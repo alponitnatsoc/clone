@@ -73,6 +73,11 @@ class EmployerHasEmployee
     private $existentSQL = 0;
 
     /**
+     * @ORM\Column(type="smallint", nullable=TRUE)
+     */
+    private $existentHighTec = 0;
+
+    /**
      * @ORM\Column(type="integer", length=1, nullable=TRUE)
      */
     private $isFree = 0;
@@ -389,5 +394,29 @@ class EmployerHasEmployee
     public function getDocumentStatus()
     {
         return $this->documentStatus;
+    }
+
+    /**
+     * Set existentHighTec
+     *
+     * @param integer $existentHighTec
+     *
+     * @return EmployerHasEmployee
+     */
+    public function setExistentHighTec($existentHighTec)
+    {
+        $this->existentHighTec = $existentHighTec;
+
+        return $this;
+    }
+
+    /**
+     * Get existentHighTec
+     *
+     * @return integer
+     */
+    public function getExistentHighTec()
+    {
+        return $this->existentHighTec;
     }
 }

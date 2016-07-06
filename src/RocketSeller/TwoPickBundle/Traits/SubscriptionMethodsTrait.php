@@ -613,7 +613,7 @@ trait SubscriptionMethodsTrait
         /* @var $employer Employer */
         $employer = $person->getEmployer();
         if($employer->getIdHighTech()!=null){
-            return true;
+            //return true;
         }
         $em = $this->getDoctrine()->getManager();
         $request = $this->container->get('request');
@@ -650,7 +650,7 @@ trait SubscriptionMethodsTrait
             /** @var EmployerHasEmployee $employeeC */
             foreach ($eHEes as $employeeC) {
                 //dump($employeeC);
-                if ($employeeC->getState() > 1) {
+                if ($employeeC->getState() > 1 && $employeeC->getExistentHighTec()!=1 ) {
                     //check if it exist
 
                     $contracts = $employeeC->getContracts();
@@ -700,6 +700,9 @@ trait SubscriptionMethodsTrait
 
                             return false;
                         }
+                        $employeeC->setExistentHighTec(1);
+                        $em->persist($employeeC);
+                        $em->flush();
                     }
                 }
             }
