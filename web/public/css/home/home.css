@@ -94,7 +94,14 @@ border-bottom: 3px solid #794815}
 /*empieza la seccion de beneficios*/
 
 #beneficios {width: 1100px; margin: 0 auto; text-align: center}
-#beneficios h2 {margin: 25px 0;}
+#beneficios h2 {
+	margin: 25px auto;
+	font-size: 25px;
+	width: 85%;
+font-weight: 100;}
+#beneficios h3 {
+		font-size: 20px;
+		font-weight: 600;}
 .beneficios {
 	text-align: center;
 	color: #5D5D5D;
@@ -139,6 +146,46 @@ border-bottom: 3px solid #794815}
 	padding: 6px 12px;
 	box-sizing: border-box;
 	text-align: center;
+}
+/*seccion de los precios*/
+#texto-descript {margin: 60px 0 70px 0}
+#texto-descript h4 {width: 750px; text-align: center; margin: 0 auto;}
+#cont-3precios {width: 1100px; margin: 50px auto 0 auto; padding: 60px 0 0 0;}
+#cont-3precios h2 {
+	margin: 25px auto;
+	font-size: 25px;
+	width: 85%;
+font-weight: 100;
+}
+.centrar {text-align: center;padding: 0 60px;box-sizing: border-box;}
+.caja-precio {
+	background: #40c1c3;
+width: 100%;
+height: auto;
+margin: 0 auto;
+border-radius: 5px;
+color: #ffffff;
+padding: 15px 0 1px 0;
+margin-top: 0px;
+}
+.span {font-size: 25px}
+.losPagos {
+		clear: both;
+  	margin: 20px auto 0 auto;
+    width: 80%;
+    text-align: center;
+    color: #8e8e8e;
+    padding: 15px 31px;
+    border: #e4e4e4 dashed 1px;
+    border-radius: 5px;
+		background: #FFF;
+		font-weight: 500;
+		font-size: 16px;
+}
+
+.back {
+	background: #fbfbfb;
+    padding-bottom: 100px;
 }
 
 /*empieza la seccion de calculadora*/
@@ -186,7 +233,14 @@ border-bottom: 3px solid #794815}
 
 /*empieza la seccion de computador*/
 
-#intro-pc {text-align: center; height: 125px; background: #eaeaea; font-size: 20px; box-sizing: border-box; padding: 30px 0}
+#intro-pc {
+	text-align: center;
+height: 125px;
+font-size: 20px;
+box-sizing: border-box;
+padding: 30px 0;
+margin: 40px 0 65px 0;
+}
 #contenido-pc {width: 1100px; margin: 30px auto}
 .texto-bullets {padding: 60px 0; box-sizing: border-box; font-size: 17px}
 .texto-bullets p {margin: 0}
@@ -438,3 +492,12 @@ border-bottom: 3px solid #794815}
 	}
 
 /*----------------------------------------------------------grid-----------------------------------------------------------*/
+
+@media only screen and (max-width: 1024px) {
+		#cont-3precios {width: 90%;}
+	}
+
+@media only screen and (max-width: 800px) {
+	.span_1_of_3 {width: 100%;}
+	.caja-precio {width: 90%; margin-bottom: 30px}
+	}

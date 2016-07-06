@@ -63,9 +63,9 @@ marketing:
 autenticate:
     path:     /backoffice/autenticate/{user}/{autentication}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:demoLogin}
-add_to_sql_back:
-    path:     /backoffice/addsql/{user}/{autentication}
-    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:addtoSQLBack}
+add_to_sql_and_hightec_back:
+    path:     /backoffice/addtoback/{user}/{autentication}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:addToSQLandHighTecBack}
 show_un_active_codes:
     path:     /backoffice/show/unactive/codes
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showUnActiveCodes}

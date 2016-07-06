@@ -3,6 +3,8 @@
 namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Exclude;
 
 /**
  * PurchaseOrdersDescription
@@ -42,6 +44,7 @@ class PurchaseOrdersDescription
 
     /**
      * @ORM\OneToMany(targetEntity="Pay", mappedBy="purchaseOrdersDescription", cascade={"persist"})
+     * @Exclude
      */
     private $payPay;
 
@@ -49,6 +52,7 @@ class PurchaseOrdersDescription
      * @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrders
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrders", inversedBy="purchaseOrderDescriptions", cascade={"persist"})
      * @ORM\JoinColumn(name="purchase_orders_id_purchase_orders", referencedColumnName="id_purchase_orders")
+     * @Exclude
      */
     private $purchaseOrders;
 

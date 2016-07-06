@@ -88,12 +88,6 @@ class EmployerRegistration extends AbstractType
                 'label'=>'Administradora de Riesgos Labolares',
                 'required' => true
             ))
-            ->add('arlAC', 'text', array(
-                'mapped' => false,
-                'label'=>' ',
-                'required' => true,
-                'attr'=>array("class"=>'autocomA',"placeholder" => "Escribe el nombre de tu entidad")
-            ))
             ->add('arlExists', 'choice', array(
                 'choices' => array(
                     0 => 'Si',

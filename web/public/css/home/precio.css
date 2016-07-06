@@ -52,7 +52,7 @@ border-bottom: 3px solid #794815}
 #texto-descript h4 {width: 750px; text-align: center; margin: 0 auto;}
 #cont-3precios {width: 1100px; margin: 0 auto; padding: 60px 0 0 0;}
 .centrar {text-align: center;padding: 0 60px;box-sizing: border-box;}
-.caja-precio {background: #edeef0; width: 190px; height:auto; margin: 0 auto; border-radius: 5px; color: #5D5D5D; padding: 15px 0 1px 0; margin-top: 0px}
+.caja-precio {background: #40c1c3; width: 190px; height:auto; margin: 0 auto; border-radius: 5px; color: #5D5D5D; padding: 15px 0 1px 0; margin-top: 0px}
 .span {font-size: 25px}
 .losPagos {
 		clear: both;
@@ -63,10 +63,12 @@ border-bottom: 3px solid #794815}
     padding: 15px 31px;
     border: #e4e4e4 dashed 1px;
     border-radius: 5px;
+		font-size: 16px;
+		font-weight: 500;
 }
 
 /*empieza la seccion de calculadora*/
-.fondo-calculadora {background: #FBFBFB; margin: 60px 0;padding: 60px 0;}
+.fondo-calculadora {background: #FBFBFB; margin: 60px 0 ;padding: 60px 0 0 0;}
 #calculadora {width: 1100px; margin: 0 auto;}
 #calculadora h2 {text-align: center; margin: 25px 0; font-size: 25px}
 #calculadora h4 {margin: 30px 0; text-align: center}
@@ -93,6 +95,8 @@ border-bottom: 3px solid #794815}
     font-size: 20px;
     border-radius: 5px;
 }
+.textocal2 {display: none}
+#selectores-calcu {display:none}
 #texto-finalcalculadora {text-align: center; width: 400px; margin: 20px auto; color: #6d6d71}
 #resultado-calculadora {width: 390px;border-radius: 3px;font-size: 28px;color: #FFF;}
 #callregistro {color: #6d6d71; margin: 70px auto; width: 255px; text-align: center}
@@ -163,6 +167,39 @@ border-bottom: 3px solid #794815}
 	.caja-precio {width: 90%; margin-bottom: 30px}
 	.span_1_of_5,.span_3_of_5  {width: 100%;}
 	.no-colorcont {text-align: center}
+
+	/*cambio calculadora de calculadora*/
+	.textocal1 {display: none}
+	.textocal2 {display: block}
+	.calculadora-espacios {display:none}
+	#selectores-calcu {
+		width:85%;
+		margin: 0 auto;
+		display:block;
+		border: 2px dashed #00CCCA;
+		border-radius: 5px;
+		padding: 1px 0 20px;}
+
+	#calc {
+		width: 320px;
+   		margin: 0 auto;}
+	.tipoContrato {
+		border: 1px solid #CCC;
+		border-radius: 3px;
+		padding: 5px 15px;
+		margin: 13px 0 13px 15px;
+		}
+		.spandescript {
+			font-size: 12px}
+		.spanForm {
+			width: 125px;
+			display: block;
+			float: left;
+			margin: 5px 0;
+			font-size: 15px;
+			color:#00838C}
+	/*fin cambio de calculadora*/
+
 	}
 
 @media only screen and (max-width: 768px) {

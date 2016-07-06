@@ -37,7 +37,7 @@ class NoveltyController extends Controller {
 
         $payRollRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
         $payRol = $payRollRepo->find($idPayroll);
-        $empId = $payRol->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getIdEmployee();
+        $empId = $payRol->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getIdEmployerHasEmployee();
 
         /** @var NoveltyType $NT */
         foreach ($noveltyTypes as $NT) {
