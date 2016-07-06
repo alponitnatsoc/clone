@@ -89,7 +89,7 @@ class BackOfficeController extends Controller
             $ehes=$user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
             /** @var EmployerHasEmployee $ehe */
             foreach ( $ehes as $ehe ) {
-                if($ehe->getState()>=4&&$ehe->getExistentSQL()!=0){
+                if($ehe->getState()>=4&&$ehe->getExistentSQL()!=1){
                     $this->addEmployeeToSQL($ehe);
                 }
             }
