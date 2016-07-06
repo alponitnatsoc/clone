@@ -3,6 +3,8 @@
 namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Exclude;
 
 /**
  * NoveltyType
@@ -28,6 +30,7 @@ class NoveltyType
 
     /**
      * @ORM\OneToMany(targetEntity="NoveltyTypeHasDocumentType", mappedBy="noveltyTypeNoveltyType", cascade={"persist"})
+     * @Exclude
      */
     private $requiredDocuments;
 

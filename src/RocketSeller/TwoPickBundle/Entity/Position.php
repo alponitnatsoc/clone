@@ -34,6 +34,7 @@ class Position
 
     /**
      * @ORM\OneToMany(targetEntity="CalculatorConstraints", mappedBy="positionPosition")
+     * @Exclude
      */
     private $constraints;
 
