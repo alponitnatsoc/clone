@@ -581,7 +581,13 @@ class PayrollController extends Controller
                             //create next payroll
                             $newPayroll = new Payroll();
                             $nowDate = new DateTime();
-                            $nowDate = new DateTime(date('Y-m-d', strtotime("+1 months", strtotime($nowDate->format("Y-m-") . "1"))));
+                            $nowPeriod = $actualPayroll->getPeriod();
+                            if ($actualPayroll->getContractContract()->getFrequencyFrequency()->getPayrollCode() == "Q" && $nowPeriod == 4) {
+                                $monthsToAdd=1;
+                            } else {
+                                $monthsToAdd=0;
+                            }
+                            $nowDate = new DateTime(date('Y-m-d', strtotime("+$monthsToAdd months", strtotime($nowDate->format("Y-m-") . "1"))));
                             //here i create the comprobante
 
                             $documentType = 'Comprobante';
@@ -607,7 +613,6 @@ class PayrollController extends Controller
                             $em = $this->getDoctrine()->getManager();
                             $em->persist($notification);
 
-                            $nowPeriod = $actualPayroll->getPeriod();
                             if ($actualPayroll->getContractContract()->getFrequencyFrequency()->getPayrollCode() == "Q" && $nowPeriod == 4) {
                                 $newPayroll->setPeriod(2);
                             } else {
