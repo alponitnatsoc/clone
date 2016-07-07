@@ -73,23 +73,41 @@ function prepareLegal() {
   //END ABOGADO --------
 
   //VALIDATION CHECKBOX
-  $("#continuarContratoNext").attr("disabled","true");
+  if( !$("#checkboxContinueContinuar").is(':checked') ){
+    $("#continuarContratoNext").attr("disabled","true");
+    $("#continuarContratoNextSpan").attr("title","Debes marcar la casilla de aceptación de responsabilidad para poder continuar");
+  }
+  else{
+    $("#continuarContratoNext").removeAttr("disabled");
+    $("#continuarContratoNextSpan").attr("title","");
+  }
 
   $("#checkboxContinueContinuar").click(function () {
     if(!$(this).is(':checked')){
            $("#continuarContratoNext").attr("disabled","true");
+           $("#continuarContratoNextSpan").attr("title","Debes marcar la casilla de aceptación de responsabilidad para poder continuar");
       } else {
            $("#continuarContratoNext").removeAttr("disabled");
+           $("#continuarContratoNextSpan").attr("title","");
       }
   });
 
-  $("#nuevoContratoNext").attr("disabled","true");
+  if( !$("#checkboxContinueNuevo").is(':checked') ){
+    $("#nuevoContratoNext").attr("disabled","true");
+    $("#nuevoContratoNextSpan").attr("title","Debes marcar la casilla de aceptación de responsabilidad para poder continuar");
+  }
+  else{
+    $("#nuevoContratoNext").removeAttr("disabled");
+    $("#nuevoContratoNextSpan").attr("title","");
+  }
 
   $("#checkboxContinueNuevo").click(function () {
     if(!$(this).is(':checked')){
            $("#nuevoContratoNext").attr("disabled","true");
+           $("#nuevoContratoNextSpan").attr("title","Debes marcar la casilla de aceptación de responsabilidad para poder continuar");
       } else {
            $("#nuevoContratoNext").removeAttr("disabled");
+           $("#nuevoContratoNextSpan").attr("title","");
       }
   });
 
@@ -129,6 +147,7 @@ function hideOptionsAndLoadOldSettings() {
   }
 
 }
+
 function evaluateOptions() {
 
 
