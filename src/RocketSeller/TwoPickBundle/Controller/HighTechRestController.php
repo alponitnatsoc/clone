@@ -115,20 +115,21 @@ class HighTechRestController extends FOSRestController
       $pos=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'00'));
                //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
       $dis->setPurchaseOrdersStatus($pos);
-      $retorno = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getDispersePurchaseOrder', ['idPurchaseOrder' => $dis->getIdPurchaseOrders()]);
+      $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getDispersePurchaseOrder', ['idPurchaseOrder' => $dis->getIdPurchaseOrders()]);
     } else {
       $pos=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'P1'));
                //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
       $dis->setPurchaseOrdersStatus($pos);
       $date = new DateTime('01-01-0001 00:00:00');
       $dis->setDatePaid($date);
-      $view = View::create();
-      $retorno = $view->setStatusCode(200)->setData(array());
     }
     $em->persist($dis);
     $em->flush();
-
+    $view = View::create();
+    $retorno = $view->setStatusCode(200)->setData(array());
     return $retorno;
+
+
   }
 
   /**

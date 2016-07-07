@@ -501,11 +501,12 @@ class PaymentMethodRestController extends FOSRestController
                 $payType=$payMethod->getAccountTypeAccountType();
                 if($payMethod->getPayTypePayType()->getName()=="Daviplata"){
                     $accountType="DP";
+                    $paymentMethodAN=$payMethod->getCellPhone();
                 }else{
                     $accountType = $payMethod->getAccountTypeAccountType()->getName() == "Ahorros" ? "AH" : ($payMethod->getAccountTypeAccountType()->getName() == "Corriente" ? "CC" : "EN");
+                    $paymentMethodAN=$payMethod->getAccountNumber();
                 }
                 $bankCode=$payMethod->getBankBank()->getHightechCode();
-                $paymentMethodAN=$payMethod->getCellPhone()!=""?$payMethod->getCellPhone():$payMethod->getAccountNumber();
                 $documentTypeEmployee=$employeePerson->getDocumentType();
                 $documentEmployee =$employeePerson->getDocument();
 
