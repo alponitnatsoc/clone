@@ -90,6 +90,20 @@ class TwigSwiftMailer implements MailerInterface
 
         return $this->sendMessage($template, $context, 'registro@symplifica.com' ,$toEmail);
     }
+
+    public function sendReminderPayEmailMessage(User $user , $days)
+    {
+        $to = $user->getEmail();
+        $template = $this->parameters['template']['remindNovelty'];
+        $context = array(
+            'toEmail' => $user->getEmail(),
+            'user' => $user,
+            'subject'=> "Recordatorio Agregar Novedades",
+            'dias' => $days,
+            'userName' => $user->getPersonPerson()->getFullName(),
+        );
+        return $this->sendMessage($template,$context,'registro@symplifica.com', $to);
+    }
     
     public function sendWelcomeEmailMessage(UserInterface $user)
     {
@@ -137,7 +151,7 @@ class TwigSwiftMailer implements MailerInterface
             'subject'=> "Inicio de proceso de validación",
             'employeeName'=>$eHE->getEmployeeEmployee()->getPersonPerson()->getNames(),
         );
-        $this->sendMessage($template,$context,$this->parameters['from_email']['confirmation'], $to);
+        return $this->sendMessage($template,$context,$this->parameters['from_email']['confirmation'], $to);
     }
     public function sendDiasHabilesMessage(User $user,EmployerHasEmployee $eHE){
         $to = $user->getEmail();
@@ -149,7 +163,7 @@ class TwigSwiftMailer implements MailerInterface
             'subject'=> "Inicio de proceso de afiliación",
             'employeeName'=>$eHE->getEmployeeEmployee()->getPersonPerson()->getNames(),
         );
-        $this->sendMessage($template,$context,$this->parameters['from_email']['confirmation'], $to);
+        return $this->sendMessage($template,$context,$this->parameters['from_email']['confirmation'], $to);
     }
 
     public function sendBackValidatedMessage(UserInterface $user,EmployerHasEmployee $eHE){
@@ -161,7 +175,7 @@ class TwigSwiftMailer implements MailerInterface
             'subject'=> "Confirmacíon de afiliación",
             'employeeName'=>$eHE->getEmployeeEmployee()->getPersonPerson()->getNames(),
         );
-        $this->sendMessage($template,$context,$this->parameters['from_email']['confirmation'], $to);
+        return $this->sendMessage($template,$context,$this->parameters['from_email']['confirmation'], $to);
     }
     
     /**
