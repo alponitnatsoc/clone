@@ -92,7 +92,7 @@ h1 {margin: 0}
 
 /* responsive */
 
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 1024px) {
 	#team {width: 90%;}
 	}
 
@@ -103,7 +103,7 @@ h1 {margin: 0}
 
 	}
 
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 560px) {
 	.span_1_of_3 {width: 100%; margin: 20px 0}
 	.members {margin: 00px 0 0px 0;}
 	}

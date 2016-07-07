@@ -52,7 +52,7 @@
         </div>
 
             <div class="row">
-                {% set dataNomina = toPay.purchaseOrderDescriptions %}
+                {% set dataNomina = toPay.purchase_order_descriptions %}
                 {% for pod in dataNomina %}
 
 
@@ -66,7 +66,9 @@
                                     <div class="col-md-4 width">
                                         <h4 class="izquierda bold azulmediofont" style="font-size:15px">{{ pod.description }}</h4>
                                         <span class="derecha extrabold azuloscurofont" style="font-size:20px;color: #3C4B5A;">$ {{ pod.value|number_format(0, '.', ',')  }}</span>
-                                        <input type="hidden" class="pay" name="{{ pod.idPurchaseOrdersDescription }}" value="{{ pod.idPurchaseOrdersDescription }}">
+                                        {% if pod.id_purchase_orders_description is defined %}
+                                        <input type="hidden" class="pay" name="{{ pod.id_purchase_orders_description }}" value="{{ pod.id_purchase_orders_description }}">
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
