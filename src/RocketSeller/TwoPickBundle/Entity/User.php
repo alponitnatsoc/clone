@@ -895,6 +895,7 @@ class User extends BaseUser
      */
     public function addPurchaseOrder(\RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrder)
     {
+        $purchaseOrder->setIdUser($this);
         $this->purchaseOrders[] = $purchaseOrder;
 
         return $this;

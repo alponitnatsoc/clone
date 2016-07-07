@@ -128,51 +128,12 @@ class PayrollRestSecuredController extends FOSRestController
         $poS = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
         $paidStatus = $poS->findOneBy(array('idNovoPay' => '00'));
         $paidPO = new PurchaseOrders();
-        $realtoPay = new PurchaseOrders();
 
         $paidValue = 0;
 
         $valueToGet4xMilFrom = 0;
         $numberOfPNTrans = 0;
         $willPayPN = false;
-
-        foreach ($payrollToPay as $key => $value) {
-
-            /** @var PurchaseOrdersDescription $tempPOD */
-            $tempPOD = $podRepo->find($value);
-
-            if ($tempPOD == null) {
-                //por seguridad en caso de que no exista el POD
-                return $view->setStatusCode(403)->setData(array('error'=>'no exite pod'));
-            }
-            if ($tempPOD->getPayrollPayroll() == null) {
-                $person = $tempPOD->getPayrollsPila()->get(0)->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
-                $flagFrequency = false;
-            } else {
-                $person = $tempPOD->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
-                if ($tempPOD->getPayrollPayroll()->getContractContract()->getPayMethodPayMethod()->getPayTypePayType()->getPayrollCode() == "EFE")
-                    $flagFrequency = true;
-                else
-                    $flagFrequency = false;
-            }
-            if ($person->getIdPerson() != $userPerson->getIdPerson()) {
-                //Por seguridad se verifica que los PODS pertenezcan al usuario loggeado
-                return $view->setStatusCode(403)->setData(array('error'=>'no pasó seguridad pod'));
-            }
-                if (!$flagFrequency) {
-                    $total += $tempPOD->getValue();
-                    if ($tempPOD->getProductProduct()->getSimpleName() == "PN") {
-                        $willPayPN = true;
-                        $valueToGet4xMilFrom = $valueToGet4xMilFrom + $tempPOD->getValue();
-                        $numberOfPNTrans = $numberOfPNTrans + 1;
-                    }
-                }
-                if ($tempPOD->getProductProduct()->getSimpleName() == "PP") {
-                    $valueToGet4xMilFrom = $valueToGet4xMilFrom + $tempPOD->getValue();
-                }
-                $realtoPay->addPurchaseOrderDescription($tempPOD);
-
-        }
         foreach ($payrollsPaid as $key => $value) {
             /** @var PurchaseOrdersDescription $tempPOD */
             $tempPOD = $podRepo->find($value);
@@ -197,6 +158,7 @@ class PayrollRestSecuredController extends FOSRestController
                     $nowDate = new DateTime();
                     $nowDate = new DateTime(date('Y-m-d', strtotime("+1 months", strtotime($nowDate->format("Y-m-") . "1"))));
                     //here i create the comprobante
+                    $person = $pod->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
 
                     $documentType = 'Comprobante';
                     $msj = "Subir comprobante de " . $utils->mb_capitalize(explode(" ", $person->getNames())[0] . " " . $person->getLastName1());
@@ -243,10 +205,49 @@ class PayrollRestSecuredController extends FOSRestController
             $paidPO->setValue($paidValue);
             $paidPO->setPurchaseOrdersStatus($paidStatus);
             $paidPO->setDatePaid(new \DateTime());
-            $paidPO->setIdUser($user);
             $paidPO->setName("El usuario aceptó haber pagado los siguientes items");
-            $em->persist($paidPO);
+            $user->addPurchaseOrder($paidPO);
+            $em->persist($user);
             $em->flush();
+        }
+
+        $realtoPay = new PurchaseOrders();
+        foreach ($payrollToPay as $key => $value) {
+
+            /** @var PurchaseOrdersDescription $tempPOD */
+            $tempPOD = $podRepo->find($value);
+
+            if ($tempPOD == null) {
+                //por seguridad en caso de que no exista el POD
+                return $view->setStatusCode(403)->setData(array('error'=>'no exite pod'));
+            }
+            if ($tempPOD->getPayrollPayroll() == null) {
+                $person = $tempPOD->getPayrollsPila()->get(0)->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
+                $flagFrequency = false;
+            } else {
+                $person = $tempPOD->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
+                if ($tempPOD->getPayrollPayroll()->getContractContract()->getPayMethodPayMethod()->getPayTypePayType()->getPayrollCode() == "EFE")
+                    $flagFrequency = true;
+                else
+                    $flagFrequency = false;
+            }
+            if ($person->getIdPerson() != $userPerson->getIdPerson()) {
+                //Por seguridad se verifica que los PODS pertenezcan al usuario loggeado
+                return $view->setStatusCode(403)->setData(array('error'=>'no pasó seguridad pod'));
+            }
+            if (!$flagFrequency) {
+                $total += $tempPOD->getValue();
+                if ($tempPOD->getProductProduct()->getSimpleName() == "PN") {
+                    $willPayPN = true;
+                    $valueToGet4xMilFrom = $valueToGet4xMilFrom + $tempPOD->getValue();
+                    $numberOfPNTrans = $numberOfPNTrans + 1;
+                }
+            }
+            if ($tempPOD->getProductProduct()->getSimpleName() == "PP") {
+                $valueToGet4xMilFrom = $valueToGet4xMilFrom + $tempPOD->getValue();
+            }
+            $realtoPay->addPurchaseOrderDescription($tempPOD);
+
         }
         if ($realtoPay->getPurchaseOrderDescriptions()->count() > 0) {
             //add transaction cost

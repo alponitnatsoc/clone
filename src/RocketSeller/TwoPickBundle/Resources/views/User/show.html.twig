@@ -15,7 +15,7 @@
                 <h3>Datos básicos</h3>
                 <br />
                 <div class="col-sm-12 center">
-                    <div id="basicDataTab" class="tab-pane fade in active col-sm-12 col-xs-12">
+                    <div id="basicDataTab" class="tab-pane fade in active col-sm-12 col-xs-12 contain-info-tab">
                         {{ form_start(form) }}
                             <div class="col-sm-12" id="formErrors">
                                 <div id="dataSuccessEmail">Los datos fueron actualizados exitosamente.</div>
@@ -57,7 +57,7 @@
             </div>
 
             <div class="row">
-                <h3>Medios de pago</h3>
+                <h3 style="color: #1fcecb;font-weight: 600;">Medios de pago</h3>
                 <div class="col-sm-12 center">
                     <div class="col-sm-12 col-xs-12">
                         {% if (payMethods['creditCards'] is defined) %}
@@ -91,37 +91,37 @@
                         {% if (payMethods['bankAccounts'] is defined) %}
                         <div class="row panel panel-default table-responsive" id="bankAccounts">
                             <!-- Default panel contents -->
-                            <div class="panel-heading center">Cuentas bancarias</div>
+                            <div class="cuentas-heading center">Cuentas bancarias</div>
                             <!-- Table -->
-                            <table class="table table-bordered ">
-                                <tbody>
+                            <div class="table table-bordered ">
+                                <div>
                                     {% for payM in payMethods['bankAccounts'] %}
-                                    <tr>
-                                        <td class="vert-align">
+                                    <div class="contCuentas">
+                                        <div class="vert-align cuentasBanc">
                                             <span>Tipo de cuenta</span>
                                             <h4><strong>{{ payM["payment-type"] }}</strong></h4>
-                                        </td>
-                                        <td class="vert-align">
+                                        </div>
+                                        <div class="vert-align cuentasBanc borderun">
                                             <span>Número de cuenta</span>
                                             <h4><strong>{{ payM["account"] }}</strong></h4>
-                                        </td>
-                                        <td class="vert-align">
+                                        </div>
+                                        <div class="vert-align cuentasBanc">
                                             <span>Banco</span>
                                             <h4><strong>{{ payM["bank"] }}</strong></h4>
-                                        </td>
+                                        </div>
 {#                                         <td class="vert-align">#}
 {#                                             <a class="fa-2x fa fa-trash-o"></a>#}
 {#                                             <a class="" style="margin-left: 10px;">Eliminar cuenta</a>#}
 {#                                     <td><a class="DeleteCC" href="{{ path('api_public_get_delete_pay_method',{'idPayM': payM['method-id'], 'idUser': app.user.personPerson.document })  }}">Eliminar</a></td>#}
 {#                                         </td>#}
-                                    </tr>
+                                    </div>
                                     {% endfor %}
-                                </tbody>
-                            </table>
+                                </div>
+                            </div>
                         </div>
                         {% endif %}
-                        <div class="row text-center" style="padding: 10px; background-color: lightgray; border-radius: 5px; font-size: 15px;">
-                            <a type="button" id="addPayMethod" class="" value="Agregar" href="{{ path('add_generic_payment_method',{userId:app.user.id}) }}"><i class="fa fa-plus-circle"></i> <i>Agregar método de pago</i></a>
+                        <div class="row text-center borderNewpayM">
+                            <a style="color: #fd9224;" type="button" id="addPayMethod" class="" value="Agregar" href="{{ path('add_generic_payment_method',{userId:app.user.id}) }}"><i class="fa fa-plus-circle"></i> <i>Agregar método de pago</i></a>
                         </div>
                     </div>
                 </div>
@@ -133,13 +133,13 @@
 
             <style>
             .service-days {
-                background-color: gray;
-                margin: 0 auto;
-                width: 150px;
-                padding: 10px;
-                color: #fff;
-                text-align: center;
-                border-radius: 5px;
+              background-color: #1fcecb;
+              margin: 0 auto;
+              width: 300px;
+              padding: 15px 10px;
+              color: #fff;
+              text-align: center;
+              border-radius: 5px;
             }
             .service-days h1 {
                 font-size: 30px;
@@ -150,17 +150,20 @@
             .vert-align {
                 vertical-align: middle !important;
             }
+            @media only screen and (max-width: 480px) {
+              .service-days {width: 90%;}
+            }
             </style>
             <div class="row">
-                <h3>Facturación</h3>
+                <h3 style="color: #1fcecb;font-weight: 600;">Facturación</h3>
                 <div class="col-sm-12 center">
                     <div class="col-sm-12 col-xs-12 center">
                         <div class="row">
-                            <h4><i>Días restantes de servicio gratuito</i></h4>
+                            <h4 style="color: gray;"><i>Días restantes de servicio gratuito</i></h4>
                             <div class="service-days">
                                 <h1>{{ dayService }} días</h1>
                             </div>
-                            <h5>Cliente desde {{ dateCreated|date("F")|trans|lower }} {{ dateCreated|date("d") }} de {{ dateCreated|date("Y") }}</h5>
+                            <h5 style="color: gray;">Cliente desde {{ dateCreated|date("F")|trans|lower }} {{ dateCreated|date("d") }} de {{ dateCreated|date("Y") }}</h5>
                         </div>
                         {% if app.user.paymentState == 0 %}
                             <div class="NoPay row panel-default col-sm-12">
@@ -216,7 +219,7 @@
             }
             </style>
             <div class="row">
-                <h3>Facturas emitidas</h3>
+                <h3 style="color: #1fcecb;font-weight: 600;">Facturas emitidas</h3>
                 <div class="col-sm-12 center">
                     <div class="col-sm-12 col-xs-12 table-responsive">
                         <table class="record_properties table table-bordered">
