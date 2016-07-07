@@ -1005,9 +1005,13 @@ function startEmployee() {
     $("#register_employee_employeeHasEmployers_holidayDebt").val(Math.abs($("#register_employee_employeeHasEmployers_holidayDebt").val()));
     $("#totalExpensesVal").attr("disabled", true);
     loadConstrains();
+
     if($("#register_employee_employeeHasEmployers_timeCommitment_2").is("[checked]")){
       $(document).ajaxStop(function () {
+        if(leavingPage == false){
           reverseCalculator();
+          leavingPage = true;
+        }
       });
     }
 
@@ -1514,6 +1518,7 @@ function addListeners() {
     });
 }
 //Extract Constraints
+var leavingPage =  false;
 var transportAid;
 var smmlv;
 var EPSEmployer;
