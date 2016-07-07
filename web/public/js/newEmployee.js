@@ -1280,6 +1280,15 @@ function jsonCalcToHTML(data) {
 }
 
 function addListeners() {
+  $("#sisbenTooltip").on('click', function(){
+    $(this).tooltip('show');
+  });
+  $("#pensionTooltip").on('click', function(){
+    $(this).tooltip('show');
+  });
+  $("#costoTooltip").on('click', function(){
+    $(this).tooltip('show');
+  });
     $("#ex6").bootstrapSlider();
     $("#ex6").on("slide", function (slideEvt) {
         $("#register_employee_employeeHasEmployers_salaryD").val(slideEvt.value);
