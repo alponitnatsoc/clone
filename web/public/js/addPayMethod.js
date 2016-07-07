@@ -20,6 +20,21 @@ function payMethodLoad() {
     startValidation();
   });
 
+  $("#pay_method_0").attr("disabled","true");
+  var flag = false;
+  $(".radio").has("label").each( function () {
+    $(this).find("input").each( function () {
+      if( $(this).attr("disabled") == "disabled" ){
+        flag = true;
+        return false;
+      }
+    });
+    if ( flag == true ){
+      $(this).css("color","#ccc");
+      return false;
+    }
+  });
+
 }
 
 function choosePayMethod(){

@@ -38,14 +38,14 @@ class AddPayMethod extends AbstractType
           //Radio Button for choose pay method
           ->add('pay_method', 'choice', array(
               'choices' => array(
-              'Tarjeta de Crédito' => 'Tarjeta de Crédito',
+              'Tarjeta de Crédito' => 'Tarjeta de Crédito (Próximamente)',
               'Cuenta Bancaria' => 'Cuenta Bancaria',
               ),
               'label' => 'Medio de pago',
               'multiple' => false,
               'expanded' => true,
               'required' => true,
-              'data' => 'Tarjeta de Crédito'
+              'data' => 'Cuenta Bancaria'
           ))
 
           //Hidden User Id data
