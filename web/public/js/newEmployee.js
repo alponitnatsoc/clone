@@ -44,7 +44,8 @@ function startEmployee() {
                 "register_employee[employeeHasEmployers][paysPens]": "required",
                 "register_employee[verificationCode]": "required",
                 "register_employee[employeeHasEmployers][frequencyFrequency]": "required",
-                "register_employee[employeeHasEmployers][holidayDebt]": "required"
+                "register_employee[employeeHasEmployers][holidayDebt]": "required",
+                "register_employee[entities][pension]":"required"
                 /*,
                  "register_employee[credit_card]": "required",
                  "register_employee[cvv]": "required",
@@ -82,7 +83,8 @@ function startEmployee() {
                 "register_employee[employeeHasEmployers][paysPens]": "Por favor selecciona una opción",
                 "register_employee[verificationCode]": "Por favor ingrese el código",
                 "register_employee[employeeHasEmployers][frequencyFrequency]": "Por favor selecciona una opción",
-                "register_employee[employeeHasEmployers][holidayDebt]" : "Por favor ingrese un número de días o cambie de opción"
+                "register_employee[employeeHasEmployers][holidayDebt]" : "Por favor ingrese un número de días o cambie de opción",
+                "register_employee[entities][pension]":"Debes seleccionar una entidad"
                 /*,
                  "register_employee[credit_card]": "Por favor ingresa el número de la tarjeta",
                  "register_employee[cvv]": "Por favor ingresa el código de seguridad de la tarjeta",
@@ -1035,6 +1037,7 @@ function startEmployee() {
     $("#register_employee_employeeHasEmployers_paysPens").on("change",function(){
         if($(this).find("input:checked").val()=="1"){
             $("#pensionHide").show();
+            $("#register_employee_entities_pension").val("");
         }else{
             $("#pensionHide").hide();
             $("#register_employee_entities_pension").val(50);
@@ -1525,6 +1528,20 @@ function addListeners() {
           $(this).prop("checked", true);
         });
     });
+
+   $("#cerrarModalDetalle").click(function(){
+     //TODO Cambiar coso a la presel
+     var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
+     if (selectedVal == " Trabajador por días") {
+         $('#radio_diario').prop('checked', true);
+         $('#radio_mensual').prop('checked', false);
+     }
+     else {
+         $('#radio_diario').prop('checked', true);
+         $('#radio_mensual').prop('checked', false);
+     }
+     calculator();
+   });
 }
 //Extract Constraints
 var leavingPage =  false;
