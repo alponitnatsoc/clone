@@ -28,10 +28,10 @@ class ReminderPayCommand extends ContainerAwareCommand
 
         $this->output = $output;
 
-        $ch = curl_init("https://localhost/api/public/v1/secured/reminders");
+        $ch = curl_init("http://10.0.0.143/api/public/v1/secured/reminders");
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
 
         $response = curl_exec($ch);
         if (!$response) {
