@@ -32,7 +32,7 @@ class ReminderRestController extends FOSRestController
     {
         $response = 'Comienza: <br>';
 //        $diaPago=intval(date("t"))-24;
-        $diaPago = 7;
+        $diaPago = 8;
         $date = new \DateTime();
 
         $response = $response."-Dia del mes: ".$date->format('d').", Dia del recordatorio quincenal: 12, Dia del recordatorio mensual: ".$diaPago.'<br>';
