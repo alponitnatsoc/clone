@@ -431,6 +431,9 @@ function fillTable(){
             subtotal = subtotal * 0.9;
           }
 
+          //Is confusing to the user displaying free months and having to pay
+          //TODO when we stop of giving free months we should remove this = 0
+          subtotal = 0;
           total_cost_all = subtotal + total_seguridad_social + total_income + totalTransaccionalL;
           $("#totalCostAll").html(getPrice(total_cost_all));
       }
@@ -467,7 +470,7 @@ function fillTable(){
         $(this).html(getPrice(endValue) + "</br>GRATIS Por el próximo mes");
       }
       else if( freeMonths > 1){
-        $(this).html(getPrice(endValue) + "GRATIS Por los próximos " + freeMonths + " meses");
+        $(this).html(getPrice(endValue) + "</br>GRATIS Por los próximos " + freeMonths + " meses");
       }
       else{
         $(this).html(getPrice(endValue));

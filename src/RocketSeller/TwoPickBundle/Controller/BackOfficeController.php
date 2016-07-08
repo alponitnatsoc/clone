@@ -3,10 +3,13 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\Document;
 use RocketSeller\TwoPickBundle\Entity\Employee;
+use RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\PromotionCode;
 use RocketSeller\TwoPickBundle\Entity\User;
@@ -70,6 +73,133 @@ class BackOfficeController extends Controller
         $clientBetaReal=$codesTypeRepo->findOneBy(array("shortName"=>"CB"));
         $codes= $codesRepo->findBy(array("userUser"=>null,'promotionCodeTypePromotionCodeType'=>$clientBetaReal));
         return $this->render('RocketSellerTwoPickBundle:BackOffice:promotionCodes.html.twig',array('codes'=>$codes));
+
+    }
+    public function addToSQLEntitiesBackAction($user,$autentication, $idEhe)
+    {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+
+        $dm = $this->getDoctrine();
+        $repo = $dm->getRepository('RocketSellerTwoPickBundle:User');
+        /** @var User $user */
+        $user = $repo->find($user);
+        if (!$user) {
+            throw $this->createNotFoundException('No demouser found!');
+        }
+        if($autentication==$user->getSalt()) {
+            $repo = $dm->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
+            /** @var EmployerHasEmployee $eHE */
+            $eHE=$repo->find($idEhe);
+            if($eHE==null){
+                return false;
+            }
+            $actContract = null;
+            /** @var Contract $c */
+            foreach ($eHE->getContracts() as $c) {
+                if ($c->getState() == 1) {
+                    $actContract = $c;
+                    break;
+                }
+            }
+            $emEntities=$eHE->getEmployeeEmployee()->getEntities();
+            $request = $this->container->get('request');
+            /** @var EmployeeHasEntity $eEntity */
+            foreach ($emEntities as $eEntity) {
+                $entity = $eEntity->getEntityEntity();
+                $eType = $entity->getEntityTypeEntityType();
+                if ($eType->getPayrollCode() == "EPS" || $eType->getPayrollCode() == "ARS") {
+                    $request->setMethod("POST");
+                    $request->request->add(array(
+                        "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                        "entity_type_code" => $eType->getPayrollCode(),
+                        "coverage_code" => $eType->getPayrollCode() == "EPS" ? "2" : "1", //EPS ITS ALWAYS FAMILIAR SO NEVER CHANGE THIS
+                        "entity_code" => $entity->getPayrollCode(),
+                        "start_date" => $actContract->getStartDate()->format("d-m-Y"),
+                    ));
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
+                    if ($insertionAnswer->getStatusCode() != 200) {
+                        return false;
+                    }
+                }
+                if ($eType->getPayrollCode() == "AFP") {
+                    if ($entity->getPayrollCode() == 0) {
+                        $coverage = 2 ; //2 si es pensionado o  si no amporta
+                    } else {
+                        $coverage = 1;
+                    }
+                    $request->setMethod("POST");
+                    $request->request->add(array(
+                        "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                        "entity_type_code" => $eType->getPayrollCode(),
+                        "coverage_code" => $coverage, //the relation coverage from SQL
+                        "entity_code" => $entity->getPayrollCode(),
+                        "start_date" => $actContract->getStartDate()->format("d-m-Y"),
+                    ));
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
+                    if ($insertionAnswer->getStatusCode() != 200) {
+                        echo "Cago insertar entidad AFP " . $eHE->getIdEmployerHasEmployee() . " SC" . $insertionAnswer->getStatusCode();
+                        die();
+                        $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
+                        return $view;
+                    }
+                }
+                if ($eType->getPayrollCode() == "FCES") {
+                    $request->setMethod("POST");
+                    $request->request->add(array(
+                        "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                        "entity_type_code" => "FCES",
+                        "coverage_code" => 1, //DONT change this is forever and ever
+                        "entity_code" => intval($entity->getPayrollCode()),
+                        "start_date" => $actContract->getStartDate()->format("d-m-Y"),
+                    ));
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
+                    if ($insertionAnswer->getStatusCode() != 200) {
+                        return false;
+                    }
+                }
+            }
+            $emEntities = $eHE->getEmployerEmployer()->getEntities();
+            $flag = false;
+            /** @var EmployerHasEntity $eEntity */
+            foreach ($emEntities as $eEntity) {
+                $entity = $eEntity->getEntityEntity();
+                $eType = $entity->getEntityTypeEntityType();
+                if ($eType->getPayrollCode() == "ARP") {
+                    $request->setMethod("POST");
+                    $request->request->add(array(
+                        "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                        "entity_type_code" => $eType->getPayrollCode(),
+                        "coverage_code" => $actContract->getPositionPosition()->getPayrollCoverageCode(),
+                        "entity_code" => $entity->getPayrollCode(),
+                        "start_date" => $actContract->getStartDate()->format("d-m-Y"),
+                    ));
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
+                    if ($insertionAnswer->getStatusCode() != 200) {
+                        return false;
+                    }
+                }
+                if ($eType->getPayrollCode() == "PARAFISCAL") {
+                    if (!$flag) {
+                        $flag = true;
+                    } else {
+                        continue;
+                    }
+                    $request->setMethod("POST");
+                    $request->request->add(array(
+                        "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                        "entity_type_code" => $eType->getPayrollCode(),
+                        "coverage_code" => "1", //Forever and ever don't change this
+                        "entity_code" => $entity->getPayrollCode(),
+                        "start_date" => $actContract->getStartDate()->format("d-m-Y"),
+                    ));
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
+                    if ($insertionAnswer->getStatusCode() != 200) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return $this->redirectToRoute("pages");
 
     }
     public function addToSQLandHighTecBackAction($user,$autentication)

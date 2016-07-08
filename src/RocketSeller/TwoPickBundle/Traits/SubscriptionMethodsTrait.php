@@ -391,7 +391,7 @@ trait SubscriptionMethodsTrait
                 }
                 if ($eType->getPayrollCode() == "AFP") {
                     if ($entity->getPayrollCode() == 0) {
-                        $coverage = $entity->getName() == "Pensionado" ? 2 : 0; //2 si es pensionado o 0 si no amporta
+                        $coverage = 2 ; //2 si es pensionado o  si no amporta
                     } else {
                         $coverage = 1;
                     }
