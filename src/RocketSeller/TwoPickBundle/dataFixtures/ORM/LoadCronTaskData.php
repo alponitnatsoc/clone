@@ -46,7 +46,7 @@ class LoadCronTaskData extends AbstractFixture implements OrderedFixtureInterfac
         $cronTask->setName('Ultimo Recordatorio');
         $cronTask->setLastRun(new \DateTime());
         $cronTask->setInterval(86400); //1 day =  24 hour * 60 min * 60 sec = 86400 seconds
-        $cronTask->setCommands(array('symplifica:LastReminder'));
+        $cronTask->setCommands(array('symplifica:lastReminder'));
         $manager->persist($cronTask);
 
         $manager->flush();
