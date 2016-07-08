@@ -28,10 +28,10 @@
                 <div class="col-sm-12 col-sm-offset-4"></div>
                 <div class="col-sm-12 top-box-employee">
                     <div class="col-sm-4 left-top-box">
-                        <div class="col-sm-12">
+                        <div class="col-sm-12" style="color:#00858c;">
                             <p><strong>{{utils.mb_capitalize(employee.personPerson.names)}}</strong></p>
                             <p>{{utils.mb_capitalize(employee.personPerson.lastName1)}} {{utils.mb_capitalize(employee.personPerson.lastName2)}}</p>
-                            <p class="document-text" style="font-weight: 100;color: #888686;"><i>{{employee.personPerson.documentType}}: {{employee.personPerson.document}} {% if employee.personPerson.documentExpeditionPlace %}de {{employee.personPerson.documentExpeditionPlace}}{% endif %}</i>
+                            <p class="document-text" style="font-weight: 100;color: #888686;padding-top: 5px;"><i>{{employee.personPerson.documentType}}: {{employee.personPerson.document}} {% if employee.personPerson.documentExpeditionPlace %}de {{employee.personPerson.documentExpeditionPlace}}{% endif %}</i>
                             </p>
                         </div>
                     </div>
@@ -78,23 +78,23 @@
                             <h4 class="col-sm-12" style="color:#1FCECB;; font-weight:lighter;font-size: 20px;">Datos básicos</h4>
                             <li style="clear: both;">
                                 <p class="title"><i>Estado civil</i></p>
-                                <p><strong>{{ employee.personPerson.civilStatus}}</strong></p>
+                                <p class="liEmpl"><strong>{{ employee.personPerson.civilStatus}}</strong></p>
                             </li>
                             <li>
                                 <p class="title"><i>Fecha de nacimiento</i></p>
-                                <p><strong>{{ employee.personPerson.birthDate|date('F')|trans}} {{ employee.personPerson.birthDate|date('d')}} de {{  employee.personPerson.birthDate|date('Y')}}</strong></p>
+                                <p class="liEmpl"><strong>{{ employee.personPerson.birthDate|date('F')|trans}} {{ employee.personPerson.birthDate|date('d')}} de {{  employee.personPerson.birthDate|date('Y')}}</strong></p>
                             </li>
                             <li>
                                 <p class="title"><i>País</i></p>
-                                <p><strong>{{employee.personPerson.birthCountry.name}}</strong></p>
+                                <p class="liEmpl"><strong>{{employee.personPerson.birthCountry.name}}</strong></p>
                             </li>
                             <li>
                                 <p class="title"><i>Departamento</i></p>
-                                <p><strong>{{employee.personPerson.birthDepartment.name}}</strong></p>
+                                <p class="liEmpl"><strong>{{employee.personPerson.birthDepartment.name}}</strong></p>
                             </li>
                             <li>
                                 <p class="title"><i>Ciudad</i></p>
-                                <p><strong>{{employee.personPerson.birthCity.name}}</strong></p>
+                                <p class="liEmpl"><strong>{{employee.personPerson.birthCity.name}}</strong></p>
                             </li>
                         </ul>
                     </div>
@@ -103,23 +103,23 @@
                             <h4 class="col-sm-12" style="color:#1FCECB; font-weight:lighter;font-size: 20px;">Datos de contacto</h4>
                             <li style="clear: both;">
                                 <p class="title"><i>Dirección</i></p>
-                                <p><strong>{{employee.personPerson.mainAddress}}</strong></p>
+                                <p class="liEmpl"><strong>{{employee.personPerson.mainAddress}}</strong></p>
                             </li>
                             <li>
                                 <p class="title"><i>Email</i></p>
-                                <p><strong>{{employee.personPerson.email}}</strong></p>
+                                <p class="liEmpl"><strong>{{employee.personPerson.email}}</strong></p>
                             </li>
                             <li>
                                 <p class="title"><i>Teléfono</i></p>
-                                <p><strong>{{employee.personPerson.phones[0].phoneNumber}}</strong></p>
+                                <p class="liEmpl"><strong>{{employee.personPerson.phones[0].phoneNumber}}</strong></p>
                             </li>
                             <li>
                                 <p class="title"><i>Departamento</i></p>
-                                <p><strong>{{employee.personPerson.department.name}}</strong></p>
+                                <p class="liEmpl"><strong>{{employee.personPerson.department.name}}</strong></p>
                             </li>
                             <li>
                                 <p class="title"><i>Ciudad</i></p>
-                                <p><strong>{{employee.personPerson.city.name}}</strong></p>
+                                <p class="liEmpl"><strong>{{employee.personPerson.city.name}}</strong></p>
                             </li>
                         </ul>
                     </div>
@@ -131,23 +131,23 @@
                             <li>
                                 {{ form_start(form2)}}
                                 <p class="title"><i>Estado civil</i></p>
-                                <p>{{form_widget(form2.civilStatus) }}</p>
+                                <p class="liEmpl">{{form_widget(form2.civilStatus) }}</p>
                             </li>
                             <li>
                                 <p class="title"><i>Fecha de nacimiento</i></p>
-                                <p>{{form_widget(form2.birthDate) }}</p>
+                                <p class="liEmpl">{{form_widget(form2.birthDate) }}</p>
                             </li>
                             <li>
                                 <p class="title"><i>País</i></p>
-                                <p>{{form_widget(form2.birthCountry) }}</p>
+                                <p class="liEmpl">{{form_widget(form2.birthCountry) }}</p>
                             </li>
                             <li>
                                 <p class="title"><i>Departamento</i></p>
-                                <p>{{form_widget(form2.birthDepartment) }}</p>
+                                <p class="liEmpl">{{form_widget(form2.birthDepartment) }}</p>
                             </li>
                             <li>
                                 <p class="title"><i>Ciudad</i></p>
-                                <p>{{form_widget(form2.birthCity) }}</p>
+                                <p class="liEmpl">{{form_widget(form2.birthCity) }}</p>
 
                             </li>
                         </ul>
@@ -157,23 +157,23 @@
                             <h4 class="col-sm-12">Datos de contacto</h4>
                             <li>
                                 <p class="title"><i>Dirección</i></p>
-                                <p>{{form_widget(form2.mainAddress)}}</p>
+                                <p class="liEmpl">{{form_widget(form2.mainAddress)}}</p>
                             </li>
                             <li>
                                 <p class="title"><i>Email</i></p>
-                                <p>{{form_widget(form2.email)}}</p>
+                                <p class="liEmpl">{{form_widget(form2.email)}}</p>
                             </li>
                             <li>
                                 <p class="title"><i>Teléfono</i></p>
-                                <p>{{form_widget(form2.phone)}}</p>
+                                <p class="liEmpl">{{form_widget(form2.phone)}}</p>
                             </li>
                             <li>
                                 <p class="title"><i>Departamento</i></p>
-                                <p>{{form_widget(form2.department)}}</p>
+                                <p class="liEmpl">{{form_widget(form2.department)}}</p>
                             </li>
                             <li>
                                 <p class="title"><i>Ciudad</i></p>
-                                <p>{{form_widget(form2.city)}}</p>
+                                <p class="liEmpl">{{form_widget(form2.city)}}</p>
                             </li>
                         </ul>
 
@@ -192,10 +192,10 @@
                 <div class="col-sm-12 col-sm-offset-4"></div>
                 <div class="col-sm-12 top-box-employee">
                     <div class="col-sm-4 left-top-box">
-                        <div class="col-sm-12">
+                        <div class="col-sm-12" style="color:#00858c;">
                             <p><strong>{{employee.personPerson.names}}</strong></p>
                             <p>{{employee.personPerson.lastName1}} {{employee.personPerson.lastName2}}</p>
-                            <p class="document-text" style="font-weight: 100;color: #888686;"><i>{{employee.personPerson.documentType}}: {{employee.personPerson.document}} {% if employee.personPerson.documentExpeditionPlace %}de {{employee.personPerson.documentExpeditionPlace}}{% endif %}</i></p>
+                            <p class="document-text" style="font-weight: 100;color: #888686;padding-top:5px"><i>{{employee.personPerson.documentType}}: {{employee.personPerson.document}} {% if employee.personPerson.documentExpeditionPlace %}de {{employee.personPerson.documentExpeditionPlace}}{% endif %}</i></p>
                         </div>
                     </div>
                     <div class="col-sm-8">
@@ -214,19 +214,19 @@
                                 <ul class="col-sm-12">
                                     <li>
                                         <p class="title"><i>Tipo de empleado</i></p>
-                                        <p><strong>{{ contract.positionPosition.name }}</strong></p>
+                                        <p class="liEmpl"><strong>{{ contract.positionPosition.name }}</strong></p>
                                     </li>
                                     <li>
                                         <p class="title"><i>Fecha inicio de contrato</i></p>
-                                        <p><strong>{{ contract.startDate|date('F')|trans }} {{ contract.startDate|date('d')}} de {{  contract.startDate|date('Y')}}</strong></p>
+                                        <p class="liEmpl"><strong>{{ contract.startDate|date('F')|trans }} {{ contract.startDate|date('d')}} de {{  contract.startDate|date('Y')}}</strong></p>
                                     </li>
                                     <li>
                                         <p class="title"><i>Tipo de contrato</i></p>
-                                        <p><strong>{{contract.contractTypeContractType.name}}</strong></p>
+                                        <p class="liEmpl"><strong>{{contract.contractTypeContractType.name}}</strong></p>
                                     </li>
                                     <li>
                                         <p class="title"><i>Salario</i></p>
-                                        <p><strong>${{contract.salary}}</strong></p>
+                                        <p class="liEmpl"><strong>${{contract.salary}}</strong></p>
                                     </li>
                                 </ul>
                             </div>
@@ -234,21 +234,21 @@
                                 <ul class="col-sm-12">
                                     <li>
                                         <p class="title"><i>Cargo</i></p>
-                                        <p><strong>{{contract.positionPosition.name}}</strong></p>
+                                        <p class="liEmpl"><strong>{{contract.positionPosition.name}}</strong></p>
                                     </li>
                                     {% if contract.contractTypeContractType.name == "Término fijo" %}
                                       <li>
                                           <p class="title"><i>Fecha fin de contrato</i></p>
-                                          <p><strong>{{ contract.endDate|date('F')|trans }} {{ contract.endDate|date('d')}} de {{  contract.endDate|date('Y')}}</strong></p>
+                                          <p class="liEmpl"><strong>{{ contract.endDate|date('F')|trans }} {{ contract.endDate|date('d')}} de {{  contract.endDate|date('Y')}}</strong></p>
                                       </li>
                                     {% endif %}
                                     <li>
                                         <p class="title"><i>Lugar de trabajo</i></p>
-                                        <p><strong>{{contract.workplaceWorkplace.mainAddress}}</strong></p>
+                                        <p class="liEmpl"><strong>{{contract.workplaceWorkplace.mainAddress}}</strong></p>
                                     </li>
                                     <li>
                                         <p class="title"><i>Metodo de pago</i></p>
-                                        <p><strong>{{contract.payMethodPayMethod.payTypePayType.name}}</strong></p>
+                                        <p class="liEmpl"><strong>{{contract.payMethodPayMethod.payTypePayType.name}}</strong></p>
                                     </li>
                                 </ul>
                             </div>
@@ -256,11 +256,11 @@
                                 <ul class="col-sm-12">
                                     <li>
                                         <p class="title"><i>Dedicación de tiempo</i></p>
-                                        <p><strong>{{contract.timeCommitmentTimeCommitment.name}}</strong></p>
+                                        <p class="liEmpl"><strong>{{contract.timeCommitmentTimeCommitment.name}}</strong></p>
                                     </li>
                                     <li>
                                         <p class="title"><i>Días laborales al mes</i></p>
-                                        <p><strong>{{contract.workableDaysMonth}}</strong></p>
+                                        <p class="liEmpl"><strong>{{contract.workableDaysMonth}}</strong></p>
                                     </li>
                                 </ul>
                             </div>
@@ -270,19 +270,19 @@
                                 <ul class="col-sm-12">
                                     <li>
                                         <p class="title"><i>Tipo de empleado</i></p>
-                                        <p><strong>{{ contract.positionPosition.name }}</strong></p>
+                                        <p class="liEmpl"><strong>{{ contract.positionPosition.name }}</strong></p>
                                     </li>
                                     <li>
                                         <p class="title"><i>Fecha inicion de contrato</i></p>
-                                        <p><strong>{{ contract.startDate|date('F')|trans }} {{ contract.startDate|date('d')}} de {{  contract.startDate|date('Y')}}</strong></p>
+                                        <p class="liEmpl"><strong>{{ contract.startDate|date('F')|trans }} {{ contract.startDate|date('d')}} de {{  contract.startDate|date('Y')}}</strong></p>
                                     </li>
                                     <li>
                                         <p class="title"><i>Tipo de contrato</i></p>
-                                        <p><strong>{{contract.contractTypeContractType.name}}</strong></p>
+                                        <p class="liEmpl"><strong>{{contract.contractTypeContractType.name}}</strong></p>
                                     </li>
                                     <li>
                                         <p class="title"><i>Salario</i></p>
-                                        <input style="margin: 10px 0;" id="form_contract_salary" name="contract[salary]" required="required" class="form-control" type="text">
+                                        <input style="margin: 10px 0;" id="form_contract_salary" name="contract[salary]" required="required" class="form-control liEmpl" type="text">
                                     </li>
                                 </ul>
                             </div>
@@ -290,16 +290,16 @@
                                 <ul class="col-sm-12">
                                     <li>
                                         <p class="title"><i>Cargo</i></p>
-                                        <p><strong>{{contract.contractTypeContractType.name}}</strong></p>
+                                        <p class="liEmpl"><strong>{{contract.contractTypeContractType.name}}</strong></p>
                                     </li>
                                     <li>
                                         <p class="title"><i>Fecha fin de contrato</i></p>
-                                        <p><strong>{{ contract.endDate|date('F')|trans }} {{ contract.endDate|date('d')}} de {{  contract.endDate|date('Y')}}</strong></p>
+                                        <p class="liEmpl"><strong>{{ contract.endDate|date('F')|trans }} {{ contract.endDate|date('d')}} de {{  contract.endDate|date('Y')}}</strong></p>
                                     </li>
                                     <li>
                                         {% set workplaces = employerHasEmployee.EmployerEmployer.workplaces %}
                                         <p class="title"><i>Lugar de trabajo</i></p>
-                                        <select style="margin: 10px 0;" id="form_contract_workplace" name="contract[workplace]" required="required" class="form-control">
+                                        <select style="margin: 10px 0;" id="form_contract_workplace" name="contract[workplace]" required="required" class="form-control liEmpl">
                                             <option value="" selected="selected">Seleccionar una opción</option>
                                             {% for workplace in workplaces %}
                                                 <option value="{{workplace.idWorkplace}}">{{ workplace.name}}</option>
@@ -309,7 +309,7 @@
                                     </li>
                                     <li>
                                         <p class="title"><i>Metodo de pago</i></p>
-                                        <select style="margin: 10px 0;" id="form_contract_method_type" name="contract[method_type]" required="required" class="form-control">
+                                        <select style="margin: 10px 0;" id="form_contract_method_type" name="contract[method_type]" required="required" class="form-control liEmpl">
                                             <option value="" selected="selected">Seleccionar una opción</option>
                                             {% for payMethodType in payMethodTypes %}
                                                 <option value="{{payMethodType.idPayType}}">{{ payMethodType.name}}</option>
@@ -323,11 +323,11 @@
                                 <ul class="col-sm-12 ">
                                     <li>
                                         <p class="title"><i>Dedicación de tiempo</i></p>
-                                        <p><strong>{{contract.timeCommitmentTimeCommitment.name}}</strong></p>
+                                        <p class="liEmpl"><strong>{{contract.timeCommitmentTimeCommitment.name}}</strong></p>
                                     </li>
                                     <li>
                                         <p class="title"><i>Dias laborales al mes</i></p>
-                                        <p><strong>{{contract.workableDaysMonth}}</strong></p>
+                                        <p class="liEmpl"><strong>{{contract.workableDaysMonth}}</strong></p>
                                     </li>
                                 </ul>
                             </div>
@@ -339,7 +339,7 @@
 
                     <div class="col-sm-12 file-download-contract downcopy" >
                         <h4 style="font-weight: bold;color: #00858C;">Copia firmada del contrato</h4>
-                        <p>Consulte aquí la copia digitalizada del contrato que usted guardó en el sistema el día 10 de enero de 2015. <strong>› Colsultar</strong></p>
+                        <p>Consulte aquí la copia digitalizada del contrato que usted guardó en el sistema el día 10 de enero de 2015. <strong>› Consultar</strong></p>
                         {% if contractEmployee %}
                             <a href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':contractEmployee.idDocument}) }}">
                                 <div  class="col-sm-8 col-sm-offset-2 pdf-contract-download">
@@ -367,7 +367,7 @@
                     <div class="col-sm-8 col-sm-offset-2 recuadro-ssocial">
                         <div class="col-sm-6 left">
                           {% if entidades["EPS"].name is defined %}
-                            <p class="title"><i><strong>Eps</strong></i></p>
+                            <p class="title"><i><strong>EPS</strong></i></p>
                           {% endif %}
                             <p class="title"><i><strong>Fondo de Pensiones</strong></i></p>
                             <!--<p class="title"><i><strong>Arl</strong></i></p>-->
