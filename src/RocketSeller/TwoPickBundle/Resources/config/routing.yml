@@ -68,7 +68,7 @@ add_to_sql_and_hightec_back:
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:addToSQLandHighTecBack}
 add_to_sql_entities_back:
     path:     /backoffice/entities/addtoback/{user}/{autentication}/{idEhe}
-    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:addToSQLandHighTecBack}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:addToSQLEntitiesBack}
 show_un_active_codes:
     path:     /backoffice/show/unactive/codes
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showUnActiveCodes}
