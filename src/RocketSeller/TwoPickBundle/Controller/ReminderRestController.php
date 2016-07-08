@@ -73,7 +73,7 @@ class ReminderRestController extends FOSRestController
                     $response = $response."- -NO ESTA APROBADO. <br><br>";
                 }
             }
-        }elseif($date->format('d') == 8){
+        }elseif($date->format('d') == 10){
             $users = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:User")->findAll();
             $response = $response."- SE EJECUTA LA TAREA QUINCENAL".'<br><br>';
             /** @var User $user */
@@ -182,7 +182,7 @@ class ReminderRestController extends FOSRestController
                     $response = $response."- -NO ESTA APROBADO. <br><br>";
                 }
             }
-        }elseif($date->format('d') == 8){
+        }elseif($date->format('d') == 12){
             $users = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:User")->findAll();
             $response = $response."- SE EJECUTA LA TAREA QUINCENAL".'<br><br>';
             /** @var User $user */

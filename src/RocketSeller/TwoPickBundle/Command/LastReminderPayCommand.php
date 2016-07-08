@@ -28,7 +28,7 @@ class LastReminderPayCommand extends ContainerAwareCommand
 
         $this->output = $output;
 
-        $ch = curl_init("http://127.0.0.1/api/public/v1/secured/lasts/reminders");
+        $ch = curl_init("http://ec2-52-91-121-67.compute-1.amazonaws.com/api/public/v1/secured/lasts/reminders");
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
