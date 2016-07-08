@@ -213,7 +213,7 @@ class TwigSwiftMailer implements MailerInterface
             ->setFrom(array($fromEmail=>'Equipo Symplifica'))
             ->setTo($toEmail)
             ->setReplyTo("contactanos@symplifica.com")
-            ->setPriority(2);
+            ->setPriority(1);
 
         if ($path) {
             $message->attach(\Swift_Attachment::fromPath($path));
