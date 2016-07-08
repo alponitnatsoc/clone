@@ -162,8 +162,14 @@ function startSubscriptionChoise() {
                 $("div[data-id='"+ key +"']").each(function(){
                   if($(this).hasClass("salaryIndVal"))
                   {
-                    $(this).html(getPrice(resultado['totalIncome']));
-                    total_income += resultado['totalIncome'];
+                    var tI = resultado['totalIncome'];
+                    console.log("prev " + tI);
+                    if(type == "days"){
+                      tI = (tI / numberOfDays) * 4.34523810;
+                    }
+                    console.log("pos " + tI);
+                    $(this).html(getPrice(tI));
+                    total_income += tI;
                     total_seguridad_social += resultado['totalDiscountsForEmployer'];
                   }
                 });
@@ -372,8 +378,12 @@ function fillTable(){
             if($(this).hasClass("salaryIndVal"))
             {
               if(contrato[key]['wayToPay'] != 3){
-                $(this).html(getPrice(salaryKey));
-                total_income += salaryKey;
+                var tI = salaryKey;
+                if(type == "days"){
+                  tI = (tI / numberOfDays) * (numberOfDays/4 * 4.34523810);
+                }
+                $(this).html(getPrice(tI));
+                total_income += tI;
                 num_empleados_pago_nomina++;
                 if(contrato[key]['frecuencia'] == 2){
                   num_empleados_pago_nomina_quincenal++;
