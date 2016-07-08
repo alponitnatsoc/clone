@@ -1955,12 +1955,13 @@ function validateSalary() {
 
         if(numberToCmp < salMinDiario)
         {
-            if(numberToCmp !=0) {
+            if(numberToCmp !=0 || $("#register_employee_employeeHasEmployers_salaryD").val() != 0) {
                 $("#salarioMinimo").find('.modal-body').html('El salario diario debe ser más alto para que el salario contractual sea del mínimo legal vigente ($' + getPrice(salMinDiario) + ').');
                 $("#salarioMinimo").modal('show');
                 $("#register_employee_employeeHasEmployers_salaryD").val(salMinDiario);
                 reverseCalculator();
-            }else{
+            }
+            else{
                 showModal(3);
             }
             return false;
