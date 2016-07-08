@@ -467,7 +467,7 @@ function fillTable(){
         $(this).html(getPrice(endValue) + "</br>GRATIS Por el próximo mes");
       }
       else if( freeMonths > 1){
-        $(this).html(getPrice(endValue) + "GRATIS Por los próximos " + freeMonths + " meses");
+        $(this).html(getPrice(endValue) + "</br>GRATIS Por los próximos " + freeMonths + " meses");
       }
       else{
         $(this).html(getPrice(endValue));
