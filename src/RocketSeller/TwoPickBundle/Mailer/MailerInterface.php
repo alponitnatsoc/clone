@@ -57,6 +57,15 @@ interface MailerInterface
     public function sendReminderEmailMessage(UserInterface $user,$toEmail);
 
     /**
+     * Send an reminder email
+     *
+     * @param User $user usuario al que se le envia el email
+     * @param $days tipo de recordatorio para el usuario 2 o 3 dias habiles
+     * @return void
+     */
+    public function sendReminderPayEmailMessage(User $user, $days);
+
+    /**
      * Send help message
      * @param String $name
      * @param String $fromEmail

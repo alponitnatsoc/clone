@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
+use RocketSeller\TwoPickBundle\Entity\Pay;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
@@ -117,6 +118,8 @@ class HighTechRestController extends FOSRestController
       $dis->setPurchaseOrdersStatus($pos);
       $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getDispersePurchaseOrder', ['idPurchaseOrder' => $dis->getIdPurchaseOrders()]);
     } else {
+      //TODO enviar el correo a "" notificando que no se pudo hacer la transaccion con la informacion de, la fecha del rechazo, el monto, el empleador(nombres, telefono,correo) y el empleado(nombres, numero de cuenta),
+
       $pos=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'P1'));
                //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
       $dis->setPurchaseOrdersStatus($pos);
@@ -174,7 +177,7 @@ class HighTechRestController extends FOSRestController
     $state = $parameters['estado'];
     $payRepository = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Pay");
 
-    /** @var PurchaseOrders $pay */
+    /** @var Pay $pay */
     $pay = $payRepository->findOneBy(array('idDispercionNovo' => $id));
     if ($pay == null) {
       throw new HttpException(404, "The id: " . $id . " was not found.");
@@ -185,14 +188,17 @@ class HighTechRestController extends FOSRestController
     if($state == 0) {
       $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'-1'));
                //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
-      $pay->setPurchaseOrdersStatus($pos);
+      $pay->setPurchaseOrdersStatusPurchaseOrdersStatus($pos);
+      $pay->getPurchaseOrdersDescription()->setPurchaseOrdersStatus($pos);
     } else {
       $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'-2'));
                //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
-      $pay->setPurchaseOrdersStatus($pos);
+      $pay->setPurchaseOrdersStatusPurchaseOrdersStatus($pos);
+      $pay->getPurchaseOrdersDescription()->setPurchaseOrdersStatus($pos);
       $view = View::create();
 
       //TODO(gabriel.montero): Aca se debe crear una notificicacion tanto para el backoffice, como para el usuario
+      //TODO enviar el correo a "" notificando que no se pudo hacer la transaccion con la informacion de, la fecha del rechazo, el monto, el empleador(nombres, telefono,correo) y el empleado(nombres, numero de cuenta),
       // Indicando que la transaccion no fue exitosa y se debe revisar la informacion del empleado.
       // Esto tambien debe disparar una accion que cuente un tiempo y retorne la plata automaticamente si no hay cambios.
     }
