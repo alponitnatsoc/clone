@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
+use RocketSeller\TwoPickBundle\Entity\Pay;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
@@ -176,7 +177,7 @@ class HighTechRestController extends FOSRestController
     $state = $parameters['estado'];
     $payRepository = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Pay");
 
-    /** @var PurchaseOrders $pay */
+    /** @var Pay $pay */
     $pay = $payRepository->findOneBy(array('idDispercionNovo' => $id));
     if ($pay == null) {
       throw new HttpException(404, "The id: " . $id . " was not found.");
@@ -187,11 +188,13 @@ class HighTechRestController extends FOSRestController
     if($state == 0) {
       $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'-1'));
                //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
-      $pay->setPurchaseOrdersStatus($pos);
+      $pay->setPurchaseOrdersStatusPurchaseOrdersStatus($pos);
+      $pay->getPurchaseOrdersDescription()->setPurchaseOrdersStatus($pos);
     } else {
       $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'-2'));
                //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
-      $pay->setPurchaseOrdersStatus($pos);
+      $pay->setPurchaseOrdersStatusPurchaseOrdersStatus($pos);
+      $pay->getPurchaseOrdersDescription()->setPurchaseOrdersStatus($pos);
       $view = View::create();
 
       //TODO(gabriel.montero): Aca se debe crear una notificicacion tanto para el backoffice, como para el usuario
