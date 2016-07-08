@@ -44,7 +44,8 @@ function startEmployee() {
                 "register_employee[employeeHasEmployers][paysPens]": "required",
                 "register_employee[verificationCode]": "required",
                 "register_employee[employeeHasEmployers][frequencyFrequency]": "required",
-                "register_employee[employeeHasEmployers][holidayDebt]": "required"
+                "register_employee[employeeHasEmployers][holidayDebt]": "required",
+                "register_employee[entities][pension]":"required"
                 /*,
                  "register_employee[credit_card]": "required",
                  "register_employee[cvv]": "required",
@@ -82,7 +83,8 @@ function startEmployee() {
                 "register_employee[employeeHasEmployers][paysPens]": "Por favor selecciona una opción",
                 "register_employee[verificationCode]": "Por favor ingrese el código",
                 "register_employee[employeeHasEmployers][frequencyFrequency]": "Por favor selecciona una opción",
-                "register_employee[employeeHasEmployers][holidayDebt]" : "Por favor ingrese un número de días o cambie de opción"
+                "register_employee[employeeHasEmployers][holidayDebt]" : "Por favor ingrese un número de días o cambie de opción",
+                "register_employee[entities][pension]":"Debes seleccionar una entidad"
                 /*,
                  "register_employee[credit_card]": "Por favor ingresa el número de la tarjeta",
                  "register_employee[cvv]": "Por favor ingresa el código de seguridad de la tarjeta",
@@ -1005,9 +1007,13 @@ function startEmployee() {
     $("#register_employee_employeeHasEmployers_holidayDebt").val(Math.abs($("#register_employee_employeeHasEmployers_holidayDebt").val()));
     $("#totalExpensesVal").attr("disabled", true);
     loadConstrains();
+
     if($("#register_employee_employeeHasEmployers_timeCommitment_2").is("[checked]")){
       $(document).ajaxStop(function () {
+        if(leavingPage == false){
           reverseCalculator();
+          leavingPage = true;
+        }
       });
     }
 
@@ -1031,6 +1037,7 @@ function startEmployee() {
     $("#register_employee_employeeHasEmployers_paysPens").on("change",function(){
         if($(this).find("input:checked").val()=="1"){
             $("#pensionHide").show();
+            $("#register_employee_entities_pension").val("");
         }else{
             $("#pensionHide").hide();
             $("#register_employee_entities_pension").val(50);
@@ -1276,6 +1283,15 @@ function jsonCalcToHTML(data) {
 }
 
 function addListeners() {
+  $("#sisbenTooltip").on('click', function(){
+    $(this).tooltip('show');
+  });
+  $("#pensionTooltip").on('click', function(){
+    $(this).tooltip('show');
+  });
+  $("#costoTooltip").on('click', function(){
+    $(this).tooltip('show');
+  });
     $("#ex6").bootstrapSlider();
     $("#ex6").on("slide", function (slideEvt) {
         $("#register_employee_employeeHasEmployers_salaryD").val(slideEvt.value);
@@ -1512,8 +1528,23 @@ function addListeners() {
           $(this).prop("checked", true);
         });
     });
+
+   $("#cerrarModalDetalle").click(function(){
+     //TODO Cambiar coso a la presel
+     var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
+     if (selectedVal == " Trabajador por días") {
+         $('#radio_diario').prop('checked', true);
+         $('#radio_mensual').prop('checked', false);
+     }
+     else {
+         $('#radio_diario').prop('checked', true);
+         $('#radio_mensual').prop('checked', false);
+     }
+     calculator();
+   });
 }
 //Extract Constraints
+var leavingPage =  false;
 var transportAid;
 var smmlv;
 var EPSEmployer;
@@ -1924,12 +1955,13 @@ function validateSalary() {
 
         if(numberToCmp < salMinDiario)
         {
-            if(numberToCmp !=0) {
+            if(numberToCmp !=0 || $("#register_employee_employeeHasEmployers_salaryD").val() != 0) {
                 $("#salarioMinimo").find('.modal-body').html('El salario diario debe ser más alto para que el salario contractual sea del mínimo legal vigente ($' + getPrice(salMinDiario) + ').');
                 $("#salarioMinimo").modal('show');
                 $("#register_employee_employeeHasEmployers_salaryD").val(salMinDiario);
                 reverseCalculator();
-            }else{
+            }
+            else{
                 showModal(3);
             }
             return false;

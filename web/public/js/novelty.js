@@ -11,16 +11,24 @@ function addNoveltySelectListener() {
 
     var selectedText = $("#novelty_fields_noveltyType").find("option:selected").text();
 
-    if(selectedText =="Hora extra diurna" ||
-          selectedText =="Hora extra festiva diurna"){
-          $("#notaNovedad").show();
-          $("#notaNovedad").text("Se considera hora extra diurna en el horario de 6AM a 10PM.");
+    if(selectedText =="Hora extra diurna"){
+      $("#notaNovedad").show();
+      $("#notaNovedad").text("Hora extra diurna es el tiempo de trabajo adicional a las 8 horas diarias o a la jornada pactada entre las partes en un horario de 6am a 10pm.");
     }
 
-    if(selectedText =="Hora extra nocturna" ||
-        selectedText =="Hora extra festiva nocturna"  ){
-          $("#notaNovedad").show();
-          $("#notaNovedad").text("Se considera hora extra nocturna en el horario de 10PM a 6AM.");
+    if(selectedText =="Hora extra festiva diurna"){
+      $("#notaNovedad").show();
+      $("#notaNovedad").text("Hora extra diurna festiva es aquella hora que se trabaja adicional a las 8 horas diarias o a la jornada pactada entre las partes en un horario de 6am a 10 pm; en un día festivo o dominical.");
+    }
+
+    if(selectedText =="Hora extra nocturna"){
+      $("#notaNovedad").show();
+      $("#notaNovedad").text("Hora extra nocturna es aquella hora que se trabaja adicional a las 8 horas diarias o a la jornada pactada entre las partes en un horario de 10:00pm a 6 am.");
+    }
+
+    if(selectedText =="Hora extra festiva nocturna"  ){
+      $("#notaNovedad").show();
+      $("#notaNovedad").text("Hora extra nocturna festiva es aquella hora que se trabaja adicional a las 8 horas diarias o a la jornada pactada entre las partes en un horario de 10pm a 6am; en un día festivo o dominical.");
     }
 
     if(selectedText =="Licencia de maternidad" ||

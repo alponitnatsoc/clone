@@ -569,12 +569,14 @@ Si tu empleado inició labores anteriormente. Debes regresar y marcarlo correcta
 
                                     <div class="col-sm-12 col-xs-12 days">
                                         <div class="col-sm-6 label-group">
+                                            <div id="sisbenTooltip" class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="top" data-container = "body" data-delay="{ show: 1, hide: 1}"
+                                            title="Si aparece régimen subsidiado, si pertenece al Sisben. Si aparece régimen contributivo, no pertenece al Sisben" style="float:left"></div>
                                             {{ form_label(form.employeeHasEmployers.sisben,null,{'label_attr':{'style':'width:90%'}}) }}
                                         </div>
                                         <div class="col-sm-6 form-group">
                                             {{ form_widget(form.employeeHasEmployers.sisben) }}
                                             <a target="_blank"  href="http://www.tramitesyconsultas.info/consulta-fosyga-afiliados/#formulario"><div class="btn btn-grey" style="margin: 0 auto 35px auto;clear: both;width: 90%;white-space: inherit;text-align: left;">
-                                              Si no sabes, ingresa acá y consulta con la cédula de tu empleado
+                                              &#10095; Consulta aquí
                                             </div></a>
                                         </div>
 
@@ -582,7 +584,13 @@ Si tu empleado inició labores anteriormente. Debes regresar y marcarlo correcta
 
                                     <div id="hidePensOpt" class="col-sm-12 col-xs-12">
                                         <div class="col-sm-6 label-group">
-                                            {{ form_label(form.employeeHasEmployers.paysPens) }}
+                                          <div id="pensionTooltip" class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="top" data-container = "body" data-delay="{ show: 1, hide: 1}"
+                                          title="No requiere aportar a pensión cuando:
+                                                Ya está pensionado,
+                                                es heredero de una pensión o
+                                                la edad de inicio de aporte no cumple requisito de días a aportar"></div>
+                                            {{ form_label(form.employeeHasEmployers.paysPens, null,{
+                                            'label' : '¿Requiere aportar a pensión?',})}}
                                         </div>
                                         <div class="col-sm-6 form-group">
                                             {{ form_widget(form.employeeHasEmployers.paysPens) }}
@@ -677,6 +685,9 @@ Si tu empleado inició labores anteriormente. Debes regresar y marcarlo correcta
                                 <div id="cont-resumenpagos">
                                     <div class="col-sm-12 col-xs-12 text-center resumenpagos">
                                         <br />
+                                        <div id="costoTooltip" class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="top" data-container = "body" data-delay="{ show: 1, hide: 1}"
+                                        title="Este valor incluye lo pertinente a salud, riegos y pensión.
+Adicional están los días de vacaciones, cesantías, intereses sobre cesantías y prima (En aprobación)"></div>
                                         <p id="labelCosto" class="p">Costo total<br />del empleado</p>
                                         <div class="priceTotal">
 
@@ -751,7 +762,7 @@ Si tu empleado inició labores anteriormente. Debes regresar y marcarlo correcta
                                                 <h3 class="modal-title">Detalles Calculadora</h3>
                                             </div>
                                         -->
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
+                                            <button id="cerrarModalDetalle" type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
                                             <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
                                                 <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 20px;">&nbsp;&nbsp;&nbsp;<i class="glyphicon glyphicon-usd" style="font-size:17px"></i>&nbsp;          Estimación del costo de tu empleado</div>
                                             </div>
@@ -1184,6 +1195,11 @@ $(document).ready(function(){
                             <div id="paymentMethod" class="tab-pane fade in">
                                 <div class="formulario" style="border-bottom:0px">
                                     <div class="formulario row" style="margin:0;padding:0">
+                                      <div class="textoFinalPaymeth">
+                                          *Por tu seguridad y la de tus empleados te recomendamos los métodos de pago electrónicos ya que te
+                                          permiten tener todas las evidencias de pagos de salario de manera automática y evitas manejar efectivo.
+                                           Las transferencias a través de nuestra plataforma generan costos transaccionales.
+                                      </div>
                                         <div class="col-sm-12 col-xs-12">
                                             <div class="text-center" style="padding: 0 0 30px 0;font-size: 19px;font-weight: 100;color: #00858C;">
                                                 ¿Cuál será el metodo de pago para tu empleado?
@@ -1291,11 +1307,6 @@ $(document).ready(function(){
 
                                             </div>
                                             <br />
-                                            <div class="textoFinalPaymeth">
-                                                *Por tu seguridad y la de tus empleados te recomendamos los métodos de pago electrónicos ya que te
-                                                permiten tener todas las evidencias de pagos de salario de manera automática y evitas manejar efectivo.
-                                                 Las transferencias a través de nuestra plataforma generan costos transaccionales.
-                                            </div>
                                             <div class="col-sm-12 col-xs-12 center" style="border-top: 1px solid #e6e7e8; padding-top: 20px;">
                                                 <a class="btn btn-grey btnPrevious-contract btnPrevious" >Volver atrás</a>
                                                 <button id="register_employee_save" type="submit" name="register_employee[save]" class="btn btn-orange">Procesar información de contrato</button>
