@@ -162,8 +162,14 @@ function startSubscriptionChoise() {
                 $("div[data-id='"+ key +"']").each(function(){
                   if($(this).hasClass("salaryIndVal"))
                   {
-                    $(this).html(getPrice(resultado['totalIncome']));
-                    total_income += resultado['totalIncome'];
+                    var tI = resultado['totalIncome'];
+                    console.log("prev " + tI);
+                    if(type == "days"){
+                      tI = (tI / numberOfDays) * 4.34523810;
+                    }
+                    console.log("pos " + tI);
+                    $(this).html(getPrice(tI));
+                    total_income += tI;
                     total_seguridad_social += resultado['totalDiscountsForEmployer'];
                   }
                 });
@@ -372,8 +378,12 @@ function fillTable(){
             if($(this).hasClass("salaryIndVal"))
             {
               if(contrato[key]['wayToPay'] != 3){
-                $(this).html(getPrice(salaryKey));
-                total_income += salaryKey;
+                var tI = salaryKey;
+                if(type == "days"){
+                  tI = (tI / numberOfDays) * (numberOfDays/4 * 4.34523810);
+                }
+                $(this).html(getPrice(tI));
+                total_income += tI;
                 num_empleados_pago_nomina++;
                 if(contrato[key]['frecuencia'] == 2){
                   num_empleados_pago_nomina_quincenal++;
@@ -421,6 +431,9 @@ function fillTable(){
             subtotal = subtotal * 0.9;
           }
 
+          //Is confusing to the user displaying free months and having to pay
+          //TODO when we stop of giving free months we should remove this = 0
+          subtotal = 0;
           total_cost_all = subtotal + total_seguridad_social + total_income + totalTransaccionalL;
           $("#totalCostAll").html(getPrice(total_cost_all));
       }
@@ -457,7 +470,7 @@ function fillTable(){
         $(this).html(getPrice(endValue) + "</br>GRATIS Por el próximo mes");
       }
       else if( freeMonths > 1){
-        $(this).html(getPrice(endValue) + "GRATIS Por los próximos " + freeMonths + " meses");
+        $(this).html(getPrice(endValue) + "</br>GRATIS Por los próximos " + freeMonths + " meses");
       }
       else{
         $(this).html(getPrice(endValue));

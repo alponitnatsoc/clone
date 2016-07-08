@@ -292,8 +292,8 @@
                                         <div style="font-style:italic; font-weight:100; font-size: small;"
                                              class="{{ ((contrato.workableDaysMonth) >= 20)? 'tiempo_completo':(((contrato.workableDaysMonth) >= 11)? 'medio_tiempo':'trabajo_por_dias' ) }}  "
                                              data-employeeId="{{ employee.idEmployerHasEmployee }}">
-                                            Trabaja {{ (contrato.workableDaysMonth)|number_format(0, '.', ',') }} días
-                                            al mes
+                                            Trabaja {{ ((contrato.workableDaysMonth / 4) * 4.34523810)|number_format(2, '.', ',') }} días
+                                            en promedio al mes
                                         </div>
                                     </div>
 

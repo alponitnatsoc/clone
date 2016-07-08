@@ -55,6 +55,7 @@ class EntitiesPick extends AbstractType
                 'class' => 'RocketSellerTwoPickBundle:Entity',
                 'choices' => $this->pensionEntities,
                 'choice_label' =>'name',
+                'placeholder'=>"Seleccione una opción",
                 'mapped' => false,
                 'label'=>'Pension'
             ))
