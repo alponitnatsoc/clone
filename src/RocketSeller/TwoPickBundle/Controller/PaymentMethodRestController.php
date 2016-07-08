@@ -398,7 +398,13 @@ class PaymentMethodRestController extends FOSRestController
             $dispersionAnswer=$this->disperseMoney($desc,$person);
             if($dispersionAnswer['code']!=200){
                 return $view->setStatusCode($dispersionAnswer['code'])->setData($dispersionAnswer['data']);
+            }else{
+                //setting the id of the dispersion to rejected
+                $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'-2'));
+                $desc->setPurchaseOrdersStatus($pos);
+                //TODO  enviar el correo a "" notificando que no se pudo hacer la transaccion con la informacion de, la fecha del rechazo, el monto, el empleador(nombres, telefono,correo) y el empleado(nombres, numero de cuenta),
             }
+
         }
         $view->setStatusCode(200)->setData(array());
         return $view;
@@ -430,6 +436,10 @@ class PaymentMethodRestController extends FOSRestController
         if($purchaseOrder==null){
             return $view->setStatusCode(404)->setData(array('purchaseOrder'=>"la orden de compra no existe"));
         }
+        if($purchaseOrder->getAlreadyRecived()==1){
+            $view->setStatusCode(200)->setData(array('alreadySent'=>'the confirmation was already sent to the server'));
+            return $view;
+        }
         /** @var User $user */
         $user = $purchaseOrder->getIdUser();
         $person = $user->getPersonPerson();
@@ -438,6 +448,7 @@ class PaymentMethodRestController extends FOSRestController
         $pmArray=explode('-',$pmid);
         $purchaseOrder->setPayMethodId($pmArray[1]);
         $purchaseOrder->setProviderId($pmArray[0]);
+        $purchaseOrder->setAlreadyRecived(1);
         $em=$this->getDoctrine()->getManager();
         $em->persist($purchaseOrder);
         $em->flush();

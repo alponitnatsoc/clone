@@ -117,6 +117,8 @@ class HighTechRestController extends FOSRestController
       $dis->setPurchaseOrdersStatus($pos);
       $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getDispersePurchaseOrder', ['idPurchaseOrder' => $dis->getIdPurchaseOrders()]);
     } else {
+      //TODO enviar el correo a "" notificando que no se pudo hacer la transaccion con la informacion de, la fecha del rechazo, el monto, el empleador(nombres, telefono,correo) y el empleado(nombres, numero de cuenta),
+
       $pos=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'P1'));
                //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
       $dis->setPurchaseOrdersStatus($pos);
@@ -193,6 +195,7 @@ class HighTechRestController extends FOSRestController
       $view = View::create();
 
       //TODO(gabriel.montero): Aca se debe crear una notificicacion tanto para el backoffice, como para el usuario
+      //TODO enviar el correo a "" notificando que no se pudo hacer la transaccion con la informacion de, la fecha del rechazo, el monto, el empleador(nombres, telefono,correo) y el empleado(nombres, numero de cuenta),
       // Indicando que la transaccion no fue exitosa y se debe revisar la informacion del empleado.
       // Esto tambien debe disparar una accion que cuente un tiempo y retorne la plata automaticamente si no hay cambios.
     }

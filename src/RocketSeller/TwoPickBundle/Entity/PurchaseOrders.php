@@ -106,6 +106,11 @@ class PurchaseOrders
     private $value;
 
     /**
+     * @ORM\Column(type="smallint", nullable=TRUE)
+     */
+    private $alreadyRecived;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -424,5 +429,29 @@ class PurchaseOrders
     public function getDatePaid()
     {
         return $this->date_paid;
+    }
+
+    /**
+     * Set alreadyRecived
+     *
+     * @param integer $alreadyRecived
+     *
+     * @return PurchaseOrders
+     */
+    public function setAlreadyRecived($alreadyRecived)
+    {
+        $this->alreadyRecived = $alreadyRecived;
+
+        return $this;
+    }
+
+    /**
+     * Get alreadyRecived
+     *
+     * @return integer
+     */
+    public function getAlreadyRecived()
+    {
+        return $this->alreadyRecived;
     }
 }
