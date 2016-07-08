@@ -104,6 +104,20 @@ class TwigSwiftMailer implements MailerInterface
         );
         return $this->sendMessage($template,$context,'registro@symplifica.com', $to);
     }
+
+    public function sendLastReminderPayEmailMessage(User $user , $days)
+    {
+        $to = $user->getEmail();
+        $template = $this->parameters['template']['lastRemindNovelty'];
+        $context = array(
+            'toEmail' => $user->getEmail(),
+            'user' => $user,
+            'subject'=> "Recordatorio Agregar Novedades",
+            'dias' => $days,
+            'userName' => $user->getPersonPerson()->getFullName(),
+        );
+        return $this->sendMessage($template,$context,'registro@symplifica.com', $to);
+    }
     
     public function sendWelcomeEmailMessage(UserInterface $user)
     {
@@ -196,8 +210,10 @@ class TwigSwiftMailer implements MailerInterface
 
         $message = \Swift_Message::newInstance()
             ->setSubject($subject)
-            ->setFrom($fromEmail)
-            ->setTo($toEmail);
+            ->setFrom(array($fromEmail=>'Equipo Symplifica'))
+            ->setTo($toEmail)
+            ->setReplyTo("contactanos@symplifica.com")
+            ->setPriority(2);
 
         if ($path) {
             $message->attach(\Swift_Attachment::fromPath($path));

@@ -521,7 +521,7 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
         /* Type fces */
 
         $EntityFcesPorvenir = new Entity();
-        $EntityFcesPorvenir->setName('FCES PORVENIR');
+        $EntityFcesPorvenir->setName('FCES PORVENIR - HORIZONTE');
         $EntityFcesPorvenir->setPayrollCode('400');
         $EntityFcesPorvenir->setPilaCode('03');
         $EntityFcesPorvenir->setEntityTypeEntityType($this->getReference('entityType-fces'));
@@ -538,15 +538,6 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
 
         $manager->persist($EntityFcesColfondos);
 
-        $EntityFcesHorizonte = new Entity();
-        $EntityFcesHorizonte->setName('FCES HORIZONTE');
-        $EntityFcesHorizonte->setPayrollCode('420');
-        $EntityFcesHorizonte->setPilaCode('05');
-        $EntityFcesHorizonte->setEntityTypeEntityType($this->getReference('entityType-fces'));
-
-
-        $manager->persist($EntityFcesHorizonte);
-
         $EntityFcesProteccion = new Entity();
         $EntityFcesProteccion->setName('FCES PROTECCION');
         $EntityFcesProteccion->setPayrollCode('430');
@@ -557,7 +548,7 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($EntityFcesProteccion);
 
         $EntityFcesSkandia = new Entity();
-        $EntityFcesSkandia->setName('FCES SKANDIA');
+        $EntityFcesSkandia->setName('FCES OLD MUTUAL SKANDIA');
         $EntityFcesSkandia->setPayrollCode('450');
         $EntityFcesSkandia->setPilaCode('19');
         $EntityFcesSkandia->setEntityTypeEntityType($this->getReference('entityType-fces'));
@@ -1403,7 +1394,6 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('entity-SkandiaOldMutualFondoDePensionesObligatorias-afp', $EntityAfpSkandiaOldMutualFondoDePensionesObligatorias);
         $this->addReference('entity-Porvenir-fces', $EntityFcesPorvenir);
         $this->addReference('entity-Colfondos-fces', $EntityFcesColfondos);
-        $this->addReference('entity-Horizonte-fces', $EntityFcesHorizonte);
         $this->addReference('entity-Proteccion-fces', $EntityFcesProteccion);
         $this->addReference('entity-Skandia-fces', $EntityFcesSkandia);
         $this->addReference('entity-FondoNacionalDelAhorro-fces', $EntityFcesFondoNacionalDelAhorro);
