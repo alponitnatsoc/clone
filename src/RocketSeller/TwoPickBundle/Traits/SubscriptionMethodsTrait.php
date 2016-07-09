@@ -614,8 +614,8 @@ trait SubscriptionMethodsTrait
         /* @var $employer Employer */
         $employer = $person->getEmployer();
         $request = $this->container->get('request');
+        $em = $this->getDoctrine()->getManager();
         if($employer->getIdHighTech()==null){
-            $em = $this->getDoctrine()->getManager();
             $request->setMethod("POST");
             $request->request->add(array(
                 "documentType" => $person->getDocumentType(),
