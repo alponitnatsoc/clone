@@ -3,9 +3,10 @@
 <head>
 <title>Factura de servicio de Symplifica</title>
 <meta charset="utf-8" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700' rel='stylesheet' type='text/css'>
 <style>
 body {
-    height: 792px;
+    height: 900px;
     width: 612px;
     /* to centre page on screen*/
     margin-left: auto;
@@ -39,7 +40,9 @@ body {
 .columns {
     overflow: auto;
 }
-
+.columns p {
+  margin: 5px 0
+}
 .columns .cols {
     float: left;
     width: 50%;
@@ -50,95 +53,100 @@ body {
     overflow: auto;
 /*     border-bottom: solid; */
 }
+.subt {
+        height: auto;
+    overflow: hidden;
+    clear: both;
+    border-bottom: 1px solid;
+    border-top: 1px solid;
+    padding: 5px 0;
+    margin: 5px 0;
+    }
 
 </style>
 </head>
-<body>
+<body style="color:#5D5D5D">
 {% set local = "now"|date("d-m-y") %}
 <hr />
 <div class="level">
-    <div style="width: 33%; float: left;">
-        <p>SYMPLIFICA logo</p>
+    <div style="width: 100%;">
+        <p><img src="https://symplifica.com/img/logo.png" alt="Symplifica"></p>
     </div>
-    <div style="width: 34%; float: left;">
+    <div style="width: 100%;font-family: 'Open Sans', sans-serif;font-weight:700">
+        <p style="margin:0">FACTURA DE VENTA <span>Nº {{ data.invoiceNumber }}</span></p>
+        <p style="margin: 5px 0 20px 0;"><strong>Orden de compra: </strong>{{ data.purchaseOrder.number }}</p>
+    </div>
+    <div class="level" style="border: 1px solid;border-radius: 5px;">
+        <div style="width: 33%; float:left"><small>SYMPLIFICA S.A.S.</small></div>
+        <div style="width: 34%; float:left"><small>NIT 900.862.831-7</small></div>
+        <div style="width: 33%; float:left"><small>BOGOTÁ - COLOMBIA</small></div>
+    </div>
+    <div style="width: 85%;margin:0 auto;padding: 10px 0 0 0;font-weight:100;font-family: 'Open Sans', sans-serif">
         <small>IVA Régimen Común</small>
         <small>No Somos Grandes Contribuyentes - No Somos Autorretenedores</small>
         <small>Actividad Económica 7020</small>
         <small>Resolución DIAN No. 320001302735 del 2015/08/19</small>
         <small>Numeración Autorizada por Computador del 01 al 1000</small>
     </div>
-    <div style="width: 33%; float: left;">
-        <p>FACTURA DE VENTA</p>
-        <p>Nº {{ data.invoiceNumber }}</p>
-    </div>
+
 </div>
 
-<div class="level">
-    <div style="width: 33%; float:left"><small>SYMPLIFICA S.A.S.</small></div>
-    <div style="width: 34%; float:left"><small>NIT 900.862.831-7</small></div>
-    <div style="width: 33%; float:left"><small>BOGOTÁ - COLOMBIA</small></div>
-</div>
+
 
 <div class="level table">
-    <div class="title"><strong>DATOS DEL CLIENTE</strong></div>
-    <div class="columns">
+    <div class="title" style="padding: 0 0 5px 0;font-family: 'Open Sans', sans-serif;font-weight:700"><strong>DATOS DEL CLIENTE</strong></div>
+    <div class="columns" style="border-top: 1px solid #CCC;border-bottom: 1px solid #CCC;padding: 10px 0;">
         <div class="cols">
-            <p><strong>Nombre:</strong>{{ data.client.name }}</p>
-            <p><strong>{{ data.client.docType }}:</strong>{{ data.client.docNumber }}</p>
-            <p><strong>Dirección:</strong>{{ data.client.address }}</p>
-            <p><strong>Teléfono:</strong>{{ data.client.phone[0].phoneNumber }}</p>
-            <p><strong>Ciudad:</strong>{{ data.client.city }}</p>
+            <p><strong>Nombre: </strong>{{ data.client.name }}</p>
+            <p><strong>{{ data.client.docType }}: </strong>{{ data.client.docNumber }}</p>
+            <p><strong>Dirección: </strong>{{ data.client.address|capitalize }}</p>
         </div>
-        <div class="cols">
-            <p><strong>Orden de compra:</strong>{{ data.purchaseOrder.number }}</p>
-            <p><strong>Ciudad:</strong>{{ data.purchaseOrder.city }}</p>
-            <p><strong>Fecha:</strong>{{ "now"|date('d-m-y') }}</p>
-            <p><strong>Vencimiento:</strong>{{ data.purchaseOrder.endDate }}</p>
-            <p><strong>Centro/subcentro:</strong>{{ data.purchaseOrder.center }}</p>
+        <div class="cols" style="text-align:right">
+            <p><strong>Fecha: </strong>{{ "now"|date('d-m-y') }}</p>
+            <p><strong>Teléfono: </strong>{{ data.client.phone[0].phoneNumber }}</p>
+            <p><strong>Ciudad: </strong>{{ data.client.city }}</p>
         </div>
     </div>
 </div>
 
-<div class="level table">
+<div class="level table" style="border-bottom: 1px solid;">
     <div class="columns">
-        <div class="row">
-            <div class="title" style="width: 55%; float: left;"><strong>DESCRIPCION</strong></div>
-            <div class="title" style="width: 15%; float: left;"><strong>CANTIDAD</strong></div>
-            <div class="title" style="width: 15%; float: left;"><strong>VR UNITARIO</strong></div>
-            <div class="title" style="width: 15%; float: left;"><strong>VALOR TOTAL</strong></div>
+        <div class="row" style="border-bottom: 1px solid;font-size: 13px;font-family: 'Open Sans', sans-serif;font-weight:700">
+            <div class="title" style="width: 265px; float: left;"><strong>DESCRIPCION</strong></div>
+            <div class="title" style="width: 102px; float: left;"><strong>CANTIDAD</strong></div>
+            <div class="title" style="width: 102px; float: left;"><strong>VR UNITARIO</strong></div>
+            <div class="title" style="width: 102px; float: left;"><strong>VALOR TOTAL</strong></div>
         </div>
         {% for key, item in data.items %}
             <div class="row" style="width:100%">
-                <div class="cols" style="width:55%;">
+                <div class="cols" style="width:265px;">
                     <p>{{ item.product.name }}</p>
                 </div>
-                <div class="cols" style="width:15%;">
+                <div class="cols" style="width:102px;text-align:right;padding: 0 15px 0 0;box-sizing: border-box;">
                     <p></p>
                 </div>
-                <div class="cols" style="width:15%;">
+                <div class="cols" style="width:102px;text-align:right;padding: 0 15px 0 0;box-sizing: border-box;">
                     <p>{{ item.unitValue }}</p>
                 </div>
-                <div class="cols" style="width:15%;">
+                <div class="cols" style="width:102px;text-align:right;padding: 0 15px 0 0;box-sizing: border-box;">
                     <p>{{ item.totalValue }}</p>
                 </div>
             </div>
         {% endfor %}
     </div>
     <div class="columns">
-        <div class="cols" style="width:70%;">
-            <p>SON:</p>
-        </div>
-        <div class="cols" style="width:15%;">
-            <p><strong><small>SUB-TOTAL</small></strong></p>
-            <p><strong><small>IVA</small></strong></p>
-            <p><strong><small>RETE-FUENTE</small></strong></p>
-            <p><strong><small>TOTAL</small></strong></p>
-        </div>
-        <div class="cols" style="width:15%;">
-            <p>{{ data.purchaseOrder.subTotal }}</p>
-            <p>{{ data.purchaseOrder.iva }}</p>
-            <p>0</p>
-            <p>{{ data.purchaseOrder.total }}</p>
+
+        <div class="subt">
+            <div class="cols" style="width:50%;font-family: 'Open Sans', sans-serif;font-weight:700">
+                <p><strong><small>SUB-TOTAL</small></strong></p>
+                <p><strong><small>IVA</small></strong></p>
+                <p><strong><small>TOTAL</small></strong></p>
+            </div>
+            <div class="cols" style="width:50%;text-align: right;padding: 0 15px 0 0;box-sizing: border-box;">
+                <p>{{ data.purchaseOrder.subTotal }}</p>
+                <p>{{ data.purchaseOrder.iva }}</p>
+                <p>{{ data.purchaseOrder.total }}</p>
+            </div>
         </div>
     </div>
     <div class="columns">
@@ -147,13 +155,7 @@ body {
 </div>
 
 <div class="level">
-    <div class="table" style="width:40%; float:left; height: 100px;">
-        <small class="">Elaborado por</small>
-    </div>
-    <div class="table" style="width:40%; float:right; height: 100px;">
-        <small class="">Aceptado por:</small>
-        <small class="">Firma y sello del cliente</small>
-    </div>
+
 </div>
 
 <div class="level table">
