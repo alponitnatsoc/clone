@@ -669,14 +669,13 @@ trait SubscriptionMethodsTrait
 
                     if ($payType->getPayrollCode() != 'EFE') {
                         $paymentMethodId = $payMC->getAccountTypeAccountType();
-                        if ($paymentMethodId) {
-                            if ($payType->getName() == "Daviplata") {
-                                $paymentMethodId = "DP";
-                            } else {
-                                $paymentMethodId = $payMC->getAccountTypeAccountType()->getName() == "Ahorros" ? "AH" : ($payMC->getAccountTypeAccountType()->getName() == "Corriente" ? "CC" : "EN");
-                            }
+                        if($payMC->getPayTypePayType()->getImage()=="/img/icon_daviplata.png"){
+                            $accountType="DP";
+                            $paymentMethodAN=$payMC->getCellPhone();
+                        }else{
+                            $accountType = $payMC->getAccountTypeAccountType()->getName() == "Ahorros" ? "AH" : ($payMC->getAccountTypeAccountType()->getName() == "Corriente" ? "CC" : "EN");
+                            $paymentMethodAN=$payMC->getAccountNumber();
                         }
-                        $paymentMethodAN = $payMC->getAccountNumber() == null ? $payMC->getCellPhone() : $payMC->getAccountNumber();
                         $employeePerson = $employeeC->getEmployeeEmployee()->getPersonPerson();
                         $request->setMethod("POST");
                         $request->request->add(array(
@@ -690,7 +689,7 @@ trait SubscriptionMethodsTrait
                             "employeeCellphone" => $employeePerson->getPhones()->get(0)->getPhoneNumber(),
                             "employeeMail" => $employeePerson->getEmail() == null ? $employeePerson->getDocumentType() . $person->getDocument() .
                                 "@" . $employeePerson->getNames() . ".com" : $employeePerson->getEmail(),
-                            "employeeAccountType" => $paymentMethodId,
+                            "employeeAccountType" => $accountType,
                             "employeeAccountNumber" => $paymentMethodAN,
                             "employeeBankCode" => $payMC->getBankBank()->getHightechCode() ?: 23,
                         ));
