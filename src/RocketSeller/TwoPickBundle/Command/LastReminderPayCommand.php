@@ -28,7 +28,7 @@ class LastReminderPayCommand extends ContainerAwareCommand
 
         $this->output = $output;
 
-        $ch = curl_init("http://ec2-52-91-121-67.compute-1.amazonaws.com/api/public/v1/secured/lasts/reminders");
+        $ch = curl_init("http://10.0.0.143/api/public/v1/secured/lasts/reminders");
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -43,6 +43,20 @@ class LastReminderPayCommand extends ContainerAwareCommand
             $output->writeln("Respuesta: " . $response);
         }
         $output->writeln('<comment>Done!</comment>');
+    }
+    private function runCommand($string)
+    {
+        // Split namespace and arguments
+        $namespace = split(' ', $string)[0];
+
+        // Set input
+        $command = $this->getApplication()->find($namespace);
+        $input = new StringInput($string);
+
+        // Send all output to the console
+        $returnCode = $command->execute($input, $this->output);
+
+        return $returnCode != 0;
     }
     
     
