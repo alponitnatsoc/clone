@@ -108,12 +108,16 @@ class HighTechRestController extends FOSRestController
     if ($dis == null) {
       throw new HttpException(404, "The id: " . $id . " was not found.");
     }
+    $em = $this->getDoctrine()->getManager();
     if($dis->getAlreadyRecived()==1){
       $view = View::create();
       $retorno = $view->setStatusCode(200)->setData(array('already'=>"sent"));
       return $retorno;
+    }else{
+      $dis->setAlreadyRecived(1);
+      $em->persist($dis);
+      $em->flush();
     }
-    $em = $this->getDoctrine()->getManager();
     $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
     $retorno = null;
     if($state == 0) {
