@@ -669,7 +669,7 @@ trait SubscriptionMethodsTrait
 
                     if ($payType->getPayrollCode() != 'EFE') {
                         $paymentMethodId = $payMC->getAccountTypeAccountType();
-                        if($payMC->getPayTypePayType()->getImage()=="/img/icon_daviplata.png"){
+                        if($payMC->getPayTypePayType()->getName()=="Daviplata*"){
                             $accountType="DP";
                             $paymentMethodAN=$payMC->getCellPhone();
                         }else{
