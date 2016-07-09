@@ -128,6 +128,7 @@ class HighTechRestController extends FOSRestController
       $answer=$this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getDispersePurchaseOrder', ['idPurchaseOrder' => $dis->getIdPurchaseOrders()]);
       if($answer->getStatusCode()!=200){
         $mesange="not so good man";
+        //TODO persistir algo en la bd que diga que algo segurmente pasó con la cuenta
       }else{
         $mesange="all good man";
       }

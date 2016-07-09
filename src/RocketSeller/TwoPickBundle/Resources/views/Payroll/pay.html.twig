@@ -27,6 +27,8 @@
 
             <link rel="stylesheet" type="text/css" href="{{ asset('css/public/pagospage.css') }}"/>
             <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700' rel='stylesheet' type='text/css'>
+            <div id="agregarNovedad"></div>
+
             <div class="payroll pay">
                 <form method="post" action="{{ path('payroll_calculate') }}" id="form_calculate">
                     {% set pilaData=null %}
@@ -38,17 +40,24 @@
                                     <div class="tittle-pay">
                                         <div class="center light-italic">
                                           {%  set employee = data.payrollPayroll.contractContract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson %}
+                                          {%  set payType = data.payrollPayroll.contractContract.payMethodPayMethod.payTypePayType.payrollCode %}
                                           {%  set employeeName = employee.names ~' '~ employee.lastName1 %}
+                                          {%  set idPayroll = data.payrollPayroll.idPayroll %}
                                           {{ employeeName }}
                                         </div>
                                         <div class="center">
-                                            <label style="font-weight: 100;"><input type="radio" class="toPayArray" name="{{ data.idPurchaseOrdersDescription }}" value="p-{{ data.idPurchaseOrdersDescription }}"> Pagar </label>
-                                            <label style="font-weight: 100;margin-left: 15px;"><input type="radio" class="alreadyPaid" name="{{ data.idPurchaseOrdersDescription }}" value="ap-{{ data.idPurchaseOrdersDescription }}"> Pagaré fuera de la plataforma* </label>
+                                            {% if payType != 'EFE' %}
+                                                <label style="font-weight: 100;"><input type="radio" class="toPayArray" name="{{ data.idPurchaseOrdersDescription }}" value="p-{{ data.idPurchaseOrdersDescription }}"> Pagar </label>
+                                                <label style="font-weight: 100;margin-left: 15px;"><input type="radio" class="alreadyPaid" name="{{ data.idPurchaseOrdersDescription }}" value="ap-{{ data.idPurchaseOrdersDescription }}"> Pagaré fuera de la plataforma </label>
+                                            {% else %}
+                                                <label style="font-weight: 100;margin-left: 15px;"><input type="radio" class="alreadyPaid" name="{{ data.idPurchaseOrdersDescription }}" value="ap-{{ data.idPurchaseOrdersDescription }}"> Pago en efectivo - Generar comprobante </label>
+                                            {% endif %}
+
                                         </div>
                                     </div>
                                     <div class="height center">
                                         <div class="left borderight">
-                                            <span class="semi-italic azulmediofont title-span">Novedades reportadas</span>
+                                            <span class="semi-italic azulmediofont title-span">Novedades reportadas <a class="notAjax addNovelty btn-xs btn-lightBlue" href="/novelty/select/{{ idPayroll }}">Agregar novedad</a></span>
                                             {% if data.payrollPayroll.novelties|length > 0 %}
                                                 Novedades:
                                                 {%  set novelties = data.payrollPayroll.novelties %}
@@ -83,7 +92,7 @@
 
                                     <div class="center">
                                         <label style="font-weight:100"><input type="radio" class="toPayArray" name="{{ pilaData.idPurchaseOrdersDescription }}" value="p-{{ pilaData.idPurchaseOrdersDescription }}"> Pagar </label>
-                                        <label style="font-weight:100;margin-left: 15px;"><input type="radio" class="alreadyPaid" name="{{ pilaData.idPurchaseOrdersDescription }}" value="ap-{{ pilaData.idPurchaseOrdersDescription }}"> Pagaré fuera de la plataforma* </label>
+                                        <label style="font-weight:100;margin-left: 15px;"><input type="radio" class="alreadyPaid" name="{{ pilaData.idPurchaseOrdersDescription }}" value="ap-{{ pilaData.idPurchaseOrdersDescription }}"> Pagaré fuera de la plataforma </label>
                                     </div>
                                 </div>
                                     <div class="height">
@@ -129,7 +138,7 @@
                                             </div>
                                             <div class="center">
                                                 <label style="font-weight:100"><input type="radio" class="toPayArray" name="{{ data.idPurchaseOrdersDescription }}" value="p-{{ data.idPurchaseOrdersDescription }}"> Pagar </label>
-                                                <label style="font-weight:100;margin-left: 15px;"><input type="radio" class="alreadyPaid" name="{{ data.idPurchaseOrdersDescription }}" value="ap-{{ data.idPurchaseOrdersDescription }}"> Pagaré fuera de la plataforma* </label>
+                                                <label style="font-weight:100;margin-left: 15px;"><input type="radio" class="alreadyPaid" name="{{ data.idPurchaseOrdersDescription }}" value="ap-{{ data.idPurchaseOrdersDescription }}"> Pagaré fuera de la plataforma </label>
                                             </div>
                                         </div>
                                             <div class="height center">
@@ -167,7 +176,7 @@
                                           </div>
                                           <div class="center">
                                               <label style="font-weight:100"><input type="radio" class="toPayArray" name="{{ pilaData.idPurchaseOrdersDescription }}" value="p-{{ pilaData.idPurchaseOrdersDescription }}"> Pagar </label>
-                                              <label style="font-weight:100;margin-left: 15px;"><input type="radio" class="alreadyPaid" name="{{ pilaData.idPurchaseOrdersDescription }}" value="ap-{{ pilaData.idPurchaseOrdersDescription }}"> Pagaré fuera de la plataforma* </label>
+                                              <label style="font-weight:100;margin-left: 15px;"><input type="radio" class="alreadyPaid" name="{{ pilaData.idPurchaseOrdersDescription }}" value="ap-{{ pilaData.idPurchaseOrdersDescription }}"> Pagaré fuera de la plataforma </label>
                                           </div>
                                         </div>
 
@@ -194,7 +203,7 @@
 
                             {% endif %}
                         {% endfor %}
-                    </div>
+                    </div>{#
                     <div class="row border1">
                         <div class="media">
                             <div class="media-left">
@@ -205,7 +214,7 @@
                                 <p class="light grisclarofont">Selecciona esta opción se pagarás en efectivo o desde tu cuenta débito.</p>
                             </div>
                         </div>
-                    </div>
+                    </div>#}
                     <div class="row importante">
                         <div class="media">
                             <div class="media-left">
