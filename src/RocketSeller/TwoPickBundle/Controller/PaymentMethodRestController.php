@@ -510,7 +510,7 @@ class PaymentMethodRestController extends FOSRestController
 
             } elseif ($purchaseOrderDescription->getProductProduct()->getSimpleName() == "PN") {
                 $payType=$payMethod->getAccountTypeAccountType();
-                if($payMethod->getPayTypePayType()->getImage()=="/img/icon_daviplata.png"){
+                if($payMethod->getPayTypePayType()->getName()=="Daviplata*"){
                     $accountType="DP";
                     $paymentMethodAN=$payMethod->getCellPhone();
                 }else{

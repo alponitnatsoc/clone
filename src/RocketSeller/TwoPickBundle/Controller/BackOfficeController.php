@@ -199,7 +199,7 @@ class BackOfficeController extends Controller
                 }
             }
         }
-        return $this->redirectToRoute("pages");
+        return $this->redirectToRoute("show_dashboard");
 
     }
     public function addToSQLandHighTecBackAction($user,$autentication)
@@ -229,7 +229,7 @@ class BackOfficeController extends Controller
             }
 
         }
-        return $this->redirectToRoute("pages");
+        return $this->redirectToRoute("show_dashboard");
 
     }
     public function demoLoginAction($user,$autentication)
