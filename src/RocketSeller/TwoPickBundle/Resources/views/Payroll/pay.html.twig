@@ -134,7 +134,7 @@
                                             <div class="center light-italic">
                                                 {%  set employee = data.payrollPayroll.contractContract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson %}
                                                 {%  set employeeName = employee.names ~' '~ employee.lastName1 %}
-                                                Nómina de {{ employeeName }} mes {{ data.payrollPayroll.month }}
+                                                Nómina de {{ employeeName }} {{ utils.period_number_to_name(data.payrollPayroll.period) }} {{ utils.month_number_to_name(data.payrollPayroll.month) }}
                                             </div>
                                             <div class="center">
                                                 <label style="font-weight:100"><input type="radio" class="toPayArray" name="{{ data.idPurchaseOrdersDescription }}" value="p-{{ data.idPurchaseOrdersDescription }}"> Pagar </label>
@@ -171,7 +171,7 @@
 
                                         <div class="tittle-pay">
                                           <div class="center light-italic">
-                                            Aportes a seguridad social mes {{ pilaData.payrollsPila.0.month }}:
+                                            Aportes a seguridad social mes {{ utils.month_number_to_name(pilaData.payrollsPila.0.month) }}:
                                             {%  set payrolls = pilaData.payrollsPila %}
                                           </div>
                                           <div class="center">
