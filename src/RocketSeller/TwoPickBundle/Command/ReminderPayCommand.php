@@ -27,8 +27,7 @@ class ReminderPayCommand extends ContainerAwareCommand
         $output->writeln('<comment>Recordatorio Fecha Corte Novedades</comment>');
 
         $this->output = $output;
-
-        $ch = curl_init("http://10.0.0.143/api/public/v1/secured/reminders");
+        $ch = curl_init("symplifica_dev:elmismo@http://10.0.0.143/api/public/v1/secured/reminders");
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
