@@ -25,7 +25,7 @@ class PayrollCloseCommand extends ContainerAwareCommand
     {
         
         $output->writeln('<comment>Cerrar nominas dia 25</comment>');
-        $request = $this->getContainer()->get('request');
+        $request = $this->container->get('request');
         $request->setMethod("PUT");
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollMethodRest:putAutoLiquidatePayroll', array('_format' => 'json'));
         if ($insertionAnswer->getStatusCode() != 200) {
