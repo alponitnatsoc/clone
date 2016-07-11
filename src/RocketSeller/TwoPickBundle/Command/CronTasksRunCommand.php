@@ -23,7 +23,7 @@ class CronTasksRunCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('<comment>Running Cron Tasks...</comment>');
-
+        $output->writeln('<comments>Command in progress...</comments>');
         $this->output = $output;
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $crontasks = $em->getRepository('RocketSellerTwoPickBundle:CronTask')->findAll();
@@ -53,7 +53,6 @@ class CronTasksRunCommand extends ContainerAwareCommand
                         $output->writeln(sprintf('Executing command <comment>%s</comment>...', $command));
                         // Run the command
                         $result = $this->runCommand($command);
-
                         // Set $lastrun for this crontask
                         $crontask->setLastRun(new \DateTime());
                     }
