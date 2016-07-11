@@ -30,7 +30,7 @@ class ReminderPayCommand extends ContainerAwareCommand
         $ch = curl_init("symplifica_dev:elmismo@10.0.0.143/api/public/v1/secured/reminders");
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 
         $response = curl_exec($ch);
         if (!$response) {
