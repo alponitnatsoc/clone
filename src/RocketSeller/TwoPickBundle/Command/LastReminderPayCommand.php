@@ -28,7 +28,7 @@ class LastReminderPayCommand extends ContainerAwareCommand
 
         $this->output = $output;
 
-        $ch = curl_init("http://10.0.0.143/api/public/v1/secured/lasts/reminders");
+        $ch = curl_init("symplifica_dev:elmismo@10.0.0.143/api/public/v1/lasts/reminders");
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");

@@ -93,8 +93,7 @@ payroll_services:
 reminder_services:
     type: rest
     resource: "RocketSellerTwoPickBundle:ReminderRest"
-    name_prefix: api_public_secured_
-    prefix: /secured
+    name_prefix: api_public_
 payroll_method_rest:
     type: rest
     resource: "RocketSellerTwoPickBundle:PayrollMethodRest"
