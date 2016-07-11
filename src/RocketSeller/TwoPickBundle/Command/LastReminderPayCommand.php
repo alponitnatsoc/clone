@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\HttpFoundation\Request;
 
 class LastReminderPayCommand extends ContainerAwareCommand
 {
@@ -25,7 +26,8 @@ class LastReminderPayCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('<comment>Recordatorio Última Fecha Corte Novedades</comment>');
-        $request = $this->container->get('request');
+        /** @var Request $request */
+        $request = new Request();
         $request->setMethod("POST");
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:ReminderRest:postLastReminder', array('_format' => 'json'));
         if ($insertionAnswer->getStatusCode() != 200) {
