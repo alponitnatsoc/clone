@@ -156,3 +156,19 @@ a {text-decoration: none}
 .btn-azulnopagos:hover {
 	border-bottom: #4f8084 3px solid;
 	background: #8ca4a7}
+
+	@media only screen and (max-width: 1200px) {
+		#cont-succesdocs {
+			width:100%;
+		}
+	}
+@media only screen and (max-width: 1024px) {
+	.fechasclave {
+		width:47%;
+	}
+}
+@media only screen and (max-width: 540px) {
+	.fechasclave {
+		width:100%;
+	}
+}
