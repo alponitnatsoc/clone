@@ -448,7 +448,6 @@ class PaymentMethodRestController extends FOSRestController
         $pmArray=explode('-',$pmid);
         $purchaseOrder->setPayMethodId($pmArray[1]);
         $purchaseOrder->setProviderId($pmArray[0]);
-        $purchaseOrder->setAlreadyRecived(1);
         $em=$this->getDoctrine()->getManager();
         $em->persist($purchaseOrder);
         $em->flush();
