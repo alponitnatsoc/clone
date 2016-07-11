@@ -25,22 +25,26 @@ class ReminderPayCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('<comment>Recordatorio Fecha Corte Novedades</comment>');
+        if(shell_exec ("wget http://ipinfo.io/ip -qO -")== "52.91.121.67"){
+            $output->writeln('<comment>Si es</comment>');
+        }elseif(false){
+            $this->output = $output;
+            $ch = curl_init("symplifica_dev:elmismo@10.0.0.1/api/public/v1/secured/reminders");
 
-        $this->output = $output;
-        $ch = curl_init("symplifica_dev:elmismo@10.0.0.143/api/public/v1/reminders");
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-
-        $response = curl_exec($ch);
-        if (!$response) {
-            $output->writeln('Fallo llamando servicio');
-        } else {
-            //$response = json_decode($response);
-            //dump($response);
-            $output->writeln("Respuesta: " . $response);
+            $response = curl_exec($ch);
+            if (!$response) {
+                $output->writeln('Fallo llamando servicio');
+            } else {
+                //$response = json_decode($response);
+                //dump($response);
+                $output->writeln("Respuesta: " . $response);
+            }
+            $output->writeln('<comment>Done!</comment>');
         }
-        $output->writeln('<comment>Done!</comment>');
+
     }
     
     private function runCommand($string)
