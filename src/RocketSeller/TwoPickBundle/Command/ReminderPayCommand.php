@@ -25,27 +25,28 @@ class ReminderPayCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('<comment>Recordatorio Fecha Corte Novedades</comment>');
-        $ip=shell_exec ("wget http://ipinfo.io/ip -qO -")."";
-        $output->writeln('<comment>%s</comment>',$ip);
-        if(true){
-            $output->writeln('<comment>Si es</comment>');
-        }elseif(false){
-            $this->output = $output;
-            $ch = curl_init("symplifica_dev:elmismo@10.0.0.1/api/public/v1/secured/reminders");
-
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-
-            $response = curl_exec($ch);
-            if (!$response) {
-                $output->writeln('Fallo llamando servicio');
-            } else {
-                //$response = json_decode($response);
-                //dump($response);
-                $output->writeln("Respuesta: " . $response);
-            }
-            $output->writeln('<comment>Done!</comment>');
+        $ip = trim(shell_exec ("wget http://ipinfo.io/ip -qO -").'', " \n.\t.");
+        if($ip=='52.91.121.67'){
+            $service = "symplifica_dev:elmismo@52.91.121.67/api/public/v1/secured/reminders";
+        }else{
+            $service = "10.0.0.1/api/public/v1/secured/reminders";
         }
+        $this->output = $output;
+        $ch = curl_init($service);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+
+        $response = curl_exec($ch);
+        if (!$response) {
+            $output->writeln('Fallo llamando servicio');
+        } else {
+            //$response = json_decode($response);
+            //dump($response);
+            $output->writeln("Respuesta: " . $response);
+        }
+        $output->writeln('<comment>Done!</comment>');
+        
 
     }
     

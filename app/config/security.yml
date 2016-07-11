@@ -93,12 +93,12 @@ security:
         # cpsuite.htsoft.co is the hightech server host.
 
         # This are the web services for hightech, they should be before the normal web services.
-        - { path: ^/api/public/v1/notificacion, role: IS_AUTHENTICATED_ANONYMOUSLY, ips: [10.0.0.1, 127.0.0.1, 190.7.130.163, 52.73.123.224, 52.91.121.67, 181.143.94.42, 190.24.91.37, 52.86.183.212] }
+        - { path: ^/api/public/v1/notificacion, role: IS_AUTHENTICATED_ANONYMOUSLY, ips: [10.0.0.1, 127.0.0.1, 190.7.130.163, 52.73.123.224, 52.91.121.67, 190.24.91.37, 52.86.183.212] }
         - { path: ^/api/public/v1/notificacion, role: IS_AUTHENTICATED_ANONYMOUSLY, host: cpsuite\.htsoft\.co$ }
         - { path: ^/api/public/v1/notificacion, role: [ROLE_NO_ACCESS] }
 
         # This are the web services for novopayment, they should be before the normal web services.
-        - { path: ^/api/public/v1/dispersion/[0-9]+$, role: IS_AUTHENTICATED_ANONYMOUSLY, ips: [10.0.0.1, 127.0.0.1, 190.7.130.163, 52.73.123.224, 52.91.121.67, 181.143.94.42 ] }
+        - { path: ^/api/public/v1/dispersion/[0-9]+$, role: IS_AUTHENTICATED_ANONYMOUSLY, ips: [10.0.0.1, 127.0.0.1, 190.7.130.163, 52.73.123.224, 52.91.121.67 ] }
         - { path: ^/api/public/v1/dispersion/[0-9]+$, role: IS_AUTHENTICATED_ANONYMOUSLY, ips: [72.46.255.110] }
         - { path: ^/api/public/v1/dispersion/[0-9]+$, role: [ROLE_NO_ACCESS] }
 
