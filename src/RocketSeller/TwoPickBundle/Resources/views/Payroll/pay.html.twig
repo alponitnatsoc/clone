@@ -50,7 +50,7 @@
                                             {% if data.payrollPayroll.sqlNovelties|length > 0 %}
                                                 {%  set novelties = data.payrollPayroll.sqlNovelties %}
                                                 {% for novelty in novelties if novelty.noveltyTypeNoveltyType.idNoveltyType == 29 %}
-                                                    <a class="notAjax workedDays btn-xs btn-orange" href="/novelty/workableDays/{{ novelty.idNovelty }}">Cambiar el número de días trabajados</a>
+                                              </br>Número de días trabajados: {{novelty.units }} - <a class="notAjax workedDays btn-xs btn-orange" href="/novelty/workableDays/{{ novelty.idNovelty }}">Cambiar días</a>
                                                 {% endfor %}
                                             {% endif %}
                                           {% endif %}
