@@ -25,7 +25,8 @@ class ReminderPayCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('<comment>Recordatorio Fecha Corte Novedades</comment>');
-        if(shell_exec ("wget http://ipinfo.io/ip -qO -")== "52.91.121.67"){
+        $output->writeln('<comment>%s</comment>',shell_exec ("wget http://ipinfo.io/ip -qO -"));
+        if(true){
             $output->writeln('<comment>Si es</comment>');
         }elseif(false){
             $this->output = $output;
