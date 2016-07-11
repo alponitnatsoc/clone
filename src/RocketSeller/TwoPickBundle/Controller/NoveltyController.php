@@ -307,4 +307,73 @@ class NoveltyController extends Controller {
         return true;
     }
 
+    public function setWorkedDaysAction($idNovelty) {
+        $user = $this->getUser();
+
+        $noveltyRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Novelty");
+        $novelty=$noveltyRepo->findOneBy(array("idNovelty"=>$idNovelty));
+
+        $employerPersonID = $novelty->getSqlPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson()->getIdPerson();
+
+        if( $employerPersonID != $user->getPersonPerson()->getIdPerson() ){
+          return $this->redirectToRoute('show_dashboard');
+        }
+
+        //necesito retornar el num de dias y todo lo necesario para llamar el POST que actualice los dias
+        return $this->render('RocketSellerTwoPickBundle:Novelty:changeDays.html.twig', array(
+            'novelty' => $novelty,
+            'employee' => $novelty->getSqlPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()));
+    }
+
+    public function  updateWorkedDaysAction($empId, $idNovelty, $daysAmount){
+
+      $request = $this->container->get('request');
+
+      $noveltyRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Novelty");
+      $novelty=$noveltyRepo->findOneBy(array('idNovelty' => $idNovelty));
+
+      $user = $this->getUser();
+
+      if($user->getPersonPerson()->getIdPerson() != $novelty->getSqlPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson()->getIdPerson()){
+        return $this->redirectToRoute('show_dashboard');
+      }
+
+      //retrieve the novelty info in order to be restored later
+      $request->setMethod("GET");
+      $info = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getEmployeeNovelty',array(
+          "employeeId" => $empId
+          ), array('_format' => 'json'));
+
+      $info = json_decode($info->getContent(),true);
+
+      //First deletes on SQL the stored novelty
+      $request->setMethod("POST");
+      $request->request->add(array(
+          "employee_id"=>$empId,
+          "novelty_consec"=>$info['NOV_CONSEC']
+      ));
+      $deleteAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postDeleteNoveltyEmployee', array('_format' => 'json'));
+      if($deleteAnswer->getStatusCode()!=200){
+          return $this->redirectToRoute('show_dashboard');
+      }
+
+      //now adds to SQL the same novelty but with another units value
+
+      $request->setMethod("POST");
+      $request->request->add(array(
+          "employee_id"=>$empId,
+          "novelty_concept_id"=>1,
+          "unity_numbers"=>$daysAmount,
+          "novelty_start_date"=>date("d-m-Y", strtotime($info['NOV_FECHA_DESDE_CAUSA'])),
+          "novelty_end_date"=> date("d-m-Y", strtotime($info['NOV_FECHA_HASTA_CAUSA'])),
+          "novelty_base"=>$novelty->getSqlValue() / $novelty->getUnits()
+      ));
+
+      $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddNoveltyEmployee', array('_format' => 'json'));
+      if($insertionAnswer->getStatusCode()!=200){
+          return $this->redirectToRoute('show_dashboard');
+      }
+
+      return $this->redirectToRoute('payroll');
+    }
 }

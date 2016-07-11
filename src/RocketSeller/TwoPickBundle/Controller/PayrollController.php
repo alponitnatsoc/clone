@@ -188,6 +188,17 @@ class PayrollController extends Controller
                 break;
             }
         }
+        if($pods!=null){
+            $total=0;
+            /** @var PurchaseOrdersDescription $pod */
+            foreach ($pods as $pod) {
+                $total+=$pod->getValue();
+            }
+            if($total==0){
+                $pods=null;
+            }
+        }
+
 
         return $this->render('RocketSellerTwoPickBundle:Payroll:pay.html.twig', array(
             'dataNomina' => $pods,

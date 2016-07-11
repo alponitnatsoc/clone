@@ -191,6 +191,16 @@ class TwigSwiftMailer implements MailerInterface
         );
         return $this->sendMessage($template,$context,$this->parameters['from_email']['confirmation'], $to);
     }
+
+    public function sendLogMessage($content){
+        $to = "andres.ramirez@symplifica.com";
+        $template=$this->parameters['template']['log'];
+        $context = array(
+            'toEmail' => "andres.ramirez@symplifica.com",
+            'htmlBody' => $content
+        );
+        return $this->sendMessage($template,$context,'log@symplifica.com', $to);
+    }
     
     /**
      * @param string $templateName
@@ -206,14 +216,21 @@ class TwigSwiftMailer implements MailerInterface
         $subject = $template->renderBlock('subject', $context);
         $textBody = $template->renderBlock('body_text', $context);
         $htmlBody = $template->renderBlock('body_html', $context);
-        
-
-        $message = \Swift_Message::newInstance()
-            ->setSubject($subject)
-            ->setFrom(array($fromEmail=>'Equipo Symplifica'))
-            ->setTo($toEmail)
-            ->setReplyTo("contactanos@symplifica.com")
-            ->setPriority(1);
+        $message ="";
+        if($fromEmail==$this->parameters['from_email']['confirmation'] or $fromEmail ==$this->parameters['from_email']['resetting']){
+            $message = \Swift_Message::newInstance()
+                ->setSubject($subject)
+                ->setFrom($fromEmail)
+                ->setTo($toEmail)
+                ->setPriority(1);
+        }else{
+            $message = \Swift_Message::newInstance()
+                ->setSubject($subject)
+                ->setFrom(array($fromEmail=>'Equipo Symplifica'))
+                ->setTo($toEmail)
+                ->setReplyTo("contactanos@symplifica.com")
+                ->setPriority(1);
+        }
 
         if ($path) {
             $message->attach(\Swift_Attachment::fromPath($path));

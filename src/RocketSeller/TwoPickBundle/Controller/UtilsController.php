@@ -22,4 +22,67 @@ class UtilsController
 
         return $stringToReturn;
     }
+    public function month_number_to_name($numberToConvert)
+    {
+        $stringToReturn="";
+        if(is_numeric($numberToConvert)){
+            $numberToConvert=$numberToConvert % 13;
+            if($numberToConvert==0)
+                $numberToConvert+=1;
+            switch ($numberToConvert){
+                case 1 :
+                    $stringToReturn="Enero";
+                    break;
+                case 2 :
+                    $stringToReturn="Febrero";
+                    break;
+                case 3 :
+                    $stringToReturn="Marzo";
+                    break;
+                case 4 :
+                    $stringToReturn="Abril";
+                    break;
+                case 5 :
+                    $stringToReturn="Mayo";
+                    break;
+                case 6 :
+                    $stringToReturn="Junio";
+                    break;
+                case 7 :
+                    $stringToReturn="Julio";
+                    break;
+                case 8 :
+                    $stringToReturn="Agosto";
+                    break;
+                case 9 :
+                    $stringToReturn="Septiembre";
+                    break;
+                case 10 :
+                    $stringToReturn="Octubre";
+                    break;
+                case 11 :
+                    $stringToReturn="Noviembre";
+                    break;
+                case 12 :
+                    $stringToReturn="Diciembre";
+                    break;
+            }
+        }
+        return $stringToReturn;
+    }
+    public function period_number_to_name($numberToConvert)
+    {
+        $stringToReturn="";
+        if(is_numeric($numberToConvert)){
+            switch ($numberToConvert){
+                case 2 :
+                    $stringToReturn="1ª Quincena de";
+                    break;
+                case 4 :
+                    $stringToReturn="Cierre de mes";
+                    break;
+            }
+        }
+        return $stringToReturn;
+    }
 }
