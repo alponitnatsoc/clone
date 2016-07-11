@@ -25,16 +25,15 @@ class PayrollCloseCommand extends ContainerAwareCommand
     {
         
         $output->writeln('<comment>Cerrar nominas dia 25</comment>');
-        
-        $rest = new \RocketSeller\TwoPickBundle\Controller\PayrollMethodRestController();
-        $response = $rest->putAutoLiquidatePayrollAction();
-        
-        if (!$response) {
+        $request = $this->getContainer()->get('request');
+        $request->setMethod("PUT");
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollMethodRest:putAutoLiquidatePayroll', array('_format' => 'json'));
+        if ($insertionAnswer->getStatusCode() != 200) {
             $output->writeln('Fallo llamando servicio');
         } else {
             //$response = json_decode($response);
             //dump($response);
-            $output->writeln("Respuesta: " . $response);
+            $output->writeln("Respuesta: " . $insertionAnswer->getContent());
         }
         $output->writeln('<comment>Done!</comment>');
     }

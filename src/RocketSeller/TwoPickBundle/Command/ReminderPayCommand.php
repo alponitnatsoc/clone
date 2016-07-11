@@ -25,15 +25,15 @@ class ReminderPayCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('<comment>Recordatorio Fecha Corte Novedades</comment>');
-        
-        $rest = new \RocketSeller\TwoPickBundle\Controller\ReminderRestController();
-        $response = $rest->postReminderAction();
-        if (!$response) {
+        $request = $this->getContainer()->get('request');
+        $request->setMethod("POST");
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:ReminderRest:postReminder', array('_format' => 'json'));
+        if ($insertionAnswer->getStatusCode() != 200) {
             $output->writeln('Fallo llamando servicio');
         } else {
             //$response = json_decode($response);
             //dump($response);
-            $output->writeln("Respuesta: " . $response);
+            $output->writeln("Respuesta: " . $insertionAnswer->getContent());
         }
         $output->writeln('<comment>Done!</comment>');
         
