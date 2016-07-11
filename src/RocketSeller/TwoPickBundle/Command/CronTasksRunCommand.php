@@ -23,7 +23,6 @@ class CronTasksRunCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('<comment>%s</comment>',$_SERVER['HTTP_HOST']);
         $output->writeln('<comment>Running Cron Tasks...</comment>');
         $this->output = $output;
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
