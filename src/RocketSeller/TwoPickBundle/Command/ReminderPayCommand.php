@@ -28,10 +28,10 @@ class ReminderPayCommand extends ContainerAwareCommand
 
         $this->output = $output;
 
-        $ch = curl_init("127.0.0.1/api/public/v1/secured/reminders");
+        $ch = curl_init("http://10.0.0.143/api/public/v1/secured/reminders");
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
 
         $response = curl_exec($ch);
         if (!$response) {
@@ -44,6 +44,20 @@ class ReminderPayCommand extends ContainerAwareCommand
         $output->writeln('<comment>Done!</comment>');
     }
     
+    private function runCommand($string)
+    {
+        // Split namespace and arguments
+        $namespace = split(' ', $string)[0];
+
+        // Set input
+        $command = $this->getApplication()->find($namespace);
+        $input = new StringInput($string);
+
+        // Send all output to the console
+        $returnCode = $command->execute($input, $this->output);
+
+        return $returnCode != 0;
+    }
     
     
 }
