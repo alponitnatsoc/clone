@@ -1200,15 +1200,17 @@ class PayrollRestController extends FOSRestController
      *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
      *    (name="novelty_concept_id", nullable=true, requirements="([0-9])+", description="Code of the concept as provided by SQL, it can be found in the table novelty_type, under payroll_code")
      *    (name="novelty_value", nullable=true, requirements="([0-9])+(.[0-9]+)?", description="Value in COP of the novelty, is optional")
-     *    (name="liquidation_type_id", nullable=true, requirements="([0-9])+", strict=true, description="Code of the liquidation type")
+     *    (name="liquidation_type_id", nullable=true, requirements="([A-Z])+", strict=true, description="Code of the liquidation type")
      *    (name="unity_numbers", nullable=true, requirements="([0-9])+", strict=true, description="Number of units of the novelty")
      *    (name="novelty_start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty starts(format: DD-MM-YYYY)")
-     *    (name="novelty_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty ends(format: DD-MM-YYYY)")
+     *    (name="novelty_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty ends(format: DD-MM-YYYY)"
+     *    (name="novelty_consec", nullable=true, requirements="([0-9])+", strict=true, description="Identifier used on SQL to identify the novelty")
      *
      * @return View
      */
     public function postModifyNoveltyEmployeeAction(Request $request)
     {
+
         $parameters = $request->request->all();
         $regex = array();
         $mandatory = array();
@@ -1219,7 +1221,7 @@ class PayrollRestController extends FOSRestController
         $mandatory['novelty_concept_id'] = false;
         $regex['novelty_value'] = '([0-9])+(.[0-9]+)?';
         $mandatory['novelty_value'] = false;
-        $regex['liquidation_type_id'] = '([0-9])+';
+        $regex['liquidation_type_id'] = '([A-Z])+';
         $mandatory['liquidation_type_id'] = false;
         $regex['unity_numbers'] = '([0-9])+';
         $mandatory['unity_numbers'] = false;
@@ -1227,14 +1229,14 @@ class PayrollRestController extends FOSRestController
         $mandatory['novelty_start_date'] = false;
         $regex['novelty_end_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
         $mandatory['novelty_end_date'] = false;
+        $regex['novelty_consec'] = '([0-9])+';
+        $mandatory['novelty_consec'] = false;
 
         $this->validateParamters($parameters, $regex, $mandatory);
 
         $content = array();
         $unico = array();
         $info = $this->getEmployeeNoveltyAction($parameters['employee_id'])->getData();
-
-
         $unico['EMP_CODIGO'] = isset($parameters['employee_id']) ? $parameters['employee_id'] : $info['EMP_CODIGO'];
 
         $unico['TIPOCON'] = 1;
@@ -1245,6 +1247,85 @@ class PayrollRestController extends FOSRestController
         $unico['NOV_UNIDADES'] = isset($parameters['unity_numbers']) ? $parameters['unity_numbers'] : $info['NOV_UNIDADES'];
         $unico['NOV_FECHA_DESDE_CAUSA'] = isset($parameters['novelty_start_date']) ? $parameters['novelty_start_date'] : $info['NOV_FECHA_DESDE_CAUSA'];
         $unico['NOV_FECHA_HASTA_CAUSA'] = isset($parameters['novelty_end_date']) ? $parameters['novelty_end_date'] : $info['NOV_FECHA_HASTA_CAUSA'];
+        $unico['NOV_CONSEC'] = isset($parameters['novelty_consec']) ? $parameters['novelty_consec'] : $info['NOV_CONSEC'];
+
+        $content[] = $unico;
+        $parameters = array();
+        $parameters['inInexCod'] = '612';
+        $parameters['clXMLSolic'] = $this->createXml($content, 612);
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters);
+
+        return $responseView;
+    }
+
+    /**
+     * Deletes an occasional novelty for an employee.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Deletes an occasional novelty for an employee.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+     *    (name="novelty_consec", nullable=false, requirements="([0-9])+", strict=true, description="Identifier used on SQL to identify the novelty")
+     *
+     * @return View
+     */
+    public function postDeleteNoveltyEmployeeAction(Request $request)
+    {
+
+        $parameters = $request->request->all();
+        $regex = array();
+        $mandatory = array();
+        // Set all the parameters info.
+        $regex['employee_id'] = '([0-9])+';
+        $mandatory['employee_id'] = true;
+        $regex['novelty_concept_id'] = '([0-9])+';
+        $mandatory['novelty_concept_id'] = false;
+        $regex['novelty_value'] = '([0-9])+(.[0-9]+)?';
+        $mandatory['novelty_value'] = false;
+        $regex['liquidation_type_id'] = '([A-Z])+';
+        $mandatory['liquidation_type_id'] = false;
+        $regex['unity_numbers'] = '([0-9])+';
+        $mandatory['unity_numbers'] = false;
+        $regex['novelty_start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
+        $mandatory['novelty_start_date'] = false;
+        $regex['novelty_end_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
+        $mandatory['novelty_end_date'] = false;
+        $regex['novelty_consec'] = '([0-9])+';
+        $mandatory['novelty_consec'] = false;
+
+        $this->validateParamters($parameters, $regex, $mandatory);
+
+        $content = array();
+        $unico = array();
+        $info = $this->getEmployeeNoveltyAction($parameters['employee_id'])->getData();
+
+        if( $info['NOV_CONSEC'] == $parameters['novelty_consec']){
+            $use = $info;
+        }
+
+        $unico['TIPOCON'] = 2;
+        $unico['EMP_CODIGO'] = isset($parameters['employee_id']) ? $parameters['employee_id'] : $use['EMP_CODIGO'];
+        $unico['CON_CODIGO'] = isset($parameters['novelty_concept_id']) ? $parameters['novelty_concept_id'] : $use['CON_CODIGO'];
+        $unico['NOV_VALOR_LOCAL'] = isset($parameters['novelty_value']) ? $parameters['novelty_value'] : $use['NOV_VALOR_LOCAL'];
+        $unico['FLIQ_CODIGO'] = isset($parameters['liquidation_type_id']) ? $parameters['liquidation_type_id'] : $use['FLIQ_CODIGO'];
+        $unico['NOV_UNIDADES'] = isset($parameters['unity_numbers']) ? $parameters['unity_numbers'] : $use['NOV_UNIDADES'];
+        $unico['NOV_FECHA_DESDE_CAUSA'] = isset($parameters['novelty_start_date']) ? $parameters['novelty_start_date'] : $use['NOV_FECHA_DESDE_CAUSA'];
+        $unico['NOV_FECHA_HASTA_CAUSA'] = isset($parameters['novelty_end_date']) ? $parameters['novelty_end_date'] : $use['NOV_FECHA_HASTA_CAUSA'];
+        $unico['NOV_CONSEC'] = isset($parameters['novelty_consec']) ? $parameters['novelty_consec'] : $use['NOV_CONSEC'];
+
 
         $content[] = $unico;
         $parameters = array();

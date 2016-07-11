@@ -61,6 +61,12 @@ novelty_edit:
 novelty_select:
     path:      /novelty/select/{idPayroll}
     defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:selectNovelty, idPayroll: -1}
+novelty_worked_days:
+    path:      /novelty/workableDays/{idNovelty}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:setWorkedDays}
+novelty_update_worked_days:
+    path:      /novelty/workableDays/{empId}/update/{idNovelty}/{daysAmount}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:updateWorkedDays}
 documentos:
     path:      /document/add/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Document:addDocument}

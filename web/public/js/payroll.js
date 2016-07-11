@@ -6,6 +6,15 @@ $(document).ready(function () {
             loadNovelty(href);
         });
     });
+
+    $(".workedDays").each(function () {
+        $(this).on("click", function (e) {
+            e.preventDefault();
+            var href = $(this).attr("href");
+            loadWorkedDays(href);
+        });
+    });
+
     $('.employee .pay').on('change', function (e) {
         var i = 0;
         $('.employee .pay').each(function (index, element) {
@@ -124,6 +133,32 @@ function loadNovelty(url) {
             window.location.reload();
         })
         $('#noveltyModal').modal('show');
+
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+    });
+}
+
+function loadWorkedDays(url) {
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: {
+        }
+    }).done(function (data) {
+        $("#cambiarDias").html(data);
+        $.getScript("/public/js/changeDaysWorked.js").done(function () {
+            changeDays();
+        });
+
+        $('#changeDaysModal').modal({
+          show: false,
+          backdrop: 'static'
+        });
+        $('#changeDaysModal').on('hidden.bs.modal', function () {
+            window.location.reload();
+        })
+        $('#changeDaysModal').modal('show');
 
     }).fail(function (jqXHR, textStatus, errorThrown) {
         alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);

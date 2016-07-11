@@ -138,6 +138,8 @@ trait PayrollMethodsTrait
                             $actNovel->setSqlValue($novelties->get($z)->getSqlValue());
                             $actNovel->setNoveltyTypeNoveltyType($novelties->get($z)->getNoveltyTypeNoveltyType());
                             $actNovel->setName($actNovel->getNoveltyTypeNoveltyType()->getName());
+                            $actNovel->setSqlNovConsec($novelties->get($z)->getSqlnovConsec());
+                            $actNovel->setUnits($novelties->get($z)->getUnits());
                         }
                     }
                     $em=$this->getDoctrine()->getManager();
