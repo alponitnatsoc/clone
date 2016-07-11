@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Traits;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use RocketSeller\TwoPickBundle\Controller\UtilsController;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Novelty;
@@ -29,8 +30,9 @@ trait PayrollMethodsTrait
     /**
      * Obtener informacion de nomina
      *
-     * @param Employer $idEmployer ID del empleador
-     * @return boolean
+     * @param Employer $employer
+     * @param bool $payrollToPay
+     * @return ArrayCollection
      */
     public function getInfoPayroll(Employer $employer, $payrollToPay = false)
     {
@@ -52,10 +54,13 @@ trait PayrollMethodsTrait
                 if ($podPila->getPurchaseOrdersStatus()!=null&&($podPila->getPurchaseOrdersStatus()->getIdNovoPay() == "-1" || $podPila->getPurchaseOrdersStatus()->getIdNovoPay() == "S2" || $podPila->getPurchaseOrdersStatus()->getIdNovoPay() == "00")){
 
                 }else {
+
+                    /** @var UtilsController $utils */
+                    $utils = $this->get('app.symplifica_utils');
                         $productPILA = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product")->findOneBy(array('simpleName' => 'PP'));
                         $podPila->setProductProduct($productPILA);
                         $dateToday = new \DateTime();
-                        $podPila->setDescription("Pago de Aportes a Seguridad Social mes " . $dateToday->format("m"));
+                        $podPila->setDescription("Pago de Aportes a Seguridad Social mes " . $utils->month_number_to_name($dateToday->format("m")));
                         $entity = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
                         $pos = $entity->findOneBy(array('idNovoPay' => 'P1')); // Estado pendiente por pago
                         $podPila->setPurchaseOrdersStatus($pos);
@@ -103,6 +108,8 @@ trait PayrollMethodsTrait
             /* @var $contract Contract */
             foreach ($contracts as $contract) {
                 if ($contract->getState() > 0) {
+                    /** @var UtilsController $utils */
+                    $utils = $this->get('app.symplifica_utils');
                     /* @var Payroll $payroll */
                     $payroll = $contract->getActivePayroll();
                     if (!$this->checkActivePayroll($payroll))
@@ -155,7 +162,7 @@ trait PayrollMethodsTrait
                     $tempPOD->setPayrollPayroll($payroll);
                     $tempPOD->setProductProduct($productNomina);
                     $person = $employerHasEmployee->getEmployeeEmployee()->getPersonPerson();
-                    $tempPOD->setDescription("Pago Nómina " .ucfirst(mb_strtolower(explode(" ", $person->getNames())[0], 'UTF-8')) ." ". ucfirst($person->getLastName1()) . " mes " . $payroll->getMonth() . " periodo " . $payroll->getPeriod());
+                    $tempPOD->setDescription("Pago Nómina " .$utils->mb_capitalize(explode(" ", $person->getNames())[0]) ." ". $utils->mb_capitalize($person->getLastName1())." ". $utils->period_number_to_name($payroll->getPeriod()). " " . $utils->month_number_to_name( $payroll->getMonth()) );
                     $tempPOD->setValue($totalLiquidation["total"]);
 
                     if ($payroll->getPeriod() == 4) {
