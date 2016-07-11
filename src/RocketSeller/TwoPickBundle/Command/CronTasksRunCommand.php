@@ -74,8 +74,6 @@ class CronTasksRunCommand extends ContainerAwareCommand
 
         $output->writeln('<comment>Done!</comment>');
         /** @var MailerInterface $smailer */
-        $smailer = $this->get('symplifica.mailer.twig_swift');
-        $smailer->sendLogMessage($output);
     }
 
     private function runCommand($string)
