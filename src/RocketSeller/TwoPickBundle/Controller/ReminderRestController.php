@@ -30,7 +30,7 @@ class ReminderRestController extends FOSRestController
     {
         $response = 'Comienza: <br>';
 //        $diaPago=intval(date("t"))-24;
-        $diaPago = 11;
+        $diaPago = 22;
         $date = new \DateTime();
 
         $response = $response."-Dia del mes: ".$date->format('d').", Dia del recordatorio quincenal: 10, Dia del recordatorio mensual: ".$diaPago.'<br>';
@@ -73,7 +73,7 @@ class ReminderRestController extends FOSRestController
                     $response = $response."- -NO ESTA APROBADO. <br><br>";
                 }
             }
-        }elseif($date->format('d') == 10){
+        }elseif($date->format('d') == 11){
             $users = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:User")->findAll();
             $response = $response."- SE EJECUTA LA TAREA QUINCENAL".'<br><br>';
             /** @var User $user */

@@ -25,10 +25,16 @@ class LastReminderPayCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('<comment>Recordatorio Última Fecha Corte Novedades</comment>');
-
+        
+        $ip = trim(shell_exec ("wget http://ipinfo.io/ip -qO -").'', " \n.\t.");
+        
+        if($ip=='52.91.121.67'){
+            $service = "symplifica_dev:elmismo@52.91.121.67/api/public/v1/secured/lasts/reminders";
+        }else{
+            $service = "52.73.123.224/api/public/v1/secured/lasts/reminders";
+        }
         $this->output = $output;
-
-        $ch = curl_init("symplifica_dev:elmismo@10.0.0.1/api/public/v1/secured/lasts/reminders");
+        $ch = curl_init($service);
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
