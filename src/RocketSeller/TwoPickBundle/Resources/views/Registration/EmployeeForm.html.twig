@@ -502,8 +502,9 @@
                                         {% if changeBehaviorFlag == 1 %}
                                           <p class="text-muted" style="font-size: 16px;">Ingresa la fecha en la cual tu empleado comenzó labores.</p>
                                         {% else %}
-                                          <p class="border" style="font-size: 16px;color:#00858c">La fecha de inicio del contrato debe ser 3 días hábiles luego de completar tu registro, debido los procesos de afiliación.
-Si tu empleado inició labores anteriormente. Debes regresar y marcarlo correctamente.</p>
+                                          <p class="border" style="font-size: 16px;color:#00858c">Los procesos de afiliación a seguridad social tardan por lo menos 3 días hábiles. Un empleado no debe iniciar labores sin haber sido afiliado a la seguridad social.
+                                          Es por eso que la fecha de inicio del contrato debe ser por lo menos 3 días hábiles después de que completas el registro.
+                                          Si no terminas el registro nosotros iremos ajustando la fecha de inicio del contrato.</p>
                                         {% endif %}
 
                                     </div>
@@ -584,13 +585,15 @@ Si tu empleado inició labores anteriormente. Debes regresar y marcarlo correcta
 
                                     <div id="hidePensOpt" class="col-sm-12 col-xs-12">
                                         <div class="col-sm-6 label-group">
-                                          <div id="pensionTooltip" class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="top" data-container = "body" data-delay="{ show: 1, hide: 1}"
+                                          <div style="float:left" id="pensionTooltip" class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="top" data-container = "body" data-delay="{ show: 1, hide: 1}"
                                           title="No requiere aportar a pensión cuando:
                                                 Ya está pensionado,
                                                 es heredero de una pensión o
                                                 la edad de inicio de aporte no cumple requisito de días a aportar"></div>
                                             {{ form_label(form.employeeHasEmployers.paysPens, null,{
-                                            'label' : '¿Requiere aportar a pensión?',})}}
+                                            'label' : '¿El empleado requiere aportar a pensión?',
+                                            'label_attr': {
+                                            'style': "width:90%",}})}}
                                         </div>
                                         <div class="col-sm-6 form-group">
                                             {{ form_widget(form.employeeHasEmployers.paysPens) }}
