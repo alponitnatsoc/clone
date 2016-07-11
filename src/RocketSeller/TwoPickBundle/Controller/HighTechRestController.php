@@ -109,6 +109,15 @@ class HighTechRestController extends FOSRestController
       throw new HttpException(404, "The id: " . $id . " was not found.");
     }
     $em = $this->getDoctrine()->getManager();
+    if($dis->getAlreadyRecived()==1){
+      $view = View::create();
+      $retorno = $view->setStatusCode(200)->setData(array('already'=>"sent"));
+      return $retorno;
+    }else{
+      $dis->setAlreadyRecived(1);
+      $em->persist($dis);
+      $em->flush();
+    }
     $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
     $retorno = null;
     if($state == 0) {
@@ -116,7 +125,13 @@ class HighTechRestController extends FOSRestController
       $pos=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'00'));
                //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
       $dis->setPurchaseOrdersStatus($pos);
-      $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getDispersePurchaseOrder', ['idPurchaseOrder' => $dis->getIdPurchaseOrders()]);
+      $answer=$this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getDispersePurchaseOrder', ['idPurchaseOrder' => $dis->getIdPurchaseOrders()]);
+      if($answer->getStatusCode()!=200){
+        $mesange="not so good man";
+        //TODO persistir algo en la bd que diga que algo segurmente pasó con la cuenta
+      }else{
+        $mesange="all good man";
+      }
     } else {
       //TODO enviar el correo a "" notificando que no se pudo hacer la transaccion con la informacion de, la fecha del rechazo, el monto, el empleador(nombres, telefono,correo) y el empleado(nombres, numero de cuenta),
 
@@ -129,7 +144,7 @@ class HighTechRestController extends FOSRestController
     $em->persist($dis);
     $em->flush();
     $view = View::create();
-    $retorno = $view->setStatusCode(200)->setData(array());
+    $retorno = $view->setStatusCode(200)->setData(array("mesange"=>$mesange));
     return $retorno;
 
 

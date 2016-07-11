@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Traits;
 
 use DateTime;
+use FOS\RestBundle\View\View;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Person;
@@ -612,30 +613,33 @@ trait SubscriptionMethodsTrait
         $person = $user->getPersonPerson();
         /* @var $employer Employer */
         $employer = $person->getEmployer();
-        if($employer->getIdHighTech()!=null){
-            //return true;
-        }
-        $em = $this->getDoctrine()->getManager();
         $request = $this->container->get('request');
-        $request->setMethod("POST");
-        $request->request->add(array(
-            "documentType" => $person->getDocumentType(),
-            "documentNumber" => $person->getDocument(),
-            "name" => $person->getNames(),
-            "firstLastName" => $person->getLastName1(),
-            "secondLastName" => $person->getLastName2(),
-            "documentExpeditionDate" => $person->getDocumentExpeditionDate() ? $person->getDocumentExpeditionDate()->format("Y-m-d") : "",
-            "civilState" => $person->getCivilStatus(),
-            "address" => $person->getMainAddress(),
-            "phone" => $person->getPhones()->get(0)->getPhoneNumber(),
-            "municipio" => $person->getCity()->getName(),
-            "department" => $person->getDepartment()->getName(),
-            "mail" => $user->getEmail()
-        ));
+        $em = $this->getDoctrine()->getManager();
+        if($employer->getIdHighTech()==null){
+            $request->setMethod("POST");
+            $request->request->add(array(
+                "documentType" => $person->getDocumentType(),
+                "documentNumber" => $person->getDocument(),
+                "name" => $person->getNames(),
+                "firstLastName" => $person->getLastName1(),
+                "secondLastName" => $person->getLastName2(),
+                "documentExpeditionDate" => $person->getDocumentExpeditionDate() ? $person->getDocumentExpeditionDate()->format("Y-m-d") : "",
+                "civilState" => $person->getCivilStatus(),
+                "address" => $person->getMainAddress(),
+                "phone" => $person->getPhones()->get(0)->getPhoneNumber(),
+                "municipio" => $person->getCity()->getName(),
+                "department" => $person->getDepartment()->getName(),
+                "mail" => $user->getEmail()
+            ));
 
-        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postRegisterNaturalPerson', array('_format' => 'json'));
-        //dump($insertionAnswer);
-        //echo "Status Code Employer: " . $person->getNames() . " -> " . $insertionAnswer->getStatusCode();
+            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postRegisterNaturalPerson', array('_format' => 'json'));
+            //dump($insertionAnswer);
+            //echo "Status Code Employer: " . $person->getNames() . " -> " . $insertionAnswer->getStatusCode();
+        }else{
+            $insertionAnswer=View::create();
+            $insertionAnswer->setStatusCode(404);
+        }
+
 
         if ($insertionAnswer->getStatusCode() == 404 || $insertionAnswer->getStatusCode() == 200) {
             if ($insertionAnswer->getStatusCode() == 200) {
@@ -670,12 +674,13 @@ trait SubscriptionMethodsTrait
                     if ($payType->getPayrollCode() != 'EFE') {
                         $paymentMethodId = $payMC->getAccountTypeAccountType();
                         if ($paymentMethodId) {
-                            if ($payType->getName() == "Daviplata") {
+                            if ($payType->getName() == "Daviplata*") {
                                 $paymentMethodId = "DP";
                             } else {
                                 $paymentMethodId = $payMC->getAccountTypeAccountType()->getName() == "Ahorros" ? "AH" : ($payMC->getAccountTypeAccountType()->getName() == "Corriente" ? "CC" : "EN");
                             }
                         }
+                        //TODO change this as the same of the dispersion
                         $paymentMethodAN = $payMC->getAccountNumber() == null ? $payMC->getCellPhone() : $payMC->getAccountNumber();
                         $employeePerson = $employeeC->getEmployeeEmployee()->getPersonPerson();
                         $request->setMethod("POST");
