@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Command;
 
+use RocketSeller\TwoPickBundle\RocketSellerTwoPickBundle;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -22,15 +23,12 @@ class PayrollCloseCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        
         $output->writeln('<comment>Cerrar nominas dia 25</comment>');
-
-        $this->output = $output;
-
-        $ch = curl_init("http://127.0.0.1/api/public/v1/auto/liquidate/payroll");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
-
-        $response = curl_exec($ch);
+        
+        $rest = new \RocketSeller\TwoPickBundle\Controller\PayrollMethodRestController();
+        $response = $rest->putAutoLiquidatePayrollAction();
+        
         if (!$response) {
             $output->writeln('Fallo llamando servicio');
         } else {

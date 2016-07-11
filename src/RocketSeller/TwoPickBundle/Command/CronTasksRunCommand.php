@@ -2,7 +2,6 @@
 
 namespace RocketSeller\TwoPickBundle\Command;
 
-use RocketSeller\TwoPickBundle\Mailer\MailerInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -73,7 +72,6 @@ class CronTasksRunCommand extends ContainerAwareCommand
         $em->flush();
 
         $output->writeln('<comment>Done!</comment>');
-        /** @var MailerInterface $smailer */
     }
 
     private function runCommand($string)
