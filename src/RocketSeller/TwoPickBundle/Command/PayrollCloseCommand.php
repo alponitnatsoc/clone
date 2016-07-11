@@ -28,7 +28,7 @@ class PayrollCloseCommand extends ContainerAwareCommand
         /** @var Request $request */
         $request = new Request();
         $request->setMethod("PUT");
-        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollMethodRest:putAutoLiquidatePayroll', array('_format' => 'json'));
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollMethodRest:putAutoLiquidatePayroll',array('request'=>$request), array('_format' => 'json'));
         if ($insertionAnswer->getStatusCode() != 200) {
             $output->writeln('Fallo llamando servicio');
         } else {

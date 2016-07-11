@@ -29,7 +29,7 @@ class ReminderPayCommand extends ContainerAwareCommand
         /** @var Request $request */
         $request = new Request();
         $request->setMethod("POST");
-        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:ReminderRest:postReminder', array('_format' => 'json'));
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:ReminderRest:postReminder',array('request'=>$request), array('_format' => 'json'));
         if ($insertionAnswer->getStatusCode() != 200) {
             $output->writeln('Fallo llamando servicio');
         } else {
