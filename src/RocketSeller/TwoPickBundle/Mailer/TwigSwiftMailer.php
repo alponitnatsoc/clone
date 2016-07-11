@@ -191,6 +191,16 @@ class TwigSwiftMailer implements MailerInterface
         );
         return $this->sendMessage($template,$context,$this->parameters['from_email']['confirmation'], $to);
     }
+
+    public function sendLogMessage($content){
+        $to = "andres.ramirez@symplifica.com";
+        $template=$this->parameters['template']['log'];
+        $context = array(
+            'toEmail' => "andres.ramirez@symplifica.com",
+            'htmlBody' => $content
+        );
+        return $this->sendMessage($template,$context,'log@symplifica.com', $to);
+    }
     
     /**
      * @param string $templateName

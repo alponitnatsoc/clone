@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Command;
 
+use RocketSeller\TwoPickBundle\Mailer\MailerInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -23,7 +24,6 @@ class CronTasksRunCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('<comment>Running Cron Tasks...</comment>');
-        $output->writeln('<comments>Command in progress...</comments>');
         $this->output = $output;
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $crontasks = $em->getRepository('RocketSellerTwoPickBundle:CronTask')->findAll();
@@ -73,6 +73,9 @@ class CronTasksRunCommand extends ContainerAwareCommand
         $em->flush();
 
         $output->writeln('<comment>Done!</comment>');
+        /** @var MailerInterface $smailer */
+        $smailer = $this->get('symplifica.mailer.twig_swift');
+        $smailer->sendLogMessage($output);
     }
 
     private function runCommand($string)
