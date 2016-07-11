@@ -188,13 +188,15 @@ class PayrollController extends Controller
                 break;
             }
         }
-        $total=0;
-        /** @var PurchaseOrdersDescription $pod */
-        foreach ($pods as $pod) {
-            $total+=$pod->getValue();
-        }
-        if($total==0){
-            $pods=null;
+        if($pods!=null){
+            $total=0;
+            /** @var PurchaseOrdersDescription $pod */
+            foreach ($pods as $pod) {
+                $total+=$pod->getValue();
+            }
+            if($total==0){
+                $pods=null;
+            }
         }
 
 
