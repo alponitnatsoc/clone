@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Command;
 
+use RocketSeller\TwoPickBundle\Mailer\MailerInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -23,7 +24,6 @@ class CronTasksRunCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('<comment>Running Cron Tasks...</comment>');
-
         $this->output = $output;
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $crontasks = $em->getRepository('RocketSellerTwoPickBundle:CronTask')->findAll();
@@ -53,7 +53,6 @@ class CronTasksRunCommand extends ContainerAwareCommand
                         $output->writeln(sprintf('Executing command <comment>%s</comment>...', $command));
                         // Run the command
                         $result = $this->runCommand($command);
-
                         // Set $lastrun for this crontask
                         $crontask->setLastRun(new \DateTime());
                     }
@@ -74,6 +73,7 @@ class CronTasksRunCommand extends ContainerAwareCommand
         $em->flush();
 
         $output->writeln('<comment>Done!</comment>');
+        /** @var MailerInterface $smailer */
     }
 
     private function runCommand($string)
