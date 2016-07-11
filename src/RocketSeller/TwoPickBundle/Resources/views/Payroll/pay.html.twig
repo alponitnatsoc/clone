@@ -28,6 +28,7 @@
             <link rel="stylesheet" type="text/css" href="{{ asset('css/public/pagospage.css') }}"/>
             <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700' rel='stylesheet' type='text/css'>
             <div id="agregarNovedad"></div>
+            <div id="cambiarDias"></div>
 
             <div class="payroll pay">
                 <form method="post" action="{{ path('payroll_calculate') }}" id="form_calculate">
@@ -44,6 +45,15 @@
                                           {%  set employeeName = employee.names ~' '~ employee.lastName1 %}
                                           {%  set idPayroll = data.payrollPayroll.idPayroll %}
                                           {{ employeeName }}
+
+                                          {% if data.payrollPayroll.contractContract.timeCommitmentTimeCommitment.code == "XD" %}
+                                            {% if data.payrollPayroll.sqlNovelties|length > 0 %}
+                                                {%  set novelties = data.payrollPayroll.sqlNovelties %}
+                                                {% for novelty in novelties if novelty.noveltyTypeNoveltyType.idNoveltyType == 29 %}
+                                                    <a class="notAjax workedDays btn-xs btn-orange" href="/novelty/workableDays/{{ novelty.idNovelty }}">Cambiar el número de días trabajados</a>
+                                                {% endfor %}
+                                            {% endif %}
+                                          {% endif %}
                                         </div>
                                         <div class="center">
                                             {% if payType != 'EFE' %}
