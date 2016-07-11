@@ -29,7 +29,7 @@ class ReminderPayCommand extends ContainerAwareCommand
         if($ip=='52.91.121.67'){
             $service = "symplifica_dev:elmismo@52.91.121.67/api/public/v1/secured/reminders";
         }else{
-            $service = "10.0.0.1/api/public/v1/secured/reminders";
+            $service = "52.73.123.224/api/public/v1/secured/reminders";
         }
         $this->output = $output;
         $ch = curl_init($service);
