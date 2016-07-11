@@ -236,6 +236,24 @@ class ReminderRestController extends FOSRestController
         $view = View::create();
         $view->setData($response)->setStatusCode(200);
         return $view;
+    }
+
+    /**
+     * Reminder daviplata.
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Send the reminder to create daviplata if not created.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when error"
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function postReminderDaviplataAction()
+    {
 
 
     }
