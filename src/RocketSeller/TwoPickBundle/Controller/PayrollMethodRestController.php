@@ -134,6 +134,7 @@ class PayrollMethodRestController extends FOSRestController
 
         $payrollEntity = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
         $month = date("m");
+        $year = date("Y");
         $day = date("d");
         $period =  4 ;
         //TODO tengo que buscar las que no están pagas
@@ -141,6 +142,7 @@ class PayrollMethodRestController extends FOSRestController
             $params = array(
                 "month" => $month,
                 "period"=>$period,
+                "year"=>$year,
                 "paid" => 0
 
             );
@@ -148,6 +150,7 @@ class PayrollMethodRestController extends FOSRestController
             $period = 2;
             $params = array(
                 "month" => $month,
+                "year"=>$year,
                 "period" => $period,
                 "paid" => 0
             );
@@ -315,7 +318,7 @@ class PayrollMethodRestController extends FOSRestController
         }
 
         if (!isset($total)) {
-            $total = "no hay nominas pendientes por cerrar";
+            $total = "no hay nominas pendientes por cerrar ";
         }
 
 //         $result .= count($pod);
