@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\HttpFoundation\Request;
 
 class PayrollCloseCommand extends ContainerAwareCommand
 {
@@ -22,21 +23,18 @@ class PayrollCloseCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        
         $output->writeln('<comment>Cerrar nominas dia 25</comment>');
-
-        $this->output = $output;
-
-        $ch = curl_init("http://127.0.0.1/api/public/v1/auto/liquidate/payroll");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
-
-        $response = curl_exec($ch);
-        if (!$response) {
+        /** @var Request $request */
+        $request = new Request();
+        $request->setMethod("PUT");
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollMethodRest:putAutoLiquidatePayroll',array('request'=>$request), array('_format' => 'json'));
+        if ($insertionAnswer->getStatusCode() != 200) {
             $output->writeln('Fallo llamando servicio');
         } else {
             //$response = json_decode($response);
             //dump($response);
-            $output->writeln("Respuesta: " . $response);
+            $output->writeln("Respuesta: " . $insertionAnswer->getContent());
         }
         $output->writeln('<comment>Done!</comment>');
     }

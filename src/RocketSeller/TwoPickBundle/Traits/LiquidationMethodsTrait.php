@@ -29,6 +29,8 @@ trait LiquidationMethodsTrait
                 $novelty->setNoveltyTypeNoveltyType($noveltyType);
                 $novelty->setName($noveltyType->getName());
                 $novelty->setSqlValue($info["NOMI_VALOR_LOCAL"]);
+                $novelty->setSqlNovConsec($info["NOV_CONSEC"]);
+                $novelty->setUnits($info["NOMI_UNIDADES"]);
                 $novelties->add($novelty);
                 //                 var_dump($info["NOMI_VALOR"] . " - " . $noveltyType->getNaturaleza());
                 switch ($noveltyType->getNaturaleza()):

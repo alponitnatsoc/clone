@@ -115,6 +115,14 @@ interface MailerInterface
     public function sendDiasHabilesMessage(User $user,EmployerHasEmployee $eHE);
 
     /**
+     * Send log status
+     *
+     * @param String $content
+     *
+     * @return void
+     */
+    public function sendLogMessage($content);
+    /**
      * Send an reminder Backoffice validation
      *
      * @param UserInterface $user

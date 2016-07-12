@@ -41,10 +41,11 @@ class ReminderRestController extends FOSRestController
             foreach ($users as $user){
                 $response = $response.'- -Usuario: '.$user->getPersonPerson()->getFullName().'<br>';
                 if($user->getStatus() == 2){
+                    $enviado = false;
                     /** @var EmployerHasEmployee $eHE */
                     foreach ($user->getPersonPerson()->getEmployer()->getEmployerHasEmployees() as $eHE ){
                         $response = $response."- - Empleado: ".$eHE->getEmployeeEmployee()->getPersonPerson()->getFullName()."<br>";
-                        if($eHE->getContracts()){
+                        if($eHE->getContracts()and!$enviado){
                             /** @var Contract $contract */
                             foreach ($eHE->getContracts() as $contract){
                                 if($contract->getActivePayroll()){
@@ -53,6 +54,7 @@ class ReminderRestController extends FOSRestController
                                         $send = $smailer->sendReminderPayEmailMessage($user,3);
                                         $response = $response."- - -Periodo activo: ".$contract->getActivePayroll()->getMonth().' '.$contract->getActivePayroll()->getYear()."<br>";
                                         if($send){
+                                            $enviado=true;
                                             $response = $response."- - -ENVIO EL CORREO<br><br>";
                                         }else{
                                             $response = $response."- - -NO ENVIO EL CORREO<br><br>";
@@ -73,25 +75,27 @@ class ReminderRestController extends FOSRestController
                     $response = $response."- -NO ESTA APROBADO. <br><br>";
                 }
             }
-        }elseif($date->format('d') == 10){
+        }elseif($date->format('d') == 11){
             $users = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:User")->findAll();
             $response = $response."- SE EJECUTA LA TAREA QUINCENAL".'<br><br>';
             /** @var User $user */
             foreach ($users as $user){
                 $response = $response.'- -Usuario: '.$user->getPersonPerson()->getFullName().'<br>';
                 if($user->getStatus() == 2){
+                    $enviado = false;
                     /** @var EmployerHasEmployee $eHE */
                     foreach ($user->getPersonPerson()->getEmployer()->getEmployerHasEmployees() as $eHE ){
                         $response = $response."- - Empleado: ".$eHE->getEmployeeEmployee()->getPersonPerson()->getFullName()."<br>";
-                        if($eHE->getContracts()){
+                        if($eHE->getContracts() and !$enviado){
                             /** @var Contract $contract */
                             foreach ($eHE->getContracts() as $contract){
-                                if($contract->getActivePayroll() and $contract->getActivePayroll()->getPeriod() == 2){
+                                if($contract->getActivePayroll() and $contract->getActivePayroll()->getPeriod() == 2 and !$enviado){
                                     if($contract->getActivePayroll()->getMonth()==$date->format('m')){
                                         $smailer = $this->get('symplifica.mailer.twig_swift');
                                         $send= $smailer->sendReminderPayEmailMessage($user,2);
                                         $response = $response."- - -Periodo activo: ".$contract->getActivePayroll()->getMonth().' '.$contract->getActivePayroll()->getYear()."<br>";
                                         if($send){
+                                            $enviado=true;
                                             $response = $response."- - -ENVIO EL CORREO<br><br>";
                                         }else{
                                             $response = $response."- - -NO ENVIO EL CORREO<br><br>";
@@ -150,10 +154,11 @@ class ReminderRestController extends FOSRestController
             foreach ($users as $user){
                 $response = $response.'- -Usuario: '.$user->getPersonPerson()->getFullName().'<br>';
                 if($user->getStatus() == 2){
+                    $enviado=false;
                     /** @var EmployerHasEmployee $eHE */
                     foreach ($user->getPersonPerson()->getEmployer()->getEmployerHasEmployees() as $eHE ){
                         $response = $response."- - Empleado: ".$eHE->getEmployeeEmployee()->getPersonPerson()->getFullName()."<br>";
-                        if($eHE->getContracts()){
+                        if($eHE->getContracts() and !$enviado){
                             /** @var Contract $contract */
                             foreach ($eHE->getContracts() as $contract){
                                 if($contract->getActivePayroll()){
@@ -162,6 +167,7 @@ class ReminderRestController extends FOSRestController
                                         $send = $smailer->sendLastReminderPayEmailMessage($user,3);
                                         $response = $response."- - -Periodo activo: ".$contract->getActivePayroll()->getMonth().' '.$contract->getActivePayroll()->getYear()."<br>";
                                         if($send){
+                                            $enviado=true;
                                             $response = $response."- - -ENVIO EL CORREO<br><br>";
                                         }else{
                                             $response = $response."- - -NO ENVIO EL CORREO<br><br>";
@@ -189,10 +195,11 @@ class ReminderRestController extends FOSRestController
             foreach ($users as $user){
                 $response = $response.'- -Usuario: '.$user->getPersonPerson()->getFullName().'<br>';
                 if($user->getStatus() == 2){
+                    $enviado = false;
                     /** @var EmployerHasEmployee $eHE */
                     foreach ($user->getPersonPerson()->getEmployer()->getEmployerHasEmployees() as $eHE ){
                         $response = $response."- - Empleado: ".$eHE->getEmployeeEmployee()->getPersonPerson()->getFullName()."<br>";
-                        if($eHE->getContracts()){
+                        if($eHE->getContracts() and !$enviado){
                             /** @var Contract $contract */
                             foreach ($eHE->getContracts() as $contract){
                                 if($contract->getActivePayroll() and $contract->getActivePayroll()->getPeriod() == 2){
@@ -201,6 +208,7 @@ class ReminderRestController extends FOSRestController
                                         $send= $smailer->sendLastReminderPayEmailMessage($user,2);
                                         $response = $response."- - -Periodo activo: ".$contract->getActivePayroll()->getMonth().' '.$contract->getActivePayroll()->getYear()."<br>";
                                         if($send){
+                                            $enviado=true;
                                             $response = $response."- - -ENVIO EL CORREO<br><br>";
                                         }else{
                                             $response = $response."- - -NO ENVIO EL CORREO<br><br>";
@@ -228,6 +236,24 @@ class ReminderRestController extends FOSRestController
         $view = View::create();
         $view->setData($response)->setStatusCode(200);
         return $view;
+    }
+
+    /**
+     * Reminder daviplata.
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Send the reminder to create daviplata if not created.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when error"
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function postReminderDaviplataAction()
+    {
 
 
     }

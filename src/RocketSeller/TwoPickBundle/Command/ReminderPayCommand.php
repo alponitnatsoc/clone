@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\HttpFoundation\Request;
 
 class ReminderPayCommand extends ContainerAwareCommand
 {
@@ -25,23 +26,20 @@ class ReminderPayCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('<comment>Recordatorio Fecha Corte Novedades</comment>');
-
-        $this->output = $output;
-
-        $ch = curl_init("http://10.0.0.143/api/public/v1/secured/reminders");
-
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
-
-        $response = curl_exec($ch);
-        if (!$response) {
+        /** @var Request $request */
+        $request = new Request();
+        $request->setMethod("POST");
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:ReminderRest:postReminder',array('request'=>$request), array('_format' => 'json'));
+        if ($insertionAnswer->getStatusCode() != 200) {
             $output->writeln('Fallo llamando servicio');
         } else {
             //$response = json_decode($response);
             //dump($response);
-            $output->writeln("Respuesta: " . $response);
+            $output->writeln("Respuesta: " . $insertionAnswer->getContent());
         }
         $output->writeln('<comment>Done!</comment>');
+        
+
     }
     
     private function runCommand($string)
