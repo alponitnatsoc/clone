@@ -725,6 +725,9 @@ use EmployerMethodsTrait;
                     'totalDeducido'=>$totalDeducido,
                     'total'=>$totalDevengado-$totalDeducido
                 );
+                //extracting signature
+
+                //$baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
 
                 $data = array(
                     'employeeInfo' => $employeeInfo,

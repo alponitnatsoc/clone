@@ -20,6 +20,26 @@ use DateTime;
 
 class NoveltyRestController extends FOSRestController
 {
+  /**
+   * Return the novelty types<br/>
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = "Returns the list of novelty types",
+   *   statusCodes = {
+   *     200 = "Returned when successful"
+   *   }
+   * )
+   *
+   * @return View
+   */
+   public function getNoveltyTypesAction() {
+     $novletyRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:NoveltyType");
+     $novleties = $novletyRepo->findAll();
+     $view = View::create();
+
+     return $view->setStatusCode(200)->setData(array('novelties'=>$novleties));
+   }
 
     /**
      * Add the novelty<br/>

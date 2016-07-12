@@ -170,7 +170,7 @@ class PayrollRestSecuredController extends FOSRestController
                     $person = $pod->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
 
                     $documentType = 'Comprobante';
-                    $msj = "Subir comprobante de " . $utils->mb_capitalize(explode(" ", $person->getNames())[0] . " " . $person->getLastName1());
+                    $msj = "Subir comprobante de " . $utils->mb_capitalize(explode(" ", $person->getNames())[0] . " " . $person->getLastName1())." ".$utils->period_number_to_name($actualPayroll->getPeriod())." ".$utils->month_number_to_name($actualPayroll->getMonth());
                     $dUrl = $this->generateUrl("download_documents", array('id' => $actualPayroll->getIdPayroll(), 'ref' => "comprobante", 'type' => 'pdf'));
                     $dAction = "Bajar";
                     $action = "Subir";
