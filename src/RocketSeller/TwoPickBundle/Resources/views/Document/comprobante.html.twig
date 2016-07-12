@@ -103,7 +103,7 @@
 <div id="contenedor-comp">
     <div id="tittle-comp">
         <h2>Comprobante de pago</h2>
-        <span>Periodo {{ data.employeeInfo.month }} {{ data.employeeInfo.period }}</span>
+        <span>Periodo {{ utils.period_number_to_name(data.employeeInfo.period) }} {{ utils.month_number_to_name(data.employeeInfo.month) }}</span>
     </div>
     <div id="data-empleado">
         <p>

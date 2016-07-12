@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Command;
 
+use RocketSeller\TwoPickBundle\Controller\PayrollMethodRestController;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -25,16 +26,16 @@ class PayrollCloseCommand extends ContainerAwareCommand
     {
         
         $output->writeln('<comment>Cerrar nominas dia 25</comment>');
-        /** @var Request $request */
-        $request = new Request();
-        $request->setMethod("PUT");
-        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollMethodRest:putAutoLiquidatePayroll',array('request'=>$request), array('_format' => 'json'));
-        if ($insertionAnswer->getStatusCode() != 200) {
+        /** @var PayrollMethodRestController $payroll */
+        $payroll = $this->get('app.symplifica_payroll');
+
+        $response = $payroll->putAutoLiquidatePayrollAction();
+        if ($response->getStatusCode() != 200) {
             $output->writeln('Fallo llamando servicio');
         } else {
             //$response = json_decode($response);
             //dump($response);
-            $output->writeln("Respuesta: " . $insertionAnswer->getContent());
+            $output->writeln("Respuesta: " . $response->getContent());
         }
         $output->writeln('<comment>Done!</comment>');
     }

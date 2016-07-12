@@ -24,64 +24,78 @@
     </div>
 
     <div class="payroll calculate" style="clear:both">
-
-        <div class="calculateHeader" style="margin: 30px auto;color:#00858C">
-            <br />
-            <h2>El cálculo final para efectuar el pago fue realizado existosamente.</h2>
-            <h3>Verifique a continuación la información</h3>
-        </div>
-        <form method="post" action="{{ path('payroll_confirm') }}" id="formPay" style="width: 90%;margin: 0 auto;">
-
-        <div class="row col-xs-12 bordertotales">
-            <div class="col-xs-4 resppay" style="padding: 20px 0 0 20px;color:#1FCECB;">
-                <h4 class="media-heading" style="color: #00858C;font-weight: bold;font-style: italic;">Fecha de pago</h4>
-                {{ "now"|localizeddate('long', 'short', false) }}
+        {% set dataNomina = toPay.purchase_order_descriptions %}
+        {% if dataNomina == null %}
+            <div class="calculateHeader" style="margin: 30px auto;color:#00858C">
+                <br />
+                <h2>Gracias por reportar su pago.</h2>
+                <h3>En la siguiente pantalla encontrará una notificación para generar su comprobante de pago. Debe descargarlo, hacerlo firmar por su empleado y subirlo nuevamente a nuestra plataforma para mantener el registro de sus pagos al día.</h3>
+                <a class="btn btn-orange notAjax" href="{{ path("show_dashboard") }}">Ver las notificaciones</a>
             </div>
-            <div class="col-xs-4 borders resppay" style="color:#1FCECB;">
-                <h4 class="media-heading" style="color: #00858C;font-weight: bold;font-style: italic;">Total a pagar</h4>
-                <span id="totalPay"> $ {{ toPay.value|number_format(0, '.', ',')  }}</span>
+        {% else %}
+            <div class="calculateHeader" style="margin: 30px auto;color:#00858C">
+                <br />
+                <h2>El cálculo final para efectuar el pago fue realizado existosamente.</h2>
+                <h3>Verifique a continuación la información</h3>
             </div>
-            <div class="col-xs-4 resppay" style="padding: 20px 15px 0 20px;color:#1FCECB;">
-                <h4 class="media-heading" style="color: #00858C;font-weight: bold;font-style: italic;">Método de pago</h4>
-                <select name="paymentMethod" class="form-control paymentMethod" required="required">
-                    {% for paymentMethod in payMethods %}
-                        <option value="{{ paymentMethod['method-id'] }}">{{ paymentMethod['account'] }}</option>
-                    {% endfor  %}
-                </select>
-            </div>
-        </div>
+            <form method="post" action="{{ path('payroll_confirm') }}" id="formPay" style="width: 90%;margin: 0 auto;">
 
-            <div class="row">
-                {% set dataNomina = toPay.purchase_order_descriptions %}
-                {% for pod in dataNomina %}
+                <div class="row col-xs-12 bordertotales">
+                    <div class="col-xs-4 resppay" style="padding: 20px 0 0 20px;color:#1FCECB;">
+                        <h4 class="media-heading" style="color: #00858C;font-weight: bold;font-style: italic;">Fecha de pago</h4>
+                        {{ "now"|localizeddate('long', 'short', false) }}
+                    </div>
+                    <div class="col-xs-4 borders resppay" style="color:#1FCECB;">
+                        <h4 class="media-heading" style="color: #00858C;font-weight: bold;font-style: italic;">Total a pagar</h4>
+                        <span id="totalPay"> $ {{ toPay.value|number_format(0, '.', ',')  }}</span>
+                    </div>
+                    <div class="col-xs-4 resppay" style="padding: 20px 15px 0 20px;color:#1FCECB;">
+                        <h4 class="media-heading" style="color: #00858C;font-weight: bold;font-style: italic;">Método de pago</h4>
+                        <select name="paymentMethod" class="form-control paymentMethod" required="required">
+                            {% for paymentMethod in payMethods %}
+                                <option value="{{ paymentMethod['method-id'] }}">{{ paymentMethod['account'] }}</option>
+                            {% endfor  %}
+                        </select>
+                    </div>
+                </div>
 
-
-                    <div class="col-xs-12">
-                        <div class="row-fluid clearfix employee">
-                            {#<div class="col-xs-1">
-                                <img class="{{ personEmployee.gender == 'FEM'?'female':'male'  }}" src="{{ personEmployee.gender == 'FEM'?'/img/female.png':'/img/male.png'  }}" alt="Icono" height="42" width="42">
-                            </div>#}
-                            <div class="col-xs-12">
-                                <div class="row info col-xs-11 width">
-                                    <div class="col-md-4 width">
-                                        <h4 class="izquierda bold azulmediofont" style="font-size:15px">{{ pod.description }}</h4>
-                                        <span class="derecha extrabold azuloscurofont" style="font-size:20px;color: #3C4B5A;">$ {{ pod.value|number_format(0, '.', ',')  }}</span>
-                                        {% if pod.id_purchase_orders_description is defined %}
-                                        <input type="hidden" class="pay" name="{{ pod.id_purchase_orders_description }}" value="{{ pod.id_purchase_orders_description }}">
-                                        {% endif %}
+                <div class="row">
+                    {% for pod in dataNomina %}
+                        <div class="col-xs-12">
+                            <div class="row-fluid clearfix employee">
+                                {#<div class="col-xs-1">
+                                    <img class="{{ personEmployee.gender == 'FEM'?'female':'male'  }}" src="{{ personEmployee.gender == 'FEM'?'/img/female.png':'/img/male.png'  }}" alt="Icono" height="42" width="42">
+                                </div>#}
+                                <div class="col-xs-12">
+                                    <div class="row info col-xs-11 width">
+                                        <div class="col-md-4 width">
+                                            <h4 class="izquierda bold azulmediofont" style="font-size:15px">{{ pod.description }}</h4>
+                                            <span class="derecha extrabold azuloscurofont" style="font-size:20px;color: #3C4B5A;">$ {{ pod.value|number_format(0, '.', ',')  }}</span>
+                                            {% if pod.id_purchase_orders_description is defined %}
+                                                <input type="hidden" class="pay" name="{{ pod.id_purchase_orders_description }}" value="{{ pod.id_purchase_orders_description }}">
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                {% endfor %}
-            </div>
-            <div class="row buttons center">
-                <div class="col-xs-12 center" style="border-top: 1px solid #CCC;padding: 35px 0 0 0;">
-                    <input type="button" class="btn btn-grey btnPrevious-form btnPrevious" id="btnBack" value="Volver Atrás" onclick="history.go(-1);"/> <input type="submit" id="btnPay" class="btn btn-orange" value="Pagar" />
+                    {% endfor %}
+                    {% if paid.purchase_order_descriptions != null  %}
+                        <div class="calculateHeader" style="margin: 30px auto;color:#00858C">
+                            <br />
+                            <h2>Gracias por reportar su pago.</h2>
+                            <h3>En tu tablero de control encontrarás una notificación para generar su comprobante de pago. Debe descargarlo, hacerlo firmar por su empleado y subirlo nuevamente a nuestra plataforma para mantener el registro de sus pagos al día.</h3>
+                        </div>
+                    {% endif %}
                 </div>
-            </div>
-        </form>
+                <div class="row buttons center">
+                    <div class="col-xs-12 center" style="border-top: 1px solid #CCC;padding: 35px 0 0 0;">
+                        <input type="button" class="btn btn-grey btnPrevious-form btnPrevious" id="btnBack" value="Volver Atrás" onclick="history.go(-1);"/> <input type="submit" id="btnPay" class="btn btn-orange" value="Pagar" />
+                    </div>
+                </div>
+            </form>
+        {% endif %}
+
     </div>
 
 

@@ -82,3 +82,5 @@ services:
                   resetting: '%fos_user.resetting.email.from_email%'
     app.symplifica_utils:
         class: RocketSeller\TwoPickBundle\Controller\UtilsController
+    app.symplifica_payroll:
+        class: RocketSeller\TwoPickBundle\Controller\PayrollMethodRestController
