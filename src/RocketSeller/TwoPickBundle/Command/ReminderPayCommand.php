@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\HttpFoundation\Request;
 
 class ReminderPayCommand extends ContainerAwareCommand
 {
@@ -25,25 +26,16 @@ class ReminderPayCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('<comment>Recordatorio Fecha Corte Novedades</comment>');
-        $ip = trim(shell_exec ("wget http://ipinfo.io/ip -qO -").'', " \n.\t.");
-        if($ip=='52.91.121.67'){
-            $service = "symplifica_dev:elmismo@52.91.121.67/api/public/v1/secured/reminders";
-        }else{
-            $service = "127.0.0.1/api/public/v1/secured/reminders";
-        }
-        $this->output = $output;
-        $ch = curl_init($service);
-
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-
-        $response = curl_exec($ch);
-        if (!$response) {
+        /** @var Request $request */
+        $request = new Request();
+        $request->setMethod("POST");
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:ReminderRest:postReminder',array('request'=>$request), array('_format' => 'json'));
+        if ($insertionAnswer->getStatusCode() != 200) {
             $output->writeln('Fallo llamando servicio');
         } else {
             //$response = json_decode($response);
             //dump($response);
-            $output->writeln("Respuesta: " . $response);
+            $output->writeln("Respuesta: " . $insertionAnswer->getContent());
         }
         $output->writeln('<comment>Done!</comment>');
         
