@@ -4,13 +4,13 @@
 function addNoveltySelectListener() {
 
     $("#notaNovedad").hide();
-    //$("#novelty_fields_noveltyType").attr('disabled','true');
 
     var modBody=$("#noveltyModal").find(".cuerpoNovelty");
     var form=modBody.find("form");
 
     var selectedText = $("#novelty_fields_noveltyType").find("option:selected").text();
-
+    $(".toHide").hide();
+    $("#nombreNovedad").text(selectedText);
     if(selectedText =="Hora extra diurna"){
       $("#notaNovedad").show();
       $("#notaNovedad").text("Hora extra diurna es el tiempo de trabajo adicional a las 8 horas diarias o a la jornada pactada entre las partes en un horario de 6am a 10pm.");
@@ -112,7 +112,6 @@ function addNoveltySelectListener() {
         e.preventDefault();
 
         var value=form.find("input[name='form[noveltyType]']:checked").val();
-
         if($("#novelty_fields_noveltyType").val() !=null){
             value="";
         }
