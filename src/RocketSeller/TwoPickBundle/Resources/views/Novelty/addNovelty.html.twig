@@ -6,12 +6,16 @@
 				{{ errno }}
 			</div>
 		{% endif %}
+	<h3 id="nombreNovedad"></h3>
 	<div id="notaNovedad" style="font-style: italic;"></div>
 	</br>
 	{{ form_start(form) }}
 	    {{ form_errors(form) }}
 		<div id="formFields" class="form-black">
-			{{ form_row(form.noveltyType) }}
+
+			<div class="toHide">
+        {{ form_row(form.noveltyType) }}
+    	</div>
 			{% if form.documents is defined %}
 				{% for document in form.documents %}
 					<div style="display: none;">
