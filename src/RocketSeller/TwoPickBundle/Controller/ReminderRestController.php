@@ -255,8 +255,8 @@ class ReminderRestController extends FOSRestController
     public function postReminderDaviplataAction()
     {
         $response = 'Comienza: <br>';
-        $diaQ = 10;
-        $diaM = 13;
+        $diaQ = 13;
+        $diaM = 25;
         $date = new \DateTime();
         $response = $response."-Dia del mes: ".$date->format('d').", Dia del recordatorio davivienda mensual: ".$diaM.", Dia del recordatorio quincenal: ".$diaQ.'<br>';
         $flag=false;
@@ -297,6 +297,7 @@ class ReminderRestController extends FOSRestController
                                 if($contract->getActivePayroll()->getMonth() == $date->format('m') and $contract->getActivePayroll()->getPeriod()==4){
                                     $smailer = $this->get('symplifica.mailer.twig_swift');
                                     $send= $smailer->sendDaviplataReminderMessage($user,$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName());
+                                    $response = $response . "- - - Usuario= ".$user->getPersonPerson()->getFullName()." Empleado: ".$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName()."<br><br>";
                                     if($send){
                                         $enviado=true;
                                         $response = $response."- - -ENVIO EL CORREO<br><br>";
