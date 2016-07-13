@@ -68,6 +68,9 @@ class PayrollMethodRestController extends FOSRestController
                $dayStart="1";
            }
            $dateStartPeriod= new DateTime($actPayrroll->getYear()."-".$actPayrroll->getMonth()."-".$dayStart);
+           if($actContract->getStartDate()>$dateStartPeriod){
+               $dateStartPeriod=$actContract->getStartDate();
+           }
            $dayEnd=$actPayrroll->getPeriod()==2?"15":$dateStartPeriod->format("t");
            $dateEndPeriod= new DateTime($actPayrroll->getYear()."-".$actPayrroll->getMonth()."-".$dayEnd);
            $request->setMethod("GET");
@@ -190,7 +193,7 @@ class PayrollMethodRestController extends FOSRestController
 
             /** @var EmployerHasEmployee $ehe */
             foreach ($eHEs as $ehe) {
-                if($ehe->getState()>=3){
+                if($ehe->getState()>3){
                     $employee=$ehe->getEmployeeEmployee();
                     $contracts=$ehe->getContracts();
                     $realContract=null;
@@ -210,7 +213,7 @@ class PayrollMethodRestController extends FOSRestController
                                 $dataNomina = $this->getInfoNominaSQL($ehe);
                                 $salary = $this->totalLiquidation($dataNomina)['total'];
                                 $pila = $this->getTotalPILA($empHasEmp);
-                                $req = new Request();
+                                /*$req = new Request();
                                 $req->request->set("employee_id", $ehe->getIdEmployerHasEmployee());
                                 $req->request->set("execution_type", "C");
 
@@ -230,7 +233,7 @@ class PayrollMethodRestController extends FOSRestController
 
                                     $total[] = array("EmployerHasEmployee " . $ehe->getIdEmployerHasEmployee() => "error en sql");
                                     continue;
-                                }
+                                }*/
                                 if(count($activePayrrol->getPurchaseOrdersDescription())>0){
                                     $pod=$activePayrrol->getPurchaseOrdersDescription()->get(0);
                                 }else{
@@ -252,11 +255,12 @@ class PayrollMethodRestController extends FOSRestController
                                 $contract=$activePayrrol->getContractContract();
                                 $newActivePayroll=new Payroll();
                                 if($contract->getFrequencyFrequency()->getPayrollCode()=="Q"&&$period==4){
+                                    $nextMonth=($month%12)+1;
                                     $nextPeriod=2;
                                 }else{
                                     $nextPeriod=4;
+                                    $nextMonth=$month;
                                 }
-                                $nextMonth=($month%12)+1;
                                 if($nextMonth==1){
                                     $nextYear=intval($activePayrrol->getYear())+1;
                                 }else{
