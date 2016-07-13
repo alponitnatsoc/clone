@@ -492,16 +492,7 @@ class ProcedureController extends Controller
 						if($notification==null)
 							$notification = new Notification();
 
-						$notification->setPersonPerson($user->getPersonPerson());
-						$notification->setStatus(1);
-						$notification->setDocumentTypeDocumentType($documentType);
-						$notification->setType('alert');
-						$notification->setDescription($msj);
-						$notification->setRelatedLink($url);
-						$notification->setAccion($nAction);
-						$notification->setDownloadAction($dAction);
-						$notification->setDownloadLink($dUrl);
-						$em->persist($notification);
+						//se envia emai de validacion 3 días
                         $smailer = $this->get('symplifica.mailer.twig_swift');
                         $smailer->sendDiasHabilesMessage($user,$realEhe);
 
@@ -518,6 +509,19 @@ class ProcedureController extends Controller
 
 						//then check if changing the start date is necessary
 						if($realEhe->getLegalFF()==0){
+							//ademas agrego la notificacion
+
+							$notification->setPersonPerson($user->getPersonPerson());
+							$notification->setStatus(1);
+							$notification->setDocumentTypeDocumentType($documentType);
+							$notification->setType('alert');
+							$notification->setDescription($msj);
+							$notification->setRelatedLink($url);
+							$notification->setAccion($nAction);
+							$notification->setDownloadAction($dAction);
+							$notification->setDownloadLink($dUrl);
+							$em->persist($notification);
+
 							$todayPlus = new DateTime();
 							$request = $this->container->get('request');
 							$request->setMethod("GET");
