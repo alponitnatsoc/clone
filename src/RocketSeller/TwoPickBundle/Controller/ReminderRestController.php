@@ -255,8 +255,8 @@ class ReminderRestController extends FOSRestController
     public function postReminderDaviplataAction()
     {
         $response = 'Comienza: <br>';
-        $diaQ = 13;
-        $diaM = 25;
+        $diaQ = 10;
+        $diaM = 13;
         $date = new \DateTime();
         $response = $response."-Dia del mes: ".$date->format('d').", Dia del recordatorio davivienda mensual: ".$diaM.", Dia del recordatorio quincenal: ".$diaQ.'<br>';
         $flag=false;
