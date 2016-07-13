@@ -254,7 +254,99 @@ class ReminderRestController extends FOSRestController
      */
     public function postReminderDaviplataAction()
     {
-
+        $response = 'Comienza: <br>';
+        $diaQ = 10;
+        $diaM = 13;
+        $date = new \DateTime();
+        $response = $response."-Dia del mes: ".$date->format('d').", Dia del recordatorio davivienda mensual: ".$diaM.", Dia del recordatorio quincenal: ".$diaQ.'<br>';
+        $flag=false;
+        if($date->format('d') == $diaM or $date->format('d')==$diaQ){
+            $notifications = $this
+                ->getDoctrine()
+                ->getManager()
+                ->getRepository("RocketSellerTwoPickBundle:Notification")
+                ->findBy(
+                    array(
+                        "accion" => 'Crear Daviplata',
+                        "status" => 1,
+                    )
+                );
+            if($notifications){
+                $flag=true;
+                $response = $response."-HAY NOTIFICACIONES".'<br><br>';
+            }
+        }
+        if(($date->format('d') == $diaM or $date->format('d')==$diaQ) and !$flag){
+            $response = $response."- NO HAY NOTIFICACIONES DE DAVIPLATA".'<br><br>';
+        }elseif($date->format('d') == $diaM){
+            $response = $response."- SE EJECUTA LA TAREA MENSUAL".'<br><br>';
+            $response = $response."- -RECORRIENDO NOTIFICACIONES DAVIPLATA".'<br><br>';
+            /** @var Notification $notification */
+            foreach ($notifications as $notification){
+                $person = $notification->getPersonPerson();
+                /** @var User $user */
+                $user = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('personPerson'=>$person));
+                if($user){
+                    $pices = explode('/',$notification->getRelatedLink());
+                    if($pices){
+                        $pMethod = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:PayMethod")->find($pices[2]);
+                        if($pMethod){
+                            /** @var Contract $contract */
+                            $contract=$this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:Contract")->findOneBy(array('payMethodPayMethod'=>$pMethod));
+                            if($contract){
+                                if($contract->getActivePayroll()->getMonth() == $date->format('m') and $contract->getActivePayroll()->getPeriod()==4){
+                                    $smailer = $this->get('symplifica.mailer.twig_swift');
+                                    $send= $smailer->sendDaviplataReminderMessage($user,$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName());
+                                    if($send){
+                                        $enviado=true;
+                                        $response = $response."- - -ENVIO EL CORREO<br><br>";
+                                    }else{
+                                        $response = $response."- - -NO ENVIO EL CORREO<br><br>";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }elseif($date->format('d') == $diaQ){
+            $response = $response."- SE EJECUTA LA TAREA QUINCENAL".'<br><br>';
+            $response = $response."- -RECORRIENDO NOTIFICACIONES DAVIPLATA".'<br><br>';
+            /** @var Notification $notification */
+            foreach ($notifications as $notification) {
+                $person = $notification->getPersonPerson();
+                /** @var User $user */
+                $user = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('personPerson' => $person));
+                if ($user) {
+                    $pices = explode('/', $notification->getRelatedLink());
+                    if ($pices) {
+                        $pMethod = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:PayMethod")->find($pices[2]);
+                        if ($pMethod) {
+                            /** @var Contract $contract */
+                            $contract = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:Contract")->findOneBy(array('payMethodPayMethod' => $pMethod));
+                            if ($contract) {
+                                if ($contract->getActivePayroll()->getMonth() == $date->format('m') and $contract->getActivePayroll()->getPeriod() == 2) {
+                                    $smailer = $this->get('symplifica.mailer.twig_swift');
+                                    $response = $response . "- - - Usuario= ".$user->getPersonPerson()->getFullName()." Empleado: ".$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName()."<br><br>";
+                                    $send = $smailer->sendDaviplataReminderMessage($user, $contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName());
+                                    if ($send) {
+                                        $response = $response . "- - -ENVIO EL CORREO<br><br>";
+                                    } else {
+                                        $response = $response . "- - -NO ENVIO EL CORREO<br><br>";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }else{
+            $response = $response."- NO DEBE EJECUTARSE LA TAREA AUN ".'<br><br>';
+        }
+        $response = $response."Termina".'<br>';
+        $view = View::create();
+        $view->setData($response)->setStatusCode(200);
+        return $view;
 
     }
 }

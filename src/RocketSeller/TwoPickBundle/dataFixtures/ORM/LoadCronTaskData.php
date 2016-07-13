@@ -50,6 +50,15 @@ class LoadCronTaskData extends AbstractFixture implements OrderedFixtureInterfac
         $manager->persist($cronTask);
 
         $manager->flush();
+
+		$cronTask = new CronTask();
+        $cronTask->setName('Recordatorio Daviplata');
+        $cronTask->setLastRun(new \DateTime());
+        $cronTask->setInterval(86400); //1 day =  24 hour * 60 min * 60 sec = 86400 seconds
+        $cronTask->setCommands(array('symplifica:daviReminder'));
+        $manager->persist($cronTask);
+
+        $manager->flush();
     }
 
     public function getOrder()

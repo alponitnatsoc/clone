@@ -104,7 +104,7 @@ class Novelty
     private $description;
 
     /**
-     * @ORM\Column(type="integer", nullable=TRUE, name="sql_nov_consec")
+     * @ORM\Column(type="string", nullable=TRUE, name="sql_nov_consec")
      */
     private $sqlNovConsec;
 
@@ -426,10 +426,11 @@ class Novelty
         return $this->sqlPayrollPayroll;
     }
 
+
     /**
      * Set sqlNovConsec
      *
-     * @param integer $sqlNovConsec
+     * @param string $sqlNovConsec
      *
      * @return Novelty
      */
@@ -443,7 +444,7 @@ class Novelty
     /**
      * Get sqlNovConsec
      *
-     * @return integer
+     * @return string
      */
     public function getSqlNovConsec()
     {
