@@ -31,12 +31,12 @@ class PurchaseOrdersDescriptionController extends Controller
 			Beneficiarios UPC adicional es decir afiliar a alguien por fuera de mi nucleo familiar directo
 		*/
 		$cPodFileType = array();
-		
+
 		foreach( $pod as $singlePod){
 			if($singlePod->getPurchaseOrdersStatus()->getIdNovoPay() != "-1"){
 				if( count($singlePod->getPayrollsPila()) > 0 ){
 					$cPod[] = $singlePod;
-					$cPodFileType[] = $singlePod->getPayrollsPila())[0]->getContractContract()->getPlanillaTypePlanillaType()->getCode();
+					//$cPodFileType[] = $singlePod->getPayrollsPila())[0]->getContractContract()->getPlanillaTypePlanillaType()->getCode();
 				}
 			}
 		}
