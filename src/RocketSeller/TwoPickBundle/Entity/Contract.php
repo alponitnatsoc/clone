@@ -202,6 +202,16 @@ class Contract
     private $workableDaysMonth;
 
     /**
+     * @var \RocketSeller\TwoPickBundle\Entity\PlanillaType
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PlanillaType")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="planilla_type_id_planilla_type", referencedColumnName="id_planilla_type")
+     * })
+     */
+    private $planillaTypePlanillaType;
+
+
+    /**
      * Get idContract
      *
      * @return integer
@@ -578,7 +588,7 @@ class Contract
         return $this->liquidations;
     }
 
-    
+
     /**
      * Set startDate
      *
@@ -892,4 +902,28 @@ class Contract
         $this->liquidations = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+    /**
+     * Set planillaTypePlanillaType
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PlanillaType $planillaTypePlanillaType
+     *
+     * @return Contract
+     */
+    public function setPlanillaTypePlanillaType(\RocketSeller\TwoPickBundle\Entity\PlanillaType $planillaTypePlanillaType = null)
+    {
+        $this->planillaTypePlanillaType = $planillaTypePlanillaType;
+
+        return $this;
+    }
+
+    /**
+     * Get planillaTypePlanillaType
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\PlanillaType
+     */
+    public function getPlanillaTypePlanillaType()
+    {
+        return $this->planillaTypePlanillaType;
+    }
 }

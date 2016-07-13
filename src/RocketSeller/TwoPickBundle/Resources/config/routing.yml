@@ -75,6 +75,12 @@ show_un_active_codes:
 generate_codes:
     path:     /backoffice/generate/codes/{amount}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:generateCodes}
+show_pilas:
+    path:     /backoffice/show/pilas
+    defaults: { _controller: RocketSellerTwoPickBundle:PurchaseOrdersDescription:index}
+persist_planilla_id:
+    path:     /backoffice/planilla/persista/{id}/{idPod}
+    defaults: { _controller: RocketSellerTwoPickBundle:PurchaseOrdersDescription:persistPilaEnlaceOperativoCode}
 
 #tramites
 show_procedure:

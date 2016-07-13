@@ -208,7 +208,7 @@ class PilaPlainTextRestController extends FOSRestController
       foreach($ehe as $i) {
         $entity = $i->getEntityEntity();
         // If is AFP and doesn't pay.
-        if($entity->getIdEntity() == 3 && $entity->getPayrollCode() == 0) {
+        if($entity->getEntityTypeEntityType()->getPayrollCode() == "AFP" && $entity->getPayrollCode() == 0) {
           return false;
         }
       }
@@ -377,6 +377,7 @@ class PilaPlainTextRestController extends FOSRestController
       $elementos[] = $item;
     }
 
+    //TOGO 4
     public function executeLine() {
       // TODO: sort all the items based on start of line, in case of error.
       $elementos = &$this->elementos;
@@ -682,7 +683,7 @@ class PilaPlainTextRestController extends FOSRestController
       // Campo 74 Resolucion 130.
       $this->add(506, 506, $exonerated);
     }
-
+    // TOGO 5
     // Type is E or S.
     // Count is the number of employees of this type.
     public function createLineaEmpleado($employees, $exonerated=false, $idEmployer){
@@ -863,7 +864,7 @@ class PilaPlainTextRestController extends FOSRestController
         $retiro = '';
         if(count($finalLiquidation) > 0)
           $retiro = 'X';
-
+          //TOGO 10
         $variacionSalario = '';
         if($this->novedadGeneral($employeeInfo, 2))
           $variacionSalario = 'X';
@@ -959,6 +960,7 @@ class PilaPlainTextRestController extends FOSRestController
     // Type is E or S.
     // Count is the number of employees of this type.
     public function createEncabezado($idEmployer, $type, $count){
+      //TOGO 2
       $elementos = &$this->elementos;
       $elementos = array();
       $employer = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Employer");
@@ -1007,7 +1009,7 @@ class PilaPlainTextRestController extends FOSRestController
       $count .= $count2;
 
 
-
+      // TOGO 3
       //Articulo 7 resolucion 1747 de 2008.
       // Campo 1.
       $this->add(1, 2, '01'); //01 is mandatory.
@@ -1087,7 +1089,7 @@ class PilaPlainTextRestController extends FOSRestController
       $tempEmp = $emp->getEmployerHasEmployees();
       /** @var EmployerHasEmployee $ehe */
       foreach($tempEmp as $ehe) {
-        if($ehe->getState() >= 3)
+        if($ehe->getState() > 3)
           $numberEmployees ++;
       }
 
@@ -1104,6 +1106,9 @@ class PilaPlainTextRestController extends FOSRestController
       }
       $exonerated = $numberEmployees > 1 ? true: false;
 
+      //S es tiempo completo (Convencional)
+      //E es tiempo parcial sin Sisben (Domestico)
+      //TOGO 1
       $line = $this->createEncabezado($idEmployer, 'S', count($tiempo_completo));
       $line .= "\n";
       $this->elementos = array();
