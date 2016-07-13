@@ -201,6 +201,20 @@ class TwigSwiftMailer implements MailerInterface
         );
         return $this->sendMessage($template,$context,'log@symplifica.com', $to);
     }
+
+    public function sendDaviplataReminderMessage(User $user , $employeeName)
+    {
+        $to = $user->getEmail();
+        $template = $this->parameters['template']['reminderDaviplata'];
+        $context = array(
+            'toEmail' => $user->getEmail(),
+            'user' => $user,
+            'employeeName' => $employeeName,
+            'subject'=> "Recordatorio Crear Daviplata",
+            'userName' => $user->getPersonPerson()->getFullName(),
+        );
+        return $this->sendMessage($template,$context,'registro@symplifica.com', $to);
+    }
     
     /**
      * @param string $templateName
@@ -244,5 +258,6 @@ class TwigSwiftMailer implements MailerInterface
 
         return $this->mailer->send($message);
     }
+
     
 }

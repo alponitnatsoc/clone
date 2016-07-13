@@ -131,4 +131,13 @@ interface MailerInterface
      * @return void
      */
     public function sendBackValidatedMessage(UserInterface $user,EmployerHasEmployee $eHE);
+
+    /**
+     * Send a reminder create daviplata email
+     *
+     * @param User $user usuario al que se le envia el email
+     * @param String $employeName nombre del empleado
+     * @return void
+     */
+    public function sendDaviplataReminderMessage(User $user, $employeeName);
 }

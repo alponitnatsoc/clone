@@ -76,6 +76,7 @@ services:
                     remindNovelty: 'FOSUserBundle:Registration:payRecorder.txt.twig'
                     lastRemindNovelty: 'FOSUserBundle:Registration:lastPayRecorder.txt.twig'
                     log: 'FOSUserBundle:SendEmail:logEmail.html.twig'
+                    reminderDaviplata : 'FOSUserBundle:Registration:daviplataRecorder.txt.twig'
 
                 from_email:
                   confirmation: '%fos_user.registration.confirmation.from_email%'
