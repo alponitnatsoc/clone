@@ -20,30 +20,29 @@ class PurchaseOrdersDescriptionController extends Controller
 		$pod = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')->findBy(array("productProduct"=>$productIdToSearch));
 
 		$cPod = array();
+
 		/*Los tipo E son:
-			Personas dependiente de Empresas
-			Empleados contratados por personas naturales para trabajo comercial
-			Empleados de tiempo parcial afiliadas a Sisben
+			Personas dependiente de Empresas - Empleados contratados por personas naturales para trabajo comercial -Empleados de tiempo parcial afiliadas a Sisben
+
+		  Los tipo S son:
+			Empleados contratador por personas naturales para trabajo Domestico -Beneficiarios UPC adicional es decir afiliar a alguien por fuera de mi nucleo familiar directo
 		*/
 
-		/*Los tipo S son:
-			Empleados contratador por personas naturales para trabajo Domestico
-			Beneficiarios UPC adicional es decir afiliar a alguien por fuera de mi nucleo familiar directo
-		*/
 		$cPodFileType = array();
+		$idEmployers = array();
 
 		foreach( $pod as $singlePod){
 			if($singlePod->getPurchaseOrdersStatus()->getIdNovoPay() != "-1"){
 				if( count($singlePod->getPayrollsPila()) > 0 ){
 					$cPod[] = $singlePod;
-					//$cPodFileType[] = $singlePod->getPayrollsPila())[0]->getContractContract()->getPlanillaTypePlanillaType()->getCode();
+					$localArr = $singlePod->getPayrollsPila();
+					$cPodFileType[] = $localArr[0]->getContractContract()->getPlanillaTypePlanillaType()->getCode();
 				}
 			}
 		}
 
 		return $this->render(
-            '@RocketSellerTwoPick/BackOffice/pila.html.twig',array('pilas'=>$cPod)
-        );
+            '@RocketSellerTwoPick/BackOffice/pila.html.twig',array('pilas'=>$cPod, 'tipoPlanilla' =>$cPodFileType));
     }
 
 		public function persistPilaEnlaceOperativoCodeAction($id,$idPod){
