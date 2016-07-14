@@ -621,7 +621,7 @@ class PaymentMethodRestController extends FOSRestController
             $methodToCall='RocketSellerTwoPickBundle:Payments2Rest:postClientGscPayment';
 
         }
-        $insertionAnswer = $this->forward($methodToCall, array('_format' => 'json'));
+        $insertionAnswer = $this->forward($methodToCall,array("request"=>$request), array('_format' => 'json'));
 
         if($purchaseOrder->getProviderId()==0) {
             $answer = json_decode($insertionAnswer->getContent(), true);
