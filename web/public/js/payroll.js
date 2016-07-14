@@ -109,6 +109,10 @@ $(document).ready(function () {
 
     });
 
+    $("#btnShowDetails").on('click',function (event) {
+        $("#modal_show_details").modal('show');
+    });
+
 });
 function loadNovelty(url) {
     $.ajax({

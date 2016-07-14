@@ -338,12 +338,12 @@ class PayrollRestSecuredController extends FOSRestController
 
 
     /**
-     * Return the PODS and POS of the requested user
+     * Confirms the paymet of podsToPay with specific paymentMethod
      *
      *
      * @ApiDoc(
      *   resource = true,
-     *   description = "Return the overall User List",
+     *   description = "Confirms the paymet of podsToPay with specific paymentMethod",
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     403 = "Returned when users not match",
