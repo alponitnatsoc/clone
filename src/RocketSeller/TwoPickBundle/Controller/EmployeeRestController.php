@@ -291,6 +291,17 @@ class EmployeeRestController extends FOSRestController {
         $contract->setFrequencyFrequency($tempFrequency);
 
 
+        $planillaTypeRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PlanillaType');
+        // Logic to determine the contract planilla type
+        if($contract->getTimeCommitmentTimeCommitment()->getCode() == "XD" && $contract->getSisben() == 1){
+          $planillaTypeToSet = $planillaTypeRepo->findOneBy(array("code" => "E"));
+          $contract->setPlanillaTypePlanillaType($planillaTypeToSet);
+        }
+        else {
+          $planillaTypeToSet = $planillaTypeRepo->findOneBy(array("code" => "S"));
+          $contract->setPlanillaTypePlanillaType($planillaTypeToSet);
+        }
+
         //Final Entity Validation
         $errors = $this->get('validator')->validate($contract, array('Update'));
 
@@ -1114,6 +1125,17 @@ class EmployeeRestController extends FOSRestController {
         }
 
         $contract->setPayMethodPayMethod($payMethod);
+
+        $planillaTypeRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PlanillaType');
+        // Logic to determine the contract planilla type
+        if($contract->getTimeCommitmentTimeCommitment()->getCode() == "XD" && $contract->getSisben() == 1){
+          $planillaTypeToSet = $planillaTypeRepo->findOneBy(array("code" => "E"));
+          $contract->setPlanillaTypePlanillaType($planillaTypeToSet);
+        }
+        else {
+          $planillaTypeToSet = $planillaTypeRepo->findOneBy(array("code" => "S"));
+          $contract->setPlanillaTypePlanillaType($planillaTypeToSet);
+        }
 
         $em->persist($contract);
         $em->persist($payMethod);
