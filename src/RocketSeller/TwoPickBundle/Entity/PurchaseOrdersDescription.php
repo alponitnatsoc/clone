@@ -10,7 +10,7 @@ use JMS\Serializer\Annotation\Exclude;
  * PurchaseOrdersDescription
  *
  * @ORM\Table(name="purchase_orders_description", indexes={
- *      @ORM\Index(name="fk_purchase_orders_description_purchase_orders1", columns={"purchase_orders_id_purchase_orders"}), 
+ *      @ORM\Index(name="fk_purchase_orders_description_purchase_orders1", columns={"purchase_orders_id_purchase_orders"}),
  *      @ORM\Index(name="fk_purchase_orders_description_product1", columns={"product_id_product"}),
  *  })
  * @ORM\Entity(repositoryClass="RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescriptionRepository")
@@ -84,7 +84,11 @@ class PurchaseOrdersDescription
      */
     private $value;
 
-
+    /**
+     * @ORM\Column(type="string", length=100, nullable=TRUE)
+     */
+    private $enlaceOperativoFileName;
+    
     /**
      * Get idPurchaseOrdersDescription
      *
@@ -315,5 +319,29 @@ class PurchaseOrdersDescription
     public function getPayrollPayroll()
     {
         return $this->payrollPayroll;
+    }
+
+    /**
+     * Set enlaceOperativoFileName
+     *
+     * @param string $enlaceOperativoFileName
+     *
+     * @return PurchaseOrdersDescription
+     */
+    public function setEnlaceOperativoFileName($enlaceOperativoFileName)
+    {
+        $this->enlaceOperativoFileName = $enlaceOperativoFileName;
+
+        return $this;
+    }
+
+    /**
+     * Get enlaceOperativoFileName
+     *
+     * @return string
+     */
+    public function getEnlaceOperativoFileName()
+    {
+        return $this->enlaceOperativoFileName;
     }
 }

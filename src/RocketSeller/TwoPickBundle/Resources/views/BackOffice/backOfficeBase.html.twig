@@ -48,12 +48,16 @@
         <div class="{% if app.request.get('_route') == 'legal_ass' %}activeMenu{% endif %} well well-lg">
             <a class="notAjax" href="{{ path('legal_ass') }}">Asistencia Legal</a>
         </div>
-        <div class="{% if app.request.get('_route') == 'register_express' %}activeMenu{% endif %} well well-lg separador">
+        <div class="{% if app.request.get('_route') == 'register_express' %}activeMenu{% endif %} well well-lg">
             <a class="notAjax" href="{{ path('register_express') }}">Registro Express</a>
+        </div>
+        <div class="{% if app.request.get('_route') == 'show_pilas' %}activeMenu{% endif %} well well-lg separador">
+            <a class="notAjax" href="{{ path('show_pilas') }}" >Central manejo de pila</a>
         </div>
         <div class="{% if app.request.get('_route') == 'marketing' %}activeMenu{% endif %} well well-lg">
             <a class="notAjax" href="{{ path('marketing') }}" >Marketing</a>
         </div>
+
     {% endblock %}
 
     {% block usrName %}BACK OFFICE{% endblock %}

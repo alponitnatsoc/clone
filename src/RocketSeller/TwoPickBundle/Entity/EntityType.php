@@ -3,6 +3,8 @@
 namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Exclude;
 
 /**
  * EntityType
@@ -27,6 +29,7 @@ class EntityType
 
     /**
      * @ORM\OneToMany(targetEntity="Entity", mappedBy="entityTypeEntityType")
+     * @Exclude
      */
     private $entities;
 
@@ -70,7 +73,7 @@ class EntityType
         return $this->name;
     }
 
-    
+
     /**
      * Set payroll code
      *
