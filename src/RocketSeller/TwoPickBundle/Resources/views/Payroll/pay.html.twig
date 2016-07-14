@@ -238,12 +238,29 @@
                         </div>
                     </div>
                     <div class="row buttons">
-                        <div class="col-xs-12">
-                            <input type="submit" id="btnCalculate" class="btn btn-symplifica center-block" value="Cálculo final del pago" />
+                        <div class="col-xs-12 center">
+                            <a id="btnShowDetails" class="btn btn-symplifica">Dealles</a>
+                            <input type="submit" id="btnCalculate" class="btn btn-symplifica" value="Cálculo final del pago" />
                         </div>
                     </div>
                 </form>
             </div>
+            <div class="modal fade"  role="dialog" id="modal_show_details">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="modal-title_add_novelty">Detalles</h4>
+                        </div>
+                        <div class="modal-body" id="modal_body_add_novelty">
+                            contenido
+                        </div>
+                        <div class="modal-footer">
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+
         {% else %}
             <link rel="stylesheet" type="text/css" href="{{ asset('/../css/pantallas.css') }}"/>
             <div style="clear: both;height: 60px;"></div>
