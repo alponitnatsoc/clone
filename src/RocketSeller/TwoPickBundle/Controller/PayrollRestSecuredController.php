@@ -538,9 +538,9 @@ class PayrollRestSecuredController extends FOSRestController
                     $nowDate = new DateTime();
                     $nowPeriod = $actualPayroll->getPeriod();
                     if ($actualPayroll->getContractContract()->getFrequencyFrequency()->getPayrollCode() == "Q" && $nowPeriod == 4) {
-                        $monthsToAdd = 1;
-                    } else {
                         $monthsToAdd = 0;
+                    } else {
+                        $monthsToAdd = 1;
                     }
                     $nowDate = new DateTime(date('Y-m-d', strtotime("+$monthsToAdd months", strtotime($nowDate->format("Y-m-") . "1"))));
                     //here i create the comprobante
