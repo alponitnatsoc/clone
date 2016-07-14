@@ -53,6 +53,7 @@ class Entity
 
     /**
      * @ORM\OneToMany(targetEntity="Action", mappedBy="entityEntity", cascade={"persist"})
+     * @Exclude
      */
     private $action;
 

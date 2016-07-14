@@ -140,7 +140,6 @@ class PayrollRestSecuredController extends FOSRestController
 
         $paidValue = 0;
 
-        $valueToGet4xMilFrom = 0;
         $numberOfPNTrans = 0;
         $willPayPN = false;
         foreach ($payrollsPaid as $key => $value) {
@@ -221,6 +220,7 @@ class PayrollRestSecuredController extends FOSRestController
         }
 
         $realtoPay = new PurchaseOrders();
+        $productRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
         foreach ($payrollToPay as $key => $value) {
 
             /** @var PurchaseOrdersDescription $tempPOD */
@@ -246,14 +246,6 @@ class PayrollRestSecuredController extends FOSRestController
             }
             if (!$flagFrequency) {
                 $total += $tempPOD->getValue();
-                if ($tempPOD->getProductProduct()->getSimpleName() == "PN") {
-                    $willPayPN = true;
-                    $valueToGet4xMilFrom = $valueToGet4xMilFrom + $tempPOD->getValue();
-                    $numberOfPNTrans = $numberOfPNTrans + 1;
-                }
-            }
-            if ($tempPOD->getProductProduct()->getSimpleName() == "PP") {
-                $valueToGet4xMilFrom = $valueToGet4xMilFrom + $tempPOD->getValue();
             }
             $realtoPay->addPurchaseOrderDescription($tempPOD);
 
@@ -261,29 +253,19 @@ class PayrollRestSecuredController extends FOSRestController
         if ($realtoPay->getPurchaseOrderDescriptions()->count() > 0) {
             //add transaction cost
             $transactionCost = 0;
+            /** @var Product $productCT */
+            $productCT = $productRepo->findOneBy(array("simpleName" => "CT"));
 
-            // Se agrega el cobro único por pila si no hay pagos de nomina
-            if ($willPayPN == false) {
-                $transactionCost = $transactionCost + 5500;
-            }
+            $transactionCost =  ceil(($productCT->getPrice()+($productCT->getPrice()*$productCT->getTaxTax()->getValue())))*$realtoPay->getPurchaseOrderDescriptions()->count();
 
-            // Se agrega el cobro del 4x1000
-            $transactionCost = $transactionCost + (($valueToGet4xMilFrom / 1000) * 4);
-            // Se agrega el cobro por transaccional
-
-            if ($numberOfPNTrans == 1) {
-                $transactionCost = $transactionCost + 5500;
-            } elseif ($numberOfPNTrans >= 2 && $numberOfPNTrans <= 5) {
-                $transactionCost = $transactionCost + (5500 * $numberOfPNTrans);
-            } elseif ($numberOfPNTrans > 5) {
-                $transactionCost = $numberOfPNTrans + (5500 * $numberOfPNTrans);
-            }
 
             $transactionPOD = new PurchaseOrdersDescription();
             $transactionPOD->setDescription("Costo transaccional");
-            $transactionPOD->setValue(round($transactionCost, 0));
+            $transactionPOD->setValue($transactionCost);
             $realtoPay->addPurchaseOrderDescription($transactionPOD);
             $total += $transactionPOD->getValue();
+            //now add the 4*1000
+
             $dateToday = new DateTime();
             $effectiveDate = $user->getLastPayDate();
             $isFreeMonths = $user->getIsFree();
@@ -299,7 +281,6 @@ class PayrollRestSecuredController extends FOSRestController
                 $symplificaPOD = new PurchaseOrdersDescription();
                 $symplificaPOD->setDescription("Subscripción Symplifica");
                 $ehes = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
-                $productRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
                 /** @var Product $PS1 */
                 $PS1 = $productRepo->findOneBy(array("simpleName" => "PS1"));
                 /** @var Product $PS2 */
