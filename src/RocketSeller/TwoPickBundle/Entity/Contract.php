@@ -150,7 +150,6 @@ class Contract
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="pay_method_id_pay_method", referencedColumnName="id_pay_method")
      * })
-     * @Exclude
      */
     private $payMethodPayMethod;
 
