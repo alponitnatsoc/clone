@@ -76,14 +76,16 @@ class PayrollRestSecuredController extends FOSRestController
                 }
             }
             $total = 0;
-            /** @var PurchaseOrdersDescription $pod */
-            foreach ($pods as $pod) {
-                $total += $pod->getValue();
-            }
-            if ($total == 0) {
-                $pods = null;
-            }
+            if($pods!=null){
+                /** @var PurchaseOrdersDescription $pod */
+                foreach ($pods as $pod) {
+                    $total += $pod->getValue();
+                }
+                if ($total == 0) {
+                    $pods = null;
+                }
 
+            }
 
             return $view->setStatusCode(200)->setData(array(
                 'dataNomina' => $pods,
