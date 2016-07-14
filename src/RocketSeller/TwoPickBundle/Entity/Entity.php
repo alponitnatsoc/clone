@@ -3,6 +3,8 @@
 namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Exclude;
 
 /**
  * Entity
@@ -32,6 +34,7 @@ class Entity
 
     /**
      * @ORM\OneToMany(targetEntity="EntityFields", mappedBy="entityEntity", cascade={"persist"})
+     * @Exclude
      */
     private $entityFields;
 

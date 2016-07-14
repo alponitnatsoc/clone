@@ -44,7 +44,6 @@ class Employee
 
     /**
      * @ORM\OneToMany(targetEntity="EmployeeHasEntity", mappedBy="employeeEmployee", cascade={"persist"})
-     * @Exclude
      */
     private $entities;
 
@@ -64,11 +63,11 @@ class Employee
      */
     private $twoFactorAuthentication = false;
     /**
-     * @var boolean $askBeneficiary 
+     * @var boolean $askBeneficiary
      * @ORM\Column(type="integer", nullable=true)
      */
     private $askBeneficiary ;
-     
+
     /**
      * @var integer $twoFactorCode Current authentication code
      * @ORM\Column(type="integer", nullable=true)
@@ -83,7 +82,7 @@ class Employee
      * @ORM\Column(type="integer", nullable=true)
      */
     private $employeeHasUnfinishedActions=0;
-    
+
     /**
      * Set idEmployee
      *

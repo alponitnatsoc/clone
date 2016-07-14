@@ -3,6 +3,8 @@
 namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Exclude;
 
 /**
  * EmployeeHasEntity
@@ -36,6 +38,7 @@ class EmployeeHasEntity
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="employee_id_employee", referencedColumnName="id_employee")
      * })
+     * @Exclude
      */
     private $employeeEmployee;
 
