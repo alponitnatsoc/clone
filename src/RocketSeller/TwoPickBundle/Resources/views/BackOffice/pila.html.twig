@@ -27,11 +27,13 @@
                         {% set index = loop.index0 %}
                         {% set fileType =  tipoPlanilla[index] %}
                         {% set fileStoredName = pila.enlaceOperativoFileName %}
+                        {% set idFileName = "fileName" ~ pila.idPurchaseOrdersDescription  %}
+                        {% set idFileNameButton = pila.idPurchaseOrdersDescription  %}
                         <tr>
                           <td style="vertical-align: middle">{{ pila.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.fullName }}</td>
                           <td style="vertical-align: middle">{{ pila.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.document }}</td>
-                          <td style="vertical-align: middle">Planilla de pila tipo: {{ fileType }}</td>
-                          <td style="vertical-align: middle"> <input id="fileName" value= "{{ fileStoredName }}" size="10"></input> <button type="button" onclick="location.href = '/backoffice/planilla/persista/' + $('#fileName').val() +'/{{pila.idPurchaseOrdersDescription}}'">Guardar</button></td>
+                          <td style="vertical-align: middle">Id: {{ pila.idPurchaseOrdersDescription }} - Planilla de pila tipo: {{ fileType }}</td>
+                          <td style="vertical-align: middle"> <input id= {{idFileName}} value= "{{ fileStoredName }}" size="10"></input> <button id= {{idFileNameButton}} class="saveId">Guardar</button></td>
                           <td style="vertical-align: middle"> <button type"button" onclick="location.href = '/api/public/v1/secured/monthlies/{{pila.idPurchaseOrdersDescription}}/plain/text';">Generar Archivo</button></td>
                         </tr>
                     {% endfor %}
@@ -41,4 +43,23 @@
         </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $(".saveId").on("click", function() {
+            var idToRetrieve = $(this).attr("id");
+            var valToStoreFrom = "fileName" + idToRetrieve;
+            var valToStore = $("#" + valToStoreFrom).val();
+
+            if(valToStore != ""){
+              location.href = "/backoffice/planilla/persista/"+valToStore+"/"+idToRetrieve;
+            }
+        });
+    });
+    </script>
+
 {% endblock %}
