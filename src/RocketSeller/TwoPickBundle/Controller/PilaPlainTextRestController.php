@@ -1082,13 +1082,21 @@ class PilaPlainTextRestController extends FOSRestController
 
       $numberEmployees = 0;
 
-      $tempEmp = $pilaArr[0]->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee();
+      $tempEmployer = $pilaArr[0]->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer();
+      $tempArrayEhe = $tempEmployer->getEmployerHasEmployees();
       /** @var EmployerHasEmployee $ehe */
-      foreach($tempEmp as $ehe) {
-        if($ehe->getState() >= 4)
-          $numberEmployees ++;
+      foreach($tempArrayEhe as $ehe) {
+        if($ehe->getState() >= 4){
+          $contractsToValidate = $ehe->getContracts();
+          foreach ($contractsToValidate as $contractToCheck) {
+            if($contractToCheck->getState() == 1){
+              $numberEmployees ++;
+              break;
+            }
+          }
+        }
       }
-      
+
       $exonerated = $numberEmployees > 1 ? true: false;
 
       $employer = $pilaArr[0]->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer();
