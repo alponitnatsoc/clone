@@ -417,6 +417,72 @@ class BackOfficeController extends Controller
         return $this->render('RocketSellerTwoPickBundle:BackOffice:ValidateDocuments.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action, 'cedula'=>$cedula,'path_document'=>$pathCedula,'nameDoc'=>$nameCedula ,'rut'=>$rut,'pathRut'=>$pathRut,'nameRut'=>$nameRut));
     }
 
+    /**
+     * Funcion para validar el mandato del empleador
+     * @param $idAction
+     * @return Response
+     */
+    public function validateMandatoryAction($idAction)
+    {
+        /** @var Action $action */
+        $action = $this->loadClassById($idAction,"Action");
+        /** @var Person $person */
+        $person = $action->getPersonPerson();
+        /** @var User $user */
+        $user =  $action->getUserUser();
+        /** @var Employer $employer */
+        $employer = $user->getPersonPerson()->getEmployer();
+        /** @var Document $cedula */
+        $mandato = $action->getPersonPerson()->getDocByType("Mandato");
+        if ($mandato) {
+            if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
+                $pathMandato = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($mandato->getMediaMedia(), 'reference');
+                $nameMandato = $mandato->getMediaMedia()->getName();
+            }else{
+                $pathMandato = 'https://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($mandato->getMediaMedia(), 'reference');
+                $nameMandato = $mandato->getMediaMedia()->getName();
+            }
+        }else{
+            $pathMandato='';
+            $nameMandato='';
+        }
+
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:ValidateMandato.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action, 'mandato'=>$mandato,'path_document'=>$pathMandato,'nameDoc'=>$nameMandato));
+    }
+
+    /**
+     * Funcion para validar el contrato del empleado
+     * @param $idAction
+     * @return Response
+     */
+    public function validateContractAction($idAction)
+    {
+        /** @var Action $action */
+        $action = $this->loadClassById($idAction,"Action");
+        /** @var Person $person */
+        $person = $action->getPersonPerson();
+        /** @var User $user */
+        $user =  $action->getUserUser();
+        /** @var Employer $employer */
+        $employer = $user->getPersonPerson()->getEmployer();
+        /** @var Document $cedula */
+        $contrato= $action->getPersonPerson()->getDocByType("Contrato");
+        if ($contrato) {
+            if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
+                $pathContrato = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($contrato->getMediaMedia(), 'reference');
+                $nameContrato = $contrato->getMediaMedia()->getName();
+            }else{
+                $pathContrato = 'https://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($contrato->getMediaMedia(), 'reference');
+                $nameContrato = $contrato->getMediaMedia()->getName();
+            }
+        }else{
+            $pathContrato='';
+            $nameContrato='';
+        }
+
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:ValidateContract.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action, 'contrato'=>$contrato,'path_document'=>$pathContrato,'nameDoc'=>$nameContrato));
+    }
+
     public function viewDocumentsAction($idAction)
     {
         /** @var Action $action */

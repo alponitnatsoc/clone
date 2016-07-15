@@ -463,5 +463,19 @@ class PayrollController extends Controller
             'url' => $url
         ));
     }
+    
+    public function showDetailsAction($idPayRoll, Request $request){
+        if($idPayRoll!=-1){
+            /** @var Payroll $payroll */
+            $payroll=$this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:Payroll")->find($idPayRoll);
+            if($payroll){
+                $SQLNovelties=$payroll->getSqlNovelties();
+            }
+            return $this->render('RocketSellerTwoPickBundle:Payroll:showDetails.html.twig', array(
+                'novelties'=>$SQLNovelties,
+            ));
+        }
+    }
+
 
 }

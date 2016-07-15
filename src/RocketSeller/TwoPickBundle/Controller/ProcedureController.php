@@ -101,7 +101,7 @@ class ProcedureController extends Controller
 		}*/
 		$stateActions = $this->checkActionCompletation($person->getIdPerson());
 		if ($stateActions) {
-			$employerHasEmployee->setState(4);
+			$employerHasEmployee->setState(5);
 			$em->persist($employerHasEmployee);
 			$em->flush();
             $smailer = $this->get('symplifica.mailer.twig_swift');
@@ -232,6 +232,7 @@ class ProcedureController extends Controller
 							//se agrega la accion al procedimiento
 							$procedure->addAction($action);
 
+							//se crea la accion para validar documentos y generar contrato
 							$action = new Action();
 							$action->setStatus('Nuevo');
 							$action->setRealProcedureRealProcedure($procedure);
@@ -273,7 +274,90 @@ class ProcedureController extends Controller
 								}
 							}
 							//si el empleado ya es empleado de alguien mas solo se validan las entidades ya existentes
+							//si el empleado es antiguo (ya inicio labores) se crea el tramite de validar contrato
+							if($employerHasEmployee->getLegalFF()==1){
+								$actionV = new Action();
+								$actionV->setStatus('Nuevo');
+								$actionV->setRealProcedureRealProcedure($procedure);
+								$actionV->setActionTypeActionType($this->loadClassByArray(array('code'=>'VC'),"ActionType"));
+								$actionV->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
+								$actionV->setUserUser($userSearch);
+								$em->persist($actionV);
+								$em->flush();
+								//se agrega la accion al procedimiento
+								$action->getRealProcedureRealProcedure()->addAction($actionV);
+							}
+						}else{
+							//se crea la accion de informacion del empleado validada
+							$action = new Action();
+							$action->setStatus('Completado');
+							$action->setRealProcedureRealProcedure($procedure);
+							$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VEE'),"ActionType"));
+							$action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
+							$action->setUserUser($userSearch);
+							$em->persist($action);
+							$em->flush();
+							//se agrega la accion al procedimiento
+							$procedure->addAction($action);
+
+							//se crea la accion para validar documentos y generar contrato
+							$action = new Action();
+							$action->setStatus('Nuevo');
+							$action->setRealProcedureRealProcedure($procedure);
+							$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VDC'),"ActionType"));
+							$action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
+							$action->setUserUser($userSearch);
+							$em->persist($action);
+							$em->flush();
+							//se agrega la accion al procedimiento
+							$procedure->addAction($action);
+
+
+							foreach ($employerHasEmployee->getEmployeeEmployee()->getEntities() as $employeeHasEntity) {
+								if ($employeeHasEntity->getState()>=0) {
+									//se crea a accion para las entidades del empleado
+									$action = new Action();
+									$action->setStatus('Completado');
+									$action->setRealProcedureRealProcedure($procedure);
+									$action->setEntityEntity($employeeHasEntity->getEntityEntity());
+
+									//si el usuario ya pertenece a la entidad se asigna el tipo de accion de validar la entidad
+									if ($employeeHasEntity->getState()===0){
+										$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VEN'),"ActionType"));
+										$action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
+										$action->setUserUser($userSearch);
+										$em->persist($action);
+										$em->flush();
+										//si el usuario desea inscribirse se asigna el tipo de accion para inscribir entidad
+									}elseif($employeeHasEntity->getState()===1){
+										$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'IN'),"ActionType"));
+										$action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
+										$action->setUserUser($userSearch);
+										$em->persist($action);
+										$em->flush();
+									}
+									//se agrega la accion al procedimiento
+									$procedure->addAction($action);
+								}
+							}
+
+							//si el empleado ya es empleado de alguien se crean los tramites ya completados
+							//si el empleado es antiguo (ya inicio labores) se crea el tramite de validar contrato
+							if($employerHasEmployee->getLegalFF()==1){
+								$actionV = new Action();
+								$actionV->setStatus('Nuevo');
+								$actionV->setRealProcedureRealProcedure($procedure);
+								$actionV->setActionTypeActionType($this->loadClassByArray(array('code'=>'VC'),"ActionType"));
+								$actionV->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
+								$actionV->setUserUser($userSearch);
+								$em->persist($actionV);
+								$em->flush();
+								//se agrega la accion al procedimiento
+								$action->getRealProcedureRealProcedure()->addAction($actionV);
+							}
+
 						}
+						
 					}
 
 				}
@@ -460,6 +544,7 @@ class ProcedureController extends Controller
 				}
 				if($realEhe!=null){
 					$realContract=null;
+					$realEhe->setState(4);
 					$contracts=$realEhe->getContracts();
 					/** @var Contract $contract */
 					foreach ($contracts as $contract) {
@@ -495,17 +580,20 @@ class ProcedureController extends Controller
 						//se envia emai de validacion 3 días
                         $smailer = $this->get('symplifica.mailer.twig_swift');
                         $smailer->sendDiasHabilesMessage($user,$realEhe);
+						//se crea la accion de validar contrato si no habia iniciado labores
+						if($realEhe->getLegalFF()!=1){
+							$actionV = new Action();
+							$actionV->setStatus('Nuevo');
+							$actionV->setRealProcedureRealProcedure($action->getRealProcedureRealProcedure());
+							$actionV->setActionTypeActionType($this->loadClassByArray(array('code'=>'VC'),"ActionType"));
+							$actionV->setPersonPerson($realEhe->getEmployeeEmployee()->getPersonPerson());
+							$actionV->setUserUser($user);
+							$em->persist($actionV);
+							$em->flush();
+							//se agrega la accion al procedimiento
+							$action->getRealProcedureRealProcedure()->addAction($actionV);
+						}
 
-						$actionV = new Action();
-						$actionV->setStatus('Nuevo');
-						$actionV->setRealProcedureRealProcedure($action->getRealProcedureRealProcedure());
-						$actionV->setActionTypeActionType($this->loadClassByArray(array('code'=>'VC'),"ActionType"));
-						$actionV->setPersonPerson($realEhe->getEmployeeEmployee()->getPersonPerson());
-						$actionV->setUserUser($user);
-						$em->persist($actionV);
-						$em->flush();
-						//se agrega la accion al procedimiento
-						$action->getRealProcedureRealProcedure()->addAction($actionV);
 
 						//then check if changing the start date is necessary
 						if($realEhe->getLegalFF()==0){
@@ -536,7 +624,20 @@ class ProcedureController extends Controller
 							}
 						}
 						$em->flush();
+					}else{
+						$notification2 = new Notification();
+						$notification2->setPersonPerson($user->getPersonPerson());
+						$notification2->setStatus(1);
+						$notification2->setDocumentTypeDocumentType(null);
+						$notification2->setType('alert');
+						$notification2->setDescription("Tu empleado ".$realEhe->getEmployerEmployer()->getPersonPerson()->getFullName()." a sido correctamente validado");
+						$notification2->setRelatedLink("/notifications/change/".$notification2->getId()."/0");
+						$notification2->setAccion("Cerrar");
+						$notification2->setDownloadAction(null);
+						$notification2->setDownloadLink(null);
+						$em->persist($notification2);
 					}
+					$em->flush();
 				}
 
 			}
