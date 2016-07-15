@@ -272,7 +272,7 @@ class BackOfficeController extends Controller
         $person = $action->getPersonPerson();
     	/** @var User $user */
         $user =  $action->getUserUser();
-                
+
         /** @var Employee $employee */
         $employee = $person->getEmployee();
         /** @var Employer $employer */
@@ -297,7 +297,7 @@ class BackOfficeController extends Controller
                     array(
                         "employeeEmployee" =>$employee,
                         "employerEmployer" =>$employer,
-                    ),"EmployerHasEmployee");  
+                    ),"EmployerHasEmployee");
         }else{
             $employerHasEmployee = null;
         }
@@ -383,7 +383,7 @@ class BackOfficeController extends Controller
         $person = $action->getPersonPerson();
         /** @var User $user */
         $user =  $action->getUserUser();
-        
+
         /** @var Employer $employer */
         $employer = $user->getPersonPerson()->getEmployer();
         /** @var Document $cedula */
@@ -413,7 +413,7 @@ class BackOfficeController extends Controller
             $pathRut='';
             $nameRut='';
         }
-        
+
         return $this->render('RocketSellerTwoPickBundle:BackOffice:ValidateDocuments.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action, 'cedula'=>$cedula,'path_document'=>$pathCedula,'nameDoc'=>$nameCedula ,'rut'=>$rut,'pathRut'=>$pathRut,'nameRut'=>$nameRut));
     }
 
@@ -613,7 +613,7 @@ class BackOfficeController extends Controller
 
         return $this->render('RocketSellerTwoPickBundle:BackOffice:ViewEmployeeDocuments.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action, 'cedula'=>$cedula,'path_document'=>$pathCedula,'nameDoc'=>$nameCedula ,'carta'=>$carta,'pathCarta'=>$pathCarta,'nameCarta'=>$nameCarta));
     }
-    
+
 
     public function addToSQLAction($idEmployerHasEmployee,$procedureId){
         $employerHasEmployee = $this->loadClassById($idEmployerHasEmployee,"EmployerHasEmployee");
@@ -621,49 +621,49 @@ class BackOfficeController extends Controller
         return $this->redirectToRoute('show_procedure', array('procedureId'=>$procedureId), 301);
     }
 
-	
+
     public function reportErrorAction($idAction,Request $request)
     {
     	$action = $this->loadClassById($idAction,"Action");
     	if ($request->getMethod() == 'POST') {
-    		$description = $request->request->get('description');    		
+    		$description = $request->request->get('description');
     		$actionError = new ActionError();
     		$actionError->setDescription($description);
             $actionError->setStatus('Sin contactar');
     		$action->setActionErrorActionError($actionError);
     		$action->setStatus("Error");
-		   	$em = $this->getDoctrine()->getManager();	
+		   	$em = $this->getDoctrine()->getManager();
 		    $em->persist($actionError);
 		    $em->persist($action);
 		    $em->flush();
 
 		    return $this->redirectToRoute('show_procedure', array('procedureId'=>$action->getRealProcedureRealProcedure()->getIdProcedure()), 301);
     	}else{
-    		return $this->render('RocketSellerTwoPickBundle:BackOffice:reportError.html.twig',array('idAction'=>$idAction));	
+    		return $this->render('RocketSellerTwoPickBundle:BackOffice:reportError.html.twig',array('idAction'=>$idAction));
     	}
-    	
+
     }
 
     public function registerExpressAction()
-    {   
+    {
         $em = $this->getDoctrine()->getManager();
         $role = $em->getRepository('RocketSellerTwoPickBundle:Role')
                 ->findOneByName("ROLE_BACK_OFFICE");
         $notifications = $em->getRepository('RocketSellerTwoPickBundle:Notification')
                 ->findBy(array("roleRole" => $role,
-                                        "type"=>"Registro express"));                     
-        return $this->render('RocketSellerTwoPickBundle:BackOffice:registerExpress.html.twig',array('notifications'=>$notifications));    
+                                        "type"=>"Registro express"));
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:registerExpress.html.twig',array('notifications'=>$notifications));
     }
 
     public function legalAssistanceAction()
-    {   
+    {
         $em = $this->getDoctrine()->getManager();
         $role = $em->getRepository('RocketSellerTwoPickBundle:Role')
                 ->findOneByName("ROLE_BACK_OFFICE");
         $notifications = $em->getRepository('RocketSellerTwoPickBundle:Notification')
                 ->findBy(array("roleRole" => $role,
-                                        "type"=>"Asistencia legal"));                     
-        return $this->render('RocketSellerTwoPickBundle:BackOffice:legalAssistance.html.twig',array('notifications'=>$notifications));    
+                                        "type"=>"Asistencia legal"));
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:legalAssistance.html.twig',array('notifications'=>$notifications));
     }
 
     /**
@@ -712,5 +712,50 @@ class BackOfficeController extends Controller
     public function showRequestAction(){
         $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
         return $this->render('@RocketSellerTwoPick/BackOffice/request.html.twig');
+    }
+
+    public function addPlanillaTypeToContractsBackAction($autentication)
+    {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+
+        $user = $this->getUser();
+
+        if($autentication==$user->getSalt()) {
+          $dm = $this->getDoctrine();
+          $em=$this->getDoctrine()->getManager();
+          $contracts = $dm->getRepository('RocketSellerTwoPickBundle:Contract')->findAll();
+
+          $planillaTypeRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PlanillaType');
+          $calculatorConstraintsRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:CalculatorConstraints');
+          $minWage = $calculatorConstraintsRepo->findOneBy(array("name" => "smmlv"));
+          $minWage = $minWage ->getValue();
+
+          foreach ($contracts as $contract) {
+
+            $realSalary = 0;
+            if($contract->getTimeCommitmentTimeCommitment()->getCode() == "XD"){
+              $realSalary = $contract->getSalary() / $contract->getWorkableDaysMonth();
+              $realSalary = $realSalary * (($contract->getWorkableDaysMonth() / 4) * 4.34523810);
+            }
+
+            // Logic to determine the contract planilla type
+            if($contract->getTimeCommitmentTimeCommitment()->getCode() == "XD" && $contract->getSisben() == 1 && $realSalary < $minWage){
+              $planillaTypeToSet = $planillaTypeRepo->findOneBy(array("code" => "E"));
+              $contract->setPlanillaTypePlanillaType($planillaTypeToSet);
+            }
+            else {
+              $planillaTypeToSet = $planillaTypeRepo->findOneBy(array("code" => "S"));
+              $contract->setPlanillaTypePlanillaType($planillaTypeToSet);
+            }
+
+            $em->persist($contract);
+          }
+
+          $em->flush();
+
+          return $this->redirectToRoute("back_office");
+        }
+
+        return $this->redirectToRoute("show_dashboard");
     }
 }

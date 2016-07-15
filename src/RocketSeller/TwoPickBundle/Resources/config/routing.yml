@@ -82,6 +82,9 @@ show_pilas:
 persist_planilla_id:
     path:     /backoffice/planilla/persista/{id}/{idPod}
     defaults: { _controller: RocketSellerTwoPickBundle:PurchaseOrdersDescription:persistPilaEnlaceOperativoCode}
+add_planilla_type_to_contracts:
+    path:     /backoffice/planillaType/addtoback/{autentication}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:addPlanillaTypeToContractsBack}
 
 #tramites
 show_procedure:

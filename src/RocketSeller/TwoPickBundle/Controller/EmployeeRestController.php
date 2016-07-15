@@ -292,8 +292,18 @@ class EmployeeRestController extends FOSRestController {
 
 
         $planillaTypeRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PlanillaType');
+        $calculatorConstraintsRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:CalculatorConstraints');
+        $minWage = $calculatorConstraintsRepo->findOneBy(array("name" => "smmlv"));
+        $minWage = $minWage ->getValue();
+
+        $realSalary = 0;
+        if($contract->getTimeCommitmentTimeCommitment()->getCode() == "XD"){
+          $realSalary = $contract->getSalary() / $contract->getWorkableDaysMonth();
+          $realSalary = $realSalary * (($contract->getWorkableDaysMonth() / 4) * 4.34523810);
+        }
+
         // Logic to determine the contract planilla type
-        if($contract->getTimeCommitmentTimeCommitment()->getCode() == "XD" && $contract->getSisben() == 1){
+        if($contract->getTimeCommitmentTimeCommitment()->getCode() == "XD" && $contract->getSisben() == 1 && $realSalary < $minWage){
           $planillaTypeToSet = $planillaTypeRepo->findOneBy(array("code" => "E"));
           $contract->setPlanillaTypePlanillaType($planillaTypeToSet);
         }
@@ -1127,8 +1137,18 @@ class EmployeeRestController extends FOSRestController {
         $contract->setPayMethodPayMethod($payMethod);
 
         $planillaTypeRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PlanillaType');
+        $calculatorConstraintsRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:CalculatorConstraints');
+        $minWage = $calculatorConstraintsRepo->findOneBy(array("name" => "smmlv"));
+        $minWage = $minWage ->getValue();
+
+        $realSalary = 0;
+        if($contract->getTimeCommitmentTimeCommitment()->getCode() == "XD"){
+          $realSalary = $contract->getSalary() / $contract->getWorkableDaysMonth();
+          $realSalary = $realSalary * (($contract->getWorkableDaysMonth() / 4) * 4.34523810);
+        }
+
         // Logic to determine the contract planilla type
-        if($contract->getTimeCommitmentTimeCommitment()->getCode() == "XD" && $contract->getSisben() == 1){
+        if($contract->getTimeCommitmentTimeCommitment()->getCode() == "XD" && $contract->getSisben() == 1 && $realSalary < $minWage){
           $planillaTypeToSet = $planillaTypeRepo->findOneBy(array("code" => "E"));
           $contract->setPlanillaTypePlanillaType($planillaTypeToSet);
         }

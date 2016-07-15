@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Traits;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use RocketSeller\TwoPickBundle\Controller\UtilsController;
 use RocketSeller\TwoPickBundle\Entity\Contract;
@@ -42,30 +43,49 @@ trait PayrollMethodsTrait
         $pods = new ArrayCollection();
         /* @var $employerHasEmployee EmployerHasEmployee */
         $employerHasEmployee = $employerHasEmployees->first();
-        $podPila = new PurchaseOrdersDescription();
+        $podsPila= array();
+        //$podsPila['n'];this is "n" for normal planilla
+        //the idea is to create the bucnh of pods pila that are needed, and in the caculation apply the logic
+
         do {
-            $tempPod = $this->getInfoEmployee($employerHasEmployee, $podPila);
+            $tempPod = $this->getInfoEmployee($employerHasEmployee, $podsPila);
             if ($tempPod != null) {
                 $pods->add($tempPod);
             }
         } while ($employerHasEmployee = $employerHasEmployees->next());
         if (count($pods)>0) {
-            if ($podPila->getValue() > 0) {
-                if ($podPila->getPurchaseOrdersStatus()!=null&&($podPila->getPurchaseOrdersStatus()->getIdNovoPay() == "-1" || $podPila->getPurchaseOrdersStatus()->getIdNovoPay() == "S2" || $podPila->getPurchaseOrdersStatus()->getIdNovoPay() == "00")){
+            //do this foreach  podspila
+            /** @var PurchaseOrdersDescription $value */
+            // $key would dbe the type of planilla that is set
+            foreach ($podsPila as $key => $value ) {
+                //calculate the mora and add the date to pay
+                if ($value->getValue() > 0) {
+                    if ($value->getPurchaseOrdersStatus()!=null&&($value->getPurchaseOrdersStatus()->getIdNovoPay() == "-1" || $value->getPurchaseOrdersStatus()->getIdNovoPay() == "S2" || $value->getPurchaseOrdersStatus()->getIdNovoPay() == "00")){
 
-                }else {
-
-                    /** @var UtilsController $utils */
-                    $utils = $this->get('app.symplifica_utils');
+                    }else {
+                        /** @var UtilsController $utils */
+                        $utils = $this->get('app.symplifica_utils');
                         $productPILA = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product")->findOneBy(array('simpleName' => 'PP'));
-                        $podPila->setProductProduct($productPILA);
+                        $value->setProductProduct($productPILA);
                         $dateToday = new \DateTime();
-                        $podPila->setDescription("Pago de Aportes a Seguridad Social mes " . $utils->month_number_to_name($dateToday->format("m")));
+                        $value->setDescription("Pago de Aportes a Seguridad Social mes " . $utils->month_number_to_name($dateToday->format("m")));
                         $entity = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
                         $pos = $entity->findOneBy(array('idNovoPay' => 'P1')); // Estado pendiente por pago
-                        $podPila->setPurchaseOrdersStatus($pos);
-                        $pods->add($podPila);
+                        $value->setPurchaseOrdersStatus($pos);
+                        //seeking fot the wished date
+                        $todayPlus = new DateTime();
+                        $todayPlus->modify('+1 day');
+                        $request = $this->container->get('request');
+                        $request->setMethod("GET");
+                        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysToDate',array('dateStart'=>$todayPlus->format("Y-m-d"),'days'=>3), array('_format' => 'json'));
+                        if ($insertionAnswer->getStatusCode() != 200) {
+                            return false;
+                        }
+                        $permittedDate=new DateTime(json_decode($insertionAnswer->getContent(),true)['date']);
+                        $value->setDateToPay($permittedDate);
+                        $pods->add($value);
                     }
+                }
             }
             foreach ($pods as $pod) {
                 $em->persist($pod);
@@ -98,10 +118,10 @@ trait PayrollMethodsTrait
     /**
      *
      * @param EmployerHasEmployee $employerHasEmployee
-     * @param PurchaseOrdersDescription $podPila
+     * @param array $podsPila
      * @return null|PurchaseOrdersDescription
      */
-    private function getInfoEmployee(EmployerHasEmployee $employerHasEmployee, PurchaseOrdersDescription &$podPila)
+    private function getInfoEmployee(EmployerHasEmployee $employerHasEmployee, array &$podsPila)
     {
         if ($employerHasEmployee->getState() >= 4) {
             $contracts = $employerHasEmployee->getContracts();
@@ -167,15 +187,18 @@ trait PayrollMethodsTrait
 
                     if ($payroll->getPeriod() == 4) {
                         $pila=$payroll->getPila();
-                        //this is for the first case
-                        if($pila!=null&&$podPila->getIdPurchaseOrdersDescription()==null){
-                            $podPila=$pila;
-                            $podPila->setValue($this->getTotalPILA($employerHasEmployee)['total']);
+                        //do the logic for each planilla here
+                        $planillaCode=$payroll->getContractContract()->getPlanillaTypePlanillaType()->getCode();
+                        //this is for the first case and when the pila is already set in the pod
+                        if($pila!=null&&(!isset($podsPila[$planillaCode]))){
+                            $podsPila[$planillaCode]=$pila;
+                            $podsPila[$planillaCode]->setValue($this->getTotalPILA($employerHasEmployee)['total']);
 
                         }else{
-                            $podPila->setValue($this->getTotalPILA($employerHasEmployee)['total'] + $podPila->getValue());
-                            if($podPila->getIdPurchaseOrdersDescription()==null)
-                                $podPila->addPayrollsPila($payroll);
+                            $podsPila[$planillaCode]->setValue($this->getTotalPILA($employerHasEmployee)['total'] + $podsPila[$planillaCode]->getValue());
+                            //this is for the literal first case of the currend pod type
+                            if((!isset($podsPila[$planillaCode])))
+                                $podsPila[$planillaCode]->addPayrollsPila($payroll);
                         }
 
                     }

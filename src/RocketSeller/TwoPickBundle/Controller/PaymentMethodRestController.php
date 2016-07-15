@@ -16,6 +16,7 @@ use RocketSeller\TwoPickBundle\Entity\Pay;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\User;
+use RocketSeller\TwoPickBundle\Mailer\TwigSwiftMailer;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
@@ -397,6 +398,9 @@ class PaymentMethodRestController extends FOSRestController
         foreach ($descriptions as $desc) {
             $dispersionAnswer=$this->disperseMoney($desc,$person);
             if($dispersionAnswer['code']!=200){
+                if($dispersionAnswer['code']==512){
+                    continue;
+                }
                 return $view->setStatusCode($dispersionAnswer['code'])->setData($dispersionAnswer['data']);
             }else{
                 //setting the id of the dispersion to rejected
@@ -499,13 +503,28 @@ class PaymentMethodRestController extends FOSRestController
                 $payMethod=$payRoll->getContractContract()->getPayMethodPayMethod();
             }
 
-
+            $dateToSend=null;
+            $filePila=null;
             if ($purchaseOrderDescription->getProductProduct()->getSimpleName() == "PP") {
                 $accountType = "CC";
                 $bankCode="PL";
                 $paymentMethodAN="9999999";
                 $documentTypeEmployee="NIT";
                 $documentEmployee ="900862831";
+                if($purchaseOrderDescription->getDateToPay()!=null){
+                    $dateToday=new DateTime();
+                    if($dateToday<$purchaseOrderDescription->getDateToPay()){
+                        $dateToSend=$purchaseOrderDescription->getDateToPay();
+                    }
+                }
+                if($purchaseOrderDescription->getEnlaceOperativoFileName()==null){
+                    /** @var TwigSwiftMailer $smailer */
+                    $smailer = $this->get('symplifica.mailer.twig_swift');
+                    $result=$smailer->sendBackOfficeWarningMessage($this->getUser(),$purchaseOrderDescription->getIdPurchaseOrdersDescription());
+                    return array('code'=>512,'data'=>array('error' => array('Dispersion' => 'Backoffice no ha subido el número de pila')));
+                }else{
+                    $filePila=$purchaseOrderDescription->getEnlaceOperativoFileName();
+                }
 
             } elseif ($purchaseOrderDescription->getProductProduct()->getSimpleName() == "PN") {
                 $payType=$payMethod->getAccountTypeAccountType();
@@ -537,6 +556,18 @@ class PaymentMethodRestController extends FOSRestController
                 "value" => $purchaseOrderDescription->getValue(),
                 "source" => $purchaseOrderDescription->getPurchaseOrders()->getProviderId()==1?100:101
             ));
+            if($dateToSend!=null){
+                //payment_date
+                $request->request->add(array(
+                    "payment_date" => $dateToSend
+                ));
+            }
+            if($filePila!=null){
+                $request->request->add(array(
+                    "reference" => $filePila
+                ));
+            }
+
             $methodToCall='RocketSellerTwoPickBundle:Payments2Rest:postRegisterDispersion';
         }
 
