@@ -88,6 +88,13 @@ class PurchaseOrdersDescription
      * @ORM\Column(type="string", length=100, nullable=TRUE)
      */
     private $enlaceOperativoFileName;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=TRUE)
+     */
+    private $dateToPay;
     
     /**
      * Get idPurchaseOrdersDescription
@@ -343,5 +350,29 @@ class PurchaseOrdersDescription
     public function getEnlaceOperativoFileName()
     {
         return $this->enlaceOperativoFileName;
+    }
+
+    /**
+     * Set dateToPay
+     *
+     * @param \DateTime $dateToPay
+     *
+     * @return PurchaseOrdersDescription
+     */
+    public function setDateToPay($dateToPay)
+    {
+        $this->dateToPay = $dateToPay;
+
+        return $this;
+    }
+
+    /**
+     * Get dateToPay
+     *
+     * @return \DateTime
+     */
+    public function getDateToPay()
+    {
+        return $this->dateToPay;
     }
 }

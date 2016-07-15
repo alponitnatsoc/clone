@@ -140,4 +140,12 @@ interface MailerInterface
      * @return void
      */
     public function sendDaviplataReminderMessage(User $user, $employeeName);
-}
+
+    /**
+     * Send a remind backoffice to check payrolls
+     *
+     * @param int $idPayroll
+     */
+    public function sendBackOfficeWarningMessage( $idPayroll);
+
+    }

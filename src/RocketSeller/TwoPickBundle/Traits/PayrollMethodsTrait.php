@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Traits;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use RocketSeller\TwoPickBundle\Controller\UtilsController;
 use RocketSeller\TwoPickBundle\Entity\Contract;
@@ -57,6 +58,7 @@ trait PayrollMethodsTrait
             /** @var PurchaseOrdersDescription $value */
             // $key would dbe the type of planilla that is set
             foreach ($podsPila as $key => $value ) {
+                //calculate the mora and add the date to pay
                 if ($value->getValue() > 0) {
                     if ($value->getPurchaseOrdersStatus()!=null&&($value->getPurchaseOrdersStatus()->getIdNovoPay() == "-1" || $value->getPurchaseOrdersStatus()->getIdNovoPay() == "S2" || $value->getPurchaseOrdersStatus()->getIdNovoPay() == "00")){
 
@@ -70,6 +72,17 @@ trait PayrollMethodsTrait
                         $entity = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
                         $pos = $entity->findOneBy(array('idNovoPay' => 'P1')); // Estado pendiente por pago
                         $value->setPurchaseOrdersStatus($pos);
+                        //seeking fot the wished date
+                        $todayPlus = new DateTime();
+                        $todayPlus->modify('+1 day');
+                        $request = $this->container->get('request');
+                        $request->setMethod("GET");
+                        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysToDate',array('dateStart'=>$todayPlus->format("Y-m-d"),'days'=>3), array('_format' => 'json'));
+                        if ($insertionAnswer->getStatusCode() != 200) {
+                            return false;
+                        }
+                        $permittedDate=new DateTime(json_decode($insertionAnswer->getContent(),true)['date']);
+                        $value->setDateToPay($permittedDate);
                         $pods->add($value);
                     }
                 }
@@ -172,7 +185,7 @@ trait PayrollMethodsTrait
                     $tempPOD->setDescription("Pago Nómina " .$utils->mb_capitalize(explode(" ", $person->getNames())[0]) ." ". $utils->mb_capitalize($person->getLastName1())." ". $utils->period_number_to_name($payroll->getPeriod()). " " . $utils->month_number_to_name( $payroll->getMonth()) );
                     $tempPOD->setValue($totalLiquidation["total"]);
 
-                    if ($payroll->getPeriod() == 4) {
+                    if ($payroll->getPeriod() == true) {
                         $pila=$payroll->getPila();
                         //do the logic for each planilla here
                         $planillaCode=$payroll->getContractContract()->getPlanillaTypePlanillaType()->getCode();
