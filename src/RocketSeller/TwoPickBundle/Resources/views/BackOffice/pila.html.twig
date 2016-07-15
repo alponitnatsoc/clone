@@ -26,14 +26,13 @@
                     {% for pila in pilas %}
                         {% set index = loop.index0 %}
                         {% set fileType =  tipoPlanilla[index] %}
-                        {% set idEmployer = pila.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.idEmployer %}
                         {% set fileStoredName = pila.enlaceOperativoFileName %}
                         <tr>
                           <td style="vertical-align: middle">{{ pila.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.fullName }}</td>
                           <td style="vertical-align: middle">{{ pila.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.document }}</td>
                           <td style="vertical-align: middle">Planilla de pila tipo: {{ fileType }}</td>
                           <td style="vertical-align: middle"> <input id="fileName" value= "{{ fileStoredName }}" size="10"></input> <button type="button" onclick="location.href = '/backoffice/planilla/persista/' + $('#fileName').val() +'/{{pila.idPurchaseOrdersDescription}}'">Guardar</button></td>
-                          <td style="vertical-align: middle"> <button type"button" onclick="location.href = '/api/public/v1/secured/monthlies/{{idEmployer}}/plains/{{fileType}}/text';">Generar Archivo</button></td>
+                          <td style="vertical-align: middle"> <button type"button" onclick="location.href = '/api/public/v1/secured/monthlies/{{pila.idPurchaseOrdersDescription}}/plain/text';">Generar Archivo</button></td>
                         </tr>
                     {% endfor %}
                     </tbody>
