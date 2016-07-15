@@ -92,6 +92,16 @@ class Payroll
     private $purchaseOrdersDescription;
 
     /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Document
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Document")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="document_id_document", referencedColumnName="id_document")
+     * })
+     * @Exclude
+     */
+    private $signature;
+
+    /**
      * Get idPayroll
      *
      * @return integer
@@ -315,15 +325,6 @@ class Payroll
     {
         return $this->paid;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->payrollDetails = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->novelties = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->purchaseOrdersDescription = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Set pila
@@ -416,4 +417,41 @@ class Payroll
     {
         return $this->sqlNovelties;
     }
+
+
+
+    /**
+     * Set signature
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Document $signature
+     *
+     * @return Payroll
+     */
+    public function setSignature(\RocketSeller\TwoPickBundle\Entity\Document $signature = null)
+    {
+        $this->signature = $signature;
+
+        return $this;
+    }
+
+    /**
+     * Get signature
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Document
+     */
+    public function getSignature()
+    {
+        return $this->signature;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->payrollDetails = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->novelties = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sqlNovelties = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->purchaseOrdersDescription = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
 }
