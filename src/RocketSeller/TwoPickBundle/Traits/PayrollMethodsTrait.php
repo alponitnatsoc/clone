@@ -185,7 +185,7 @@ trait PayrollMethodsTrait
                     $tempPOD->setDescription("Pago Nómina " .$utils->mb_capitalize(explode(" ", $person->getNames())[0]) ." ". $utils->mb_capitalize($person->getLastName1())." ". $utils->period_number_to_name($payroll->getPeriod()). " " . $utils->month_number_to_name( $payroll->getMonth()) );
                     $tempPOD->setValue($totalLiquidation["total"]);
 
-                    if ($payroll->getPeriod() == true) {
+                    if ($payroll->getPeriod() == 4) {
                         $pila=$payroll->getPila();
                         //do the logic for each planilla here
                         $planillaCode=$payroll->getContractContract()->getPlanillaTypePlanillaType()->getCode();
