@@ -167,6 +167,7 @@
                         {% endif %}
                         {% for po in debt %}
                             {% set pods = po.purchase_order_descriptions %}
+                            {% set pilaData=null %}
                             {% for data in pods %}
                                 {% if data.payroll_payroll != null %}
                                     <div class="borderclass">

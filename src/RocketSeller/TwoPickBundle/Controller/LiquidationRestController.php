@@ -315,7 +315,7 @@ class LiquidationRestController extends FOSRestController
         /**
          * Obtener datos de la preliquidacion antes de consolidarla
          */
-        $response = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll', array(
+        $response = $this->forward('RocketSellerTwoPickBundle:PayrollMethodRest:getGeneralPayrolls', array(
                 'employeeId' => $employee_id,
                 'period' => $period,
                 'mockFinalLiquidation' => true
