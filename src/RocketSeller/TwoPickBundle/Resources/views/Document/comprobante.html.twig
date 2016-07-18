@@ -88,10 +88,14 @@
             background: #e4e4e4;;
             padding: 5px 0;
         }
-        ​,
+        .firmaImg {
+            width: 100%;
+            height: auto;
+            margin: 15px 0 0 0
+        }
         #firma-empleado {
             width: 300px;
-            margin: 150px 0 0 0;
+            margin: 0 0 0 0;
             border-top: 1px #CCC solid;
             padding: 15px 0 0 0;
             color: #5D5D5D
@@ -193,6 +197,12 @@
             </tr>
         </table>
     </div>
+
+    {% if  data.signatureUrl != null %}
+        <div class="firmaImg">
+            <img src="{{ data.signatureUrl }}" width="auto" height="100"/>
+        </div>
+    {% endif %}
     <div id="firma-empleado">
         <p>
             <span>Firma empleado</span><br>
