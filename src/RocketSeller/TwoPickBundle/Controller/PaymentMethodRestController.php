@@ -571,7 +571,7 @@ class PaymentMethodRestController extends FOSRestController
             $methodToCall='RocketSellerTwoPickBundle:Payments2Rest:postRegisterDispersion';
         }
 
-        $insertionAnswer = $this->forward($methodToCall, array('_format' => 'json'));
+        $insertionAnswer = $this->forward($methodToCall,array('request'=>$request), array('_format' => 'json'));
 
         if($purchaseOrder->getProviderId()==0) {
             if ($insertionAnswer->getStatusCode() == 200) {

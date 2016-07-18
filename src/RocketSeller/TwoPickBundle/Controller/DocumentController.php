@@ -164,7 +164,6 @@ use EmployerMethodsTrait;
         $document->setDocumentTypeDocumentType($documentType);
         $form = $this->createForm(new DocumentRegistration(), $document);
 
-
         $form->handleRequest($request);
 
         if ($form->isValid()) {
