@@ -732,23 +732,26 @@ class BackOfficeController extends Controller
 
           foreach ($contracts as $contract) {
 
-            $realSalary = 0;
-            if($contract->getTimeCommitmentTimeCommitment()->getCode() == "XD"){
-              $realSalary = $contract->getSalary() / $contract->getWorkableDaysMonth();
-              $realSalary = $realSalary * (($contract->getWorkableDaysMonth() / 4) * 4.34523810);
+            if( $contract->getEmployerHasEmployeeEmployerHasEmployee()->getState() >= 4){
+              $realSalary = 0;
+              if($contract->getTimeCommitmentTimeCommitment()->getCode() == "XD"){
+                $realSalary = $contract->getSalary() / $contract->getWorkableDaysMonth();
+                $realSalary = $realSalary * (($contract->getWorkableDaysMonth() / 4) * 4.34523810);
+              }
+
+              // Logic to determine the contract planilla type
+              if($contract->getTimeCommitmentTimeCommitment()->getCode() == "XD" && $contract->getSisben() == 1 && $realSalary < $minWage){
+                $planillaTypeToSet = $planillaTypeRepo->findOneBy(array("code" => "E"));
+                $contract->setPlanillaTypePlanillaType($planillaTypeToSet);
+              }
+              else {
+                $planillaTypeToSet = $planillaTypeRepo->findOneBy(array("code" => "S"));
+                $contract->setPlanillaTypePlanillaType($planillaTypeToSet);
+              }
+
+              $em->persist($contract);
             }
 
-            // Logic to determine the contract planilla type
-            if($contract->getTimeCommitmentTimeCommitment()->getCode() == "XD" && $contract->getSisben() == 1 && $realSalary < $minWage){
-              $planillaTypeToSet = $planillaTypeRepo->findOneBy(array("code" => "E"));
-              $contract->setPlanillaTypePlanillaType($planillaTypeToSet);
-            }
-            else {
-              $planillaTypeToSet = $planillaTypeRepo->findOneBy(array("code" => "S"));
-              $contract->setPlanillaTypePlanillaType($planillaTypeToSet);
-            }
-
-            $em->persist($contract);
           }
 
           $em->flush();
