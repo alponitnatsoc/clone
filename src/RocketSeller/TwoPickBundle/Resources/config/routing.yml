@@ -16,6 +16,7 @@ procedure_test:
 payments_method:
     path:     /paymentmethod/{idNotification}
     defaults: { _controller: RocketSellerTwoPickBundle:PaymentMethod:index, idNotification: -1 }
+
 #Payments
 show_payments:
     path: /show/payments/{id}
@@ -75,24 +76,38 @@ show_un_active_codes:
 generate_codes:
     path:     /backoffice/generate/codes/{amount}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:generateCodes}
+show_pilas:
+    path:     /backoffice/show/pilas
+    defaults: { _controller: RocketSellerTwoPickBundle:PurchaseOrdersDescription:index}
+persist_planilla_id:
+    path:     /backoffice/planilla/persista/{id}/{idPod}
+    defaults: { _controller: RocketSellerTwoPickBundle:PurchaseOrdersDescription:persistPilaEnlaceOperativoCode}
+add_planilla_type_to_contracts:
+    path:     /backoffice/planillaType/addtoback/{autentication}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:addPlanillaTypeToContractsBack}
 
 #tramites
 show_procedure:
     path:     /backoffice/procedure/{procedureId}
     defaults: { _controller: RocketSellerTwoPickBundle:Procedure:procedureById }
-#empleado
+
+#empleador
 check_register:
     path:     /backoffice/check/register/{idAction}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:checkRegister }
 validate_employer_documents:
         path:     /backoffice/check/employer/documents/{idAction}
         defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:checkDocuments}
+validate_mandatory:
+        path:     /backoffice/check/employer/mandatory/{idAction}
+        defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:validateMandatory}
 show_info:
     path:     /backoffice/check/info/{idAction}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:checkInfo}
 view_documents:
     path:     /backoffice/view/emploeyer/documents/{idAction}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:viewDocuments}
+
 #empleado
 check_employee:
         path:     /backoffice/check/employee/{idAction}
@@ -107,6 +122,9 @@ validate_employee_documents:
 view_employee_documents:
     path:     /backoffice/view/emploeyee/documents/{idAction}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:viewEmployeeDocuments}
+validate_contract:
+        path:     /backoffice/check/employee/contract/{idAction}
+        defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:validateContract}
 
 change_action_status:
     path:     /backoffice/procedure/{procedureId}/{actionId}/{status}

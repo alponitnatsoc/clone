@@ -14,6 +14,13 @@ $(document).ready(function () {
             loadWorkedDays(href);
         });
     });
+    $(".showDetails").each(function (){
+        $(this).on("click", function (e){
+            e.preventDefault();
+            var href = $(this).attr("href");
+            loadShowDetails(href);
+        });
+    });
 
     $('.employee .pay').on('change', function (e) {
         var i = 0;
@@ -109,6 +116,10 @@ $(document).ready(function () {
 
     });
 
+    $("#btnShowDetails").on('click',function (event) {
+        $("#modal_show_details").modal('show');
+    });
+
 });
 function loadNovelty(url) {
     $.ajax({
@@ -138,6 +149,30 @@ function loadNovelty(url) {
         alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
     });
 }
+function loadShowDetails(url){
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: {
+        }
+    }).done(function (data) {
+        $("#SQLNovelties").html(data);
+        $('#modal_show_SQLNovelties_details').modal({
+            show: false,
+            keyboard: false,
+            backdrop: 'static'
+        });
+
+        $('#modal_show_SQLNovelties_details').on('hidden.bs.modal', function () {
+            window.location.reload();
+        })
+        $('#modal_show_SQLNovelties_details').modal('show');
+
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+    });
+}
 
 function loadWorkedDays(url) {
     $.ajax({
@@ -152,8 +187,8 @@ function loadWorkedDays(url) {
         });
 
         $('#changeDaysModal').modal({
-          show: false,
-          backdrop: 'static'
+            show: false,
+            backdrop: 'static'
         });
         $('#changeDaysModal').on('hidden.bs.modal', function () {
             window.location.reload();

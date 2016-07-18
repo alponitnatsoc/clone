@@ -1,6 +1,8 @@
 <?php
 
 namespace RocketSeller\TwoPickBundle\Entity;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Exclude;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -32,6 +34,7 @@ class PayMethod
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id_user", referencedColumnName="id")
      * })
+     * @Exclude
      */
     private $userUser;
 
@@ -65,11 +68,13 @@ class PayMethod
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
+     * @Exclude
      */
     private $accountNumber;
 
     /**
      * @ORM\Column(type="string", length=11, nullable=true)
+     * @Exclude
      */
     private $cellPhone;
 

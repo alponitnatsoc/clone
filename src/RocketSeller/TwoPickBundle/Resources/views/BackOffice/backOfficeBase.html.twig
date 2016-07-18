@@ -3,14 +3,9 @@
     {% block title %}back office{% endblock %}
 
     {% block stylesheet %}
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"
-              integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
-              crossorigin="anonymous">
+        <link rel="stylesheet" href="{{ asset('css/maxdn.css') }}">
         <link rel="stylesheet"
               href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/4.10.1/bootstrap-social.css"/>
-        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet"
-              integrity="sha256-k2/8zcNbxVIh5mnQ52A0r3a6jAgMGxFJFE2707UxGCk= sha512-ZV9KawG2Legkwp3nAlxLIVFudTauWuBpC10uEafMHYL0Sarrz5A7G79kXh5+5+woxQ5HM559XX2UZjMJ36Wplg=="
-              crossorigin="anonymous"/>
         <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet' type='text/css'>
         <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
         <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
@@ -53,12 +48,16 @@
         <div class="{% if app.request.get('_route') == 'legal_ass' %}activeMenu{% endif %} well well-lg">
             <a class="notAjax" href="{{ path('legal_ass') }}">Asistencia Legal</a>
         </div>
-        <div class="{% if app.request.get('_route') == 'register_express' %}activeMenu{% endif %} well well-lg separador">
+        <div class="{% if app.request.get('_route') == 'register_express' %}activeMenu{% endif %} well well-lg">
             <a class="notAjax" href="{{ path('register_express') }}">Registro Express</a>
+        </div>
+        <div class="{% if app.request.get('_route') == 'show_pilas' %}activeMenu{% endif %} well well-lg separador">
+            <a class="notAjax" href="{{ path('show_pilas') }}" >Central manejo de pila</a>
         </div>
         <div class="{% if app.request.get('_route') == 'marketing' %}activeMenu{% endif %} well well-lg">
             <a class="notAjax" href="{{ path('marketing') }}" >Marketing</a>
         </div>
+
     {% endblock %}
 
     {% block usrName %}BACK OFFICE{% endblock %}

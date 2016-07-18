@@ -291,6 +291,27 @@ class EmployeeRestController extends FOSRestController {
         $contract->setFrequencyFrequency($tempFrequency);
 
 
+        $planillaTypeRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PlanillaType');
+        $calculatorConstraintsRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:CalculatorConstraints');
+        $minWage = $calculatorConstraintsRepo->findOneBy(array("name" => "smmlv"));
+        $minWage = $minWage ->getValue();
+
+        $realSalary = 0;
+        if($contract->getTimeCommitmentTimeCommitment()->getCode() == "XD"){
+          $realSalary = $contract->getSalary() / $contract->getWorkableDaysMonth();
+          $realSalary = $realSalary * (($contract->getWorkableDaysMonth() / 4) * 4.34523810);
+        }
+
+        // Logic to determine the contract planilla type
+        if($contract->getTimeCommitmentTimeCommitment()->getCode() == "XD" && $contract->getSisben() == 1 && $realSalary < $minWage){
+          $planillaTypeToSet = $planillaTypeRepo->findOneBy(array("code" => "E"));
+          $contract->setPlanillaTypePlanillaType($planillaTypeToSet);
+        }
+        else {
+          $planillaTypeToSet = $planillaTypeRepo->findOneBy(array("code" => "S"));
+          $contract->setPlanillaTypePlanillaType($planillaTypeToSet);
+        }
+
         //Final Entity Validation
         $errors = $this->get('validator')->validate($contract, array('Update'));
 
@@ -1114,6 +1135,27 @@ class EmployeeRestController extends FOSRestController {
         }
 
         $contract->setPayMethodPayMethod($payMethod);
+
+        $planillaTypeRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PlanillaType');
+        $calculatorConstraintsRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:CalculatorConstraints');
+        $minWage = $calculatorConstraintsRepo->findOneBy(array("name" => "smmlv"));
+        $minWage = $minWage ->getValue();
+
+        $realSalary = 0;
+        if($contract->getTimeCommitmentTimeCommitment()->getCode() == "XD"){
+          $realSalary = $contract->getSalary() / $contract->getWorkableDaysMonth();
+          $realSalary = $realSalary * (($contract->getWorkableDaysMonth() / 4) * 4.34523810);
+        }
+
+        // Logic to determine the contract planilla type
+        if($contract->getTimeCommitmentTimeCommitment()->getCode() == "XD" && $contract->getSisben() == 1 && $realSalary < $minWage){
+          $planillaTypeToSet = $planillaTypeRepo->findOneBy(array("code" => "E"));
+          $contract->setPlanillaTypePlanillaType($planillaTypeToSet);
+        }
+        else {
+          $planillaTypeToSet = $planillaTypeRepo->findOneBy(array("code" => "S"));
+          $contract->setPlanillaTypePlanillaType($planillaTypeToSet);
+        }
 
         $em->persist($contract);
         $em->persist($payMethod);

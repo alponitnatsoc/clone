@@ -71,11 +71,7 @@
                 </div>
             </div>
             <div class="col-sm-6" style="margin-top: 20px; text-align:center">
-                <div>
-                    <h4>Generar archivo Excel</h4>
-                    <a class="btn btn-orange notAjax" href="{{ path('back_person_cvs_export', {'idAction':action.idAction })}}">Generar</a>
-                    <br>
-                </div>
+
                 <div style="margin-top: 30px">
                     <a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Validar</a>
                     <a class="btn btn-bitbucket notAjax" href="{{ path('show_procedure',{'procedureId':action.realProcedureRealProcedure.idProcedure})}}">Volver al tramite</a>

@@ -1,0 +1,39 @@
+<!--button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#noveltyModal">Agregar Novedad</button>
+
+	<!-- Modal -->
+<div id="modal_show_SQLNovelties_details" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" style="padding: 0">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
+                <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
+                    <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">Detalles de nómina</div>
+                </div>
+                <div class="row-fluid clearfix cuerpoNovelty" style="padding: 30px; 15px;">
+                    {% if novelties is defined %}
+                        <table>
+                            <th>
+                                <tr>
+                                    <td>Descripcion</td>
+                                    <td>Valor</td>
+                                </tr>
+                            </th>
+
+                        {% for nov in novelties %}
+                            <tr>
+                                <td>nov.name</td>
+                                <td><div class="bold precio-pay">${{ nov.sqlValue|number_format(0, '.', ',') }}</div></td>
+                            </tr>
+                        {% endfor %}
+                        </table>
+                    {% endif %}
+                    <div class="row">
+                        <div class="col-xs-6 text-right">
+                            <button type="button" class="btn btnPrevious" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

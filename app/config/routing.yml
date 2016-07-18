@@ -227,6 +227,9 @@ payroll_result:
 payroll_success:
     path:     /payroll/success
     defaults: { _controller: RocketSellerTwoPickBundle:Payroll:payrollSuccess }
+payroll_details:
+    path:     /payroll/show/details/{idPayRoll}
+    defaults: { _controller: RocketSellerTwoPickBundle:Payroll:showDetails, idPayRoll: -1 }
 
 show_form_entity:
     path:      /register/entity/{id}

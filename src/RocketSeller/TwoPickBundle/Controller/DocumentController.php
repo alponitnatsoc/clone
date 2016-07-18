@@ -164,7 +164,6 @@ use EmployerMethodsTrait;
         $document->setDocumentTypeDocumentType($documentType);
         $form = $this->createForm(new DocumentRegistration(), $document);
 
-
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -668,6 +667,11 @@ use EmployerMethodsTrait;
                 $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Payroll');
                 /** @var \RocketSeller\TwoPickBundle\Entity\Payroll $payroll */
                 $payroll = $repository->find($id);
+                $document = null;
+                if($payroll->getSignature() != null) {
+                    $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Document');
+                    $document = $repository->find($payroll->getSignature());
+                }
 
                 if($payroll->getPaid()==0){
                     return $this->redirectToRoute("show_dashboard");
@@ -725,14 +729,20 @@ use EmployerMethodsTrait;
                     'totalDeducido'=>$totalDeducido,
                     'total'=>$totalDevengado-$totalDeducido
                 );
+                $signatureUrl = null;
                 //extracting signature
-
-                //$baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
+                if($document != null && file_exists(getcwd().$this->container->get('sonata.media.twig.extension')
+                                                     ->path($document->getMediaMedia(), 'reference')))
+                {
+                    $signatureUrl = getcwd().$this->container->get('sonata.media.twig.extension')
+                                             ->path($document->getMediaMedia(), 'reference');
+                }
 
                 $data = array(
                     'employeeInfo' => $employeeInfo,
                     'client' => $clientInfo,
                     'discriminatedInfo' => $discriminatedInfo,
+                    'signatureUrl' => $signatureUrl
                 );
                 break;
             default:

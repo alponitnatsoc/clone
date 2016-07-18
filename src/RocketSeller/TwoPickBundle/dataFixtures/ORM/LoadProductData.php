@@ -78,7 +78,7 @@ class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
         $productCT = new Product();
         $productCT->setName('Costo transaccion');
         $productCT->setDescription('Costo transaccion');
-        $productCT->setPrice("6034.48");
+        $productCT->setPrice("4741.37");
         $productCT->setSimpleName('CT');
         $productCT->setTaxTax($this->getReference('tax-iva'));
         $productCT->setValidity(null);

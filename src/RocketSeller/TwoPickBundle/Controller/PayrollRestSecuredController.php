@@ -76,14 +76,16 @@ class PayrollRestSecuredController extends FOSRestController
                 }
             }
             $total = 0;
-            /** @var PurchaseOrdersDescription $pod */
-            foreach ($pods as $pod) {
-                $total += $pod->getValue();
-            }
-            if ($total == 0) {
-                $pods = null;
-            }
+            if($pods!=null){
+                /** @var PurchaseOrdersDescription $pod */
+                foreach ($pods as $pod) {
+                    $total += $pod->getValue();
+                }
+                if ($total == 0) {
+                    $pods = null;
+                }
 
+            }
 
             return $view->setStatusCode(200)->setData(array(
                 'dataNomina' => $pods,
@@ -140,7 +142,6 @@ class PayrollRestSecuredController extends FOSRestController
 
         $paidValue = 0;
 
-        $valueToGet4xMilFrom = 0;
         $numberOfPNTrans = 0;
         $willPayPN = false;
         foreach ($payrollsPaid as $key => $value) {
@@ -221,6 +222,7 @@ class PayrollRestSecuredController extends FOSRestController
         }
 
         $realtoPay = new PurchaseOrders();
+        $productRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
         foreach ($payrollToPay as $key => $value) {
 
             /** @var PurchaseOrdersDescription $tempPOD */
@@ -246,14 +248,6 @@ class PayrollRestSecuredController extends FOSRestController
             }
             if (!$flagFrequency) {
                 $total += $tempPOD->getValue();
-                if ($tempPOD->getProductProduct()->getSimpleName() == "PN") {
-                    $willPayPN = true;
-                    $valueToGet4xMilFrom = $valueToGet4xMilFrom + $tempPOD->getValue();
-                    $numberOfPNTrans = $numberOfPNTrans + 1;
-                }
-            }
-            if ($tempPOD->getProductProduct()->getSimpleName() == "PP") {
-                $valueToGet4xMilFrom = $valueToGet4xMilFrom + $tempPOD->getValue();
             }
             $realtoPay->addPurchaseOrderDescription($tempPOD);
 
@@ -261,29 +255,19 @@ class PayrollRestSecuredController extends FOSRestController
         if ($realtoPay->getPurchaseOrderDescriptions()->count() > 0) {
             //add transaction cost
             $transactionCost = 0;
+            /** @var Product $productCT */
+            $productCT = $productRepo->findOneBy(array("simpleName" => "CT"));
 
-            // Se agrega el cobro único por pila si no hay pagos de nomina
-            if ($willPayPN == false) {
-                $transactionCost = $transactionCost + 5500;
-            }
+            $transactionCost =  ceil(($productCT->getPrice()+($productCT->getPrice()*$productCT->getTaxTax()->getValue())))*$realtoPay->getPurchaseOrderDescriptions()->count();
 
-            // Se agrega el cobro del 4x1000
-            $transactionCost = $transactionCost + (($valueToGet4xMilFrom / 1000) * 4);
-            // Se agrega el cobro por transaccional
-
-            if ($numberOfPNTrans == 1) {
-                $transactionCost = $transactionCost + 5500;
-            } elseif ($numberOfPNTrans >= 2 && $numberOfPNTrans <= 5) {
-                $transactionCost = $transactionCost + (5500 * $numberOfPNTrans);
-            } elseif ($numberOfPNTrans > 5) {
-                $transactionCost = $numberOfPNTrans + (5500 * $numberOfPNTrans);
-            }
 
             $transactionPOD = new PurchaseOrdersDescription();
             $transactionPOD->setDescription("Costo transaccional");
-            $transactionPOD->setValue(round($transactionCost, 0));
+            $transactionPOD->setValue($transactionCost);
             $realtoPay->addPurchaseOrderDescription($transactionPOD);
             $total += $transactionPOD->getValue();
+            //now add the 4*1000
+
             $dateToday = new DateTime();
             $effectiveDate = $user->getLastPayDate();
             $isFreeMonths = $user->getIsFree();
@@ -299,7 +283,6 @@ class PayrollRestSecuredController extends FOSRestController
                 $symplificaPOD = new PurchaseOrdersDescription();
                 $symplificaPOD->setDescription("Subscripción Symplifica");
                 $ehes = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
-                $productRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
                 /** @var Product $PS1 */
                 $PS1 = $productRepo->findOneBy(array("simpleName" => "PS1"));
                 /** @var Product $PS2 */
@@ -357,12 +340,12 @@ class PayrollRestSecuredController extends FOSRestController
 
 
     /**
-     * Return the PODS and POS of the requested user
+     * Confirms the paymet of podsToPay with specific paymentMethod
      *
      *
      * @ApiDoc(
      *   resource = true,
-     *   description = "Return the overall User List",
+     *   description = "Confirms the paymet of podsToPay with specific paymentMethod",
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     403 = "Returned when users not match",
@@ -555,9 +538,9 @@ class PayrollRestSecuredController extends FOSRestController
                     $nowDate = new DateTime();
                     $nowPeriod = $actualPayroll->getPeriod();
                     if ($actualPayroll->getContractContract()->getFrequencyFrequency()->getPayrollCode() == "Q" && $nowPeriod == 4) {
-                        $monthsToAdd = 1;
-                    } else {
                         $monthsToAdd = 0;
+                    } else {
+                        $monthsToAdd = 1;
                     }
                     $nowDate = new DateTime(date('Y-m-d', strtotime("+$monthsToAdd months", strtotime($nowDate->format("Y-m-") . "1"))));
                     //here i create the comprobante

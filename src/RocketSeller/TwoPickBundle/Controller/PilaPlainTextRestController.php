@@ -208,7 +208,7 @@ class PilaPlainTextRestController extends FOSRestController
       foreach($ehe as $i) {
         $entity = $i->getEntityEntity();
         // If is AFP and doesn't pay.
-        if($entity->getIdEntity() == 3 && $entity->getPayrollCode() == 0) {
+        if($entity->getEntityTypeEntityType()->getPayrollCode() == "AFP" && $entity->getPayrollCode() == 0) {
           return false;
         }
       }
@@ -685,15 +685,15 @@ class PilaPlainTextRestController extends FOSRestController
 
     // Type is E or S.
     // Count is the number of employees of this type.
-    public function createLineaEmpleado($employees, $exonerated=false, $idEmployer){
+    public function createLineaEmpleado($pilaArr, $exonerated=false, $idEmployer){
       $consecutivo = 1;
       if($exonerated)
         $exonerated = 'S';
       else
         $exonerated = 'N';
-      foreach($employees as $employee) {
+      foreach($pilaArr as $pila) {
         //dump($employee);die();
-        $employee = $employee->getEmployeeEmployee();
+        $employee = $pila->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee();
         // Add left zeros to count.
         $consecutivo2 = ''.$consecutivo;
         $consecutivo = '';
@@ -958,12 +958,12 @@ class PilaPlainTextRestController extends FOSRestController
 
     // Type is E or S.
     // Count is the number of employees of this type.
-    public function createEncabezado($idEmployer, $type, $count){
+    public function createEncabezado($employer, $type, $count){
       $elementos = &$this->elementos;
       $elementos = array();
-      $employer = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Employer");
+
       /** @var Employer $emp */
-      $emp = $employer->findOneBy(array('idEmployer' => $idEmployer));
+      $emp = $employer;
 
       $razonSocial = $emp->getPersonPerson()->getNames();
       $razonSocial .= ' ' . $emp->getPersonPerson()->getLastName1();
@@ -1005,8 +1005,6 @@ class PilaPlainTextRestController extends FOSRestController
         $count .= '0';
       }
       $count .= $count2;
-
-
 
       //Articulo 7 resolucion 1747 de 2008.
       // Campo 1.
@@ -1070,45 +1068,47 @@ class PilaPlainTextRestController extends FOSRestController
      *   }
      * )
      *
-     * @param Int $idEmployer id of the employer.
-     * @param Char $type meaning if is part(E) or full time(S).
+     * @param Int $podId id of the purchase order description.
      * @return String
      */
-    public function getMonthlyPlainTextAction($idEmployer, $type='S') {
-      $employer = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Employer");
-      /** @var Employer $emp */
-      $emp = $employer->findOneBy(array('idEmployer' => $idEmployer));
+    public function getMonthlyPlainTextAction($podId) {
+      // TOGO 0
 
-      $employees = $emp->getEmployerHasEmployees();
-      $tiempo_completo = array();
-      $tiempo_parcial = array();
+      $podRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription");
+      $pod = $podRepo->findOneBy(array("idPurchaseOrdersDescription" => $podId));
+
+      $pilaArr = $pod->getPayrollsPila();
+      $type = $pilaArr[0]->getContractContract()->getPlanillaTypePlanillaType()->getCode();
 
       $numberEmployees = 0;
-      $tempEmp = $emp->getEmployerHasEmployees();
-      /** @var EmployerHasEmployee $ehe */
-      foreach($tempEmp as $ehe) {
-        if($ehe->getState() >= 3)
-          $numberEmployees ++;
-      }
 
-      foreach($employees as $employee) {
-        $contracts = $employee->getContracts();
-        foreach($contracts as $contract) {
-          if($contract->getState() != 1)
-            continue;
-          if($contract->getTimeCommitmentTimeCommitment()->getCode() == 'TC')
-            $tiempo_completo[] = $employee->getEmployeeEmployee();
-          else
-            $tiempo_parcial[] = $employee->getEmployeeEmployee();
+      $tempEmployer = $pilaArr[0]->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer();
+      $tempArrayEhe = $tempEmployer->getEmployerHasEmployees();
+      /** @var EmployerHasEmployee $ehe */
+      foreach($tempArrayEhe as $ehe) {
+        if($ehe->getState() >= 4){
+          $contractsToValidate = $ehe->getContracts();
+          foreach ($contractsToValidate as $contractToCheck) {
+            if($contractToCheck->getState() == 1){
+              $numberEmployees ++;
+              break;
+            }
+          }
         }
       }
+
       $exonerated = $numberEmployees > 1 ? true: false;
 
-      $line = $this->createEncabezado($idEmployer, 'S', count($tiempo_completo));
+      $employer = $pilaArr[0]->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer();
+
+      //S es tiempo completo (Convencional)
+      //E es tiempo parcial sin Sisben (Domestico)
+
+      $line = $this->createEncabezado($employer, $type, $numberEmployees);
       $line .= "\n";
       $this->elementos = array();
-      $line .= $this->createLineaEmpleado($employees, $exonerated, $idEmployer);
-      $filename = 'PILA_' . $idEmployer . '.txt';
+      $line .= $this->createLineaEmpleado($pilaArr, $exonerated, $employer->getIdEmployer());
+      $filename = 'PILA_' . $type . $employer->getPersonPerson()->getLastName1() .$employer->getIdEmployer() . '.txt';
       header("Content-type: text/plain; charset=utf-8");
       header("Content-Disposition: attachment; filename=$filename");
 
