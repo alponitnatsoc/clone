@@ -38,7 +38,7 @@ function addNoveltySelectListener() {
           $("#notaNovedad").html("Esta información debe provenir del comprobante de incapacidad recibido por la EPS.</br>Por ahora, no realizamos el proceso de cobro de dicha incapacidad.</br>Para mayor información, contacte su EPS");
     }
 
-    if(selectedText == "Incapacidad profesional"){
+    if(selectedText == "Incapacidad laboral"){
           $("#notaNovedad").show();
           $("#notaNovedad").html("Esta información debe provenir del comprobante de incapacidad recibido por la ARL.</br>Por ahora, no realizamos el proceso de cobro de dicha incapacidad.</br>Para mayor información, contacte su ARL");
     }

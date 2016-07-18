@@ -69,7 +69,7 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $manager->persist($NoveltyWorkAccident);
 
         $NoveltyProfessionalIllness = new NoveltyType();
-        $NoveltyProfessionalIllness->setName('Incapacidad profesional');
+        $NoveltyProfessionalIllness->setName('Incapacidad laboral');
         $NoveltyProfessionalIllness->setPayrollCode('28');
         $NoveltyProfessionalIllness->setAbsenteeism('9');
         $NoveltyProfessionalIllness->setPeriod('dia');

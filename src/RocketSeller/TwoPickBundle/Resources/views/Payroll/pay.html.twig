@@ -108,56 +108,62 @@
                                 </div>
 
                             {% else %}
-                                {% set pilaData = data %}
+                                {% if pilaData!=null %}
+                                    {% set pilaData = pilaData|merge([data]) %}
+                                {% else %}
+                                    {% set pilaData = [data] %}
+                                {% endif %}
                             {% endif %}
                             <br>
                         {% endfor %}
                         {% if pilaData!=null %}
-                            <div class="borderclass">
-                                <div class="tittle-pay">
-                                    <div class="light-italic center">
-                                        Aportes a seguridad social:
-                                        {% set payrolls = pilaData.payrolls_pila %}
-                                    </div>
-
-                                    <div class="center">
-                                        <label style="font-weight:100"><input type="radio" class="toPayArray"
-                                                                              name="{{ pilaData.id_purchase_orders_description }}"
-                                                                              value="p-{{ pilaData.id_purchase_orders_description }}">
-                                            Pagar </label>
-                                        <label style="font-weight:100;margin-left: 15px;"><input type="radio"
-                                                                                                 class="alreadyPaid"
-                                                                                                 name="{{ pilaData.id_purchase_orders_description }}"
-                                                                                                 value="ap-{{ pilaData.id_purchase_orders_description }}">
-                                            Pagaré fuera de la plataforma </label>
-                                    </div>
-                                </div>
-                                <div class="height">
-                                    <div class="left" style="border-left: 1px #CCC solid;">
-                                        <span class="title-span semi-italic azulmediofont center">Empleados</span>
-                                        <span class="pila-empl azulmediofont semi-italic">
-                                            <ul>
-                                                {% for payroll in payrolls %}
-                                                    {% set employeePP = payroll.contract_contract.employer_has_employee_employer_has_employee.employee_employee.person_person %}
-                                                    <li>{{ employeePP.names ~' '~ employeePP.last_name1 }}</li>
-                                                {% endfor %}
-                                            </ul>
-                                        </span>
-                                    </div>
-                                    <div class="right" style="border-left: 1px #CCC solid;">
-                                        <div class="center borderight">
-                                            <div class="center">
-                                                <span class="title-span semi-italic azulmediofont">Monto a pagar</span>
-                                                <span class="bold precio-pay">${{ pilaData.value|number_format(0, '.', ',') }}</span>
-                                            </div>
+                            {% for dataPila in pilaData %}
+                                <div class="borderclass">
+                                    <div class="tittle-pay">
+                                        <div class="light-italic center">
+                                            Aportes a seguridad social:
+                                            {% set payrolls = dataPila.payrolls_pila %}
                                         </div>
 
+                                        <div class="center">
+                                            <label style="font-weight:100"><input type="radio" class="toPayArray"
+                                                                                  name="{{ dataPila.id_purchase_orders_description }}"
+                                                                                  value="p-{{ dataPila.id_purchase_orders_description }}">
+                                                Pagar </label>
+                                            <label style="font-weight:100;margin-left: 15px;"><input type="radio"
+                                                                                                     class="alreadyPaid"
+                                                                                                     name="{{ dataPila.id_purchase_orders_description }}"
+                                                                                                     value="ap-{{ dataPila.id_purchase_orders_description }}">
+                                                Pagaré fuera de la plataforma </label>
+                                        </div>
+                                    </div>
+                                    <div class="height">
+                                        <div class="left" style="border-left: 1px #CCC solid;">
+                                            <span class="title-span semi-italic azulmediofont center">Empleados</span>
+                                            <span class="pila-empl azulmediofont semi-italic">
+                                                <ul>
+                                                    {% for payroll in payrolls %}
+                                                        {% set employeePP = payroll.contract_contract.employer_has_employee_employer_has_employee.employee_employee.person_person %}
+                                                        <li>{{ employeePP.names ~' '~ employeePP.last_name1 }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </span>
+                                        </div>
+                                        <div class="right" style="border-left: 1px #CCC solid;">
+                                            <div class="center borderight">
+                                                <div class="center">
+                                                    <span class="title-span semi-italic azulmediofont">Monto a pagar</span>
+                                                    <span class="bold precio-pay">${{ dataPila.value|number_format(0, '.', ',') }}</span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="center" style="clear: both;background: #CCC;padding: 10px 0;">
+                                        <a style="color:#5D5D5D;font-weight: 600" class="notAjax" href="">&#10093; Detalles</a>
                                     </div>
                                 </div>
-                                <div class="center" style="clear: both;background: #CCC;padding: 10px 0;">
-                                    <a style="color:#5D5D5D;font-weight: 600" class="notAjax" href="">&#10093; Detalles</a>
-                                </div>
-                            </div>
+                            {% endfor %}
 
                         {% endif %}
                         {% if debt|length >0 %}
