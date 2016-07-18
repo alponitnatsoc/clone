@@ -124,6 +124,10 @@ class LoadDocumentTypeData extends AbstractFixture implements OrderedFixtureInte
         $mandato->setRefPdf('mandato');
         $manager->persist($mandato);
 
+        $signature = new DocumentType();
+        $signature->setName('Firma');
+        $signature->persist($signature);
+
         $manager->flush();
 
         $this->addReference('document-type-cedula', $documentTypeCedula);
