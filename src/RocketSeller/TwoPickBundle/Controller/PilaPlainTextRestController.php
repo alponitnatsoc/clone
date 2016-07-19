@@ -691,7 +691,9 @@ class PilaPlainTextRestController extends FOSRestController
         $exonerated = 'S';
       else
         $exonerated = 'N';
-      foreach($pilaArr as $pila) {
+
+      $lineArr = array();
+      foreach($pilaArr as $key => $pila) {
         //dump($employee);die();
         $employee = $pila->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee();
         // Add left zeros to count.
@@ -896,8 +898,10 @@ class PilaPlainTextRestController extends FOSRestController
         $ingreso,$retiro,$variacionSalario,$variacionTransitoriaSalario,'',$enfermedadGeneral,$licenciaMaternidadPaternidad,$vacaciones,$incapacidadAccidente);
         $line = $this->executeLine();
         $this->elementos = array();
-        if($suspensionTemporal != 'X')
-          return $line;
+        if($suspensionTemporal != 'X'){
+          $lineArr[] = $line;
+          continue;
+        }
 
         // Here starts the second line, only if there is a non payable absentism.
 
@@ -949,10 +953,23 @@ class PilaPlainTextRestController extends FOSRestController
         $salary,$ibc,$ibc,$ibc,$porcentaje_pension,$aporte_pension,$porcentaje_salud,$aporte_salud,$porcentaje_arl,$aporte_arl,$porcentaje_caja,$aporte_caja,$exonerated,
         $ingreso,$retiro,$variacionSalario,$variacionTransitoriaSalario,$suspensionTemporal,$enfermedadGeneral,$licenciaMaternidadPaternidad,$vacaciones,$incapacidadAccidente);
 
+        $line = $line . $this->executeLine();
+        $this->elementos = array();
 
-
-        return $line . $this->executeLine();
+        $lineArr[] = $line;
       }
+
+      $returnString = "";
+      foreach ($lineArr as $key => $singleLine) {
+        if($key  == count($lineArr) - 1){
+          $returnString = $returnString . $singleLine;
+          break;
+        }
+        $returnString = $returnString . $singleLine;
+        $returnString = $returnString . "\n";
+      }
+
+      return $returnString;
     }
 
 
