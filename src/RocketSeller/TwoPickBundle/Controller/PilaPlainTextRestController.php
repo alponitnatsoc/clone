@@ -606,7 +606,6 @@ class PilaPlainTextRestController extends FOSRestController
       // Campo 32.
       $this->add(160, 165, '');// Only if the employee is changing AFP.
       // Campo 33.
-      //TOGO EPS
       $this->add(166, 171, $codigoEPS);
       // Campo 34.
       $this->add(172, 177, '');// Only if the employee is changing EPS.
@@ -692,10 +691,9 @@ class PilaPlainTextRestController extends FOSRestController
         $exonerated = 'S';
       else
         $exonerated = 'N';
-        //TOGO START
 
-        $lineArr = array();
-      foreach($pilaArr as $key=>$pila) {
+      $lineArr = array();
+      foreach($pilaArr as $key => $pila) {
         //dump($employee);die();
         $employee = $pila->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee();
         // Add left zeros to count.
@@ -732,7 +730,6 @@ class PilaPlainTextRestController extends FOSRestController
         $secondFirstName = isset(explode(' ', $firstFirstName)[1]) ? explode(' ', $firstFirstName)[1] : '';
         $firstFirstName = explode(' ', $firstFirstName)[0];
         $codigoAFP = $this->codigoEntidad($employee->getIdEmployee(), 3); //3 is afp.
-        //TOGO SETEPS
         $codigoEPS = $this->codigoEntidad($employee->getIdEmployee(), 1); //1 is eps.
         $codigoCCF = $this->codigoEntidadEmployer($idEmployer, 4); // 4 is ccf.
 
@@ -901,8 +898,10 @@ class PilaPlainTextRestController extends FOSRestController
         $ingreso,$retiro,$variacionSalario,$variacionTransitoriaSalario,'',$enfermedadGeneral,$licenciaMaternidadPaternidad,$vacaciones,$incapacidadAccidente);
         $line = $this->executeLine();
         $this->elementos = array();
-        if($suspensionTemporal != 'X')
-          return $line;
+        if($suspensionTemporal != 'X'){
+          $lineArr[] = $line;
+          continue;
+        }
 
         // Here starts the second line, only if there is a non payable absentism.
 
@@ -954,20 +953,23 @@ class PilaPlainTextRestController extends FOSRestController
         $salary,$ibc,$ibc,$ibc,$porcentaje_pension,$aporte_pension,$porcentaje_salud,$aporte_salud,$porcentaje_arl,$aporte_arl,$porcentaje_caja,$aporte_caja,$exonerated,
         $ingreso,$retiro,$variacionSalario,$variacionTransitoriaSalario,$suspensionTemporal,$enfermedadGeneral,$licenciaMaternidadPaternidad,$vacaciones,$incapacidadAccidente);
 
-        //TOGO END
-        $lineArr[] = $line . $this->executeLine();
+        $line = $line . $this->executeLine();
         $this->elementos = array();
+
+        $lineArr[] = $line;
       }
 
-      $lineAnswer = "";
-      foreach ($lineArr as $key => $line) {
-        if($key == count($lineArr) - 1){
-          $lineAnswer += $line;
-        }else {
-          $lineAnswer += $line . "\n";
+      $returnString = "";
+      foreach ($lineArr as $key => $singleLine) {
+        if($key  == count($lineArr) - 1){
+          $returnString = $returnString . $singleLine;
+          break;
         }
+        $returnString = $returnString . $singleLine;
+        $returnString = $returnString . "\n";
       }
-      return $lineAnswer;
+
+      return $returnString;
     }
 
 
