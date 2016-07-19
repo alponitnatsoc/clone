@@ -14,7 +14,13 @@ function startEmployee() {
     var loadedEndDateYear = $("#register_employee_employeeHasEmployers_endDate_year").val();
 
     $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
-      $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js").done(function() {
+        console.log("3rd time")
+        $.ajax({
+          url: "//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js",
+          dataType: "script",
+          timeout: 4000
+      }).done(function() {
+            console.log("4th time");
         validator = $("form[name='register_employee']").validate({
             //onfocusout: true,
             rules: {
@@ -124,6 +130,8 @@ function startEmployee() {
                 }
             });
         });
+      }).fail(function() {
+          location.reload();
       });
     });
     $('.btnPrevious-form').click(function () {
