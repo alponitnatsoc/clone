@@ -15,6 +15,7 @@ function startEmployee() {
 
     $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
       $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js").done(function() {
+
         validator = $("form[name='register_employee']").validate({
             //onfocusout: true,
             rules: {
@@ -1972,7 +1973,7 @@ function validateSalary() {
         salarioMes = parseFloat(accounting.unformat($("#register_employee_employeeHasEmployers_salary").val()));
         if(!salarioMes){
             if(salarioMes!= 0){
-                $("#salarioMinimo").find('.modal-body').html('AAAA El salario mínimo legal es de $ ' + getPrice(salarioMinimo)+' pesos.');
+                $("#salarioMinimo").find('.modal-body').html('El salario mínimo legal es de $ ' + getPrice(salarioMinimo)+' pesos.');
                 $("#salarioMinimo").modal('show');
                 $("#register_employee_employeeHasEmployers_salary").val((salarioMinimo));
                 calculator();
@@ -1985,7 +1986,7 @@ function validateSalary() {
             return false;
         }
         if (salarioMes < salarioMinimo) {
-            $("#salarioMinimo").find('.modal-body').html('BBB El salario mínimo legal es de $ ' + getPrice(salarioMinimo)+' pesos.');
+            $("#salarioMinimo").find('.modal-body').html('El salario mínimo legal es de $ ' + getPrice(salarioMinimo)+' pesos.');
             $("#salarioMinimo").modal('show');
             $("#register_employee_employeeHasEmployers_salary").val((salarioMinimo));
             calculator();
