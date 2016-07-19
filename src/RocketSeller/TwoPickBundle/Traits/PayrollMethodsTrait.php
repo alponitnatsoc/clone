@@ -195,12 +195,19 @@ trait PayrollMethodsTrait
                             $podsPila[$planillaCode]->setValue($this->getTotalPILA($employerHasEmployee)['total']);
 
                         }else{
+                            if($pila!=null&&isset($podsPila[$planillaCode])){
+                                $podsPila[$planillaCode]->setValue($this->getTotalPILA($employerHasEmployee)['total'] + $podsPila[$planillaCode]->getValue());
+                            }
                             //this is for the literal first case of the currend pod type
-                            if((!isset($podsPila[$planillaCode]))){
+                            elseif((!isset($podsPila[$planillaCode]))){
                                 $podsPila[$planillaCode] = new PurchaseOrdersDescription();
                                 $podsPila[$planillaCode]->addPayrollsPila($payroll);
+                                $podsPila[$planillaCode]->setValue($this->getTotalPILA($employerHasEmployee)['total']);
                             }
-                            $podsPila[$planillaCode]->setValue($this->getTotalPILA($employerHasEmployee)['total'] + $podsPila[$planillaCode]->getValue());
+                            elseif($pila==null){
+                                $podsPila[$planillaCode]->addPayrollsPila($payroll);
+                                $podsPila[$planillaCode]->setValue($this->getTotalPILA($employerHasEmployee)['total'] + $podsPila[$planillaCode]->getValue());
+                            }
                         }
 
                     }
