@@ -310,14 +310,17 @@ use EmployerMethodsTrait;
                 if($zip->close()!==TRUE)
                     echo "no permisos";
                 # send the file to the browser as a download
-                header("Content-disposition: attachment; filename=$tmp_file");
-                header('Content-type: application/zip');
+                header('Pragma: public');
                 header('Expires: 0');
                 header('Cache-Control: must-revalidate');
-                header('Pragma: public');
+                header('Cache-Control: public');
+                header('Content-Description: File Transfer');
+                header('Content-type: application/zip');
+                header("Content-disposition: attachment; filename=$tmp_file");
+                header('Content-Transfer-Encoding: binary');
                 header('Content-Length: '.filesize($tmp_file));
                 ob_clean();
-                flush();
+                ob_end_flush();
                 readfile($tmp_file);
                 ignore_user_abort(true);
                 unlink($tmp_file);

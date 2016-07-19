@@ -6,6 +6,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use RocketSeller\TwoPickBundle\Entity\Config;
 use RocketSeller\TwoPickBundle\Entity\Notification;
+use RocketSeller\TwoPickBundle\Entity\Novelty;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
@@ -471,8 +472,24 @@ class PayrollController extends Controller
             if($payroll){
                 $SQLNovelties=$payroll->getSqlNovelties();
             }
+            $total = 0;
+            $dev = 0;
+            $ded = 0;
+            /** @var Novelty $nov */
+            foreach ($SQLNovelties as $nov){
+               if ($nov->getNoveltyTypeNoveltyType()->getNaturaleza()=="DEV"){
+                    $total += $nov->getSqlValue();
+                    $dev += $nov->getSqlValue();
+               }else{
+                   $total -= $nov->getSqlValue();
+                   $ded += $nov->getSqlValue();
+               }
+            }
             return $this->render('RocketSellerTwoPickBundle:Payroll:showDetails.html.twig', array(
                 'novelties'=>$SQLNovelties,
+                'total'=> $total,
+                'dev'=> $dev,
+                'ded'=> $ded,
             ));
         }
     }
