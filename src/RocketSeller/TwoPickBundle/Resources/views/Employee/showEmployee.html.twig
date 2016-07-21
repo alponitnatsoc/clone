@@ -201,13 +201,13 @@
             <div id="contactData" class="tab-pane">
                 <div class="col-sm-12 col-sm-offset-4"></div>
                 <div class="col-sm-12 top-box-employee">
-                  <!--<div class="col-sm-4 left-top-box">
-                        <div class="col-sm-12" style="color:#00858c;">
-                            <p><strong>{{employee.personPerson.names}}</strong></p>
-                            <p>{{employee.personPerson.lastName1}} {{employee.personPerson.lastName2}}</p>
-                            <p class="document-text" style="font-weight: 100;color: #888686;padding-top:5px"><i>{{employee.personPerson.documentType}}: {{employee.personPerson.document}} {% if employee.personPerson.documentExpeditionPlace %}de {{employee.personPerson.documentExpeditionPlace}}{% endif %}</i></p>
-                        </div>
-                    </div>-->
+                  <div class="col-sm-12 center emploInfo">
+                      <div class="col-sm-12" style="color:#00858c;">
+                          <h3>{{utils.mb_capitalize(employee.personPerson.names)}} {{utils.mb_capitalize(employee.personPerson.lastName1)}} {{utils.mb_capitalize(employee.personPerson.lastName2)}}</h3>
+                          <p class="document-text" style="font-weight: 100;color: #888686;padding-top: 5px;"><i>{{employee.personPerson.documentType}}: {{employee.personPerson.document}} {% if employee.personPerson.documentExpeditionPlace %}de {{employee.personPerson.documentExpeditionPlace}}{% endif %}</i>
+                          </p>
+                      </div>
+                  </div>
                     <div class="col-sm-8">
                         <div class="col-sm-4 col-sm-offset-8">
                             {% if employerHasEmployee.state > 3 %}

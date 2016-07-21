@@ -396,18 +396,45 @@ class PaymentMethodRestController extends FOSRestController
         $person = $user->getPersonPerson();
         /** @var PurchaseOrdersDescription $desc */
         foreach ($descriptions as $desc) {
-            $dispersionAnswer=$this->disperseMoney($desc,$person);
-            if($dispersionAnswer['code']!=200){
-                if($dispersionAnswer['code']==512){
-                    continue;
+            $pays=$desc->getPayPay();
+            if($pays==null){
+                $dispersionAnswer=$this->disperseMoney($desc,$person);
+                if($dispersionAnswer['code']!=200){
+                    if($dispersionAnswer['code']==512){
+                        continue;
+                    }
+                    return $view->setStatusCode($dispersionAnswer['code'])->setData($dispersionAnswer['data']);
+                }else{
+                    //setting the id of the dispersion to rejected
+                    $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'-2'));
+                    $desc->setPurchaseOrdersStatus($pos);
+                    //TODO  enviar el correo a "" notificando que no se pudo hacer la transaccion con la informacion de, la fecha del rechazo, el monto, el empleador(nombres, telefono,correo) y el empleado(nombres, numero de cuenta),
                 }
-                return $view->setStatusCode($dispersionAnswer['code'])->setData($dispersionAnswer['data']);
             }else{
-                //setting the id of the dispersion to rejected
-                $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'-2'));
-                $desc->setPurchaseOrdersStatus($pos);
-                //TODO  enviar el correo a "" notificando que no se pudo hacer la transaccion con la informacion de, la fecha del rechazo, el monto, el empleador(nombres, telefono,correo) y el empleado(nombres, numero de cuenta),
+                $flag=false;
+                /** @var Pay $pay */
+                foreach ($pays as $pay) {
+                    if($pay->getPurchaseOrdersStatusPurchaseOrdersStatus()==null||$pay->getPurchaseOrdersStatusPurchaseOrdersStatus()->getIdNovoPay()=="-1"){
+                        $flag=true;
+                        break;
+                    }
+                }
+                if(!$flag){
+                    $dispersionAnswer=$this->disperseMoney($desc,$person);
+                    if($dispersionAnswer['code']!=200){
+                        if($dispersionAnswer['code']==512){
+                            continue;
+                        }
+                        return $view->setStatusCode($dispersionAnswer['code'])->setData($dispersionAnswer['data']);
+                    }else{
+                        //setting the id of the dispersion to rejected
+                        $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'-2'));
+                        $desc->setPurchaseOrdersStatus($pos);
+                        //TODO  enviar el correo a "" notificando que no se pudo hacer la transaccion con la informacion de, la fecha del rechazo, el monto, el empleador(nombres, telefono,correo) y el empleado(nombres, numero de cuenta),
+                    }
+                }
             }
+
 
         }
         $view->setStatusCode(200)->setData(array());
@@ -559,7 +586,7 @@ class PaymentMethodRestController extends FOSRestController
             if($dateToSend!=null){
                 //payment_date
                 $request->request->add(array(
-                    "payment_date" => $dateToSend
+                    "payment_date" => $dateToSend->format("Y-m-d")
                 ));
             }
             if($filePila!=null){
