@@ -135,7 +135,7 @@ class PayrollRestSecuredController extends FOSRestController
         if (count($payrollToPay) == 0 && count($payrollsPaid) == 0) {
             return $view->setStatusCode(400);
         }
-        $total = 0;
+        $total = $totalPayroll = 0;
         $poS = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
         $paidStatus = $poS->findOneBy(array('idNovoPay' => '00'));
         $paidPO = new PurchaseOrders();
@@ -143,6 +143,7 @@ class PayrollRestSecuredController extends FOSRestController
         $paidValue = 0;
 
         $numberOfPNTrans = 0;
+        $numberOfTrans = 0;
         $willPayPN = false;
         foreach ($payrollsPaid as $key => $value) {
             /** @var PurchaseOrdersDescription $tempPOD */
@@ -235,30 +236,55 @@ class PayrollRestSecuredController extends FOSRestController
             if ($tempPOD->getPayrollPayroll() == null) {
                 $person = $tempPOD->getPayrollsPila()->get(0)->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                 $flagFrequency = false;
+                $flagNomi=false;
+                $numberOfTrans++;
             } else {
                 $person = $tempPOD->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
-                if ($tempPOD->getPayrollPayroll()->getContractContract()->getPayMethodPayMethod()->getPayTypePayType()->getPayrollCode() == "EFE")
+                if ($tempPOD->getPayrollPayroll()->getContractContract()->getPayMethodPayMethod()->getPayTypePayType()->getPayrollCode() == "EFE"){
                     $flagFrequency = true;
-                else
+                    $flagNomi=false;
+                }
+                else{
+                    $flagNomi=true;
                     $flagFrequency = false;
+                    $numberOfTrans++;
+                }
             }
             if ($person->getIdPerson() != $userPerson->getIdPerson()) {
                 //Por seguridad se verifica que los PODS pertenezcan al usuario loggeado
                 return $view->setStatusCode(403)->setData(array('error' => 'no pasó seguridad pod'));
             }
             if (!$flagFrequency) {
+                if($flagNomi){
+                    $totalPayroll += $tempPOD->getValue();
+                }
                 $total += $tempPOD->getValue();
             }
             $realtoPay->addPurchaseOrderDescription($tempPOD);
 
         }
         if ($realtoPay->getPurchaseOrderDescriptions()->count() > 0) {
+            // add the 4*1000
+            /** @var Product $productCT */
+            $productCPM = $productRepo->findOneBy(array("simpleName" => "CPM"));
+            $fourX1000Cost=round($total*$productCPM->getPrice(), 0, PHP_ROUND_HALF_UP);
+            //this is for the payroll to be exclusive with the 4X100 tax, and not include the pila cost
+            //$fourX1000Cost=$totalPayroll*$productCPM->getPrice();
+            $fourx1000POD = new PurchaseOrdersDescription();
+            $fourx1000POD->setDescription("Cuatro por Mil");
+            $fourx1000POD->setValue($fourX1000Cost);
+            $realtoPay->addPurchaseOrderDescription($fourx1000POD);
+
+            $total += $fourx1000POD->getValue();
+
+
             //add transaction cost
             $transactionCost = 0;
             /** @var Product $productCT */
             $productCT = $productRepo->findOneBy(array("simpleName" => "CT"));
 
-            $transactionCost =  ceil(($productCT->getPrice()+($productCT->getPrice()*$productCT->getTaxTax()->getValue())))*$realtoPay->getPurchaseOrderDescriptions()->count();
+            $numberOfPNTrans=$numberOfTrans;
+            $transactionCost =  ceil(($productCT->getPrice()+($productCT->getPrice()*$productCT->getTaxTax()->getValue())))*$numberOfPNTrans;
 
 
             $transactionPOD = new PurchaseOrdersDescription();
@@ -266,7 +292,7 @@ class PayrollRestSecuredController extends FOSRestController
             $transactionPOD->setValue($transactionCost);
             $realtoPay->addPurchaseOrderDescription($transactionPOD);
             $total += $transactionPOD->getValue();
-            //now add the 4*1000
+
 
             $dateToday = new DateTime();
             $effectiveDate = $user->getLastPayDate();
@@ -374,88 +400,96 @@ class PayrollRestSecuredController extends FOSRestController
             return $this->redirectToRoute("payroll");
         }
         $total = 0;
+        $totalPayroll=0;
         $poS = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
         $paidStatus = $poS->findOneBy(array('idNovoPay' => '00'));
         $realtoPay = new PurchaseOrders();
 
         $valueToGet4xMilFrom = 0;
         $numberOfPNTrans = 0;
+        $numberOfTrans=0;
         $willPayPN = false;
 
         $paymethodid = $paramFetcher->get("paymentMethod");
+        $productRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
+
         foreach ($payrollToPay as $key => $value) {
+
             /** @var PurchaseOrdersDescription $tempPOD */
             $tempPOD = $podRepo->find($value);
+
             if ($tempPOD == null) {
                 //por seguridad en caso de que no exista el POD
-                return $this->redirectToRoute("payroll");
+                return $view->setStatusCode(403)->setData(array('error' => 'no exite pod'));
             }
             if ($tempPOD->getPayrollPayroll() == null) {
                 $person = $tempPOD->getPayrollsPila()->get(0)->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                 $flagFrequency = false;
+                $flagNomi=false;
+                $numberOfTrans++;
             } else {
                 $person = $tempPOD->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
-                if ($tempPOD->getPayrollPayroll()->getContractContract()->getPayMethodPayMethod()->getPayTypePayType()->getPayrollCode() == "EFE")
+                if ($tempPOD->getPayrollPayroll()->getContractContract()->getPayMethodPayMethod()->getPayTypePayType()->getPayrollCode() == "EFE"){
                     $flagFrequency = true;
-                else
+                    $flagNomi=false;
+                }
+                else{
+                    $flagNomi=true;
                     $flagFrequency = false;
+                    $numberOfTrans++;
+                }
             }
             if ($person->getIdPerson() != $userPerson->getIdPerson()) {
                 //Por seguridad se verifica que los PODS pertenezcan al usuario loggeado
-                return $this->redirectToRoute("payroll");
+                return $view->setStatusCode(403)->setData(array('error' => 'no pasó seguridad pod'));
             }
             if (!$flagFrequency) {
-                $total += $tempPOD->getValue();
-                if ($tempPOD->getProductProduct()->getSimpleName() == "PN") {
-                    $willPayPN = true;
-                    $valueToGet4xMilFrom = $valueToGet4xMilFrom + $tempPOD->getValue();
-                    $numberOfPNTrans = $numberOfPNTrans + 1;
+                if($flagNomi){
+                    $totalPayroll += $tempPOD->getValue();
                 }
-            }
-            if ($tempPOD->getProductProduct()->getSimpleName() == "PP") {
-                $valueToGet4xMilFrom = $valueToGet4xMilFrom + $tempPOD->getValue();
+                $total += $tempPOD->getValue();
             }
             $realtoPay->addPurchaseOrderDescription($tempPOD);
+
         }
         $em = $this->getDoctrine()->getManager();
 
         if ($realtoPay->getPurchaseOrderDescriptions()->count() > 0) {
+            // add the 4*1000
+            /** @var Product $productCT */
+            $productCPM = $productRepo->findOneBy(array("simpleName" => "CPM"));
+            $fourX1000Cost=round($total*$productCPM->getPrice(), 0, PHP_ROUND_HALF_UP);
+            //this is for the payroll to be exclusive with the 4X100 tax, and not include the pila cost
+            //$fourX1000Cost=$totalPayroll*$productCPM->getPrice();
+            $fourx1000POD = new PurchaseOrdersDescription();
+            $fourx1000POD->setDescription("Cuatro por Mil");
+            $fourx1000POD->setValue($fourX1000Cost);
+            $realtoPay->addPurchaseOrderDescription($fourx1000POD);
+
+            $total += $fourx1000POD->getValue();
+
+
             //add transaction cost
             $transactionCost = 0;
+            /** @var Product $productCT */
+            $productCT = $productRepo->findOneBy(array("simpleName" => "CT"));
 
-            // Se agrega el cobro único por pila si no hay pagos de nomina
-            if ($willPayPN == false) {
-                $transactionCost = $transactionCost + 5500;
-            }
+            $numberOfPNTrans=$numberOfTrans;
+            $transactionCost =  ceil(($productCT->getPrice()+($productCT->getPrice()*$productCT->getTaxTax()->getValue())))*$numberOfPNTrans;
 
-            // Se agrega el cobro del 4x1000
-            $transactionCost = $transactionCost + (($valueToGet4xMilFrom / 1000) * 4);
-            // Se agrega el cobro por transaccional
-
-            if ($numberOfPNTrans == 1) {
-                $transactionCost = $transactionCost + 5500;
-            } elseif ($numberOfPNTrans >= 2 && $numberOfPNTrans <= 5) {
-                $transactionCost = $transactionCost + (5500 * $numberOfPNTrans);
-            } elseif ($numberOfPNTrans > 5) {
-                $transactionCost = $numberOfPNTrans + (5500 * $numberOfPNTrans);
-            }
 
             $transactionPOD = new PurchaseOrdersDescription();
-            $productRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
-            /** @var Product $productTransaction */
-            $productTransaction = $productRepo->findOneBy(array("simpleName" => "CT"));
             $transactionPOD->setDescription("Costo transaccional");
-            $transactionPOD->setValue(round($transactionCost, 0));
-            $transactionPOD->setProductProduct($productTransaction);
+            $transactionPOD->setValue($transactionCost);
             $realtoPay->addPurchaseOrderDescription($transactionPOD);
             $total += $transactionPOD->getValue();
+
+
             $dateToday = new DateTime();
             $effectiveDate = $user->getLastPayDate();
             $isFreeMonths = $user->getIsFree();
             if ($isFreeMonths > 0) {
                 $isFreeMonths -= 1;
-                $user->setIsFree($isFreeMonths);
-                $em->persist($user);
             }
             $isFreeMonths += 1;
             $effectiveDate = new DateTime(date('Y-m-d', strtotime("+$isFreeMonths months", strtotime($effectiveDate->format("Y-m-") . "1"))));
@@ -505,7 +539,6 @@ class PayrollRestSecuredController extends FOSRestController
                 $symplificaPOD->setValue(round(($PS1->getPrice() * (1 + $PS1->getTaxTax()->getValue()) * $ps1Count) +
                     ($PS2->getPrice() * (1 + $PS2->getTaxTax()->getValue()) * $ps2Count) +
                     ($PS3->getPrice() * (1 + $PS3->getTaxTax()->getValue()) * $ps3Count), 0));
-                $symplificaPOD->setProductProduct($PS1);
                 $realtoPay->addPurchaseOrderDescription($symplificaPOD);
                 $total += $symplificaPOD->getValue();
 

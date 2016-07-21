@@ -1,18 +1,13 @@
 {% extends "::base.html.twig" %}
 {% block fos_user_content %}
     <div class="col-sm-12 col-xs-12">
-        <div class="row">
-            <div class="col-sm-12 col-xs-12 align-Resp">
-                <div class="col-sm-12 col-xs-12 blockStep inline">
-                    <div class="col-md-12 col-xs-12 txt-AD1" id="">
-                        Mi cuenta
-                    </div>
-                </div>
-            </div>
-        </div>
+
         <div class="col-sm-12 col-xs-12 center">
             <div class="row">
-                <h3>Datos básicos</h3>
+              <div class="headmicuenta">
+                <img src="{{ asset('public/img/home/account.png') }}" width="80">
+                <h3 class="miCuenta">Mi cuenta</h3>
+              </div>
                 <br />
                 <div class="col-sm-12 center">
                     <div id="basicDataTab" class="tab-pane fade in active col-sm-12 col-xs-12 contain-info-tab">
@@ -52,12 +47,9 @@
                 </div>
             </div>
 
-            <div class="col-sm-12">
-                <hr style="width: 75%;" />
-            </div>
 
-            <div class="row">
-                <h3 style="color: #1fcecb;font-weight: 600;">Medios de pago</h3>
+            <div class="row" style="margin-bottom: 70px;">
+                <h3 style="color: #5D5D5D;font-weight: 600;">Medios de pago</h3>
                 <div class="col-sm-12 center">
                     <div class="col-sm-12 col-xs-12">
                         {% if (payMethods['creditCards'] is defined) %}
@@ -91,23 +83,23 @@
                         {% if (payMethods['bankAccounts'] is defined) %}
                         <div class="row panel panel-default table-responsive" id="bankAccounts">
                             <!-- Default panel contents -->
-                            <div class="cuentas-heading center">Cuentas bancarias</div>
+                            <div class="cuentas-heading center" style="background: #3c4b5f;color: #FFF;font-weight: 600;">Cuentas bancarias</div>
                             <!-- Table -->
                             <div class="table table-bordered ">
                                 <div>
                                     {% for payM in payMethods['bankAccounts'] %}
-                                    <div class="contCuentas">
-                                        <div class="vert-align cuentasBanc">
+                                    <div class="contCuentas col-sm-12">
+                                        <div class="vert-align col-sm-4">
                                             <span>Tipo de cuenta</span>
-                                            <h4><strong>{{ payM["payment-type"] }}</strong></h4>
+                                            <h4 style="font-size: 15px;">{{ payM["payment-type"] }}</h4>
                                         </div>
-                                        <div class="vert-align cuentasBanc borderun">
+                                        <div class="vert-align borderun col-sm-4">
                                             <span>Número de cuenta</span>
-                                            <h4><strong>{{ payM["account"] }}</strong></h4>
+                                            <h4 style="font-size: 15px;">{{ payM["account"] }}</h4>
                                         </div>
-                                        <div class="vert-align cuentasBanc">
+                                        <div class="vert-align col-sm-4">
                                             <span>Banco</span>
-                                            <h4><strong>{{ payM["bank"] }}</strong></h4>
+                                            <h4 style="font-size: 15px;">{{ payM["bank"] }}</h4>
                                         </div>
 {#                                         <td class="vert-align">#}
 {#                                             <a class="fa-2x fa fa-trash-o"></a>#}
@@ -121,15 +113,12 @@
                         </div>
                         {% endif %}
                         <div class="row text-center borderNewpayM">
-                            <a style="color: #fd9224;" type="button" id="addPayMethod" class="" value="Agregar" href="{{ path('add_generic_payment_method',{userId:app.user.id}) }}"><i class="fa fa-plus-circle"></i> <i>Agregar método de pago</i></a>
+                            <a style="color: #1fcecb;" type="button" id="addPayMethod" class="" value="Agregar" href="{{ path('add_generic_payment_method',{userId:app.user.id}) }}"><i class="fa fa-plus-circle"></i> <i>Agregar método de pago</i></a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-sm-12">
-                <hr style="width: 75%;" />
-            </div>
 
             <style>
             .service-days {
@@ -149,13 +138,16 @@
             }
             .vert-align {
                 vertical-align: middle !important;
+                margin: 5px 0;
+                font-weight: 600;
+                color: #7b7b7b;
             }
             @media only screen and (max-width: 480px) {
               .service-days {width: 90%;}
             }
             </style>
-            <div class="row">
-                <h3 style="color: #1fcecb;font-weight: 600;">Facturación</h3>
+            <div class="row" style="margin-bottom: 70px;">
+                <h3 style="color:#5D5D5D;font-weight: 600;">Facturación</h3>
                 <div class="col-sm-12 center">
                     <div class="col-sm-12 col-xs-12 center">
                         <div class="row">
@@ -172,19 +164,19 @@
                             </div>
                         {% else %}
                           {% if eHEToSend.partialTime + eHEToSend.fullTime > 0 %}
-                            <div class="row panel panel-default table-responsive">
+                            <div class="row panel panel-default table-responsive" style="margin: 30px 0 0 0;">
                                 <!-- Default panel contents -->
-                                <div class="panel-heading center">Fecha de próxima facturación</div>
+                                <div class="panel-heading center" style="background: #3c4b5f;color: #FFF;font-weight: 600;">Fecha de próxima facturación</div>
                                 <!-- Table -->
-                                <table class="table table-bordered ">
-                                    <tbody>
-                                        <tr>
-                                            <td class="vert-align"><span>{{ factDate|date("F")|trans }} {{ factDate|date("d") }} {{ factDate|date("Y") }}</span></td>
-                                            <td class="vert-align">
-                                                <span style="font-weight: 800;">$ {{ amountToPay|number_format(0) }} COP</span>
-                                            </td>
-                                            <td style="width: 40%;">
-                                                <ul style="list-style:none; margin: 10px; text-align: justify;">
+                                <div class="table table-bordered ">
+                                    <div>
+                                        <div class="col-sm-12 proxText">
+                                            <div class="vert-align col-sm-6 col-xs-6"><span>{{ factDate|date("F")|trans }} {{ factDate|date("d") }} {{ factDate|date("Y") }}</span></div>
+                                            <div class="vert-align col-sm-6 col-xs-6">
+                                                <span>$ {{ amountToPay|number_format(0) }} COP</span>
+                                            </div>
+                                            <div col-sm-12 style="clear: both;">
+                                                <ul style="list-style:none; margin: 0; padding:0">
                                                   {% if eHEToSend.partialTime > 0 %}
                                                     {% if eHEToSend.partialTime == 1 %}
                                                       <li>{{ eHEToSend.partialTime }} Empleado de tiempo parcial</li>
@@ -199,10 +191,10 @@
                                                     {% endif %}
                                                   {% endif %}
                                                 </ul>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                           {% endif %}
                         {% endif %}
@@ -219,7 +211,7 @@
             }
             </style>
             <div class="row">
-                <h3 style="color: #1fcecb;font-weight: 600;">Facturas emitidas</h3>
+                <h3 style="color: #5D5D5D;font-weight: 600;">Facturas emitidas</h3>
                 <div class="col-sm-12 center">
                     <div class="col-sm-12 col-xs-12 table-responsive">
                         <table class="record_properties table table-bordered">
