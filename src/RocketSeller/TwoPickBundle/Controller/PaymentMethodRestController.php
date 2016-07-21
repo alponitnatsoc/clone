@@ -414,7 +414,7 @@ class PaymentMethodRestController extends FOSRestController
                 $flag=false;
                 /** @var Pay $pay */
                 foreach ($pays as $pay) {
-                    if($pay->getPurchaseOrdersStatusPurchaseOrdersStatus()->getIdNovoPay()=="-1"){
+                    if($pay->getPurchaseOrdersStatusPurchaseOrdersStatus()==null||$pay->getPurchaseOrdersStatusPurchaseOrdersStatus()->getIdNovoPay()=="-1"){
                         $flag=true;
                         break;
                     }
