@@ -170,6 +170,7 @@ class DocumentRestController extends FOSRestController
      * @RequestParam(array=true, name="pages", nullable=false, strict=true, description="hash name of document pages")
      * @RequestParam(name="idPerson", nullable=false, strict=true, description="id person employer")
      * @RequestParam(name="idDocumentType", nullable=false, strict=true, description="id document type")
+     * @RequestParam(name="idNotification", nullable=false, strict=true, description="id of notification to be removed")
      *
      * @return View
      */
@@ -179,7 +180,7 @@ class DocumentRestController extends FOSRestController
         $pages = $paramFetcher->get('pages');
         $idPerson = $paramFetcher->get('idPerson');
         $idDocumentType = $paramFetcher->get('idDocumentType');
-
+        $idNotification = $paramFetcher->get('idNotification');
         $person = $this->getDoctrine()
             ->getRepository('RocketSellerTwoPickBundle:Person')
             ->find($idPerson);
@@ -187,6 +188,10 @@ class DocumentRestController extends FOSRestController
         $documentType = $this->getDoctrine()
             ->getRepository('RocketSellerTwoPickBundle:DocumentType')
             ->find($idDocumentType);
+
+        $notification = $this->getDoctrine()
+            ->getRepository('RocketSellerTwoPickBundle:Notification')
+            ->find($idNotification);
 
         $document = new Document();
         $document->setPersonPerson($person);
@@ -223,6 +228,10 @@ class DocumentRestController extends FOSRestController
         $media->setDocumentDocument($document);
 
         $em->persist($media);
+
+        $notification->setStatus(0);
+        $em->persist($notification);
+
         $em->flush();
         unlink($file_path);
 
