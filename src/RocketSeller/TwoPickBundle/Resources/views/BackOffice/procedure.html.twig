@@ -171,9 +171,9 @@
 											<td><a class="notAjax" href="{{ path('show_info_employee',{'idAction':action.idAction})}}">Consultar Información</a></td>
 										{% elseif action.ActionTypeActionType.name|lower == "validar documentos" %}
 											<td><a class="notAjax" href="{{ path('view_employee_documents',{'idAction':action.idAction})}}">Ver Documentos</a></td>
+											{% set act = action %}
 											{% if documentos == 1 %}
 												{% set documentos = 2 %}
-												{% set act = action %}
 											{% endif %}
 										{% elseif action.ActionTypeActionType.name|lower == "inscripcion" %}
 											<td>Inscrito</td>

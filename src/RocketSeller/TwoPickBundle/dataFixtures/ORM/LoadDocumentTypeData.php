@@ -126,7 +126,7 @@ class LoadDocumentTypeData extends AbstractFixture implements OrderedFixtureInte
 
         $signature = new DocumentType();
         $signature->setName('Firma');
-        $signature->persist($signature);
+        $manager->persist($signature);
 
         $manager->flush();
 

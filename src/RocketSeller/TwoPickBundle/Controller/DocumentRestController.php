@@ -23,9 +23,7 @@ class DocumentRestController extends FOSRestController
      *   resource = true,
      *   description = "upload signature to a specific payroll",
      *   statusCodes = {
-     *     200 = "Created successfuly",
-     *     400 = "Bad Request",
-     *     401 = "Unauthorized"
+     *     200 = "Created successfully"
      *   }
      * )
      *
@@ -54,8 +52,7 @@ class DocumentRestController extends FOSRestController
       $img = str_replace(' ', '+', $img);
       $data = base64_decode($img);
       file_put_contents("tempSignature.png", $data);
-
-      $mediaManager = $this->container->get('sonata.media.manager.media');
+      
       $documentType = $this->getDoctrine()
               ->getRepository('RocketSellerTwoPickBundle:DocumentType')
               ->find(27); //Firma
@@ -90,11 +87,9 @@ class DocumentRestController extends FOSRestController
       unlink($tmp_file);
 
       $view = View::create();
-      $view->setData(array(
-          'signature' => $hashName
-        ))->setStatusCode(200);
+      $view->setStatusCode(200);
 
-      return $this->handleView($view);
+      return $view->setData(array());
     }
 
 }
