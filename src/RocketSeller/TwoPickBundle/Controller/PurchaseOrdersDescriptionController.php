@@ -30,7 +30,7 @@ class PurchaseOrdersDescriptionController extends Controller
 		$idEmployers = array();
 
 		foreach( $pod as $singlePod){
-			if($singlePod->getPurchaseOrdersStatus()->getIdNovoPay() != "-1"){
+			if( $singlePod->getPurchaseOrdersStatus() == null || $singlePod->getPurchaseOrdersStatus()->getIdNovoPay() != "-1"){
 				if( count($singlePod->getPayrollsPila()) > 0 ){
 					$cPod[] = $singlePod;
 					$localArr = $singlePod->getPayrollsPila();
@@ -46,11 +46,26 @@ class PurchaseOrdersDescriptionController extends Controller
 		public function persistPilaEnlaceOperativoCodeAction($id,$idPod){
 			if($id != ""){
 				$pod = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')->findOneBy(array("idPurchaseOrdersDescription" => $idPod));
+				$oldFileName = $pod->getEnlaceOperativoFileName();
 				$pod->setEnlaceOperativoFileName($id);
+
 
 				$em = $this->getDoctrine()->getManager();
 				$em->persist($pod);
 				$em->flush();
+
+				//Si existe un PO ok
+				//Si already received en 1 ok
+				//Si el PO tiene IdNovopayStatus en 00 (aprobado)
+				//Si el campo a guardar estaba escrito antes
+				$po = $pod->getPurchaseOrders();
+				if( !is_null($po)
+							&& $po->getAlreadyRecived() == 1
+								&& $po->getPurchaseOrdersStatus()->getIdNovoPay() == "00"
+									&& !is_null($oldFileName)) {
+					$answerHighTech = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getDispersePurchaseOrder', array('idPurchaseOrder' => $po->getIdPurchaseOrders()), array('_format' => 'json'));
+				}
+
 			}
 
 			return $this->redirectToRoute("show_pilas");
