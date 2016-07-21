@@ -91,9 +91,9 @@ class NoveltyForm extends AbstractType
         }
         $builder
             ->add('noveltyCheckBox','checkbox',array(
-                'label' => 'Estoy seguro que deseo gregar esta Novedad y entiendo que posteriormente no podra ser modificada',
+                'label' => 'Estoy seguro que deseo agregar esta novedad y entiendo que posteriormente no podré modificarla',
                 'required' => true,
-                
+                'mapped'=> false,
             ))
             ->add('idPayroll', 'hidden', array(
                 'data' => $this->payrollId,
