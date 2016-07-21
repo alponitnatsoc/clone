@@ -163,10 +163,6 @@ function loadShowDetails(url){
             keyboard: false,
             backdrop: 'static'
         });
-
-        $('#modal_show_SQLNovelties_details').on('hidden.bs.modal', function () {
-            window.location.reload();
-        })
         $('#modal_show_SQLNovelties_details').modal('show');
 
     }).fail(function (jqXHR, textStatus, errorThrown) {

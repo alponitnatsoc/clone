@@ -7,8 +7,13 @@ function startEmployer() {
 
     $("#errorSeverance").hide();
     $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
-      $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js").done(function() {
-
+      console.log("1st time");
+        $.ajax({
+          url: "//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js",
+          dataType: "script",
+          timeout: 4000
+      }).done(function() {
+            console.log("2nd time");
         validator = $("form[name='register_employer']").validate({
             rules: {
                 "register_employer[person][documentType]": "required",
@@ -76,6 +81,8 @@ function startEmployer() {
                 }
             });
         });
+      }).fail(function() {
+          location.reload();
       });
     });
     var $collectionHolderPhones;

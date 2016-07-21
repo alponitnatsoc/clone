@@ -13,9 +13,10 @@
                 </div>
             </div>
         </div>
+
         <div class="col-sm-12 col-xs-12 ">
             <ul class="nav-justified nav-6-tabs">
-                <li class="active"><a class="notAjax tabsEnabled" data-toggle="tab" data-target="#basicData">Datos básicos</a></li>
+                <li class="active"><a class="notAjax" data-toggle="tab" data-target="#basicData">Datos básicos</a></li>
                 <li><a class="notAjax tabsEnabled" data-toggle="tab" data-target="#contactData">Información de contrato</a></li>
                 <li><a class="notAjax tabsEnabled" data-toggle="tab" data-target="#workplacesData">Seguridad Social</a></li>
                 <li><a class="notAjax tabsEnabled" data-toggle="tab" data-target="#noveltiesData">Novedades</a></li>
@@ -27,15 +28,23 @@
             <div id="basicData" class="tab-pane fade in active">
                 <div class="col-sm-12 col-sm-offset-4"></div>
                 <div class="col-sm-12 top-box-employee">
-                    <div class="col-sm-4 left-top-box">
+                  <div class="col-sm-12 center emploInfo">
+                      <div class="col-sm-12" style="color:#00858c;">
+                          <h3>{{utils.mb_capitalize(employee.personPerson.names)}} {{utils.mb_capitalize(employee.personPerson.lastName1)}} {{utils.mb_capitalize(employee.personPerson.lastName2)}}</h3>
+                          <p class="document-text" style="font-weight: 100;color: #888686;padding-top: 5px;"><i>{{employee.personPerson.documentType}}: {{employee.personPerson.document}} {% if employee.personPerson.documentExpeditionPlace %}de {{employee.personPerson.documentExpeditionPlace}}{% endif %}</i>
+                          </p>
+                      </div>
+                  </div>
+                    <!--<div class="col-sm-4 left-top-box">
                         <div class="col-sm-12" style="color:#00858c;">
                             <p><strong>{{utils.mb_capitalize(employee.personPerson.names)}}</strong></p>
                             <p>{{utils.mb_capitalize(employee.personPerson.lastName1)}} {{utils.mb_capitalize(employee.personPerson.lastName2)}}</p>
                             <p class="document-text" style="font-weight: 100;color: #888686;padding-top: 5px;"><i>{{employee.personPerson.documentType}}: {{employee.personPerson.document}} {% if employee.personPerson.documentExpeditionPlace %}de {{employee.personPerson.documentExpeditionPlace}}{% endif %}</i>
                             </p>
                         </div>
-                    </div>
-                    <div class="col-sm-8">
+                    </div>-->
+                    <div>
+                    <div class="col-sm-8" style="width:100%">
                         <div id="special-buttons">
                             {% if employerHasEmployee.state > 3 %}
                             <div class="col-sm-5">
@@ -57,9 +66,10 @@
                             {% endif %}
                         </div>
                     </div>
+                  </div>
                 </div>
-                <div class="col-sm-12 middle-box" style="border: 1px solid #E6E6E6;border-radius: 5px;margin-top: 15px;">
-                    <div class="col-sm-4 left" style="border:0">
+                <div class="col-sm-12 middle-box" style="border: 1px solid #E6E6E6;border-radius: 5px;margin-top: 15px;height:auto;overflow:hidden">
+                    <div class="col-sm-6" style="border:0;padding:15px 0 0 0">
                         {% if employerHasEmployee.state >0 %}
                             <p><i class="fa fa-check-circle" style="color:#FD9224;font-size: 20px;padding-top: 10px;"></i>Activo</p>
                         {% else %}
@@ -67,12 +77,12 @@
                         {% endif %}
                     </div>
 
-                    <div class="col-sm-4 right" style="margin:0;padding: 15px 0;">
+                    <div class="col-sm-6" style="margin:0;padding: 15px 0;">
                         <div class="col-sm-12 title" style="font-style:italic;">Salario</div>
                         <div class="col-sm-12 text-below"><strong>${{contract.salary|number_format(0, ',', '.')}}</strong></div>
                     </div>
                 </div>
-                <div class="col-sm-12 bottom-box">
+                <div class="col-sm-12 bottom-box" style="height:auto;overflow:hidden">
                     <div class="col-sm-4 col-sm-offset-2 left">
                         <ul class="col-sm-12">
                             <h4 class="col-sm-12" style="color:#1FCECB;; font-weight:lighter;font-size: 20px;">Datos básicos</h4>
@@ -191,13 +201,13 @@
             <div id="contactData" class="tab-pane">
                 <div class="col-sm-12 col-sm-offset-4"></div>
                 <div class="col-sm-12 top-box-employee">
-                    <div class="col-sm-4 left-top-box">
-                        <div class="col-sm-12" style="color:#00858c;">
-                            <p><strong>{{employee.personPerson.names}}</strong></p>
-                            <p>{{employee.personPerson.lastName1}} {{employee.personPerson.lastName2}}</p>
-                            <p class="document-text" style="font-weight: 100;color: #888686;padding-top:5px"><i>{{employee.personPerson.documentType}}: {{employee.personPerson.document}} {% if employee.personPerson.documentExpeditionPlace %}de {{employee.personPerson.documentExpeditionPlace}}{% endif %}</i></p>
-                        </div>
-                    </div>
+                  <div class="col-sm-12 center emploInfo">
+                      <div class="col-sm-12" style="color:#00858c;">
+                          <h3>{{utils.mb_capitalize(employee.personPerson.names)}} {{utils.mb_capitalize(employee.personPerson.lastName1)}} {{utils.mb_capitalize(employee.personPerson.lastName2)}}</h3>
+                          <p class="document-text" style="font-weight: 100;color: #888686;padding-top: 5px;"><i>{{employee.personPerson.documentType}}: {{employee.personPerson.document}} {% if employee.personPerson.documentExpeditionPlace %}de {{employee.personPerson.documentExpeditionPlace}}{% endif %}</i>
+                          </p>
+                      </div>
+                  </div>
                     <div class="col-sm-8">
                         <div class="col-sm-4 col-sm-offset-8">
                             {% if employerHasEmployee.state > 3 %}
@@ -644,7 +654,7 @@
                             {% for doc in docs %}
                                 {% if doc.mediaMedia %}
                                     {% set numDocs = numDocs+1 %}
-                                    <div class=" element col-sm-3">
+                                    <div class="docs col-md-4">
                                         <div class="col-sm-12 icon-pdf">
                                             <i class="fa fa-file-pdf-o fa-2x"></i>
                                         </div>

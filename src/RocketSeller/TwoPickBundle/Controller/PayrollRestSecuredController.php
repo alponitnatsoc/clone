@@ -544,9 +544,9 @@ class PayrollRestSecuredController extends FOSRestController
                     }
                     $nowDate = new DateTime(date('Y-m-d', strtotime("+$monthsToAdd months", strtotime($nowDate->format("Y-m-") . "1"))));
                     //here i create the comprobante
-
+                    $employeePerson=$actualPayroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson();
                     $documentType = 'Comprobante';
-                    $msj = "Subir comprobante de " . $utils->mb_capitalize(explode(" ", $person->getNames())[0] . " " . $person->getLastName1());
+                    $msj = "Subir comprobante de " . $utils->mb_capitalize(explode(" ", $employeePerson->getNames())[0] . " " . $employeePerson->getLastName1());
                     $dUrl = $this->generateUrl("download_documents", array('id' => $actualPayroll->getIdPayroll(), 'ref' => "comprobante", 'type' => 'pdf'));
                     $dAction = "Bajar";
                     $action = "Subir";
