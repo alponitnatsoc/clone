@@ -586,7 +586,7 @@ class PaymentMethodRestController extends FOSRestController
             if($dateToSend!=null){
                 //payment_date
                 $request->request->add(array(
-                    "payment_date" => $dateToSend
+                    "payment_date" => $dateToSend->format("Y-m-d")
                 ));
             }
             if($filePila!=null){
