@@ -5,6 +5,7 @@ namespace RocketSeller\TwoPickBundle\Controller;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
 use Proxies\__CG__\RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\Contract;
 use Symfony\Component\HttpFoundation\Request;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
@@ -285,6 +286,56 @@ class DocumentRestController extends FOSRestController
 
         $view = View::create();
         $view->setData($response)->setStatusCode(200);
+        return $view;
+    }
+
+    /**
+     * Link the document contract to it's active contract for employees with only one employer
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Correction to the data base to link the unlinked contract documents for employees with only one employer",
+     *   statusCodes = {
+     *     200 = "Correction executed correctly"
+     *   }
+     * )
+     * @return View
+     */
+    public function postLinkContractsAction()
+    {
+
+        $response = "";
+        $response = $response . " Corrigiendo los contratos sin documento contrato".'<br><br>';
+        $em = $this->getDoctrine()->getManager();
+        $documents = $em->getRepository("RocketSellerTwoPickBundle:Document")->findAll();
+        $response = $response . " Recorriendo los documentos...<br><br>";
+        /** @var Document $document */
+        foreach ($documents as $document) {
+            if($document->getDocumentTypeDocumentType()->getName()=='Contrato'){
+                if($document->getPersonPerson()->getEmployee()){
+                    if($document->getPersonPerson()->getEmployee()->getEmployeeHasEmployers()->count()==1){
+                        /** @var EmployerHasEmployee $eHE */
+                        $eHE=$document->getPersonPerson()->getEmployee()->getEmployeeHasEmployers()->first();
+                        $contracts = $eHE->getContracts();
+                        /** @var Contract $contract */
+                        foreach ($contracts as $contract){
+                            if($contract->getState()==1){
+                                $response = $response . " Asignando el documento del contrato...<br><br>";
+                                $contract->setDocumentDocument($document);
+                                $em->persist($contract);
+                            }
+                        }
+                    }
+                }
+            }
+            $em->persist($document);
+            $em->flush();
+        }
+        $response = $response . " Termino.<br><br>";
+
+        $view = View::create();
+        $view->setData($response)->setStatusCode(200);
+        return $view;
     }
 
 }

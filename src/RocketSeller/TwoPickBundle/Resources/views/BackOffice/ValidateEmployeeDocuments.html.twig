@@ -27,7 +27,7 @@
                     </div>
                 {% endif %}
 
-                {% if person.docByType("Carta autorización Symplifica")=='' %}
+                {% if person.docByType("Carta autorización Symplifica",user.personPerson.employer.idEmployer)=='' %}
                     <div class="col-md-6" style="margin-top:250px; text-align:center">
                         <p>Llamar al cliente {{ user.personPerson.fullName}} y recordarle que suba la carta de autorización para este empleado</p>
                     </div>

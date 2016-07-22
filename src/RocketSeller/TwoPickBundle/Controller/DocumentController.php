@@ -3,8 +3,10 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use RocketSeller\TwoPickBundle\Entity\Document;
+use RocketSeller\TwoPickBundle\Entity\DocumentType;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Notification;
+use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\User;
@@ -143,7 +145,7 @@ use EmployerMethodsTrait;
     //JPG,PNG,TIF, BMP, DOC,PDF
 
     /**
-     * @param integer $id id of the person who owns the document being added
+     * @param integer $id id of the person who owns the document being added, only if the doctype is Comprobante this function receives instead a payrollId so it can associate the document to the payroll
      * @param integer $idDocumentType id to match the document type with the table DocumentType
      * @param integer $idNotification id to change the status of the notification after the document has been addded
      * @param Request $request 
@@ -159,17 +161,29 @@ use EmployerMethodsTrait;
             //'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         );
         $em = $this->getDoctrine()->getManager();
+        // getting the documentType from the database and chequing is a valid document type
+        /** @var DocumentType $documentType */
+        $documentType = $this->getDoctrine()
+            ->getRepository('RocketSellerTwoPickBundle:DocumentType')
+            ->find($idDocumentType);
+        /**
+         * If the document type is Comprobante we obtain the person with the payroll employerHasEmployee relation
+         */
         // getting the person that owns the document
-        /** @var Person $person */
-        $person = $this->getDoctrine()
+        if($documentType->getName()=="Comprobante"){
+            /** @var Payroll $payroll */
+            $payroll = $em->getRepository("RocketSellerTwoPickBundle:Payroll")->find($id);
+            /** @var Person $person */
+            $person = $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson();
+        }else{
+            /** @var Person $person */
+            $person = $this->getDoctrine()
                 ->getRepository('RocketSellerTwoPickBundle:Person')
                 ->find($id);
+        }
         // setting the person name for the modalform
         $name = $person->getNames();
-        // getting the documentType from the database and chequing is a valid document type
-        $documentType = $this->getDoctrine()
-                ->getRepository('RocketSellerTwoPickBundle:DocumentType')
-                ->find($idDocumentType);
+
         if ($idNotification != 0) {
             $em = $this->getDoctrine()->getManager();
             $notification = $this->getDoctrine()

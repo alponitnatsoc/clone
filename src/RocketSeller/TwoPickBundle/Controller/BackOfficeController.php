@@ -555,7 +555,7 @@ class BackOfficeController extends Controller
             $pathCedula='';
             $nameCedula='';
         }
-        $carta = $action->getPersonPerson()->getDocByType("Carta autorización Symplifica");
+        $carta = $action->getPersonPerson()->getDocByType("Carta autorización Symplifica",$user->getPersonPerson()->getEmployer()->getIdEmployer());
         if ($carta) {
             if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
                 $pathCarta = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($carta->getMediaMedia(), 'reference');
@@ -597,7 +597,7 @@ class BackOfficeController extends Controller
             $pathCedula='';
             $nameCedula='';
         }
-        $carta = $action->getPersonPerson()->getDocByType("Carta autorización Symplifica");
+        $carta = $action->getPersonPerson()->getDocByType("Carta autorización Symplifica",$user->getPersonPerson()->getEmployer()->getIdEmployer());
         if ($carta) {
             if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
                 $pathCarta = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($carta->getMediaMedia(), 'reference');
