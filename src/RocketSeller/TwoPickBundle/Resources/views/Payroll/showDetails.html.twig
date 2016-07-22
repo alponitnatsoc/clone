@@ -1,3 +1,38 @@
+<style>
+  .tittle {
+    font-weight: 600;
+    color: #3b4b5a;
+    border-bottom: 1px #CCC solid;
+    padding: 0 0 20px 0;
+    margin: 0 0 15px 0;
+  }
+  .devengos {
+    font-size: 24px;
+    text-align: left;
+    margin-left: 20px;
+    color: #616161;
+    font-weight: 600;
+  }
+  .rightdata {
+    font-size: 18px;
+    margin-right: 20px;
+    text-align: right;
+    color: #8e8e8e;
+  }
+  .leftdata {
+    font-size: 18px;
+    margin-left: 20px;
+    text-align: left;
+    color: #8e8e8e;
+  }
+  .total {
+    font-size: 22px;
+    margin-right: 20px;
+    text-align: right;
+    color: #616161;
+    font-weight: 600;
+  }
+</style>
 <!--button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#noveltyModal">Agregar Novedad</button>
 
 	<!-- Modal -->
@@ -11,37 +46,44 @@
                 </div>
                 <div class="row-fluid clearfix cuerpoNovelty center" style="padding: 30px;">
                     {% if novelties is defined %}
-                        <div><h2><strong>Detalles del costo</strong></h2></div>
+                        <div class="tittle">
+                          <h2>Detalles del costo</h2>
+                        </div>
                         <div class="row">
-                            <div class="row" style="font-size: 24px;text-align: left;margin-left: 20px"><strong>Devengos</strong></div>
+                            <div class="row devengos">Devengos</div>
                             <div class="row">
                             {% for nov in novelties %}
                                 {% if nov.noveltyTypeNoveltyType.naturaleza == 'DEV' %}
-                                    <div class="col-md-5" style="font-size: 18px;margin-left: 20px; text-align: left"><strong>{{  nov.name }}</strong></div><div class="col-md-5" style="font-size: 18px;margin-right: 20px;text-align: right">${{ nov.sqlValue|number_format(0, '.', ',') }}</div>
+                                    <div class="col-md-5 leftdata">{{  nov.name }}</div>
+                                    <div class="col-md-5 rightdata">${{ nov.sqlValue|number_format(0, '.', ',') }}</div>
                                 {% endif %}
                             {% endfor %}
-                            <div class="col-md-5" style="font-size: 22px; text-align: left; margin-left: 20px;"><strong>Total</strong></div><div class="col-md-5" style="font-size: 22px;margin-right: 20px;text-align: right"><strong>${{ dev|number_format(0, '.', ',') }}</strong></div>
+                            <div class="col-md-5 devengos">Total</div>
+                            <div class="col-md-5 total">${{ dev|number_format(0, '.', ',') }}</div>
                             </div>
                         </div>
                         <br/>
                         <div class="row">
-                            <div class="row" style="font-size: 24px;text-align: left;margin-left: 20px;"><strong>Deducciones</strong></div>
+                            <div class="row devengos">Deducciones</div>
                             <div class="row">
-                            {% for nov in novelties %}
-                                    {% if nov.noveltyTypeNoveltyType.naturaleza == 'DED' %}
-                                        <div class="col-md-5" style="font-size: 18px;margin-left: 20px; text-align: left"><strong>{{  nov.name }}</strong></div><div class="col-md-5" style="font-size: 18px;margin-right: 20px;text-align: right">${{ nov.sqlValue|number_format(0, '.', ',') }}</div>
-                                    {% endif %}
-                            {% endfor %}
-                            <div class="col-md-5" style="font-size: 22px; text-align: left; margin-left: 20px;"><strong>Total</strong></div><div class="col-md-5" style="font-size: 22px;margin-right: 20px;text-align: right"><strong>${{ ded|number_format(0, '.', ',') }}</strong></div>
+                              {% for nov in novelties %}
+                                      {% if nov.noveltyTypeNoveltyType.naturaleza == 'DED' %}
+                                          <div class="col-md-5 leftdata">{{  nov.name }}</div>
+                                          <div class="col-md-5 rightdata">${{ nov.sqlValue|number_format(0, '.', ',') }}</div>
+                                      {% endif %}
+                              {% endfor %}
+                              <div class="col-md-5 devengos">Total</div>
+                              <div class="col-md-5 total">${{ ded|number_format(0, '.', ',') }}</div>
                             </div>
                         </div>
                         <br/>
                         <div class="row">
-                            <div class="col-md-5" style="font-size: 25px; text-align: left"><strong>Neto a pagar</strong></div><div class="col-md-5" style="font-size: 25px;text-align: right"><strong>${{ total|number_format(0, '.', ',') }}</strong></div>
+                            <div class="col-md-5 devengos">Neto a pagar</div>
+                            <div class="col-md-5 total">${{ total|number_format(0, '.', ',') }}</div>
                         </div>
                     {% endif %}
                     <div class="row">
-                        <div>
+                        <div style="margin-top: 45px;">
                             <button type="button" class="btn btnPrevious" data-dismiss="modal">Cerrar</button>
                         </div>
                     </div>
