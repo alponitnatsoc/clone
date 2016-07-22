@@ -534,7 +534,7 @@ class PilaPlainTextRestController extends FOSRestController
     public function employeeParame($consecutivo,$tipoDocumento,$documento,$subtipoCotizante,$deparmentCode,$municipioCode,
     $firstLastName,$secondLastName,$firstFirstName,$secondFirstName,$codigoAFP,$codigoEPS,$codigoCCF,$diasSinDescuento,$diasConDescuento,
     $salary,$ibc_arl_caja,$ibc_salud,$ibc_pension,$porcentaje_pension,$aporte_pension,$porcentaje_salud,$aporte_salud,$porcentaje_arl,$aporte_arl,$porcentaje_caja,$aporte_caja,$exonerated,
-    $ingreso,$retiro,$variacionSalario,$variacionTransitoriaSalario,$suspensionTemporal,$enfermedadGeneral,$licenciaMaternidadPaternidad,$vacaciones,$incapacidadAccidente) {
+    $ingreso,$retiro,$variacionSalario,$variacionTransitoriaSalario,$suspensionTemporal,$enfermedadGeneral,$licenciaMaternidadPaternidad,$vacaciones,$incapacidadAccidente, $contractType) {
       //Articulo 10 resolucion 1747 de 2008.
       // Campo 1.
       $this->add(1, 2, '02'); //02 is mandatory.
@@ -545,7 +545,12 @@ class PilaPlainTextRestController extends FOSRestController
       // Campo 4.
       $this->add(10, 25, $documento);
       // Campo 5.
-      $this->add(26, 27, '02');   // 02 si es tiempo completo 51 si es tiempo parcial importante cambiar.!!!!!!!!!!!!!
+      if( $contractType == "XD" ){
+        $this->add(26, 27, '51');   // 02 si es tiempo completo 51 si es tiempo parcial importante cambiar.!!!!!!!!!!!!!
+      }
+      else {
+        $this->add(26, 27, '02');
+      }
       // Campo 6.
       $this->add(28, 29, $subtipoCotizante, true); //!!!!!!!!!cambiar por 00
       // Campo 7.
@@ -696,6 +701,7 @@ class PilaPlainTextRestController extends FOSRestController
       foreach($pilaArr as $key => $pila) {
         //dump($employee);die();
         $employee = $pila->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee();
+        $contractType = $pila->getContractContract()->getTimeCommitmentTimeCommitment()->getCode();
         // Add left zeros to count.
         $consecutivo2 = ''.$consecutivo;
         $consecutivo = '';
@@ -895,7 +901,7 @@ class PilaPlainTextRestController extends FOSRestController
         $this->employeeParame($consecutivo,$tipoDocumento,$documento,$subtipoCotizante,$deparmentCode,$municipioCode,
         $firstLastName,$secondLastName,$firstFirstName,$secondFirstName,$codigoAFP,$codigoEPS,$codigoCCF,$diasSinDescuento,$diasConDescuento,
         $salary,$ibc_arl_caja,$ibc_salud,$ibc_pension,$porcentaje_pension,$aporte_pension,$porcentaje_salud,$aporte_salud,$porcentaje_arl,$aporte_arl,$porcentaje_caja,$aporte_caja,$exonerated,
-        $ingreso,$retiro,$variacionSalario,$variacionTransitoriaSalario,'',$enfermedadGeneral,$licenciaMaternidadPaternidad,$vacaciones,$incapacidadAccidente);
+        $ingreso,$retiro,$variacionSalario,$variacionTransitoriaSalario,'',$enfermedadGeneral,$licenciaMaternidadPaternidad,$vacaciones,$incapacidadAccidente,$contractType);
         $line = $this->executeLine();
         $this->elementos = array();
         if($suspensionTemporal != 'X'){
@@ -951,7 +957,7 @@ class PilaPlainTextRestController extends FOSRestController
         $this->employeeParame($consecutivo,$tipoDocumento,$documento,$subtipoCotizante,$deparmentCode,$municipioCode,
         $firstLastName,$secondLastName,$firstFirstName,$secondFirstName,$codigoAFP,$codigoEPS,$codigoCCF,$diasSinDescuento,$diasConDescuento,
         $salary,$ibc,$ibc,$ibc,$porcentaje_pension,$aporte_pension,$porcentaje_salud,$aporte_salud,$porcentaje_arl,$aporte_arl,$porcentaje_caja,$aporte_caja,$exonerated,
-        $ingreso,$retiro,$variacionSalario,$variacionTransitoriaSalario,$suspensionTemporal,$enfermedadGeneral,$licenciaMaternidadPaternidad,$vacaciones,$incapacidadAccidente);
+        $ingreso,$retiro,$variacionSalario,$variacionTransitoriaSalario,$suspensionTemporal,$enfermedadGeneral,$licenciaMaternidadPaternidad,$vacaciones,$incapacidadAccidente,$contractType);
 
         $line = $line . $this->executeLine();
         $this->elementos = array();

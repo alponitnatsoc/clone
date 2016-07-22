@@ -31,6 +31,7 @@ use RocketSeller\TwoPickBundle\Traits\EmployerMethodsTrait;
 use RocketSeller\TwoPickBundle\Entity\Novelty;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use ZipArchive;
+use FOS\RestBundle\View\View;
 
 class DocumentController extends Controller
 {
@@ -747,6 +748,15 @@ use EmployerMethodsTrait;
                     'discriminatedInfo' => $discriminatedInfo,
                     'signatureUrl' => $signatureUrl
                 );
+                break;
+            case "joiner":
+                $data = array();
+                $arrHashNames = explode(",", $id);
+                foreach ($arrHashNames as $hashName) {
+                    if($hashName == "") continue;
+                    $hashName = str_replace('_', '/', $hashName);
+                    array_push($data, $hashName);
+                }
                 break;
             default:
                 break;
