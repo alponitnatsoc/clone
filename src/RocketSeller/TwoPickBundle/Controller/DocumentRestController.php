@@ -269,6 +269,7 @@ class DocumentRestController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         $documents = $em->getRepository("RocketSellerTwoPickBundle:Document")->findAll();
         $response = $response . " Recorriendo los documentos...<br/><br/>";
+        /** @var Document $document */
         foreach ($documents as $document) {
             if($document->getPersonPerson()->getEmployee()){
                 if($document->getPersonPerson()->getEmployee()->getEmployeeHasEmployers()->count()==1){
