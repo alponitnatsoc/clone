@@ -4,6 +4,8 @@ namespace RocketSeller\TwoPickBundle\Controller;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
+use Proxies\__CG__\RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\Contract;
 use Symfony\Component\HttpFoundation\Request;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
@@ -36,61 +38,62 @@ class DocumentRestController extends FOSRestController
      *
      * @return View
      */
-    public function postUploadSignatureAction(ParamFetcher $paramFetcher) {
-      $em = $this->getDoctrine()->getManager();
+    public function postUploadSignatureAction(ParamFetcher $paramFetcher)
+    {
+        $em = $this->getDoctrine()->getManager();
 
-      $idPerson = $paramFetcher->get('idPerson');
-      $person = $this->getDoctrine()
-              ->getRepository('RocketSellerTwoPickBundle:Person')
-              ->find($idPerson);
-      $idPayroll = $paramFetcher->get('idPayroll');
-      $payroll = $this->getDoctrine()
-              ->getRepository('RocketSellerTwoPickBundle:Payroll')
-              ->find($idPayroll);
+        $idPerson = $paramFetcher->get('idPerson');
+        $person = $this->getDoctrine()
+            ->getRepository('RocketSellerTwoPickBundle:Person')
+            ->find($idPerson);
+        $idPayroll = $paramFetcher->get('idPayroll');
+        $payroll = $this->getDoctrine()
+            ->getRepository('RocketSellerTwoPickBundle:Payroll')
+            ->find($idPayroll);
 
-      $rawSignature = $paramFetcher->get('signature');
-      $img = str_replace('data:image/png;base64,', '', $rawSignature);
-      $img = str_replace(' ', '+', $img);
-      $data = base64_decode($img);
-      file_put_contents("tempSignature.png", $data);
-      
-      $documentType = $this->getDoctrine()
-              ->getRepository('RocketSellerTwoPickBundle:DocumentType')
-              ->find(27); //Firma
+        $rawSignature = $paramFetcher->get('signature');
+        $img = str_replace('data:image/png;base64,', '', $rawSignature);
+        $img = str_replace(' ', '+', $img);
+        $data = base64_decode($img);
+        file_put_contents("tempSignature.png", $data);
 
-      $document = new Document();
-      $document->setPersonPerson($person);
-      $document->setName('Signature');
-      $document->setStatus(1);
-      $document->setDocumentTypeDocumentType($documentType);
-      $em->persist($document);
+        $documentType = $this->getDoctrine()
+            ->getRepository('RocketSellerTwoPickBundle:DocumentType')
+            ->find(27); //Firma
 
-      $payroll->setSignature($document);
-      $em->persist($payroll);
+        $document = new Document();
+        $document->setPersonPerson($person);
+        $document->setName('Signature');
+        $document->setStatus(1);
+        $document->setDocumentTypeDocumentType($documentType);
+        $em->persist($document);
 
-      $media = new Media();
+        $payroll->setSignature($document);
+        $em->persist($payroll);
 
-      $tmp_file =  new UploadedFile( 'tempSignature.png', 'signature.png', 'image/png', null, null, true);
-      $media->setBinaryContent($tmp_file);
-      $media->setProviderName('sonata.media.provider.file');
-      $media->setName($document->getName());
-      $media->setProviderStatus(Media::STATUS_OK);
+        $media = new Media();
 
-      $hashFile = hash_file('sha256', $tmp_file);
-      $hashName = hash('sha256', $hashFile . date("Y.m.d") . date("h:i:sa"));
-      $media->setProviderReference($hashName . ".png");
+        $tmp_file = new UploadedFile('tempSignature.png', 'signature.png', 'image/png', null, null, true);
+        $media->setBinaryContent($tmp_file);
+        $media->setProviderName('sonata.media.provider.file');
+        $media->setName($document->getName());
+        $media->setProviderStatus(Media::STATUS_OK);
 
-      $media->setContext('firma');
-      $media->setDocumentDocument($document);
+        $hashFile = hash_file('sha256', $tmp_file);
+        $hashName = hash('sha256', $hashFile . date("Y.m.d") . date("h:i:sa"));
+        $media->setProviderReference($hashName . ".png");
 
-      $em->persist($media);
-      $em->flush();
-      unlink($tmp_file);
+        $media->setContext('firma');
+        $media->setDocumentDocument($document);
 
-      $view = View::create();
-      $view->setStatusCode(200);
+        $em->persist($media);
+        $em->flush();
+        unlink($tmp_file);
 
-      return $view->setData(array());
+        $view = View::create();
+        $view->setStatusCode(200);
+
+        return $view->setData(array());
     }
 
     /**
@@ -150,8 +153,8 @@ class DocumentRestController extends FOSRestController
         $view->setStatusCode(200);
 
         return $view->setData(array(
-                'hashName' => "$hashName.$format"
-            ));
+            'hashName' => "$hashName.$format"
+        ));
     }
 
     /**
@@ -246,4 +249,93 @@ class DocumentRestController extends FOSRestController
 
         return $view->setData(array());
     }
+    
+    /**
+     * Generate EmployerId for persons with only one employer
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Correction to the Database schema to add EmployerId for documents that belong to a employee with only one Employer",
+     *   statusCodes = {
+     *     200 = "Correction executed correctly"
+     *   }
+     * )
+     * @return View
+     */
+    public function postGenerateDocumentEmployerIdsAction()
+    {
+
+        $response = "";
+        $response = $response . " Corrigiendo tabla de documentos en la base de datos<br/><br/>";
+        $em = $this->getDoctrine()->getManager();
+        $documents = $em->getRepository("RocketSellerTwoPickBundle:Document")->findAll();
+        $response = $response . " Recorriendo los documentos...<br/><br/>";
+        /** @var Document $document */
+        foreach ($documents as $document) {
+            if($document->getPersonPerson()->getEmployee()){
+                if($document->getPersonPerson()->getEmployee()->getEmployeeHasEmployers()->count()==1){
+                    /** @var EmployerHasEmployee $eHE */
+                    $eHE=$document->getPersonPerson()->getEmployee()->getEmployeeHasEmployers()->first();
+                    $document->setEmployerEmployer($eHE->getEmployerEmployer());
+                }
+            }
+            $em->persist($document);
+            $em->flush();
+        }
+        $response = $response . " Termino.<br/><br/>";
+
+        $view = View::create();
+        $view->setData($response)->setStatusCode(200);
+        return $view;
+    }
+
+    /**
+     * Link the document contract to it's active contract for employees with only one employer
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Correction to the data base to link the unlinked contract documents for employees with only one employer",
+     *   statusCodes = {
+     *     200 = "Correction executed correctly"
+     *   }
+     * )
+     * @return View
+     */
+    public function postLinkContractsAction()
+    {
+
+        $response = "";
+        $response = $response . " Corrigiendo los contratos sin documento contrato".'<br><br>';
+        $em = $this->getDoctrine()->getManager();
+        $documents = $em->getRepository("RocketSellerTwoPickBundle:Document")->findAll();
+        $response = $response . " Recorriendo los documentos...<br><br>";
+        /** @var Document $document */
+        foreach ($documents as $document) {
+            if($document->getDocumentTypeDocumentType()->getName()=='Contrato'){
+                if($document->getPersonPerson()->getEmployee()){
+                    if($document->getPersonPerson()->getEmployee()->getEmployeeHasEmployers()->count()==1){
+                        /** @var EmployerHasEmployee $eHE */
+                        $eHE=$document->getPersonPerson()->getEmployee()->getEmployeeHasEmployers()->first();
+                        $contracts = $eHE->getContracts();
+                        /** @var Contract $contract */
+                        foreach ($contracts as $contract){
+                            if($contract->getState()==1){
+                                $response = $response . " Asignando el documento del contrato...<br><br>";
+                                $contract->setDocumentDocument($document);
+                                $em->persist($contract);
+                            }
+                        }
+                    }
+                }
+            }
+            $em->persist($document);
+            $em->flush();
+        }
+        $response = $response . " Termino.<br><br>";
+
+        $view = View::create();
+        $view->setData($response)->setStatusCode(200);
+        return $view;
+    }
+
 }

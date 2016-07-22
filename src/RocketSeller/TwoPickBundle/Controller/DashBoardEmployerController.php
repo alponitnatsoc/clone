@@ -62,7 +62,8 @@ class DashBoardEmployerController extends Controller {
                     $smailer->sendOneDayMessage($this->getUser(),$eHE);
                 }
                 if($tareas and $docStat['docStatus']==11){
-                    return $this->redirectToRoute('employer_completion_documents');
+                    $eHE = $this->getDoctrine()->getManager()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->find($docStat['idEHE']);
+                    return $this->redirectToRoute('employer_completion_documents',array('idEHE'=>$eHE->getIdEmployerHasEmployee()));
                 }
                 if(!$tareas and $docStat['docStatus']>13){
                     $em = $this->getDoctrine()->getManager();

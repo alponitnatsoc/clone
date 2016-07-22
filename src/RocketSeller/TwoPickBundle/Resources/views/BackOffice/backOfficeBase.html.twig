@@ -59,6 +59,9 @@
         <div class="{% if app.request.get('_route') == 'marketing' %}activeMenu{% endif %} well well-lg">
             <a class="notAjax" href="{{ path('marketing') }}" >Marketing</a>
         </div>
+        <div class="{% if app.request.get('_route') == 'show_unfinished_users' %}activeMenu{% endif %} well well-lg">
+            <a class="notAjax" href="{{ path('show_unfinished_users') }}" >Estado del registro</a>
+        </div>
 
     {% endblock %}
 

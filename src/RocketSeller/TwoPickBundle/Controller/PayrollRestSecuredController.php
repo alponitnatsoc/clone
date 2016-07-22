@@ -178,7 +178,13 @@ class PayrollRestSecuredController extends FOSRestController
                     $action = "Subir";
 
                     $documentType = $documentTypeRepo->findByName($documentType)[0];
-                    $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
+                    /** OJO NO BORRAR
+                     * En esta función se va a enviar el id del PAYROLL como si fuera el id de la PERSONA a la que se le asigna el documento 
+                     * Solo para este caso COMPROBANTE ya que posteriormente se debe obtener el id del payrrol y del employerHasEmployee y asi
+                     * poder asignarle el documento asociado al payroll una vez el usuario suba el documento. 
+                     * Normalmente se envia el Id de la persona a la que se asocia el documento.
+                     */
+                    $url = $this->generateUrl("documentos_employee", array('id' => $actualPayroll->getIdPayroll(), 'idDocumentType' => $documentType->getIdDocumentType()));
                     //$url = $this->generateUrl("api_public_post_doc_from");
 
                     $notification = new Notification();

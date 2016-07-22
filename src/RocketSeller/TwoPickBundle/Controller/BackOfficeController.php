@@ -66,6 +66,7 @@ class BackOfficeController extends Controller
         $em->flush();
         return $this->redirectToRoute("show_un_active_codes");
     }
+
     public function showUnActiveCodesAction()
     {
         $codesRepo= $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCode");
@@ -73,6 +74,23 @@ class BackOfficeController extends Controller
         $clientBetaReal=$codesTypeRepo->findOneBy(array("shortName"=>"CB"));
         $codes= $codesRepo->findBy(array("userUser"=>null,'promotionCodeTypePromotionCodeType'=>$clientBetaReal));
         return $this->render('RocketSellerTwoPickBundle:BackOffice:promotionCodes.html.twig',array('codes'=>$codes));
+
+    }
+
+    public function showUsersLoginAction()
+    {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        $usersRepo= $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+        $users= $usersRepo->findBy(array("status"=>2));
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:usersBackLogin.html.twig',array('users'=>$users));
+
+    }
+    public function showUnfinishedUsersAction()
+    {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        $usersRepo= $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+        $users= $usersRepo->findBy(array("status"=>1));
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:showUnfinishedUsers.html.twig',array('users'=>$users));
 
     }
     public function addToSQLEntitiesBackAction($user,$autentication, $idEhe)
@@ -466,7 +484,7 @@ class BackOfficeController extends Controller
         /** @var Employer $employer */
         $employer = $user->getPersonPerson()->getEmployer();
         /** @var Document $cedula */
-        $contrato= $action->getPersonPerson()->getDocByType("Contrato");
+        $contrato= $action->getPersonPerson()->getDocByType('Contrato',$user->getPersonPerson()->getEmployer()->getIdEmployer());
         if ($contrato) {
             if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
                 $pathContrato = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($contrato->getMediaMedia(), 'reference');
@@ -555,7 +573,7 @@ class BackOfficeController extends Controller
             $pathCedula='';
             $nameCedula='';
         }
-        $carta = $action->getPersonPerson()->getDocByType("Carta autorización Symplifica");
+        $carta = $action->getPersonPerson()->getDocByType("Carta autorización Symplifica",$user->getPersonPerson()->getEmployer()->getIdEmployer());
         if ($carta) {
             if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
                 $pathCarta = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($carta->getMediaMedia(), 'reference');
@@ -597,7 +615,7 @@ class BackOfficeController extends Controller
             $pathCedula='';
             $nameCedula='';
         }
-        $carta = $action->getPersonPerson()->getDocByType("Carta autorización Symplifica");
+        $carta = $action->getPersonPerson()->getDocByType("Carta autorización Symplifica",$user->getPersonPerson()->getEmployer()->getIdEmployer());
         if ($carta) {
             if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
                 $pathCarta = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($carta->getMediaMedia(), 'reference');
