@@ -12,6 +12,7 @@ use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\CalculatorConstraints;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations\Put;
@@ -489,9 +490,13 @@ class PilaPlainTextRestController extends FOSRestController
     }
 
 
-    public function getIBC($employeeInfo) {
-      $salario_minio = 689455;
+    public function getIBC($employeeInfo, $minWage, $contractType) {
+      $salario_minimo = $minWage;
       $total = 0;
+
+      if($contractType == "XD"){
+        return $salario_minimo;
+      }
       foreach($employeeInfo as $item) {
         if($item['CON_CODIGO'] == 1) {
           $total += $item['NOMI_VALOR_LOCAL'];
@@ -534,7 +539,7 @@ class PilaPlainTextRestController extends FOSRestController
     public function employeeParame($consecutivo,$tipoDocumento,$documento,$subtipoCotizante,$deparmentCode,$municipioCode,
     $firstLastName,$secondLastName,$firstFirstName,$secondFirstName,$codigoAFP,$codigoEPS,$codigoCCF,$diasSinDescuento,$diasConDescuento,
     $salary,$ibc_arl_caja,$ibc_salud,$ibc_pension,$porcentaje_pension,$aporte_pension,$porcentaje_salud,$aporte_salud,$porcentaje_arl,$aporte_arl,$porcentaje_caja,$aporte_caja,$exonerated,
-    $ingreso,$retiro,$variacionSalario,$variacionTransitoriaSalario,$suspensionTemporal,$enfermedadGeneral,$licenciaMaternidadPaternidad,$vacaciones,$incapacidadAccidente, $contractType) {
+    $ingreso,$retiro,$variacionSalario,$variacionTransitoriaSalario,$suspensionTemporal,$enfermedadGeneral,$licenciaMaternidadPaternidad,$vacaciones,$incapacidadAccidente, $contractType, $diasLicencia, $minWage) {
       //Articulo 10 resolucion 1747 de 2008.
       // Campo 1.
       $this->add(1, 2, '02'); //02 is mandatory.
@@ -618,21 +623,30 @@ class PilaPlainTextRestController extends FOSRestController
       $this->add(178, 183, $codigoCCF);
       // Campo 36.
       $this->add(184, 185, $diasSinDescuento);
-      // Campo 37.
-      $this->add(186, 187, $diasSinDescuento);
+      // Campo 37. - Si la persona no cotiza salud, entonces se envia 0 dias
+      if ( isset($codigoEPS) ){
+        $this->add(186, 187, $diasSinDescuento);
+      }
+      else{
+        $this->add(186, 187, '00');
+      }
+      //Independientemente debe ser 30
+      $diasConDescuento3839 = 30 - $diasLicencia;
+      $diasConDescuento3839 = $this->leftZeros($diasConDescuento3839, 2);
       // Campo 38.
-      $this->add(188, 189, $diasConDescuento);
+      $this->add(188, 189, $diasConDescuento3839);
       // Campo 39.
-      $this->add(190, 191, $diasConDescuento);
+      $this->add(190, 191, $diasConDescuento3839);
       // Campo 40.
       $this->add(192, 200, $salary);
       // Campo 41.
       $this->add(201, 201, '');
-      // Campo 42.
+      // Campo 42. // Redondear...
       $this->add(202, 210, $ibc_pension);
       // Campo 43.
       $this->add(211, 219, $ibc_salud);
       // Campo 44.
+      //Debe ser 1smmlv
       $this->add(220, 228, $ibc_arl_caja);
       // Campo 45.
       $this->add(229, 237, $ibc_arl_caja);
@@ -691,6 +705,10 @@ class PilaPlainTextRestController extends FOSRestController
     // Type is E or S.
     // Count is the number of employees of this type.
     public function createLineaEmpleado($pilaArr, $exonerated=false, $idEmployer){
+      $calculatorConstraintsRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:CalculatorConstraints');
+      $minWage = $calculatorConstraintsRepo->findOneBy(array("name" => "smmlv"));
+      $minWage = $minWage ->getValue();
+
       $consecutivo = 1;
       if($exonerated)
         $exonerated = 'S';
@@ -781,12 +799,13 @@ class PilaPlainTextRestController extends FOSRestController
                 ), array('_format' => 'json')
         );
         $finalLiquidation = json_decode($finalLiquidation->getContent(), true);
-        $diasSinDescuento = $this->diasSinDescuento($employeeInfo) - $this->diasLicencia($employeeInfo);
+        $diasSinDescuento = $this->diasSinDescuento($employeeInfo)/* - $this->diasLicencia($employeeInfo)*/;
         $diasConDescuento = $this->diasConDescuento($employeeInfo) - $this->diasLicencia($employeeInfo);
+        $diasLicencia = $this->diasLicencia($employeeInfo);
 
         $diasSinDescuento = $this->leftZeros($diasSinDescuento, 2);
         $diasConDescuento = $this->leftZeros($diasConDescuento, 2);
-        $ibc_arl_caja = $this->getIBC($employeeInfo) -  $this->valorLicencia($employeeInfo);
+        $ibc_arl_caja = $this->getIBC($employeeInfo, $minWage, $contractType) -  $this->valorLicencia($employeeInfo);
         $ibc_arl_caja = $this->leftZeros($ibc_arl_caja, 9);
 
         $ibc_salud = $this->getIBCSalud($employeeInfo) -  $this->valorLicencia($employeeInfo);
@@ -898,10 +917,21 @@ class PilaPlainTextRestController extends FOSRestController
 
         $incapacidadAccidente = $this->incapacidadAccidente($employeeInfo);
 
+        //TOTEST
+        if($ingreso == 'X' ){
+          if($contractType == "TC"){
+            $diasSinDescuento = 30;
+            $diasConDescuento = 30 - $this->diasLicencia($employeeInfo);
+
+            $diasSinDescuento = $this->leftZeros($diasSinDescuento, 2);
+            $diasConDescuento = $this->leftZeros($diasConDescuento, 2);
+          }
+        }
+
         $this->employeeParame($consecutivo,$tipoDocumento,$documento,$subtipoCotizante,$deparmentCode,$municipioCode,
         $firstLastName,$secondLastName,$firstFirstName,$secondFirstName,$codigoAFP,$codigoEPS,$codigoCCF,$diasSinDescuento,$diasConDescuento,
         $salary,$ibc_arl_caja,$ibc_salud,$ibc_pension,$porcentaje_pension,$aporte_pension,$porcentaje_salud,$aporte_salud,$porcentaje_arl,$aporte_arl,$porcentaje_caja,$aporte_caja,$exonerated,
-        $ingreso,$retiro,$variacionSalario,$variacionTransitoriaSalario,'',$enfermedadGeneral,$licenciaMaternidadPaternidad,$vacaciones,$incapacidadAccidente,$contractType);
+        $ingreso,$retiro,$variacionSalario,$variacionTransitoriaSalario,'',$enfermedadGeneral,$licenciaMaternidadPaternidad,$vacaciones,$incapacidadAccidente,$contractType, $diasLicencia, $minWage);
         $line = $this->executeLine();
         $this->elementos = array();
         if($suspensionTemporal != 'X'){
@@ -957,7 +987,7 @@ class PilaPlainTextRestController extends FOSRestController
         $this->employeeParame($consecutivo,$tipoDocumento,$documento,$subtipoCotizante,$deparmentCode,$municipioCode,
         $firstLastName,$secondLastName,$firstFirstName,$secondFirstName,$codigoAFP,$codigoEPS,$codigoCCF,$diasSinDescuento,$diasConDescuento,
         $salary,$ibc,$ibc,$ibc,$porcentaje_pension,$aporte_pension,$porcentaje_salud,$aporte_salud,$porcentaje_arl,$aporte_arl,$porcentaje_caja,$aporte_caja,$exonerated,
-        $ingreso,$retiro,$variacionSalario,$variacionTransitoriaSalario,$suspensionTemporal,$enfermedadGeneral,$licenciaMaternidadPaternidad,$vacaciones,$incapacidadAccidente,$contractType);
+        $ingreso,$retiro,$variacionSalario,$variacionTransitoriaSalario,$suspensionTemporal,$enfermedadGeneral,$licenciaMaternidadPaternidad,$vacaciones,$incapacidadAccidente,$contractType, $diasLicencia, $minWage);
 
         $line = $line . $this->executeLine();
         $this->elementos = array();

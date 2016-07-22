@@ -521,10 +521,10 @@
             </div>
             <div id="noveltiesData" class="tab-pane">
                 <div class="col-sm-12 middle-content">
-                    <div class="content col-sm-6 col-sm-offset-3">
+                    <div class="content col-sm-6 center">
                         <h4 style="font-weight: 100;color: #808080;font-size: 21px;margin: 20px 0 10px 0;">Novedades reportadas al día de hoy</h4>
                     </div>
-                    
+
                     {% set noveltycount = 0 %}
                     {% set payrolls = contract.payrolls %}
                     {% for payroll in payrolls %}
@@ -567,14 +567,10 @@
 
                     {% if employerHasEmployee.state > 3 %}
                         <div class="col-sm-12  row-add-novelty" style="text-align:center;">
-                            <div class="col-sm-4 col-sm-offset-4">
-                                <div class="col-sm-2 plus-icon">
+                                <div class="col-sm-12 center">
                                     <i class="fa fa-plus-circle fa-2x"></i>
+                                    <a style="color: #00858c;font-size: 15px;font-weight: 400;}" class="notAjax addNovelty" href="/novelty/select/{{ contract.activePayroll.idPayroll  }}">Agregar Novedad</a>
                                 </div>
-                                <div class="col-sm-10 text">
-                                    <a style="color: #6F6F6F;font-size: 15px;font-weight: 400;font-style: italic;}" class="notAjax addNovelty" href="/novelty/select/{{ contract.activePayroll.idPayroll  }}">Agregar Novedad</a>
-                                </div>
-                            </div>
                         </div>
                     {% endif %}
                 </div>
