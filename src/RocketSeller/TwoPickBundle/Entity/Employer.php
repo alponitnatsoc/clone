@@ -497,7 +497,7 @@ class Employer
         /** @var EmployerHasEmployee $employee */
         foreach( $employees as $employee){
             if ($employee->getState()>2){
-                if ($employee->getEmployeeEmployee()->getEmployeeHasUnfinishedActions()>0){
+                if ($employee->getEmployeeEmployee()->getEmployeeHasUnfinishedActions($this->getIdEmployer())>0){
                     $this->toFinish += 1;
                 }
             }
@@ -530,7 +530,7 @@ class Employer
         /** @var EmployerHasEmployee $employee */
         foreach( $employees as $employee){
             if ($employee->getState()>2){
-                if ($employee->getEmployeeEmployee()->getEmployeeHasUnfinishedActions()===0){
+                if ($employee->getEmployeeEmployee()->getEmployeeHasUnfinishedActions($this->getIdEmployer())===0){
                     $this->finished+=1;
                 }
             }

@@ -141,8 +141,17 @@ use EmployerMethodsTrait;
     }
 
     //JPG,PNG,TIF, BMP, DOC,PDF
+
+    /**
+     * @param integer $id id of the person who owns the document being added
+     * @param integer $idDocumentType id to match the document type with the table DocumentType
+     * @param integer $idNotification id to change the status of the notification after the document has been addded
+     * @param Request $request 
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     */
     public function addDocAction($id, $idDocumentType, $idNotification, Request $request)
     {
+        // setting the document types alowed by the application
         $fileTypePermitted = array(
             'image/png',
             'image/jpeg',
@@ -150,19 +159,40 @@ use EmployerMethodsTrait;
             //'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         );
         $em = $this->getDoctrine()->getManager();
+        // getting the person that owns the document
+        /** @var Person $person */
         $person = $this->getDoctrine()
                 ->getRepository('RocketSellerTwoPickBundle:Person')
                 ->find($id);
+        // setting the person name for the modalform
         $name = $person->getNames();
+        // getting the documentType from the database and chequing is a valid document type
         $documentType = $this->getDoctrine()
                 ->getRepository('RocketSellerTwoPickBundle:DocumentType')
                 ->find($idDocumentType);
-        $bdDoc=$person->getDocByType($documentType->getName());
+        if ($idNotification != 0) {
+            $em = $this->getDoctrine()->getManager();
+            $notification = $this->getDoctrine()
+                ->getRepository('RocketSellerTwoPickBundle:Notification')
+                ->find($idNotification);
+        }else{
+            return $this->redirectToRoute('matrix_choose', array('tab' => 3), 301);
+        }
+
+        //checking if the document alredy exist in the database
+        if($documentType->getName()=='Contrato'){
+            $bdDoc=$person->getDocByType($documentType->getName(),$notification->getPersonPerson()->getEmployer()->getIdEmployer());
+        }else{
+            $bdDoc=$person->getDocByType($documentType->getName());
+        }
         $document = new Document();
         $document->setPersonPerson($person);
         $document->setStatus(1);
         $document->setName('Diferente');
         $document->setDocumentTypeDocumentType($documentType);
+        if($person->getEmployee()){
+            $document->setEmployerEmployer($notification->getPersonPerson()->getEmployer());
+        }
         $form = $this->createForm(new DocumentRegistration(), $document);
 
         $form->handleRequest($request);
@@ -183,11 +213,25 @@ use EmployerMethodsTrait;
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($document);
                 $em->flush();
-                if ($idNotification != 0) {
-                    $em = $this->getDoctrine()->getManager();
-                    $notification = $this->getDoctrine()
-                            ->getRepository('RocketSellerTwoPickBundle:Notification')
-                            ->find($idNotification);
+
+                    // if documentType is contract it sets the document contract to the active contract of the employerHasEmployee that matchs with the owner of the notification
+                    if($idDocumentType==4){
+                        $eHEs= $person->getEmployee()->getEmployeeHasEmployers();
+                        /** @var EmployerHasEmployee $eHE */
+                        foreach ($eHEs as $eHE){
+                            if($eHE->getEmployerEmployer()->getPersonPerson()->getIdPerson()==$notification->getPersonPerson()->getIdPerson()){
+                                $contracts = $eHE->getContracts();
+                                /** @var Contract $contract */
+                                foreach ($contracts as $contract) {
+                                    if($contract->getState()==1){
+                                        $contract->setDocumentDocument($document);
+                                        $em->persist($contract);
+                                        $em->flush();
+                                    }
+                                }
+                            }
+                        }
+                    }
                     $notification->setStatus(0);
                     $em->flush();
                     $request = $this->container->get('request');
@@ -195,10 +239,6 @@ use EmployerMethodsTrait;
                     $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:EmployerRest:getEmployerDocumentsState', array('idUser' => $this->getUser()->getId()), array('_format' => 'json'));
                     $responsePaymentsMethods = json_decode($insertionAnswer->getContent(), true);
                     return $this->redirectToRoute('show_dashboard');
-
-                } else {
-                    return $this->redirectToRoute('matrix_choose', array('tab' => 3), 301);
-                }
             } else {
                 $this->addFlash('fail_format', 'NVF');
                 return $this->redirectToRoute('show_dashboard');

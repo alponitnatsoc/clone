@@ -407,10 +407,10 @@ class Employee
 
     /**
      * Get employeeHasUnfinishedActions
-     *
+     * @param integer $idEmployer Employer id to relate the action owner
      * @return integer
      */
-    public function getEmployeeHasUnfinishedActions()
+    public function getEmployeeHasUnfinishedActions($idEmployer)
     {
         $actions=$this->getPersonPerson()->getAction();
         /** @var Action $action */
@@ -419,7 +419,7 @@ class Employee
         }else{
             $this->employeeHasUnfinishedActions = 0;
             foreach($actions as $action){
-                if ($action->getStatus() === "Nuevo"){
+                if ($action->getStatus() === "Nuevo" and $action->getUserUser()->getPersonPerson()->getEmployer()->getIdEmployer()==$idEmployer){
                     $this->setEmployeeHasUnfinishedActions(1);
                     return $this->employeeHasUnfinishedActions;
                 }

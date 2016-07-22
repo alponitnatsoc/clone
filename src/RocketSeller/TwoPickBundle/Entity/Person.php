@@ -6,12 +6,13 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Exclude;
+use RocketSeller\TwoPickBundle\RocketSellerTwoPickBundle;
 
 /**
  * Person
  *
  * @ORM\Table(name="person" , uniqueConstraints={@UniqueConstraint(name="documentUnique", columns={"document_type", "document"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PersonRepository")
  */
 class Person
 {
@@ -617,18 +618,44 @@ class Person
     /**
      * Get docByType
      * @param array $docType
+     * @param integer $employerId id of the employer if type is contract
      * @return \Application\Sonata\MediaBundle\Document\
      */
-    public function getDocByType($docType)
+    public function getDocByType($docType,$employerId=0)
     {
-        /** @var Document */
-        $documents=$this->docs;
-        foreach ($documents as $document){
-            if($document->getDocumentTypeDocumentType()==$docType){
-                return $document;
+
+        if ($docType =='Contrato') {
+            if($employerId==0) return null;
+            $eHEs = $this->getEmployee()->getEmployeeHasEmployers();
+            /** @var EmployerHasEmployee $eHE */
+            foreach ($eHEs as $eHE) {
+                if ($eHE->getEmployerEmployer()->getIdEmployer() == $employerId) {
+                    $contracts = $eHE->getContracts();
+                    /** @var Contract $contract */
+                    foreach ($contracts as $contract) {
+                        if ($contract->getState() == 1) {
+                            /** @var Document $contractDoc */
+                            $contractDoc = $contract->getDocumentDocument();
+                        }
+                    }
+                }
             }
         }
-        return 0;
+        $documents=$this->docs;
+        /** @var Document $document */
+        foreach ($documents as $document){
+            if($document->getDocumentTypeDocumentType()->getName()==$docType){
+                if($docType == 'Contrato' and $document->getIdDocument() == $contractDoc->getIdDocument() ){
+                    return $document;
+                }elseif($docType=="Carta autorización Symplifica" and $document->getEmployerEmployer()->getIdEmployer()==$employerId){
+                    if ($employerId==0) return null;
+                    return $document;
+                }else{
+                    return $document;
+                }
+            }
+        }
+        return null;
     }
 
     /**

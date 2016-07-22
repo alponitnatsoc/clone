@@ -466,7 +466,7 @@ class BackOfficeController extends Controller
         /** @var Employer $employer */
         $employer = $user->getPersonPerson()->getEmployer();
         /** @var Document $cedula */
-        $contrato= $action->getPersonPerson()->getDocByType("Contrato");
+        $contrato= $action->getPersonPerson()->getDocByType('Contrato',$user->getPersonPerson()->getEmployer()->getIdEmployer());
         if ($contrato) {
             if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
                 $pathContrato = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($contrato->getMediaMedia(), 'reference');

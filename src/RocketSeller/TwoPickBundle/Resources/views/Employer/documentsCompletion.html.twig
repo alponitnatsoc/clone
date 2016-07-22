@@ -34,9 +34,16 @@
 				<h1 class="azulclarofont light">Recuerda que</h1><br>
 				<p class="light grisclarofont">Validaremos tu información, este proceso puede tardar hasta <strong>3 días hábiles</strong>,
 					nos pondremos en contacto contigo si necesitamos rectificar información. Te notificaremos a tu correo electrónico una vez
-					puedas comenzar a gestionar a tus empleados desde la plataforma.<strong><br><br>Ahora debes descargar y subir la copia del 
-						contrato firmada, tambien debes terminar
-					tus tareas pendientes.</strong>
+					puedas comenzar a gestionar a tus empleados desde la plataforma.<br><br>
+						{% if contract %}
+							<strong>Ahora debes terminar tus tareas pendientes, si las tienes.</strong>
+						{% else %}
+							{% if new %}
+								<strong>Ahora debes descargar y subir la copia del contrato firmada, luego debes terminar tus tareas pendientes, si las tienes.</strong>
+							{% else %}
+								<strong>Ahora debes subir la copia del contrato que tenias con tu empleado, luego debes terminar tus tareas pendientes, si las tienes.</strong>
+							{% endif %}
+						{% endif %}
 
 					<br><br><span class="azulmediofont bold">¡Nos veremos pronto!</span></p><br><br>
 					<a class="btn btn-orange notAjax" href="{{ path('show_dashboard') }}">Continuar</a>
