@@ -15,7 +15,7 @@
                 <h4 class="col-md-12 panel-heading">CONTRATO</h4>
             </div>
             <div class="col-md-12 center">
-                {% if person.docByType("Contrato")=='' %}
+                {% if path_document == '' %}
                     <div class="col-md-12" style="margin-top:250px;margin-bottom: 150px; text-align:center">
                         <p>Llamar al cliente {{ user.personPerson.fullName}} y recordarle que suba el contrato firmado</p>
                     </div>

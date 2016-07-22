@@ -3,6 +3,8 @@
 namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Exclude;
 
 /**
  * Document
@@ -30,8 +32,6 @@ class Document
      */
     private $personPerson;
 
-
-
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\DocumentType
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\DocumentType")
@@ -55,7 +55,15 @@ class Document
      */
     private $status;
 
-    
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Employer
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employer")
+     * @ORM\JoinColumns({
+     *     @ORM\JoinColumn(name="employer_id_employer", referencedColumnName="id_employer")
+     * })
+     * @Exclude
+     */
+    private $employerEmployer;
 
     /**
      * Get idDocument
@@ -210,5 +218,29 @@ class Document
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Set employerEmployer
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Employer $employerEmployer
+     *
+     * @return Document
+     */
+    public function setEmployerEmployer(\RocketSeller\TwoPickBundle\Entity\Employer $employerEmployer = null)
+    {
+        $this->employerEmployer = $employerEmployer;
+
+        return $this;
+    }
+
+    /**
+     * Get employerEmployer
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Employer
+     */
+    public function getEmployerEmployer()
+    {
+        return $this->employerEmployer;
     }
 }

@@ -521,68 +521,56 @@
             </div>
             <div id="noveltiesData" class="tab-pane">
                 <div class="col-sm-12 middle-content">
-                    <div class="content col-sm-6 col-sm-offset-3">
+                    <div class="content col-sm-6 center">
                         <h4 style="font-weight: 100;color: #808080;font-size: 21px;margin: 20px 0 10px 0;">Novedades reportadas al día de hoy</h4>
                     </div>
-                    <div class="col-sm-12" style="text-align:center;">
-                        <div class="col-sm-3">
-                            <p><strong style="color: #5D5D5D;">Fecha inicio</strong></p>
-                        </div>
-                        <div class="col-sm-3">
-                            <p><strong style="color: #5D5D5D;">Fecha fin</strong></p>
-                        </div>
-                        <div class="col-sm-3">
-                            <p><strong style="color: #5D5D5D;">Estado</strong></p>
-                        </div>
-                        <div class="col-sm-3">
-                            <p><strong style="color: #5D5D5D;">Detalle</strong></p>
-                        </div>
-                     </div>
+
                     {% set noveltycount = 0 %}
                     {% set payrolls = contract.payrolls %}
                     {% for payroll in payrolls %}
                         {% set novelties = payroll.novelties %}
                         {% for novelty in novelties %}
-                            <div class="col-sm-12 row-novelty" style="text-align:center;">
-                                <div class=" element-table col-sm-3">
+                            <div class="col-sm-12 row-novelty" style="text-align:center;padding:0;">
+                                <div class=" element-table col-sm-4">
+                                  <span><strong style="color: #5D5D5D;">Fecha inicio</strong></span>
                                     {% if novelty.dateStart %}
-                                        <p><strong>{{ novelty.dateStart|date('d/m/y') }}</strong></p>
+                                        <p>{{ novelty.dateStart|date('d/m/y') }}</p>
                                     {% else %}
                                         <p><strong>-</strong></p>
                                     {% endif %}
                                 </div>
-                                <div class="element-table col-sm-3">
+                                <div class="element-table col-sm-4">
+                                  <span><strong style="color: #5D5D5D;">Fecha fin</strong></span>
                                     {% if novelty.dateEnd %}
-                                        <p><strong>{{ novelty.dateEnd|date('d/m/y') }}</strong></p>
+                                        <p>{{ novelty.dateEnd|date('d/m/y') }}</p>
                                     {% else %}
-                                        <p><strong>-</strong></p>
+                                        <p>-</p>
                                     {% endif %}
                                 </div>
-                                <div class="element-table col-sm-3">
-                                    <p><strong>{{ novelty.noveltyTypeNoveltyType.name}}</strong></p>
+                                <div class="element-table col-sm-4">
+                                    <span><strong style="color: #5D5D5D;">Estado</strong></span>
+                                    <p>{{ novelty.noveltyTypeNoveltyType.name}}</p>
                                 </div>
-                                <div class="element-detail col-sm-3">
-                                    <p><strong>Detalle</strong></p>
+                                <div class="element-detail col-sm-12">
+                                    <p>&#10095; Ver detalle</p>
                                 </div>
                             </div>
                             {% set noveltycount = noveltycount + 1 %}
                         {% endfor %}
                         {% endfor %}
-                        <div class="nonovedad">
+
                           {% if noveltycount == 0 %}
+                          <div class="nonovedad">
                             No tienes novedades reportadas a la fecha
+                          </div>
                           {% endif %}
-                        </div>
+
                     {% if employerHasEmployee.state > 3 %}
                         <div class="col-sm-12  row-add-novelty" style="text-align:center;">
-                            <div class="col-sm-4 col-sm-offset-4">
-                                <div class="col-sm-2 plus-icon">
+                                <div class="col-sm-12 center">
                                     <i class="fa fa-plus-circle fa-2x"></i>
+                                    <a style="color: #00858c;font-size: 15px;font-weight: 400;}" class="notAjax addNovelty" href="/novelty/select/{{ contract.activePayroll.idPayroll  }}">Agregar Novedad</a>
                                 </div>
-                                <div class="col-sm-10 text">
-                                    <a style="color: #6F6F6F;font-size: 15px;font-weight: 400;font-style: italic;}" class="notAjax addNovelty" href="/novelty/select/{{ contract.activePayroll.idPayroll  }}">Agregar Novedad</a>
-                                </div>
-                            </div>
                         </div>
                     {% endif %}
                 </div>

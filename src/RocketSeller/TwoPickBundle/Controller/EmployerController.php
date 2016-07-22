@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Phone;
 use RocketSeller\TwoPickBundle\Entity\User;
@@ -25,9 +26,32 @@ class EmployerController extends Controller
     {
         return $this->render('RocketSellerTwoPickBundle:Default:index.html.twig');
     }
-    public function documentCompletionAction()
+    public function documentCompletionAction($idEHE)
     {
-        return $this->render('RocketSellerTwoPickBundle:Employer:documentsCompletion.html.twig');
+        $eHE=$this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")->find($idEHE);
+        /** @var Contract $contract */
+        if($eHE){
+            $contracts = $eHE->getContracts();
+            /** @var Contract $con */
+            foreach ($contracts as $con){
+                if($con->getState()==1){
+                    if($con->getDocumentDocument()){
+                        $contract=true;
+                    }else{
+                        $contract=false;
+                    }
+                }
+            }
+            if($eHE->getLegalFF()==0){
+                $new=true;
+            }else{
+                $new=false;
+            }
+        }
+
+        return $this->render('RocketSellerTwoPickBundle:Employer:documentsCompletion.html.twig',array('contract'=>$contract,'new'=>$new));
+
+        
     }
 
     public function showDataAction()
