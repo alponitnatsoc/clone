@@ -64,6 +64,12 @@ marketing:
 autenticate:
     path:     /backoffice/autenticate/{user}/{autentication}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:demoLogin}
+users_login_back:
+    path:     /backoffice/show/users/autenticate
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showUsersLogin}
+show_unfinished_users:
+    path:     /backoffice/show/unfinished/users
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showUnfinishedUsers}
 add_to_sql_and_hightec_back:
     path:     /backoffice/addtoback/{user}/{autentication}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:addToSQLandHighTecBack}
