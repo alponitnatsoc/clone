@@ -288,7 +288,8 @@
         {% endset %}
 
         {% set modal_content %}
-            <p style="color: #8a8a8a;padding: 20px 35px;font-size: 20px;text-align: center;font-weight: 100;">¡Haz subido todos los documentos de tu empleado <strong>{% if param is defined %}{{ param }}{% endif %}</strong> !<br><br>
+            <span style="text-align:center"><img src="{{ asset('public/img/landing/benefit1.png') }}" width="80"/></span>
+            <p style="color: #8a8a8a;padding: 20px 35px;font-size: 17px;text-align: center;font-weight: 100;"><strong style="color:#00858c">¡Haz subido todos los documentos de tu empleado<br>{% if param is defined %}{{ param }}{% endif %}!</strong><br><br>
             En un máximo de 1 día hábil iniciaremos a validar tu proceso y radicarlo ante las entidades de seguridad social
             de ser necesario. Si tienes tareas pendientes puedes seguir con ellas.</p>
         {% endset %}
