@@ -139,7 +139,7 @@ class PayrollRestSecuredController extends FOSRestController
         $poS = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
         $paidStatus = $poS->findOneBy(array('idNovoPay' => '00'));
         $paidPO = new PurchaseOrders();
-
+        $paidPO->setPurchaseOrdersStatus($paidStatus);
         $paidValue = 0;
 
         $numberOfPNTrans = 0;
@@ -154,7 +154,12 @@ class PayrollRestSecuredController extends FOSRestController
         //setting the data of the already paid selected items
         $em = $this->getDoctrine()->getManager();
         $pods = $paidPO->getPurchaseOrderDescriptions();
+        $pendingStatus = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => 'P1'));
         $documentTypeRepo = $em->getRepository('RocketSellerTwoPickBundle:DocumentType');
+        $pilaOwePo=new PurchaseOrders();
+        $pendingStatus = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => 'P1'));
+        $pilaOwePo->setPurchaseOrdersStatus($pendingStatus);
+        $pilaOwePo->setIdUser($user);
         if ($pods->count() > 0) {
             /** @var UtilsController $utils */
             $utils = $this->get('app.symplifica_utils');
@@ -178,12 +183,8 @@ class PayrollRestSecuredController extends FOSRestController
                     $action = "Subir";
 
                     $documentType = $documentTypeRepo->findByName($documentType)[0];
-                    /** OJO NO BORRAR
-                     * En esta función se va a enviar el id del PAYROLL como si fuera el id de la PERSONA a la que se le asigna el documento 
-                     * Solo para este caso COMPROBANTE ya que posteriormente se debe obtener el id del payrrol y del employerHasEmployee y asi
-                     * poder asignarle el documento asociado al payroll una vez el usuario suba el documento. 
-                     * Normalmente se envia el Id de la persona a la que se asocia el documento.
-                     */
+
+                    //aqui se envía el id del payroll en vez del de la persona
                     $url = $this->generateUrl("documentos_employee", array('id' => $actualPayroll->getIdPayroll(), 'idDocumentType' => $documentType->getIdDocumentType()));
                     //$url = $this->generateUrl("api_public_post_doc_from");
 
@@ -200,7 +201,12 @@ class PayrollRestSecuredController extends FOSRestController
                     $em = $this->getDoctrine()->getManager();
                     $em->persist($notification);
                     if ($actualPayroll->getIdPayroll() == $actualPayroll->getContractContract()->getActivePayroll()->getIdPayroll()) {
-
+                        //to fix the Pila Pod of disappearing, we pass it to de owe PO if the pila is not getting paid
+                        $asociatedPila = $actualPayroll->getPila();
+                        if($asociatedPila->getPurchaseOrders()==null||$asociatedPila->getPurchaseOrders()->getPurchaseOrdersStatus()->getIdNovoPay()!="S2"){
+                            $asociatedPila->setPurchaseOrdersStatus($pendingStatus);
+                            $pilaOwePo->addPurchaseOrderDescription($asociatedPila);
+                        }
                         $nowPeriod = $actualPayroll->getPeriod();
                         if ($actualPayroll->getContractContract()->getFrequencyFrequency()->getPayrollCode() == "Q" && $nowPeriod == 4) {
                             $newPayroll->setPeriod(2);
@@ -220,10 +226,12 @@ class PayrollRestSecuredController extends FOSRestController
             }
 
             $paidPO->setValue($paidValue);
-            $paidPO->setPurchaseOrdersStatus($paidStatus);
             $paidPO->setDatePaid(new \DateTime());
             $paidPO->setName("El usuario aceptó haber pagado los siguientes items");
             $user->addPurchaseOrder($paidPO);
+            if($pilaOwePo->getPurchaseOrderDescriptions()->count()>0){
+                $pilaOwePo->setIdUser($user);
+            }
             $em->persist($user);
             $em->flush();
         }
@@ -559,13 +567,18 @@ class PayrollRestSecuredController extends FOSRestController
         $response = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getPayPurchaseOrder', array(
             "idPurchaseOrder" => $realtoPay->getIdPurchaseOrders()), array('_format' => 'json'));
         if ($response->getStatusCode() == 200) {
-            //set all to paid
-            $procesingStatus = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => 'S2'));
-            $realtoPay->setPurchaseOrdersStatus($procesingStatus);
+
             $pods = $realtoPay->getPurchaseOrderDescriptions();
             /** @var UtilsController $utils */
             $utils = $this->get('app.symplifica_utils');
             $documentTypeRepo = $em->getRepository('RocketSellerTwoPickBundle:DocumentType');
+            $pilaOwePo=new PurchaseOrders();
+            $pendingStatus = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => 'P1'));
+            $pilaOwePo->setPurchaseOrdersStatus($pendingStatus);
+            $pilaOwePo->setIdUser($user);
+            //set all to paid
+            $procesingStatus = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => 'S2'));
+            $realtoPay->setPurchaseOrdersStatus($procesingStatus);
             /** @var PurchaseOrdersDescription $pod */
             foreach ($pods as $pod) {
                 $pod->setPurchaseOrdersStatus($procesingStatus);
@@ -609,6 +622,12 @@ class PayrollRestSecuredController extends FOSRestController
 
                     if ($actualPayroll->getIdPayroll() == $actualPayroll->getContractContract()->getActivePayroll()->getIdPayroll()) {
 
+                        //to fix the Pila Pod of disappearing, we pass it to de owe PO if the pila is not getting paid
+                        $asociatedPila = $actualPayroll->getPila();
+                        if($asociatedPila->getPurchaseOrders()==null|$asociatedPila->getPurchaseOrders()->getPurchaseOrdersStatus()->getIdNovoPay()!="S2"){
+                            $asociatedPila->setPurchaseOrdersStatus($pendingStatus);
+                            $pilaOwePo->addPurchaseOrderDescription($asociatedPila);
+                        }
                         $nowPeriod = $actualPayroll->getPeriod();
                         if ($actualPayroll->getContractContract()->getFrequencyFrequency()->getPayrollCode() == "Q" && $nowPeriod == 4) {
                             $newPayroll->setPeriod(2);
@@ -625,6 +644,11 @@ class PayrollRestSecuredController extends FOSRestController
                         $em->flush();
                     }
                 }
+            }
+
+            if($pilaOwePo->getPurchaseOrderDescriptions()->count()>0){
+                $pilaOwePo->setIdUser($user);
+                $em->persist($user);
             }
             $em->flush();
             /** @var Config $ucfg */
