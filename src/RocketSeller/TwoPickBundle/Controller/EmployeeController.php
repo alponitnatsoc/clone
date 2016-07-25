@@ -594,6 +594,7 @@ class EmployeeController extends Controller
         $contracts = $employerHasEmployee->getContracts();
         foreach ($contracts as $contract) {
             if ($contract->getState()) {
+                /** @var Contract $activeContract */
                 $activeContract = $contract;
             }
         }
@@ -604,14 +605,8 @@ class EmployeeController extends Controller
                 array_push($nonRepeatedBenef, $employeeHasBeneficiary->getBeneficiaryBeneficiary());
             }
         }
-        $contractEmployee = "";
+        $contractEmployee = $activeContract->getDocumentDocument();
         $entidades = array();
-        $documents = $employee->getPersonPerson()->getDocs();
-        foreach ($documents as $doc) {
-            if ($doc->getDocumentTypeDocumentType() == $documentType) {
-                $contractEmployee = $doc;
-            }
-        }
         foreach ($entities as $entity) {
             if ($entity->getEntityEntity()->getEntityTypeEntityType()->getName() == "EPS") {
                 $entidades["EPS"] = $entity->getEntityEntity();

@@ -349,15 +349,15 @@
 
                     <div class="col-sm-12 file-download-contract downcopy" >
                         <h4 style="font-weight: bold;color: #00858C;">Copia firmada del contrato</h4>
-                        <p>Consulte aquí la copia digitalizada del contrato que usted guardó en el sistema el día 10 de enero de 2015. <strong>› Consultar</strong></p>
+                        <p>Consulta aquí la copia digitalizada del contrato que guardaste en el sistema el día 10 de enero de 2015.</p>
                         {% if contractEmployee %}
                             <a href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':contractEmployee.idDocument}) }}" class="notAjax" target="_blank">
                                 <div  class="col-sm-8 col-sm-offset-2 pdf-contract-download">
                                     <div class="col-sm-1 icon-pdf">
                                         <i class="fa fa-file-pdf-o fa-2x"></i>
                                     </div>
-                                    <div class="col-sm-10" style="text-align:left;">
-                                        <p>Consulte aquí la copia digitalizada del contrato que usted guardó en el sistema</p>
+                                    <div class="col-sm-10" style="text-align:center;">
+                                        <p>Descargar Contrato</p>
                                     </div>
                                 </div>
                             </a>

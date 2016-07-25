@@ -146,36 +146,87 @@ class ExportController extends Controller
             $action = $this->getdoctrine()
                 ->getRepository('RocketSellerTwoPickBundle:Action')
                 ->find($idAction);
-            //Employee Documents
+            // getting the person that owns the action
             /** @var Person $person */
             $person = $action->getPersonPerson();
+            //getting the person documents
             $personDocuments=$person->getDocs();
+            //seting the document count to 1 for the documents names
             $count = 1;
+            // if the action belongs to a employee we obtain the employer with the action user
             if($person->getIdPerson()!= $action->getUserUser()->getPersonPerson()->getIdPerson()){
-                //Employer Documents
+                //Getting the employer person
                 /** @var Person $user */
                 $user = $action->getUserUser()->getPersonPerson();
+                //getting the eployer documents
                 $userDocuments = $user->getDocs();
+                //adding all the documents to the document array that will load archives to the zip file
                 /** @var Document $document */
                 foreach ($userDocuments as $document) {
+                    /** @var Media $media */
+                    //getting the document media
+                    $media = $document->getMediaMedia();
+                    //if the reference to the media exist in the DataBase we asign the document path to the array $docUrl
+                    if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference'))){
+                        $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
+                    }
+                    //after the path has been set we asign the name of the document in the array docName that will be use later to asign names to files in the zip archive
+                    $docName[] = $count.'. '.$document->getDocumentTypeDocumentType()->getName().' '.$user->getFullName().'.'.$media->getExtension();
+                    //document count add
+                    $count++;
+                }
+            }
+            //searching the documents for the employee if the action belongs to a employee else getting the employer documents
+            /** @var Document $document */
+            foreach ($personDocuments as $document) {
+                if($document->getDocumentTypeDocumentType()->getName()=='Carta autorización Symplifica'){
+                    $eHEs= $document->getPersonPerson()->getEmployee()->getEmployeeHasEmployers();
+                    /** @var EmployerHasEmployee $eHE */
+                    foreach ($eHEs as $eHE){
+                        if($eHE->getEmployerEmployer()==$document->getEmployerEmployer() and $eHE->getEmployeeEmployee()->getPersonPerson()==$document->getPersonPerson()){
+                            /** @var Media $media */
+                            $media = $document->getMediaMedia();
+                            if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference'))){
+                                $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
+                            }
+                            $docName[] = $count.'. '.$document->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
+                            $count++;
+                        }
+                    }
+                }elseif($document->getDocumentTypeDocumentType()->getName()=='Contrato'){
+                    $eHEs= $document->getPersonPerson()->getEmployee()->getEmployeeHasEmployers();
+                    /** @var EmployerHasEmployee $eHE */
+                    foreach ($eHEs as $eHE){
+                        if($eHE->getEmployerEmployer()==$document->getEmployerEmployer() and $eHE->getEmployeeEmployee()->getPersonPerson()==$document->getPersonPerson()) {
+                            $contracts = $eHE->getContracts();
+                            /** @var Contract $contract */
+                            foreach ($contracts as $contract) {
+                                if ($contract->getState() == 1) {
+                                    if ($contract->getDocumentDocument()==$document){
+                                        /** @var Media $media */
+                                        $media = $document->getMediaMedia();
+                                        if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference'))){
+                                            $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
+                                        }
+                                        $docName[] = $count.'. '.$document->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
+                                        $count++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }elseif($document->getDocumentTypeDocumentType()->getName()=='Comprobante'){
+                    // do nothing
+                    dump("comprobante");
+                }else{
                     /** @var Media $media */
                     $media = $document->getMediaMedia();
                     if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference'))){
                         $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
                     }
-                    $docName[] = $count.'. '.$document->getDocumentTypeDocumentType()->getName().' '.$user->getFullName().'.'.$media->getExtension();
+                    $docName[] = $count.'. '.$document->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
                     $count++;
                 }
-            }
-            /** @var Document $document */
-            foreach ($personDocuments as $document) {
-                /** @var Media $media */
-                $media = $document->getMediaMedia();
-                if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference'))){
-                    $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
-                }
-                $docName[] = $count.'. '.$document->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
-                $count++;
             }
             $count--;
 
