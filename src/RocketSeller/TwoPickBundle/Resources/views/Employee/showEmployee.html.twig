@@ -346,23 +346,31 @@
 
                         </div>
                     </div>
-
-                    <div class="col-sm-12 file-download-contract downcopy" >
-                        <h4 style="font-weight: bold;color: #00858C;">Copia firmada del contrato</h4>
-                        <p>Consulta aquí la copia digitalizada del contrato que guardaste en el sistema el día 10 de enero de 2015.</p>
                         {% if contractEmployee %}
-                            <a href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':contractEmployee.idDocument}) }}" class="notAjax" target="_blank">
-                                <div  class="col-sm-8 col-sm-offset-2 pdf-contract-download">
-                                    <div class="col-sm-1 icon-pdf">
-                                        <i class="fa fa-file-pdf-o fa-2x"></i>
-                                    </div>
-                                    <div class="col-sm-10" style="text-align:center;">
-                                        <p>Descargar Contrato</p>
-                                    </div>
+                          <div class="col-sm-12 file-download-contract downcopy" >
+                              <div class="col-sm-1 icon-pdf">
+                                  <i class="fa fa-file-pdf-o fa-2x"></i>
+                              </div>
+                              <div class="col-sm-11">
+                                <h4 style="font-weight: bold;color: #00858C;">Copia firmada del contrato</h4>
+                                <p>Consulta aquí la copia digitalizada del contrato que guardaste en el sistema el día 10 de enero de 2015.
+                                  <a href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':contractEmployee.idDocument}) }}" class="notAjax" target="_blank">
+                                  <strong>&#10095; Descargar contrato</strong></a></p>
+                              </div>
+                          </div>
+                          {% else %}
+                            <div class="col-sm-12 file-download-contract downcopy" >
+                              <div class="col-sm-1 icon-pdf">
+                                  <i class="fa fa-file-pdf-o fa-2x"></i>
+                              </div>
+                                <div class="col-sm-11">
+                                  <h4 style="font-weight: bold;color: #00858C;">No hay copia firmada del contrato</h4>
+                                  <p>No haz subido el contrato del empleado, para hacerlo ve al tablero de control y subelo.<br><a href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':contractEmployee.idDocument}) }}" class="notAjax" target="_blank">
+                                  <strong>&#10095; Ir al tablero de control</strong></a></p>
                                 </div>
-                            </a>
+                            </div>
                         {% endif %}
-                    </div>
+
                     <div class="col-sm-12 col-sm-offset-5">
                         <span class="edit-contract btn btn-orange notAjax" href="">Editar</span>
                     </div>
@@ -521,7 +529,7 @@
             </div>
             <div id="noveltiesData" class="tab-pane">
                 <div class="col-sm-12 middle-content">
-                    <div class="content col-sm-6 center">
+                    <div class="content col-sm-12 center">
                         <h4 style="font-weight: 100;color: #808080;font-size: 21px;margin: 20px 0 10px 0;">Novedades reportadas al día de hoy</h4>
                     </div>
 
