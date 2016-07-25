@@ -1,0 +1,28 @@
+{% extends '@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig' %}
+
+{% block fos_user_content %}
+    <div id="main" class="col-sm-10">
+        <div class="col-md-12">
+            <br>
+            <table>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Cédula</th>
+                </tr>
+                {% for user in users %}
+                    <tr>
+                        <td>
+                            {{ user.personPerson.fullName }}
+                        </td>
+                        <td>
+                            <a href="{{ path('autenticate', { 'user': user.id, 'autentication': user.salt}) }}" >{{ user.personPerson.document }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+

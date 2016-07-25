@@ -66,6 +66,7 @@ class BackOfficeController extends Controller
         $em->flush();
         return $this->redirectToRoute("show_un_active_codes");
     }
+
     public function showUnActiveCodesAction()
     {
         $codesRepo= $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCode");
@@ -73,6 +74,23 @@ class BackOfficeController extends Controller
         $clientBetaReal=$codesTypeRepo->findOneBy(array("shortName"=>"CB"));
         $codes= $codesRepo->findBy(array("userUser"=>null,'promotionCodeTypePromotionCodeType'=>$clientBetaReal));
         return $this->render('RocketSellerTwoPickBundle:BackOffice:promotionCodes.html.twig',array('codes'=>$codes));
+
+    }
+
+    public function showUsersLoginAction()
+    {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        $usersRepo= $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+        $users= $usersRepo->findBy(array("status"=>2));
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:usersBackLogin.html.twig',array('users'=>$users));
+
+    }
+    public function showUnfinishedUsersAction()
+    {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        $usersRepo= $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+        $users= $usersRepo->findBy(array("status"=>1));
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:showUnfinishedUsers.html.twig',array('users'=>$users));
 
     }
     public function addToSQLEntitiesBackAction($user,$autentication, $idEhe)
