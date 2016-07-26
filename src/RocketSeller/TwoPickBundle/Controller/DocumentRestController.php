@@ -242,6 +242,11 @@ class DocumentRestController extends FOSRestController
             $path = "uploads/tempDocumentPages/$idPerson/$hashName";
             unlink($path);
         }
+        //delete files that are still inside the directory
+        foreach (scandir("uploads/tempDocumentPages/$idPerson") as $file) {
+            if ($file == '.' || $file == '..') continue;
+            unlink("uploads/tempDocumentPages/$idPerson/$file");
+        }
         rmdir("uploads/tempDocumentPages/$idPerson");
 
         $view = View::create();
