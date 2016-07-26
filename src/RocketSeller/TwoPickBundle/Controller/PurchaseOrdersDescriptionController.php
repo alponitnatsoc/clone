@@ -62,7 +62,7 @@ class PurchaseOrdersDescriptionController extends Controller
 				if( !is_null($po)
 							&& $po->getAlreadyRecived() == 1
 								&& $po->getPurchaseOrdersStatus()->getIdNovoPay() == "00"
-									&& !is_null($oldFileName)) {
+									&& is_null($oldFileName)) {
 					$answerHighTech = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getDispersePurchaseOrder', array('idPurchaseOrder' => $po->getIdPurchaseOrders()), array('_format' => 'json'));
 				}
 
