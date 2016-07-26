@@ -1016,7 +1016,7 @@ class Payments2RestController extends FOSRestController
         if(isset($parameters['reference']))
           $parameters_fixed['referencia'] = $parameters['reference'];
         if(isset($parameters['payment_date']))
-          $parameters_fixed['referencia'] = $parameters['reference'];
+          $parameters_fixed['fechaPago'] = $parameters['payment_date'];
         else
           $parameters_fixed['fechaPago'] = null;
         /** @var View $res */
