@@ -175,7 +175,7 @@
                             {% set pods = po.purchase_order_descriptions %}
                             {% set pilaData=null %}
                             {% for data in pods %}
-                                {% if data.payroll_payroll != null %}
+                                {% if data.product_product.simple_name == "PN" %}
                                     <div class="borderclass">
                                         <div class="tittle-pay">
                                             <div class="center light-italic">
@@ -219,7 +219,10 @@
                                         </div>
                                     </div>
                                 {% else %}
-                                    {% set pilaData = data %}
+                                    {% if data.product_product.simple_name == "PP" %}
+                                        {% set pilaData = data %}
+                                    {% endif %}
+
                                 {% endif %}
                                 <br>
                             {% endfor %}
