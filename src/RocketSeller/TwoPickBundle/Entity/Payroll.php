@@ -99,7 +99,7 @@ class Payroll
      * })
      * @Exclude
      */
-    private $signature;
+    private $payslip;
 
     /**
      * Get idPayroll
@@ -421,27 +421,27 @@ class Payroll
 
 
     /**
-     * Set signature
+     * Set payslip
      *
-     * @param \RocketSeller\TwoPickBundle\Entity\Document $signature
+     * @param \RocketSeller\TwoPickBundle\Entity\Document $payslip
      *
      * @return Payroll
      */
-    public function setSignature(\RocketSeller\TwoPickBundle\Entity\Document $signature = null)
+    public function setPayslip(\RocketSeller\TwoPickBundle\Entity\Document $payslip = null)
     {
-        $this->signature = $signature;
+        $this->payslip = $payslip;
 
         return $this;
     }
 
     /**
-     * Get signature
+     * Get payslip
      *
      * @return \RocketSeller\TwoPickBundle\Entity\Document
      */
-    public function getSignature()
+    public function getPayslip()
     {
-        return $this->signature;
+        return $this->payslip;
     }
     /**
      * Constructor
