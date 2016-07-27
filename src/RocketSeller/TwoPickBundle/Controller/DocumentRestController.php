@@ -44,9 +44,7 @@ class DocumentRestController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         //todo id person is not necessary
         $idPerson = $paramFetcher->get('idPerson');
-        $person = $this->getDoctrine()
-            ->getRepository('RocketSellerTwoPickBundle:Person')
-            ->find($idPerson);
+
         $idPayroll = $paramFetcher->get('idPayroll');
         $payroll = $this->getDoctrine()
             ->getRepository('RocketSellerTwoPickBundle:Payroll')
@@ -80,7 +78,7 @@ class DocumentRestController extends FOSRestController
 
         $documentType = $this->getDoctrine()
             ->getRepository('RocketSellerTwoPickBundle:DocumentType')
-            ->find(2); //Comprobante
+            ->findOneBy(array("name" => 'Comprobante'));
 
         $document = new Document();
         $document->setPersonPerson($personEmployee);

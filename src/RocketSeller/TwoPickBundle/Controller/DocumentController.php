@@ -229,7 +229,7 @@ use EmployerMethodsTrait;
                 $em->flush();
 
                     // if documentType is contract it sets the document contract to the active contract of the employerHasEmployee that matchs with the owner of the notification
-                    if($idDocumentType==4){
+                    if($documentType->getName() == 'Contrato'){
                         $eHEs= $person->getEmployee()->getEmployeeHasEmployers();
                         /** @var EmployerHasEmployee $eHE */
                         foreach ($eHEs as $eHE){
