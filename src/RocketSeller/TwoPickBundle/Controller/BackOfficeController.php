@@ -916,17 +916,14 @@ class BackOfficeController extends Controller
             $em->persist($ehe);
           }
 
-          //if user getStatus 2, addToHighTech
+          $em->flush();
+
           $usersToHT = $dm->getRepository('RocketSellerTwoPickBundle:User')->findAll();
           foreach ($usersToHT as $singleUser) {
             if( $singleUser->getStatus() == 2){
               $this->addToHighTech($singleUser);
             }
-            $em->persist($ehe);
           }
-
-          $em->flush();
-
 
           return $this->redirectToRoute("back_office");
         }
