@@ -217,7 +217,7 @@
                             {% if status >= 2 %}
                                 <div class="{% if app.request.get('_route') == 'show_dashboard_employer' %}activeMenu{% endif %} well well-lg separador"
                                      style="margin-top: 40px;">
-                                    <a href="{{ path('show_dashboard_employer') }}">Tablero de control</a>
+                                    <a href="{{ path('show_dashboard_employer') }}"><span class="glyphicon glyphicon-globe gIcon" aria-hidden="true"></span>Tablero de control</a>
                                 </div>
                             {% elseif  status == 1 %}
                                 {% block menuInicio %}
@@ -230,23 +230,27 @@
 
                             {% block menu %}
                                 <div class="{% if app.request.get('_route') == 'show_employer' %}activeMenu{% endif %} well well-lg">
-                                    <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('show_employer') }}" {% endif %}>Empleador</a>
+                                    <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('show_employer') }}" {% endif %}>
+                                      <span class="glyphicon glyphicon-user gIcon"></span>Empleador</a>
                                 </div>
                                 <div class="{% if app.request.get('_route') == 'manage_employees' %}activeMenu{% endif %} well well-lg">
-                                    <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('manage_employees') }}"{% endif %}>Empleados</a>
+                                    <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('manage_employees') }}"{% endif %}>
+                                      <i class="fa fa-slideshare gIcon"></i>Empleados</a>
                                 </div>
                                 <div class="{% if app.request.get('_route') == 'payroll' %}activeMenu{% endif %} well well-lg separador">
-                                    <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('payroll') }}" class="notAjax"{% endif %}>Pago
-                                        a empleados</a>
+                                    <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('payroll') }}" class="notAjax"{% endif %}>
+                                      <span class="glyphicon glyphicon-piggy-bank gIcon" aria-hidden="true"></span>
+                                      Pago a empleados</a>
                                 </div>
                                 <div class="{% if app.request.get('_route') == 'show_certificates' %}activeMenu{% endif %} well well-lg">
-                                    <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('show_certificates') }}"{% endif %}>Certificados</a>
+                                    <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('show_certificates') }}"{% endif %}>
+                                      <span class="glyphicon glyphicon-list-alt gIcon" aria-hidden="true"></span>Certificados</a>
                                 </div>
                                 {#<div class="{% if app.request.get('_route') == 'legal_payment' %}activeMenu{% endif %} well well-lg">
                                     <a href="{{ path('legal_payment') }}">Asistencia legal</a>
                                 </div>#}
                                 <div class="{% if app.request.get('_route') == 'contact' %}activeMenu{% endif %} well well-lg">
-                                    <a href="{{ path('contact') }}">Ayuda</a>
+                                    <a href="{{ path('contact') }}"><span class="glyphicon glyphicon-comment gIcon" aria-hidden="true"></span>Ayuda</a>
                                 </div>
                             {% endblock %}
                         </div>
