@@ -91,6 +91,9 @@ persist_planilla_id:
 add_planilla_type_to_contracts:
     path:     /backoffice/planillaType/addtoback/{autentication}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:addPlanillaTypeToContractsBack}
+clear_data_after_backup:
+    path:     /backoffice/clearData/{autentication}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:clearDataAfterBackup}
 
 #tramites
 show_procedure:
