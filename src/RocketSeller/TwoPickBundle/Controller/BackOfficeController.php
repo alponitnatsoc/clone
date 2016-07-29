@@ -846,6 +846,16 @@ class BackOfficeController extends Controller
           }
 
           $persons = $dm->getRepository('RocketSellerTwoPickBundle:Person')->findAll();
+          $docToStart = "";
+          foreach ($persons as $index => $person) {
+            $docToStart = $person->getDocument();
+          }
+
+          //If already have resetted the tadabase, continues from the last generated document, otherwise starts at 712700
+          if(abs(712700 - intval($docToStart)) > 20000){
+            $docToStart = 712700;
+          }
+
           foreach ($persons as $index => $person) {
             $newName = "Fake Name" . $index;
             $newLastName1 = "FakeLastOne" . $index;
@@ -854,8 +864,7 @@ class BackOfficeController extends Controller
             $person->setLastName1($newLastName1);
             $person->setLastName2($newLastName2);
             if(!is_null($person->getDocumentType())){
-              //TODO tomar ultima cedula existente para setear el inicio del agregado
-              $person->setDocument("712667" + $index);
+              $person->setDocument(strval( intval($docToStart) + $index ));
               $person->setDocumentExpeditionDate(new \DateTime('2000-01-01'));
               $person->setBirthDate(new \DateTime('1982-01-01'));
             }
@@ -891,6 +900,14 @@ class BackOfficeController extends Controller
             $newDescription = $notification->getAccion() . " algo relacionado a " . $notification->getPersonPerson()->getNames();
             $notification->setDescription($newDescription);
             $em->persist($notification);
+          }
+
+          $referreds = $dm->getRepository('RocketSellerTwoPickBundle:Referred')->findAll();
+          foreach($referreds as $referred){
+            $referred->setUserId(NULL);
+            $referred->setReferredUserId(NULL);
+            $referred->setInvitationId(NULL);
+            $em->persist($referred);
           }
 
           $landingRegisters = $dm->getRepository('RocketSellerTwoPickBundle:LandingRegistration')->findAll();
