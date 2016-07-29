@@ -942,6 +942,8 @@ class BackOfficeController extends Controller
               $this->addToHighTech($singleUser);
             }
           }
+          
+          //TODO remove this line
 
           return $this->redirectToRoute("back_office");
         }
