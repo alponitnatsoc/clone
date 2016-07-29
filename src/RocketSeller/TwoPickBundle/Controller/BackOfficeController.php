@@ -854,6 +854,7 @@ class BackOfficeController extends Controller
             $person->setLastName1($newLastName1);
             $person->setLastName2($newLastName2);
             if(!is_null($person->getDocumentType())){
+              //TODO tomar ultima cedula existente para setear el inicio del agregado
               $person->setDocument("712667" + $index);
               $person->setDocumentExpeditionDate(new \DateTime('2000-01-01'));
               $person->setBirthDate(new \DateTime('1982-01-01'));
