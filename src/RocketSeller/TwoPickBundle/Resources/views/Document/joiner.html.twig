@@ -3,22 +3,10 @@
 <head>
     <title>Join Document</title>
     <meta charset="utf-8" />
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700' rel='stylesheet' type='text/css'>
-    <style>
-
-        .container {
-            width: 595px;
-            height: 842px;
-
-        }
-
-    </style>
 </head>
 
 {% for item in data %}
-    <div class="container">
-        <img src="{{ item }}" height="842" width="auto">
-    </div>
+    <img src="{{ item }}" height="auto" width="800">
 {% endfor %}
 
 </html>

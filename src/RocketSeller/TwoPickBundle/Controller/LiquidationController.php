@@ -293,7 +293,7 @@ class LiquidationController extends Controller
         if ($payroll) {
             $novelties = $payroll->getNovelties();
         }
-        $llamadosAtencion = $this->noveltiesByGroup("llamado_atencion");
+        $llamadosAtencion = $this->noveltiesByGroup("Suspensión");
 
         if ( !($liquidation = $this->liquidationByTypeAndEmHEmAndContract($id, 1, $contract[0]->getIdContract())) ) {
             $liquidation = new Liquidation();

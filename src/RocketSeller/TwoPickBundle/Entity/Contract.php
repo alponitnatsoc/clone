@@ -94,7 +94,7 @@ class Contract
     /**
      * @ORM\Column(type="smallint", nullable=TRUE)
      */
-    private $transportAid;
+    private $transportAid; // 1 vive donde trabaja - 0 externo
 
     /**
      * @ORM\Column(type="text", length=500, nullable=TRUE)

@@ -40,55 +40,70 @@ class DocumentRestController extends FOSRestController
      */
     public function postUploadSignatureAction(ParamFetcher $paramFetcher)
     {
+        //only works for comprobantes
         $em = $this->getDoctrine()->getManager();
-
+        //todo id person is not necessary
         $idPerson = $paramFetcher->get('idPerson');
-        $person = $this->getDoctrine()
-            ->getRepository('RocketSellerTwoPickBundle:Person')
-            ->find($idPerson);
+
         $idPayroll = $paramFetcher->get('idPayroll');
         $payroll = $this->getDoctrine()
             ->getRepository('RocketSellerTwoPickBundle:Payroll')
             ->find($idPayroll);
+        $employerHasEmployee = $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee();
+
+        $employer = $employerHasEmployee->getEmployerEmployer();
+        $personEmployee = $employerHasEmployee->getEmployeeEmployee()->getPersonPerson();
 
         $rawSignature = $paramFetcher->get('signature');
         $img = str_replace('data:image/png;base64,', '', $rawSignature);
         $img = str_replace(' ', '+', $img);
         $data = base64_decode($img);
-        file_put_contents("tempSignature.png", $data);
+        $fileSignatureName = "tempSignature.png";
+        file_put_contents("uploads/$fileSignatureName", $data);
+        $absPath = getcwd();
+        $absPath = str_replace('/', '_', $absPath);
+        $signaturePath = $absPath . '_uploads_' . $fileSignatureName;
+        echo $signaturePath;
+        $params = array(
+            'ref'=> 'comprobante',
+            'id' => "$idPayroll,$signaturePath",
+            'type' => 'pdf',
+            'attach' => null
+        );
+        $documentResult = $this->forward('RocketSellerTwoPickBundle:Document:downloadDocuments', $params);
+        $file = $documentResult->getContent();
+        $file_path = "uploads/tempComprobanteFile.pdf";
+        file_put_contents($file_path, $file);
+
 
         $documentType = $this->getDoctrine()
             ->getRepository('RocketSellerTwoPickBundle:DocumentType')
-            ->find(27); //Firma
+            ->findOneBy(array("name" => 'Comprobante'));
 
         $document = new Document();
-        $document->setPersonPerson($person);
-        $document->setName('Signature');
+        $document->setPersonPerson($personEmployee);
+        $document->setEmployerEmployer($employer);
+        $document->setName('Comprobante');
         $document->setStatus(1);
         $document->setDocumentTypeDocumentType($documentType);
         $em->persist($document);
 
-        $payroll->setSignature($document);
+        $payroll->setPayslip($document);
         $em->persist($payroll);
 
-        $media = new Media();
-
-        $tmp_file = new UploadedFile('tempSignature.png', 'signature.png', 'image/png', null, null, true);
-        $media->setBinaryContent($tmp_file);
+        $mediaManager = $this->container->get('sonata.media.manager.media');
+        $media = $mediaManager->create();
+        $media->setBinaryContent($file_path);
         $media->setProviderName('sonata.media.provider.file');
         $media->setName($document->getName());
         $media->setProviderStatus(Media::STATUS_OK);
-
-        $hashFile = hash_file('sha256', $tmp_file);
-        $hashName = hash('sha256', $hashFile . date("Y.m.d") . date("h:i:sa"));
-        $media->setProviderReference($hashName . ".png");
-
-        $media->setContext('firma');
+        $media->setContext('person');
         $media->setDocumentDocument($document);
 
         $em->persist($media);
         $em->flush();
-        unlink($tmp_file);
+        unlink("uploads/$fileSignatureName");
+        unlink($file_path);
 
         $view = View::create();
         $view->setStatusCode(200);
@@ -203,8 +218,6 @@ class DocumentRestController extends FOSRestController
         $document->setDocumentTypeDocumentType($documentType);
         $em->persist($document);
 
-        $mediaManager = $this->container->get('sonata.media.manager.media');
-        $media = $mediaManager->create();
         $absPath = getcwd();
         $absPath = str_replace('/', '_', $absPath);
         $HashNames = "";
@@ -223,6 +236,8 @@ class DocumentRestController extends FOSRestController
         $file_path = "uploads/tempDocumentPages/tempFile.png";
         file_put_contents($file_path, $file);
 
+        $mediaManager = $this->container->get('sonata.media.manager.media');
+        $media = $mediaManager->create();
         $media->setBinaryContent($file_path);
         $media->setProviderName('sonata.media.provider.file');
         $media->setName($document->getName());
@@ -241,6 +256,11 @@ class DocumentRestController extends FOSRestController
         foreach($pages as $hashName) {
             $path = "uploads/tempDocumentPages/$idPerson/$hashName";
             unlink($path);
+        }
+        //delete files that are still inside the directory
+        foreach (scandir("uploads/tempDocumentPages/$idPerson") as $file) {
+            if ($file == '.' || $file == '..') continue;
+            unlink("uploads/tempDocumentPages/$idPerson/$file");
         }
         rmdir("uploads/tempDocumentPages/$idPerson");
 

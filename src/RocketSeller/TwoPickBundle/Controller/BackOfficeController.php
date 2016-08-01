@@ -21,6 +21,7 @@ use RocketSeller\TwoPickBundle\Entity\ActionError;
 use RocketSeller\TwoPickBundle\Entity\Action;
 use RocketSeller\TwoPickBundle\Traits\SubscriptionMethodsTrait;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 
 class BackOfficeController extends Controller
@@ -773,6 +774,176 @@ class BackOfficeController extends Controller
           }
 
           $em->flush();
+
+          return $this->redirectToRoute("back_office");
+        }
+
+        return $this->redirectToRoute("show_dashboard");
+    }
+
+    public function clearDataAfterBackupAction($autentication)
+    {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+
+        $user = $this->getUser();
+
+        if($autentication==$user->getSalt() && $this->getParameter('ambiente') == "desarrollo") {
+
+          $dm = $this->getDoctrine();
+          $em=$this->getDoctrine()->getManager();
+
+          $workplaces = $dm->getRepository('RocketSellerTwoPickBundle:Workplace')->findAll();
+          foreach ($workplaces as $index => $workplace) {
+            if($workplace->getName() != ""){
+              $workplace->setName("Generated Name #" . $index);
+              $workplace->setMainAddress("Generated Address #" . $index);
+              $em->persist($workplace);
+            }
+          }
+
+          $userManager = $this->get('fos_user.user_manager');
+          $allUsers = $userManager->findUsers();
+
+          foreach( $allUsers as $index => $user){
+            if($user->getUsername() != "Admin" && $user->getUsername() != "Back"){
+              $newUsername = "dummy" . $index . "@fake.org";
+              if($user->getUsername() != ""){
+                $user->setUsername($newUsername);
+                $user->setUsernameCanonical($newUsername);
+                $user->setEmail($newUsername);
+                $user->setEmailCanonical($newUsername);
+                $user->setPlainPassword("Symplifica2016");
+                $user->setFacebookId(NULL);
+                $user->setGoogleId(NULL);
+                $user->setLinkedinId(NULL);
+                $user->setFacebookAccessToken(NULL);
+                $user->setGoogleAccessToken(NULL);
+                $user->setLinkedinAccessToken(NULL);
+              }
+              $userManager->updateUser($user, true);
+            }
+          }
+
+          $pods = $dm->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')->findAll();
+          foreach ($pods as $pod) {
+            if(!is_null($pod->getProductProduct())){
+              $pod->setDescription($pod->getProductProduct()->getName());
+              $em->persist($pod);
+            }
+          }
+
+          $promCodes = $dm->getRepository('RocketSellerTwoPickBundle:PromotionCode')->findAll();
+          foreach ($promCodes as $promCode) {
+            if(is_null($promCode->getUserUser()) && $promCode->getCode() != "BACKDOOR"){
+              $em->remove($promCode);
+            }
+          }
+
+          $phones = $dm->getRepository('RocketSellerTwoPickBundle:Phone')->findAll();
+          foreach ($phones as $phone) {
+            $phone->setPhoneNumber("3309999999");
+            $em->persist($phone);
+          }
+
+          $persons = $dm->getRepository('RocketSellerTwoPickBundle:Person')->findAll();
+          $docToStart = "";
+          foreach ($persons as $index => $person) {
+            $docToStart = $person->getDocument();
+          }
+
+          //If already have resetted the tadabase, continues from the last generated document, otherwise starts at 712700
+          if(abs(712700 - intval($docToStart)) > 20000){
+            $docToStart = 712700;
+          }
+
+          foreach ($persons as $index => $person) {
+            $newName = "Fake Name" . $index;
+            $newLastName1 = "FakeLastOne" . $index;
+            $newLastName2 = "FakeLastTwo" . $index;
+            $person->setNames($newName);
+            $person->setLastName1($newLastName1);
+            $person->setLastName2($newLastName2);
+            if(!is_null($person->getDocumentType())){
+              $person->setDocument(strval( intval($docToStart) + $index ));
+              $person->setDocumentExpeditionDate(new \DateTime('2000-01-01'));
+              $person->setBirthDate(new \DateTime('1982-01-01'));
+            }
+            if(!is_null($person->getEmail())){
+              $newMail = "dummy" . $index . "@fake.org";
+              $person->setEmail($newMail);
+            }
+            if(!is_null($person->getMainAddress())){
+              $person->setMainAddress("Generated Address #" . $index);
+            }
+            $em->persist($person);
+          }
+
+          $payMethods = $dm->getRepository('RocketSellerTwoPickBundle:PayMethod')->findAll();
+          foreach ($payMethods as $payMethod) {
+            if(!is_null($payMethod->getAccountNumber()) && strlen($payMethod->getAccountNumber()) > 0){
+              $accLenght = strlen($payMethod->getAccountNumber());
+              $indexToReplace = rand(0,$accLenght-1);
+              $numberToSet = rand(0,9);
+              $newAccountNumber = $payMethod->getAccountNumber();
+              $newAccountNumber[$indexToReplace] = strval($numberToSet);
+              $payMethod->setAccountNumber($newAccountNumber);
+            }
+            if($payMethod->getCellPhone() != "0"){
+              $payMethod->setCellPhone("3209999999");
+            }
+            $em->persist($payMethod);
+          }
+
+          $notifications = $dm->getRepository('RocketSellerTwoPickBundle:Notification')->findAll();
+          foreach ($notifications as $notification) {
+            $notification->setTitle(NULL);
+            $newDescription = $notification->getAccion() . " algo relacionado a " . $notification->getPersonPerson()->getNames();
+            $notification->setDescription($newDescription);
+            $em->persist($notification);
+          }
+
+          $referreds = $dm->getRepository('RocketSellerTwoPickBundle:Referred')->findAll();
+          foreach($referreds as $referred){
+            $referred->setUserId(NULL);
+            $referred->setReferredUserId(NULL);
+            $referred->setInvitationId(NULL);
+            $em->persist($referred);
+          }
+
+          $landingRegisters = $dm->getRepository('RocketSellerTwoPickBundle:LandingRegistration')->findAll();
+          foreach ($landingRegisters as $landingRegister) {
+            $em->remove($landingRegister);
+          }
+
+          $invitations = $dm->getRepository('RocketSellerTwoPickBundle:Invitation')->findAll();
+          foreach ($invitations as $invitation) {
+            $em->remove($invitation);
+          }
+
+          $employers = $dm->getRepository('RocketSellerTwoPickBundle:Employer')->findAll();
+          foreach ($employers as $employer) {
+            $employer->setIdHighTech(NULL);
+            $em->persist($employer);
+          }
+
+          $ehes = $dm->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->findAll();
+          foreach ($ehes as $ehe) {
+            if( !is_null($ehe->getExistentHighTec()) ){
+              $ehe->setExistentHighTec(0);
+            }
+            $em->persist($ehe);
+          }
+
+          $em->flush();
+
+          $usersToHT = $dm->getRepository('RocketSellerTwoPickBundle:User')->findAll();
+          foreach ($usersToHT as $singleUser) {
+            if( $singleUser->getStatus() == 2){
+              $this->addToHighTech($singleUser);
+            }
+          }
+          
+          //TODO remove this line
 
           return $this->redirectToRoute("back_office");
         }

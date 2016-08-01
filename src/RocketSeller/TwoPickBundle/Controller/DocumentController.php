@@ -229,7 +229,7 @@ use EmployerMethodsTrait;
                 $em->flush();
 
                     // if documentType is contract it sets the document contract to the active contract of the employerHasEmployee that matchs with the owner of the notification
-                    if($idDocumentType==4){
+                    if($documentType->getName() == 'Contrato'){
                         $eHEs= $person->getEmployee()->getEmployeeHasEmployers();
                         /** @var EmployerHasEmployee $eHE */
                         foreach ($eHEs as $eHE){
@@ -721,20 +721,30 @@ use EmployerMethodsTrait;
                 );
                 break;
             case "comprobante":
-                //id de la nomina
                 $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Payroll');
-                /** @var \RocketSeller\TwoPickBundle\Entity\Payroll $payroll */
-                $payroll = $repository->find($id);
-                $document = null;
-                if($payroll->getSignature() != null) {
-                    $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Document');
-                    $document = $repository->find($payroll->getSignature());
+                $signatureUrl = null;
+                if(strpos($id, ",")) {
+                    $arr = explode(',', $id);
+                    $id = $arr[0];
+                    $signatureUrl = str_replace('_', '/', $arr[1]);
                 }
-
+                $payroll = $repository->find($id);
                 if($payroll->getPaid()==0){
                     return $this->redirectToRoute("show_dashboard");
                 }
 
+                $document = $payroll->getPayslip();
+                // document is already stored in db
+                if($document != null && $signatureUrl == null) {
+
+                    $fileUrl = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
+                    return new Response(
+                        file_get_contents($fileUrl), 200, array(
+                            'Content-Type' => 'application/pdf',
+                            'Content-Disposition' => 'attachment; filename="' . $ref . '.pdf"',
+                        )
+                    );
+                }
                 $employer = $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                 $employeePerson=$payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson();
                 $contract=$payroll->getContractContract();
@@ -787,14 +797,6 @@ use EmployerMethodsTrait;
                     'totalDeducido'=>$totalDeducido,
                     'total'=>$totalDevengado-$totalDeducido
                 );
-                $signatureUrl = null;
-                //extracting signature
-                if($document != null && file_exists(getcwd().$this->container->get('sonata.media.twig.extension')
-                                                     ->path($document->getMediaMedia(), 'reference')))
-                {
-                    $signatureUrl = getcwd().$this->container->get('sonata.media.twig.extension')
-                                             ->path($document->getMediaMedia(), 'reference');
-                }
 
                 $data = array(
                     'employeeInfo' => $employeeInfo,
