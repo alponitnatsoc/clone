@@ -10,3 +10,7 @@ payrolls :
     type: rest
     resource:     "RocketSellerTwoPickBundle:PayrollRestSecured"
     name_prefix:  api_secured_
+device :
+    type: rest
+    resource:     "RocketSellerTwoPickBundle:DeviceRestSecured"
+    name_prefix:  api_secured_
