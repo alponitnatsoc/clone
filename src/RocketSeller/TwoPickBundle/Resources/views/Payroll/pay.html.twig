@@ -181,19 +181,28 @@
                                             <div class="center light-italic">
                                                 {% set employee = data.payroll_payroll.contract_contract.employer_has_employee_employer_has_employee.employee_employee.person_person %}
                                                 {% set employeeName = employee.names ~' '~ employee.last_name1 %}
+                                                {% set payType = data.payroll_payroll.contract_contract.pay_method_pay_method.pay_type_pay_type.payroll_code %}
                                                 Nómina
                                                 de {{ employeeName }} {{ utils.period_number_to_name(data.payroll_payroll.period) }} {{ utils.month_number_to_name(data.payroll_payroll.month) }}
                                             </div>
                                             <div class="center">
-                                                <label style="font-weight:100"><input type="radio" class="toPayArray"
-                                                                                      name="{{ data.id_purchase_orders_description }}"
-                                                                                      value="p-{{ data.id_purchase_orders_description }}">
-                                                    Pagar </label>
-                                                <label style="font-weight:100;margin-left: 15px;"><input type="radio"
-                                                                                                         class="alreadyPaid"
-                                                                                                         name="{{ data.id_purchase_orders_description }}"
-                                                                                                         value="ap-{{ data.id_purchase_orders_description }}">
-                                                    Pagaré fuera de la plataforma </label>
+                                                {% if payType != 'EFE' %}
+                                                    <label style="font-weight: 100;"><input type="radio" class="toPayArray"
+                                                                                            name="{{ data.id_purchase_orders_description }}"
+                                                                                            value="p-{{ data.id_purchase_orders_description }}">
+                                                        Pagar </label>
+                                                    <label style="font-weight: 100;margin-left: 15px;"><input type="radio"
+                                                                                                              class="alreadyPaid"
+                                                                                                              name="{{ data.id_purchase_orders_description }}"
+                                                                                                              value="ap-{{ data.id_purchase_orders_description }}">
+                                                        Pagaré fuera de la plataforma </label>
+                                                {% else %}
+                                                    <label style="font-weight: 100;margin-left: 15px;"><input type="radio"
+                                                                                                              class="alreadyPaid"
+                                                                                                              name="{{ data.id_purchase_orders_description }}"
+                                                                                                              value="ap-{{ data.id_purchase_orders_description }}">
+                                                        Pago en efectivo - Generar comprobante </label>
+                                                {% endif %}
                                             </div>
                                         </div>
                                         <div class="height center">

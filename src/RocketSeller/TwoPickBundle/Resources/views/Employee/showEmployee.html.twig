@@ -568,16 +568,26 @@
                         {% endfor %}
 
                           {% if noveltycount == 0 %}
-                          <div class="nonovedad">
-                            No tienes novedades reportadas a la fecha
+                          <link rel="stylesheet" type="text/css" href="{{ asset('../css/pantallas.css') }}"/>
+                          <div id="cont-succesdocs" style="clear:both">
+                              <div id="texto-succesdocs">
+                                  <div id="pagoadelantado">
+                                      <div id="contenidopagoadelando">
+                                          <img src="{{ asset('/public/img/home/cat6.png') }}" width="100px" height="auto">
+                                          <h1 class="azulclarofont bold centrar">No tienes novedades reportadas</h1>
+                                          <p class="light grisclarofont">Si deseas reportar alguna novedad solo debes dar clic en el botón <strong>agregar novedad</strong> que
+                                          aparece abajo.</p>
+                                      </div>
+                                  </div>
+                              </div>
                           </div>
                           {% endif %}
 
                     {% if employerHasEmployee.state > 3 %}
-                        <div class="col-sm-12  row-add-novelty" style="text-align:center;">
+                        <div class="col-sm-12  row-add-novelty" style="text-align:center;margin-top:15px;">
                                 <div class="col-sm-12 center">
                                     <i class="fa fa-plus-circle fa-2x"></i>
-                                    <a style="color: #00858c;font-size: 15px;font-weight: 400;}" class="notAjax addNovelty" href="/novelty/select/{{ contract.activePayroll.idPayroll  }}">Agregar Novedad</a>
+                                    <a style="color: #5D5D5D;font-size: 15px;font-weight: 600;}" class="notAjax addNovelty" href="/novelty/select/{{ contract.activePayroll.idPayroll  }}">Agregar Novedad</a>
                                 </div>
                         </div>
                     {% endif %}

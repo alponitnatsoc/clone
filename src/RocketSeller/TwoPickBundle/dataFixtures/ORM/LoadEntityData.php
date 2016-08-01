@@ -336,7 +336,7 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
 
         $EntityEpsAliansalud = new Entity();
         $EntityEpsAliansalud->setName('EPS ALIANSALUD ');
-        $EntityEpsAliansalud->setPayrollCode('121');
+        $EntityEpsAliansalud->setPayrollCode('20');
         $EntityEpsAliansalud->setPilaCode('EPS001');
         $EntityEpsAliansalud->setEntityTypeEntityType($this->getReference('entityType-eps'));
 
@@ -1482,7 +1482,7 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('entity-Emdisalud-ars', $EntityArsEmdisalud);
         $this->addReference('entity-NoSe-fces', $EntityFcesNoSe);
 
-        
+
     }
     public function getOrder()
     {
