@@ -257,20 +257,6 @@ class EmployeeRestController extends FOSRestController {
         // URL used for test porpouses, the line above should be used in production.
         $url_request = "http://localhost:8002/api/public/v1/clients";
         $userPerson = $user->getPersonPerson();
-        $parameters = array(
-            'documentType' => $userPerson->getDocumentType(),
-            'documentNumber' => $userPerson->getDocument(),
-            'name' => $userPerson->getNames(),
-            'lastName' => $userPerson->getLastName1() . " " . $userPerson->getLastName2(),
-            'year' => $userPerson->getBirthDate()->format("Y"),
-            'month' => $userPerson->getBirthDate()->format("m"),
-            'day' => $userPerson->getBirthDate()->format("d"),
-            'phone' => $userPerson->getPhones()->get(0)->getPhoneNumber(),
-            'email' => $user->getEmail(),
-        );
-        $options = array(
-            'json' => $parameters,
-        );
 //        /** @var Response $response */
 //        $response = $this->get('guzzle.client.api_rest')->post($url_request, $options);
 //        if($response->getStatusCode()!=201){
