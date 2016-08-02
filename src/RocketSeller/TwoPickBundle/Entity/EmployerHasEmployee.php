@@ -61,7 +61,7 @@ class EmployerHasEmployee
      * 0 - unActivated
      * 1 - active
      * 2 - Twilio Verification
-     * 3 - symplifica payed
+     * 3 - symplifica paid
      * 4 - backoffice confirmed
      * 5 - backoffice completed
      * @ORM\Column(type="integer", length=1, nullable=TRUE)

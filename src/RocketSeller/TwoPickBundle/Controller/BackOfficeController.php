@@ -12,6 +12,7 @@ use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\PromotionCode;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -92,6 +93,26 @@ class BackOfficeController extends Controller
         $usersRepo= $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
         $users= $usersRepo->findBy(array("status"=>1));
         return $this->render('RocketSellerTwoPickBundle:BackOffice:showUnfinishedUsers.html.twig',array('users'=>$users));
+
+    }
+    public function showSuccessfulInvoicesAction()
+    {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        $usersRepo= $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+        $users= $usersRepo->findAll();
+        $efectivePurchaseOrders=new ArrayCollection();
+        /** @var User $user */
+        foreach ($users as $user) {
+            $pos=$user->getPurchaseOrders();
+            /** @var PurchaseOrders $po */
+            foreach ($pos as $po) {
+                if($po->getAlreadyRecived()==1){
+                    $efectivePurchaseOrders->add($po);
+                }
+            }
+        }
+
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:showInvoices.html.twig',array('pos'=>$efectivePurchaseOrders));
 
     }
     public function addToSQLEntitiesBackAction($user,$autentication, $idEhe)
