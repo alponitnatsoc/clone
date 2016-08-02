@@ -106,7 +106,7 @@ class BackOfficeController extends Controller
             $pos=$user->getPurchaseOrders();
             /** @var PurchaseOrders $po */
             foreach ($pos as $po) {
-                if($po->getAlreadyRecived()==1){
+                if($po->getAlreadyRecived()==1&&$po->getPurchaseOrdersStatus()->getIdNovoPay()=="00"){
                     $efectivePurchaseOrders->add($po);
                 }
             }
