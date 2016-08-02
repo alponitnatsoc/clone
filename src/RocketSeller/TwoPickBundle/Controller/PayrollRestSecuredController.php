@@ -239,6 +239,13 @@ class PayrollRestSecuredController extends FOSRestController
 
         $realtoPay = new PurchaseOrders();
         $productRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
+        //loading the pilaContraints
+        $pilaConstraintsRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PilaConstraints");
+        $pilaConstraintsBigEnterprise=$pilaConstraintsRepo->findBy(array('type'=>'1'));
+        $pilaConstraintsSmallEnterprise=$pilaConstraintsRepo->findBy(array('type'=>'2'));
+        $pilaConstraintsIdependets=$pilaConstraintsRepo->findBy(array('type'=>'3'));
+
+
         foreach ($payrollToPay as $key => $value) {
 
             /** @var PurchaseOrdersDescription $tempPOD */
@@ -249,6 +256,8 @@ class PayrollRestSecuredController extends FOSRestController
                 return $view->setStatusCode(403)->setData(array('error' => 'no exite pod'));
             }
             if ($tempPOD->getPayrollPayroll() == null) {
+                //paying Pila so we calculate the mora
+
                 $person = $tempPOD->getPayrollsPila()->get(0)->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                 $flagFrequency = false;
                 $flagNomi=false;
