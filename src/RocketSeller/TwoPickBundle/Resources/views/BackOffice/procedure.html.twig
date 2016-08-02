@@ -96,6 +96,20 @@
 					</tbody>
 				</table>
 			</div>
+			<div class="col-sm-12">
+				<div class="row">
+					{% for success_message in app.session.flashBag.get('employee_ended_successfully')%}
+						<div class="alert alert-success semi-italic" for="alert">
+							{{ success_message }}
+						</div>
+					{% endfor %}
+					{% for fail_message in app.session.flashBag.get('employee_ended_faild')%}
+						<div class="alert alert-fail semi-italic" for="alert">
+							{{ fail_message }}
+						</div>
+					{% endfor %}
+				</div>
+			</div>
 			<div class="panel panel-default">
 				{% set act = 0 %}
 				{% for employerHasEmployee in employerHasEmployees %}
@@ -191,9 +205,9 @@
 							</tbody>
 						</table>
 					<div style="margin-top:10px; margin-bottom:20px; text-align:center;">
-						{% if employerHasEmployee.state == 5 %}
+						{% if employerHasEmployee.state == 4 %}
 							<p> proceso de: {{ employerHasEmployee.employeeEmployee.personPerson.names}} terminado</p>
-						{% elseif employerHasEmployee.state == 4 and employerHasEmployee.existentSQL == 1 %}
+						{% elseif employerHasEmployee.state == 3 and employerHasEmployee.existentSQL == 1 %}
 							<a class="btn btn-orange notAjax" href="{{ path('complete_employee',{'idEmployerHasEmployee':employerHasEmployee.idEmployerHasEmployee,'procedureId':procedure.idProcedure })}}"> Terminar proceso </a>
 						{% else %}
 							<a class="btn btn-bitbucket notAjax" style="margin-bottom: 20px" href="{{path('export_all_documents',{'idAction':act.idAction})}}">Descargar Documentos</a>
@@ -250,21 +264,18 @@
 				</table>
 			</div>
 			<div class="col-sm-12">
-
-				<p style="background-color:red;">
-					{% for flashMessage in app.session.flashbag.get('error') %}
-
-						{{ flashMessage }}
-
+				<div class="row">
+					{% for success_message in app.session.flashBag.get('success_send_email')%}
+						<div class="alert alert-success semi-italic" for="alert">
+							{{ success_message }}
+						</div>
 					{% endfor %}
-				</p>
-				<p style="background-color:green;">
-					{% for flashMessage in app.session.flashbag.get('success') %}
-
-						{{ flashMessage }}
-
+					{% for fail_message in app.session.flashBag.get('fail_send_email')%}
+						<div class="alert alert-fail semi-italic" for="alert">
+							{{ fail_message }}
+						</div>
 					{% endfor %}
-				</p>
+				</div>
 			</div>
 			<a class="btn btn-bitbucket notAjax" href="{{ path('show_procedures') }}">Volver a los tramites</a>
 		</div>

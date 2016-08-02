@@ -3,12 +3,16 @@
 namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 
 /**
  * DocumentType
  *
- * @ORM\Table(name="document_type")
+ * @ORM\Table(name="document_type",
+ *      uniqueConstraints={@UniqueConstraint(name="uniqueCode", columns={"doc_code"})},
+ * )
  * @ORM\Entity
+ * 
  */
 class DocumentType
 {
@@ -25,6 +29,11 @@ class DocumentType
      * @ORM\Column(type="string", length=100)
      */
     private $name;
+    
+    /**
+     * @ORM\Column(name="doc_code",type="string", length=4, nullable=TRUE)
+     */
+    private $docCode;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=TRUE)
@@ -92,5 +101,29 @@ class DocumentType
     public function getRefPdf()
     {
         return $this->refPdf;
+    }
+
+    /**
+     * Set docCode
+     *
+     * @param string $docCode
+     *
+     * @return DocumentType
+     */
+    public function setDocCode($docCode)
+    {
+        $this->docCode = $docCode;
+
+        return $this;
+    }
+
+    /**
+     * Get docCode
+     *
+     * @return string
+     */
+    public function getDocCode()
+    {
+        return $this->docCode;
     }
 }
