@@ -63,7 +63,6 @@ class DocumentRestController extends FOSRestController
         $absPath = getcwd();
         $absPath = str_replace('/', '_', $absPath);
         $signaturePath = $absPath . '_uploads_' . $fileSignatureName;
-        echo $signaturePath;
         $params = array(
             'ref'=> 'comprobante',
             'id' => "$idPayroll,$signaturePath",
@@ -269,7 +268,7 @@ class DocumentRestController extends FOSRestController
 
         return $view->setData(array());
     }
-    
+
     /**
      * Generate EmployerId for persons with only one employer
      *
