@@ -1,0 +1,82 @@
+{% extends '@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig' %}
+
+{% block fos_user_content %}
+    <div id="main" class="col-sm-10">
+        <div class="col-md-12">
+            <h3>Los usarios listados a continuación no han terminado el paso 3 de 3</h3>
+            <br>
+            <table>
+                <tr>
+                    <th>Factura</th>
+                    <th>Consecutivo</th>
+                    <th>Documento</th>
+                    <th>Nombres</th>
+                    <th>Apellidos</th>
+                    <th>RECAUDÓ NÓMINA</th>
+                    <th>RECAUDÓ PILA</th>
+                    <th>FEE SYMPLIFICA COBRADO</th>
+                    <th>FEE TX COBRADO</th>
+                    <th>IVA TOTAL</th>
+                    <th>4 por mil</th>
+                </tr>
+                {% for po in pos %}
+
+                    {% set document = po.IdUser.personPerson.document %}
+                    {% set names = po.IdUser.personPerson.names %}
+                    {% set lastNames = po.IdUser.personPerson.lastName1 %}
+                    {% set pods= po.purchaseOrderDescriptions %}
+                    {% set totalPila = 0 %}
+                    {% set totalNomnina = 0 %}
+                    {% set totalFee = 0 %}
+                    {% set totalTransac = 0 %}
+                    {% set total4mill = 0 %}
+                    {% for pod in pods %}
+                        {% set flag = 'f' %}
+                        {% if pod.productProduct.simpleName == 'PP' %}
+                            {% set totalPila = totalPila + pod.value %}
+                            {% set flag = 't' %}
+                        {% endif %}
+                        {% if pod.productProduct.simpleName == 'PN' %}
+                            {% set totalNomnina = totalNomnina + pod.value %}
+                            {% set flag = 't' %}
+                        {% endif %}
+                        {% if pod.productProduct.simpleName == 'CT' %}
+                            {% set totalTransac = totalTransac + pod.value %}
+                            {% set flag = 't' %}
+                        {% endif %}
+                        {% if pod.productProduct.simpleName == 'CPM' %}
+                            {% set total4mill = total4mill + pod.value %}
+                            {% set flag = 't' %}
+                        {% endif %}
+                        {% if flag == 'f' %}
+                            {% set totalFee = totalFee + pod.value  %}
+                        {% endif %}
+                    {% endfor %}
+
+                    <tr>
+                        <td>
+                            {{ po.idPurchaseOrders }}
+                        </td>
+                        <td>
+                            {{ po.InvoiceNumber }}
+                        </td>
+                        <td>
+                            {{ document }}
+                        </td>
+                        <td>{{ names }}</td>
+                        <td>{{ lastNames }}</td>
+                        <td>{{ totalNomnina }}</td>
+                        <td>{{ totalPila }}</td>
+                        <td>{{ totalFee }}</td>
+                        <td>{{ totalTransac }}</td>
+                        <td>IVA TOTAL</td>
+                        <td>{{ total4mill }}</td>
+                    </tr>
+                {% endfor %}
+
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+

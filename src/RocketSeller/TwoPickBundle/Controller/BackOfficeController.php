@@ -12,6 +12,7 @@ use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\PromotionCode;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -92,6 +93,26 @@ class BackOfficeController extends Controller
         $usersRepo= $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
         $users= $usersRepo->findBy(array("status"=>1));
         return $this->render('RocketSellerTwoPickBundle:BackOffice:showUnfinishedUsers.html.twig',array('users'=>$users));
+
+    }
+    public function showSuccessfulInvoicesAction()
+    {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        $usersRepo= $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+        $users= $usersRepo->findAll();
+        $efectivePurchaseOrders=new ArrayCollection();
+        /** @var User $user */
+        foreach ($users as $user) {
+            $pos=$user->getPurchaseOrders();
+            /** @var PurchaseOrders $po */
+            foreach ($pos as $po) {
+                if($po->getAlreadyRecived()==1&&$po->getPurchaseOrdersStatus()->getIdNovoPay()=="00"){
+                    $efectivePurchaseOrders->add($po);
+                }
+            }
+        }
+
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:showInvoices.html.twig',array('pos'=>$efectivePurchaseOrders));
 
     }
     public function addToSQLEntitiesBackAction($user,$autentication, $idEhe)
@@ -846,6 +867,16 @@ class BackOfficeController extends Controller
           }
 
           $persons = $dm->getRepository('RocketSellerTwoPickBundle:Person')->findAll();
+          $docToStart = "";
+          foreach ($persons as $index => $person) {
+            $docToStart = $person->getDocument();
+          }
+
+          //If already have resetted the tadabase, continues from the last generated document, otherwise starts at 712700
+          if(abs(712700 - intval($docToStart)) > 20000){
+            $docToStart = 712700;
+          }
+
           foreach ($persons as $index => $person) {
             $newName = "Fake Name" . $index;
             $newLastName1 = "FakeLastOne" . $index;
@@ -854,8 +885,7 @@ class BackOfficeController extends Controller
             $person->setLastName1($newLastName1);
             $person->setLastName2($newLastName2);
             if(!is_null($person->getDocumentType())){
-              //TODO tomar ultima cedula existente para setear el inicio del agregado
-              $person->setDocument("712667" + $index);
+              $person->setDocument(strval( intval($docToStart) + $index ));
               $person->setDocumentExpeditionDate(new \DateTime('2000-01-01'));
               $person->setBirthDate(new \DateTime('1982-01-01'));
             }
@@ -893,6 +923,14 @@ class BackOfficeController extends Controller
             $em->persist($notification);
           }
 
+          $referreds = $dm->getRepository('RocketSellerTwoPickBundle:Referred')->findAll();
+          foreach($referreds as $referred){
+            $referred->setUserId(NULL);
+            $referred->setReferredUserId(NULL);
+            $referred->setInvitationId(NULL);
+            $em->persist($referred);
+          }
+
           $landingRegisters = $dm->getRepository('RocketSellerTwoPickBundle:LandingRegistration')->findAll();
           foreach ($landingRegisters as $landingRegister) {
             $em->remove($landingRegister);
@@ -925,6 +963,8 @@ class BackOfficeController extends Controller
               $this->addToHighTech($singleUser);
             }
           }
+          
+          //TODO remove this line
 
           return $this->redirectToRoute("back_office");
         }

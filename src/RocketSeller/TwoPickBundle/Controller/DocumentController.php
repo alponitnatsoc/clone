@@ -148,7 +148,7 @@ use EmployerMethodsTrait;
      * @param integer $id id of the person who owns the document being added, only if the doctype is Comprobante this function receives instead a payrollId so it can associate the document to the payroll
      * @param integer $idDocumentType id to match the document type with the table DocumentType
      * @param integer $idNotification id to change the status of the notification after the document has been addded
-     * @param Request $request 
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function addDocAction($id, $idDocumentType, $idNotification, Request $request)
@@ -348,7 +348,7 @@ use EmployerMethodsTrait;
             $document = $this->getDoctrine()
                 ->getRepository('RocketSellerTwoPickBundle:Document')
                 ->find($idDocument);
-            
+
             $media = $document->getMediaMedia();
             if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference'))){
                 $docUrl = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
@@ -729,7 +729,7 @@ use EmployerMethodsTrait;
                     $signatureUrl = str_replace('_', '/', $arr[1]);
                 }
                 $payroll = $repository->find($id);
-                if($payroll->getPaid()==0){
+                if($payroll->getPaid() == 0){
                     return $this->redirectToRoute("show_dashboard");
                 }
 

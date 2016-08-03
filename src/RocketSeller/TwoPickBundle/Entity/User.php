@@ -89,6 +89,11 @@ class User extends BaseUser
     private $action;
 
     /**
+     * @ORM\OneToMany(targetEntity="Device", mappedBy="userUser", cascade={"persist"})
+     */
+    private $devices;
+
+    /**
      * @ORM\OneToMany(targetEntity="RealProcedure", mappedBy="userUser", cascade={"persist"})
      */
     private $realProcedure;
@@ -953,5 +958,39 @@ class User extends BaseUser
     public function getPromotionCodes()
     {
         return $this->promotionCodes;
+    }
+
+    /**
+     * Add device
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Device $device
+     *
+     * @return User
+     */
+    public function addDevice(\RocketSeller\TwoPickBundle\Entity\Device $device)
+    {
+        $this->devices[] = $device;
+
+        return $this;
+    }
+
+    /**
+     * Remove device
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Device $device
+     */
+    public function removeDevice(\RocketSeller\TwoPickBundle\Entity\Device $device)
+    {
+        $this->devices->removeElement($device);
+    }
+
+    /**
+     * Get devices
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDevices()
+    {
+        return $this->devices;
     }
 }

@@ -68,54 +68,39 @@ class ProcedureController extends Controller
 
     }
 	
-    public function checkActionCompletation($idPerson)
-    {	
-    	$person = $this->loadClassById($idPerson,'Person');
-    	$actions = $this->getdoctrine()
-		->getRepository('RocketSellerTwoPickBundle:Action')
-		->findByPersonPerson($person);
-		$actionsState = true;
-
-		foreach ($actions as $action) {
-			if ($action->getStatus() != "Completado") {
-				$actionsState = false;
-			}
-		}
-
-		return $actionsState;
+    public function checkActionCompletation($idEHE,$idProc)
+    {
+        /** @var RealProcedure $procedure */
+        $procedure = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:RealProcedure")->find($idProc);
+        /** @var EmployerHasEmployee $eHE */
+        $eHE = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")->find($idEHE);
+        $actions = $eHE->getEmployeeEmployee()->getPersonPerson()->getAction();
+        /** @var Action $action */
+        foreach ($actions as $action){
+            if($action->getRealProcedureRealProcedure()==$procedure and $action->getStatus()!="Completado"){
+                return false;
+            }
+        }
+        return true;
 
     }
     public function changeEmployeeStatusAction($procedureId,$idEmployerHasEmployee)
     {
-    	$em = $this->getDoctrine()->getManager();
-    	$employerHasEmployee = $this->loadClassById($idEmployerHasEmployee,'EmployerHasEmployee');
-    	$person = $employerHasEmployee->getEmployeeEmployee()->getPersonPerson();
-    	$actions = $this->getdoctrine()
-		->getRepository('RocketSellerTwoPickBundle:Action')
-		->findByPersonPerson($person);
-		$actionsIncomplete = array();
-		/*foreach ($actions as $action) {
-			if ($action->getStatus() != "Completado") {
-				array_push($actionsIncomplete,$action);
-			}
-		}*/
-		$stateActions = $this->checkActionCompletation($person->getIdPerson());
-		if ($stateActions) {
-			$employerHasEmployee->setState(5);
-			$em->persist($employerHasEmployee);
-			$em->flush();
+    	try {
+            $em = $this->getDoctrine()->getManager();
+            $employerHasEmployee = $this->loadClassById($idEmployerHasEmployee,'EmployerHasEmployee');
+            $person = $employerHasEmployee->getEmployeeEmployee()->getPersonPerson();
+            $employerHasEmployee->setState(4);
+            $em->persist($employerHasEmployee);
+            $em->flush();
             $smailer = $this->get('symplifica.mailer.twig_swift');
             $smailer->sendBackValidatedMessage($this->getUser(),$employerHasEmployee);
-
-			$this->addFlash('success', 'Exito al terminar los tramites del empleado');
-			return $this->redirectToRoute('show_procedure',array('procedureId'=>$procedureId));
-		}else{
-
-			$this->addFlash('error', 'No has terminado las vueltas del empleado');
-			return $this->redirectToRoute('show_procedure',array('procedureId'=>$procedureId));
-			
-		}
-    	
+            $this->addFlash("employee_ended_successfully", 'Exito al terminar los tramites del empleado');
+            return $this->redirectToRoute('show_procedure',array('procedureId'=>$procedureId));
+        }catch(Exeption $e){
+            $this->addFlash("employee_ended_faild", 'Ocurrio un error terminando el empleado: '. $e);
+            return $this->redirectToRoute('show_procedure',array('procedureId'=>$procedureId));
+        }
     }
 
     /**
@@ -544,7 +529,6 @@ class ProcedureController extends Controller
 				}
 				if($realEhe!=null){
 					$realContract=null;
-					$realEhe->setState(4);
 					$contracts=$realEhe->getContracts();
 					/** @var Contract $contract */
 					foreach ($contracts as $contract) {
