@@ -774,7 +774,8 @@ use EmployerMethodsTrait;
                     'salary' => $contract->getSalary(),
                     'workCity' => $contract->getWorkplaceWorkplace()->getCity()->getName(),
                     'period'=>$payroll->getPeriod(),
-                    'month'=>$payroll->getMonth()
+                    'month'=>$payroll->getMonth(),
+                    'year'=>$payroll->getYear()
                 );
                 $devengado= array();
                 $deducido= array();

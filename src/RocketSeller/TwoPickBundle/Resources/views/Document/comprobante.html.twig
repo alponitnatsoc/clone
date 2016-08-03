@@ -104,113 +104,104 @@
 
 </head>
 <body>
-<div id="contenedor-comp">
-    <div id="tittle-comp">
-        <h2>Comprobante de pago</h2>
-        <span>Periodo {{ utils.period_number_to_name(data.employeeInfo.period) }} {{ utils.month_number_to_name(data.employeeInfo.month) }}</span>
-    </div>
-    <div id="data-empleado">
-        <p>
-            <span>Empleador</span><br>
-            {{ data.client.name }}
-        </p>
-        <div class="celdas-copm">
-            <div class="info-celdas">
-                <p>
-                    <span>Empleado</span><br>
-                    {{ data.employeeInfo.name }}
-                </p>
-            </div>
-            <div class="info-celdas">
-                <p>
-                    <span>Cédula</span><br>
-                    {{ data.employeeInfo.docNumber }}
-                </p>
-            </div>
-        </div>
-        <div class="celdas-copm">
-            <div class="info-celdas">
-                <p>
-                    <span>Cargo</span><br>
-                    {{ data.employeeInfo.position }}
-                </p>
-            </div>
-            <div class="info-celdas">
-                <p>
-                    <span>Ciudad</span><br>
-                    {{ data.employeeInfo.workCity }}
-                </p>
-            </div>
-        </div>
-        <div class="celdas-copm">
-            <div class="info-celdas">
-                <p>
-                    <span>Medio de pago</span><br>
-                    {{ data.employeeInfo.payMethod }}
-                </p>
-            </div>
-            <div class="info-celdas">
-                <p>
-                    <span>Salario</span><br>
-                    {{ data.employeeInfo.salary }}
-                </p>
-            </div>
-        </div>
-    </div>
-    <div id="descript-comp">
-        <table class="border-comp" width="612px" border="0" cellspacing="0">
-            <tr align="center" valign="middle">
-                <th>Item</th>
-                <th>Descripción</th>
-                <th>Devengado</th>
-                <th>Deducido</th>
-            </tr>
+  <div id="contenedor-comp">
+              <div id="tittle-comp">
+                  <h2>Comprobante de pago</h2>
+                  <span>Periodo {{ utils.period_number_to_name(data.employeeInfo.period) }} {{ utils.month_number_to_name(data.employeeInfo.month) }} {{ data.employeeInfo.year }}</span>
+              </div>
+              <div id="data-empleado">
+                  <p>
+                      <span>Empleador</span><br>
+                      {{ data.client.name }}
+                  </p>
+                  <div id="descript-comp">
+                      <table class="border-comp" width="612px" border="0" cellspacing="0">
+                        <tr align="center" valign="middle">
+                          <td class="bold" align="left">Empleado</td>
+                          <td align="right">{{ data.employeeInfo.name }}</td>
+                        </tr>
+                        <tr align="center" valign="middle">
+                          <td class="bold" align="left">Cédula</td>
+                          <td align="right">{{ data.employeeInfo.docNumber }}</td>
+                        </tr>
+                        <tr align="center" valign="middle">
+                          <td class="bold" align="left">Cargo</td>
+                          <td align="right">{{ data.employeeInfo.position }}</td>
+                        </tr>
+                          <tr align="center" valign="middle">
+                              <td class="bold" align="left">Ciudad</td>
+                              <td align="right">{{ data.employeeInfo.workCity }}</td>
+                            </tr>
+                          <tr align="center" valign="middle">
+                              <td class="bold" align="left">Medio de pago</td>
+                              <td align="right">{{ data.employeeInfo.payMethod }}</td>
+                            </tr>
+                          <tr align="center" valign="middle">
+                              <td class="bold" align="left">Salario</td>
+                              <td align="right">{{ data.employeeInfo.salary }}</td>
+                            </tr>
+                      </table>
+                  </div>
+              </div>
+              <div id="descript-comp">
+                  <table class="border-comp" width="612px" border="0" cellspacing="0">
+                      <tr valign="middle">
+                          <th>Item</th>
+                          <th align="left">Descripción</th>
+                          <th align="right">Devengado</th>
+                          <th align="right">Deducido</th>
+                      </tr>
 
-            {% set counter=0 %}
-            {% for desc in data.discriminatedInfo.devengado %}
-                <tr align="center" valign="middle">
-                    <td>{{ counter }}</td>
-                    <td>{{ desc.name }}</td>
-                    <td>${{ desc.sqlValue }}</td>
-                    <td>$0</td>
-                </tr>
-                {% set counter=counter+1 %}
-            {% endfor %}
-            {% for desc in data.discriminatedInfo.deducido %}
-                <tr align="center" valign="middle">
-                    <td>{{ counter }}</td>
-                    <td>{{ desc.name }}</td>
-                    <td>$0</td>
-                    <td>${{ desc.sqlValue }}</td>
-                </tr>
-                {% set counter=counter+1 %}
-            {% endfor %}
+                      {% set counter=0 %}
+                      {% for desc in data.discriminatedInfo.devengado %}
+                          <tr align="center" valign="middle">
+                              <td>{{ counter }}</td>
+                              <td align="left">{{ desc.name }}</td>
+                              <td align="right">${{ desc.sqlValue }}</td>
+                              <td align="right">$0</td>
+                          </tr>
+                          {% set counter=counter+1 %}
+                      {% endfor %}
+                      {% for desc in data.discriminatedInfo.deducido %}
+                          <tr align="center" valign="middle">
+                              <td>{{ counter }}</td>
+                              <td align="left">{{ desc.name }}</td>
+                              <td align="right">$0</td>
+                              <td align="right">${{ desc.sqlValue }}</td>
+                          </tr>
+                          {% set counter=counter+1 %}
+                      {% endfor %}
 
-            <tr valign="middle" class="sub">
-                <td class="bold" colspan="2" align="left">Total</td>
-                <td class="bold" align="center">${{ data.discriminatedInfo.totalDevengado }}</td>
-                <td class="bold" align="center">${{ data.discriminatedInfo.totalDeducido }}</td>
-            </tr>
-            <tr valign="middle" class="total">
-                <td class="bold" colspan="3" align="left">Neto a pagar</td>
-                <td class="bold" align="center">{{ data.discriminatedInfo.total }}</td>
-            </tr>
-        </table>
-    </div>
+                      <tr valign="middle" class="sub">
+                          <td class="bold" colspan="2" align="left">Total</td>
+                          <td class="bold" align="right">${{ data.discriminatedInfo.totalDevengado }}</td>
+                          <td class="bold" align="right">${{ data.discriminatedInfo.totalDeducido }}</td>
+                      </tr>
+                      <tr valign="middle" class="total">
+                          <td class="bold" colspan="3" align="left">Neto a pagar</td>
+                          <td class="bold" align="right">{{ data.discriminatedInfo.total }}</td>
+                      </tr>
+                  </table>
+                  <p>Recibi de la persona arriba mencionada, la cantidad neta a que este documento se refiere estando conforme con los ingresos, deduccion que en el estan especificados.</p>
+              </div>
 
-    {% if  data.signatureUrl != null %}
-        <div class="firmaImg">
-            <img src="{{ data.signatureUrl }}" width="auto" height="100"/>
-        </div>
-    {% endif %}
-    <div id="firma-empleado">
-        <p>
-            <span>Firma empleado</span><br>
-            {{ data.employeeInfo.name }}<br>
-            {{ data.employeeInfo.docType }}{{ data.employeeInfo.docNumber }}
+              {% if  data.signatureUrl != null %}
+                  <div class="firmaImg">
+                      <img src="{{ data.signatureUrl }}" width="auto" height="100"/>
+                  </div>
+              {% else %}
+                  <div style="margin:50px 0">
 
-        </p>
-    </div>
-</div>
+                  </div>
+              {% endif %}
+              <div id="firma-empleado">
+                  <p>
+                      <span>Firma empleado</span><br>
+                      {{ data.employeeInfo.name }}<br>
+                      {{ data.employeeInfo.docType }}{{ data.employeeInfo.docNumber }}
+
+                  </p>
+              </div>
+          </div>
 </body>
 </html>
