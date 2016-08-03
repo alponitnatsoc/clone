@@ -22,6 +22,7 @@ use RocketSeller\TwoPickBundle\Traits\PayrollMethodsTrait;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
+use Symfony\Component\Validator\Constraints\Date;
 
 class PayrollRestSecuredController extends FOSRestController
 {
@@ -257,11 +258,38 @@ class PayrollRestSecuredController extends FOSRestController
             }
             if ($tempPOD->getPayrollPayroll() == null) {
                 //paying Pila so we calculate the mora
+                //seeking fot the wished date
+                $todayPlus = new DateTime();
+                $todayPlus->modify('+1 day');
+                $request = $this->container->get('request');
+                $request->setMethod("GET");
+                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysToDate',array('dateStart'=>$todayPlus->format("Y-m-d"),'days'=>3), array('_format' => 'json'));
+                if ($insertionAnswer->getStatusCode() != 200) {
+                    return $insertionAnswer;
+                }
+                $permittedDate=new DateTime(json_decode($insertionAnswer->getContent(),true)['date']);
+                $tempPOD->setDateToPay($permittedDate);
+                /** @var Payroll $payrollNow */
+                $payrollNow=$tempPOD->getPayrollsPila()->get(0);
+                $documentLastDigits=mb_substr($userPerson->getDocument(),-2,NULL ,"UTF-8");
+                if($payrollNow->getContractContract()->getPlanillaTypePlanillaType()->getCode()=="E"){
+                    if($userPerson->getEmployer()->getEmployerHasEmployees()->count()>200){
+                        //sacar el dia respectivo para armar la fecha real de pago maximo
+                    }else{
+                        //sacar el dia respectivo para armar la fecha real de pago maximo
+                    }
+                }else{
+                    //sacar el dia respectivo para armar la fecha real de pago maximo\
+                }
+                $dateToPaySS=new DateTime($payrollNow->getYear()."-".$payrollNow->getMonth()."-1");
+                $dateToPaySS->modify('+1 month');
+
 
                 $person = $tempPOD->getPayrollsPila()->get(0)->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                 $flagFrequency = false;
                 $flagNomi=false;
                 $numberOfTrans++;
+
             } else {
                 $person = $tempPOD->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                 if ($tempPOD->getPayrollPayroll()->getContractContract()->getPayMethodPayMethod()->getPayTypePayType()->getPayrollCode() == "EFE"){

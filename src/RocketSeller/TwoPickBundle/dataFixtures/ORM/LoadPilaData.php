@@ -9,7 +9,7 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use RocketSeller\TwoPickBundle\Entity\PilaConstraints;
 
-class LoadCalculatorData extends AbstractFixture implements OrderedFixtureInterface
+class LoadPilaData extends AbstractFixture implements OrderedFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
