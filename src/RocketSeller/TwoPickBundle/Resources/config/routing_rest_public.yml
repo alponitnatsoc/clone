@@ -132,3 +132,7 @@ subscription_services:
     type: rest
     resource: "RocketSellerTwoPickBundle:SubscriptionRest"
     name_prefix: api_public_
+push_notification :
+    type: rest
+    resource: "RocketSellerTwoPickBundle:PushNotificationRest"
+    name_prefix: api_public_
