@@ -35,7 +35,8 @@ class PushNotificationRestController extends FOSRestController
     {
         $ionicIoUrl = "https://api.ionic.io/push/notifications";
         $idUser = $paramFetcher->get('idUser');
-
+        $title = $paramFetcher->get('title');
+        $message = $paramFetcher->get('message');
         $user = $this->getDoctrine()
             ->getRepository('RocketSellerTwoPickBundle:User')
             ->find($idUser);
@@ -61,20 +62,14 @@ class PushNotificationRestController extends FOSRestController
             'tokens' => $deviceTokens,
             "profile" => "tester",
             "notification" => array(
-                "title" => "Hi",
-                "message" => "Hello world!"
+                "title" => $title,
+                "message" => $message
             ),
-            "android" => array(
-                "title" => "androidTitle"
-            ),
-            "ios" => array(
-                "title" => "iosTitle"
-            )
         ));
 
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $ionicIoUrl);
-        $apiToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJiNTg0NmViNi1jZTJhLTQ5M2YtOTZkMi00Zjg0Yzg4NTZiMDgifQ.w5TO7G1_xRWKlc4sLe8SD8Ptq_ZGEGoQfAk-eQNAqUY";
+        $apiToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJmNzBmOGI3Yi1jNjMwLTQxODItYWQ0YS1iNDk2MmE3N2UwNDQifQ.HiAQEkh6vhVNpjGLw2oGYK_s6598TsFzJha-jQr55Fg";
         $headers = array("Content-type: application/json",
                          "Authorization: Bearer $apiToken" );
 
@@ -84,7 +79,7 @@ class PushNotificationRestController extends FOSRestController
         curl_setopt($curl, CURLOPT_POSTFIELDS,     $post_body);
 
         $result = curl_exec($curl);
-
+        echo $result;
         curl_close($curl);
 
         $view = View::create();
