@@ -6,6 +6,8 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use RocketSeller\TwoPickBundle\Entity\Config;
 use RocketSeller\TwoPickBundle\Entity\Notification;
+use RocketSeller\TwoPickBundle\Entity\PilaConstraints;
+use RocketSeller\TwoPickBundle\Entity\PilaTax;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
@@ -257,7 +259,7 @@ class PayrollRestSecuredController extends FOSRestController
                 return $view->setStatusCode(403)->setData(array('error' => 'no exite pod'));
             }
             if ($tempPOD->getPayrollPayroll() == null) {
-                //paying Pila so we calculate the mora
+                //paying Pila so we calculate the mora if applies
                 //seeking fot the wished date
                 $todayPlus = new DateTime();
                 $todayPlus->modify('+1 day');
@@ -271,20 +273,51 @@ class PayrollRestSecuredController extends FOSRestController
                 $tempPOD->setDateToPay($permittedDate);
                 /** @var Payroll $payrollNow */
                 $payrollNow=$tempPOD->getPayrollsPila()->get(0);
-                $documentLastDigits=mb_substr($userPerson->getDocument(),-2,NULL ,"UTF-8");
+                $documentLastDigits=intval(mb_substr($userPerson->getDocument(),-2,NULL ,"UTF-8"));
+                $dayToPay=1;
                 if($payrollNow->getContractContract()->getPlanillaTypePlanillaType()->getCode()=="E"){
                     if($userPerson->getEmployer()->getEmployerHasEmployees()->count()>200){
-                        //sacar el dia respectivo para armar la fecha real de pago maximo
+                        /** @var PilaConstraints $item */
+                        foreach ($pilaConstraintsBigEnterprise as $item) {
+                            if($item->getLastTwoDigitsFrom()<=$documentLastDigits&&$item->getLastTwoDigitsTo()>=$documentLastDigits){
+                                $dayToPay=$item->getLastDay();
+                                break;
+                            }
+                        }
                     }else{
-                        //sacar el dia respectivo para armar la fecha real de pago maximo
+                        /** @var PilaConstraints $item */
+                        foreach ($pilaConstraintsSmallEnterprise as $item) {
+                            if($item->getLastTwoDigitsFrom()<=$documentLastDigits&&$item->getLastTwoDigitsTo()>=$documentLastDigits){
+                                $dayToPay=$item->getLastDay();
+                                break;
+                            }
+                        }
                     }
                 }else{
-                    //sacar el dia respectivo para armar la fecha real de pago maximo\
+                    /** @var PilaConstraints $item */
+                    foreach ($pilaConstraintsIdependets as $item) {
+                        if($item->getLastTwoDigitsFrom()<=$documentLastDigits&&$item->getLastTwoDigitsTo()>=$documentLastDigits){
+                            $dayToPay=$item->getLastDay();
+                            break;
+                        }
+                    }
                 }
-                $dateToPaySS=new DateTime($payrollNow->getYear()."-".$payrollNow->getMonth()."-1");
+                $dateToPaySS=new DateTime($payrollNow->getYear()."-".$payrollNow->getMonth()."-".$dayToPay);
                 $dateToPaySS->modify('+1 month');
-
-
+                //now calculate the difference betewen $permittedDate and $dateToPaySS
+                $interval=$dateToPaySS->diff($permittedDate);
+                $days=intval($interval->format('%R%a'));
+                if($days<0){
+                    //se agrega la mora
+                    $pilaTaxRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PilaTax");
+                    /** @var PilaTax $taxForPayroll */
+                    $taxForPayroll=$pilaTaxRepo->findOneBy(
+                        array(
+                            'month'=> $payrollNow->getMonth(),
+                            'year'=> $payrollNow->getYear()));
+                    $tax=$taxForPayroll->getTax();
+                    //GG se puede avanzar hasta aqui por que hay que tener el valor de cada item por entidad
+                }
                 $person = $tempPOD->getPayrollsPila()->get(0)->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                 $flagFrequency = false;
                 $flagNomi=false;
