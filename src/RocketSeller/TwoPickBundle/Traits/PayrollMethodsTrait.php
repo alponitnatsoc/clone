@@ -334,6 +334,8 @@ trait PayrollMethodsTrait
                     $em = $this->getDoctrine()->getManager();
                     if($details!=null||$details->count()!=0){
                         dump("what");
+                        dump($details->count());
+                        dump($details);
                         /** @var PilaDetail $pilaDetail */
                         foreach ($details as $pilaDetail) {
                             if($pilaDetail->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode()=="EPS"||
