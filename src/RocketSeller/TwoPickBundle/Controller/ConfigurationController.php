@@ -43,6 +43,9 @@ class ConfigurationController extends Controller
           elseif ($cr->getValue() == "PreLegal-SignedContract" && $legalOptions[5] == 1) {
             $personConfiguration->add($cr);
           }
+          elseif ($cr->getValue() == "PreLegal-PartialNoSisbén" && $legalOptions[6] == 1){
+            $personConfiguration->add($cr);
+          }
         }
 
         $person->setConfiguration($personConfiguration);
