@@ -292,7 +292,7 @@ trait PayrollMethodsTrait
                     $total += isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
                     if ($value['TENT_CODIGO'] == 'AFP') {
                         $pension = new PilaDetail();
-                        $entity=$entityRepo->findBy(array("payroll_code"=>$value["ENT_CODIGO"]));
+                        $entity=$entityRepo->findOneBy(array("payroll_code"=>$value["ENT_CODIGO"]));
                         $pension->setEntityEntity($entity);
                         $pension->setPayrollPayroll($payroll);
                         $pension->setSqlValueCia(isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0);
@@ -301,7 +301,7 @@ trait PayrollMethodsTrait
                         $pensionEmp += isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
                     } elseif ($value['TENT_CODIGO'] == 'ARP') {
                         $arl = new PilaDetail();
-                        $entity=$entityRepo->findBy(array("payroll_code"=>$value["ENT_CODIGO"]));
+                        $entity=$entityRepo->findOneBy(array("payroll_code"=>$value["ENT_CODIGO"]));
                         $arl->setEntityEntity($entity);
                         $arl->setPayrollPayroll($payroll);
                         $arl->setSqlValueCia(isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0);
@@ -310,7 +310,7 @@ trait PayrollMethodsTrait
                         $arlCia += isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
                     } elseif ($value['TENT_CODIGO'] == 'EPS' || $value['TENT_CODIGO'] == 'ARS') {
                         $salud = new PilaDetail();
-                        $entity=$entityRepo->findBy(array("payroll_code"=>$value["ENT_CODIGO"]));
+                        $entity=$entityRepo->findOneBy(array("payroll_code"=>$value["ENT_CODIGO"]));
                         $salud->setEntityEntity($entity);
                         $salud->setPayrollPayroll($payroll);
                         $salud->setSqlValueCia(isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0);
@@ -319,7 +319,7 @@ trait PayrollMethodsTrait
                         $saludCia += isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
                     } elseif ($value['TENT_CODIGO'] == 'PARAFISCAL') {
                         $parafiscal = new PilaDetail();
-                        $entity=$entityRepo->findBy(array("payroll_code"=>$value["ENT_CODIGO"]));
+                        $entity=$entityRepo->findOneBy(array("payroll_code"=>$value["ENT_CODIGO"]));
                         $parafiscal->setEntityEntity($entity);
                         $parafiscal->setPayrollPayroll($payroll);
                         $parafiscal->setSqlValueCia(isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0);
