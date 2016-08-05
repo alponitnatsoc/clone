@@ -363,11 +363,10 @@ trait PayrollMethodsTrait
                             }
                         }
                     }else{
-                        $payroll->addPilaDetail($pension);
-                        $payroll->addPilaDetail($salud);
-                        $payroll->addPilaDetail($arl);
-                        $payroll->addPilaDetail($parafiscal);
-                        $em->persist($payroll);
+                        $em->persist($pension);
+                        $em->persist($salud);
+                        $em->persist($arl);
+                        $em->persist($parafiscal);
                     }
                     $em->flush();
                 }
