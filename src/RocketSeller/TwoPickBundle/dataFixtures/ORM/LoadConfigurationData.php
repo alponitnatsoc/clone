@@ -48,6 +48,12 @@ class LoadConfigurationData extends AbstractFixture implements OrderedFixtureInt
         $configuration->setDescripcion('Tengo un contrato firmado con mi empleado.');
         $manager->persist($configuration);
 
+        $configuration = new Configuration();
+        $configuration->setName('Estado Legal No Sisben');
+        $configuration->setValue('PreLegal-PartialNoSisben');
+        $configuration->setDescripcion('Mi empleado trabaja por días y no pertenece al Sisbén.');
+        $manager->persist($configuration);
+
         $manager->flush();
     }
 
