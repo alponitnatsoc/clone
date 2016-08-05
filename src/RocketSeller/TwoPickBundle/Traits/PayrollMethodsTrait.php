@@ -328,6 +328,10 @@ trait PayrollMethodsTrait
                         $parafCia += isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
                     }
                 }
+                dump($pension);
+                dump($arl);
+                dump($salud);
+                dump($parafiscal);
                 if($payroll!=null){
                     $details=$payroll->getPilaDetails();
                     /** @var ObjectManager $em */
