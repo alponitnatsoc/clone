@@ -448,7 +448,21 @@ class Payroll
     {
         return $this->payslip;
     }
-    
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->payrollDetails = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->novelties = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sqlNovelties = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pilaDetails = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->purchaseOrdersDescription = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
     /**
      * Add pilaDetail
      *
@@ -483,16 +497,4 @@ class Payroll
     {
         return $this->pilaDetails;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->payrollDetails = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->novelties = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->sqlNovelties = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->pilaDetails = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->purchaseOrdersDescription = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
 }

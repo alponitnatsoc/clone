@@ -330,11 +330,10 @@ trait PayrollMethodsTrait
                 }
                 if($payroll!=null){
                     $details=$payroll->getPilaDetails();
-                    dump("details");
-                    dump($details);
                     /** @var ObjectManager $em */
                     $em = $this->getDoctrine()->getManager();
                     if($details!=null||$details->count()!=0){
+                        dump("what");
                         /** @var PilaDetail $pilaDetail */
                         foreach ($details as $pilaDetail) {
                             if($pilaDetail->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode()=="EPS"||
@@ -365,6 +364,12 @@ trait PayrollMethodsTrait
                             }
                         }
                     }else{
+                        dump("normal");
+                        dump($pension);
+                        dump($salud);
+                        dump($arl);
+                        dump($parafiscal);
+
                         $em->persist($pension);
                         $em->persist($salud);
                         $em->persist($arl);
