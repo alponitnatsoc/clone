@@ -328,15 +328,13 @@ trait PayrollMethodsTrait
                         $parafCia += isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
                     }
                 }
-                dump($pension);
-                dump($arl);
-                dump($salud);
-                dump($parafiscal);
                 if($payroll!=null){
                     $details=$payroll->getPilaDetails();
+                    dump("details");
+                    dump($details);
                     /** @var ObjectManager $em */
                     $em = $this->getDoctrine()->getManager();
-                    if($details!=null){
+                    if($details!=null||$details->count()!=0){
                         /** @var PilaDetail $pilaDetail */
                         foreach ($details as $pilaDetail) {
                             if($pilaDetail->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode()=="EPS"||
