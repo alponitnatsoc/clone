@@ -84,6 +84,14 @@ class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
         $productCT->setValidity(null);
         $manager->persist($productCT);
 
+        $productMora = new Product();
+        $productMora->setName('Mora Pila');
+        $productMora->setDescription('Costo que paga el usuario por mora de Pila');
+        $productMora->setPrice("0");
+        $productMora->setSimpleName('CM');
+        $productMora->setValidity(null);
+        $manager->persist($productMora);
+
         $manager->flush();
 
         $this->addReference('product-type-ps1', $productS1);
@@ -94,6 +102,7 @@ class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('product-type-pp', $productPP);
         $this->addReference('product-type-pn', $productPN);
         $this->addReference('product-type-re', $productRE);
+        $this->addReference('product-type-cm', $productMora);
     }
 
     public function getOrder()
