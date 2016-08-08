@@ -268,6 +268,10 @@ class PayrollRestSecuredController extends FOSRestController
                 $permittedDate=new DateTime(json_decode($insertionAnswer->getContent(),true)['date']);
                 $tempPOD->setDateToPay($permittedDate);
                 //here starts the mora
+                //TODO leer el comentario de abajo
+                // esta mora se calcula por entidad por empleado, idealmente se debería calcular por planilla, lo que
+                // significa que si el empleador tiene 2 empleados que pertenecen a la misma entidad esos aportes se
+                // suman y a esos se les calcula la mora
                 $resultMora = $this->calculateMora($tempPOD,$userPerson);
                 if($resultMora!=0){
                     $productMora = $productRepo->findOneBy(array('simpleName'=>'CM'));
@@ -788,11 +792,26 @@ class PayrollRestSecuredController extends FOSRestController
                 }
             }
         }
-        $dateToPaySS=new DateTime($payrollNow->getYear()."-".$payrollNow->getMonth()."-".$dayToPay);
+        $dateToPaySS=new DateTime($payrollNow->getYear()."-".$payrollNow->getMonth()."-1");
         $dateToPaySS->modify('+1 month');
-        //now calculate the difference betewen $permittedDate and $dateToPaySS
-        $interval=$dateToPaySS->diff($permittedDate);
-        $days=intval($interval->format('%R%a'));
+        //adding valid days
+        $request = $this->container->get('request');
+        $request->setMethod("GET");
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysToDate',array('dateStart'=>$dateToPaySS->format("Y-m-d"),'days'=>$dayToPay), array('_format' => 'json'));
+        if ($insertionAnswer->getStatusCode() != 200) {
+            return 0;
+        }
+        $dateToPaySS=new DateTime(json_decode($insertionAnswer->getContent(),true)['date']);
+
+        //now calculate the difference betewen $permittedDate and $dateToPaySS workable days excluding saturday
+        $request = $this->container->get('request');
+        $request->setMethod("GET");
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$dateToPaySS->format("Y-m-d"),'dateEnd'=>$permittedDate->format("Y-m-d")), array('_format' => 'json'));
+        if ($insertionAnswer->getStatusCode() != 200) {
+            return 0;
+        }
+        $days=intval(json_decode($insertionAnswer->getContent(),true)['days']);
+
         if($days>0){
             //se agrega la mora
             $pilaTaxRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PilaTax");
@@ -802,7 +821,6 @@ class PayrollRestSecuredController extends FOSRestController
                     'month'=> $payrollNow->getMonth(),
                     'year'=> $payrollNow->getYear()));
             $tax=$taxForPayroll->getTax();
-            //GG se puede avanzar hasta aqui por que hay que tener el valor de cada item por entidad
             $payrollsPila=$tempPOD->getPayrollsPila();
             $tempTotal=0;
             /** @var Payroll $payrollPila */

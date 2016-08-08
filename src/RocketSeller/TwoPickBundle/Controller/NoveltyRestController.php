@@ -226,6 +226,57 @@ class NoveltyRestController extends FOSRestController
     }
 
     /**
+     * Get the validation errors
+     *
+     *
+     * @param $dateStart
+     * @param $dateEnd
+     *
+     * @return View
+     */
+    public function getWorkableDaysBetweenDatesAction($dateStart, $dateEnd)
+    {
+        //datetime format YYYY-mm-dd
+        $em=$this->getDoctrine()->getManager();
+
+        $wkd=array();
+        $wkd[5]=true;
+        $wkd[4]=true;
+        $wkd[3]=true;
+        $wkd[2]=true;
+        $wkd[1]=true;
+        $dateRStart= new DateTime($dateStart);
+        $dateREnd= new DateTime($dateEnd);
+        $mult=1;
+        if($dateRStart>$dateREnd){
+            $dateRStart = $dateREnd;
+            $dateREnd = new DateTime($dateStart);
+            $mult = -1;
+        }
+
+        $dateRStart->modify('+1 day');
+        $dateREnd->modify('+1 day');
+        $interval=$dateRStart->diff($dateREnd);
+        $answer=0;
+        $numberDays=$interval->format("%a");
+        $days=[];
+        for($i=0;$i<$numberDays;$i++){
+            $dateToCheck=new DateTime();
+            $dateToCheck->setDate($dateRStart->format("Y"),$dateRStart->format("m"),intval($dateRStart->format("d"))+$i);
+
+            if($this->workable($dateToCheck)&&isset($wkd[$dateToCheck->format("w")])){
+                $answer++;
+                $days[]=$dateToCheck->format("Y-m-d");
+            }
+
+        }
+        $view = View::create();
+        $view->setStatusCode(200)->setData(array("days"=>$answer*$mult,"dateToCheck"=>$days,"wkd"=>$wkd));
+
+        return $view;
+    }
+
+    /**
      * @param DateTime $dateToCheck
      * @return bool
      */
