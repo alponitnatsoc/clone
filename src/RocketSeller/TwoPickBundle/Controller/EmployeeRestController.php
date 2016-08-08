@@ -1374,8 +1374,6 @@ class EmployeeRestController extends FOSRestController {
 
     private function saveMatrixChooseSubmitStep1(ParamFetcher $paramFetcher) {
         /** @var User $user */
-        dump("ENTRE");
-        die;
         $user = $this->getUser();
         if ($user == null) {
             $view = View::create();
