@@ -745,8 +745,10 @@ use EmployerMethodsTrait;
                         )
                     );
                 }
+                /** @var Person $employer */
                 $employer = $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                 $employeePerson=$payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson();
+                /** @var Contract $contract */
                 $contract=$payroll->getContractContract();
                 $pods=$payroll->getPurchaseOrdersDescription();
                 $sqlNovelties=$payroll->getSqlNovelties();
@@ -764,6 +766,8 @@ use EmployerMethodsTrait;
 
                 $clientInfo = array(
                     'name' => $this->fullName($employer->getIdPerson()),
+                    'docType' => $employer->getDocumentType(),
+                    'docNumber' => $employer->getDocument(),
                 );
                 $employeeInfo = array(
                     'name' => $this->fullName($employeePerson->getIdPerson()),
@@ -771,8 +775,9 @@ use EmployerMethodsTrait;
                     'docNumber' => $employeePerson->getDocument(),
                     'position' => $contract->getPositionPosition()->getName(),
                     'payMethod' => $payMM,
-                    'salary' => $contract->getSalary(),
+                    'salary' => $contract->getTimeCommitmentTimeCommitment()->getCode()=="XD"?$contract->getSalary()/$contract->getWorkableDaysMonth():$contract->getSalary(),
                     'workCity' => $contract->getWorkplaceWorkplace()->getCity()->getName(),
+                    'type' => $contract->getTimeCommitmentTimeCommitment()->getCode()=="XD"?"Diario":"Mensual",
                     'period'=>$payroll->getPeriod(),
                     'month'=>$payroll->getMonth(),
                     'year'=>$payroll->getYear()

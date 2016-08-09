@@ -107,12 +107,13 @@
   <div id="contenedor-comp">
               <div id="tittle-comp">
                   <h2>Comprobante de pago</h2>
-                  <span>Periodo {{ utils.period_number_to_name(data.employeeInfo.period) }} {{ utils.month_number_to_name(data.employeeInfo.month) }} {{ data.employeeInfo.year }}</span>
+                  <span>{{ utils.period_number_to_name(data.employeeInfo.period) }} {{ utils.month_number_to_name(data.employeeInfo.month) }} {{ data.employeeInfo.year }}</span>
               </div>
               <div id="data-empleado">
                   <p>
                       <span>Empleador</span><br>
-                      {{ data.client.name }}
+                      {{ data.client.name }}<br>
+                      {{ data.client.docType }} {{ data.client.docNumber|number_format(0, '.', ',')   }}
                   </p>
                   <div id="descript-comp">
                       <table class="border-comp" width="612px" border="0" cellspacing="0">
@@ -122,7 +123,7 @@
                         </tr>
                         <tr align="center" valign="middle">
                           <td class="bold" align="left">Cédula</td>
-                          <td align="right">{{ data.employeeInfo.docNumber }}</td>
+                          <td align="right">{{ data.employeeInfo.docNumber|number_format(0, '.', ',')   }}</td>
                         </tr>
                         <tr align="center" valign="middle">
                           <td class="bold" align="left">Cargo</td>
@@ -137,8 +138,8 @@
                               <td align="right">{{ data.employeeInfo.payMethod }}</td>
                             </tr>
                           <tr align="center" valign="middle">
-                              <td class="bold" align="left">Salario</td>
-                              <td align="right">{{ data.employeeInfo.salary }}</td>
+                              <td class="bold" align="left">Salario {{ data.employeeInfo.type }}</td>
+                              <td align="right">${{ data.employeeInfo.salary|number_format(0, '.', ',')   }}</td>
                             </tr>
                       </table>
                   </div>
@@ -152,12 +153,12 @@
                           <th align="right">Deducido</th>
                       </tr>
 
-                      {% set counter=0 %}
+                      {% set counter=1 %}
                       {% for desc in data.discriminatedInfo.devengado %}
                           <tr align="center" valign="middle">
                               <td>{{ counter }}</td>
-                              <td align="left">{{ desc.name }}</td>
-                              <td align="right">${{ desc.sqlValue }}</td>
+                              <td align="left">{{ desc.name }} {{ desc.units }} {% if desc.noveltyTypeNoveltyType.period == 'dia'  %} dia(s) {% elseif desc.noveltyTypeNoveltyType.period == 'hora'  %} hora(s) {% elseif desc.noveltyTypeNoveltyType.period == 'unidad'  %} {% elseif desc.noveltyTypeNoveltyType.period == '%'  %} % {% endif %}</td>
+                              <td align="right">${{ desc.sqlValue|number_format(0, '.', ',') }}</td>
                               <td align="right">$0</td>
                           </tr>
                           {% set counter=counter+1 %}
@@ -165,21 +166,21 @@
                       {% for desc in data.discriminatedInfo.deducido %}
                           <tr align="center" valign="middle">
                               <td>{{ counter }}</td>
-                              <td align="left">{{ desc.name }}</td>
+                              <td align="left">{{ desc.name }} {{ desc.units }} {% if desc.noveltyTypeNoveltyType.period == 'dia'  %} dia(s) {% elseif desc.noveltyTypeNoveltyType.period == 'hora'  %} hora(s) {% elseif desc.noveltyTypeNoveltyType.period == 'unidad'  %} {% elseif desc.noveltyTypeNoveltyType.period == '%'  %} % {% endif %}</td>
                               <td align="right">$0</td>
-                              <td align="right">${{ desc.sqlValue }}</td>
+                              <td align="right">${{ desc.sqlValue|number_format(0, '.', ',') }}</td>
                           </tr>
                           {% set counter=counter+1 %}
                       {% endfor %}
 
                       <tr valign="middle" class="sub">
                           <td class="bold" colspan="2" align="left">Total</td>
-                          <td class="bold" align="right">${{ data.discriminatedInfo.totalDevengado }}</td>
-                          <td class="bold" align="right">${{ data.discriminatedInfo.totalDeducido }}</td>
+                          <td class="bold" align="right">${{ data.discriminatedInfo.totalDevengado|number_format(0, '.', ',')   }}</td>
+                          <td class="bold" align="right">${{ data.discriminatedInfo.totalDeducido|number_format(0, '.', ',')   }}</td>
                       </tr>
                       <tr valign="middle" class="total">
                           <td class="bold" colspan="3" align="left">Neto a pagar</td>
-                          <td class="bold" align="right">{{ data.discriminatedInfo.total }}</td>
+                          <td class="bold" align="right">${{ data.discriminatedInfo.total|number_format(0, '.', ',')   }}</td>
                       </tr>
                   </table>
                   <p>Confirmo que recibí de parte de la persona arriba mencionada como empleador,
