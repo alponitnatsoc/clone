@@ -244,7 +244,7 @@ class PayrollRestSecuredController extends FOSRestController
 
         $realtoPay = new PurchaseOrders();
         $productRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
-
+        $paysPila=0;
         foreach ($payrollToPay as $key => $value) {
 
             /** @var PurchaseOrdersDescription $tempPOD */
@@ -286,12 +286,10 @@ class PayrollRestSecuredController extends FOSRestController
                     $total += $moraPod->getValue();
 
                 }
-
+                $paysPila++;
                 $person = $tempPOD->getPayrollsPila()->get(0)->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                 $flagFrequency = false;
                 $flagNomi=false;
-                $numberOfTrans++;
-
             } else {
                 $person = $tempPOD->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                 if ($tempPOD->getPayrollPayroll()->getContractContract()->getPayMethodPayMethod()->getPayTypePayType()->getPayrollCode() == "EFE"){
@@ -336,10 +334,12 @@ class PayrollRestSecuredController extends FOSRestController
             $transactionCost = 0;
             /** @var Product $productCT */
             $productCT = $productRepo->findOneBy(array("simpleName" => "CT"));
-
-            $numberOfPNTrans=$numberOfTrans;
+            if($numberOfTrans==0&&$paysPila>0){
+                $numberOfPNTrans=1;
+            }else{
+                $numberOfPNTrans=$numberOfTrans;
+            }
             $transactionCost =  ceil(($productCT->getPrice()+($productCT->getPrice()*$productCT->getTaxTax()->getValue())))*$numberOfPNTrans;
-
 
             $transactionPOD = new PurchaseOrdersDescription();
             $transactionPOD->setDescription("Costo transaccional");
@@ -461,6 +461,7 @@ class PayrollRestSecuredController extends FOSRestController
 
         $valueToGet4xMilFrom = 0;
         $numberOfPNTrans = 0;
+        $paysPila=0;
         $numberOfTrans=0;
         $willPayPN = false;
 
@@ -508,7 +509,7 @@ class PayrollRestSecuredController extends FOSRestController
                 $person = $tempPOD->getPayrollsPila()->get(0)->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                 $flagFrequency = false;
                 $flagNomi=false;
-                $numberOfTrans++;
+                $paysPila++;
             } else {
                 $person = $tempPOD->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                 if ($tempPOD->getPayrollPayroll()->getContractContract()->getPayMethodPayMethod()->getPayTypePayType()->getPayrollCode() == "EFE"){
@@ -556,8 +557,11 @@ class PayrollRestSecuredController extends FOSRestController
             $transactionCost = 0;
             /** @var Product $productCT */
             $productCT = $productRepo->findOneBy(array("simpleName" => "CT"));
-
-            $numberOfPNTrans=$numberOfTrans;
+            if($numberOfTrans==0&&$paysPila>0){
+                $numberOfPNTrans=1;
+            }else{
+                $numberOfPNTrans=$numberOfTrans;
+            }
             $transactionCost =  ceil(($productCT->getPrice()+($productCT->getPrice()*$productCT->getTaxTax()->getValue())))*$numberOfPNTrans;
 
 
