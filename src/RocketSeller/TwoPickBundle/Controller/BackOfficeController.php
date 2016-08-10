@@ -775,8 +775,8 @@ class BackOfficeController extends Controller
             if( $contract->getEmployerHasEmployeeEmployerHasEmployee()->getState() >= 4){
               $realSalary = 0;
               if($contract->getTimeCommitmentTimeCommitment()->getCode() == "XD"){
-                $realSalary = $contract->getSalary() / $contract->getWorkableDaysMonth();
-                $realSalary = $realSalary * (($contract->getWorkableDaysMonth() / 4) * 4.34523810);
+                $realSalary = $contract->getSalary() /*/ $contract->getWorkableDaysMonth()*/;
+                //$realSalary = $realSalary * (($contract->getWorkableDaysMonth() / 4) * 4.34523810);
               }
 
               // Logic to determine the contract planilla type

@@ -532,6 +532,11 @@ class PaymentMethodRestController extends FOSRestController
 
             $dateToSend=null;
             $filePila=null;
+            $moraToAdd=0;
+            if ($purchaseOrderDescription->getProductProduct()->getSimpleName() == "CM") {
+                //this goes with pilla so we continue
+                return array('code'=>200);
+            }
             if ($purchaseOrderDescription->getProductProduct()->getSimpleName() == "PP") {
                 $accountType = "CC";
                 $bankCode="PL";
@@ -551,6 +556,15 @@ class PaymentMethodRestController extends FOSRestController
                     return array('code'=>512,'data'=>array('error' => array('Dispersion' => 'Backoffice no ha subido el número de pila')));
                 }else{
                     $filePila=$purchaseOrderDescription->getEnlaceOperativoFileName();
+                }
+                //adding the mora if applies
+                $pods = $purchaseOrderDescription->getPurchaseOrders()->getPurchaseOrderDescriptions();
+                /** @var PurchaseOrdersDescription $pod */
+                foreach ($pods as $pod) {
+                    if($pod->getProductProduct()->getSimpleName()=="CM"){
+                        $moraToAdd=$pod->getValue();
+                        break;
+                    }
                 }
 
             } elseif ($purchaseOrderDescription->getProductProduct()->getSimpleName() == "PN") {
@@ -580,7 +594,7 @@ class PaymentMethodRestController extends FOSRestController
                 "accountType" => $accountType,
                 "accountBankNumber" => $paymentMethodAN,
                 "bankCode" => $bankCode,
-                "value" => $purchaseOrderDescription->getValue(),
+                "value" => $purchaseOrderDescription->getValue()+$moraToAdd,//this only applies to PilaPay
                 "source" => $purchaseOrderDescription->getPurchaseOrders()->getProviderId()==1?100:101
             ));
             if($dateToSend!=null){

@@ -21,14 +21,12 @@ class DeviceRestSecuredController extends FOSRestController {
      *   resource = true,
      *   description = "add device to user",
      *   statusCodes = {
-     *     200 = "Device added successfully",
-     *     409 = "Wrong credentials"
+     *     200 = "Device added successfully"
      *   }
      * )
      *
      * @param paramFetcher $paramFetcher ParamFetcher
      *
-     * @RequestParam(name="idUser", nullable=false, strict=true, description="id user")
      * @RequestParam(name="deviceToken", nullable=false, strict=true, description="token of device")
      *
      * @return View
@@ -36,17 +34,11 @@ class DeviceRestSecuredController extends FOSRestController {
     public function postAddDeviceUserAction(ParamFetcher $paramFetcher)
     {
         /** @var User $logedUser */
-
         $em = $this->getDoctrine()->getManager();
 
-        $idUser = $paramFetcher->get('idUser');
         $deviceToken = $paramFetcher->get('deviceToken');
         $logedUser = $this->getUser();
-        if( $logedUser->getId() != $idUser) {
-            $view = View::create();
-            $view->setStatusCode(409);
-            return $view->setData(array());
-        }
+        $idUser = $logedUser->getId();
 
         $user = $this->getDoctrine()
             ->getRepository('RocketSellerTwoPickBundle:User')
@@ -73,14 +65,12 @@ class DeviceRestSecuredController extends FOSRestController {
      *   description = "remove specific device of user",
      *   statusCodes = {
      *     200 = "Device Removed successfully",
-     *     409 = "Wrong credentials",
      *     400 = "Token not found"
      *   }
      * )
      *
      * @param paramFetcher $paramFetcher ParamFetcher
      *
-     * @RequestParam(name="idUser", nullable=false, strict=true, description="id user")
      * @RequestParam(name="deviceToken", nullable=false, strict=true, description="token of device")
      *
      * @return View
@@ -91,31 +81,28 @@ class DeviceRestSecuredController extends FOSRestController {
 
         $em = $this->getDoctrine()->getManager();
 
-        $idUser = $paramFetcher->get('idUser');
+
         $deviceToken = $paramFetcher->get('deviceToken');
         $logedUser = $this->getUser();
-        if( $logedUser->getId() != $idUser) {
-            $view = View::create();
-            $view->setStatusCode(409);
-            return $view->setData(array());
-        }
+        $idUser = $logedUser->getId();
 
         $user = $this->getDoctrine()
             ->getRepository('RocketSellerTwoPickBundle:User')
             ->find($idUser);
 
-        $device = $this->getDoctrine()
+        $devices = $this->getDoctrine()
             ->getRepository('RocketSellerTwoPickBundle:Device')
-            ->findOneBy(array("token" => $deviceToken));
+            ->findBy(array("token" => $deviceToken));
 
-        if(!$device) {
+        if(!$devices) {
             $view = View::create();
             $view->setStatusCode(400);
             return $view->setData(array());
         }
-
-        $em->remove($device);
-        $em->flush();
+        foreach ($devices as $device) {
+          $em->remove($device);
+          $em->flush();
+        }
 
         $view = View::create();
         $view->setStatusCode(200);

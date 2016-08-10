@@ -4,6 +4,8 @@ namespace RocketSeller\TwoPickBundle\Traits;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ObjectRepository;
 use RocketSeller\TwoPickBundle\Controller\UtilsController;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
@@ -13,6 +15,7 @@ use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\PayMethod;
 use RocketSeller\TwoPickBundle\Entity\PayType;
+use RocketSeller\TwoPickBundle\Entity\PilaDetail;
 use RocketSeller\TwoPickBundle\Entity\Referred;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
@@ -189,24 +192,25 @@ trait PayrollMethodsTrait
                         $pila=$payroll->getPila();
                         //do the logic for each planilla here
                         $planillaCode=$payroll->getContractContract()->getPlanillaTypePlanillaType()->getCode();
+                        $totalPila=$this->getTotalPILA($employerHasEmployee, $payroll );
                         //this is for the first case and when the pila is already set in the pod
                         if($pila!=null&&(!isset($podsPila[$planillaCode]))){
                             $podsPila[$planillaCode]=$pila;
-                            $podsPila[$planillaCode]->setValue($this->getTotalPILA($employerHasEmployee)['total']);
+                            $podsPila[$planillaCode]->setValue($totalPila['total']);
 
                         }else{
                             if($pila!=null&&isset($podsPila[$planillaCode])){
-                                $podsPila[$planillaCode]->setValue($this->getTotalPILA($employerHasEmployee)['total'] + $podsPila[$planillaCode]->getValue());
+                                $podsPila[$planillaCode]->setValue($totalPila['total'] + $podsPila[$planillaCode]->getValue());
                             }
                             //this is for the literal first case of the currend pod type
                             elseif((!isset($podsPila[$planillaCode]))){
                                 $podsPila[$planillaCode] = new PurchaseOrdersDescription();
                                 $podsPila[$planillaCode]->addPayrollsPila($payroll);
-                                $podsPila[$planillaCode]->setValue($this->getTotalPILA($employerHasEmployee)['total']);
+                                $podsPila[$planillaCode]->setValue($totalPila['total']);
                             }
                             elseif($pila==null){
                                 $podsPila[$planillaCode]->addPayrollsPila($payroll);
-                                $podsPila[$planillaCode]->setValue($this->getTotalPILA($employerHasEmployee)['total'] + $podsPila[$planillaCode]->getValue());
+                                $podsPila[$planillaCode]->setValue($totalPila['total'] + $podsPila[$planillaCode]->getValue());
                             }
                         }
 
@@ -274,9 +278,12 @@ trait PayrollMethodsTrait
         return false;
     }
 
-    private function getTotalPILA($employerHasEmployee)
+    private function getTotalPILA($employerHasEmployee, Payroll $payroll=null)
     {
-        $total = $pension = $salud = $arl = $parafiscales = 0;
+        $total = $pensionCia = $pensionEmp = $saludCia = $saludEmp = $arlCia = $arlEmp = $parafCia = $parafEmp = 0;
+        /** @var ObjectRepository $entityRepo */
+        $entityRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Entity");
+        $pension=$salud=$arl=$parafiscal=null;
         if ($employerHasEmployee) {
             $pila = $this->getInfoPilaSQL($employerHasEmployee);
             if ($pila) {
@@ -284,27 +291,103 @@ trait PayrollMethodsTrait
                     $total += isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
                     $total += isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
                     if ($value['TENT_CODIGO'] == 'AFP') {
-                        $pension += isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
-                        $pension += isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
+                        $pension = new PilaDetail();
+                        $entity=$entityRepo->findOneBy(array("payroll_code"=>$value["ENT_CODIGO"]));
+                        $pension->setEntityEntity($entity);
+                        $pension->setPayrollPayroll($payroll);
+                        $pension->setSqlValueCia(isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0);
+                        $pension->setSqlValueEmp(isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0);
+                        $pensionCia += isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
+                        $pensionEmp += isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
                     } elseif ($value['TENT_CODIGO'] == 'ARP') {
-                        $arl += isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
-                        $arl += isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
+                        $arl = new PilaDetail();
+                        $entity=$entityRepo->findOneBy(array("payroll_code"=>$value["ENT_CODIGO"]));
+                        $arl->setEntityEntity($entity);
+                        $arl->setPayrollPayroll($payroll);
+                        $arl->setSqlValueCia(isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0);
+                        $arl->setSqlValueEmp(isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0);
+                        $arlEmp += isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
+                        $arlCia += isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
                     } elseif ($value['TENT_CODIGO'] == 'EPS' || $value['TENT_CODIGO'] == 'ARS') {
-                        $salud += isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
-                        $salud += isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
+                        $salud = new PilaDetail();
+                        $entity=$entityRepo->findOneBy(array("payroll_code"=>$value["ENT_CODIGO"]));
+                        $salud->setEntityEntity($entity);
+                        $salud->setPayrollPayroll($payroll);
+                        $salud->setSqlValueCia(isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0);
+                        $salud->setSqlValueEmp(isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0);
+                        $saludEmp += isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
+                        $saludCia += isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
                     } elseif ($value['TENT_CODIGO'] == 'PARAFISCAL') {
-                        $parafiscales += isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
-                        $parafiscales += isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
+                        $parafiscal = new PilaDetail();
+                        $entity=$entityRepo->findOneBy(array("payroll_code"=>$value["ENT_CODIGO"]));
+                        $parafiscal->setEntityEntity($entity);
+                        $parafiscal->setPayrollPayroll($payroll);
+                        $parafiscal->setSqlValueCia(isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0);
+                        $parafiscal->setSqlValueEmp(isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0);
+                        $parafEmp += isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
+                        $parafCia += isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
                     }
+                }
+                if($payroll!=null){
+                    $details=$payroll->getPilaDetails();
+                    /** @var ObjectManager $em */
+                    $em = $this->getDoctrine()->getManager();
+                    if($details->count()!=0){
+                        /** @var PilaDetail $pilaDetail */
+                        foreach ($details as $pilaDetail) {
+                            if($pilaDetail->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode()=="EPS"||
+                                $pilaDetail->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode()=="ARS"){
+                                $pilaDetail->setEntityEntity($salud->getEntityEntity());
+                                $pilaDetail->setPayrollPayroll($salud->getPayrollPayroll());
+                                $pilaDetail->setSqlValueCia($salud->getSqlValueCia());
+                                $pilaDetail->setSqlValueEmp($salud->getSqlValueEmp());
+                                $em->persist($pilaDetail);
+                            }elseif ($pilaDetail->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode()=="ARP"){
+                                $pilaDetail->setEntityEntity($arl->getEntityEntity());
+                                $pilaDetail->setPayrollPayroll($arl->getPayrollPayroll());
+                                $pilaDetail->setSqlValueCia($arl->getSqlValueCia());
+                                $pilaDetail->setSqlValueEmp($arl->getSqlValueEmp());
+                                $em->persist($pilaDetail);
+                            }elseif ($pilaDetail->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode()=="AFP"){
+                                $pilaDetail->setEntityEntity($pension->getEntityEntity());
+                                $pilaDetail->setPayrollPayroll($pension->getPayrollPayroll());
+                                $pilaDetail->setSqlValueCia($pension->getSqlValueCia());
+                                $pilaDetail->setSqlValueEmp($pension->getSqlValueEmp());
+                                $em->persist($pilaDetail);
+                            }elseif($pilaDetail->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode()=="PARAFISCAL"){
+                                $pilaDetail->setEntityEntity($parafiscal->getEntityEntity());
+                                $pilaDetail->setPayrollPayroll($parafiscal->getPayrollPayroll());
+                                $pilaDetail->setSqlValueCia($parafiscal->getSqlValueCia());
+                                $pilaDetail->setSqlValueEmp($parafiscal->getSqlValueEmp());
+                                $em->persist($pilaDetail);
+                            }
+                        }
+                    }else{
+
+                        $em->persist($pension);
+                        $em->persist($salud);
+                        $em->persist($arl);
+                        $em->persist($parafiscal);
+                    }
+                    $em->flush();
                 }
             }
         }
+
         return array(
             'total' => (int)ceil($total),
-            'pension' => (int)ceil($pension),
-            'salud' => (int)ceil($salud),
-            'arl' => (int)ceil($arl),
-            'parafiscales' => (int)ceil($parafiscales)
+            'pension' => array(
+                'cia' => (int) ceil($pensionCia),
+                'emp' => (int) ceil($pensionEmp)),
+            'salud' => array(
+                'cia' => (int) ceil($saludCia),
+                'emp' => (int) ceil($saludEmp)),
+            'arl' => array(
+                'cia' => (int) ceil($arlCia),
+                'emp' => (int) ceil($arlEmp)),
+            'parafiscales' => array(
+                'cia' => (int) ceil($parafCia),
+                'emp' => (int) ceil($parafEmp))
         );
     }
 

@@ -55,6 +55,7 @@ class DocumentRestController extends FOSRestController
         $personEmployee = $employerHasEmployee->getEmployeeEmployee()->getPersonPerson();
 
         $rawSignature = $paramFetcher->get('signature');
+        $raw2 = $rawSignature;
         $img = str_replace('data:image/png;base64,', '', $rawSignature);
         $img = str_replace(' ', '+', $img);
         $data = base64_decode($img);
@@ -63,16 +64,15 @@ class DocumentRestController extends FOSRestController
         $absPath = getcwd();
         $absPath = str_replace('/', '_', $absPath);
         $signaturePath = $absPath . '_uploads_' . $fileSignatureName;
-        echo $signaturePath;
         $params = array(
             'ref'=> 'comprobante',
-            'id' => "$idPayroll,$signaturePath",
-            'type' => 'pdf',
+            'id' => "$idPayroll,$raw2",
+            'type' => 'html',
             'attach' => null
         );
         $documentResult = $this->forward('RocketSellerTwoPickBundle:Document:downloadDocuments', $params);
         $file = $documentResult->getContent();
-        $file_path = "uploads/tempComprobanteFile.pdf";
+        $file_path = "uploads/tempComprobanteFile.html";
         file_put_contents($file_path, $file);
 
 
@@ -269,7 +269,7 @@ class DocumentRestController extends FOSRestController
 
         return $view->setData(array());
     }
-    
+
     /**
      * Generate EmployerId for persons with only one employer
      *

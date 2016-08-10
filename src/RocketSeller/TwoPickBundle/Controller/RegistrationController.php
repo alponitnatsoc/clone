@@ -138,6 +138,8 @@ class RegistrationController extends BaseController
                     $realCode->setStartDate(new \DateTime());
                     $endDate= new DateTime(date("Y-m-d", strtotime("+".$user->getIsFree()." month", strtotime($realCode->getStartDate()->format("Y-m-d")))));
                     $realCode->setEndDate($endDate);
+                }else{
+                    $user->setIsFree($realCode->getPromotionCodeTypePromotionCodeType()->getDuration());
                 }
                 $userManager->updateUser($user);
             }else{

@@ -126,6 +126,7 @@ function hideOptionsAndLoadOldSettings() {
   var hop4 = $("#hOp4").val();
   var hop5 = $("#hOp5").val();
   var hop6 = $("#hOp6").val();
+  var hop7 = $("#hOp7").val();
 
   if( hop1 == 1 ){
     $("#op1").attr('checked', 'checked');
@@ -145,6 +146,9 @@ function hideOptionsAndLoadOldSettings() {
   if( hop6 == 1 ){
     $("#op6").attr('checked', 'checked');
   }
+  if( hop7 == 1 ){
+    $("#op7").attr('checked', 'checked');
+  }
 
 }
 
@@ -157,13 +161,14 @@ function evaluateOptions() {
   var isB4On = $("#op4").is(':checked');
   var isB5On = $("#op5").is(':checked');
   var isB6On = $("#op6").is(':checked');
+  var isB7On = $("#op7").is(':checked');
 
-  if( isB1On && isB2On && !isB3On && isB4On){
+  if( isB1On && isB2On && !isB3On && isB4On && !isB7On){
     $("#caso1").show();
     $("#caso2").hide();
     $("#caso3").hide();
   }
-  else if (isB1On && !isB2On && !isB6On) {
+  else if (isB1On && !isB2On && !isB6On && !isB7On) {
     $("#caso1").hide();
     $("#caso2").show();
     $("#caso3").hide();
@@ -184,13 +189,14 @@ function validateBeforeNext( prevOption ) {
   var isB4On = $("#op4").is(':checked');
   var isB5On = $("#op5").is(':checked');
   var isB6On = $("#op6").is(':checked');
+  var isB7On = $("#op7").is(':checked');
 
   var actualOption = 0;
 
-  if( isB1On && isB2On && !isB3On && isB4On){
+  if( isB1On && isB2On && !isB3On && isB4On && !isB7On){
     actualOption = 1;
   }
-  else if (isB1On && !isB2On && !isB6On) {
+  else if (isB1On && !isB2On && !isB6On && !isB7On) {
     actualOption = 2;
   }
   else{
@@ -210,6 +216,7 @@ function prepareUrlString (){
   var isB4On = $("#op4").is(':checked');
   var isB5On = $("#op5").is(':checked');
   var isB6On = $("#op6").is(':checked');
+  var isB7On = $("#op7").is(':checked');
 
   if(isB1On){
     optString += "1";
@@ -242,6 +249,12 @@ function prepareUrlString (){
     optString += "0";
   }
   if(isB6On){
+    optString += "1";
+  }
+  else {
+    optString += "0";
+  }
+  if(isB7On){
     optString += "1";
   }
   else {

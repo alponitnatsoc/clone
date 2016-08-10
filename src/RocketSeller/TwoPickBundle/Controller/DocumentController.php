@@ -148,7 +148,7 @@ use EmployerMethodsTrait;
      * @param integer $id id of the person who owns the document being added, only if the doctype is Comprobante this function receives instead a payrollId so it can associate the document to the payroll
      * @param integer $idDocumentType id to match the document type with the table DocumentType
      * @param integer $idNotification id to change the status of the notification after the document has been addded
-     * @param Request $request 
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function addDocAction($id, $idDocumentType, $idNotification, Request $request)
@@ -348,7 +348,7 @@ use EmployerMethodsTrait;
             $document = $this->getDoctrine()
                 ->getRepository('RocketSellerTwoPickBundle:Document')
                 ->find($idDocument);
-            
+
             $media = $document->getMediaMedia();
             if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference'))){
                 $docUrl = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
@@ -726,10 +726,10 @@ use EmployerMethodsTrait;
                 if(strpos($id, ",")) {
                     $arr = explode(',', $id);
                     $id = $arr[0];
-                    $signatureUrl = str_replace('_', '/', $arr[1]);
+                    $signatureUrl = "$arr[1],$arr[2]";
                 }
                 $payroll = $repository->find($id);
-                if($payroll->getPaid()==0){
+                if($payroll->getPaid() == 0){
                     return $this->redirectToRoute("show_dashboard");
                 }
 
@@ -745,8 +745,10 @@ use EmployerMethodsTrait;
                         )
                     );
                 }
+                /** @var Person $employer */
                 $employer = $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                 $employeePerson=$payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson();
+                /** @var Contract $contract */
                 $contract=$payroll->getContractContract();
                 $pods=$payroll->getPurchaseOrdersDescription();
                 $sqlNovelties=$payroll->getSqlNovelties();
@@ -764,6 +766,8 @@ use EmployerMethodsTrait;
 
                 $clientInfo = array(
                     'name' => $this->fullName($employer->getIdPerson()),
+                    'docType' => $employer->getDocumentType(),
+                    'docNumber' => $employer->getDocument(),
                 );
                 $employeeInfo = array(
                     'name' => $this->fullName($employeePerson->getIdPerson()),
@@ -771,10 +775,12 @@ use EmployerMethodsTrait;
                     'docNumber' => $employeePerson->getDocument(),
                     'position' => $contract->getPositionPosition()->getName(),
                     'payMethod' => $payMM,
-                    'salary' => $contract->getSalary(),
+                    'salary' => $contract->getTimeCommitmentTimeCommitment()->getCode()=="XD"?$contract->getSalary()/$contract->getWorkableDaysMonth():$contract->getSalary(),
                     'workCity' => $contract->getWorkplaceWorkplace()->getCity()->getName(),
+                    'type' => $contract->getTimeCommitmentTimeCommitment()->getCode()=="XD"?"Diario":"Mensual",
                     'period'=>$payroll->getPeriod(),
-                    'month'=>$payroll->getMonth()
+                    'month'=>$payroll->getMonth(),
+                    'year'=>$payroll->getYear()
                 );
                 $devengado= array();
                 $deducido= array();

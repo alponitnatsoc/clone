@@ -164,9 +164,11 @@ function startSubscriptionChoise() {
                   {
                     var tI = resultado['totalIncome'];
                     console.log("prev " + tI);
+                    /*
                     if(type == "days"){
                       tI = (tI / numberOfDays) * 4.34523810;
                     }
+                    */
                     console.log("pos " + tI);
                     $(this).html(getPrice(tI));
                     total_income += tI;
@@ -379,9 +381,11 @@ function fillTable(){
             {
               if(contrato[key]['wayToPay'] != 3){
                 var tI = salaryKey;
+                /*
                 if(type == "days"){
                   tI = (tI / numberOfDays) * (numberOfDays/4 * 4.34523810);
                 }
+                */
                 $(this).html(getPrice(tI));
                 total_income += tI;
                 num_empleados_pago_nomina++;
@@ -489,7 +493,7 @@ function calculatorL(type, numberOfDays, salaryM, salaryD, sisben, transport, ar
     var aid = 0;
     var aidD = 0;
 
-    numberOfDays = (numberOfDays / 4) * 4.34523810;
+    numberOfDays = (numberOfDays / 4) * 4/*.34523810*/;
     salaryD = salaryM / numberOfDays;
 
     var totalExpenses = 0;

@@ -284,8 +284,8 @@ class EmployeeRestController extends FOSRestController {
 
         $realSalary = 0;
         if($contract->getTimeCommitmentTimeCommitment()->getCode() == "XD"){
-          $realSalary = $contract->getSalary() / $contract->getWorkableDaysMonth();
-          $realSalary = $realSalary * (($contract->getWorkableDaysMonth() / 4) * 4.34523810);
+          $realSalary = $contract->getSalary() /*/ $contract->getWorkableDaysMonth()*/;
+          //$realSalary = $realSalary * (($contract->getWorkableDaysMonth() / 4) * 4.34523810);
         }
 
         // Logic to determine the contract planilla type
@@ -1129,8 +1129,8 @@ class EmployeeRestController extends FOSRestController {
 
         $realSalary = 0;
         if($contract->getTimeCommitmentTimeCommitment()->getCode() == "XD"){
-          $realSalary = $contract->getSalary() / $contract->getWorkableDaysMonth();
-          $realSalary = $realSalary * (($contract->getWorkableDaysMonth() / 4) * 4.34523810);
+          $realSalary = $contract->getSalary() /*/ $contract->getWorkableDaysMonth()*/;
+          //$realSalary = $realSalary * (($contract->getWorkableDaysMonth() / 4) * 4.34523810);
         }
 
         // Logic to determine the contract planilla type
@@ -1237,6 +1237,8 @@ class EmployeeRestController extends FOSRestController {
     }
 
     private function validateEntitiesEmployee($realEmployee) {
+
+
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $personEmployee = $realEmployee->getPersonPerson();

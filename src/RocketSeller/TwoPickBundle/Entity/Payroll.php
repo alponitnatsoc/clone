@@ -87,6 +87,11 @@ class Payroll
     private $sqlNovelties;
 
     /**
+     * @ORM\OneToMany(targetEntity="PilaDetail", mappedBy="payrollPayroll", cascade={"persist"})
+     */
+    private $pilaDetails;
+
+    /**
      * @ORM\OneToMany(targetEntity="PurchaseOrdersDescription", mappedBy="payrollPayroll", cascade={"persist"})
      */
     private $purchaseOrdersDescription;
@@ -443,6 +448,8 @@ class Payroll
     {
         return $this->payslip;
     }
+
+
     /**
      * Constructor
      */
@@ -451,7 +458,43 @@ class Payroll
         $this->payrollDetails = new \Doctrine\Common\Collections\ArrayCollection();
         $this->novelties = new \Doctrine\Common\Collections\ArrayCollection();
         $this->sqlNovelties = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pilaDetails = new \Doctrine\Common\Collections\ArrayCollection();
         $this->purchaseOrdersDescription = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+    /**
+     * Add pilaDetail
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PilaDetail $pilaDetail
+     *
+     * @return Payroll
+     */
+    public function addPilaDetail(\RocketSeller\TwoPickBundle\Entity\PilaDetail $pilaDetail)
+    {
+        $pilaDetail->setPayrollPayroll($this);
+        $this->pilaDetails[] = $pilaDetail;
+
+        return $this;
+    }
+
+    /**
+     * Remove pilaDetail
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PilaDetail $pilaDetail
+     */
+    public function removePilaDetail(\RocketSeller\TwoPickBundle\Entity\PilaDetail $pilaDetail)
+    {
+        $this->pilaDetails->removeElement($pilaDetail);
+    }
+
+    /**
+     * Get pilaDetails
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPilaDetails()
+    {
+        return $this->pilaDetails;
+    }
 }
