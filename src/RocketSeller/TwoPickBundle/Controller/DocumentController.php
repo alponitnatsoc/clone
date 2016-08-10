@@ -726,7 +726,7 @@ use EmployerMethodsTrait;
                 if(strpos($id, ",")) {
                     $arr = explode(',', $id);
                     $id = $arr[0];
-                    $signatureUrl = str_replace('_', '/', $arr[1]);
+                    $signatureUrl = "$arr[1],$arr[2]";
                 }
                 $payroll = $repository->find($id);
                 if($payroll->getPaid() == 0){
