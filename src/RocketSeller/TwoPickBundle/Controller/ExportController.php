@@ -3,17 +3,26 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use Application\Sonata\MediaBundle\Entity\Media;
+use FOS\RestBundle\View\View;
+use PHPExcel;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use RocketSeller\TwoPickBundle\Entity\Action;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\Document;
+use RocketSeller\TwoPickBundle\Entity\DocumentType;
 use RocketSeller\TwoPickBundle\Entity\EmployeeHasBeneficiary;
 use RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity;
+use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
+use RocketSeller\TwoPickBundle\Entity\Novelty;
+use RocketSeller\TwoPickBundle\Entity\NoveltyTypeHasDocumentType;
+use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Phone;
 use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,6 +32,297 @@ use ZipArchive;
 
 class ExportController extends Controller
 {
+    /**
+     * Function to export all the documents related to a entity
+     * @param String $entityType name of the entity
+     * @param Integer $idEntity id of the entity row
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function exportDocumentsAction($entityType, $idEntity){
+        //checking user is authenticated
+        if(!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')){
+            throw $this->createAccessDeniedException();
+        }
+        //flag for backoffice user
+        $backOffice=false;
+        //flag for permissions
+        $auth=false;
+        $count = 0;
+        //if user is backoffice changing the backoffice flag
+        if($this->isGranted('ROLE_BACK_OFFICE', $this->getUser())){
+            $backOffice= true;
+        }
+        //getting the user
+        /** @var User $user */
+        $user = $this->getUser();
+        //switching between enityTypes
+        switch ($entityType){
+            case 'Person':
+                //getting the person from the idEntity parameter
+                /** @var Person $person */
+                $person = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:Person")->find($idEntity);
+                if(!$person)
+                    throw $this->createNotFoundException();
+                //if person is equal to the user person changing the permission flag to true
+                if($person->getIdPerson() == $user->getPersonPerson()->getIdPerson()){
+                    $auth=true;
+                //if person is diferent for the user person looking for the person in the employees of the employer
+                }elseif($person != $user->getPersonPerson() and $person->getEmployee()){
+                    $eHES = $person->getEmployee()->getEmployeeHasEmployers();
+                    /** @var EmployerHasEmployee $eHE */
+                    foreach ($eHES as $eHE){
+                        //if the employee person belongs to the employerHasEmployee relation for the user changing the permission flag to true
+                        if($eHE->getEmployerEmployer()->getPersonPerson()==$user->getPersonPerson()){
+                            $auth = true;
+                            break;
+                        }
+
+                    }
+                }
+                //if the user is not allowed to download the documents throwing the exception
+                if(!$backOffice and !$auth){
+                    throw $this->createAccessDeniedException();
+                //if the user is allowed to download the documents getting all the documents related to the entity person
+                }else{
+                    $name= "Documentos de ".$person->getFullName();
+                    $cedula = $person->getDocumentDocument();
+                    $rut= $person->getRutDocument();
+                    $registro = $person->getBirthRegDocument();
+                    if($cedula){
+                        $media= $cedula->getMediaMedia();
+                        if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference'))){
+                            $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
+                        }
+                        $docName[] = $cedula->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
+                        $count++;
+                    }
+                    if($rut){
+                        $media= $rut->getMediaMedia();
+                        if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference'))){
+                            $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
+                        }
+                        $docName[] = $rut->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
+                        $count++;
+                    }
+                    if($registro){
+                        $media= $registro->getMediaMedia();
+                        if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($registro->getMediaMedia(), 'reference'))){
+                            $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($registro->getMediaMedia(), 'reference');
+                        }
+                        $docName[] = $registro->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
+                        $count++;
+                    }
+                }
+                break;
+            case 'Employer':
+                //getting the employer from the idEntity parameter
+                /** @var Employer $employer */
+                $employer = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Employer")->find($idEntity);
+                $name = "Mandato ".$employer->getPersonPerson()->getFullName();
+                if(!$employer)
+                    throw $this->createNotFoundException();
+                //if the employer person is equal to the user person changing auth flag to true
+                if($employer->getPersonPerson()==$user->getPersonPerson()){
+                    $auth=true;
+                }
+                //if user is not allowed to download the document throwing the exception
+                if(!$backOffice and !$auth){
+                    throw $this->createAccessDeniedException();
+                    //if the user is allowed to download getting all the documents related to the entity employer
+                }else{
+                    $mandato = $employer->getMandatoryDocument();
+                    if($mandato){
+                        $media= $mandato->getMediaMedia();
+                        if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($mandato->getMediaMedia(), 'reference'))){
+                            $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($mandato->getMediaMedia(), 'reference');
+                        }
+                        $docName[] = $mandato->getDocumentTypeDocumentType()->getName().' '.$employer->getPersonPerson()->getFullName().'.'.$media->getExtension();
+                        $count++;
+                    }
+                }
+                break;
+            case 'EmployerHasEmployee':
+                //getting the employerHsEmployee from the idEntity parameter
+                /** @var EmployerHasEmployee $eHE */
+                $eHE = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")->find($idEntity);
+                $name = "Carta de autorización de ".$eHE->getEmployeeEmployee()->getPersonPerson()->getFullName();
+                if(!$eHE)
+                    throw $this->createNotFoundException();
+                //if the employerPerson is equal to the user person changing the auth flag to true
+                if($eHE->getEmployeeEmployee()->getPersonPerson()==$user->getPersonPerson()){
+                    $auth=true;
+                }
+                if(!$backOffice and !$auth){
+                    throw $this->createAccessDeniedException();
+                    //if the user is allowed to download getting all the documents related to the entity employerHasEmployee
+                }else{
+                    $carta = $eHE->getAuthDocument();
+                    if($carta){
+                        $media= $carta->getMediaMedia();
+                        if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($carta->getMediaMedia(), 'reference'))){
+                            $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($carta->getMediaMedia(), 'reference');
+                        }
+                        $docName[] = $carta->getDocumentTypeDocumentType()->getName().' '.$eHE->getEmployerEmployer()->getPersonPerson()->getFullName().'.'.$media->getExtension();
+                        $count++;
+                    }
+                }
+
+                break;
+            case 'Contract':
+
+                //getting the contract from the idEntity parameter
+                /** @var Contract $contract */
+                $contract = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:Contract")->find($idEntity);
+                if(!$contract)
+                    throw $this->createNotFoundException();
+                $name = "Contrato de ".$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName();
+                //if the employer person from the relation is equal to the user person changing the auth flag to true
+                if($contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson()==$user->getPersonPerson()){
+                    $auth=true;
+                }
+                //if user is not alowed to download the document throwing the exception
+                if(!$backOffice and !$auth){
+                    throw $this->createAccessDeniedException();
+                //if the user is alowed to download the document getting all the documents related to the entity contract
+                }else{
+                    $contract = $contract->getDocumentDocument();
+                    if($contract){
+                        $media= $contract->getMediaMedia();
+                        if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($contract->getMediaMedia(), 'reference'))){
+                            $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($contract->getMediaMedia(), 'reference');
+                        }
+                        $docName[] = $contract->getDocumentTypeDocumentType()->getName().' '.$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName().'.'.$media->getExtension();
+                        $count++;
+                    }
+                }
+                break;
+            case 'Payroll':
+                /** @var Payroll $payroll */
+                $payroll = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll")->find($idEntity);
+                if(!$payroll)
+                    throw $this->createNotFoundException();
+                $name = "Comprobante de pago de ".$payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName();
+                if($payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson()==$user->getPersonPerson())
+                    $auth=true;
+                if(!$backOffice and !$auth) {
+                    throw $this->createAccessDeniedException();
+                }else{
+                    /** @var Document $comprobante */
+                    $comprobante = $payroll->getPayslip();
+                    if($comprobante){
+                        $media= $comprobante->getMediaMedia();
+                        if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($comprobante->getMediaMedia(), 'reference'))){
+                            $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($comprobante->getMediaMedia(), 'reference');
+                        }
+                        $docName[] = $comprobante->getDocumentTypeDocumentType()->getName().' '.$payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName().'.'.$media->getExtension();
+                        $count++;
+                    }
+                }
+                break;
+            case 'Novelty':
+                /** @var Novelty $novelty */
+                $novelty = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:Payroll")->find($idEntity);
+                if(!$novelty)
+                    throw $this->createNotFoundException();
+                $name = 'Documentos de la novedad '.$novelty->getNoveltyTypeNoveltyType()->getName();
+                if($novelty->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson()==$user->getPersonPerson())
+                    $auth=true;
+                if(!$backOffice and !$auth){
+                    throw $this->createAccessDeniedException();
+                }else{
+                    $documents = $novelty->getDocuments();
+                    /** @var Document $document */
+                    foreach ($documents as $document){
+                        $media= $document->getMediaMedia();
+                        if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference'))){
+                            $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
+                        }
+                        $docName[] = $document->getDocumentTypeDocumentType()->getName().' '.$novelty->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName().'.'.$media->getExtension();
+                        $count++;
+                    }
+                }
+                break;
+        }
+        //if document count is greater than zero
+        if ($count>0){
+            // create new zip opbject
+            $zip = new ZipArchive();
+            //create a temp file & open it
+            $tmp_file =$name.".zip";
+            if ($zip->open($tmp_file,ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE )=== TRUE) {
+                for($i = 0 ; $i<$count;$i++){
+                   // loop through each file
+                   $zip->addFile($docUrl[$i],$docName[$i]);
+
+               }
+                //close zip
+                if($zip->close()!==TRUE)
+                    echo "no permisos";
+                //send the file to the browser as a download
+                header('Pragma: public');
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate');
+                header('Cache-Control: public');
+                header('Content-Description: File Transfer');
+                header('Content-type: application/zip');
+                header("Content-disposition: attachment; filename=$tmp_file");
+                header('Content-Transfer-Encoding: binary');
+                ob_clean();
+                ob_end_flush();
+                readfile($tmp_file);
+                ignore_user_abort(true);
+                unlink($tmp_file);
+            }
+
+        }
+        return $this->redirectToRoute('ajax', array(), 301);
+    }
+
+    /**
+     * Funcion que crea el archivo zip con el contrato del employerHasEmployee que se desea descargar.
+     * @param $idContract id del contrato que desea descargarse
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function exportContractAction($idContract){
+        if($this->isGranted('EXPORT_DOCUMENTS_PERSON', $this->getUser())) {
+            /** @var Contract $contract */
+            $contract = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:Contract")->find($idContract);
+            if($contract->getDocumentDocument()){
+                $docContract = $contract->getDocumentDocument();
+                $media = $docContract->getMediaMedia();
+                if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($docContract->getMediaMedia(), 'reference'))){
+                    $docUrl = getcwd().$this->container->get('sonata.media.twig.extension')->path($docContract->getMediaMedia(), 'reference');
+                }
+                $docName = $docContract->getDocumentTypeDocumentType()->getName().' '.$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName().'.'.$media->getExtension();
+                # create new zip opbject
+                $zip = new ZipArchive();
+                # create a temp file & open it
+                $tmp_file =$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getNames()."_Contract.zip";
+                if ($zip->open($tmp_file,ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE )=== TRUE) {
+                    # loop through each file
+                    $zip->addFile($docUrl,$docName);
+                    # close zip
+                    if($zip->close()!==TRUE)
+                        echo "no permisos";
+                    # send the file to the browser as a download
+                    header("Content-disposition: attachment; filename=$tmp_file");
+                    header('Content-type: application/zip');
+                    header('Expires: 0');
+                    header('Cache-Control: must-revalidate');
+                    header('Pragma: public');
+                    ob_clean();
+                    flush();
+
+                    readfile($tmp_file);
+                    ignore_user_abort(true);
+                    unlink($tmp_file);
+                }
+			    return $this->redirectToRoute('ajax', array(), 301);
+            }
+        }else{
+            throw $this->createAccessDeniedException("No tiene suficientes permisos");
+        }
+    }
 
     /**
      * Funcion que crea el archivo zip con los documentos que ha subido la persona para backoffice.
@@ -36,19 +336,40 @@ class ExportController extends Controller
 			$person = $this->getdoctrine()
 			->getRepository('RocketSellerTwoPickBundle:Person')
 			->find($idPerson);
-
-			$personDocuments=$person->getDocs();
             $count = 1;
-			/** @var Document $document */
-			foreach ($personDocuments as $document) {
-				/** @var Media $media */
-                $media = $document->getMediaMedia();
-                if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference'))){
-                    $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
+            if($person->getDocumentDocument()){
+                /** @var Document $cedula */
+                $cedula = $person->getDocumentDocument();
+                /** @var Media $media */
+                $media = $cedula->getMediaMedia();
+                if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference'))){
+                    $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 }
-                $docName[] = $count.'. '.$document->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
+                $docName[] = $count.'. '.$cedula->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
                 $count++;
-			}
+            }
+			if($person->getRutDocument()){
+                /** @var Document $rut */
+                $rut = $person->getRutDocument();
+                /** @var Media $media */
+                $media = $rut->getMediaMedia();
+                if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference'))){
+                    $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
+                }
+                $docName[] = $count.'. '.$rut->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
+                $count++;
+            }
+            if($person->getBirthRegDocument()){
+                /** @var Document $registro */
+                $registro = $person->getBirthRegDocument();
+                /** @var Media $media */
+                $media = $registro->getMediaMedia();
+                if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($registro->getMediaMedia(), 'reference'))){
+                    $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($registro->getMediaMedia(), 'reference');
+                }
+                $docName[] = $count.'. '.$registro->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
+                $count++;
+            }
 			# create new zip opbject
 			$zip = new ZipArchive();
             $count--;
@@ -69,7 +390,6 @@ class ExportController extends Controller
 				header('Expires: 0');
 				header('Cache-Control: must-revalidate');
 				header('Pragma: public');
-				header('Content-Length: '.filesize($tmp_file));
 				ob_clean();
 				flush();
 
@@ -78,7 +398,6 @@ class ExportController extends Controller
 				unlink($tmp_file);
 			}
 			return $this->redirectToRoute('ajax', array(), 301);
-			//return $this->redirect("/backoffice/procedures", 301);
 		}else{
 			throw $this->createAccessDeniedException("No tiene suficientes permisos");
 		}
@@ -86,58 +405,191 @@ class ExportController extends Controller
 
     /**
      * Funcion que crea el archivo zip con el documento que se desea descargar.
-     * @param $idPerson id de la persona de la que se quieren descargar documentos
-     * @param $idDocType id del documento que se desea descargar
+     * @param Integer $idDoc id del documento que se desea descargar
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function exportDocumentByPersonDocTypeAction($idPerson,$idDocType)
+    public function exportDocumentByIdDocumentAction($idDoc)
     {
-        if($this->isGranted('EXPORT_DOCUMENTS_PERSON', $this->getUser())) {
-
-            $person = $this->getdoctrine()
-                ->getRepository('RocketSellerTwoPickBundle:Person')
-                ->find($idPerson);
-            $docType = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:DocumentType')->find($idDocType);
-            /** @var Document $document */
-            $document = $person->getDocByType($docType->getName());
-            /** @var Media $media */
-            $media = $document->getMediaMedia();
-            if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference'))){
-                $docUrl = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
-            }
-            $docName = $document->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
-            # create new zip opbject
-            $zip = new ZipArchive();
-            # create a temp file & open it
-            $tmp_file =$person->getNames()."_".$document->getDocumentTypeDocumentType()->getName().".zip";
-            if ($zip->open($tmp_file,ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE )=== TRUE) {
-                # loop through each file
-                $zip->addFile($docUrl,$docName);
-                # close zip
-                if($zip->close()!==TRUE)
-                    echo "no permisos";
-                # send the file to the browser as a download
-                header("Content-disposition: attachment; filename=$tmp_file");
-                header('Content-type: application/zip');
-                header('Expires: 0');
-                header('Cache-Control: must-revalidate');
-                header('Pragma: public');
-                header('Content-Length: '.filesize($tmp_file));
-                ob_clean();
-                flush();
-                readfile($tmp_file);
-                ignore_user_abort(true);
-                unlink($tmp_file);
-            }
-            return $this->redirectToRoute('ajax', array(), 301);
-        }else{
-            throw $this->createAccessDeniedException("No tiene suficientes permisos");
+        //checking user is authenticated
+        if(!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')){
+            throw $this->createAccessDeniedException();
         }
+        //flag for backoffice user
+        $backOffice=false;
+        //flag for permissions
+        $auth=false;
+        //if user is backoffice changing the backoffice flag
+        if($this->isGranted('ROLE_BACK_OFFICE', $this->getUser())){
+            $backOffice= true;
+        }
+        //getting the user
+        /** @var User $user */
+        $user = $this->getUser();
+        /** @var Document $document */
+        $document = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Document")->find($idDoc);
+        if(!$document)
+            throw $this->createNotFoundException();
+        switch($document->getDocumentTypeDocumentType()->getDocCode()){
+            case 'CC':
+                /** @var Person $person */
+                $person = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Person")->findOneBy(array('documentDocument'=>$document));
+                if(!$person)
+                    throw $this->createNotFoundException();
+                if($person == $user->getPersonPerson()){
+                    $auth=true;
+                    $name = $person->getFullName();
+                }else{
+                    if($person->getEmployee()){
+                        $eHEs = $person->getEmployee()->getEmployeeHasEmployers();
+                        /** @var EmployerHasEmployee $eHE */
+                        foreach ($eHEs as $eHE){
+                            if($eHE->getEmployerEmployer()->getPersonPerson()==$person){
+                                $auth=true;
+                                $name = $eHE->getEmployeeEmployee()->getPersonPerson()->getFullName();
+                                break;
+                            }
+                        }
+                    }
+                }
+                break;
+            case 'RUT':
+                /** @var Person $person */
+                $person = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Person")->findOneBy(array('rutDocument'=>$document));
+                if(!$person)
+                    throw $this->createNotFoundException();
+                if($person == $user->getPersonPerson()){
+                    $auth=true;
+                    $name = $person->getFullName();
+                }else{
+                    if($person->getEmployee()){
+                        $eHEs = $person->getEmployee()->getEmployeeHasEmployers();
+                        /** @var EmployerHasEmployee $eHE */
+                        foreach ($eHEs as $eHE){
+                            if($eHE->getEmployerEmployer()->getPersonPerson()==$person){
+                                $auth=true;
+                                $name = $eHE->getEmployeeEmployee()->getPersonPerson()->getFullName();
+                                break;
+                            }
+                        }
+                    }
+                }
+                break;
+            case 'CTR':
+                /** @var Contract $contract */
+                $contract = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Contract")->findOneBy(array('documentDocument'=>$document));
+                if(!$contract)
+                    throw $this->createNotFoundException();
+                if($contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson() == $user->getPersonPerson())
+                    $auth=true;
+                $name = $contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName();
+                break;
+            case 'CAS':
+                /** @var EmployerHasEmployee $eHE */
+                $eHE = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")->findOneBy(array('authDocument'=>$document));
+                if(!$eHE)
+                    throw $this->createNotFoundException();
+                if($eHE->getEmployerEmployer()->getPersonPerson() == $user->getPersonPerson())
+                    $auth=true;
+                $name=$eHE->getEmployeeEmployee()->getPersonPerson()->getFullName();
+                break;
+            case 'RCDN':
+                /** @var Person $person */
+                $person = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Person")->findOneBy(array('birthRegDocument'=>$document));
+                if(!$person)
+                    throw $this->createNotFoundException();
+                if($person == $user->getPersonPerson()){
+                    $auth=true;
+                    $name = $person->getFullName();
+                }else{
+                    if($person->getEmployee()){
+                        $eHEs = $person->getEmployee()->getEmployeeHasEmployers();
+                        /** @var EmployerHasEmployee $eHE */
+                        foreach ($eHEs as $eHE){
+                            if($eHE->getEmployerEmployer()->getPersonPerson()==$person){
+                                $auth=true;
+                                $name = $eHE->getEmployeeEmployee()->getPersonPerson()->getFullName();
+                                break;
+                            }
+                        }
+                    }
+                }
+                break;
+            case 'MAND':
+                /** @var Employer $employer */
+                $employer =$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Employer")->findOneBy(array('mandatoryDocument'=>$document));
+                if(!$employer)
+                    throw $this->createNotFoundException();
+                if($employer->getPersonPerson() == $user->getPersonPerson())
+                    $auth=true;
+                $name=$employer->getPersonPerson()->getFullName();
+                break;
+            case 'CPR':
+                /** @var Payroll $payroll */
+                $payroll = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll")->findOneBy(array('payslip'=>$document));
+                if(!$payroll)
+                    throw $this->createNotFoundException();
+                if($payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson() == $user->getPersonPerson())
+                    $auth=true;
+                $name=$payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName();
+                break;
+            case 'TI':
+                /** @var Person $person */
+                $person = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Person")->findOneBy(array('documentDocument'=>$document));
+                if(!$person)
+                    throw $this->createNotFoundException();
+                if($person == $user->getPersonPerson()){
+                    $auth=true;
+                    $name = $person->getFullName();
+                }else{
+                    if($person->getEmployee()){
+                        $eHEs = $person->getEmployee()->getEmployeeHasEmployers();
+                        /** @var EmployerHasEmployee $eHE */
+                        foreach ($eHEs as $eHE){
+                            if($eHE->getEmployerEmployer()->getPersonPerson()==$person){
+                                $auth=true;
+                                $name = $eHE->getEmployeeEmployee()->getPersonPerson()->getFullName();
+                                break;
+                            }
+                        }
+                    }
+                }
+                break;
+        }
+        if(!$backOffice and !$auth)
+            throw $this->createAccessDeniedException();
+        $media = $document->getMediaMedia();
+        if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference'))){
+            $docUrl = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
+        }
+        $docName = $document->getDocumentTypeDocumentType()->getName().' '.$name.'.'.$media->getExtension();
+        # create new zip opbject
+        $zip = new ZipArchive();
+        # create a temp file & open it
+        $tmp_file ="Download_".$document->getDocumentTypeDocumentType()->getName().".zip";
+        if ($zip->open($tmp_file,ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE )=== TRUE) {
+            # loop through each file
+            $zip->addFile($docUrl,$docName);
+            # close zip
+            if($zip->close()!==TRUE)
+                echo "no permisos";
+            # send the file to the browser as a download
+            header("Content-disposition: attachment; filename=$tmp_file");
+            header('Content-type: application/zip');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            ob_clean();
+            flush();
+            readfile($tmp_file);
+            ignore_user_abort(true);
+            unlink($tmp_file);
+        }
+        return $this->redirectToRoute('ajax', array(), 301);
     }
 
 
     /**
-     * Funcion para exporar todos los documentos relacionados a la acción
+     * Export all the documents related to an action
      * @param $idAction
      */
     public function exportAllDocumentsAction($idAction)
@@ -250,7 +702,7 @@ class ExportController extends Controller
                 fputcsv($handle, array('Tipo de Documento del Empleador','Cedula de Ciudadania'),';');
             }elseif ($person->getDocumentType()=='CE') {
                 fputcsv($handle, array('Tipo de Documento del Empleador','Cedula de Extranjeria'),';');
-            }elseif ($person->getDocByType()=='TI'){
+            }elseif ($person->getDocumentType()=='TI'){
                 fputcsv($handle, array('Tipo de Documento del Empleador','Tarjeta de Identidad'),';');
             }
             fputcsv($handle, array(' '.'Numero de Documento del Empleador',$person->getDocument().' '),';');
@@ -277,7 +729,7 @@ class ExportController extends Controller
                 fputcsv($handle, array('Tipo de Documento del Representante Legal','Cedula de Ciudadania'),';');
             }elseif ($person->getDocumentType()=='CE') {
                 fputcsv($handle, array('Tipo de Documento del Representante Legal','Cedula de Extranjeria'),';');
-            }elseif ($person->getDocByType()=='TI'){
+            }elseif ($person->getDocumentType()=='TI'){
                 fputcsv($handle, array('Tipo de Documento del Representante Legal','Tarjeta de Identidad'),';');
             }
             fputcsv($handle, array(' '.'Numero de Documento del Representante Legal',$person->getDocument().' '),';');
@@ -293,7 +745,7 @@ class ExportController extends Controller
                     fputcsv($handle, array('Tipo de Documento del Empleado','Cedula de Ciudadania'),';');
                 }elseif ($employee->getDocumentType()=='CE') {
                     fputcsv($handle, array('Tipo de Documento del Empleado','Cedula de Extranjeria'),';');
-                }elseif ($employee->getDocByType()=='TI'){
+                }elseif ($employee->getDocumentType()=='TI'){
                     fputcsv($handle, array('Tipo de Documento del Empleado','Tarjeta de Identidad'),';');
                 }
                 fputcsv($handle, array('Numero de Documento del empleado',$employee->getDocument().' '),';');
@@ -371,7 +823,6 @@ class ExportController extends Controller
                 header('Expires: 0');
                 header('Cache-Control: must-revalidate');
                 header('Pragma: public');
-                header('Content-Length: '.filesize($tmp_file));
                 ob_clean();
                 flush();
 
@@ -383,65 +834,6 @@ class ExportController extends Controller
         }else{
             throw $this->createAccessDeniedException("No tiene suficientes permisos");
         }
-    }
-
-    public function exportDocumentsAction()
-    {
-		/** @var User $user */
-		$user = $this->getUser();
-		$userDocuments=$user->getPersonPerson()->getDocs();
-		$files = array();
-		$files[0] = array();
-		$files[1] = array();
-		/** @var Document $document */
-		foreach ($userDocuments as $document) {
-			$files[0][]= $this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
-			$files[1][]=$document->getMediaMedia()->getName();
-		}
-		$valid_files = array();
-		$valid_files[0] = array();
-		$valid_files[1] = array();
-
-		//if files were passed in..
-		if(is_array($files[0])) {
-					//cycle through each file
-			for($i=0;$i<count($files[0]);$i++){
-				if(file_exists(getcwd().$files[0][$i])) {
-					$valid_files[0][] = getcwd().$files[0][$i];
-					$valid_files[1][] = $files[1][$i];
-
-				}
-			}
-		}
-
-		# create new zip opbject
-		$zip = new ZipArchive();
-
-		# create a temp file & open it
-		$tmp_file =$user->getPersonPerson()->getNames()."_Documents.zip";
-		if ($zip->open($tmp_file,ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE )=== TRUE) {
-			# loop through each file
-			for($i=0;$i<count($valid_files[0]);$i++){
-				$zip->addFile($valid_files[0][$i],$valid_files[1][$i]);
-			}
-			# close zip
-			if($zip->close()!==TRUE)
-				echo "no permisos";
-			# send the file to the browser as a download
-			header("Content-disposition: attachment; filename=$tmp_file");
-			header('Content-type: application/zip');
-			header('Expires: 0');
-			header('Cache-Control: must-revalidate');
-			header('Pragma: public');
-			header('Content-Length: '.filesize($tmp_file));
-			ob_clean();
-			flush();
-
-			readfile($tmp_file);
-			ignore_user_abort(true);
-			unlink($tmp_file);
-		}
-		return $this->redirectToRoute('ajax', array(), 301);
     }
 
 	public function generateCsvAction(){
@@ -527,7 +919,6 @@ class ExportController extends Controller
 		header('Expires: 0');
 		header('Cache-Control: must-revalidate');
 		header('Pragma: public');
-		header('Content-Length: '.filesize($tmp_file));
 		ob_clean();
 		flush();
 		readfile($tmp_file);
@@ -545,7 +936,39 @@ class ExportController extends Controller
         /** @var Person $employee */
         $employee = $action->getPersonPerson();
 
-		// $tmp_file=$person->getNames()."_fields.csv";
+//        // ask the service for a Excel5
+//        $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+//
+//        $phpExcelObject->getProperties()->setCreator("Symplifica-Doc-Generator")
+//            ->setLastModifiedBy("Symplifica")
+//            ->setTitle("general info")
+//            ->setSubject("details")
+//            ->setDescription("generated document with the employerHasEmployee information")
+//            ->setKeywords("employee employeer contract")
+//            ->setCategory("Information");
+//        $phpExcelObject->setActiveSheetIndex(0)
+//            ->setCellValue('A1', 'Hello')
+//            ->setCellValue('B2', 'world!');
+//        $phpExcelObject->getActiveSheet()->setTitle('Simple');
+//        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+//        $phpExcelObject->setActiveSheetIndex(0);
+//
+//        // create the writer
+//        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel2007');
+//        // create the response
+//        $response = $this->get('phpexcel')->createStreamedResponse($writer);
+//        // adding headers
+//        $dispositionHeader = $response->headers->makeDisposition(
+//            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+//            'Info_'.$employee->getFullName().'_'.date('d-m-y').'.xlsx'
+//        );
+//        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+//        $response->headers->set('Pragma', 'public');
+//        $response->headers->set('Cache-Control', 'maxage=1');
+//        $response->headers->set('Content-Disposition', $dispositionHeader);
+//        return $response;
+
+        // $tmp_file=$person->getNames()."_fields.csv";
 		$tmp_file=$this->container->getParameter('kernel.cache_dir') .$person->getNames()."_fields.csv";
         $handle = fopen($tmp_file, 'w+');
         fputs($handle, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
@@ -560,7 +983,7 @@ class ExportController extends Controller
 			fputcsv($handle, array('Tipo de Documento del Empleador','Cedula de Ciudadania'),',');
 		}elseif ($person->getDocumentType()=='CE') {
 			fputcsv($handle, array('Tipo de Documento del Empleador','Cedula de Extranjeria'),',');
-		}elseif ($person->getDocByType()=='TI'){
+		}elseif ($person->getDocumentType()=='TI'){
 			fputcsv($handle, array('Tipo de Documento del Empleador','Tarjeta de Identidad'),',');
 		}
 		fputcsv($handle, array(' '.'Numero de Documento del Empleador',$person->getDocument().' '),',');
@@ -587,7 +1010,7 @@ class ExportController extends Controller
             fputcsv($handle, array('Tipo de Documento del Representante Legal','Cedula de Ciudadania'),',');
         }elseif ($person->getDocumentType()=='CE') {
             fputcsv($handle, array('Tipo de Documento del Representante Legal','Cedula de Extranjeria'),',');
-        }elseif ($person->getDocByType()=='TI'){
+        }elseif ($person->getDocumentType()=='TI'){
             fputcsv($handle, array('Tipo de Documento del Representante Legal','Tarjeta de Identidad'),',');
         }
         fputcsv($handle, array(' '.'Numero de Documento del Representante Legal',$person->getDocument().' '),',');
@@ -603,7 +1026,7 @@ class ExportController extends Controller
                 fputcsv($handle, array('Tipo de Documento del Empleado','Cedula de Ciudadania'),',');
             }elseif ($employee->getDocumentType()=='CE') {
                 fputcsv($handle, array('Tipo de Documento del Empleado','Cedula de Extranjeria'),',');
-            }elseif ($employee->getDocByType()=='TI'){
+            }elseif ($employee->getDocumentType()=='TI'){
                 fputcsv($handle, array('Tipo de Documento del Empleado','Tarjeta de Identidad'),',');
             }
             fputcsv($handle, array('Numero de Documento del empleado',$employee->getDocument().' '),',');
@@ -650,9 +1073,12 @@ class ExportController extends Controller
                             fputcsv($handle, array('Salario del empleado',$contract->getSalary()),',');
                             fputcsv($handle, array('Cargo del empleado',$contract->getPositionPosition()->getName()),',');
                             fputcsv($handle, array('Fecha de inicio del contrato',$contract->getStartDate()->format('d/m/y')),',');
-                            if($contract->getEndDate()) {
+                            $date = $contract->getEndDate();
+                            if($date != ""){
+                                echo "entro";die;
                                 fputcsv($handle, array('Fecha de fin del contrato',$contract->getEndDate()->format('d/m/y')),',');
                             }
+
                             break;
                         }
                     }
@@ -664,18 +1090,14 @@ class ExportController extends Controller
         header("Content-Disposition: attachment; filename=$tmp_file");
         header("Content-type: application/vnd.ms-excel; charset=utf-8");
         header('Content-Transfer-Encoding: binary');
-        header('Content-Description: File Transfer');
         header('Expires: 0');
-        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Cache-Control: must-revalidate');
         header('Pragma: public');
-        header('Content-Length: '.filesize($tmp_file));
-
         ob_clean();
-        ob_end_flush();
-		flush();
-		readfile($tmp_file);
-		ignore_user_abort(true);
-		unlink($tmp_file);
+        flush();
+        readfile($tmp_file);
+        ignore_user_abort(true);
+        unlink($tmp_file);
 	}
 
     public function exportLandingAction(){
@@ -703,7 +1125,6 @@ class ExportController extends Controller
         header('Expires: 0');
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
         header('Pragma: public');
-        header('Content-Length: '.filesize($tmp_file));
 
         ob_clean();
         ob_end_flush();

@@ -24,9 +24,6 @@ class DashBoardEmployerController extends Controller {
     public function showDashBoardAction(Request $request) {
         /** @var User $user */
         $user = $this->getUser();
-        $contractType = $this->getdoctrine()
-                    ->getRepository('RocketSellerTwoPickBundle:DocumentType')
-                    ->findOneByName("Contrato");
         if (empty($user)) {
             return $this->redirectToRoute('fos_user_security_login');
         }
@@ -48,45 +45,58 @@ class DashBoardEmployerController extends Controller {
 
             /** @var User $user */
             $user = $this->getUser();
+            $endValid = false;
+            $cleanDash = false;
+            //se calcula el estado de documentos de todos los empleados para el empleador
             foreach ($this->allDocumentsReady($user) as $docStat ){
+                //se asigna la bandera ready para cada id de empleado con su respectivo status
                 $ready[$docStat['idEHE']]=$docStat['docStatus'];
-                if(!$tareas and $docStat['docStatus']==13){
-                        return $this->render('@RocketSellerTwoPick/Employer/endvalidation.html.twig');
-                }
-
-                /** Se envia el Email diahabil*/
+                // Se envia el Email diahabil y se muestra el modal de documentos en validación
                 if($tareas and $docStat['docStatus']==2){
                     $em = $this->getDoctrine()->getManager();
                     $eHE = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->find($docStat['idEHE']);
                     $smailer = $this->get('symplifica.mailer.twig_swift');
                     $smailer->sendOneDayMessage($this->getUser(),$eHE);
+                }elseif(!$tareas and ($docStat['docStatus']==2 or $docStat['docStatus']==3)){
+                    $cleanDash =true;
                 }
+
+                //si el usuario no tiene tareas pendientes y algun empleado fue completamente validado por backoffice
+                if(!$tareas and $docStat['docStatus']==13){
+                    $endValid = true;
+                }
+
+
+
                 if($tareas and $docStat['docStatus']==11){
                     $eHE = $this->getDoctrine()->getManager()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->find($docStat['idEHE']);
                     return $this->redirectToRoute('employer_completion_documents',array('idEHE'=>$eHE->getIdEmployerHasEmployee()));
                 }
                 if(!$tareas and $docStat['docStatus']>13){
-                    $em = $this->getDoctrine()->getManager();
-                    $eHE = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->find($docStat['idEHE']);
-                    return $this->render('@RocketSellerTwoPick/Employer/cleanDashboard.html.twig',array(
-                        'userName' => $user->getPersonPerson()->getFullName(),
-                        'employeeName'=> $eHE->getEmployeeEmployee()->getPersonPerson()->getFullName(),
-                        'validated'=>$docStat['idEHE'],
-                    ));
                 }
             }
+            if($endValid){
+                return $this->render('@RocketSellerTwoPick/Employer/endvalidation.html.twig',array(
+                    'user' => $user->getPersonPerson(),
+                    'ready'=>$ready,
+                ));
+            }
+            if($cleanDash){
+                return $this->render('@RocketSellerTwoPick/Employer/cleanDashboard.html.twig',array(
+                    'user' => $user->getPersonPerson(),
+                    'ready' => $ready
+                ));
+            }
             return $this->render('RocketSellerTwoPickBundle:Employer:dashBoard.html.twig', array(
-                        'notifications' => $notifications,
-                        'user' => $user->getPersonPerson(),
-                        'contractType' => $contractType,
-                        'ready'=>$ready,
+                    'notifications' => $notifications,
+                    'user' => $user->getPersonPerson(),
+                    'ready'=>$ready,
             ));
             
         } catch (Exception $ex) {
             return $this->render('RocketSellerTwoPickBundle:Employer:dashBoard.html.twig', array(
                         'notifications' => false,
                         'user' => $user->getPersonPerson(),
-                        'contractType' => $contractType,
 
             ));
         }

@@ -14,8 +14,8 @@
             <div class="panel panel-default">
                 <h4 class="col-md-12 panel-heading">Información Registrada</h4>
 
-                {% set document = person.docByType("Cedula") %}
-                {% if person.docByType("Cedula")=='' %}
+                {% set document = person.documentDocument %}
+                {% if person.documentDocument=='' %}
                 <div class="col-md-6" style="margin-top:250px; text-align:center">
                     <p>Llamar al cliente {{ person.fullName }} y recordarle que suba la cedula</p>
                     {% else %}

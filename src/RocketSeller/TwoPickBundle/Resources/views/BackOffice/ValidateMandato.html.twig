@@ -15,7 +15,7 @@
                 <h4 class="col-md-12 panel-heading">MANDATO</h4>
             </div>
             <div class="col-md-12 center">
-                {% if person.docByType("Mandato")=='' %}
+                {% if person.employer.mandatoryDocument=='' %}
                     <div class="col-md-12" style="margin-top:250px;margin-bottom: 150px; text-align:center">
                         <p>Llamar al cliente {{ user.personPerson.fullName}} y recordarle que descargue, firme y suba el mandato</p>
                     </div>
@@ -36,7 +36,7 @@
                     {% else %}
                         <h4>Descargar documentos</h4>
                         <p>{{ mandato.documentTypeDocumentType.name}} {{ person.fullName }}</p>
-                        <a class="btn btn-orange notAjax" href="{{ path('export_documents_person',{'idPerson':action.personPerson.idPerson})}}">Descargar</a>
+                        <a class="btn btn-orange notAjax" href="{{ path('export_document_by_id',{'idDoc':mandato.idDocument})}}">Descargar</a>
                         <br>
                     {% endif %}
                     <br>

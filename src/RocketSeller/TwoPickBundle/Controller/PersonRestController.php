@@ -4,6 +4,7 @@ namespace RocketSeller\TwoPickBundle\Controller;
 use Doctrine\DBAL\Query\QueryBuilder;
 use RocketSeller\TwoPickBundle\Entity\City;
 use RocketSeller\TwoPickBundle\Entity\Department;
+use RocketSeller\TwoPickBundle\Entity\Document;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use FOS\RestBundle\Controller\FOSRestController;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -613,6 +614,46 @@ class PersonRestController extends FOSRestController
         }
         $view = View::create($msgs);
         $view->setStatusCode(400);
+
+        return $view;
+    }
+
+    /**
+     * Link existing documents to the person and deleting the previous relation<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Link existing documents to the person from the antique database Schema",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when error"
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function postLinkPersonsDocumentsAction()
+    {
+        $msgs = "Linking persons documents<br>";
+        $msgs = $msgs." Crossing the persons in database<br>";
+        //getting all the persons in the database
+        $persons = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:Person")->findAll();
+        //crossing the persons to find their documents
+        /** @var Person $person */
+        foreach ($persons as $person){
+            //if person docs array is not clear
+            if(!$person->getDocs()->clear()){
+                //Crossing person documents
+                /** @var Document $document */
+                foreach ($person->getDocs() as $document){
+                    if($document->getDocumentTypeDocumentType()->getDocCode()=='CC'){
+                          //todo action
+                    }
+                }
+            }
+        }
+        $view = View::create($msgs);
+        $view->setStatusCode(200);
 
         return $view;
     }

@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 use Doctrine\Common\Collections\Criteria;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Exclude;
@@ -11,7 +12,11 @@ use JMS\Serializer\Annotation\Exclude;
 /**
  * EmployerHasEmployee
  *
- * @ORM\Table(name="employer_has_employee", indexes={@ORM\Index(name="fk_employer_has_employee_employer1", columns={"employer_id_employer"}), @ORM\Index(name="fk_employer_has_employee_employee1", columns={"employee_id_employee"})})
+ * @ORM\Table(name="employer_has_employee",
+ *     indexes={@ORM\Index(name="fk_employer_has_employee_employer1",columns={"employer_id_employer"}),
+ *              @ORM\Index(name="fk_employer_has_employee_employee1",columns={"employee_id_employee"})},
+ *     uniqueConstraints={@UniqueConstraint(name="cartaUnique", columns={"auth_id_document", "id_employer_has_employee"})}
+ * )
  * @ORM\Entity
  */
 class EmployerHasEmployee
@@ -50,6 +55,14 @@ class EmployerHasEmployee
      * @Exclude
      */
     private $contracts;
+
+    /** @var Document
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Document")
+     * @ORM\JoinColumns(
+     *     @ORM\JoinColumn(name="auth_id_document",referencedColumnName="id_document")
+     * )
+     */
+    private $authDocument;
 
     /**
      * @ORM\OneToMany(targetEntity="Liquidation", mappedBy="employerHasEmployee", cascade={"persist"})
@@ -108,13 +121,11 @@ class EmployerHasEmployee
      * 10 - all documents error
      * 11 - all docs validated message
      * 12 - all docs error message
-     * 13 - backoffice message
+     * 13 - backoffice finished message
      * 14 - employee contract upload is pending
      * 15 - message contract uploaded 
-     * 16 - employee contract in validation
+     * 16 - backoffice finished
      * 17 - employee contract error
-     * 18 - employee contract validated message
-     * 19 - backoffice finished
      * @ORM\Column(type="integer", length=1, nullable=TRUE)
      */
     private $documentStatus = -2;
@@ -419,5 +430,29 @@ class EmployerHasEmployee
     public function getExistentHighTec()
     {
         return $this->existentHighTec;
+    }
+
+    /**
+     * Set cartaDocument
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Document $authDocument
+     *
+     * @return EmployerHasEmployee
+     */
+    public function setAuthDocument(\RocketSeller\TwoPickBundle\Entity\Document $authDocument = null)
+    {
+        $this->authDocument = $authDocument;
+
+        return $this;
+    }
+
+    /**
+     * Get cartaDocument
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Document
+     */
+    public function getAuthDocument()
+    {
+        return $this->authDocument;
     }
 }

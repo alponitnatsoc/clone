@@ -2,10 +2,13 @@
 
 namespace RocketSeller\TwoPickBundle\Traits;
 
+use Doctrine\Common\Persistence\ObjectManagerAware;
 use RocketSeller\TwoPickBundle\Controller\UtilsController;
 use RocketSeller\TwoPickBundle\Entity\Action;
+use RocketSeller\TwoPickBundle\Entity\ActionType;
 use RocketSeller\TwoPickBundle\Entity\Configuration;
 use RocketSeller\TwoPickBundle\Entity\Contract;
+use RocketSeller\TwoPickBundle\Entity\Document;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Employer;
@@ -73,55 +76,51 @@ trait EmployeeMethodsTrait
         return null;
     }
 
+    /**
+     * Función que cuenta el numero de documentos pendientes para el empleador
+     * @param Person $person Persona asociada al empleador
+     * @return int Numero de documentos pendientes
+     */
     protected function employerDocumentsReady(Person $person)
     {
         $em = $this->getDoctrine()->getManager();
-        $documentsRepo = $em->getRepository('RocketSellerTwoPickBundle:Document');
-        $documents = $documentsRepo->findByPersonPerson($person);
-        $docs = array('Cedula' => false, 'Rut' => false, 'Mandato' => false);
+        //Initialising de pending docs counter
         $pendingDocs = 0;
-        foreach ($docs as $type => $status) {
-            foreach ($documents as $key => $document) {
-                if ($type == $document->getDocumentTypeDocumentType()->getName()) {
-                    $docs[$type] = true;
-                    break;
-                }
-            }
-            if (!$docs[$type]) {
-                $pendingDocs++;
-            }
-        }
+        if(!$person->getDocumentDocument())
+            $pendingDocs++;
+        if(!$person->getRutDocument())
+            $pendingDocs++;
+        if(!$person->getEmployer()->getMandatoryDocument())
+            $pendingDocs++;
+        //returning the count of pending docs MAX 3
         return $pendingDocs;
     }
 
+    /**
+     * Función que verifica los documentos subidos para el empleado
+     * los estados del contrato pueden ser 1 cuando existe un documento contrato para el contrato activo o 0 si no existe
+     * @param EmployerHasEmployee $eHE employerHasEmployee del que se van a obtener los documentos
+     * @return array vector con el numero de documentos pendientes en la posición 0 y el estado del contrato en la posición
+     */
     protected function employeeDocumentsReady(EmployerHasEmployee $eHE)
     {
-        $em = $this->getDoctrine()->getManager();
-        $documentsRepo = $em->getRepository('RocketSellerTwoPickBundle:Document');
-        $ePerson=$eHE->getEmployeeEmployee()->getPersonPerson();
-        $eDocuments= $documentsRepo->findByPersonPerson($ePerson);
-        $eDocs = array('Cedula' => false,'Contrato'=>false,'Carta autorización Symplifica'=>false);
+
         $ePendingDocs=0;
-        $contract=0;
-        foreach ($eDocs as $type => $status) {
-            foreach ($eDocuments as $key => $document) {
-                if ($type == $document->getDocumentTypeDocumentType()->getName()) {
-                    $eDocs[$type] = true;
-                    break;
-                }
-            }
-            if (!$eDocs[$type]) {
-                if($type!='Contrato'){
-                    $ePendingDocs++;
-                }else{
-                    $contract=1;
-                }
-            }
-        }
-        return array('pending'=>$ePendingDocs,'contract'=>$contract);
+        $pContract = 0;
+        if(!$eHE->getAuthDocument())
+            $ePendingDocs++;
+        if(!$eHE->getEmployeeEmployee()->getPersonPerson()->getDocumentDocument())
+            $ePendingDocs++;
+        $em = $this->getDoctrine()->getManager();
+        /** @var Contract $contract */
+        $contract = $em->getRepository("RocketSellerTwoPickBundle:Contract")->findOneBy(array('employerHasEmployeeEmployerHasEmployee'=>$eHE,'state'=>1));
+        if(!$contract->getDocumentDocument())
+            $pContract ++;
+        return array('pending'=>$ePendingDocs,'contract'=>$pContract);
     }
 
     /**
+     * Función que retorna el estado de validación de documentos de un empleador por backoffice
      * 1 - validado
      * 0 - Por Validar
      * -1 - Error de Validación
@@ -132,16 +131,30 @@ trait EmployeeMethodsTrait
      */
     protected function employerDocumentsValidated(User $user)
     {
+        //Getting the person from the user
+        /** @var Person $person */
         $person = $user->getPersonPerson();
+        //Getting the employer associated to the person
+        /** @var Employer $employer */
         $employer = $person->getEmployer();
+        //Finding the procedure type with code REE Registro empleador y empleados
+        /** @var ProcedureType $procedureType */
+        $procedureType = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:ProcedureType')->findOneBy(array(
+            'code'  =>'REE',
+        ));
+        //finding the procedure for the user employer combination
         /** @var RealProcedure $procedure */
         $procedure = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:RealProcedure')->findOneBy(array(
             'userUser'          => $user,
             'employerEmployer'  => $employer,
+            'procedureTypeProcedureType' => $procedureType,
         ));
+        //Finding the action type with code VDC validar Documentos
+        /** @var ActionType $actionType */
         $actionType = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:ActionType')->findOneBy(array(
             'code'  =>'VDC',
         ));
+        //Finding the action for the actual employer
         /** @var Action $action */
         $action = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Action')->findOneBy(array(
             'userUser'                  =>$user,
@@ -149,20 +162,26 @@ trait EmployeeMethodsTrait
             'personPerson'              =>$person,
             'actionTypeActionType'      =>$actionType,
         ));
+        //Getting the completion status for the action
         $status = $action->getStatus();
 
         if($status == 'Completado'){
+            //return state Validated
             return 1;
         }elseif($status == 'Error'){
+            //return state Error
             return -1;
         }elseif($status == 'Nuevo'){
+            //return state Pending Validation
             return 0;
         }else{
+            //return state Unknown State
             return 2;
         }
     }
 
     /**
+     * Función que retorna el estado de validación de información de un empleado por backoffice
      * 1 - validado
      * 0 - Por Validar
      * -1 - Error de Validación
@@ -209,6 +228,7 @@ trait EmployeeMethodsTrait
     }
 
     /**
+     * Función que retorna el estado de validación de documentos de un empleado por backoffice
      * 1 - validado
      * 0 - Por Validar
      * -1 - Error de Validación
@@ -255,6 +275,53 @@ trait EmployeeMethodsTrait
     }
 
     /**
+     * Función que retorna el estado de validación del contrato de un empleado por backoffice
+     * 1 - validado
+     * 0 - Por Validar
+     * -1 - Error de Validación
+     * 2 - estado desconocido
+     *
+     * @param User $user Usuario del empleado del que se consulta el estado de validacion de documentos
+     * @param EmployerHasEmployee $eHE employerHasEmployee del empleado del que se consulta el estado de validacion de documetos
+     * @return int
+     */
+    protected function employeeContractValidated(User $user, EmployerHasEmployee $eHE)
+    {
+        if($eHE->getState()<3){
+            return 2;
+        }
+        $employer = $user->getPersonPerson()->getEmployer();
+        $employee = $eHE->getEmployeeEmployee();
+        $person = $employee->getPersonPerson();
+        /** @var RealProcedure $procedure */
+        $procedure = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:RealProcedure')->findOneBy(array(
+            'userUser' => $user,
+            'employerEmployer' => $employer,
+        ));
+        $actionType = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:ActionType')->findOneBy(array(
+            'code'=>'VC',
+        ));
+        /** @var Action $action */
+        $action = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Action')->findOneBy(array(
+            'userUser'=>$user,
+            'realProcedureRealProcedure'=>$procedure,
+            'personPerson'=>$person,
+            'actionTypeActionType'=>$actionType,
+        ));
+        $status=$action->getStatus();
+
+        if($status=='Completado'){
+            return 1;
+        }elseif($status=='Error'){
+            return -1;
+        }elseif($status=='Nuevo'){
+            return 0;
+        }else{
+            return 2;
+        }
+    }
+
+    /**
      * @param User $user usuario al que se le desea actualizar el estado de documentos de todos sus empleados
      * @return array arreglo de estado de documentos para cada empleado
      */
@@ -268,270 +335,81 @@ trait EmployeeMethodsTrait
                 if($eHE->getDocumentStatus() == -2 or $eHE->getDocumentStatus()==0){
                     $eHE->setDocumentStatus(-1);
                 }
-                switch ($eHE->getDocumentStatus()){
-                    case -1:
-                        $pend = $this->employerDocumentsReady($person);
-                        $ePend = $this->employeeDocumentsReady($eHE);
-                        if($ePend['pending']!=0 and $pend !=0){
-                            $eHE->setDocumentStatus(-1);
-                        }elseif($ePend['pending']!=0 and $pend ==0){
-                            $eHE->setDocumentStatus(0);
-                        }elseif($ePend['pending']==0 and $pend !=0){
-                            $eHE->setDocumentStatus(1);
-                        }elseif($pend==0 and $ePend['pending']==0){
-                            $eHE->setDocumentStatus(2);
-                        }
+                $case = $eHE->getDocumentStatus();
+                
+                if($case == -1){
+                    $pend = $this->employerDocumentsReady($person);
+                    $ePend = $this->employeeDocumentsReady($eHE);
+                    if($ePend['pending']!=0 and $pend !=0){
+                        $eHE->setDocumentStatus(-1);
+                    }elseif($ePend['pending']!=0 and $pend ==0){
+                        $eHE->setDocumentStatus(0);
+                    }elseif($ePend['pending']==0 and $pend !=0){
+                        $eHE->setDocumentStatus(1);
+                    }elseif($pend==0 and $ePend['pending']==0){
+                        $eHE->setDocumentStatus(2);
+                    }
+                }elseif($case == 0){
+                    $ePend = $this->employeeDocumentsReady($eHE);
+                    if($ePend['pending']==0){
+                        $eHE->setDocumentStatus(2);
+                    }else{
+                        $eHE->setDocumentStatus(0);
+                    }
+                }elseif($case == 1){
+                    $pend = $this->employerDocumentsReady($person);
+                    if($pend==0){
+                        $eHE->setDocumentStatus(2);
+                    }else{
+                        $eHE->setDocumentStatus(1);
+                    }
+                }elseif($case > 1 and $case < 11){
+                    $docValid = $this->employerDocumentsValidated($user);
+                    $eDocsValid = $this->employeeDocumentsValidated($user,$eHE);
+                    if($docValid == 2 or $eDocsValid == 2 ){
                         break;
-                    case 0:
-                        $ePend = $this->employeeDocumentsReady($eHE);
-                        if($ePend['pending']==0){
-                            $eHE->setDocumentStatus(2);
-                        }else{
-                            $eHE->setDocumentStatus(0);
-                        }
-                        break;
-                    case 1:
-                        $pend = $this->employerDocumentsReady($person);
-                        if($pend==0){
-                            $eHE->setDocumentStatus(2);
-                        }else{
-                            $eHE->setDocumentStatus(1);
-                        }
-                        break;
-                    case 2:
+                    }
+                    if($docValid == 0 and $eDocsValid == 0){
                         $eHE->setDocumentStatus(3);
-                        break;
-                    case 3:
-                        $docValid = $this->employerDocumentsValidated($user);
-                        $eDocsValid = $this->employeeDocumentsValidated($user,$eHE);
-                        if($docValid == 2 or $eDocsValid == 2 ){
-                            break;
-                        }
-                        if($docValid == 0 and $eDocsValid == 0){
-                            $eHE->setDocumentStatus(3);
-                        }elseif($docValid == 1 and $eDocsValid == 0){
-                            $eHE->setDocumentStatus(4);
-                        }elseif($docValid == 0 and $eDocsValid == 1){
-                            $eHE->setDocumentStatus(5);
-                        }elseif($docValid == -1 and $eDocsValid == 1){
-                            $eHE->setDocumentStatus(6);
-                        }elseif($docValid == 1 and $eDocsValid == -1){
-                            $eHE->setDocumentStatus(7);
-                        }elseif($docValid == -1 and $eDocsValid == 0){
-                            $eHE->setDocumentStatus(8);
-                        }elseif($docValid == 0 and $eDocsValid == -1){
-                            $eHE->setDocumentStatus(9);
-                        }elseif($docValid == -1 and $eDocsValid == -1){
-                            $eHE->setDocumentStatus(10);
-                        }elseif($docValid == 1 and $eDocsValid == 1){
-                            $eHE->setDocumentStatus(11);
-                        }
-                        break;
-                    case 4:
-                        $docValid = $this->employerDocumentsValidated($user);
-                        $eDocsValid = $this->employeeDocumentsValidated($user,$eHE);
-                        if($docValid == 2 or $eDocsValid == 2 ){
-                            break;
-                        }
-                        if($docValid == 0 and $eDocsValid == 0){
-                            $eHE->setDocumentStatus(3);
-                        }elseif($docValid == 1 and $eDocsValid == 0){
-                            $eHE->setDocumentStatus(4);
-                        }elseif($docValid == 0 and $eDocsValid == 1){
-                            $eHE->setDocumentStatus(5);
-                        }elseif($docValid == -1 and $eDocsValid == 1){
-                            $eHE->setDocumentStatus(6);
-                        }elseif($docValid == 1 and $eDocsValid == -1){
-                            $eHE->setDocumentStatus(7);
-                        }elseif($docValid == -1 and $eDocsValid == 0){
-                            $eHE->setDocumentStatus(8);
-                        }elseif($docValid == 0 and $eDocsValid == -1){
-                            $eHE->setDocumentStatus(9);
-                        }elseif($docValid == -1 and $eDocsValid == -1){
-                            $eHE->setDocumentStatus(10);
-                        }elseif($docValid == 1 and $eDocsValid == 1){
-                            $eHE->setDocumentStatus(11);
-                        }
-                        break;
-                    case 5:
-                        $docValid = $this->employerDocumentsValidated($user);
-                        $eDocsValid = $this->employeeDocumentsValidated($user,$eHE);
-                        if($docValid == 2 or $eDocsValid == 2 ){
-                            break;
-                        }
-                        if($docValid == 0 and $eDocsValid == 0){
-                            $eHE->setDocumentStatus(3);
-                        }elseif($docValid == 1 and $eDocsValid == 0){
-                            $eHE->setDocumentStatus(4);
-                        }elseif($docValid == 0 and $eDocsValid == 1){
-                            $eHE->setDocumentStatus(5);
-                        }elseif($docValid == -1 and $eDocsValid == 1){
-                            $eHE->setDocumentStatus(6);
-                        }elseif($docValid == 1 and $eDocsValid == -1){
-                            $eHE->setDocumentStatus(7);
-                        }elseif($docValid == -1 and $eDocsValid == 0){
-                            $eHE->setDocumentStatus(8);
-                        }elseif($docValid == 0 and $eDocsValid == -1){
-                            $eHE->setDocumentStatus(9);
-                        }elseif($docValid == -1 and $eDocsValid == -1){
-                            $eHE->setDocumentStatus(10);
-                        }elseif($docValid == 1 and $eDocsValid == 1){
-                            $eHE->setDocumentStatus(11);
-                        }
-                        break;
-                    case 6:
-                        $docValid = $this->employerDocumentsValidated($user);
-                        $eDocsValid = $this->employeeDocumentsValidated($user,$eHE);
-                        if($docValid == 2 or $eDocsValid == 2 ){
-                            break;
-                        }
-                        if($docValid == 0 and $eDocsValid == 0){
-                            $eHE->setDocumentStatus(3);
-                        }elseif($docValid == 1 and $eDocsValid == 0){
-                            $eHE->setDocumentStatus(4);
-                        }elseif($docValid == 0 and $eDocsValid == 1){
-                            $eHE->setDocumentStatus(5);
-                        }elseif($docValid == -1 and $eDocsValid == 1){
-                            $eHE->setDocumentStatus(6);
-                        }elseif($docValid == 1 and $eDocsValid == -1){
-                            $eHE->setDocumentStatus(7);
-                        }elseif($docValid == -1 and $eDocsValid == 0){
-                            $eHE->setDocumentStatus(8);
-                        }elseif($docValid == 0 and $eDocsValid == -1){
-                            $eHE->setDocumentStatus(9);
-                        }elseif($docValid == -1 and $eDocsValid == -1){
-                            $eHE->setDocumentStatus(10);
-                        }elseif($docValid == 1 and $eDocsValid == 1){
-                            $eHE->setDocumentStatus(11);
-                        }
-                        break;
-                    case 7:
-                        $docValid = $this->employerDocumentsValidated($user);
-                        $eDocsValid = $this->employeeDocumentsValidated($user,$eHE);
-                        if($docValid == 2 or $eDocsValid == 2 ){
-                            break;
-                        }
-                        if($docValid == 0 and $eDocsValid == 0){
-                            $eHE->setDocumentStatus(3);
-                        }elseif($docValid == 1 and $eDocsValid == 0){
-                            $eHE->setDocumentStatus(4);
-                        }elseif($docValid == 0 and $eDocsValid == 1){
-                            $eHE->setDocumentStatus(5);
-                        }elseif($docValid == -1 and $eDocsValid == 1){
-                            $eHE->setDocumentStatus(6);
-                        }elseif($docValid == 1 and $eDocsValid == -1){
-                            $eHE->setDocumentStatus(7);
-                        }elseif($docValid == -1 and $eDocsValid == 0){
-                            $eHE->setDocumentStatus(8);
-                        }elseif($docValid == 0 and $eDocsValid == -1){
-                            $eHE->setDocumentStatus(9);
-                        }elseif($docValid == -1 and $eDocsValid == -1){
-                            $eHE->setDocumentStatus(10);
-                        }elseif($docValid == 1 and $eDocsValid == 1){
-                            $eHE->setDocumentStatus(11);
-                        }
-                        break;
-                    case 8:
-                        $docValid = $this->employerDocumentsValidated($user);
-                        $eDocsValid = $this->employeeDocumentsValidated($user,$eHE);
-                        if($docValid == 2 or $eDocsValid == 2 ){
-                            break;
-                        }
-                        if($docValid == 0 and $eDocsValid == 0){
-                            $eHE->setDocumentStatus(3);
-                        }elseif($docValid == 1 and $eDocsValid == 0){
-                            $eHE->setDocumentStatus(4);
-                        }elseif($docValid == 0 and $eDocsValid == 1){
-                            $eHE->setDocumentStatus(5);
-                        }elseif($docValid == -1 and $eDocsValid == 1){
-                            $eHE->setDocumentStatus(6);
-                        }elseif($docValid == 1 and $eDocsValid == -1){
-                            $eHE->setDocumentStatus(7);
-                        }elseif($docValid == -1 and $eDocsValid == 0){
-                            $eHE->setDocumentStatus(8);
-                        }elseif($docValid == 0 and $eDocsValid == -1){
-                            $eHE->setDocumentStatus(9);
-                        }elseif($docValid == -1 and $eDocsValid == -1){
-                            $eHE->setDocumentStatus(10);
-                        }elseif($docValid == 1 and $eDocsValid == 1){
-                            $eHE->setDocumentStatus(11);
-                        }
-                        break;
-                    case 9:
-                        $docValid = $this->employerDocumentsValidated($user);
-                        $eDocsValid = $this->employeeDocumentsValidated($user,$eHE);
-                        if($docValid == 2 or $eDocsValid == 2 ){
-                            break;
-                        }
-                        if($docValid == 0 and $eDocsValid == 0){
-                            $eHE->setDocumentStatus(3);
-                        }elseif($docValid == 1 and $eDocsValid == 0){
-                            $eHE->setDocumentStatus(4);
-                        }elseif($docValid == 0 and $eDocsValid == 1){
-                            $eHE->setDocumentStatus(5);
-                        }elseif($docValid == -1 and $eDocsValid == 1){
-                            $eHE->setDocumentStatus(6);
-                        }elseif($docValid == 1 and $eDocsValid == -1){
-                            $eHE->setDocumentStatus(7);
-                        }elseif($docValid == -1 and $eDocsValid == 0){
-                            $eHE->setDocumentStatus(8);
-                        }elseif($docValid == 0 and $eDocsValid == -1){
-                            $eHE->setDocumentStatus(9);
-                        }elseif($docValid == -1 and $eDocsValid == -1){
-                            $eHE->setDocumentStatus(10);
-                        }elseif($docValid == 1 and $eDocsValid == 1){
-                            $eHE->setDocumentStatus(11);
-                        }
-                        break;
-                    case 10:
-                        $docValid = $this->employerDocumentsValidated($user);
-                        $eDocsValid = $this->employeeDocumentsValidated($user,$eHE);
-                        if($docValid == 2 or $eDocsValid == 2 ){
-                            break;
-                        }
-                        if($docValid == 0 and $eDocsValid == 0){
-                            $eHE->setDocumentStatus(3);
-                        }elseif($docValid == 1 and $eDocsValid == 0){
-                            $eHE->setDocumentStatus(4);
-                        }elseif($docValid == 0 and $eDocsValid == 1){
-                            $eHE->setDocumentStatus(5);
-                        }elseif($docValid == -1 and $eDocsValid == 1){
-                            $eHE->setDocumentStatus(6);
-                        }elseif($docValid == 1 and $eDocsValid == -1){
-                            $eHE->setDocumentStatus(7);
-                        }elseif($docValid == -1 and $eDocsValid == 0){
-                            $eHE->setDocumentStatus(8);
-                        }elseif($docValid == 0 and $eDocsValid == -1){
-                            $eHE->setDocumentStatus(9);
-                        }elseif($docValid == -1 and $eDocsValid == -1){
-                            $eHE->setDocumentStatus(10);
-                        }elseif($docValid == 1 and $eDocsValid == 1){
-                            $eHE->setDocumentStatus(11);
-                        }
-                        break;
-                        break;
-                    case 11:
-                        $eHE->setDocumentStatus(13);
-                        break;
-                    case 12:
-                        $eHE->setDocumentStatus(10);
-                        break;
-                    case 13:
+                    }elseif($docValid == 1 and $eDocsValid == 0){
+                        $eHE->setDocumentStatus(4);
+                    }elseif($docValid == 0 and $eDocsValid == 1){
+                        $eHE->setDocumentStatus(5);
+                    }elseif($docValid == -1 and $eDocsValid == 1){
+                        $eHE->setDocumentStatus(6);
+                    }elseif($docValid == 1 and $eDocsValid == -1){
+                        $eHE->setDocumentStatus(7);
+                    }elseif($docValid == -1 and $eDocsValid == 0){
+                        $eHE->setDocumentStatus(8);
+                    }elseif($docValid == 0 and $eDocsValid == -1){
+                        $eHE->setDocumentStatus(9);
+                    }elseif($docValid == -1 and $eDocsValid == -1){
+                        $eHE->setDocumentStatus(12);
+                    }elseif($docValid == 1 and $eDocsValid == 1){
+                        $eHE->setDocumentStatus(11);
+                    }
+                }elseif($case == 11){
+                    $ePend = $this->employeeDocumentsReady($eHE);
+                    if($ePend['contract']==0){
                         $eHE->setDocumentStatus(14);
-                        break;
-                    case 14:
-                        $ePend = $this->employeeDocumentsReady($eHE);
-                        if($ePend['contract']==0){
-                            $eHE->setDocumentStatus(14);
-                        }else{
-                            $eHE->setDocumentStatus(15);
-                        }
-                        break;
-                    case 15:
-                        $eHE->setDocumentStatus(16);
-                        break;
-                    case 16:
-                        break;
+                    }else{
+                        $eHE->setDocumentStatus(15);
+                    }
+                }elseif($case == 12){
+                    $eHE->setDocumentStatus(10);
+                }elseif($case == 13){
+                    $eHE->setDocumentStatus(16);
+                }elseif($case == 14){
+                    $ePend = $this->employeeDocumentsReady($eHE);
+                    if($ePend['contract']==0){
+                        $eHE->setDocumentStatus(14);
+                    }else{
+                        $eHE->setDocumentStatus(15);
+                    }
+                }elseif($case == 15){
+                    if($eHE->getState()>4){
+                        $eHE->setDocumentStatus(13);
+                    }
                 }
             }else{
                 $eHE->setDocumentStatus(-2);
@@ -545,6 +423,11 @@ trait EmployeeMethodsTrait
     }
 
 
+    /**
+     * function to generate all the employer and employee notifications 
+     * @param User $user
+     * @return bool
+     */
     protected function validateDocuments(User $user)
     {
         /* @var $employerHasEmployee EmployerHasEmployee */
@@ -567,43 +450,51 @@ trait EmployeeMethodsTrait
         // = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $employer = $user->getPersonPerson()->getEmployer();
-        $person = $realEmployee->getPersonPerson();
-
-        $documentsRepo = $em->getRepository('RocketSellerTwoPickBundle:Document');
-        $documents = $documentsRepo->findByPersonPerson($person);
+        $eePerson = $realEmployee->getPersonPerson();
+        // obtaining the employerHasEmployee for the relation User employee
         /** @var EmployerHasEmployee $employerHasEmployee */
         $employerHasEmployee = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->findOneBy(array(
             'employerEmployer' => $employer,
             'employeeEmployee' => $realEmployee,
             'state' => 3
         ));
+        // obtaining the active contract for the employerHasEmployee
         /** @var Contract $contract */
         $contract = $em->getRepository('RocketSellerTwoPickBundle:Contract')->findOneBy(array(
             'employerHasEmployeeEmployerHasEmployee' => $employerHasEmployee,
-            'state' => 3
+            'state' => 1
         ));
+
         /** @var UtilsController $utils */
         $utils = $this->get('app.symplifica_utils');
-        $docs = array('Cedula' => false, 'Contrato' => false,'Carta autorización Symplifica'=>false);
+        //array of employeeDocs
+        $docs = array('CC' => false, 'CTR' => false,'CAS'=>false);
+        if($eePerson->getDocumentDocument()){
+            $docs['CC']=true;
+        }
+        if($employerHasEmployee->getAuthDocument()){
+            $docs['CAS']=true;
+        }
+        if($contract->getDocumentDocument()){
+            $docs['CTR']=true;
+        }
         foreach ($docs as $type => $status) {
-            foreach ($documents as $key => $document) {
-                if ($type == $document->getDocumentTypeDocumentType()->getName()) {
-                    $docs[$type] = true;
-                    break;
-                }
-            }
             // {{ path('download_document', {'id': employees[0].personPerson.idPerson , 'idDocument':doc.idDocument}) }}
             if (!$docs[$type]) {
                 $msj = "";
-                $documentTypeRepo = $em->getRepository('RocketSellerTwoPickBundle:DocumentType');
+                $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findOneBy(array('docCode'=>$type));
                 $dAction=null;
                 $nAction="Subir";
                 $dUrl=null;
-                if ($type == 'Cedula') {
-                    $msj = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
-                    $documentType = 'Cedula';
-                } elseif ($type == 'Contrato') {
-                    $documentType = 'Contrato';
+                if ($type == 'CC') {
+                    $msj = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$eePerson->getNames())[0]." ". $eePerson->getLastName1());
+                    $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$eePerson->getIdPerson(),'docCode'=>'CC'));
+                }elseif ($type == 'CAS') {
+                    $msj = "Subir autorización firmada de manejo de datos y afiliación de " .$utils->mb_capitalize(explode(" ",$eePerson->getNames())[0]." ". $eePerson->getLastName1());
+                    $url = $this->generateUrl("documentos_employee", array('entityType'=>'EmployerHasEmployee','entityId'=>$employerHasEmployee->getIdEmployerHasEmployee(),'docCode'=>'CAS'));
+                    $dAction="Bajar";
+                    $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getIdEmployerHasEmployee(), 'ref' => "aut-afiliacion-ss", 'type' => 'pdf'));
+                }elseif ($type == 'CTR') {
                     if($employerHasEmployee->getLegalFF()==1){
                         $configurations=$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getConfigurations();
                         $flag=false;
@@ -618,20 +509,14 @@ trait EmployeeMethodsTrait
                             $dAction="Bajar";
                             $dUrl = $this->generateUrl("download_documents", array('id' => $contract->getIdContract(), 'ref' => "contrato", 'type' => 'pdf'));
                         }
-                        $msj = "Subir copia del contrato de ". $utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
+                        $msj = "Subir copia del contrato de ". $utils->mb_capitalize(explode(" ",$eePerson->getNames())[0]." ". $eePerson->getLastName1());
+                        $url = $this->generateUrl("documentos_employee", array('entityType'=>'Contract','entityId'=>$contract->getIdContract(),'docCode'=>'CTR'));
                     }else{
-                        $msj = "Aviso sobre el contrato de ". $utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
+                        $msj = "Aviso sobre el contrato de ". $utils->mb_capitalize(explode(" ",$eePerson->getNames())[0]." ". $eePerson->getLastName1());
                         $nAction="Ver";
                     }
 
-                } elseif ($type == 'Carta autorización Symplifica') {
-                    $documentType = 'Carta autorización Symplifica';
-                    $msj = "Subir autorización firmada de manejo de datos y afiliación de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
-                    $dAction="Bajar";
-                    $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getIdEmployerHasEmployee(), 'ref' => "aut-afiliacion-ss", 'type' => 'pdf'));
                 }
-                $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
-                $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
                 if($nAction=="Ver"){
                     $url = $this->generateUrl("view_document_contract_state", array("idEHE"=>$employerHasEmployee->getIdEmployerHasEmployee()));
                 }
@@ -664,39 +549,37 @@ trait EmployeeMethodsTrait
     {
         //$user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
-
         $person = $realEmployer->getPersonPerson();
-        $documentsRepo = $em->getRepository('RocketSellerTwoPickBundle:Document');
-        $documents = $documentsRepo->findByPersonPerson($person);
         /** @var UtilsController $utils */
         $utils = $this->get('app.symplifica_utils');
-        $docs = array('Cedula' => false, 'Rut' => false, 'Mandato' => false);
+        $docs = array('CC' => false, 'RUT' => false, 'MAND' => false);
+        if($realEmployer->getMandatoryDocument()){
+            $docs['MAND']=true;
+        }
+        if($person->getDocumentDocument()){
+            $docs['CC']=true;
+        }
+        if($person->getRutDocument()){
+            $docs['RUT']=true;
+        }
         foreach ($docs as $type => $status) {
-            foreach ($documents as $key => $document) {
-                if ($type == $document->getDocumentTypeDocumentType()->getName()) {
-                    $docs[$type] = true;
-                    break;
-                }
-            }
             if (!$docs[$type]) {
                 $msj = "";
-                $documentTypeRepo = $em->getRepository('RocketSellerTwoPickBundle:DocumentType');
+                $documentType= $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findOneBy(array('docCode'=>$type));
                 $dAction=null;
                 $dUrl=null;
-                if ($type == 'Cedula') {
+                if ($type == 'CC') {
                     $msj = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
-                    $documentType = 'Cedula';
-                } elseif ($type == 'Rut') {
+                    $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$person->getIdPerson(),'docCode'=>'CC'));
+                } elseif ($type == 'RUT') {
                     $msj = "Subir copia del RUT de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
-                    $documentType = 'Rut';
-                } elseif ($type == 'Mandato'){
-                  $documentType = 'Mandato';
-                  $msj = "Subir mandato firmado de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
-                  $dUrl = $this->generateUrl("download_documents", array('id' => $person->getIdPerson(), 'ref' => "mandato", 'type' => 'pdf'));
-                  $dAction="Bajar";
+                    $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$person->getIdPerson(),'docCode'=>'RUT'));
+                } elseif ($type == 'MAND'){
+                    $msj = "Subir mandato firmado de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
+                    $url = $this->generateUrl("documentos_employee", array('entityType'=>'Employer','entityId'=>$realEmployer->getIdEmployer(),'docCode'=>'MAND'));
+                    $dUrl = $this->generateUrl("download_documents", array('id' => $person->getIdPerson(), 'ref' => "mandato", 'type' => 'pdf'));
+                    $dAction="Bajar";
                 }
-                $documentType = $documentTypeRepo->findByName($documentType)[0];
-                $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
                 //$url = $this->generateUrl("api_public_post_doc_from");
                 $this->createNotification($user->getPersonPerson(), $msj, $url, $documentType,"Subir",$dAction,$dUrl);
             }
