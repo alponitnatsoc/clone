@@ -455,6 +455,7 @@ class DocumentRestController extends FOSRestController
                 }
             }
         }
+
         //getting the documents from the data base
         $documents = $em->getRepository("RocketSellerTwoPickBundle:Document")->findAll();
         //Crossing all the documents the first time to correct the relations
