@@ -698,7 +698,6 @@ class PayrollRestSecuredController extends FOSRestController
                     $em->persist($notification);
 
                     if ($actualPayroll->getIdPayroll() == $actualPayroll->getContractContract()->getActivePayroll()->getIdPayroll()) {
-
                         //to fix the Pila Pod of disappearing, we pass it to de owe PO if the pila is not getting paid
                         $asociatedPila = $actualPayroll->getPila();
                         if($actualPayroll->getPeriod()==4){
