@@ -182,22 +182,17 @@ class PayrollRestSecuredController extends FOSRestController
                     $person = $pod->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                     $employeePerson=$actualPayroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson();
 
-                    $documentType = 'Comprobante';
                     $msj = "Subir comprobante de " . $utils->mb_capitalize(explode(" ", $employeePerson->getNames())[0] . " " . $employeePerson->getLastName1()) . " " . $utils->period_number_to_name($actualPayroll->getPeriod()) . " " . $utils->month_number_to_name($actualPayroll->getMonth());
                     $dUrl = $this->generateUrl("download_documents", array('id' => $actualPayroll->getIdPayroll(), 'ref' => "comprobante", 'type' => 'pdf'));
                     $dAction = "Bajar";
                     $action = "Subir";
-
-                    $documentType = $documentTypeRepo->findByName($documentType)[0];
-
-                    //aqui se envía el id del payroll en vez del de la persona
-                    $url = $this->generateUrl("documentos_employee", array('id' => $actualPayroll->getIdPayroll(), 'idDocumentType' => $documentType->getIdDocumentType()));
+                    $url = $this->generateUrl("documentos_employee", array("entityType"=>'Payroll',"entityId"=>$actualPayroll->getIdPayroll(),"docCode"=>'CPR'));
                     //$url = $this->generateUrl("api_public_post_doc_from");
 
                     $notification = new Notification();
                     $notification->setPersonPerson($person);
                     $notification->setStatus(1);
-                    $notification->setDocumentTypeDocumentType($documentType);
+                    $notification->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'CPR')));
                     $notification->setType('alert');
                     $notification->setDescription($msj);
                     $notification->setRelatedLink($url);
@@ -680,8 +675,8 @@ class PayrollRestSecuredController extends FOSRestController
                     $dAction = "Bajar";
                     $action = "Subir";
 
-                    $documentType = $documentTypeRepo->findByName($documentType)[0];
-                    $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
+                    $url = $this->generateUrl("documentos_employee", array("entityType"=>'Payroll',"entityId"=>$actualPayroll->getIdPayroll(),"docCode"=>'CPR'));
+                    $documentType = $em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'CPR'));
                     //$url = $this->generateUrl("api_public_post_doc_from");
 
                     $notification = new Notification();

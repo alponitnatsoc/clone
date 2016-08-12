@@ -7,16 +7,31 @@
 <div id="cont-succesdocs">
                 <div id="title-siccesdocs">
                     <img src="../img/perfecto.png"/>
-                    <h1 class="azuloscurofont bold">¡{{ userName }}!</h1>
+                    <h1 class="azuloscurofont bold">¡{{ user.fullName }}!</h1>
                     <h2 class="h2 light grisclarofont">No tienes tareas pendientes</h2>
                 </div>
 
                 <div id="texto-succesdocs">
+                    {% for eHE in user.employer.employerHasEmployees %}
+                        {% if ready is defined %}
+                            {% if ready[eHE.idEmployerHasEmployee] == 2 or ready[eHE.idEmployerHasEmployee] == 3 %}
+                                {% set name = eHE.employeeEmployee.personPerson.fullName %}
+                                <div class="casiValidado">
+                                    <h1 class="azulclarofont light centrar">¡Haz subido todos los documentos de <br><strong>{{ name }}</strong></h1>
+                                    <p class="light grisclarofont">En un máximo de 1 día hábil iniciaremos a validar tu proceso y radicarlo ante las entidades de seguridad social
+                                        de ser necesario.</p>
+                                </div>
+                            {% endif %}
+                            {% if ready[eHE.idEmployerHasEmployee] >= 11 %}
+                                {% set allDocs = true %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
                     {% if validated is defined and validated < 14 %}
-                	<div class="casiValidado">
-                    	<h1 class="azulclarofont light centrar">Estas en proceso de validación</h1>
-                        <p class="light grisclarofont">Ya etas cerca de poder Gestinar tus empleados, te notificaremos cuando estes listo.</p>
-                    </div>
+                        <div class="casiValidado">
+                            <h1 class="azulclarofont light centrar">Estas en proceso de validación</h1>
+                            <p class="light grisclarofont">Ya etas cerca de poder Gestinar tus empleados, te notificaremos cuando estes listo.</p>
+                        </div>
                     {% endif %}
                     {% if validated is defined and validated > 13 %}
                     {#<div>#}
@@ -28,45 +43,46 @@
                         {#</div>#}
                      {#</div>div#}
                     {% endif %}
+                    {% if allDocs is defined %}
+                        <div id="fechas">
+                            <h1 class="grisclarofont light centrar">Ten en cuenta las siguientes fechas :</h1><br>
+                            <div class="fechasclave">
+                                <p class="bold azulclarofont">Día 10 de cada mes</p>
+                                <p class="grisclarofont light">Tiempo oportuno</p>
+                                <p class="light-italic grisclarofont">para reportar novedades</p>
+                            </div>
+                            <div class="fechasclave">
+                                <p class="bold azulclarofont">Día 12 de cada mes</p>
+                                <p class="grisclarofont light">Ultimo día para</p>
+                                <p class="light-italic grisclarofont">reportar novedades</p>
+                            </div>
+                            <div class="fechasclave">
+                                <p class="bold azulclarofont">Día 15 de cada mes</p>
+                                <p class="grisclarofont light">Pago oportuno</p>
+                                <p class="grisclarofont light">de la quincena</p>
+                            </div>
+                            <div class="fechasclave">
+                                <p class="bold azulclarofont">Día 23 de cada mes</p>
+                                <p class="grisclarofont light">Tiempo oportuno</p>
+                                <p class="light-italic grisclarofont">para reportar novedades</p>
+                            </div>
+                            <div class="fechasclave">
+                                <p class="bold azulclarofont">Día 25 de cada mes</p>
+                                <p class="grisclarofont light">Ultimo día para</p>
+                                <p class="light-italic grisclarofont">reportar novedades</p>
+                            </div>
+                            <div class="fechasclave">
+                                <p class="bold azulclarofont">Día 30 de cada mes</p>
+                                <p class="grisclarofont light">Pago de nómina</p>
+                                <p class="light-italic grisclarofont">y de aportes a seguridad</p>
+                            </div>
+                        </div>
+                        <div class="border">
+                            <p class="semi-italic azulmediofont">Puedes reportar novedades en cualquier momento.<br>
 
-                    <div id="fechas">
-                        <h1 class="grisclarofont light centrar">Ten en cuenta las siguientes fechas :</h1><br>
-                        <div class="fechasclave">
-                            <p class="bold azulclarofont">Día 10 de cada mes</p>
-                            <p class="grisclarofont light">Tiempo oportuno</p>
-                            <p class="light-italic grisclarofont">para reportar novedades</p>
+                            Sugerimos los días 15 y 30 de cada mes, pero el pago de nómina lo puedes hacer en cualquier momento después del cierre.</p>
                         </div>
-                        <div class="fechasclave">
-                            <p class="bold azulclarofont">Día 12 de cada mes</p>
-                            <p class="grisclarofont light">Ultimo día para</p>
-                            <p class="light-italic grisclarofont">reportar novedades</p>
-                        </div>
-                        <div class="fechasclave">
-                            <p class="bold azulclarofont">Día 15 de cada mes</p>
-                            <p class="grisclarofont light">Pago oportuno</p>
-                            <p class="grisclarofont light">de la quincena</p>
-                        </div>
-                        <div class="fechasclave">
-                            <p class="bold azulclarofont">Día 23 de cada mes</p>
-                            <p class="grisclarofont light">Tiempo oportuno</p>
-                            <p class="light-italic grisclarofont">para reportar novedades</p>
-                        </div>
-                        <div class="fechasclave">
-                            <p class="bold azulclarofont">Día 25 de cada mes</p>
-                            <p class="grisclarofont light">Ultimo día para</p>
-                            <p class="light-italic grisclarofont">reportar novedades</p>
-                        </div>
-                        <div class="fechasclave">
-                            <p class="bold azulclarofont">Día 30 de cada mes</p>
-                            <p class="grisclarofont light">Pago de nómina</p>
-                            <p class="light-italic grisclarofont">y de aportes a seguridad</p>
-                        </div>
-                    </div>
-                    <div class="border">
-                        <p class="semi-italic azulmediofont">Puedes reportar novedades en cualquier momento.<br>
-
-                        Sugerimos los días 15 y 30 de cada mes, pero el pago de nómina lo puedes hacer en cualquier momento después del cierre.</p>
-                    </div>
+                    {% endif %}
                 </div>
 	</div>
 

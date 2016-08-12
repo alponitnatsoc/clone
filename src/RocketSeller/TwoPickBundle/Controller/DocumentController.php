@@ -145,13 +145,15 @@ use EmployerMethodsTrait;
     //JPG,PNG,TIF, BMP, DOC,PDF
 
     /**
-     * @param integer $id id of the person who owns the document being added, only if the doctype is Comprobante this function receives instead a payrollId so it can associate the document to the payroll
-     * @param integer $idDocumentType id to match the document type with the table DocumentType
-     * @param integer $idNotification id to change the status of the notification after the document has been addded
+     * Function to upload documents from the notification
+     * @param String $entityType name of the entity related with the document
+     * @param Integer $entityId id of the row from the entitytype table
+     * @param String $docCode unique code of the documentType
+     * @param Integer $idNotification id of the notification to change status
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
-    public function addDocAction($id, $idDocumentType, $idNotification, Request $request)
+    public function addDocAction($entityType, $entityId, $docCode, $idNotification, Request $request)
     {
         // setting the document types alowed by the application
         $fileTypePermitted = array(
@@ -161,51 +163,129 @@ use EmployerMethodsTrait;
             //'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         );
         $em = $this->getDoctrine()->getManager();
-        // getting the documentType from the database and chequing is a valid document type
+        /** @var Notification $notification */
+        $notification = $em->getRepository("RocketSellerTwoPickBundle:Notification")->find($idNotification);
+        // getting the documentType from the database and checking if it is a valid document type
         /** @var DocumentType $documentType */
         $documentType = $this->getDoctrine()
             ->getRepository('RocketSellerTwoPickBundle:DocumentType')
-            ->find($idDocumentType);
-        /**
-         * If the document type is Comprobante we obtain the person with the payroll employerHasEmployee relation
-         */
-        // getting the person that owns the document
-        if($documentType->getName()=="Comprobante"){
-            /** @var Payroll $payroll */
-            $payroll = $em->getRepository("RocketSellerTwoPickBundle:Payroll")->find($id);
-            /** @var Person $person */
-            $person = $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson();
-        }else{
-            /** @var Person $person */
-            $person = $this->getDoctrine()
-                ->getRepository('RocketSellerTwoPickBundle:Person')
-                ->find($id);
-        }
-        // setting the person name for the modalform
-        $name = $person->getNames();
-
-        if ($idNotification != 0) {
-            $em = $this->getDoctrine()->getManager();
-            $notification = $this->getDoctrine()
-                ->getRepository('RocketSellerTwoPickBundle:Notification')
-                ->find($idNotification);
-        }else{
-            return $this->redirectToRoute('matrix_choose', array('tab' => 3), 301);
-        }
-
-        //checking if the document alredy exist in the database
-        if($documentType->getName()=='Contrato'){
-            $bdDoc=$person->getDocByType($documentType->getName(),$notification->getPersonPerson()->getEmployer()->getIdEmployer());
-        }else{
-            $bdDoc=$person->getDocByType($documentType->getName());
-        }
-        $document = new Document();
-        $document->setPersonPerson($person);
-        $document->setStatus(1);
-        $document->setName('Diferente');
-        $document->setDocumentTypeDocumentType($documentType);
-        if($person->getEmployee()){
-            $document->setEmployerEmployer($notification->getPersonPerson()->getEmployer());
+            ->findOneBy(array("docCode"=>$docCode));
+        /** @var Document $document */
+        //switching between entities
+        switch ($entityType){
+            case "Person":
+                /** @var Person $person */
+                $person = $em->getRepository("RocketSellerTwoPickBundle:Person")->find($entityId);
+                $name = $person->getFullName();
+                //switching between doctypes
+                switch ($docCode){
+                    case "CC":
+                        if($person->getDocumentDocument()){
+                            $document = $person->getDocumentDocument();
+                        }else{
+                            $document = new Document();
+                            $document->setName($documentType->getName());
+                            $document->setDocumentTypeDocumentType($documentType);
+                            $document->setStatus(0);
+                            $person->setDocumentDocument($document);
+                        }
+                        break;
+                    case "RUT":
+                        if($person->getRutDocument()){
+                            $document = $person->getRutDocument();
+                        }else{
+                            $document = new Document();
+                            $document->setName($documentType->getName());
+                            $document->setDocumentTypeDocumentType($documentType);
+                            $document->setStatus(0);
+                            $person->setRutDocument($document);
+                        }
+                        break;
+                    case "RCDN":
+                        if($person->getBirthRegDocument()){
+                            $document = $person->getBirthRegDocument();
+                        }else{
+                            $document = new Document();
+                            $document->setName($documentType->getName());
+                            $document->setDocumentTypeDocumentType($documentType);
+                            $document->setStatus(0);
+                            $person->setBirthRegDocument($document);
+                        }
+                        break;
+                    case "TI":
+                        if($person->getDocumentDocument()){
+                            $document = $person->getDocumentDocument();
+                        }else{
+                            $document = new Document();
+                            $document->setName($documentType->getName());
+                            $document->setDocumentTypeDocumentType($documentType);
+                            $document->setStatus(0);
+                            $person->setDocumentDocument($document);
+                        }
+                        break;
+                }
+                $em->persist($person);
+                break;
+            case "Employer":
+                /** @var Employer $employer */
+                $employer = $em->getRepository("RocketSellerTwoPickBundle:Employer")->find($entityId);
+                $name = $employer->getPersonPerson()->getFullName();
+                if($employer->getMandatoryDocument()){
+                    $document = $employer->getMandatoryDocument();
+                }else{
+                    $document = new Document();
+                    $document->setName($documentType->getName());
+                    $document->setDocumentTypeDocumentType($documentType);
+                    $document->setStatus(0);
+                    $employer->setMandatoryDocument($document);
+                }
+                $em->persist($employer);
+                break;
+            case "EmployerHasEmployee":
+                /** @var EmployerHasEmployee $eHE */
+                $eHE = $em->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")->find($entityId);
+                $name = $eHE->getEmployeeEmployee()->getPersonPerson()->getFullName();
+                if($eHE->getAuthDocument()){
+                    $document = $eHE->getAuthDocument();
+                }else{
+                    $document = new Document();
+                    $document->setName($documentType->getName());
+                    $document->setDocumentTypeDocumentType($documentType);
+                    $document->setStatus(0);
+                    $eHE->setAuthDocument($document);
+                }
+                $em->persist($eHE);
+                break;
+            case "Contract":
+                /** @var Contract $contract */
+                $contract = $em->getRepository("RocketSellerTwoPickBundle:Contract")->find($entityId);
+                $name = $contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName();
+                if($contract->getDocumentDocument()){
+                    $document = $contract->getDocumentDocument();
+                }else{
+                    $document = new Document();
+                    $document->setName($documentType->getName());
+                    $document->setDocumentTypeDocumentType($documentType);
+                    $document->setStatus(0);
+                    $contract->setDocumentDocument($document);
+                }
+                $em->persist($contract);
+                break;
+            case "Payroll":
+                /** @var Payroll $payroll */
+                $payroll = $em->getRepository("RocketSellerTwoPickBundle:Payroll")->find($entityId);
+                $name = "pago de ".$payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName();
+                if($payroll->getPayslip()){
+                    $document = $payroll->getPayslip();
+                }else{
+                    $document = new Document();
+                    $document->setName($documentType->getName());
+                    $document->setDocumentTypeDocumentType($documentType);
+                    $document->setStatus(0);
+                    $payroll->setPayslip($document);
+                }
+                $em->persist($payroll);
+                break;
         }
         $form = $this->createForm(new DocumentRegistration(), $document);
 
@@ -225,41 +305,24 @@ use EmployerMethodsTrait;
                     $em->flush();
                 }
                 $em = $this->getDoctrine()->getManager();
+                $document->setStatus(1);
                 $em->persist($document);
                 $em->flush();
-
-                    // if documentType is contract it sets the document contract to the active contract of the employerHasEmployee that matchs with the owner of the notification
-                    if($documentType->getName() == 'Contrato'){
-                        $eHEs= $person->getEmployee()->getEmployeeHasEmployers();
-                        /** @var EmployerHasEmployee $eHE */
-                        foreach ($eHEs as $eHE){
-                            if($eHE->getEmployerEmployer()->getPersonPerson()->getIdPerson()==$notification->getPersonPerson()->getIdPerson()){
-                                $contracts = $eHE->getContracts();
-                                /** @var Contract $contract */
-                                foreach ($contracts as $contract) {
-                                    if($contract->getState()==1){
-                                        $contract->setDocumentDocument($document);
-                                        $em->persist($contract);
-                                        $em->flush();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    $notification->setStatus(0);
-                    $em->flush();
-                    $request = $this->container->get('request');
-                    $request->setMethod("GET");
-                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:EmployerRest:getEmployerDocumentsState', array('idUser' => $this->getUser()->getId()), array('_format' => 'json'));
-                    $responsePaymentsMethods = json_decode($insertionAnswer->getContent(), true);
-                    return $this->redirectToRoute('show_dashboard');
+                $notification->setStatus(0);
+                $em->persist($notification);
+                $em->flush();
+                $request = $this->container->get('request');
+                $request->setMethod("GET");
+                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:EmployerRest:getEmployerDocumentsState', array('idUser' => $this->getUser()->getId()), array('_format' => 'json'));
+                $responsePaymentsMethods = json_decode($insertionAnswer->getContent(), true);
+                return $this->redirectToRoute('show_dashboard');
             } else {
                 $this->addFlash('fail_format', 'NVF');
                 return $this->redirectToRoute('show_dashboard');
             }
         }
         return $this->render(
-            'RocketSellerTwoPickBundle:Document:addDocumentForm.html.twig', array('form' => $form->createView(), 'id' => $id, 'idDocumentType' => $idDocumentType, 'documentName'=>$documentType->getName(),'personName'=>$name, 'idNotification' => $idNotification));
+            'RocketSellerTwoPickBundle:Document:addDocumentForm.html.twig', array('form' => $form->createView(), "entityType" => $entityType, "entityId" => $entityId, "docCode" => $docCode, "idNotification" => $idNotification, 'personName' => $name, "documentName" => $documentType->getName()));
     }
 
     public function addDocModalAction($id, $idDocumentType, Request $request)
@@ -332,58 +395,142 @@ use EmployerMethodsTrait;
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
         }
-        /** @var Person $user */
-        $user = $this->getUser()->getPersonPerson();
-        /** @var EmployerHasEmployee $eHE */
-        $valid = false;
-        foreach ($user->getEmployer()->getEmployerHasEmployees() as $eHE){
-            if ($eHE->getEmployeeEmployee()->getPersonPerson()->getIdPerson()==$id){
-                $valid=true;
-            }
-        }
-        if($valid) {
-            $person = $this->getdoctrine()
-                ->getRepository('RocketSellerTwoPickBundle:Person')
-                ->find($id);
-            $document = $this->getDoctrine()
-                ->getRepository('RocketSellerTwoPickBundle:Document')
-                ->find($idDocument);
-
-            $media = $document->getMediaMedia();
-            if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference'))){
-                $docUrl = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
-            }
-            $docName = $document->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
-            # create new zip opbject
-            $zip = new ZipArchive();
-            # create a temp file & open it
-            $tmp_file =$person->getNames()."_".$document->getDocumentTypeDocumentType()->getName().".zip";
-            if ($zip->open($tmp_file,ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE )=== TRUE) {
-                # loop through each file
-                $zip->addFile($docUrl,$docName);
-                # close zip
-                if($zip->close()!==TRUE)
-                    echo "no permisos";
-                # send the file to the browser as a download
-                header('Pragma: public');
-                header('Expires: 0');
-                header('Cache-Control: must-revalidate');
-                header('Cache-Control: public');
-                header('Content-Description: File Transfer');
-                header('Content-type: application/zip');
-                header("Content-disposition: attachment; filename=$tmp_file");
-                header('Content-Transfer-Encoding: binary');
-                header('Content-Length: '.filesize($tmp_file));
-                ob_clean();
-                ob_end_flush();
-                readfile($tmp_file);
-                ignore_user_abort(true);
-                unlink($tmp_file);
-            }
-            return $this->redirectToRoute('ajax', array(), 301);
+        /** @var Document $document */
+        $document = $this->getDoctrine()
+            ->getRepository('RocketSellerTwoPickBundle:Document')
+            ->find($idDocument);
+        if(!$document)
+            throw $this->createNotFoundException();
+        $backoffice=false;
+        if($this->isGranted('ROLE_BACK_OFFICE', $this->getUser())){
+            $backoffice=true;
         }else{
-            throw $this->createAccessDeniedException("No tiene suficientes permisos");
+            /** @var Person $person */
+            $person = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Person')->find($id);
+            /** @var User $user */
+            $user = $this->getUser();
+            /** @var Person $uPerson */
+            $uPerson = $user->getPersonPerson();
+            $auth = false;
+            $eHEExist=false;
+            $eHERep=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
+            if(!$person)
+                throw $this->createNotFoundException();
+            if($person != $uPerson){
+                /** @var Employer $employer */
+                $employer = $uPerson->getEmployer();
+                if($employer== null)
+                    throw $this->createNotFoundException();
+                /** @var Employee $employee */
+                $employee = $person->getEmployee();
+                if($employee== null)
+                    throw $this->createNotFoundException();
+                /** @var EmployerHasEmployee $eHE */
+                $eHE = $eHERep->findOneBy(array('employerEmployer'=>$employer,'employeeEmployee'=>$employee));
+                if($eHE==null)
+                    throw $this->createNotFoundException();
+                $eHEExist = true;
+            }
+            $docCode=$document->getDocumentTypeDocumentType()->getDocCode();
+            if($person == $uPerson and ($docCode == 'CC' or $docCode =='RUT')){
+                $auth=true;
+            }elseif($eHEExist){
+                $auth=true;
+            }
+            if(!$auth)
+                throw $this->createAccessDeniedException();
+            switch ($document->getDocumentTypeDocumentType()->getDocCode()){
+                case 'CC':
+                    if($person->getDocumentDocument()!=$document)
+                        throw $this->createAccessDeniedException();
+                    break;
+                case 'RUT':
+                    if($person->getRutDocument()!=$document)
+                        throw $this->createAccessDeniedException();
+                    break;
+                case 'MAND':
+                    if($employer->getMandatoryDocument()!=$document)
+                        throw $this->createAccessDeniedException();
+                    break;
+                case 'CTR':
+                    /** @var Contract $contract */
+                    foreach ($eHE->getContracts() as $contract){
+                        if($contract->getState()==1){
+                            /** @var Contract $activeContract */
+                            $activeContract = $contract;
+                            break;
+                        }
+                    }
+                    if(!$activeContract)
+                        throw $this->createNotFoundException();
+                    if( $activeContract->getDocumentDocument()!= $document)
+                        throw $this->createAccessDeniedException();
+                    break;
+                case 'CAS':
+                    if($eHE->getAuthDocument()!=$document)
+                        throw $this->createAccessDeniedException();
+                    break;
+            }
         }
+        if($backoffice){
+            switch($document->getDocumentTypeDocumentType()->getDocCode()){
+                case 'CC':
+                    $person = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Person")->findOneBy(array('documentDocument'=>$document));
+                    break;
+                case 'RUT':
+                    $person = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Person")->findOneBy(array('rutDocument'=>$document));
+                    break;
+                case 'MAND':
+                    /** @var Employer $employer */
+                    $employer = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Employer")->findOneBy(array('mandatoryDocument'=>$document));
+                    $person = $employer->getPersonPerson();
+                    break;
+                case 'CTR':
+                    /** @var Contract $contract */
+                    $contract = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Contract")->findOneBy(array('documentDocument'=>$document));
+                    $person = $contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson();
+                    break;
+                case 'CAS':
+                    $eHE = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")->findOneBy(array('authDocument'=>$document));
+                    $person = $eHE->getEmployeeEmployee()->getPersonPerson();
+                    break;
+            }
+            if(!$person)
+                throw $this->createNotFoundException();
+        }
+        $media = $document->getMediaMedia();
+        if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference'))){
+            $docUrl = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
+        }
+        $docName = $document->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
+        # create new zip opbject
+        $zip = new ZipArchive();
+        # create a temp file & open it
+        $tmp_file =$person->getNames()."_".$document->getDocumentTypeDocumentType()->getName().".zip";
+        if ($zip->open($tmp_file,ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE )=== TRUE) {
+            # loop through each file
+            $zip->addFile($docUrl,$docName);
+            # close zip
+            if($zip->close()!==TRUE)
+                echo "no permisos";
+            # send the file to the browser as a download
+            header('Pragma: public');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Cache-Control: public');
+            header('Content-Description: File Transfer');
+            header('Content-type: application/zip');
+            header("Content-disposition: attachment; filename=$tmp_file");
+            header('Content-Transfer-Encoding: binary');
+            header('Content-Length: '.filesize($tmp_file));
+            ob_clean();
+            ob_end_flush();
+            readfile($tmp_file);
+            ignore_user_abort(true);
+            unlink($tmp_file);
+        }
+        return $this->redirectToRoute('ajax', array(), 301);
+
     }
 
     public function downloadDocumentPDFAction($document)
