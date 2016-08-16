@@ -304,11 +304,11 @@ class EmployerRestController extends FOSRestController
         if($user){
             /** @var Person $employerPerson */
             $employerPerson=$user->getPersonPerson();
-            if(!$employerPerson->getDocByType("Cedula"))
+            if(!$employerPerson->getDocumentDocument())
                 $missingDocs = 'Cedula Empleador, ';
-            if(!$employerPerson->getDocByType("Rut"))
+            if(!$employerPerson->getRutDocument())
                 $missingDocs = $missingDocs.'Rut Empleador, ';
-            if(!$employerPerson->getDocByType("Mandato"))
+            if(!$employerPerson->getEmployer()->getMandatoryDocument())
                 $missingDocs = $missingDocs.'Mandato Empleador, ';
             $numEmp = 0;
             /** @var EmployerHasEmployee $employerHasEmployee */
@@ -316,10 +316,10 @@ class EmployerRestController extends FOSRestController
                 if($employerHasEmployee->getState()<1)
                     continue;
                 $numEmp+=1;
-                if(!$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getDocByType("Cedula")){
+                if(!$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getDocumentDocument()){
                     $missingDocs = $missingDocs.'Cedula Empleado '.$numEmp.', ';
                 }
-                if(!$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getDocByType("Carta autorización Symplifica")){
+                if(!$employerHasEmployee->getAuthDocument()){
                     $missingDocs = $missingDocs.'Carta Autorizacion Empleado '.$numEmp.', ';
                 }
                 //if(!$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getDocByType("Contrato")){

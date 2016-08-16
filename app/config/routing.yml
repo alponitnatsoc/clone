@@ -43,9 +43,6 @@ registration_confirmed_start:
 matrix_choose:
     path:      /matrix/choose/{tab}
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:matrixChoose, tab: 3}
-testzip:
-    path:      /export/user/documents
-    defaults:  { _controller: RocketSellerTwoPickBundle:Export:exportDocuments}
 testcvs:
     path:      /export/user/fields
     defaults:  { _controller: RocketSellerTwoPickBundle:Export:generateCsv}
@@ -72,7 +69,7 @@ documentos:
     defaults:  { _controller: RocketSellerTwoPickBundle:Document:addDocument}
 
 documentos_employee:
-    path:      /document/add/{id}/{idDocumentType}/{idNotification}
+    path:      /document/add/{entityType}/{entityId}/{docCode}/{idNotification}
     defaults:  { _controller: RocketSellerTwoPickBundle:Document:addDoc , idNotification: 0}
 
 documentos_contract:
@@ -349,10 +346,6 @@ gallery:
 media:
     resource: '@SonataMediaBundle/Resources/config/routing/media.xml'
     prefix: /media
-
-export_document_byDocType:
-    path:     /Document/export/Person/{idPerson}/{idDocType}
-    defaults: { _controller: RocketSellerTwoPickBundle:Export:exportDocumentByPersonDocType }
 
 home_products:
     path:     /productos

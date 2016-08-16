@@ -182,22 +182,17 @@ class PayrollRestSecuredController extends FOSRestController
                     $person = $pod->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                     $employeePerson=$actualPayroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson();
 
-                    $documentType = 'Comprobante';
                     $msj = "Subir comprobante de " . $utils->mb_capitalize(explode(" ", $employeePerson->getNames())[0] . " " . $employeePerson->getLastName1()) . " " . $utils->period_number_to_name($actualPayroll->getPeriod()) . " " . $utils->month_number_to_name($actualPayroll->getMonth());
                     $dUrl = $this->generateUrl("download_documents", array('id' => $actualPayroll->getIdPayroll(), 'ref' => "comprobante", 'type' => 'pdf'));
                     $dAction = "Bajar";
                     $action = "Subir";
-
-                    $documentType = $documentTypeRepo->findByName($documentType)[0];
-
-                    //aqui se envía el id del payroll en vez del de la persona
-                    $url = $this->generateUrl("documentos_employee", array('id' => $actualPayroll->getIdPayroll(), 'idDocumentType' => $documentType->getIdDocumentType()));
+                    $url = $this->generateUrl("documentos_employee", array("entityType"=>'Payroll',"entityId"=>$actualPayroll->getIdPayroll(),"docCode"=>'CPR'));
                     //$url = $this->generateUrl("api_public_post_doc_from");
 
                     $notification = new Notification();
                     $notification->setPersonPerson($person);
                     $notification->setStatus(1);
-                    $notification->setDocumentTypeDocumentType($documentType);
+                    $notification->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'CPR')));
                     $notification->setType('alert');
                     $notification->setDescription($msj);
                     $notification->setRelatedLink($url);
@@ -209,9 +204,11 @@ class PayrollRestSecuredController extends FOSRestController
                     if ($actualPayroll->getIdPayroll() == $actualPayroll->getContractContract()->getActivePayroll()->getIdPayroll()) {
                         //to fix the Pila Pod of disappearing, we pass it to de owe PO if the pila is not getting paid
                         $asociatedPila = $actualPayroll->getPila();
-                        if($asociatedPila->getPurchaseOrders()==null||$asociatedPila->getPurchaseOrders()->getPurchaseOrdersStatus()->getIdNovoPay()!="S2"){
-                            $asociatedPila->setPurchaseOrdersStatus($pendingStatus);
-                            $pilaOwePo->addPurchaseOrderDescription($asociatedPila);
+                        if($actualPayroll->getPeriod()==4){
+                            if($asociatedPila->getPurchaseOrders()==null||$asociatedPila->getPurchaseOrders()->getPurchaseOrdersStatus()->getIdNovoPay()!="S2") {
+                                $asociatedPila->setPurchaseOrdersStatus($pendingStatus);
+                                $pilaOwePo->addPurchaseOrderDescription($asociatedPila);
+                            }
                         }
                         $nowPeriod = $actualPayroll->getPeriod();
                         if ($actualPayroll->getContractContract()->getFrequencyFrequency()->getPayrollCode() == "Q" && $nowPeriod == 4) {
@@ -244,7 +241,7 @@ class PayrollRestSecuredController extends FOSRestController
 
         $realtoPay = new PurchaseOrders();
         $productRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
-
+        $paysPila=0;
         foreach ($payrollToPay as $key => $value) {
 
             /** @var PurchaseOrdersDescription $tempPOD */
@@ -286,12 +283,10 @@ class PayrollRestSecuredController extends FOSRestController
                     $total += $moraPod->getValue();
 
                 }
-
+                $paysPila++;
                 $person = $tempPOD->getPayrollsPila()->get(0)->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                 $flagFrequency = false;
                 $flagNomi=false;
-                $numberOfTrans++;
-
             } else {
                 $person = $tempPOD->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                 if ($tempPOD->getPayrollPayroll()->getContractContract()->getPayMethodPayMethod()->getPayTypePayType()->getPayrollCode() == "EFE"){
@@ -336,10 +331,12 @@ class PayrollRestSecuredController extends FOSRestController
             $transactionCost = 0;
             /** @var Product $productCT */
             $productCT = $productRepo->findOneBy(array("simpleName" => "CT"));
-
-            $numberOfPNTrans=$numberOfTrans;
+            if($numberOfTrans==0&&$paysPila>0){
+                $numberOfPNTrans=1;
+            }else{
+                $numberOfPNTrans=$numberOfTrans;
+            }
             $transactionCost =  ceil(($productCT->getPrice()+($productCT->getPrice()*$productCT->getTaxTax()->getValue())))*$numberOfPNTrans;
-
 
             $transactionPOD = new PurchaseOrdersDescription();
             $transactionPOD->setDescription("Costo transaccional");
@@ -461,6 +458,7 @@ class PayrollRestSecuredController extends FOSRestController
 
         $valueToGet4xMilFrom = 0;
         $numberOfPNTrans = 0;
+        $paysPila=0;
         $numberOfTrans=0;
         $willPayPN = false;
 
@@ -508,7 +506,7 @@ class PayrollRestSecuredController extends FOSRestController
                 $person = $tempPOD->getPayrollsPila()->get(0)->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                 $flagFrequency = false;
                 $flagNomi=false;
-                $numberOfTrans++;
+                $paysPila++;
             } else {
                 $person = $tempPOD->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                 if ($tempPOD->getPayrollPayroll()->getContractContract()->getPayMethodPayMethod()->getPayTypePayType()->getPayrollCode() == "EFE"){
@@ -556,8 +554,11 @@ class PayrollRestSecuredController extends FOSRestController
             $transactionCost = 0;
             /** @var Product $productCT */
             $productCT = $productRepo->findOneBy(array("simpleName" => "CT"));
-
-            $numberOfPNTrans=$numberOfTrans;
+            if($numberOfTrans==0&&$paysPila>0){
+                $numberOfPNTrans=1;
+            }else{
+                $numberOfPNTrans=$numberOfTrans;
+            }
             $transactionCost =  ceil(($productCT->getPrice()+($productCT->getPrice()*$productCT->getTaxTax()->getValue())))*$numberOfPNTrans;
 
 
@@ -674,8 +675,8 @@ class PayrollRestSecuredController extends FOSRestController
                     $dAction = "Bajar";
                     $action = "Subir";
 
-                    $documentType = $documentTypeRepo->findByName($documentType)[0];
-                    $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
+                    $url = $this->generateUrl("documentos_employee", array("entityType"=>'Payroll',"entityId"=>$actualPayroll->getIdPayroll(),"docCode"=>'CPR'));
+                    $documentType = $em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'CPR'));
                     //$url = $this->generateUrl("api_public_post_doc_from");
 
                     $notification = new Notification();
@@ -692,13 +693,15 @@ class PayrollRestSecuredController extends FOSRestController
                     $em->persist($notification);
 
                     if ($actualPayroll->getIdPayroll() == $actualPayroll->getContractContract()->getActivePayroll()->getIdPayroll()) {
-
                         //to fix the Pila Pod of disappearing, we pass it to de owe PO if the pila is not getting paid
                         $asociatedPila = $actualPayroll->getPila();
-                        if($asociatedPila->getPurchaseOrders()==null|$asociatedPila->getPurchaseOrders()->getPurchaseOrdersStatus()->getIdNovoPay()!="S2"){
-                            $asociatedPila->setPurchaseOrdersStatus($pendingStatus);
-                            $pilaOwePo->addPurchaseOrderDescription($asociatedPila);
+                        if($actualPayroll->getPeriod()==4){
+                            if($asociatedPila->getPurchaseOrders()==null|$asociatedPila->getPurchaseOrders()->getPurchaseOrdersStatus()->getIdNovoPay()!="S2"){
+                                $asociatedPila->setPurchaseOrdersStatus($pendingStatus);
+                                $pilaOwePo->addPurchaseOrderDescription($asociatedPila);
+                            }
                         }
+
                         $nowPeriod = $actualPayroll->getPeriod();
                         if ($actualPayroll->getContractContract()->getFrequencyFrequency()->getPayrollCode() == "Q" && $nowPeriod == 4) {
                             $newPayroll->setPeriod(2);

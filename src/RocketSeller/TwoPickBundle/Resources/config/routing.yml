@@ -150,9 +150,18 @@ report_error:
 back_add_sql:
     path:     /backoffice/add/sql/{idEmployerHasEmployee}/{procedureId}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:addToSQL }
+export_documents_entity:
+    path:     /entity/documents/export/{entityType}/{idEntity}
+    defaults: { _controller: RocketSellerTwoPickBundle:Export:exportDocuments , entityType : null , idEntity: -1 }
 export_documents_person:
     path:     /backoffice/export/person/documents/{idPerson}
     defaults: { _controller: RocketSellerTwoPickBundle:Export:exportDocumentsByPerson }
+export_document_by_id:
+    path:     /backoffice/export/document/{idDoc}
+    defaults: { _controller: RocketSellerTwoPickBundle:Export:exportDocumentByIdDocument, idDoc: -1}
+export_contract:
+    path:     /backoffice/export/employerHasEmployee/contract/{idContract}
+    defaults: {_controller: RocketSellerTwoPickBundle:Export:exportContract}
 export_all_documents:
     path:     /backoffice/export/action/documents/{idAction}
     defaults: { _controller: RocketSellerTwoPickBundle:Export:exportAllDocuments }
