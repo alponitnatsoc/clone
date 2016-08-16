@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * NoveltyTypeFields
  *
  * @ORM\Table(name="novelty_type_fields")
+ * @ORM\Entity(repositoryClass="NoveltyTypeFieldsRepository")
  */
 class NoveltyTypeFields
 {
