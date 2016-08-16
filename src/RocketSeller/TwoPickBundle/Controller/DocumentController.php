@@ -722,28 +722,25 @@ use EmployerMethodsTrait;
                 break;
             case "comprobante":
                 $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Payroll');
-                $signatureUrl = null;
+                $isMobile = false;
                 if(strpos($id, ",")) {
-                    $arr = explode(',', $id);
-                    $id = $arr[0];
-                    $signatureUrl = "$arr[1],$arr[2]";
+                   $arr = explode(',', $id);
+                   $id = $arr[0];
+                   $isMobile = true;
                 }
                 $payroll = $repository->find($id);
                 if($payroll->getPaid() == 0){
                     return $this->redirectToRoute("show_dashboard");
                 }
+                $signatureUrl = null;
 
-                $document = $payroll->getPayslip();
+                $document = $payroll->getSignature();
                 // document is already stored in db
                 if($document != null && $signatureUrl == null) {
 
                     $fileUrl = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
-                    return new Response(
-                        file_get_contents($fileUrl), 200, array(
-                            'Content-Type' => 'application/pdf',
-                            'Content-Disposition' => 'attachment; filename="' . $ref . '.pdf"',
-                        )
-                    );
+                    $data = file_get_contents($fileUrl);
+                    $signatureUrl = 'data:image/png;base64,' . base64_encode($data);
                 }
                 /** @var Person $employer */
                 $employer = $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
@@ -808,7 +805,8 @@ use EmployerMethodsTrait;
                     'employeeInfo' => $employeeInfo,
                     'client' => $clientInfo,
                     'discriminatedInfo' => $discriminatedInfo,
-                    'signatureUrl' => $signatureUrl
+                    'signatureUrl' => $signatureUrl,
+                    'isMobile' => $isMobile
                 );
                 break;
             case "joiner":
