@@ -872,7 +872,7 @@ class BackOfficeController extends Controller
             $docToStart = $person->getDocument();
           }
 
-          //If already have resetted the tadabase, continues from the last generated document, otherwise starts at 712700
+          //If already have resetted the database, continues from the last generated document, otherwise starts at 712700
           if(abs(712700 - intval($docToStart)) > 20000){
             $docToStart = 712700;
           }
@@ -963,9 +963,7 @@ class BackOfficeController extends Controller
               $this->addToHighTech($singleUser);
             }
           }
-          
-          //TODO remove this line
-
+	        
           return $this->redirectToRoute("back_office");
         }
 

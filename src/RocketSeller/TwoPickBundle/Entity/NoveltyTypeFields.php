@@ -8,7 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
  * NoveltyTypeFields
  *
  * @ORM\Table(name="novelty_type_fields")
- * @ORM\Entity
  */
 class NoveltyTypeFields
 {
@@ -45,6 +44,16 @@ class NoveltyTypeFields
      */
     private $dataType;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $displayable;
+
+    /**
+     * @ORM\Column(type="string", length=40, nullable=true)
+     */
+    private $noveltyDataConstrain;
+    
     /**
      * Get idNoveltyTypeFields
      *
@@ -149,5 +158,53 @@ class NoveltyTypeFields
     public function getNoveltyTypeNoveltyType()
     {
         return $this->noveltyTypeNoveltyType;
+    }
+
+    /**
+     * Set displayable
+     *
+     * @param boolean $displayable
+     *
+     * @return NoveltyTypeFields
+     */
+    public function setDisplayable($displayable)
+    {
+        $this->displayable = $displayable;
+
+        return $this;
+    }
+
+    /**
+     * Get displayable
+     *
+     * @return boolean
+     */
+    public function getDisplayable()
+    {
+        return $this->displayable;
+    }
+
+    /**
+     * Set noveltyDataConstrain
+     *
+     * @param string $noveltyDataConstrain
+     *
+     * @return NoveltyTypeFields
+     */
+    public function setNoveltyDataConstrain($noveltyDataConstrain)
+    {
+        $this->noveltyDataConstrain = $noveltyDataConstrain;
+
+        return $this;
+    }
+
+    /**
+     * Get noveltyDataConstrain
+     *
+     * @return string
+     */
+    public function getNoveltyDataConstrain()
+    {
+        return $this->noveltyDataConstrain;
     }
 }

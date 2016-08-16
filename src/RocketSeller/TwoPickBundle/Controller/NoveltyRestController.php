@@ -10,6 +10,7 @@ use FOS\RestBundle\Controller\Annotations\Route;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
 use RocketSeller\TwoPickBundle\Entity\Novelty;
+use RocketSeller\TwoPickBundle\Entity\NoveltyTypeFields;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -62,10 +63,29 @@ class NoveltyRestController extends FOSRestController
     public function getAddNoveltySqlAction($idNovelty)
     {
 
-        $em=$this->getDoctrine();
+        $em=$this->getDoctrine()->getManager();
         $noveltyRepo=$em->getRepository("RocketSellerTwoPickBundle:Novelty");
         /** @var Novelty $novelty */
         $novelty=$noveltyRepo->find($idNovelty);
+       
+        $noveltyRequiredFields  = $novelty->getNoveltyTypeNoveltyType()->getRequiredFields();
+        $utils = $this->get('app.symplifica_utils');
+        /** @var NoveltyTypeFields $requiredField */
+        foreach($noveltyRequiredFields as $requiredField){
+            if($requiredField->getDisplayable() == false){
+                if ($requiredField->getColumnName() == "date_end"){
+                    $dataToSet = $utils->novelty_date_constrain_to_date_after($requiredField->getNoveltyDataConstrain(), $novelty);
+                    $novelty->setDateEnd($dataToSet);
+                }
+                elseif ($requiredField->getColumnName() == "date_start"){
+                    $dataToSet = $utils->novelty_date_constrain_to_date_after($requiredField->getNoveltyDataConstrain(), $novelty);
+                    $novelty->setDateStart($dataToSet);
+                }
+            }
+        }
+        $em->persist($novelty);
+        $em->flush();
+        
         $view = View::create();
         $request = $this->container->get('request');
         $noveltyType=$novelty->getNoveltyTypeNoveltyType();
