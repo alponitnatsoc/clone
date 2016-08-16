@@ -12,7 +12,12 @@ use RocketSeller\TwoPickBundle\RocketSellerTwoPickBundle;
 /**
  * Person
  *
- * @ORM\Table(name="person" , uniqueConstraints={@UniqueConstraint(name="documentUnique", columns={"document_type", "document"})})
+ * @ORM\Table(name="person",
+ *      uniqueConstraints={@UniqueConstraint(name="documentUnique", columns={"document_type", "document"})},
+ *      uniqueConstraints={@UniqueConstraint(name="uploadedDocumentUnique", columns={"document_id_document"})},
+ *      uniqueConstraints={@uniqueConstraint(name="uploadedRutUnique",columns={"rut_id_document"})},
+ *     uniqueConstraints={@uniqueConstraint(name="uploadedBirthRegUnique",columns={"registro_id_document"})}
+ * )
  * @ORM\Entity(repositoryClass="PersonRepository")
  */
 class Person
@@ -51,6 +56,31 @@ class Person
      * @ORM\Column(type="string", length=20, nullable=TRUE)
      */
     private $document;
+
+    /**
+     * @var Document
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Document")
+     * @ORM\JoinColumns({
+     *     @ORM\JoinColumn(name="document_id_document",referencedColumnName="id_document")
+     * })
+     */
+    private $documentDocument;
+
+    /** @var Document
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Document")
+     * @ORM\JoinColumns(
+     *     @ORM\JoinColumn(name="rut_id_document",referencedColumnName="id_document")
+     * )
+     */
+    private $rutDocument;
+
+    /** @var Document
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Document")
+     * @ORM\JoinColumns(
+     *     @ORM\JoinColumn(name="registro_id_document",referencedColumnName="id_document")
+     * )
+     */
+    private $birthRegDocument;
 
     /**
      * @ORM\Column(type="date", nullable=TRUE)
@@ -617,72 +647,6 @@ class Person
     }
 
     /**
-     * Get docByType
-     * @param array $docType
-     * @param integer $employerId id of the employer if type is Contract
-     * @param integer $payrollId id of the payroll if type is Comprobante
-     * @return \Application\Sonata\MediaBundle\Document\
-     */
-    public function getDocByType($docType,$employerId=0,$payrollId=0)
-    {
-
-        if ($docType =='Contrato') {
-            if($employerId==0) return null;
-            $eHEs = $this->getEmployee()->getEmployeeHasEmployers();
-            /** @var EmployerHasEmployee $eHE */
-            foreach ($eHEs as $eHE) {
-                if ($eHE->getEmployerEmployer()->getIdEmployer() == $employerId) {
-                    $contracts = $eHE->getContracts();
-                    /** @var Contract $contract */
-                    foreach ($contracts as $contract) {
-                        if ($contract->getState() == 1) {
-                            /** @var Document $contractDoc */
-                            $contractDoc = $contract->getDocumentDocument();
-                        }
-                    }
-                }
-            }
-        }elseif($docType=='Comprobante'){
-            if($payrollId==0 or $employerId==0) return null;
-            $eHEs = $this->getEmployee()->getEmployeeHasEmployers();
-            /** @var EmployerHasEmployee $eHE */
-            foreach ($eHEs as $eHE) {
-                if($eHE->getEmployerEmployer()->getIdEmployer() == $employerId){
-                    $contracts = $eHE->getContracts();
-                    /** @var Contract $contract */
-                    foreach ($contracts as $contract) {
-                        $payrolls=$contract->getPayrolls();
-                        /** @var Payroll $payroll */
-                        foreach ($payrolls as $payroll){
-                            if($payroll->getIdPayroll() == $payrollId){
-                                $comprobanteDoc = $payroll->getSignature();
-                            }
-                        }
-                    }
-                }
-            }
-        }elseif($docType=='Carta autorización Symplifica'and $employerId==0){
-            return null;
-        }
-        $documents=$this->docs;
-        /** @var Document $document */
-        foreach ($documents as $document){
-            if($document->getDocumentTypeDocumentType()->getName()==$docType){
-                if($docType == 'Contrato' and $document->getIdDocument() == $contractDoc->getIdDocument() ){
-                    return $document;
-                }elseif($docType=="Carta autorización Symplifica" and $document->getEmployerEmployer()->getIdEmployer()==$employerId){
-                    return $document;
-                }elseif($docType=="Comprobante"){
-                    return $comprobanteDoc;
-                }else{
-                    return $document;
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
      * Add specificDatum
      *
      * @param \RocketSeller\TwoPickBundle\Entity\SpecificData $specificDatum
@@ -1053,5 +1017,77 @@ class Person
     public function getConfigurations()
     {
         return $this->configurations;
+    }
+
+    /**
+     * Set documentDocument
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Document $documentDocument
+     *
+     * @return Person
+     */
+    public function setDocumentDocument(\RocketSeller\TwoPickBundle\Entity\Document $documentDocument = null)
+    {
+        $this->documentDocument = $documentDocument;
+
+        return $this;
+    }
+
+    /**
+     * Get documentDocument
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Document
+     */
+    public function getDocumentDocument()
+    {
+        return $this->documentDocument;
+    }
+
+    /**
+     * Set rutDocument
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Document $rutDocument
+     *
+     * @return Person
+     */
+    public function setRutDocument(\RocketSeller\TwoPickBundle\Entity\Document $rutDocument = null)
+    {
+        $this->rutDocument = $rutDocument;
+
+        return $this;
+    }
+
+    /**
+     * Get rutDocument
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Document
+     */
+    public function getRutDocument()
+    {
+        return $this->rutDocument;
+    }
+
+    /**
+     * Set birthRegDocument
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Document $birthRegDocument
+     *
+     * @return Person
+     */
+    public function setBirthRegDocument(\RocketSeller\TwoPickBundle\Entity\Document $birthRegDocument = null)
+    {
+        $this->birthRegDocument = $birthRegDocument;
+
+        return $this;
+    }
+
+    /**
+     * Get birthRegDocument
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Document
+     */
+    public function getBirthRegDocument()
+    {
+        return $this->birthRegDocument;
     }
 }

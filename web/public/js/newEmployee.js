@@ -2073,16 +2073,19 @@ function payMethodListener() {
         var selectedVal = $hasIt.val();
         if (selectedVal == 0) {
             $hasIt.parent().parent().find(".form-group").not(".formFieldsNo").each(function () {
+                $hasIt.parent().parent().find( "label[for*='cellphone']" ).text("Celular del empleado que usará para Daviplata");
                 //$(this).hide();
             });
         } else {
             $hasIt.parent().parent().find(".form-group").each(function () {
+                $hasIt.parent().parent().find( "label[for*='cellphone']" ).text("Número celular Daviplata");
                 $(this).show();
             })
         }
         $hasIt.on("change", function () {
             var selectedVal = $(this).val();
             if (selectedVal == 1) {
+                $hasIt.parent().parent().find( "label[for*='cellphone']" ).text("Número celular Daviplata");
                 $hasIt.parent().parent().find(".form-group").each(function () {
                     $(this).show();
                 })
@@ -2091,6 +2094,7 @@ function payMethodListener() {
                 /*$hasIt.parent().parent().find(".form-group").not(".formFieldsNo").each(function () {
                     $(this).hide();
                 });*/
+                $hasIt.parent().parent().find( "label[for*='cellphone']" ).text("Celular del empleado que usará para Daviplata");
                 $("#noDaviplata").modal("show");
             }
         });

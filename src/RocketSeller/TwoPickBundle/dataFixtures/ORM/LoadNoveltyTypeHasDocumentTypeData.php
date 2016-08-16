@@ -12,22 +12,16 @@ class LoadNoveltyTypeHasDocumentTypeData extends AbstractFixture implements Orde
     public function load(ObjectManager $manager)
     {
         // Maternity.
-        $NoveltyMaternidadCedula = new NoveltyTypeHasDocumentType();
-        $NoveltyMaternidadCedula->setNoveltyTypeNoveltyType($this->getReference('novelty-maternity'));
-        $NoveltyMaternidadCedula->setDocumentTypeDocumentType($this->getReference('document-type-cedula'));
-        $NoveltyMaternidadCedula->setPersonType('person');
-        $manager->persist($NoveltyMaternidadCedula);
-
         $NoveltyMaternidadCivil = new NoveltyTypeHasDocumentType();
         $NoveltyMaternidadCivil->setNoveltyTypeNoveltyType($this->getReference('novelty-maternity'));
-        $NoveltyMaternidadCivil->setDocumentTypeDocumentType($this->getReference('document-registro-civ-hijo'));
-        $NoveltyMaternidadCivil->setPersonType('person');
+        $NoveltyMaternidadCivil->setDocumentTypeDocumentType($this->getReference('document-Registro-civil-nacido-vivo'));
+        $NoveltyMaternidadCivil->setPersonType('employee');
         $manager->persist($NoveltyMaternidadCivil);
 
         $NoveltyMaternidadLicencia = new NoveltyTypeHasDocumentType();
         $NoveltyMaternidadLicencia->setNoveltyTypeNoveltyType($this->getReference('novelty-maternity'));
         $NoveltyMaternidadLicencia->setDocumentTypeDocumentType($this->getReference('document-licencia-maternidad'));
-        $NoveltyMaternidadLicencia->setPersonType('person');
+        $NoveltyMaternidadLicencia->setPersonType('employee');
         $manager->persist($NoveltyMaternidadLicencia);
 
         $NoveltyMaternidadClinica = new NoveltyTypeHasDocumentType();
@@ -35,6 +29,32 @@ class LoadNoveltyTypeHasDocumentTypeData extends AbstractFixture implements Orde
         $NoveltyMaternidadClinica->setDocumentTypeDocumentType($this->getReference('document-historia-clinica'));
         $NoveltyMaternidadClinica->setPersonType('employee');
         $manager->persist($NoveltyMaternidadClinica);
+
+        // Licencia de paternidad.
+
+        $NoveltyPaternidadRegistro = new NoveltyTypeHasDocumentType();
+        $NoveltyPaternidadRegistro->setNoveltyTypeNoveltyType($this->getReference('novelty-paternity-leave'));
+        $NoveltyPaternidadRegistro->setDocumentTypeDocumentType($this->getReference('document-Registro-civil-nacido-vivo'));
+        $NoveltyPaternidadRegistro->setPersonType('employee');
+        $manager->persist($NoveltyPaternidadRegistro);
+
+        $NoveltyPaternidadLicenciaMat = new NoveltyTypeHasDocumentType();
+        $NoveltyPaternidadLicenciaMat->setNoveltyTypeNoveltyType($this->getReference('novelty-paternity-leave'));
+        $NoveltyPaternidadLicenciaMat->setDocumentTypeDocumentType($this->getReference('document-licencia-maternidad'));
+        $NoveltyPaternidadLicenciaMat->setPersonType('employee');
+        $manager->persist($NoveltyPaternidadLicenciaMat);
+
+        $NoveltyPaternidadLicenciaMat = new NoveltyTypeHasDocumentType();
+        $NoveltyPaternidadLicenciaMat->setNoveltyTypeNoveltyType($this->getReference('novelty-paternity-leave'));
+        $NoveltyPaternidadLicenciaMat->setDocumentTypeDocumentType($this->getReference('document-licencia-paternidad'));
+        $NoveltyPaternidadLicenciaMat->setPersonType('employee');
+        $manager->persist($NoveltyPaternidadLicenciaMat);
+
+        $NoveltyPaternidadHistoria = new NoveltyTypeHasDocumentType();
+        $NoveltyPaternidadHistoria->setNoveltyTypeNoveltyType($this->getReference('novelty-paternity-leave'));
+        $NoveltyPaternidadHistoria->setDocumentTypeDocumentType($this->getReference('document-historia-clinica'));
+        $NoveltyPaternidadHistoria->setPersonType('employee');
+        $manager->persist($NoveltyPaternidadHistoria);
 
         // Licencia no remunerada.
         $NoveltyNoRemuneradaFormato = new NoveltyTypeHasDocumentType();
@@ -46,7 +66,7 @@ class LoadNoveltyTypeHasDocumentTypeData extends AbstractFixture implements Orde
         // Licencia remunerada.
         $NoveltyRemuneradaDocumento = new NoveltyTypeHasDocumentType();
         $NoveltyRemuneradaDocumento->setNoveltyTypeNoveltyType($this->getReference('novelty-paid'));
-        $NoveltyRemuneradaDocumento->setDocumentTypeDocumentType($this->getReference('document-documento-soporte'));
+        $NoveltyRemuneradaDocumento->setDocumentTypeDocumentType($this->getReference('document-formato-rem'));
         $NoveltyRemuneradaDocumento->setPersonType('employee');
         $manager->persist($NoveltyRemuneradaDocumento);
 
@@ -58,11 +78,6 @@ class LoadNoveltyTypeHasDocumentTypeData extends AbstractFixture implements Orde
         $manager->persist($NoveltySuspensionFormato);
 
         // Enfermedad general.
-        $NoveltyEnfermedadCedula = new NoveltyTypeHasDocumentType();
-        $NoveltyEnfermedadCedula->setNoveltyTypeNoveltyType($this->getReference('novelty-general-illness'));
-        $NoveltyEnfermedadCedula->setDocumentTypeDocumentType($this->getReference('document-type-cedula'));
-        $NoveltyEnfermedadCedula->setPersonType('employee');
-        $manager->persist($NoveltyEnfermedadCedula);
 
         $NoveltyEnfermedadHistoria = new NoveltyTypeHasDocumentType();
         $NoveltyEnfermedadHistoria->setNoveltyTypeNoveltyType($this->getReference('novelty-general-illness'));
@@ -84,11 +99,6 @@ class LoadNoveltyTypeHasDocumentTypeData extends AbstractFixture implements Orde
         $manager->persist($NoveltyAccidenteReporte);
 
         // Enfermedad profesional.
-        $NoveltyEnfProfesionalCedula = new NoveltyTypeHasDocumentType();
-        $NoveltyEnfProfesionalCedula->setNoveltyTypeNoveltyType($this->getReference('novelty-professional-illness'));
-        $NoveltyEnfProfesionalCedula->setDocumentTypeDocumentType($this->getReference('document-type-cedula'));
-        $NoveltyEnfProfesionalCedula->setPersonType('employee');
-        $manager->persist($NoveltyEnfProfesionalCedula);
 
         $NoveltyEnfProfesionalHistoria = new NoveltyTypeHasDocumentType();
         $NoveltyEnfProfesionalHistoria->setNoveltyTypeNoveltyType($this->getReference('novelty-professional-illness'));
@@ -98,7 +108,7 @@ class LoadNoveltyTypeHasDocumentTypeData extends AbstractFixture implements Orde
 
         $NoveltyEnfProfesionalIncapacidad = new NoveltyTypeHasDocumentType();
         $NoveltyEnfProfesionalIncapacidad->setNoveltyTypeNoveltyType($this->getReference('novelty-professional-illness'));
-        $NoveltyEnfProfesionalIncapacidad->setDocumentTypeDocumentType($this->getReference('document-incapacidad'));
+        $NoveltyEnfProfesionalIncapacidad->setDocumentTypeDocumentType($this->getReference('document-incapacidad-profecional'));
         $NoveltyEnfProfesionalIncapacidad->setPersonType('employee');
         $manager->persist($NoveltyEnfProfesionalIncapacidad);
 
@@ -108,36 +118,6 @@ class LoadNoveltyTypeHasDocumentTypeData extends AbstractFixture implements Orde
         $NoveltyEnfProfesionalReporteAccidente->setPersonType('employee');
         $manager->persist($NoveltyEnfProfesionalReporteAccidente);
 
-        // Licencia de paternidad.
-        $NoveltyPaternidadCedula = new NoveltyTypeHasDocumentType();
-        $NoveltyPaternidadCedula->setNoveltyTypeNoveltyType($this->getReference('novelty-paternity-leave'));
-        $NoveltyPaternidadCedula->setDocumentTypeDocumentType($this->getReference('document-type-cedula'));
-        $NoveltyPaternidadCedula->setPersonType('employee');
-        $manager->persist($NoveltyPaternidadCedula);
-
-        $NoveltyPaternidadRegistro = new NoveltyTypeHasDocumentType();
-        $NoveltyPaternidadRegistro->setNoveltyTypeNoveltyType($this->getReference('novelty-paternity-leave'));
-        $NoveltyPaternidadRegistro->setDocumentTypeDocumentType($this->getReference('document-registro-civ-hijo'));
-        $NoveltyPaternidadRegistro->setPersonType('employee');
-        $manager->persist($NoveltyPaternidadRegistro);
-
-        $NoveltyPaternidadLicenciaMat = new NoveltyTypeHasDocumentType();
-        $NoveltyPaternidadLicenciaMat->setNoveltyTypeNoveltyType($this->getReference('novelty-paternity-leave'));
-        $NoveltyPaternidadLicenciaMat->setDocumentTypeDocumentType($this->getReference('document-licencia-maternidad'));
-        $NoveltyPaternidadLicenciaMat->setPersonType('employee');
-        $manager->persist($NoveltyPaternidadLicenciaMat);
-
-        $NoveltyPaternidadLicenciaPat = new NoveltyTypeHasDocumentType();
-        $NoveltyPaternidadLicenciaPat->setNoveltyTypeNoveltyType($this->getReference('novelty-paternity-leave'));
-        $NoveltyPaternidadLicenciaPat->setDocumentTypeDocumentType($this->getReference('document-licencia-paternidad'));
-        $NoveltyPaternidadLicenciaPat->setPersonType('employee');
-        $manager->persist($NoveltyPaternidadLicenciaPat);
-
-        $NoveltyPaternidadHistoria = new NoveltyTypeHasDocumentType();
-        $NoveltyPaternidadHistoria->setNoveltyTypeNoveltyType($this->getReference('novelty-paternity-leave'));
-        $NoveltyPaternidadHistoria->setDocumentTypeDocumentType($this->getReference('document-historia-clinica'));
-        $NoveltyPaternidadHistoria->setPersonType('employee');
-        $manager->persist($NoveltyPaternidadHistoria);
 
         // Ajuste sueldo, no documents required.
         // Bonificacion, no documents required.
@@ -157,11 +137,10 @@ class LoadNoveltyTypeHasDocumentTypeData extends AbstractFixture implements Orde
         $NoveltyVacacionesSoporte->setPersonType('employee');
         $manager->persist($NoveltyVacacionesSoporte);
 
-
         // Vacaciones dinero.
         $NoveltyVacacionesDineroSoporte = new NoveltyTypeHasDocumentType();
         $NoveltyVacacionesDineroSoporte->setNoveltyTypeNoveltyType($this->getReference('novelty-vacation-money'));
-        $NoveltyVacacionesDineroSoporte->setDocumentTypeDocumentType($this->getReference('document-documento-soporte'));
+        $NoveltyVacacionesDineroSoporte->setDocumentTypeDocumentType($this->getReference('document-vacaciones-dinero'));
         $NoveltyVacacionesDineroSoporte->setPersonType('employee');
         $manager->persist($NoveltyVacacionesDineroSoporte);
 

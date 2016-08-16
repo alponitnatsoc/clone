@@ -3,13 +3,16 @@
 namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Exclude;
 
 /**
  * Employer
  *
- * @ORM\Table(name="employer", indexes={@ORM\Index(name="fk_employer_person1", columns={"person_id_person"})})
+ * @ORM\Table(name="employer", indexes={@ORM\Index(name="fk_employer_person1", columns={"person_id_person"})},
+ *     uniqueConstraints={@UniqueConstraint(name="mandatoryUnique", columns={"mandatory_id_document", "id_employer"})}
+ *     )
  * @ORM\Entity
  */
 class Employer
@@ -90,6 +93,14 @@ class Employer
      * @Exclude
      */
     private $entities;
+
+    /** @var Document
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Document")
+     * @ORM\JoinColumns(
+     *     @ORM\JoinColumn(name="mandatory_id_document",referencedColumnName="id_document")
+     * )
+     */
+    private $mandatoryDocument;
 
     /**
      * @var integer $toFinish
@@ -536,5 +547,29 @@ class Employer
             }
         }
         return $this->finished;
+    }
+
+    /**
+     * Set mandatoryDocument
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Document $mandatoryDocument
+     *
+     * @return Employer
+     */
+    public function setMandatoryDocument(\RocketSeller\TwoPickBundle\Entity\Document $mandatoryDocument = null)
+    {
+        $this->mandatoryDocument = $mandatoryDocument;
+
+        return $this;
+    }
+
+    /**
+     * Get mandatoryDocument
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Document
+     */
+    public function getMandatoryDocument()
+    {
+        return $this->mandatoryDocument;
     }
 }

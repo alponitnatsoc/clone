@@ -336,7 +336,7 @@
                               </div>
                               <div class="col-sm-11">
                                 <h4 style="font-weight: bold;color: #00858C;">Copia firmada del contrato</h4>
-                                <p>Consulta aquí la copia digitalizada del contrato que guardaste en el sistema el día 10 de enero de 2015.
+                                <p>Consulta aquí la copia digitalizada del contrato que guardaste en el sistema el día {{ contractDate }}.
                                   <a href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':contractEmployee.idDocument}) }}" class="notAjax" target="_blank">
                                   <strong>&#10095; Descargar contrato</strong></a></p>
                               </div>
@@ -348,7 +348,7 @@
                               </div>
                                 <div class="col-sm-11">
                                   <h4 style="font-weight: bold;color: #00858C;">No hay copia firmada del contrato</h4>
-                                  <p>No haz subido el contrato del empleado, para hacerlo ve al tablero de control y subelo.<br><a href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':contractEmployee.idDocument}) }}" class="notAjax" target="_blank">
+                                  <p>No haz subido el contrato del empleado, para hacerlo ve al tablero de control y subelo.<br><a href="{{ path('show_dashboard')}}" class="notAjax">
                                   <strong>&#10095; Ir al tablero de control</strong></a></p>
                                 </div>
                             </div>
@@ -663,33 +663,72 @@
                         <h4 style="text-align:center;font-weight: 100;color: #808080;font-size: 21px;margin: 20px 0 10px 0;">Documentos asociados a {{employee.personPerson.names}} al día de hoy</h4>
                     </div>
                     <div class="col-sm-12 documents-content">
-                        {% set docs = employee.personPerson.docs %}
                         {% set numDocs = 0 %}
-                        {% if docs|length > 0 %}
-                            {% for doc in docs %}
-                                {% if doc.mediaMedia %}
-                                    {% set numDocs = numDocs+1 %}
-                                    <div class="docs col-md-4">
-                                        <div class="col-sm-12 icon-pdf">
-                                            <i class="fa fa-file-pdf-o fa-2x"></i>
-                                        </div>
-                                        <div class="col-sm-12 title-doc">
-                                            <p><strong>{{doc.documentTypeDocumentType.name}}</strong></p>
-                                        </div>
-                                        <div class="col-sm-12">
-                                            <p>{{employee.personPerson.names}} {{ employee.personPerson.lastName1}}</p>
-                                        </div>
-                                        <div class="panel_btn_action">
-                                            <a class="btn btn-docs notAjax " href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':doc.idDocument}) }}">Ver documento</a>
-                                        </div>
+                        {% if employee.personPerson.documentDocument != '' %}
+                            {% set numDocs = numDocs+1 %}
+                            {% set cedula = employee.personPerson.documentDocument %}
+                        {% endif %}
+                        {% if employerHasEmployee.authDocument != '' %}
+                            {% set numDocs = numDocs+1 %}
+                            {% set carta = employerHasEmployee.authDocument %}
+                        {% endif %}
+                        {% if contractEmployee %}
+                            {% set numDocs = numDocs+1 %}
+                        {% endif %}
+                        {% if numDocs > 0 %}
+                            {% if cedula is defined %}
+                                <div class="docs col-md-4">
+                                    <div class="col-sm-12 icon-pdf">
+                                        <i class="fa fa-file-pdf-o fa-2x"></i>
                                     </div>
-                                {% endif %}
-                            {% endfor %}
+                                    <div class="col-sm-12 title-doc">
+                                        <p><strong>{{ cedula.documentTypeDocumentType.name}}</strong></p>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <p>{{employee.personPerson.names}} {{ employee.personPerson.lastName1}}</p>
+                                    </div>
+                                    <div class="panel_btn_action">
+                                        <a class="btn btn-docs notAjax " href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':cedula.idDocument}) }}">Descargar Cedula</a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if carta is defined %}
+                                <div class="docs col-md-4">
+                                    <div class="col-sm-12 icon-pdf">
+                                        <i class="fa fa-file-pdf-o fa-2x"></i>
+                                    </div>
+                                    <div class="col-sm-12 title-doc">
+                                        <p><strong>{{ carta.documentTypeDocumentType.name}}</strong></p>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <p>{{employee.personPerson.names}} {{ employee.personPerson.lastName1}}</p>
+                                    </div>
+                                    <div class="panel_btn_action">
+                                        <a class="btn btn-docs notAjax " href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':carta.idDocument}) }}">Descargar Cedula</a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if contractEmployee %}
+                                <div class="docs col-md-4">
+                                    <div class="col-sm-12 icon-pdf">
+                                        <i class="fa fa-file-pdf-o fa-2x"></i>
+                                    </div>
+                                    <div class="col-sm-12 title-doc">
+                                        <p><strong>{{contractEmployee.documentTypeDocumentType.name}}</strong></p>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <p>{{employee.personPerson.names}} {{ employee.personPerson.lastName1}}</p>
+                                    </div>
+                                    <div class="panel_btn_action">
+                                        <a class="btn btn-docs notAjax " href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':contractEmployee.idDocument}) }}">Descargar Contrato</a>
+                                    </div>
+                                </div>
+                            {% endif %}
                         {% endif %}
                         {% if numDocs == 0  %}
-                        <div class="nonovedad">
-                            Hásta el momento no hay documentos de {{employee.personPerson.names}} disponibles
-                        </div>
+                            <div class="nonovedad">
+                                Hásta el momento no hay documentos de {{employee.personPerson.names}} disponibles
+                            </div>
                         {% endif %}
                     </div>
                 </div>

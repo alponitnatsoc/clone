@@ -54,7 +54,7 @@ class ProcedureController extends Controller
 	 * 		inscribir entidades
 	 * 		validar entidades
 	 *
-	 * @param $procedureId ID del real procedure que llega de la pagina de tramites
+	 * @param Integer $procedureId ID del real procedure que llega de la pagina de tramites
 	 * @return Response /backoffice/procedure/{procedureId}
      */
 	public function procedureByIdAction($procedureId)
@@ -62,13 +62,19 @@ class ProcedureController extends Controller
     	$procedure = $this->loadClassById($procedureId,'RealProcedure');
     	$employer = $procedure->getEmployerEmployer();
     	$employerHasEmployees =  $employer->getEmployerHasEmployees();
-    	$actionComplete = array();
     	return $this->render('RocketSellerTwoPickBundle:BackOffice:procedure.html.twig'
 			,array('procedure'=>$procedure, 'employerHasEmployees'=>$employerHasEmployees,));
 
     }
-	
-    public function checkActionCompletation($idEHE,$idProc)
+
+
+    /**
+     * Función para verificar el estado de los tramites de un empleado
+     * @param Integer $idEHE id del EmployerHasEmployee
+     * @param Integer $idProc id del RealProcedure
+     * @return bool true cuando estan completadas todas las acciones
+     */
+    public function checkActionCompletation($idEHE, $idProc)
     {
         /** @var RealProcedure $procedure */
         $procedure = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:RealProcedure")->find($idProc);
@@ -84,12 +90,19 @@ class ProcedureController extends Controller
         return true;
 
     }
-    public function changeEmployeeStatusAction($procedureId,$idEmployerHasEmployee)
+
+    /**
+     * Funcion para cambiar el estado de backoffice de un employerHasEmployee
+     * @param Integer $procedureId
+     * @param Integer $idEmployerHasEmployee
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function changeEmployeeStatusAction($procedureId, $idEmployerHasEmployee)
     {
     	try {
             $em = $this->getDoctrine()->getManager();
             $employerHasEmployee = $this->loadClassById($idEmployerHasEmployee,'EmployerHasEmployee');
-            $person = $employerHasEmployee->getEmployeeEmployee()->getPersonPerson();
+            //$actComplete = $this->checkActionCompletation($idEmployerHasEmployee,$procedureId);
             $employerHasEmployee->setState(4);
             $em->persist($employerHasEmployee);
             $em->flush();
@@ -258,7 +271,6 @@ class ProcedureController extends Controller
 									$procedure->addAction($action);
 								}
 							}
-							//si el empleado ya es empleado de alguien mas solo se validan las entidades ya existentes
 							//si el empleado es antiguo (ya inicio labores) se crea el tramite de validar contrato
 							if($employerHasEmployee->getLegalFF()==1){
 								$actionV = new Action();
@@ -272,6 +284,7 @@ class ProcedureController extends Controller
 								//se agrega la accion al procedimiento
 								$action->getRealProcedureRealProcedure()->addAction($actionV);
 							}
+                        //si el empleado ya es empleado de alguien mas solo se validan las entidades ya existentes
 						}else{
 							//se crea la accion de informacion del empleado validada
 							$action = new Action();
@@ -296,8 +309,7 @@ class ProcedureController extends Controller
 							$em->flush();
 							//se agrega la accion al procedimiento
 							$procedure->addAction($action);
-
-
+                            //si el empleado ya es empleado de alguien se crean los tramites ya completados
 							foreach ($employerHasEmployee->getEmployeeEmployee()->getEntities() as $employeeHasEntity) {
 								if ($employeeHasEntity->getState()>=0) {
 									//se crea a accion para las entidades del empleado
@@ -325,8 +337,6 @@ class ProcedureController extends Controller
 									$procedure->addAction($action);
 								}
 							}
-
-							//si el empleado ya es empleado de alguien se crean los tramites ya completados
 							//si el empleado es antiguo (ya inicio labores) se crea el tramite de validar contrato
 							if($employerHasEmployee->getLegalFF()==1){
 								$actionV = new Action();
@@ -422,6 +432,7 @@ class ProcedureController extends Controller
 
     	return true;
     }
+
     /**
      * estructura de tramite para generar vueltas y tramites
      * @param  $id $id_employer       id del empleador que genera el tramite
@@ -507,7 +518,16 @@ class ProcedureController extends Controller
         return $procedure;
         
     }
-    public function changeVueltaStateAction($procedureId,$actionId,$status)
+
+
+    /**
+     * Funcion que cambia el estado de una accion y crea notificaciones al empleador
+     * @param Integer $procedureId
+     * @param Integer $actionId
+     * @param String $status
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function changeVueltaStateAction($procedureId, $actionId, $status)
     {
 
     	$em = $this->getDoctrine()->getManager();
@@ -540,14 +560,13 @@ class ProcedureController extends Controller
 					if($contract!=null){
 						//first create the notification
 						$utils = $this->get('app.symplifica_utils');
-						$documentType = 'Contrato';
 						$dAction="Bajar";
 						$dUrl = $this->generateUrl("download_documents", array('id' => $contract->getIdContract(), 'ref' => "contrato", 'type' => 'pdf'));
 						$msj = "Subir copia del contrato de ". $utils->mb_capitalize(explode(" ",$realEhe->getEmployeeEmployee()->getPersonPerson()->getNames())[0]." ". $realEhe->getEmployeeEmployee()->getPersonPerson()->getLastName1());
 						$nAction="Subir";
 						/** @var DocumentType $documentType */
-						$documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
-						$url = $this->generateUrl("documentos_employee", array('id' => $realEhe->getEmployeeEmployee()->getPersonPerson()->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
+						$documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findOneBy(array("docCode"=>'CTR'));
+						$url = $this->generateUrl("documentos_employee", array('entityType'=>'Contract','entityId' =>$contract->getIdContract(), 'docCode' =>'CTR'));
 						$notifications=$realEhe->getEmployerEmployer()->getPersonPerson()->getNotifications();
 						$urlToFind=$this->generateUrl("view_document_contract_state", array("idEHE"=>$realEhe->getIdEmployerHasEmployee()));
 						//searching the notification of the state of the contract to replace its content
