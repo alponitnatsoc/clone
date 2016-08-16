@@ -257,7 +257,7 @@ class LoadNoveltyTypeFieldsData extends AbstractFixture implements OrderedFixtur
         $manager->persist($NoveltyVacationMoneyStart);
 
         $NoveltyVacationMoneyDays = new NoveltyTypeFields();
-        $NoveltyVacationMoneyDays->setName('Dias en dinero');
+        $NoveltyVacationMoneyDays->setName('Días en dinero');
         $NoveltyVacationMoneyDays->setColumnName('units');
         $NoveltyVacationMoneyDays->setDataType('text');
         $NoveltyVacationMoneyDays->setNoveltyTypeNoveltyType($this->getReference('novelty-vacation-money'));
@@ -587,14 +587,14 @@ class LoadNoveltyTypeFieldsData extends AbstractFixture implements OrderedFixtur
         $dotacionEnd->setDisplayable(false);
         $manager->persist($dotacionEnd);
 
-        $noveltyUnpaidDays = new NoveltyTypeFields();
+        /*$noveltyUnpaidDays = new NoveltyTypeFields();
         $noveltyUnpaidDays->setName('Total de días');
         $noveltyUnpaidDays->setColumnName('units');
         $noveltyUnpaidDays->setDataType('text');
         $noveltyUnpaidDays->setNoveltyTypeNoveltyType($this->getReference('novelty-unpaid'));
         $noveltyUnpaidDays->setDisplayable(false);
-        $manager->persist($noveltyUnpaidDays);
-
+        $manager->persist($noveltyUnpaidDays);*/
+	
         $despido = new NoveltyTypeFields();
         $despido->setName('Fin de contrato');
         $despido->setColumnName('date_end');
