@@ -363,11 +363,14 @@ trait PayrollMethodsTrait
                             }
                         }
                     }else{
-
-                        $em->persist($pension);
-                        $em->persist($salud);
-                        $em->persist($arl);
-                        $em->persist($parafiscal);
+                        if($pension!=null)
+                            $em->persist($pension);
+                        if($salud!=null)
+                            $em->persist($salud);
+                        if($arl!=null)
+                            $em->persist($arl);
+                        if($parafiscal!=null)
+                            $em->persist($parafiscal);
                     }
                     $em->flush();
                 }
