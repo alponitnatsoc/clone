@@ -365,7 +365,6 @@ class UtilsController
 			
 			if(strpos($value,"_") !== false ){ //if this line exists, means that has to compare a % with certain value
 				$elementsArr = explode("_", substr($singleConstr,4));
-				dump($elementsArr);
 				if($elementsArr[0] == "pe"){ //Percentage
 					if($elementsArr[2] == "Sal"){
 						$splitSalaryIn = 0;
