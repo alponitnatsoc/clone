@@ -285,7 +285,6 @@ class LoadNoveltyTypeFieldsData extends AbstractFixture implements OrderedFixtur
 		    $NoveltyLibertyBonusAmount->setNoveltyTypeNoveltyType($this->getReference('novelty-liberty-bonus'));
 	      $NoveltyLibertyBonusAmount->setNoveltyDataConstrain("Min/mo_1");
 	      $NoveltyLibertyBonusAmount->setDisplayable(true);
-		    $NoveltyLibertyBonusAmount->setDisplayable(false);
 		    $manager->persist($NoveltyLibertyBonusAmount);
         //Fin bonificacion
 
@@ -545,6 +544,7 @@ class LoadNoveltyTypeFieldsData extends AbstractFixture implements OrderedFixtur
 		    $NoveltyBonusAmount->setColumnName('amount');
 		    $NoveltyBonusAmount->setDataType('text');
 		    $NoveltyBonusAmount->setNoveltyTypeNoveltyType($this->getReference('novelty-bonus'));
+	      $NoveltyBonusAmount->setDisplayable(false);
 		    $manager->persist($NoveltyBonusAmount);
 
         $llegadaTardeStart = new NoveltyTypeFields();
