@@ -283,8 +283,8 @@ class LoadNoveltyTypeFieldsData extends AbstractFixture implements OrderedFixtur
 		    $NoveltyLibertyBonusAmount->setColumnName('amount');
 		    $NoveltyLibertyBonusAmount->setDataType('text');
 		    $NoveltyLibertyBonusAmount->setNoveltyTypeNoveltyType($this->getReference('novelty-liberty-bonus'));
-		    $NoveltyBonusAmount->setNoveltyDataConstrain("Min/mo_1");
-		    $NoveltyBonusAmount->setDisplayable(true);
+	      $NoveltyLibertyBonusAmount->setNoveltyDataConstrain("Min/mo_1");
+	      $NoveltyLibertyBonusAmount->setDisplayable(true);
 		    $NoveltyLibertyBonusAmount->setDisplayable(false);
 		    $manager->persist($NoveltyLibertyBonusAmount);
         //Fin bonificacion
