@@ -1257,9 +1257,10 @@ class EmployeeRestController extends FOSRestController {
     }
 
     private function validateDocumentsEmployee($realEmployee) {
+        /** @var User $user */
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
-
+        /** @var Person $person */
         $person = $realEmployee->getPersonPerson();
         $documentsRepo = $em->getRepository('RocketSellerTwoPickBundle:Document');
         $documents = $documentsRepo->findByPersonPerson($person);

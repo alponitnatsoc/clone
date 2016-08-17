@@ -2,6 +2,7 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 
+use RocketSeller\TwoPickBundle\Entity\Config;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use FOS\RestBundle\Controller\FOSRestController;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -33,9 +34,9 @@ class HighTechRestController extends FOSRestController
   /**
    * Verifies that the parameters to the web services, are in place and that
    * have the ccorrect format.
-   * @param Array $parameters, Contains the parameters by the client.
-   * @param Array $regex, contains the key as parameter and a regex.
-   * @param Array $mandatory, contains a bool indicating if it is mandatory.
+   * @param array $parameters, Contains the parameters by the client.
+   * @param array $regex, contains the key as parameter and a regex.
+   * @param array $mandatory, contains a bool indicating if it is mandatory.
    */
    public function validateParamters($parameters, $regex, $mandatory)
    {
@@ -128,12 +129,39 @@ class HighTechRestController extends FOSRestController
       $answer=$this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getDispersePurchaseOrder', ['idPurchaseOrder' => $dis->getIdPurchaseOrders()]);
       if($answer->getStatusCode()!=200){
         $mesange="not so good man";
-        //TODO persistir algo en la bd que diga que algo segurmente pasó con la cuenta
       }else{
         $mesange="all good man";
       }
+
+
+        $userEmail = $dis->getIdUser()->getUsernameCanonical();
+        $fechaRecaudo = new DateTime();
+        $value = $dis->getValue();
+        $employerPerson = $dis->getIdUser()->getPersonPerson();
+        //TODO-Andres enviar el correo que el recaudo se relizó satisfactoriamente
+
+
+        //this will happen on the recaudo
+        //TODO-Gabriel change this to recaudo confirmation.
+        /** @var Config $ucfg */
+        $ucfg = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Config")->findOneBy(array('name' => 'ufg'));
+        $invoiceNumber = intval($ucfg->getValue()) + 1;
+        $ucfg->setValue($invoiceNumber);
+        $dis->setInvoiceNumber($invoiceNumber);
+        $em->persist($ucfg);
+        $em->persist($dis);
+        $em->flush();
     } else {
-      //TODO enviar el correo a "" notificando que no se pudo hacer la transaccion con la informacion de, la fecha del rechazo, el monto, el empleador(nombres, telefono,correo) y el empleado(nombres, numero de cuenta),
+        $userEmail = $dis->getIdUser()->getUsernameCanonical();
+        $fechaRechazo= new DateTime();
+        $value=$dis->getValue();
+        $employerPerson=$dis->getIdUser()->getPersonPerson();
+        //nicetohave buscar este ID
+        $paymethodId=$dis->getPayMethodId();
+
+      //TODO-Andres enviar el correo a "" notificando que no se pudo hacer la transaccion con la informacion de, la fecha del rechazo, el monto, el empleador(nombres, telefono,correo)
+      // también a backoffice, notificando la misma informaciónla info la saca de las variables de arriba
+
 
       $pos=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'P1'));
                //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
@@ -260,6 +288,49 @@ class HighTechRestController extends FOSRestController
 
     // Set all the parameters info.
     $regex['numeroRadicado'] = '([0-9])+'; $mandatory['numeroRadicado'] = true;
+    $regex['estado'] = '([0-9])+'; $mandatory['estado'] = true;
+
+    $this->validateParamters($parameters, $regex, $mandatory);
+
+    // Succesfull operation.
+    $view = View::create();
+    $view->setStatusCode(200);
+    $view->setData([]);
+    return $view;
+
+  }
+
+  /**
+   * @POST("notificacion/registro")
+   * Get a notification of the payment, to update in our system.<br/>
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = "Get a notification of the payment, to update in our system.",
+   *   statusCodes = {
+   *     200 = "OK",
+   *     400 = "Bad Request",
+   *     401 = "Unauthorized"
+   *   }
+   * )
+   *
+   * @param Request $request.
+   * Rest Parameters:
+   *
+   * (name="methodId", nullable=false, requirements="([0-9])+", strict=true, description="the id of operation returned by HT in web service #8.")
+   * (name="estado", nullable=false, requirements="([0-9])+", strict=true, description="Status of the operation, where:
+   *                                                   0 OK, 90 NOTOk."
+   *
+   * @return View
+   */
+  public function postAccountSubscriptionAction(Request $request)
+  {
+    $parameters = $request->request->all();
+    $regex = array();
+    $mandatory = array();
+
+    // Set all the parameters info.
+    $regex['methodId'] = '([0-9])+'; $mandatory['methodId'] = true;
     $regex['estado'] = '([0-9])+'; $mandatory['estado'] = true;
 
     $this->validateParamters($parameters, $regex, $mandatory);

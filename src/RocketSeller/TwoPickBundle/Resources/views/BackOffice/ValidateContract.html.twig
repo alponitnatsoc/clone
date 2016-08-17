@@ -34,9 +34,9 @@
                     {% if nameDoc==''%}
                         <p>El usuario no a subido el contrato</p>
                     {% else %}
-                        <h4>Descargar documentos</h4>
+                        <h4>Descargar contrato</h4>
                         <p>{{ contrato.documentTypeDocumentType.name}} {{ person.fullName }}</p>
-                        <a class="btn btn-orange notAjax" href="{{ path('export_documents_person',{'idPerson':action.personPerson.idPerson})}}">Descargar</a>
+                        <a class="btn btn-orange notAjax" href="{{ path('export_contract',{'idContract':contract.idContract})}}">Descargar</a>
                         <br>
                     {% endif %}
                     <br>

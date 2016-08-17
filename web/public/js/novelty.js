@@ -132,9 +132,9 @@ function addNoveltySelectListener() {
                   );
               }else{
                   var error=$(data).find("#error");
-                  if(error.length!=0){
+                  /*if(error.length!=0){
                       alert(error.html());
-                  }
+                  }*/
                   modBody.html(
                       innerForm
                   );

@@ -152,88 +152,6 @@ class Novelty
     }
 
     /**
-     * Set payrollDetailPayrollDetail
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\PayrollDetail $payrollDetailPayrollDetail
-     *
-     * @return Novelty
-     */
-    public function setPayrollDetailPayrollDetail(\RocketSeller\TwoPickBundle\Entity\PayrollDetail $payrollDetailPayrollDetail = null)
-    {
-        $this->payrollDetailPayrollDetail = $payrollDetailPayrollDetail;
-
-        return $this;
-    }
-
-    /**
-     * Get payrollDetailPayrollDetail
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\PayrollDetail
-     */
-    public function getPayrollDetailPayrollDetail()
-    {
-        return $this->payrollDetailPayrollDetail;
-    }
-
-    /**
-     * Set noveltyTypeNoveltyType
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\NoveltyType $noveltyTypeNoveltyType
-     *
-     * @return Novelty
-     */
-    public function setNoveltyTypeNoveltyType(\RocketSeller\TwoPickBundle\Entity\NoveltyType $noveltyTypeNoveltyType = null)
-    {
-        $this->noveltyTypeNoveltyType = $noveltyTypeNoveltyType;
-
-        return $this;
-    }
-
-    /**
-     * Get noveltyTypeNoveltyType
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\NoveltyType
-     */
-    public function getNoveltyTypeNoveltyType()
-    {
-        return $this->noveltyTypeNoveltyType;
-    }
-
-    /**
-     * Add document
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\Document $document
-     *
-     * @return Novelty
-     */
-    public function addDocument(\RocketSeller\TwoPickBundle\Entity\Document $document)
-    {
-        $this->documents[] = $document;
-
-        return $this;
-    }
-
-    /**
-     * Remove document
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\Document $document
-     */
-    public function removeDocument(\RocketSeller\TwoPickBundle\Entity\Document $document)
-    {
-        $this->documents->removeElement($document);
-    }
-
-    /**
-     * Get documents
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getDocuments()
-    {
-        return $this->documents;
-    }
-
-    /**
      * Set dateStart
      *
      * @param \DateTime $dateStart
@@ -329,29 +247,28 @@ class Novelty
         return $this->amount;
     }
 
-
     /**
-     * Set payrollPayroll
+     * Set sqlValue
      *
-     * @param \RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll
+     * @param float $sqlValue
      *
      * @return Novelty
      */
-    public function setPayrollPayroll(\RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll = null)
+    public function setSqlValue($sqlValue)
     {
-        $this->payrollPayroll = $payrollPayroll;
+        $this->sqlValue = $sqlValue;
 
         return $this;
     }
 
     /**
-     * Get payrollPayroll
+     * Get sqlValue
      *
-     * @return \RocketSeller\TwoPickBundle\Entity\Payroll
+     * @return float
      */
-    public function getPayrollPayroll()
+    public function getSqlValue()
     {
-        return $this->payrollPayroll;
+        return $this->sqlValue;
     }
 
     /**
@@ -379,27 +296,75 @@ class Novelty
     }
 
     /**
-     * Set sqlValue
+     * Set sqlNovConsec
      *
-     * @param float $sqlValue
+     * @param string $sqlNovConsec
      *
      * @return Novelty
      */
-    public function setSqlValue($sqlValue)
+    public function setSqlNovConsec($sqlNovConsec)
     {
-        $this->sqlValue = $sqlValue;
+        $this->sqlNovConsec = $sqlNovConsec;
 
         return $this;
     }
 
     /**
-     * Get sqlValue
+     * Get sqlNovConsec
      *
-     * @return float
+     * @return string
      */
-    public function getSqlValue()
+    public function getSqlNovConsec()
     {
-        return $this->sqlValue;
+        return $this->sqlNovConsec;
+    }
+
+    /**
+     * Set payrollDetailPayrollDetail
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PayrollDetail $payrollDetailPayrollDetail
+     *
+     * @return Novelty
+     */
+    public function setPayrollDetailPayrollDetail(\RocketSeller\TwoPickBundle\Entity\PayrollDetail $payrollDetailPayrollDetail = null)
+    {
+        $this->payrollDetailPayrollDetail = $payrollDetailPayrollDetail;
+
+        return $this;
+    }
+
+    /**
+     * Get payrollDetailPayrollDetail
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\PayrollDetail
+     */
+    public function getPayrollDetailPayrollDetail()
+    {
+        return $this->payrollDetailPayrollDetail;
+    }
+
+    /**
+     * Set payrollPayroll
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll
+     *
+     * @return Novelty
+     */
+    public function setPayrollPayroll(\RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll = null)
+    {
+        $this->payrollPayroll = $payrollPayroll;
+
+        return $this;
+    }
+
+    /**
+     * Get payrollPayroll
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Payroll
+     */
+    public function getPayrollPayroll()
+    {
+        return $this->payrollPayroll;
     }
 
     /**
@@ -426,28 +391,61 @@ class Novelty
         return $this->sqlPayrollPayroll;
     }
 
-
     /**
-     * Set sqlNovConsec
+     * Set noveltyTypeNoveltyType
      *
-     * @param string $sqlNovConsec
+     * @param \RocketSeller\TwoPickBundle\Entity\NoveltyType $noveltyTypeNoveltyType
      *
      * @return Novelty
      */
-    public function setSqlNovConsec($sqlNovConsec)
+    public function setNoveltyTypeNoveltyType(\RocketSeller\TwoPickBundle\Entity\NoveltyType $noveltyTypeNoveltyType = null)
     {
-        $this->sqlNovConsec = $sqlNovConsec;
+        $this->noveltyTypeNoveltyType = $noveltyTypeNoveltyType;
 
         return $this;
     }
 
     /**
-     * Get sqlNovConsec
+     * Get noveltyTypeNoveltyType
      *
-     * @return string
+     * @return \RocketSeller\TwoPickBundle\Entity\NoveltyType
      */
-    public function getSqlNovConsec()
+    public function getNoveltyTypeNoveltyType()
     {
-        return $this->sqlNovConsec;
+        return $this->noveltyTypeNoveltyType;
+    }
+
+    /**
+     * Add document
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Document $document
+     *
+     * @return Novelty
+     */
+    public function addDocument(\RocketSeller\TwoPickBundle\Entity\Document $document)
+    {
+        $this->documents[] = $document;
+
+        return $this;
+    }
+
+    /**
+     * Remove document
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Document $document
+     */
+    public function removeDocument(\RocketSeller\TwoPickBundle\Entity\Document $document)
+    {
+        $this->documents->removeElement($document);
+    }
+
+    /**
+     * Get documents
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDocuments()
+    {
+        return $this->documents;
     }
 }

@@ -16,7 +16,7 @@
                 <h4 class="col-md-6 panel-heading">RUT</h4>
             </div>
             <div class="col-md-12">
-                {% if person.docByType("Cedula")=='' %}
+                {% if person.documentDocument=='' %}
                     <div class="col-md-6" style="margin-top:250px; text-align:center">
                         <p>Llamar al cliente {{ user.personPerson.fullName}} y recordarle que suba la cedula</p>
                     </div>
@@ -27,7 +27,7 @@
                     </div>
                 {% endif %}
 
-                {% if person.docByType("Rut")=='' %}
+                {% if person.rutDocument=='' %}
                     <div class="col-md-6" style="margin-top:250px; text-align:center">
                         <p>Llamar al cliente {{ user.personPerson.fullName}} y recordarle que suba el RUT</p>
                     </div>

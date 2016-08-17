@@ -5,11 +5,14 @@ namespace RocketSeller\TwoPickBundle\Controller;
 use DateTime;
 use DateInterval;
 use Doctrine\Common\Collections\ArrayCollection;
+use JMS\SecurityExtraBundle\Tests\Fixtures\A;
 use RocketSeller\TwoPickBundle\Entity\Beneficiary;
 use RocketSeller\TwoPickBundle\Entity\Contract;
+use RocketSeller\TwoPickBundle\Entity\Document;
 use RocketSeller\TwoPickBundle\Entity\Employee;
 use RocketSeller\TwoPickBundle\Entity\EmployeeHasBeneficiary;
 use RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity;
+use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Entity;
@@ -573,10 +576,13 @@ class EmployeeController extends Controller
     public function showEmployeeAction($id)
     {
         $this->dateToday= new \DateTime();
+        /** @var User $user */
         $user = $this->getUser();
+        /** @var Person $person */
         $person = $user->getPersonPerson();
-
+        /** @var Employer $employer */
         $employer = $this->loadClassByArray(array('personPerson' => $person), 'Employer');
+        /** @var Employee $employee */
         $employee = $this->getDoctrine()
                 ->getRepository('RocketSellerTwoPickBundle:Employee')
                 ->find($id);
@@ -585,13 +591,14 @@ class EmployeeController extends Controller
                 ->findAll();
         $entities = $employee->getEntities();
         $entitiesEmployer = $employer->getEntities();
+        /** @var EmployerHasEmployee $employerHasEmployee */
         $employerHasEmployee = $this->loadClassByArray(array(
             'employerEmployer' => $employer,
             'employeeEmployee' => $employee,
                 ), 'EmployerHasEmployee'
         );
-        $documentType = $this->loadClassByArray(array('name' => 'Contrato'), 'DocumentType');
         $contracts = $employerHasEmployee->getContracts();
+        /** @var Contract $contract */
         foreach ($contracts as $contract) {
             if ($contract->getState()) {
                 /** @var Contract $activeContract */
@@ -605,7 +612,12 @@ class EmployeeController extends Controller
                 array_push($nonRepeatedBenef, $employeeHasBeneficiary->getBeneficiaryBeneficiary());
             }
         }
+        /** @var Document $contractEmployee */
         $contractEmployee = $activeContract->getDocumentDocument();
+        $contractDate = "";
+        if($contractEmployee){
+            $contractDate = $contractEmployee->getMediaMedia()->getUpdatedAt()->format("l j"). " de " . $contractEmployee->getMediaMedia()->getUpdatedAt()->format("F") ;
+        }
         $entidades = array();
         foreach ($entities as $entity) {
             if ($entity->getEntityEntity()->getEntityTypeEntityType()->getName() == "EPS") {
@@ -712,7 +724,6 @@ class EmployeeController extends Controller
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ))
-
             ->getForm();
 
 
@@ -721,6 +732,7 @@ class EmployeeController extends Controller
                     'employee' => $employee,
                     'employerHasEmployee' => $employerHasEmployee,
                     'contract' => $activeContract,
+                    'contractDate' => $contractDate,
                     'contractEmployee' => $contractEmployee,
                     'entidades' => $entidades,
                     'nonRepeatedBenef'=>$nonRepeatedBenef,

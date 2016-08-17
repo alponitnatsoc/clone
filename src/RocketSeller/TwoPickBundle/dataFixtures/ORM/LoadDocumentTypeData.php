@@ -11,132 +11,172 @@ class LoadDocumentTypeData extends AbstractFixture implements OrderedFixtureInte
     public function load(ObjectManager $manager)
     {
         $documentTypeCedula = new DocumentType();
-        $documentTypeCedula->setName('Cedula');
+        $documentTypeCedula->setName('Cédula');
+        $documentTypeCedula->setDocCode('CC');
         $manager->persist($documentTypeCedula);
-
-        $documentTypeComprobante = new DocumentType();
-        $documentTypeComprobante->setName('Comprobante');
-        $manager->persist($documentTypeComprobante);
 
         $documentTypeRut = new DocumentType();
         $documentTypeRut->setName('Rut');
+        $documentTypeRut->setDocCode('RUT');
         $manager->persist($documentTypeRut);
 
         $documentTypeContrato = new DocumentType();
         $documentTypeContrato->setName('Contrato');
+        $documentTypeContrato->setDocCode('CTR');
         $manager->persist($documentTypeContrato);
 
         $documentTypeCartaAut = new DocumentType();
         $documentTypeCartaAut->setName('Carta autorización Symplifica');
+        $documentTypeCartaAut->setDocCode('CAS');
         $manager->persist($documentTypeCartaAut);
 
         $documentTypeRegistroCiv = new DocumentType();
-        $documentTypeRegistroCiv->setName('REGISTRO CIVIL DE NACIMIENTO COTIZANTE');
+        $documentTypeRegistroCiv->setName('Registro civil de nacimiento');
+        $documentTypeRegistroCiv->setDocCode('RCDN');
         $manager->persist($documentTypeRegistroCiv);
 
-        $documentTypeRegistroCivHijo = new DocumentType();
-        $documentTypeRegistroCivHijo->setName('REGISTRO CIVIL DE NACIMIENTO HIJO (BENEFICIARIO)');
-        $manager->persist($documentTypeRegistroCivHijo);
-
         $documentLicenciaMaternidad = new DocumentType();
-        $documentLicenciaMaternidad->setName('LICENCIA DE MATERNIDAD EN ORGINAL');
+        $documentLicenciaMaternidad->setName('Licencia de maternidad original');
+        $documentLicenciaMaternidad->setDocCode('LDM');
         $manager->persist($documentLicenciaMaternidad);
 
         $documentLicenciaPaternidad = new DocumentType();
-        $documentLicenciaPaternidad->setName('LICENCIA DE PATERNIDAD EN ORIGINAL');
+        $documentLicenciaPaternidad->setName('Licencia de paternidad original');
+        $documentLicenciaPaternidad->setDocCode('LDP');
         $manager->persist($documentLicenciaPaternidad);
 
         $documentTypeHistoriaClinica = new DocumentType();
-        $documentTypeHistoriaClinica->setName('HISTORIA CLINICA DEL EVENTO');
+        $documentTypeHistoriaClinica->setName('Historia clinica del suceso');
+        $documentTypeHistoriaClinica->setDocCode('HCDE');
         $manager->persist($documentTypeHistoriaClinica);
 
         $documentTypeDocumentoSoporte = new DocumentType();
         $documentTypeDocumentoSoporte->setName('DOCUMENTOS SOPORTES DE LA NOVEDAD');
+        $documentTypeDocumentoSoporte->setDocCode('DSN');
         $manager->persist($documentTypeDocumentoSoporte);
 
         $documentTypeFormatoSoporte = new DocumentType();
         $documentTypeFormatoSoporte->setName('FORMATOS SOPORTES DE LA NOVEDAD');
+        $documentTypeFormatoSoporte->setDocCode('FSN');
         $manager->persist($documentTypeFormatoSoporte);
 
         $documentTypeIncapacidad = new DocumentType();
-        $documentTypeIncapacidad->setName('INCAPACIDAD');
+        $documentTypeIncapacidad->setName('Soporte de Incapacidad General');
+        $documentTypeIncapacidad->setDocCode('INC');
         $manager->persist($documentTypeIncapacidad);
 
         $documentTypeReporteAcci = new DocumentType();
-        $documentTypeReporteAcci->setName('REPORTE DE ACCIDENTE DE TRABAJO');
+        $documentTypeReporteAcci->setName('Reporte de accidente de trabajo');
+        $documentTypeReporteAcci->setDocCode('RADT');
         $manager->persist($documentTypeReporteAcci);
 
         $documentTypeCertificadoDefuncion = new DocumentType();
-        $documentTypeCertificadoDefuncion->setName('CERTIFICADO DEFUNCION DE (PADRES, COMPAÑERA, HIJOS, HERMANOS) ');
+        $documentTypeCertificadoDefuncion->setName('CERTIFICADO DE DEFUNCIÓN');
+        $documentTypeCertificadoDefuncion->setDocCode('CERD');
         $manager->persist($documentTypeCertificadoDefuncion);
-
-        $documentTypeRegistroCivil = new DocumentType();
-        $documentTypeRegistroCivil->setName('REGISTRO CIVIL  ( BENEFICIARIO ) ');
-        $manager->persist($documentTypeRegistroCivil);
-
-        $documentTypeDocumentoIdent = new DocumentType();
-        $documentTypeDocumentoIdent->setName('DOCUMENTO DE IDENTIDAD DE BENEFICIARIO');
-        $manager->persist($documentTypeDocumentoIdent);
 
         $cartaRenuncia = new DocumentType();
         $cartaRenuncia->setName('Carta de renuncia');
+        $cartaRenuncia->setDocCode('CDR');
         $manager->persist($cartaRenuncia);
-
-
 
         $solVacaciones = new DocumentType();
         $solVacaciones->setName('Solicitud de vacaciones');
         $solVacaciones->setRefPdf('vacaciones');
+        $solVacaciones->setDocCode('SDV');
         $manager->persist($solVacaciones);
 
         $suspencion = new DocumentType();
         $suspencion->setName('Suspencion');
         $suspencion->setRefPdf('suspencion');
+        $suspencion->setDocCode('SUSP');
         $manager->persist($suspencion);
 
         $descargo = new DocumentType();
         $descargo->setName('Version libre de hechos');
         $descargo->setRefPdf('descargo');
+        $descargo->setDocCode('VLDH');
         $manager->persist($descargo);
 
         $descuento = new DocumentType();
         $descuento->setName('Autorización de descuento');
         $descuento->setRefPdf('aut-descuento');
+        $descuento->setDocCode('ADES');
         $manager->persist($descuento);
 
         $dotacion = new DocumentType();
         $dotacion->setName('Soporte entrega de dotación');
         $dotacion->setRefPdf('dotacion');
+        $dotacion->setDocCode('DOT');
         $manager->persist($dotacion);
 
         $permiso = new DocumentType();
         $permiso->setName('Licencia no remunerada');
         $permiso->setRefPdf('permiso');
+        $permiso->setDocCode('LNRE');
         $manager->persist($permiso);
 
         $notDespido = new DocumentType();
         $notDespido->setName('Notificación de despido');
         $notDespido->setRefPdf('not-despido');
+        $notDespido->setDocCode('NDSP');
         $manager->persist($notDespido);
 
         $mandato = new DocumentType();
         $mandato->setName('Mandato');
         $mandato->setRefPdf('mandato');
+        $mandato->setDocCode('MAND');
         $manager->persist($mandato);
+
+        $otroSi = new DocumentType();
+        $otroSi->setName('OtroSi');
+        $otroSi->setDocCode('OTRS');
+        $manager->persist($otroSi);
+
+        $documentTypeComprobante = new DocumentType();
+        $documentTypeComprobante->setName('Comprobante');
+        $documentTypeComprobante->setDocCode('CPR');
+        $manager->persist($documentTypeComprobante);
 
         $signature = new DocumentType();
         $signature->setName('Firma');
+        $signature->setDocCode('FIRM');
         $manager->persist($signature);
+
+        $documentTypeTI = new DocumentType();
+        $documentTypeTI->setName('Tarjeta de Identidad');
+        $documentTypeTI->setDocCode('TI');
+        $manager->persist($documentTypeTI);
+
+        $documentTypeIncapacidadProf = new DocumentType();
+        $documentTypeIncapacidadProf->setName('Soporte de Incapacidad Profecional');
+        $documentTypeIncapacidadProf->setDocCode('INCP');
+        $manager->persist($documentTypeIncapacidadProf);
+
+        $documentTypeRegNacVivo = new DocumentType();
+        $documentTypeRegNacVivo->setName('Registro civil de hijo nacido vivo');
+        $documentTypeRegNacVivo->setDocCode('RCNV');
+        $manager->persist($documentTypeRegNacVivo);
+
+        $documentTypeRem = new DocumentType();
+        $documentTypeRem->setName('Licencia remunerada');
+        $documentTypeRem->setDocCode('LREM');
+        $documentTypeRem->setRefPdf('formato-licencia');
+        $manager->persist($documentTypeRem);
+
+        $documentTypeSDVD = new DocumentType();
+        $documentTypeSDVD->setName('Solicitud vacaciones en dinero');
+        $documentTypeSDVD->setDocCode('SDVD');
+        $documentTypeSDVD->setRefPdf('vacaciones-dinero');
+        $manager->persist($documentTypeSDVD);
 
         $manager->flush();
 
         $this->addReference('document-type-cedula', $documentTypeCedula);
-        $this->addReference('document-type-comprobante', $documentTypeComprobante);
         $this->addReference('document-type-rut', $documentTypeRut);
         $this->addReference('document-type-contrato', $documentTypeContrato);
         $this->addReference('document-carta-aut', $documentTypeCartaAut);
         $this->addReference('document-registro-civ', $documentTypeRegistroCiv);
-        $this->addReference('document-registro-civ-hijo', $documentTypeRegistroCivHijo);
         $this->addReference('document-licencia-maternidad', $documentLicenciaMaternidad);
         $this->addReference('document-licencia-paternidad', $documentLicenciaPaternidad);
         $this->addReference('document-historia-clinica', $documentTypeHistoriaClinica);
@@ -144,18 +184,24 @@ class LoadDocumentTypeData extends AbstractFixture implements OrderedFixtureInte
         $this->addReference('document-formato-soporte', $documentTypeFormatoSoporte);
         $this->addReference('document-incapacidad', $documentTypeIncapacidad);
         $this->addReference('document-reporte-acci', $documentTypeReporteAcci);
-        $this->addReference('document-certificado-defuncion', $documentTypeCertificadoDefuncion);
-        $this->addReference('document-registro-civil', $documentTypeRegistroCivil);
-        $this->addReference('document-documento-identidad', $documentTypeDocumentoIdent);
+        $this->addReference('document-certificado-defuncion-padre', $documentTypeCertificadoDefuncion);
         $this->addReference('document-carta-renuncia', $cartaRenuncia);
-
         $this->addReference('document-not-despido', $notDespido);
         $this->addReference('document-permiso', $permiso);
         $this->addReference('document-dotacion', $dotacion);
         $this->addReference('document-aut-descuento', $descuento);
         $this->addReference('document-descargo', $descargo);
         $this->addReference('document-suspencion', $suspencion);
+        $this->addReference('document-type-comprobante', $documentTypeComprobante);
         $this->addReference('document-sol-vacaciones', $solVacaciones);
+        $this->addReference('document-otro-si',$otroSi);
+        $this->addReference('document-firma',$signature);
+        $this->addReference('document-TI',$documentTypeTI);
+        $this->addReference('document-incapacidad-profecional',$documentTypeIncapacidadProf);
+        $this->addReference('document-Registro-civil-nacido-vivo',$documentTypeRegNacVivo);
+        $this->addReference('document-formato-rem',$documentTypeRem);
+        $this->addReference('document-vacaciones-dinero',$documentTypeSDVD);
+
     }
     public function getOrder()
     {

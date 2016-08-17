@@ -65,6 +65,11 @@ class NoveltyType
     private $naturaleza;
 
     /**
+     * @ORM\Column(type="string", length=40, nullable=TRUE)
+     */
+    private $displayOn;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -295,5 +300,29 @@ class NoveltyType
     public function getGrupo()
     {
         return $this->grupo;
+    }
+
+    /**
+     * Set displayOn
+     *
+     * @param string $displayOn
+     *
+     * @return NoveltyType
+     */
+    public function setDisplayOn($displayOn)
+    {
+        $this->displayOn = $displayOn;
+
+        return $this;
+    }
+
+    /**
+     * Get displayOn
+     *
+     * @return string
+     */
+    public function getDisplayOn()
+    {
+        return $this->displayOn;
     }
 }

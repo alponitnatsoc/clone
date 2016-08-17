@@ -16,8 +16,8 @@
     </div>
     <div class="col-sm-17">
         <div class="col-sm-6">
-            {% set document = action.personPerson.docByType("Cedula") %}
-            {% if action.personPerson.docByType("Cedula")=='' %}
+            {% set document = action.personPerson.documentDocument %}
+            {% if action.personPerson.documentDocument=='' %}
                 <p>Llamar al cliente y recordar que suba la cedula de {{ action.personPerson.fullName}}</p>
             {% else %}
                 <iframe class="noAjax" src="{{ cedulaPath }}" style="width:320px; height:420px;" frameborder="0"></iframe>

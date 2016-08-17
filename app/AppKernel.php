@@ -66,7 +66,9 @@ class AppKernel extends Kernel
             new Vresh\TwilioBundle\VreshTwilioBundle(),
 
             //KnpSnappyBundle create PDF/image form url/html
-            new Knp\Bundle\SnappyBundle\KnpSnappyBundle()
+            new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
+            // Add excel bundle
+            new Liuggio\ExcelBundle\LiuggioExcelBundle()
 
         );
 
