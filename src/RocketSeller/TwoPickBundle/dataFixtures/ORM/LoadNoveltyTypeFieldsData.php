@@ -698,7 +698,7 @@ class LoadNoveltyTypeFieldsData extends AbstractFixture implements OrderedFixtur
         $this->addReference('novelty-descargos-start', $descargosStart);
         $this->addReference('novelty-dotacion-start', $dotacionStart);
         $this->addReference('novelty-dotacion-end', $dotacionEnd);
-        $this->addReference('novelty-novelty-unpaid-days', $noveltyUnpaidDays);
+        //$this->addReference('novelty-novelty-unpaid-days', $noveltyUnpaidDays);
         $this->addReference('novelty-despido-end', $despido);
 
     }
