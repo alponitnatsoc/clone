@@ -27,7 +27,7 @@ class NoveltyRestController extends FOSRestController
    *
    * @ApiDoc(
    *   resource = true,
-   *   description = "Returns the list of novelty types",
+   *   description = "Returns the list of novelty types with specific time commitment",
    *   statusCodes = {
    *     200 = "Returned when successful"
    *   }
@@ -35,12 +35,20 @@ class NoveltyRestController extends FOSRestController
    *
    * @return View
    */
-   public function getNoveltyTypesAction() {
-     $novletyRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:NoveltyType");
-     $novleties = $novletyRepo->findAll();
+   public function getNoveltyTypesAction($timeCommitmentCode) {
+     $novletyTypeRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:NoveltyType");
+     $novletyTypes = $novletyTypeRepo->findAll();
+
+     $resultNoveltyTypes = array();
+     foreach ($novletyTypes as $NT) {
+       if (strpos($NT->getDisplayOn(), $timeCommitmentCode) !== false) {
+         array_push($resultNoveltyTypes, $NT);
+       }
+     }
+
      $view = View::create();
 
-     return $view->setStatusCode(200)->setData(array('novelties'=>$novleties));
+     return $view->setStatusCode(200)->setData(array('novelties'=>$resultNoveltyTypes));
    }
 
     /**
@@ -68,7 +76,7 @@ class NoveltyRestController extends FOSRestController
         $noveltyRepo=$em->getRepository("RocketSellerTwoPickBundle:Novelty");
         /** @var Novelty $novelty */
         $novelty=$noveltyRepo->find($idNovelty);
-       
+
         $noveltyRequiredFields  = $novelty->getNoveltyTypeNoveltyType()->getRequiredFields();
         $utils = $this->get('app.symplifica_utils');
         /** @var NoveltyTypeFields $requiredField */
@@ -86,7 +94,7 @@ class NoveltyRestController extends FOSRestController
         }
         $em->persist($novelty);
         $em->flush();
-        
+
         $view = View::create();
         $request = $this->container->get('request');
         $noveltyType=$novelty->getNoveltyTypeNoveltyType();
