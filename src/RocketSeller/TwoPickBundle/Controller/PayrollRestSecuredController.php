@@ -725,14 +725,12 @@ class PayrollRestSecuredController extends FOSRestController
                 $em->persist($user);
             }
             $em->flush();
-            /** @var Config $ucfg */
-            $ucfg = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Config")->findOneBy(array('name' => 'ufg'));
-            $invoiceNumber = intval($ucfg->getValue()) + 1;
-            $ucfg->setValue($invoiceNumber);
-            $realtoPay->setInvoiceNumber($invoiceNumber);
-            $em->persist($ucfg);
-            $em->persist($realtoPay);
-            $em->flush();
+
+
+            $procesingPurchaseOrder=$realtoPay;
+            //TODO-Andres Send email of the purchase order
+            // Con la descripción que se está procesando el pago. la Purchase order es $procesingPurchaseOrder
+
 
             return $view->setStatusCode(200)->setData(array('result' => "s", 'idPO' => $realtoPay->getIdPurchaseOrders()));
 
@@ -751,6 +749,10 @@ class PayrollRestSecuredController extends FOSRestController
             }
             $em->persist($realtoPay);
             $em->flush();
+
+            $rejectedPurchaseOrder=$realtoPay;
+            //TODO-Andres Send email of the rejected pay purchase order
+            // Con la descripción que se está procesando el pago. la Purchase order es $procesingPurchaseOrder
             return $view->setStatusCode(200)->setData(array('result' => "e"));
         }
 
