@@ -67,39 +67,25 @@ class DocumentRestController extends FOSRestController
         $data = base64_decode($img);
         $fileSignatureName = "tempSignature.png";
         file_put_contents("uploads/$fileSignatureName", $data);
-        $absPath = getcwd();
-        $absPath = str_replace('/', '_', $absPath);
-        $signaturePath = $absPath . '_uploads_' . $fileSignatureName;
-        $params = array(
-            'ref'=> 'comprobante',
-            'id' => "$idPayroll,$raw2",
-            'type' => 'html',
-            'attach' => null
-        );
-        $documentResult = $this->forward('RocketSellerTwoPickBundle:Document:downloadDocuments', $params);
-        $file = $documentResult->getContent();
-        $file_path = "uploads/tempComprobanteFile.html";
-        file_put_contents($file_path, $file);
-
 
         $documentType = $this->getDoctrine()
             ->getRepository('RocketSellerTwoPickBundle:DocumentType')
-            ->findOneBy(array("name" => 'Comprobante'));
+            ->findOneBy(array("name" => 'Firma'));
 
         $document = new Document();
         $document->setPersonPerson($personEmployee);
         $document->setEmployerEmployer($employer);
-        $document->setName('Comprobante');
+        $document->setName('Firma');
         $document->setStatus(1);
         $document->setDocumentTypeDocumentType($documentType);
         $em->persist($document);
 
-        $payroll->setPayslip($document);
+        $payroll->setSignature($document);
         $em->persist($payroll);
 
         $mediaManager = $this->container->get('sonata.media.manager.media');
         $media = $mediaManager->create();
-        $media->setBinaryContent($file_path);
+        $media->setBinaryContent("uploads/$fileSignatureName");
         $media->setProviderName('sonata.media.provider.file');
         $media->setName($document->getName());
         $media->setProviderStatus(Media::STATUS_OK);
@@ -109,7 +95,6 @@ class DocumentRestController extends FOSRestController
         $em->persist($media);
         $em->flush();
         unlink("uploads/$fileSignatureName");
-        unlink($file_path);
 
         $view = View::create();
         $view->setStatusCode(200);

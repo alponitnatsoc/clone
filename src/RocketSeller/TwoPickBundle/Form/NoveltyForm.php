@@ -49,9 +49,12 @@ class NoveltyForm extends AbstractType
                 'by_reference' => false,
                 'required' => false));
         }
-        //if has extra fields add te fields to the main form
+        //if has extra fields add the fields to the main form
         /** @var NoveltyTypeFields $field */
         foreach ($this->fields as $field){
+            if($field->getDisplayable() == false){
+              continue;
+            }
             // leading letter means that is an entity
             if($field->getDataType()[0]<="Z"){
                 $builder
@@ -76,8 +79,8 @@ class NoveltyForm extends AbstractType
                             'placeholder' => array(
                                 'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
                             ),
-                            'years'=>range($this->today->format("Y"),intval($this->today->format("Y"))+1),
-                            'label' => $field->getName(),
+                            'years'=>range(intval($this->today->format("Y"))-1,intval($this->today->format("Y"))+1),
+	                          'label' => $field->getName(),
                             'required' => false
                         ));
                 }else{
@@ -115,4 +118,5 @@ class NoveltyForm extends AbstractType
     {
         return 'novelty_fields';
     }
+	
 }

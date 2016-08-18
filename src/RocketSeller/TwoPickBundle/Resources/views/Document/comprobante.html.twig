@@ -103,7 +103,12 @@
     </style>
 
 </head>
-<body>
+
+{% if  data.isMobile %}
+  <body style="zoom: 0.5;">
+{% else %}
+  <body>
+{% endif %}
   <div id="contenedor-comp">
               <div id="tittle-comp">
                   <h2>Comprobante de pago</h2>

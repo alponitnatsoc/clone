@@ -1025,6 +1025,37 @@ class Payments2RestController extends FOSRestController
         return $responseView;
     }
 
+
+    /**
+     * Checks the state of a transaction.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Checks the state of a transaction",
+     *   statusCodes = {
+     *     200 = "Created",
+     *     400 = "Bad Request",
+     *     404 = "Not found",
+     *     422 = "Bad parameters"
+     *   }
+     * )
+     *
+     * @param Int $radicatedNumber radicated number of the collection.
+     *
+     * @return View
+     */
+    public function getTransactionStateAction( $radicatedNumber)
+    {
+        $path = "ConsultarEstado";
+        $parameters_fixed = array();
+        $parameters_fixed['numeroRadicado'] = $radicatedNumber;
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters_fixed, $path, "ConsultarEstado");
+
+        return $responseView;
+    }
+
     /**
      * Gets the dispersion state.<br/>
      *
