@@ -55,8 +55,8 @@
                         <br>
                     {% else %}
                         <h4>Descargar documentos</h4>
-                        <a class="btn btn-orange notAjax" href="{{ path('export_document_by_id',{'idDoc':cedula.idDocument})}}">Descargar Cédula</a>
-                        <a class="btn btn-orange notAjax" href="{{ path('export_document_by_id',{'idDoc':carta.idDocument})}}">Descargar Carta Autorización</a>
+                        <a class="btn btn-bitbucket notAjax" href="{{ path('export_document_by_id',{'idDoc':cedula.idDocument})}}" style="width: 230px;margin-bottom: 10px">Descargar Cédula</a>
+                        <a class="btn btn-bitbucket notAjax" href="{{ path('export_document_by_id',{'idDoc':carta.idDocument})}}" style="width: 230px;margin-bottom: 10px">Descargar Carta Autorización</a>
                         <br>
                     {% endif %}
                     <br>
