@@ -204,66 +204,143 @@ tendrá vigencia mientras subsistan las causas que le dieron origen de acuerdo a
 forma terminará por las causas contempladas en las leyes, reglamentos, en el presente contrato y en general de cualquier documento emanado de la voluntad del
 EMPLEADOR.</p>
 
-<p style="text-align: justify;"><strong>SEPTIMA: </strong>PERIODO DE PRUEBA: Acuerdan las partes fijar como periodo de prueba los primeros dos (2) meses
-calendario de labor, a partir de la vigencia del presente contrato laboral. Durante este periodo las partes pueden dar por terminado unilateralmente el
-contrato sin necesidad de pagar indemnización alguna excepto la del no pago de liquidación de prestaciones sociales.</p>
+{% if (data.employee.replaceOldContracts == true and data.employee.stillOnTest == false) %}
+    <p style="text-align: justify;"><strong>SEPTIMA: </strong>EFECTOS Y MODIFICACIONES: El presente contrato reemplaza en su integridad y deja sin efecto cualquier otro contrato
+        verbal o escrito celebrado entre las partes con anterioridad. Las modificaciones que se acuerden al presente contrato se anotarán a continuación de su texto.</p>
 
-<p style="text-align: justify;"><strong>OCTAVA: </strong>JUSTAS CAUSAS PARA DAR POR TERMINADO EL PRESENTE CONTRATO: El incumplimiento a cualquiera de las
-obligaciones aquí establecidas, así como las previstas en el Artículo 7º del Decreto 2351 de 1.965 y además por parte del de EL EMPLEADOR las siguientes faltas
-que para el efecto se califican como graves: a) La violación grave por parte de EL TRABAJADOR de cualquiera de  sus obligaciones legales, contractuales o
-reglamentarias; b) La no asistencia al trabajo, sin excusa suficiente a juicio de EL EMPLEADOR, por dos veces dentro de un mismo mes calendario; c) El hecho
-que EL TRABAJADOR llegue embriagado al trabajo o ingiera bebidas embriagantes en el sitio de trabajo, aún por la primera vez; d) El hecho de que EL TRABAJADOR
-abandone el sitio de trabajo sin el permiso de EL EMPLEADOR o sin una clara justificación; e) La no asistencia a una sesión completa de la jornada de trabajo,
-o más, sin excusa suficiente a juicio de EL  EMPLEADOR salvo fuerza mayor o caso fortuito. f) el incumplimiento de las órdenes dadas por el empleador.</p>
+    <p style="text-align: justify;"><strong>PARÁGRAFO: </strong>Las partes dejan constancia que para todos efectos legales y contractuales la fecha de ingreso será la del contrato
+        que dio origen a la relación laboral.</p>
+{% elseif (data.employee.replaceOldContracts == true and data.employee.stillOnTest == true)  %}
+    <p style="text-align: justify;"><strong>SEPTIMA: </strong>EFECTOS Y MODIFICACIONES: El presente contrato reemplaza en su integridad y deja sin efecto cualquier otro contrato
+        verbal o escrito celebrado entre las partes con anterioridad. Las modificaciones que se acuerden al presente contrato se anotarán a continuación de su texto.</p>
 
-<p style="text-align: justify;"><strong>PARÁGRAFO: </strong>La violación de dichas obligaciones y prohibiciones dará lugar a la terminación del contrato de
-trabajo con justa causa.</p>
+    <p style="text-align: justify;"><strong>PARÁGRAFO: </strong>Las partes dejan constancia que para todos efectos legales y contractuales la fecha de ingreso será la del contrato
+        que dio origen a la relación laboral.</p>
 
-<p style="text-align: justify;"><strong>NOVENA: </strong>EL TRABAJADOR se obliga a laborar los
-{% for day in data.contract.workDays %}
-    {% if loop.last %}
-        y
-    {% elseif not loop.first %}
-        ,
-    {% endif %}
-    {{ day.dayName }}
-{% endfor %}
-de cada semana.</p>
+    <p style="text-align: justify;"><strong>OCTAVA: </strong>PERIODO DE PRUEBA: Acuerdan las partes fijar como periodo de prueba los primeros dos (2) meses
+        calendario de labor, a partir de la vigencia del presente contrato laboral. Durante este periodo las partes pueden dar por terminado unilateralmente el
+        contrato sin necesidad de pagar indemnización alguna excepto la del no pago de liquidación de prestaciones sociales.</p>
+{% else %}
+    <p style="text-align: justify;"><strong>SEPTIMA: </strong>PERIODO DE PRUEBA: Acuerdan las partes fijar como periodo de prueba los primeros dos (2) meses
+        calendario de labor, a partir de la vigencia del presente contrato laboral. Durante este periodo las partes pueden dar por terminado unilateralmente el
+        contrato sin necesidad de pagar indemnización alguna excepto la del no pago de liquidación de prestaciones sociales.</p>
+{% endif %}
 
-<p style="text-align: justify;"><strong>DECIMA: </strong>SALARIO: EL EMPLEADOR pagará al TRABAJADOR como remuneración por los servicios prestados, el salario
-diario de {{ data.contract.salary/data.contract.nWorkDays }} por cada día laborado; pagaderos de manera {{ data.contract.frequency }}.</p>
+{% if (data.employee.replaceOldContracts == true and data.employee.stillOnTest == true) %}
+    <p style="text-align: justify;"><strong>NOVENA: </strong>JUSTAS CAUSAS PARA DAR POR TERMINADO EL PRESENTE CONTRATO: El incumplimiento a cualquiera de las
+        obligaciones aquí establecidas, así como las previstas en el Artículo 7º del Decreto 2351 de 1.965 y además por parte del de EL EMPLEADOR las siguientes faltas
+        que para el efecto se califican como graves: a) La violación grave por parte de EL TRABAJADOR de cualquiera de  sus obligaciones legales, contractuales o
+        reglamentarias; b) La no asistencia al trabajo, sin excusa suficiente a juicio de EL EMPLEADOR, por dos veces dentro de un mismo mes calendario; c) El hecho
+        que EL TRABAJADOR llegue embriagado al trabajo o ingiera bebidas embriagantes en el sitio de trabajo, aún por la primera vez; d) El hecho de que EL TRABAJADOR
+        abandone el sitio de trabajo sin el permiso de EL EMPLEADOR o sin una clara justificación; e) La no asistencia a una sesión completa de la jornada de trabajo,
+        o más, sin excusa suficiente a juicio de EL  EMPLEADOR salvo fuerza mayor o caso fortuito. f) el incumplimiento de las órdenes dadas por el empleador.</p>
 
-<p style="text-align: justify;"><strong>PARÁGRAFO 1: </strong>Dentro de este pago se encuentra incluida la remuneración de los descansos dominicales y festivos
-de que tratan los capítulos I y II del título VII del Código Sustantivo del Trabajo.</p>
+    <p style="text-align: justify;"><strong>PARÁGRAFO: </strong>La violación de dichas obligaciones y prohibiciones dará lugar a la terminación del contrato de
+        trabajo con justa causa.</p>
 
-<p style="text-align: justify;"><strong>PARÁGRAFO 2: </strong>Toda remuneración variable que llegue a recibir EL TRABAJADOR se entenderá distribuida así:
-El 82.5% que remunera la labor ordinaria y el 17.5% restante que remunera el descanso en días dominicales o festivos.</p>
+    <p style="text-align: justify;"><strong>DECIMA: </strong>EL TRABAJADOR se obliga a laborar los
+        {% for day in data.contract.workDays %}
+            {% if loop.last %}
+                y
+            {% elseif not loop.first %}
+                ,
+            {% endif %}
+            {{ day.dayName }}
+        {% endfor %}
+        de cada semana.</p>
 
-<p style="text-align: justify;"><strong>PARÁGRAFO 3: </strong>Las partes expresamente acuerdan que lo que reciba el trabajador o llegue a recibir en el futuro,
-adicional a su salario ordinario, ya sean beneficios extralegales o auxilios habituales u ocasionales,  tales como el transporte o subsidios para el transporte,
-auxilio de alimentación, auxilio de alojamiento o habitación, bonificaciones  por  mera liberalidad, primas extralegales y cualquier otro beneficio extralegal,
-en dinero o en especie, no constituye salario para ningún efecto legal, de conformidad con lo establecido en el artículo 15 de la Ley 50 de 1990.</p>
+    <p style="text-align: justify;"><strong>DECIMA PRIMERA: </strong>SALARIO: EL EMPLEADOR pagará al TRABAJADOR como remuneración por los servicios prestados, el salario
+        diario de {{ data.contract.salary/data.contract.nWorkDays }} por cada día laborado; pagaderos de manera {{ data.contract.frequency }}.</p>
 
-<p style="text-align: justify;"><strong>PARÁGRAFO 4: </strong>Si el empleador tiene afiliada a la trabajadora del servicio doméstico en las empresas promotoras
-de pensiones, ARL y Caja de Compensación Familiar, con los beneficios que otorga el Decreto 2616 de 2013 en sus artículos 5 al 9, para efectos de tener que
-adecuar el valor de cotización mínima semanal o la que corresponda, según la tabla de aportes a cargo del empleador en cada sistema y según los días laborados,
-deberá reportar el cambio a través de la Planilla Asistida PILA.</p>
+    <p style="text-align: justify;"><strong>PARÁGRAFO 1: </strong>Dentro de este pago se encuentra incluida la remuneración de los descansos dominicales y festivos
+        de que tratan los capítulos I y II del título VII del Código Sustantivo del Trabajo.</p>
 
-<p style="text-align: justify;"><strong>DECIMA PRIMERA: </strong>BENEFICIARIOS DE LA COTIZACIÓN POR SEMANAS: Como requisito fundamental para acceder a los
-beneficios contemplados en el Decreto 2616 de 2013, EL TRABAJADOR deberá estar vinculado al régimen subsidiado en salud. Si EL TRABAJADOR dependiente se
-encuentra vinculado en el régimen contributivo a través de EPS, los porcentajes de cotización se harán con base en el salario mínimo legal mensual vigente
-completo, para todos los sistemas, es decir para salud, pensión, Riesgos Laborales, y Caja de Compensación Familiar, así labore en periodos inferiores al mes o
-por días.</p>
+    <p style="text-align: justify;"><strong>PARÁGRAFO 2: </strong>Toda remuneración variable que llegue a recibir EL TRABAJADOR se entenderá distribuida así:
+        El 82.5% que remunera la labor ordinaria y el 17.5% restante que remunera el descanso en días dominicales o festivos.</p>
 
-<p style="text-align: justify;"><strong>DECIMA SEGUNDA:</strong>EFECTOS: El presente contrato reemplaza y por lo tanto, deja sin valor y efecto, cualquier otro
-contrato verbal o escrito, que se hubiera celebrado entre las partes con anterioridad.</p>
+    <p style="text-align: justify;"><strong>PARÁGRAFO 3: </strong>Las partes expresamente acuerdan que lo que reciba el trabajador o llegue a recibir en el futuro,
+        adicional a su salario ordinario, ya sean beneficios extralegales o auxilios habituales u ocasionales,  tales como el transporte o subsidios para el transporte,
+        auxilio de alimentación, auxilio de alojamiento o habitación, bonificaciones  por  mera liberalidad, primas extralegales y cualquier otro beneficio extralegal,
+        en dinero o en especie, no constituye salario para ningún efecto legal, de conformidad con lo establecido en el artículo 15 de la Ley 50 de 1990.</p>
 
-<p style="text-align: justify;"><strong>DECIMA TERCERA: </strong>AUTORIZACIÓN DE TRATAMIENTO DE DATOS PERSONALES Y POLÍTICA DE INFORMACIÓN PERSONAL: EL TRABAJADOR
-autoriza de manera previa, explícita, inequívoca e informada a EL EMPLEADOR para que recolecte y trate sus datos personales para fines laborales por el tiempo
-que sea necesario para alcanzar dicha finalidad o el máximo legal permitido. Así mismo, esta autorización se extiende al tercero denominado SYMPLIFICA SAS,
-entidad también encargada del manejo de los datos personales para fines laborales. Esta autorización comprende la información que suministro verbalmente o por
-escrito (hoja de vida, formatos, etc.) con ocasión de los procesos de selección y durante su vinculación como empleado (a) del EMPLEADOR. De otra parte, EL
-TRABAJADOR se compromete a respetar y aplicar la política de tratamiento de datos personales de EL EMPLEADOR. Todo lo anterior, teniendo en cuenta lo siguiente</p>
+    <p style="text-align: justify;"><strong>PARÁGRAFO 4: </strong>Si el empleador tiene afiliada a la trabajadora del servicio doméstico en las empresas promotoras
+        de pensiones, ARL y Caja de Compensación Familiar, con los beneficios que otorga el Decreto 2616 de 2013 en sus artículos 5 al 9, para efectos de tener que
+        adecuar el valor de cotización mínima semanal o la que corresponda, según la tabla de aportes a cargo del empleador en cada sistema y según los días laborados,
+        deberá reportar el cambio a través de la Planilla Asistida PILA.</p>
+
+    <p style="text-align: justify;"><strong>DECIMA SEGUNDA: </strong>BENEFICIARIOS DE LA COTIZACIÓN POR SEMANAS: Como requisito fundamental para acceder a los
+        beneficios contemplados en el Decreto 2616 de 2013, EL TRABAJADOR deberá estar vinculado al régimen subsidiado en salud. Si EL TRABAJADOR dependiente se
+        encuentra vinculado en el régimen contributivo a través de EPS, los porcentajes de cotización se harán con base en el salario mínimo legal mensual vigente
+        completo, para todos los sistemas, es decir para salud, pensión, Riesgos Laborales, y Caja de Compensación Familiar, así labore en periodos inferiores al mes o
+        por días.</p>
+
+    <p style="text-align: justify;"><strong>DECIMA TERCERA:</strong>EFECTOS: El presente contrato reemplaza y por lo tanto, deja sin valor y efecto, cualquier otro
+        contrato verbal o escrito, que se hubiera celebrado entre las partes con anterioridad.</p>
+
+    <p style="text-align: justify;"><strong>DECIMA CUARTA: </strong>AUTORIZACIÓN DE TRATAMIENTO DE DATOS PERSONALES Y POLÍTICA DE INFORMACIÓN PERSONAL: EL TRABAJADOR
+        autoriza de manera previa, explícita, inequívoca e informada a EL EMPLEADOR para que recolecte y trate sus datos personales para fines laborales por el tiempo
+        que sea necesario para alcanzar dicha finalidad o el máximo legal permitido. Así mismo, esta autorización se extiende al tercero denominado SYMPLIFICA SAS,
+        entidad también encargada del manejo de los datos personales para fines laborales. Esta autorización comprende la información que suministro verbalmente o por
+        escrito (hoja de vida, formatos, etc.) con ocasión de los procesos de selección y durante su vinculación como empleado (a) del EMPLEADOR. De otra parte, EL
+        TRABAJADOR se compromete a respetar y aplicar la política de tratamiento de datos personales de EL EMPLEADOR. Todo lo anterior, teniendo en cuenta lo siguiente</p>
+{% else %}
+    <p style="text-align: justify;"><strong>OCTAVA: </strong>JUSTAS CAUSAS PARA DAR POR TERMINADO EL PRESENTE CONTRATO: El incumplimiento a cualquiera de las
+        obligaciones aquí establecidas, así como las previstas en el Artículo 7º del Decreto 2351 de 1.965 y además por parte del de EL EMPLEADOR las siguientes faltas
+        que para el efecto se califican como graves: a) La violación grave por parte de EL TRABAJADOR de cualquiera de  sus obligaciones legales, contractuales o
+        reglamentarias; b) La no asistencia al trabajo, sin excusa suficiente a juicio de EL EMPLEADOR, por dos veces dentro de un mismo mes calendario; c) El hecho
+        que EL TRABAJADOR llegue embriagado al trabajo o ingiera bebidas embriagantes en el sitio de trabajo, aún por la primera vez; d) El hecho de que EL TRABAJADOR
+        abandone el sitio de trabajo sin el permiso de EL EMPLEADOR o sin una clara justificación; e) La no asistencia a una sesión completa de la jornada de trabajo,
+        o más, sin excusa suficiente a juicio de EL  EMPLEADOR salvo fuerza mayor o caso fortuito. f) el incumplimiento de las órdenes dadas por el empleador.</p>
+
+    <p style="text-align: justify;"><strong>PARÁGRAFO: </strong>La violación de dichas obligaciones y prohibiciones dará lugar a la terminación del contrato de
+        trabajo con justa causa.</p>
+
+    <p style="text-align: justify;"><strong>NOVENA: </strong>EL TRABAJADOR se obliga a laborar los
+        {% for day in data.contract.workDays %}
+            {% if loop.last %}
+                y
+            {% elseif not loop.first %}
+                ,
+            {% endif %}
+            {{ day.dayName }}
+        {% endfor %}
+        de cada semana.</p>
+
+    <p style="text-align: justify;"><strong>DECIMA: </strong>SALARIO: EL EMPLEADOR pagará al TRABAJADOR como remuneración por los servicios prestados, el salario
+        diario de {{ data.contract.salary/data.contract.nWorkDays }} por cada día laborado; pagaderos de manera {{ data.contract.frequency }}.</p>
+
+    <p style="text-align: justify;"><strong>PARÁGRAFO 1: </strong>Dentro de este pago se encuentra incluida la remuneración de los descansos dominicales y festivos
+        de que tratan los capítulos I y II del título VII del Código Sustantivo del Trabajo.</p>
+
+    <p style="text-align: justify;"><strong>PARÁGRAFO 2: </strong>Toda remuneración variable que llegue a recibir EL TRABAJADOR se entenderá distribuida así:
+        El 82.5% que remunera la labor ordinaria y el 17.5% restante que remunera el descanso en días dominicales o festivos.</p>
+
+    <p style="text-align: justify;"><strong>PARÁGRAFO 3: </strong>Las partes expresamente acuerdan que lo que reciba el trabajador o llegue a recibir en el futuro,
+        adicional a su salario ordinario, ya sean beneficios extralegales o auxilios habituales u ocasionales,  tales como el transporte o subsidios para el transporte,
+        auxilio de alimentación, auxilio de alojamiento o habitación, bonificaciones  por  mera liberalidad, primas extralegales y cualquier otro beneficio extralegal,
+        en dinero o en especie, no constituye salario para ningún efecto legal, de conformidad con lo establecido en el artículo 15 de la Ley 50 de 1990.</p>
+
+    <p style="text-align: justify;"><strong>PARÁGRAFO 4: </strong>Si el empleador tiene afiliada a la trabajadora del servicio doméstico en las empresas promotoras
+        de pensiones, ARL y Caja de Compensación Familiar, con los beneficios que otorga el Decreto 2616 de 2013 en sus artículos 5 al 9, para efectos de tener que
+        adecuar el valor de cotización mínima semanal o la que corresponda, según la tabla de aportes a cargo del empleador en cada sistema y según los días laborados,
+        deberá reportar el cambio a través de la Planilla Asistida PILA.</p>
+
+    <p style="text-align: justify;"><strong>DECIMA PRIMERA: </strong>BENEFICIARIOS DE LA COTIZACIÓN POR SEMANAS: Como requisito fundamental para acceder a los
+        beneficios contemplados en el Decreto 2616 de 2013, EL TRABAJADOR deberá estar vinculado al régimen subsidiado en salud. Si EL TRABAJADOR dependiente se
+        encuentra vinculado en el régimen contributivo a través de EPS, los porcentajes de cotización se harán con base en el salario mínimo legal mensual vigente
+        completo, para todos los sistemas, es decir para salud, pensión, Riesgos Laborales, y Caja de Compensación Familiar, así labore en periodos inferiores al mes o
+        por días.</p>
+
+    <p style="text-align: justify;"><strong>DECIMA SEGUNDA:</strong>EFECTOS: El presente contrato reemplaza y por lo tanto, deja sin valor y efecto, cualquier otro
+        contrato verbal o escrito, que se hubiera celebrado entre las partes con anterioridad.</p>
+
+    <p style="text-align: justify;"><strong>DECIMA TERCERA: </strong>AUTORIZACIÓN DE TRATAMIENTO DE DATOS PERSONALES Y POLÍTICA DE INFORMACIÓN PERSONAL: EL TRABAJADOR
+        autoriza de manera previa, explícita, inequívoca e informada a EL EMPLEADOR para que recolecte y trate sus datos personales para fines laborales por el tiempo
+        que sea necesario para alcanzar dicha finalidad o el máximo legal permitido. Así mismo, esta autorización se extiende al tercero denominado SYMPLIFICA SAS,
+        entidad también encargada del manejo de los datos personales para fines laborales. Esta autorización comprende la información que suministro verbalmente o por
+        escrito (hoja de vida, formatos, etc.) con ocasión de los procesos de selección y durante su vinculación como empleado (a) del EMPLEADOR. De otra parte, EL
+        TRABAJADOR se compromete a respetar y aplicar la política de tratamiento de datos personales de EL EMPLEADOR. Todo lo anterior, teniendo en cuenta lo siguiente</p>
+{% endif %}
 
 <p style="text-align: justify;">EL TRABAJADOR reconoce que fue informado de manera clara, previa y expresa de lo siguiente:
 
