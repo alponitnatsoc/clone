@@ -157,6 +157,12 @@ class LoadPurchaseOrdersStatusData extends AbstractFixture implements OrderedFix
         $PurchaseOrdersStatusDispersion2->setIdNovoPay('-2');
         $manager->persist($PurchaseOrdersStatusDispersion2);
 
+        $PurchaseOrdersStatusDispersion3 = new PurchaseOrdersStatus();
+        $PurchaseOrdersStatusDispersion3->setName('DispersionDevuelta');
+        $PurchaseOrdersStatusDispersion3->setDescription('El monto a pagar fue devuelto en su totalidad');
+        $PurchaseOrdersStatusDispersion3->setIdNovoPay('-3');
+        $manager->persist($PurchaseOrdersStatusDispersion3);
+
         $manager->flush();
     }
 

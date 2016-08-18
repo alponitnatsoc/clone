@@ -13,6 +13,7 @@ use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\PromotionCode;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -76,6 +77,60 @@ class BackOfficeController extends Controller
         $clientBetaReal=$codesTypeRepo->findOneBy(array("shortName"=>"CB"));
         $codes= $codesRepo->findBy(array("userUser"=>null,'promotionCodeTypePromotionCodeType'=>$clientBetaReal));
         return $this->render('RocketSellerTwoPickBundle:BackOffice:promotionCodes.html.twig',array('codes'=>$codes));
+
+    }
+
+    public function showRejectedPODAction()
+    {
+        $codesRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription");
+        $podStatusRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
+        $rejectedState = $podStatusRepo->findOneBy(array("idNovoPay" => "-2"));
+        $rejectedPods = $codesRepo->findBy(array('purchaseOrdersStatus'=>$rejectedState));
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:rejectedPurchaseOrdersDescriptions.html.twig',array('rejectedPods'=>$rejectedPods));
+
+    }
+
+    public function retryPayAction($idPO)
+    {
+        $answer = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getDispersePurchaseOrder', ['idPurchaseOrder' => $idPO]);
+        if ($answer->getStatusCode() != 200) {
+            $mesange = "not so good man";
+        } else {
+            $mesange = "all good man";
+        }
+        return $this->redirectToRoute("show_rejected_pods");
+    }
+
+    public function returnMoneyPayAction($idPOD)
+    {
+        $codesRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription");
+        /** @var PurchaseOrdersDescription $pod */
+        $pod = $codesRepo->find($idPOD);
+        $idhightech = $pod->getPurchaseOrders()->getIdUser()->getPersonPerson()->getEmployer()->getIdHighTech();
+        $targetAccount = $pod->getPurchaseOrders()->getPayMethodId();
+        $value = $pod->getValue();
+        $podStatusRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
+        $devolutionState = $podStatusRepo->findOneBy(array("idNovoPay" => "-3"));
+        $em=$this->getDoctrine()->getManager();
+
+        $request = $this->container->get('request');
+        $request->setMethod("POST");
+        $request->request->add(array(
+            "source" => 100,//by now change this when novopayment its in
+            "accountNumber" => $idhightech,
+            "accountId" => $targetAccount,
+            "value" => $value
+        ));
+        $answer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postRegisterDevolution', array('request'=>$request), array('_format' => 'json'));
+
+        if ($answer->getStatusCode() != 200) {
+            $mesange = "not so good man";
+        } else {
+            $pod->setPurchaseOrdersStatus($devolutionState);
+            $em->persist($pod);
+            $em->flush();
+        }
+        return $this->redirectToRoute("show_rejected_pods");
 
     }
 
