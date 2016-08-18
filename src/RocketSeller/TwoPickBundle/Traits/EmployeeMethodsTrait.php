@@ -154,6 +154,11 @@ trait EmployeeMethodsTrait
         $actionType = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:ActionType')->findOneBy(array(
             'code'  =>'VDC',
         ));
+        //Finding the action type with code VM validar Mandato
+        /** @var ActionType $actionType */
+        $actionType2 = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:ActionType')->findOneBy(array(
+            'code'  =>'VM',
+        ));
         //Finding the action for the actual employer
         /** @var Action $action */
         $action = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Action')->findOneBy(array(
@@ -162,16 +167,26 @@ trait EmployeeMethodsTrait
             'personPerson'              =>$person,
             'actionTypeActionType'      =>$actionType,
         ));
+        //Finding the action for the actual employer
+        /** @var Action $action */
+        $action2 = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Action')->findOneBy(array(
+            'userUser'                  =>$user,
+            'realProcedureRealProcedure'=>$procedure,
+            'personPerson'              =>$person,
+            'actionTypeActionType'      =>$actionType2,
+        ));
         //Getting the completion status for the action
         $status = $action->getStatus();
+        //Getting the completion status for the action
+        $status2 = $action2->getStatus();
 
-        if($status == 'Completado'){
+        if($status == 'Completado' and $status2 == 'Completado'){
             //return state Validated
             return 1;
-        }elseif($status == 'Error'){
+        }elseif($status == 'Error' or $status2 == 'Error'){
             //return state Error
             return -1;
-        }elseif($status == 'Nuevo'){
+        }elseif($status == 'Nuevo' or $status2=='Nuevo'){
             //return state Pending Validation
             return 0;
         }else{
@@ -331,35 +346,51 @@ trait EmployeeMethodsTrait
         $eHEs = $person->getEmployer()->getEmployerHasEmployees();
         /** @var EmployerHasEmployee $eHE */
         foreach($eHEs as $eHE){
+            //if the employer is payed
             if($eHE->getState()>=3){
-                if($eHE->getDocumentStatus() == -2 or $eHE->getDocumentStatus()==0){
+                //if employee state is not payed changing the document state to all documents pending
+                if($eHE->getDocumentStatus()==-2 or $eHE->getDocumentStatus()==-1)
                     $eHE->setDocumentStatus(-1);
-                }
+                //get the actual document state of the employerHasEmployee
                 $case = $eHE->getDocumentStatus();
-                
+                //if the antique state is all documents pending verifying that documents are still pending
                 if($case == -1){
+                    //getting the amount of documents pending for the employer
                     $pend = $this->employerDocumentsReady($person);
+                    //getting the amount of documents pending for the employee
                     $ePend = $this->employeeDocumentsReady($eHE);
+                    //if employer and employee documents pending are greater than 0 state is -1 all docs pending
                     if($ePend['pending']!=0 and $pend !=0){
                         $eHE->setDocumentStatus(-1);
+                    //if employee pending docs greater than 0 but employer pending docs equal 0 state is 0 employee documents pending
                     }elseif($ePend['pending']!=0 and $pend ==0){
                         $eHE->setDocumentStatus(0);
+                    //if employee pending docs equal to 0 but employer pending docs greater than 0 state is 1 employer documents pending
                     }elseif($ePend['pending']==0 and $pend !=0){
                         $eHE->setDocumentStatus(1);
+                    //if both employer and employee pending docs are equal to 0 state is 2 message docs ready
                     }elseif($pend==0 and $ePend['pending']==0){
                         $eHE->setDocumentStatus(2);
                     }
+                //if the antique state is employee documents pending checking if employee documents are still pending
                 }elseif($case == 0){
+                    //getting the amount of documents pending for the employee
                     $ePend = $this->employeeDocumentsReady($eHE);
+                    //if amount of pending docs for employee equal to 0 state is 2 message docs ready
                     if($ePend['pending']==0){
                         $eHE->setDocumentStatus(2);
+                    //if amount of pending docs for employee is greater than 0 state remains in 0 employee documents pending
                     }else{
                         $eHE->setDocumentStatus(0);
                     }
+                //if the antique state is employer documents pending checking if employer documents are still pending
                 }elseif($case == 1){
+                    //getting the amount of documents pending for the employer
                     $pend = $this->employerDocumentsReady($person);
+                    //if amount of pending docs for employer equal to 0 state is 2 message docs ready
                     if($pend==0){
                         $eHE->setDocumentStatus(2);
+                    //if amount of pending docs for employer is greater than 0 state remains in 1 employer documents pending
                     }else{
                         $eHE->setDocumentStatus(1);
                     }

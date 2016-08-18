@@ -146,164 +146,16 @@ class NoveltyController extends Controller {
         $form = $this->createForm(new NoveltyForm($requiredFields, /*$hasDocuments*/ false,$this->generateUrl("novelty_add",array("noveltyTypeId"=>$noveltyType->getIdNoveltyType(),"idPayroll"=>$idPayroll)),$idPayroll), $novelty);// This is because Camilo wanted that its simple to the user to create novelties
         $form->handleRequest($request);
         if ($form->isValid()) {
-        	
-	          $utils = $this->get('app.symplifica_utils');
-	        
-	          $constrainList = $novelty->getNoveltyTypeNoveltyType()->getRequiredFields();
-	          
-	          /** @var NoveltyTypeFields $constrain */
-	          foreach ($constrainList as $constrain){
-	          	if($constrain->getColumnName() == "date_start" && $constrain->getDisplayable() == true){
-	          		if($novelty->getDateStart() == null){
-				          return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
-					          'form' => $form->createView(),
-					          'errno'=> 'No pueden haber campos vacios, completelos antes de continuar'
-				          ));
-			          }
-			          else{
-				          //Calls dedicated function to evaluate the constrain of Dates
-				          $isValidD = $utils->novelty_date_constrain_to_date_validation($constrain->getNoveltyDataConstrain(), $novelty->getDateStart(), $payRol);
-				
-				          if($isValidD[0] == false){
-					          return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
-						          'form' => $form->createView(),
-						          'errno'=> $isValidD[1]
-					          ));
-				          }
-			          }
-		          }
-				
-		          //The last if is necessary since the vacation end date has a special condition
-		          if($constrain->getColumnName() == "date_end" && $constrain->getDisplayable() == true && $novelty->getNoveltyTypeNoveltyType()->getPayrollCode()!=145){
-			          if($novelty->getDateEnd() == null){
-				          return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
-					          'form' => $form->createView(),
-					          'errno'=> 'No pueden haber campos vacios, completelos antes de continuar'
-				          ));
-			          }
-			          else{
-				          //Calls dedicated function to evaluate the constrain of Dates
-				          $isValidD = $utils->novelty_date_constrain_to_date_validation($constrain->getNoveltyDataConstrain(), $novelty->getDateEnd(), $payRol);
-				
-				          if($isValidD[0] == false){
-					          return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
-						          'form' => $form->createView(),
-						          'errno'=> $isValidD[1]
-					          ));
-				          }
-			          }
-		          }
-		
-		          if($constrain->getColumnName() == "amount" && $constrain->getDisplayable() == true){
-			          if($novelty->getAmount() == null){
-				          return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
-					          'form' => $form->createView(),
-					          'errno'=> 'No pueden haber campos vacios, completelos antes de continuar'
-				          ));
-			          }
-			          else{
-			          	//Calls dedicated function to evaluate the constrain of Amount
-				          $isValidA = $utils->novelty_amount_constrain_validation($constrain->getNoveltyDataConstrain(), $novelty->getAmount(), $payRol->getContractContract());
-				
-				          if($isValidA[0] == false){
-					          return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
-						          'form' => $form->createView(),
-						          'errno'=> $isValidA[1]
-					          ));
-				          }
-			          }
-		          }
-		          
-		          if($constrain->getColumnName() == "units" && $constrain->getDisplayable() == true){
-			          if($novelty->getUnits() == null){
-				          return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
-					          'form' => $form->createView(),
-					          'errno'=> 'No pueden haber campos vacios, completelos antes de continuar'
-				          ));
-			          }
-			          else{
-				          //Calls dedicated function to evaluate the constrain of Units
-				          $isValidA = $utils->novelty_units_constrain_validation($constrain->getNoveltyDataConstrain(), $novelty->getUnits());
-				
-				          if($isValidA[0] == false){
-					          return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
-						          'form' => $form->createView(),
-						          'errno'=> $isValidA[1]
-					          ));
-				          }
-			          }
-		          }
-		
-		          //String just needs to not be empty
-		          if($constrain->getColumnName() == "description" && $constrain->getDisplayable() == true){
-			          if($novelty->getDescription() == null){
-				          return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
-					          'form' => $form->createView(),
-					          'errno'=> 'No pueden haber campos vacios, completelos antes de continuar'
-				          ));
-			          }
-		          }
-	          }
-	        
-            //si es una novedad de vacaciones
-            if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode()==145){
-            	
-            	if($novelty->getDateEnd() <= $novelty->getDateStart()) {
-		            return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
-			            'form' => $form->createView(),
-			            'errno'=> 'El rango de fechas para las vacaciones no es valido'
-		            ));
-            	}
-            	
-              $request->setMethod("GET");
-              $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getValidVacationDaysContract',array(
-                  "dateStart"=>$novelty->getDateStart()->format("Y-m-d"),
-                  "dateEnd"=>$novelty->getDateEnd()->format("Y-m-d"),
-                  "contractId"=>$payRol->getContractContract()->getIdContract(),
-                  "payrollId"=>"-1",
-                  ), array('_format' => 'json'));
-              $days=json_decode($insertionAnswer->getContent(),true)["days"];
-	
-	            if($days > 45) {
-		            return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
-			            'form' => $form->createView(),
-			            'errno'=> 'El rango de fechas excede el máximo número de días permitido (45)'
-		            ));
-	            }
-	            
-              $novelty->setUnits($days);
-            }
-            
-            $novelty->setName($noveltyType->getName());
-            $payRol->addNovelty($novelty);
-            $em = $this->getDoctrine()->getEntityManager();
-            $em->persist($payRol);
-            $em->flush();
-            $request->setMethod("GET");
-
-            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getAddNoveltySql',array(
-                "idNovelty"=>$novelty->getIdNovelty()), array('_format' => 'json'));
-            if($insertionAnswer->getStatusCode()!=201){
-                $payRol->removeNovelty($novelty);
-                $em->remove($novelty);
-                $em->persist($payRol);
-                $em->flush();
-                return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
-                    'form' => $form->createView(),
-                    'errno'=> 'No se pudo agregar la novedad, intente más tarde, si el problema persiste, pongase en contacto con nosotros'
-                ));
-            }
-            if ( !$this->checkNoveltyFulfilment($novelty, $form)) { //Crea las notificaciones de los documentos asociados
-                /** @var User $user */
-                $user = $this->getUser();
-                $notification = $notification=$this->createNotification(null,1,null,"","Faltan llenar algunos datos de la novedad " . $novelty->getName(),"Novedad Incompleta","Completar","alert",$user->getPersonPerson());
-                $em->persist($notification);
-                $em->flush();
-                $notification->setRelatedLink($this->generateUrl("novelty_edit", array('noveltyId' => $novelty->getIdNovelty(), 'notificationReferenced' => $notification->getId())));
-                $em->persist($notification);
-                $em->flush();
-            }
-            return $this->redirectToRoute('ajax', array(), 301);
+	        $isOkForm = $this->validateAndPersistNovelty($novelty, $payRol, $noveltyType);
+	        if($isOkForm[0] == true){
+		        return $this->redirectToRoute('show_dashboard',array(),301);
+	        }
+          else {
+	          return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
+		          'form' => $form->createView(),
+		          'errno' => $isOkForm[1]
+	          ));
+          }
         }
         return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array('form' => $form->createView()));
     }
@@ -387,7 +239,7 @@ class NoveltyController extends Controller {
      * @param Form $form
      * @return bool
      */
-    private function checkNoveltyFulfilment($novelty, $form) {
+    private function checkNoveltyFulfilment($novelty) {
         //check each document
         $noveltyType = $novelty->getNoveltyTypeNoveltyType();
         $documents = $novelty->getDocuments();
@@ -403,13 +255,7 @@ class NoveltyController extends Controller {
                 }
             }
         }
-        //check each field
-        $requiredFields = $noveltyType->getRequiredFields();
-        /** @var NoveltyTypeFields $field */
-        foreach ($requiredFields as $field) {
-            if ($field->getDisplayable()==true && $form->get($field->getColumnName())->getData() == null )
-                return false;
-        }
+       
         return true;
     }
 
@@ -481,5 +327,159 @@ class NoveltyController extends Controller {
       }
 
       return $this->redirectToRoute('payroll');
+    }
+    
+    /**
+     * @param Novelty $novelty
+     * @param Payroll $payRol
+     * @param NoveltyType $noveltyType
+     * @return array
+     */
+    public function validateAndPersistNovelty($novelty, $payRol, $noveltyType){
+    	$answerArr = array();
+	    array_push($answerArr,true); //Index 0 - Determines if is false or true the validation
+	    array_push($answerArr, ""); //Index 1 - If index 0 is false, sets a custom error msg to display to the user
+	    
+	    $utils = $this->get('app.symplifica_utils');
+	    $constrainList = $novelty->getNoveltyTypeNoveltyType()->getRequiredFields();
+	    
+	    /** @var NoveltyTypeFields $constrain */
+	    foreach ($constrainList as $constrain){
+	    	if($constrain->getColumnName() == "date_start" && $constrain->getDisplayable() == true){
+	    		if($novelty->getDateStart() == null){
+	    			$answerArr[0] = false;
+				    $answerArr[1] = "No pueden haber campos vacios, completelos antes de continuar";
+				    return $answerArr;
+			    }
+			    else{
+			    	//Calls dedicated function to evaluate the constrain of Dates
+				    $isValidD = $utils->novelty_date_constrain_to_date_validation($constrain->getNoveltyDataConstrain(), $novelty->getDateStart(),$payRol);
+				    
+				    if($isValidD[0] == false){
+				    	return $isValidD;
+				    }
+			    }
+		    }
+		    
+		    //The last if is necessary since the vacation end date has a special condition
+		    if($constrain->getColumnName() == "date_end" && $constrain->getDisplayable() == true && $novelty->getNoveltyTypeNoveltyType()->getPayrollCode() != 145){
+		    	if($novelty->getDateEnd() == null){
+				    $answerArr[0] = false;
+				    $answerArr[1] = "No pueden haber campos vacios, completelos antes de continuar";
+				    return $answerArr;
+			    }
+			    else{
+				    //Calls dedicated function to evaluate the constrain of Dates
+				    $isValidD = $utils->novelty_date_constrain_to_date_validation($constrain->getNoveltyDataConstrain(), $novelty->getDateEnd(),$payRol);
+				
+				    if($isValidD[0] == false){
+					    return $isValidD;
+				    }
+			    }
+		    }
+		    
+		    if($constrain->getColumnName() == "amount" && $constrain->getDisplayable() == true){
+		    	if($novelty->getAmount() == null){
+				    $answerArr[0] = false;
+				    $answerArr[1] = "No pueden haber campos vacios, completelos antes de continuar";
+				    return $answerArr;
+			    }
+			    else{
+			    	//Calls dedicated function to evaluate the constrain of Amount
+				    $isValidA = $utils->novelty_amount_constrain_validation($constrain->getNoveltyDataConstrain(),$novelty->getAmount(),$payRol->getContractContract());
+				    
+				    if($isValidA[0] == false){
+				    	return $isValidA;
+				    }
+			    }
+		    }
+		    
+		    if($constrain->getColumnName() == "units" && $constrain->getDisplayable() == true){
+		    	if($novelty->getUnits() == null){
+		    		$answerArr[0] = false;
+				    $answerArr[1] = "No pueden haber campos vacios, completelos antes de continuar";
+				    return $answerArr;
+			    }
+			    else{
+			    	//Calls dedicated function to evaluate the constrain of Units
+				    $isValidU = $utils->novelty_units_constrain_validation($constrain->getNoveltyDataConstrain(),$novelty->getUnits());
+				    
+				    if($isValidU[0] == false){
+				    	return $isValidU;
+				    }
+			    }
+		    }
+		    
+		    //String just needs to not be empty
+		    if($constrain->getColumnName() == "description" && $constrain->getDisplayable() == true){
+		    	if($novelty->getDescription() == null){
+		    		$answerArr[0] = false;
+				    $answerArr[1] = "No pueden haber campos vacios, completelos antes de continuar";
+				    return $answerArr;
+			    }
+		    }
+	    }
+	    
+	    //si es una novedad de vacaciones
+	    if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode()==145){
+	    	if($novelty->getDateEnd() <= $novelty->getDateStart()){
+	    		$answerArr[0] = false;
+			    $answerArr[1] = "El rango de fechas para las vacaciones no es valido, la fecha de finalización no puede ser menor que la de inicio";
+			    return $answerArr;
+		    }
+		    
+		    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getValidVacationDaysContract', array(
+		    	"dateStart" => $novelty->getDateStart()->format("Y-m-d"),
+			    "dateEnd" => $novelty->getDateEnd()->format("Y-m-d"),
+			    "contractId" => $payRol->getContractContract()->getIdContract(),
+			    "payrollId" => "-1",
+		    ), array('_format' => 'json'));
+		    
+		    $days = json_decode($insertionAnswer->getContent(), true)["days"];
+		    
+		    if($days > 45){
+			    $answerArr[0] = false;
+			    $answerArr[1] = "El rango de fechas excede el máximo número de días permitido (45)";
+			    return $answerArr;
+		    }
+		    
+		    $novelty->setUnits($days);
+	    }
+	    
+	    $novelty->setName($noveltyType->getName());
+	    $payRol->addNovelty($novelty);
+	    $em = $this->getDoctrine()->getEntityManager();
+	    $em->persist($payRol);
+	    $em->flush();
+	    
+	    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getAddNoveltySql', array(
+	    	"idNovelty" => $novelty->getIdNovelty()), array('_format' => 'json'));
+	    
+	    if($insertionAnswer->getStatusCode() != 201){
+	    	$payRol->removeNovelty($novelty);
+		    $em->remove($novelty);
+		    $em->persist($payRol);
+		    $em->flush();
+		    
+		    $answerArr[0] = false;
+		    $answerArr[1] = "No se pudo agregar la novedad, intente más tarde, si el problema persiste, pongase en contacto con nosotros";
+		    return $answerArr;
+	    }
+	    
+	    //TODO Update when documents are reworked
+	    if(!$this->checkNoveltyFulfilment($novelty)){
+	    	//Crea las notificaciones de los documentos asociados
+		    /** @var User $user */
+		    $user = $this->getUser();
+		    $notification = $this->createNotification(null,1,null,"","Faltan llenar algunos datos de la novedad" . $novelty->getName(),"Novedad Incompleta", "Completar", "alert", $user->getPersonPerson());
+		    $em->persist($notification);
+		    $em->flush();
+		    $notification->setRelatedLink($this->generateUrl("novelty_edit",array('noveltyId' => $novelty->getIdNovelty(), 'notificationReferenced' => $notification->getId())));
+		    
+		    $em->persist($notification);
+		    $em->flush();
+	    }
+	    
+	    return $answerArr;
     }
 }

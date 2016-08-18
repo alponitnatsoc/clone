@@ -62,14 +62,21 @@
                         <br>
                     {% else %}
                         <h4>Descargar documentos</h4>
-                        <a class="btn btn-orange notAjax" href="{{ path('export_document_by_id',{'idDoc':cedula.idDocument})}}">Descargar Cédula</a>
-                        <a class="btn btn-orange notAjax" href="{{ path('export_document_by_id',{'idDoc':carta.idDocument})}}">Descargar Carta Autorización</a>
+                        <a class="btn btn-bitbucket notAjax" href="{{ path('export_document_by_id',{'idDoc':cedula.idDocument})}}" style="width: 230px;margin-bottom: 10px">Descargar Cédula</a>
+                        <a class="btn btn-bitbucket notAjax" href="{{ path('export_document_by_id',{'idDoc':carta.idDocument})}}" style="width: 230px;margin-bottom: 10px">Descargar Carta Autorización</a>
                         <br>
                     {% endif %}
                     <br>
                 </div>
             </div>
             <div class="col-sm-6" style="margin-top: 20px; text-align:center">
+                <div>
+                    <h4>Generar archivo Excel</h4>
+                    <a class="btn btn-orange notAjax" target="_blank" href="{{ path('back_person_cvs_export', {'idAction':action.idAction })}}">Generar</a>
+                    <br>
+                </div>
+            </div>
+            <div class="col-sm-6" style="margin-top: 10px; text-align:center">
 
                 <div style="margin-top: 30px">
                     <a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Validar</a>
