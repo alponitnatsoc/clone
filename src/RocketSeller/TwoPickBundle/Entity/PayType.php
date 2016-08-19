@@ -38,6 +38,11 @@ class PayType
     private $payroll_code;
 
     /**
+     * @ORM\Column(type="string", length=4, nullable=TRUE)
+     */
+    private $simpleName;
+
+    /**
      * @ORM\Column(type="string", length=100)
      */
     private $image;
@@ -195,4 +200,28 @@ class PayType
         return $this->image;
     }
 
+
+    /**
+     * Set simpleName
+     *
+     * @param string $simpleName
+     *
+     * @return PayType
+     */
+    public function setSimpleName($simpleName)
+    {
+        $this->simpleName = $simpleName;
+
+        return $this;
+    }
+
+    /**
+     * Get simpleName
+     *
+     * @return string
+     */
+    public function getSimpleName()
+    {
+        return $this->simpleName;
+    }
 }

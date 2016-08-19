@@ -413,18 +413,24 @@ class PaymentMethodRestController extends FOSRestController
                         continue;
                     }
                     //setting the id of the dispersion to rejected
+
                     $fechaRechazo = new DateTime();
                     $valor = $desc->getValue();
                     $employerPerson= $desc->getPurchaseOrders()->getIdUser()->getPersonPerson();
                     $rejectedProduct=$desc->getProductProduct();
                     $rejectedPOD=$desc;
-                    $this->rejectProcess($desc);
+
+                    $this->rejectProcess($desc);//ojo no enviar el correo antes de esto
+
                     //TODO-Andres  enviar el correo a "bacoffice, y empleador" notificando que no se pudo hacer la transaccion con la informacion de, la fecha del rechazo, el monto, el empleador(nombres, telefono,correo) y el id de la purchase order description con producto valor ,
                     $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'-2'));
                     $desc->setPurchaseOrdersStatus($pos);
+                    $em->persist($purchaseOrder);
+                    $em->flush();
                     return $view->setStatusCode($dispersionAnswer['code'])->setData($dispersionAnswer['data']);
                 }else{
-                    continue;
+                    $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'00'));
+                    $desc->setPurchaseOrdersStatus($pos);
                 }
             }else{
                 $flag=false;
@@ -444,17 +450,21 @@ class PaymentMethodRestController extends FOSRestController
                         //setting the id of the dispersion to rejected
                         $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'-2'));
                         $desc->setPurchaseOrdersStatus($pos);
+                        $em->persist($purchaseOrder);
+                        $em->flush();
+
                         $fechaRechazo = new DateTime();
                         $valor = $desc->getValue();
                         $employerPerson= $desc->getPurchaseOrders()->getIdUser()->getPersonPerson();
                         $rejectedProduct=$desc->getProductProduct();
                         $rejectedPOD=$desc;
-                        $this->rejectProcess($desc);
+                        $this->rejectProcess($desc);//ojo no enviar el correo antes de esto
 
                         //TODO-Andres  enviar el correo a "bacoffice y empleador" notificando que no se pudo hacer la transaccion con la informacion de, la fecha del rechazo, el monto, el empleador(nombres, telefono,correo) y el id de la purchase order description con producto valor ,
                         return $view->setStatusCode($dispersionAnswer['code'])->setData($dispersionAnswer['data']);
                     }else{
-                        continue;
+                        $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'00'));
+                        $desc->setPurchaseOrdersStatus($pos);
                     }
                 }
             }
@@ -593,7 +603,7 @@ class PaymentMethodRestController extends FOSRestController
 
             } elseif ($purchaseOrderDescription->getProductProduct()->getSimpleName() == "PN") {
                 $payType=$payMethod->getAccountTypeAccountType();
-                if($payMethod->getPayTypePayType()->getName()=="Daviplata*"){
+                if($payMethod->getPayTypePayType()->getSimpleName()=="DAV"){
                     $accountType="DP";
                     $paymentMethodAN=$payMethod->getCellPhone();
                 }else{
