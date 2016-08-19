@@ -160,7 +160,7 @@ de empleados que quieras administrar</h4>
           min: 0,
           max: 5,
     });
-     slider1.on("slide", function(slideEvt) {
+     slider1.on("change", function(slideEvt) {
          //console.log($('#ex1Slider').val());
          //console.log(conta1);
          conta1 = $('#ex1Slider').val();
@@ -176,7 +176,7 @@ de empleados que quieras administrar</h4>
       min: 0,
       max: 5,
     });
-     slider2.on("slide", function(slideEvt) {
+     slider2.on("change", function(slideEvt) {
          conta2 = $('#ex2Slider').val();
          $("#emp2").text(conta2);
          funcion();
@@ -191,7 +191,7 @@ de empleados que quieras administrar</h4>
           min: 0,
           max: 5,
         });
-     slider3.on("slide", function(slideEvt) {
+     slider3.on("change", function(slideEvt) {
          conta3 = $('#ex3Slider').val();
          $("#emp3").text(conta3);
          funcion();
@@ -202,7 +202,7 @@ de empleados que quieras administrar</h4>
      });
     function funcion(){
         var valor = (conta1 * 29500) + (conta2 * 22500) + (conta3 * 16500);
-				if((conta1 + conta2 + conta3) >= 3 )
+				if((conta1 + conta2 + conta3) >= 4 )
 					valor = valor * 0.9;
         $("#total-empleados").text(conta1 + conta2 + conta3);
         $("#precio").text(" = $"+numberWithCommas(valor) + " mensuales");

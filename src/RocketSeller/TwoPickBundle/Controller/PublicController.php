@@ -42,13 +42,6 @@ class PublicController extends Controller
         ));
     }
 
-    public function ayudaAction() {
-        return $this->render('RocketSellerTwoPickBundle:Public:ayuda.html.twig');
-    }
-
-    public function blogAction() {
-        return $this->render('RocketSellerTwoPickBundle:Public:blog.html.twig');
-    }
     
     public function contactenosAction(Request $request) {
         
@@ -96,19 +89,4 @@ class PublicController extends Controller
             "breadcrumbs" => array("Inicio" => "/", "Contáctenos" => "")
         ));
     }
-
-    public function productoAction() {
-        return $this->render('RocketSellerTwoPickBundle:Public:producto.html.twig', array(
-            "breadcrumbs" => array("Inicio" => "/", "Contáctenos" => "")
-        ));
-    }
-
-		/**
-     * @Route("/categories/{redirectedBy}", name="called_by")
-     */
-		public function categoriesAction($redirectedBy) {
-
-				return $this->render('RocketSellerTwoPickBundle:Public:categories.html.twig', array(
-            "called_from" => $redirectedBy));
-		}
 }

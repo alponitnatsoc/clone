@@ -157,67 +157,145 @@ tendrá vigencia mientras subsistan las causas que le dieron origen de acuerdo a
 forma terminará por las causas contempladas en las leyes, reglamentos, en el presente contrato y en general de cualquier documento emanado de la voluntad del
 EMPLEADOR.</p>
 
-<p style="text-align: justify;"><strong>SEPTIMA: </strong>PERIODO DE PRUEBA: Acuerdan las partes fijar como periodo de prueba los primeros dos (2) meses
-calendario de labor, a partir de la vigencia del presente contrato laboral. Durante este periodo las partes pueden dar por terminado unilateralmente el
-contrato sin necesidad de pagar indemnización alguna excepto la del no pago de liquidación de prestaciones sociales.</p>
+{% if (data.employee.replaceOldContracts == true and data.employee.stillOnTest == false) %}
+    <p style="text-align: justify;"><strong>SEPTIMA: </strong>EFECTOS Y MODIFICACIONES: El presente contrato reemplaza en su integridad y deja sin efecto cualquier otro contrato
+        verbal o escrito celebrado entre las partes con anterioridad. Las modificaciones que se acuerden al presente contrato se anotarán a continuación de su texto.</p>
 
-<p style="text-align: justify;"><strong>OCTAVA: </strong>JUSTAS CAUSAS PARA DAR POR TERMINADO EL PRESENTE CONTRATO: El incumplimiento a cualquiera de las
-obligaciones aquí establecidas, así como las previstas en el Artículo 7º del Decreto 2351 de 1.965 y además por parte del de EL EMPLEADOR las siguientes faltas
-que para el efecto se califican como graves: a) La violación grave por parte de EL TRABAJADOR de cualquiera de  sus obligaciones legales, contractuales o
-reglamentarias; b) La no asistencia al trabajo, sin excusa suficiente a juicio de EL EMPLEADOR, por dos veces dentro de un mismo mes calendario; c) El hecho
-que EL TRABAJADOR llegue embriagado al trabajo o ingiera bebidas embriagantes en el sitio de trabajo, aún por la primera vez; d) El hecho de que EL TRABAJADOR
-abandone el sitio de trabajo sin el permiso de EL EMPLEADOR o sin una clara justificación; e) La no asistencia a una sesión completa de la jornada de trabajo,
-o más, sin excusa suficiente a juicio de EL  EMPLEADOR salvo fuerza mayor o caso fortuito. f) el incumplimiento de las órdenes dadas por el empleador.</p>
+    <p style="text-align: justify;"><strong>PARÁGRAFO: </strong>Las partes dejan constancia que para todos efectos legales y contractuales la fecha de ingreso será la del contrato
+        que dio origen a la relación laboral.</p>
+{% elseif (data.employee.replaceOldContracts == true and data.employee.stillOnTest == true)  %}
+    <p style="text-align: justify;"><strong>SEPTIMA: </strong>EFECTOS Y MODIFICACIONES: El presente contrato reemplaza en su integridad y deja sin efecto cualquier otro contrato
+        verbal o escrito celebrado entre las partes con anterioridad. Las modificaciones que se acuerden al presente contrato se anotarán a continuación de su texto.</p>
 
-<p style="text-align: justify;"><strong>PARÁGRAFO: </strong>La violación de dichas obligaciones y prohibiciones dará lugar a la terminación del contrato de
-trabajo con justa causa.</p>
+    <p style="text-align: justify;"><strong>PARÁGRAFO: </strong>Las partes dejan constancia que para todos efectos legales y contractuales la fecha de ingreso será la del contrato
+        que dio origen a la relación laboral.</p>
 
-<p style="text-align: justify;"><strong>NOVENA: </strong>SALARIO: EL EMPLEADOR reconocerá y pagará como retribución por el trabajo desempeñado de EL TRABAJADOR,
-un Salario Ordinario Básico Mensual por la suma de {{ data.contract.salary }}, pagadero por quincenas vencidas o de manera mensual, según determine
-EL EMPLEADOR dentro del cual se encuentra incluida la remuneración de los descansos dominicales y festivos de que tratan los Capítulos I, II y III del Título
-VII del Código Sustantivo del Trabajo.</p>
+    <p style="text-align: justify;"><strong>OCTAVA: </strong>PERIODO DE PRUEBA: Acuerdan las partes fijar como periodo de prueba los primeros dos (2) meses
+        calendario de labor, a partir de la vigencia del presente contrato laboral. Durante este periodo las partes pueden dar por terminado unilateralmente el
+        contrato sin necesidad de pagar indemnización alguna excepto la del no pago de liquidación de prestaciones sociales.</p>
+{% else %}
+    <p style="text-align: justify;"><strong>SEPTIMA: </strong>PERIODO DE PRUEBA: Acuerdan las partes fijar como periodo de prueba los primeros dos (2) meses
+        calendario de labor, a partir de la vigencia del presente contrato laboral. Durante este periodo las partes pueden dar por terminado unilateralmente el
+        contrato sin necesidad de pagar indemnización alguna excepto la del no pago de liquidación de prestaciones sociales.</p>
+{% endif %}
 
-<p style="text-align: justify;"><strong>PARÁGRAFO 1: </strong>Toda remuneración variable que llegue a recibir EL TRABAJADOR se entenderá distribuida así:
-El 82.5% que remunera la labor ordinaria y el 17.5% restante que remunera el descanso en días dominicales o festivos.</p>
+{% if (data.employee.replaceOldContracts == true and data.employee.stillOnTest == true) %}
+    <p style="text-align: justify;"><strong>NOVENA: </strong>JUSTAS CAUSAS PARA DAR POR TERMINADO EL PRESENTE CONTRATO: El incumplimiento a cualquiera de las
+        obligaciones aquí establecidas, así como las previstas en el Artículo 7º del Decreto 2351 de 1.965 y además por parte del de EL EMPLEADOR las siguientes faltas
+        que para el efecto se califican como graves: a) La violación grave por parte de EL TRABAJADOR de cualquiera de  sus obligaciones legales, contractuales o
+        reglamentarias; b) La no asistencia al trabajo, sin excusa suficiente a juicio de EL EMPLEADOR, por dos veces dentro de un mismo mes calendario; c) El hecho
+        que EL TRABAJADOR llegue embriagado al trabajo o ingiera bebidas embriagantes en el sitio de trabajo, aún por la primera vez; d) El hecho de que EL TRABAJADOR
+        abandone el sitio de trabajo sin el permiso de EL EMPLEADOR o sin una clara justificación; e) La no asistencia a una sesión completa de la jornada de trabajo,
+        o más, sin excusa suficiente a juicio de EL  EMPLEADOR salvo fuerza mayor o caso fortuito. f) el incumplimiento de las órdenes dadas por el empleador.</p>
 
-<p style="text-align: justify;"><strong>PARÁGRAFO 2: </strong>En los términos del artículo 128 del código sustantivo del trabajo las partes establecen
-expresamente que no son salario y no lo constituyen para ningún efecto legal los beneficios o auxilios acordados u otorgados en forma extralegal por el
-EMPLEADOR como la alimentación, habitación o vestuario en los casos en que EL EMPLEADOR por razón del trabajo le asigne a EL TRABAJADOR, lavado de ropas
-u otro servicio de cualquier naturaleza que EL EMPLEADOR dé al TRABAJADOR  ni los viáticos que sean dados como medio de transporte y gastos de representación.
-Igualmente pactan que no constituyen salarios las primas extralegales, bonificaciones, gratificaciones ocasionales, la participación de utilidades, los
-excedentes de las empresas de economía solidaria ni lo que recibe el TRABAJADOR  en dinero o en especie ni para su beneficio, ni para enriquecer su patrimonio,
-sino para desempeñar a cabalidad su funciones; pactan también que no son salarios las herramientas, ni los elementos de trabajo que reciba el TRABAJADOR,
-ni las prestaciones sociales de que tratan los títulos VIII y IX de CST.</p>
+    <p style="text-align: justify;"><strong>PARÁGRAFO: </strong>La violación de dichas obligaciones y prohibiciones dará lugar a la terminación del contrato de
+        trabajo con justa causa.</p>
 
-<p style="text-align: justify;"><strong>PARÁGRAFO 3: </strong>Teniendo en cuenta que el trabajador habitará en el lugar de trabajo, las partes son conscientes
-y así lo hacen saber, que no habrá lugar a cancelar ningún valor por concepto de auxilio de transporte legal, toda vez que no se presentan los presupuestos
-fácticos que dicho auxilio prevé.</p>
+    <p style="text-align: justify;"><strong>DECIMA: </strong>SALARIO: EL EMPLEADOR reconocerá y pagará como retribución por el trabajo desempeñado de EL TRABAJADOR,
+        un Salario Ordinario Básico Mensual por la suma de {{ data.contract.salary }}, pagadero por quincenas vencidas o de manera mensual, según determine
+        EL EMPLEADOR dentro del cual se encuentra incluida la remuneración de los descansos dominicales y festivos de que tratan los Capítulos I, II y III del Título
+        VII del Código Sustantivo del Trabajo.</p>
 
-<p style="text-align: justify;"><strong>DECIMA: </strong>VIVIENDA: Teniendo en cuenta que EL TRABAJADOR residirá en el lugar de trabajo, EL EMPLEADOR
-le suministrará una vivienda en {{ data.contract.workplace }} con los siguientes implementos y servicios públicos básicos, lo cual no constituye salario
-para ningún efecto legal de acuerdo con lo establecido en el art 15 de la ley 50 de 1990. De igual manera, como la vivienda se suministra en virtud del presente
-contrato de trabajo, EL TRABAJADOR está obligado a restituirla a EL EMPLEADOR el día de la terminación del contrato laboral. EL TRABAJADOR deberá cuidar y
-mantener la vivienda suministrada, la cual sólo podrá ser destinada para su habitación y la de su familia próxima (cónyuge o compañera permanente, hijos y
-padres). No podrá adelantar mejoras o adecuaciones sin la autorización escrita de EL EMPLEADOR.</p>
+    <p style="text-align: justify;"><strong>PARÁGRAFO 1: </strong>Toda remuneración variable que llegue a recibir EL TRABAJADOR se entenderá distribuida así:
+        El 82.5% que remunera la labor ordinaria y el 17.5% restante que remunera el descanso en días dominicales o festivos.</p>
 
-<p style="text-align: justify;"><strong>DECIMA PRIMERA:</strong>FAMILIA DEL TRABAJADOR: La relación laboral que se pacta en el presente escrito es únicamente
-entre EL EMPLEADOR y el Trabajador, por lo que se deja expresa constancia que si bien este último habitará en el lugar de prestación de servicios junto con su
-familia, éstos no prestan ningún servicio para la compañía y por ende no mantienen relación laboral o de cualquier otra índole con la misma.</p>
+    <p style="text-align: justify;"><strong>PARÁGRAFO 2: </strong>En los términos del artículo 128 del código sustantivo del trabajo las partes establecen
+        expresamente que no son salario y no lo constituyen para ningún efecto legal los beneficios o auxilios acordados u otorgados en forma extralegal por el
+        EMPLEADOR como la alimentación, habitación o vestuario en los casos en que EL EMPLEADOR por razón del trabajo le asigne a EL TRABAJADOR, lavado de ropas
+        u otro servicio de cualquier naturaleza que EL EMPLEADOR dé al TRABAJADOR  ni los viáticos que sean dados como medio de transporte y gastos de representación.
+        Igualmente pactan que no constituyen salarios las primas extralegales, bonificaciones, gratificaciones ocasionales, la participación de utilidades, los
+        excedentes de las empresas de economía solidaria ni lo que recibe el TRABAJADOR  en dinero o en especie ni para su beneficio, ni para enriquecer su patrimonio,
+        sino para desempeñar a cabalidad su funciones; pactan también que no son salarios las herramientas, ni los elementos de trabajo que reciba el TRABAJADOR,
+        ni las prestaciones sociales de que tratan los títulos VIII y IX de CST.</p>
 
-<p style="text-align: justify;"><strong>DECIMA SEGUNDA: </strong>EXCLUSION SALARIAL: Las partes acuerdan que no tendrá carácter salarial para ningún efecto
-legal de acuerdo con lo dispuesto en el art 128 del CST modificado por el art 15 de la ley 50 de 1990 la vivienda, los elementos que se encuentran en ella,
-los servicios públicos, los auxilios o beneficios económicos, la alimentación, vestuario y habitación o por cualquier otro concepto que el empleador reconozca
-a EL TRABAJADOR o a su familia en forma ocasional o habitual como cualquier otro pago efectuado por mera liberalidad.</p>
+    <p style="text-align: justify;"><strong>PARÁGRAFO 3: </strong>Teniendo en cuenta que el trabajador habitará en el lugar de trabajo, las partes son conscientes
+        y así lo hacen saber, que no habrá lugar a cancelar ningún valor por concepto de auxilio de transporte legal, toda vez que no se presentan los presupuestos
+        fácticos que dicho auxilio prevé.</p>
 
-<p style="text-align: justify;"><strong>DECIMA TERCERA:</strong>EFECTOS: El presente contrato reemplaza y por lo tanto, deja sin valor y efecto, cualquier otro
-contrato verbal o escrito, que se hubiera celebrado entre las partes con anterioridad.</p>
+    <p style="text-align: justify;"><strong>DECIMA PRIMERA: </strong>VIVIENDA: Teniendo en cuenta que EL TRABAJADOR residirá en el lugar de trabajo, EL EMPLEADOR
+        le suministrará una vivienda en {{ data.contract.workplace }} con los siguientes implementos y servicios públicos básicos, lo cual no constituye salario
+        para ningún efecto legal de acuerdo con lo establecido en el art 15 de la ley 50 de 1990. De igual manera, como la vivienda se suministra en virtud del presente
+        contrato de trabajo, EL TRABAJADOR está obligado a restituirla a EL EMPLEADOR el día de la terminación del contrato laboral. EL TRABAJADOR deberá cuidar y
+        mantener la vivienda suministrada, la cual sólo podrá ser destinada para su habitación y la de su familia próxima (cónyuge o compañera permanente, hijos y
+        padres). No podrá adelantar mejoras o adecuaciones sin la autorización escrita de EL EMPLEADOR.</p>
 
-<p style="text-align: justify;"><strong>DECIMA CUARTA: </strong>AUTORIZACIÓN DE TRATAMIENTO DE DATOS PERSONALES Y POLÍTICA DE INFORMACIÓN PERSONAL: EL TRABAJADOR
-autoriza de manera previa, explícita, inequívoca e informada a EL EMPLEADOR para que recolecte y trate sus datos personales para fines laborales por el tiempo
-que sea necesario para alcanzar dicha finalidad o el máximo legal permitido. Así mismo, esta autorización se extiende al tercero denominado SYMPLIFICA SAS,
-entidad también encargada del manejo de los datos personales para fines laborales. Esta autorización comprende la información que suministro verbalmente o por
-escrito (hoja de vida, formatos, etc.) con ocasión de los procesos de selección y durante su vinculación como empleado (a) del EMPLEADOR. De otra parte, EL
-TRABAJADOR se compromete a respetar y aplicar la política de tratamiento de datos personales de EL EMPLEADOR. Todo lo anterior, teniendo en cuenta lo siguiente</p>
+    <p style="text-align: justify;"><strong>DECIMA SEGUNDA:</strong>FAMILIA DEL TRABAJADOR: La relación laboral que se pacta en el presente escrito es únicamente
+        entre EL EMPLEADOR y el Trabajador, por lo que se deja expresa constancia que si bien este último habitará en el lugar de prestación de servicios junto con su
+        familia, éstos no prestan ningún servicio para la compañía y por ende no mantienen relación laboral o de cualquier otra índole con la misma.</p>
+
+    <p style="text-align: justify;"><strong>DECIMA TERCERA: </strong>EXCLUSION SALARIAL: Las partes acuerdan que no tendrá carácter salarial para ningún efecto
+        legal de acuerdo con lo dispuesto en el art 128 del CST modificado por el art 15 de la ley 50 de 1990 la vivienda, los elementos que se encuentran en ella,
+        los servicios públicos, los auxilios o beneficios económicos, la alimentación, vestuario y habitación o por cualquier otro concepto que el empleador reconozca
+        a EL TRABAJADOR o a su familia en forma ocasional o habitual como cualquier otro pago efectuado por mera liberalidad.</p>
+
+    <p style="text-align: justify;"><strong>DECIMA CUARTA:</strong>EFECTOS: El presente contrato reemplaza y por lo tanto, deja sin valor y efecto, cualquier otro
+        contrato verbal o escrito, que se hubiera celebrado entre las partes con anterioridad.</p>
+
+    <p style="text-align: justify;"><strong>DECIMA QUINTA: </strong>AUTORIZACIÓN DE TRATAMIENTO DE DATOS PERSONALES Y POLÍTICA DE INFORMACIÓN PERSONAL: EL TRABAJADOR
+        autoriza de manera previa, explícita, inequívoca e informada a EL EMPLEADOR para que recolecte y trate sus datos personales para fines laborales por el tiempo
+        que sea necesario para alcanzar dicha finalidad o el máximo legal permitido. Así mismo, esta autorización se extiende al tercero denominado SYMPLIFICA SAS,
+        entidad también encargada del manejo de los datos personales para fines laborales. Esta autorización comprende la información que suministro verbalmente o por
+        escrito (hoja de vida, formatos, etc.) con ocasión de los procesos de selección y durante su vinculación como empleado (a) del EMPLEADOR. De otra parte, EL
+        TRABAJADOR se compromete a respetar y aplicar la política de tratamiento de datos personales de EL EMPLEADOR. Todo lo anterior, teniendo en cuenta lo siguiente</p>
+{% else %}
+    <p style="text-align: justify;"><strong>OCTAVA: </strong>JUSTAS CAUSAS PARA DAR POR TERMINADO EL PRESENTE CONTRATO: El incumplimiento a cualquiera de las
+        obligaciones aquí establecidas, así como las previstas en el Artículo 7º del Decreto 2351 de 1.965 y además por parte del de EL EMPLEADOR las siguientes faltas
+        que para el efecto se califican como graves: a) La violación grave por parte de EL TRABAJADOR de cualquiera de  sus obligaciones legales, contractuales o
+        reglamentarias; b) La no asistencia al trabajo, sin excusa suficiente a juicio de EL EMPLEADOR, por dos veces dentro de un mismo mes calendario; c) El hecho
+        que EL TRABAJADOR llegue embriagado al trabajo o ingiera bebidas embriagantes en el sitio de trabajo, aún por la primera vez; d) El hecho de que EL TRABAJADOR
+        abandone el sitio de trabajo sin el permiso de EL EMPLEADOR o sin una clara justificación; e) La no asistencia a una sesión completa de la jornada de trabajo,
+        o más, sin excusa suficiente a juicio de EL  EMPLEADOR salvo fuerza mayor o caso fortuito. f) el incumplimiento de las órdenes dadas por el empleador.</p>
+
+    <p style="text-align: justify;"><strong>PARÁGRAFO: </strong>La violación de dichas obligaciones y prohibiciones dará lugar a la terminación del contrato de
+        trabajo con justa causa.</p>
+
+    <p style="text-align: justify;"><strong>NOVENA: </strong>SALARIO: EL EMPLEADOR reconocerá y pagará como retribución por el trabajo desempeñado de EL TRABAJADOR,
+        un Salario Ordinario Básico Mensual por la suma de {{ data.contract.salary }}, pagadero por quincenas vencidas o de manera mensual, según determine
+        EL EMPLEADOR dentro del cual se encuentra incluida la remuneración de los descansos dominicales y festivos de que tratan los Capítulos I, II y III del Título
+        VII del Código Sustantivo del Trabajo.</p>
+
+    <p style="text-align: justify;"><strong>PARÁGRAFO 1: </strong>Toda remuneración variable que llegue a recibir EL TRABAJADOR se entenderá distribuida así:
+        El 82.5% que remunera la labor ordinaria y el 17.5% restante que remunera el descanso en días dominicales o festivos.</p>
+
+    <p style="text-align: justify;"><strong>PARÁGRAFO 2: </strong>En los términos del artículo 128 del código sustantivo del trabajo las partes establecen
+        expresamente que no son salario y no lo constituyen para ningún efecto legal los beneficios o auxilios acordados u otorgados en forma extralegal por el
+        EMPLEADOR como la alimentación, habitación o vestuario en los casos en que EL EMPLEADOR por razón del trabajo le asigne a EL TRABAJADOR, lavado de ropas
+        u otro servicio de cualquier naturaleza que EL EMPLEADOR dé al TRABAJADOR  ni los viáticos que sean dados como medio de transporte y gastos de representación.
+        Igualmente pactan que no constituyen salarios las primas extralegales, bonificaciones, gratificaciones ocasionales, la participación de utilidades, los
+        excedentes de las empresas de economía solidaria ni lo que recibe el TRABAJADOR  en dinero o en especie ni para su beneficio, ni para enriquecer su patrimonio,
+        sino para desempeñar a cabalidad su funciones; pactan también que no son salarios las herramientas, ni los elementos de trabajo que reciba el TRABAJADOR,
+        ni las prestaciones sociales de que tratan los títulos VIII y IX de CST.</p>
+
+    <p style="text-align: justify;"><strong>PARÁGRAFO 3: </strong>Teniendo en cuenta que el trabajador habitará en el lugar de trabajo, las partes son conscientes
+        y así lo hacen saber, que no habrá lugar a cancelar ningún valor por concepto de auxilio de transporte legal, toda vez que no se presentan los presupuestos
+        fácticos que dicho auxilio prevé.</p>
+
+    <p style="text-align: justify;"><strong>DECIMA: </strong>VIVIENDA: Teniendo en cuenta que EL TRABAJADOR residirá en el lugar de trabajo, EL EMPLEADOR
+        le suministrará una vivienda en {{ data.contract.workplace }} con los siguientes implementos y servicios públicos básicos, lo cual no constituye salario
+        para ningún efecto legal de acuerdo con lo establecido en el art 15 de la ley 50 de 1990. De igual manera, como la vivienda se suministra en virtud del presente
+        contrato de trabajo, EL TRABAJADOR está obligado a restituirla a EL EMPLEADOR el día de la terminación del contrato laboral. EL TRABAJADOR deberá cuidar y
+        mantener la vivienda suministrada, la cual sólo podrá ser destinada para su habitación y la de su familia próxima (cónyuge o compañera permanente, hijos y
+        padres). No podrá adelantar mejoras o adecuaciones sin la autorización escrita de EL EMPLEADOR.</p>
+
+    <p style="text-align: justify;"><strong>DECIMA PRIMERA:</strong>FAMILIA DEL TRABAJADOR: La relación laboral que se pacta en el presente escrito es únicamente
+        entre EL EMPLEADOR y el Trabajador, por lo que se deja expresa constancia que si bien este último habitará en el lugar de prestación de servicios junto con su
+        familia, éstos no prestan ningún servicio para la compañía y por ende no mantienen relación laboral o de cualquier otra índole con la misma.</p>
+
+    <p style="text-align: justify;"><strong>DECIMA SEGUNDA: </strong>EXCLUSION SALARIAL: Las partes acuerdan que no tendrá carácter salarial para ningún efecto
+        legal de acuerdo con lo dispuesto en el art 128 del CST modificado por el art 15 de la ley 50 de 1990 la vivienda, los elementos que se encuentran en ella,
+        los servicios públicos, los auxilios o beneficios económicos, la alimentación, vestuario y habitación o por cualquier otro concepto que el empleador reconozca
+        a EL TRABAJADOR o a su familia en forma ocasional o habitual como cualquier otro pago efectuado por mera liberalidad.</p>
+
+    <p style="text-align: justify;"><strong>DECIMA TERCERA:</strong>EFECTOS: El presente contrato reemplaza y por lo tanto, deja sin valor y efecto, cualquier otro
+        contrato verbal o escrito, que se hubiera celebrado entre las partes con anterioridad.</p>
+
+    <p style="text-align: justify;"><strong>DECIMA CUARTA: </strong>AUTORIZACIÓN DE TRATAMIENTO DE DATOS PERSONALES Y POLÍTICA DE INFORMACIÓN PERSONAL: EL TRABAJADOR
+        autoriza de manera previa, explícita, inequívoca e informada a EL EMPLEADOR para que recolecte y trate sus datos personales para fines laborales por el tiempo
+        que sea necesario para alcanzar dicha finalidad o el máximo legal permitido. Así mismo, esta autorización se extiende al tercero denominado SYMPLIFICA SAS,
+        entidad también encargada del manejo de los datos personales para fines laborales. Esta autorización comprende la información que suministro verbalmente o por
+        escrito (hoja de vida, formatos, etc.) con ocasión de los procesos de selección y durante su vinculación como empleado (a) del EMPLEADOR. De otra parte, EL
+        TRABAJADOR se compromete a respetar y aplicar la política de tratamiento de datos personales de EL EMPLEADOR. Todo lo anterior, teniendo en cuenta lo siguiente</p>
+{% endif %}
 
 <p style="text-align: justify;">EL TRABAJADOR reconoce que fue informado de manera clara, previa y expresa de lo siguiente:
 
