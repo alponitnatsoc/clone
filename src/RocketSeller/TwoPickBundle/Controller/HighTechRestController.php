@@ -236,6 +236,13 @@ class HighTechRestController extends FOSRestController
             //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
             $pay->setPurchaseOrdersStatusPurchaseOrdersStatus($pos);
             $pay->getPurchaseOrdersDescription()->setPurchaseOrdersStatus($pos);
+            //TODO-Andres enviar el correo que la dispersión se relizó satisfactoriamente
+            //TODO-Andres Adjuntar el comprobante si aplica
+            if($pay->getPurchaseOrdersDescription()->getProductProduct()->getSimpleName()=="PN"){
+                //esto significa que hay que enviar el comporbante
+
+            }
+
         } else {
             $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => '-2'));
             //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
@@ -249,6 +256,9 @@ class HighTechRestController extends FOSRestController
             $rejectDate = new DateTime();
             $value = $rejectedPurchaseOrderDescription->getValue();
             $product = $rejectedPurchaseOrderDescription->getProductProduct();
+            //TODO-Andres enviar el correo a "" notificando que no se pudo hacer la transaccion con la informacion de, la fecha del rechazo, el monto, el empleador(nombres, telefono,correo)
+
+
 
         }
         $em->persist($pay);
