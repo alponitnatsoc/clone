@@ -160,7 +160,7 @@ de empleados que quieras administrar</h4>
           min: 0,
           max: 5,
     });
-     slider1.on("slide", function(slideEvt) {
+     slider1.on("change", function(slideEvt) {
          //console.log($('#ex1Slider').val());
          //console.log(conta1);
          conta1 = $('#ex1Slider').val();
@@ -176,7 +176,7 @@ de empleados que quieras administrar</h4>
       min: 0,
       max: 5,
     });
-     slider2.on("slide", function(slideEvt) {
+     slider2.on("change", function(slideEvt) {
          conta2 = $('#ex2Slider').val();
          $("#emp2").text(conta2);
          funcion();
@@ -191,7 +191,7 @@ de empleados que quieras administrar</h4>
           min: 0,
           max: 5,
         });
-     slider3.on("slide", function(slideEvt) {
+     slider3.on("change", function(slideEvt) {
          conta3 = $('#ex3Slider').val();
          $("#emp3").text(conta3);
          funcion();
