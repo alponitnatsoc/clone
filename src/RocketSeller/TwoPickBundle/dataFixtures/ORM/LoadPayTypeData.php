@@ -16,6 +16,7 @@ class LoadPayTypeData extends AbstractFixture implements OrderedFixtureInterface
         $PayTypeRetiro->setDescripcion('Retiros sin ningún costo desde los cajeros de Davivienda y sin cuotas de manejo. ');
         $PayTypeRetiro->setImage('/img/icon_daviplata.png');
         $PayTypeRetiro->setPayrollCode('CON');
+        $PayTypeRetiro->setSimpleName('DAV');
 
         $manager->persist($PayTypeRetiro);
 
@@ -24,6 +25,8 @@ class LoadPayTypeData extends AbstractFixture implements OrderedFixtureInterface
         $PayTypeTransferencia->setDescripcion(' Registre la cuenta bancaria donde el empleado recibirá su pago de nómina.');
         $PayTypeTransferencia->setImage('/img/icon_transfer.png');
         $PayTypeTransferencia->setPayrollCode('CON');
+        $PayTypeTransferencia->setSimpleName('TRA');
+
 
         $manager->persist($PayTypeTransferencia);
 
@@ -32,6 +35,7 @@ class LoadPayTypeData extends AbstractFixture implements OrderedFixtureInterface
         $PayTypeEfectivo->setDescripcion('El pago se realizará de forma directa al empleado.');
         $PayTypeEfectivo->setImage('/img/icon_cash.png');
         $PayTypeEfectivo->setPayrollCode('EFE');
+        $PayTypeEfectivo->setSimpleName('EFE');
 
         $manager->persist($PayTypeEfectivo);
 

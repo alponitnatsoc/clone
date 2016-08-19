@@ -21,15 +21,64 @@ a {text-decoration: none}
 .bold {font-family: 'Open Sans', sans-serif;font-weight: 700}
 .extrabold {font-family: 'Open Sans', sans-serif;font-weight: 800}
 
-
+header {
+	padding-top: 105px;
+}
+#headForm {
+	width: 1100px;
+	margin: 0 auto;
+	height: auto;
+  overflow: hidden;
+	position: relative;
+  top: 20%;
+}
+.formCont {
+	width: 100%;
+	float: right;
+}
+.inputFull {
+	width: 100%;
+	margin: 2px 0;
+	border-radius: 5px;
+	border: 1px solid #CCC;
+	padding: 5px 10px;
+}
+.inputHalf {
+	width: 49.3%;
+	border-radius: 5px;
+	padding: 5px 10px;
+	border: 1px solid #CCC;
+	margin: 2px 0;
+}
+.contHeadForm {
+	width: 465px;
+	float: right;
+	background: rgba(255,255,255,0.6);
+  padding: 25px;
+  border-radius: 5px;
+}
+.contHeadForm h1 {
+	font-size: 25px;
+	text-align: right;
+}
+.contHeadForm p {
+	font-size: 17px;
+	text-align: right;
+	color: #909090;
+	line-height: 15px;
+}
+.obten {
+	color: #FFF;
+	width: 100%;
+}
 #banner {
 	width: 100%;
 	height: 460px;
-	background: url("../../img/home/banner.png");
+	background: url("../../img/home/bannernuevo.png");
 	background-size:cover;
 	background-position:center;
-	padding: 165px 0 0 0;
-    box-sizing: border-box;
+	/*padding: 165px 0 0 0;
+  box-sizing: border-box;*/
 }
 
 #cont-banner {
@@ -92,7 +141,15 @@ border-bottom: 3px solid #794815}
 	color: #FD9224}
 
 /*empieza la seccion de beneficios*/
-
+.titleSec {
+	background: #F7F7F8;
+	padding: 25px 0;
+}
+.titleSec h2 {
+	margin: 0;
+	font-size: 1.5em;
+	padding: 0 25px;
+}
 #beneficios {width: 1100px; margin: 0 auto; text-align: center}
 #beneficios h2 {
 	margin: 25px auto;
@@ -351,8 +408,7 @@ margin: 40px 0 65px 0;
 /*  REMOVE MARGINS AS ALL GO FULL WIDTH AT 480 PIXELS */
 
 @media only screen and (max-width: 1024px) {
-
-		#beneficios {width: 90%;}
+		#beneficios,#headForm {width: 90%;}
 		.beneficios {font-size: 14px}
 		#calculadora {width: 90%;}
 		#opiniones {width: 90%;}
@@ -405,7 +461,7 @@ margin: 40px 0 65px 0;
 
 	#cont-banner {width: 90%;}
 	#tbanner1 h1 {font-size: 25px;}
-	#banner {height: 380px;padding: 130px 0 0 0;box-sizing: border-box;}
+	/*#banner {height: 380px;padding: 130px 0 0 0;box-sizing: border-box;}*/
 	.span_1_of_4 {width: 49%;}
 	.span_1_of_5,.span_3_of_5  {width: 100%;}
 	.no-colorcont {text-align: center; height: 75px;padding: 10px 0 0 0;}
@@ -426,23 +482,29 @@ margin: 40px 0 65px 0;
 		.numeros {float: left; padding: 20px 10px 0 100px;}
 		#contenido-pc p {width: 90%;}
 		}
-
+	@media only screen and (max-width: 514px) {
+			.contHeadForm {width: 95%;}
+			.contHeadForm h1 { font-size: 1.5em;}
+			.contHeadForm p {font-size: 1.3em;line-height: 20px;}
+			}
 @media only screen and (max-width: 480px) {
 
 	#contenido-pc p {width: 375px;}
+	.contHeadForm h1 {text-align: center}
+	.contHeadForm p {text-align: center}
 	.col { margin: 1% 0 1% 0%;}
 	#tbanner1 h1 {font-size: 20px;}
 	.span_1_of_4 {width: 100%; }
 	.span_1_of_3 {width: 100%;}
 	.span_1_of_2 {width: 100%;}
 	#btn-prueba {width: 100%; color: #FFFFFF;border-bottom: solid 3px #D86D00;margin-bottom: 5px;border-radius: 5px;float: none}
-#tbanner2 {width: 100%; text-align: center}
-.btn-video {width: 100%; float: none; border: 1px #FD9224 solid; border-radius: 7px;}
-#banner {padding: 120px 0 0 0; height: 420px}
-#intro-pc {height: 100px;font-size: 15px;}
-.numeros {padding: 20px 10px 0 40px;}
-#resultado-calculadora {width: 90%;margin: 0 auto;}
-#texto-finalcalculadora {width: 90%}
+	#tbanner2 {width: 100%; text-align: center}
+	.btn-video {width: 100%; float: none; border: 1px #FD9224 solid; border-radius: 7px;}
+	/*#banner {padding: 120px 0 0 0; height: 420px}*/
+	#intro-pc {height: 100px;font-size: 15px;}
+	.numeros {padding: 20px 10px 0 40px;}
+	#resultado-calculadora {width: 90%;margin: 0 auto;}
+	#texto-finalcalculadora {width: 90%}
 }
 
 @media only screen and (max-width: 425px) {
@@ -474,6 +536,8 @@ margin: 40px 0 65px 0;
 	#contenido-pc p {width: 340px;}}
 
 @media only screen and (max-width: 375px) {
+	.inputHalf {width: 100%;}
+	#headForm {top: 10%;}
 	#contenido-pc p {width: 300px;}
 	#texto-finalcalculadora {width: 90%;}
 	#resultado-calculadora {width: 90%;}

@@ -56,6 +56,9 @@
         <div class="{% if app.request.get('_route') == 'show_pilas' %}activeMenu{% endif %} well well-lg separador">
             <a class="notAjax" href="{{ path('show_pilas') }}" >Central manejo de pila</a>
         </div>
+        <div class="{% if app.request.get('_route') == 'show_rejected_pods' %}activeMenu{% endif %} well well-lg separador">
+            <a class="notAjax" href="{{ path('show_rejected_pods') }}" >Manejo de devoluciones</a>
+        </div>
         <div class="{% if app.request.get('_route') == 'marketing' %}activeMenu{% endif %} well well-lg">
             <a class="notAjax" href="{{ path('marketing') }}" >Marketing</a>
         </div>

@@ -1,0 +1,71 @@
+{% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
+
+{% block fos_user_content %}
+    <div id="main">
+        <div class="col-md-12">
+            <div class="panel panel-title">
+                Items que no se pudieron dispersar
+            </div>
+            <br>
+
+            <table class="table">
+                <tr>
+                    <th>Id</th>
+                    <th>Valor</th>
+                    <th>Producto</th>
+                    <th>Empleador</th>
+                    <th>Descripción</th>
+                    <th>Nómina</th>
+                    <th>Pila</th>
+                    <th>Fecha de Pago</th>
+                    <th>Accion</th>
+                </tr>
+                {% for pods in rejectedPods %}
+                    <tr>
+                        <td>
+                            {{ pods.idPurchaseOrdersDescription }}
+                        </td>
+                        <td>
+                            ${{ pods.value|number_format(0, '.', ',') }}
+                        </td>
+                        <td>
+                            {{ pods.productProduct.name }}
+                        </td>
+                        <td>
+                            {{ pods.purchaseOrders.idUser.personPerson.fullName }}
+                        </td>
+                        <td>
+                            {{ pods.description }}
+                        </td>
+                        <td>
+                            {% if pods.payrollPayroll != null %}
+                                Periodo: {{ pods.payrollPayroll.period }} mes: {{ pods.payrollPayroll.month }} año: {{ pods.payrollPayroll.year }}
+                            {% else %}
+                                ----
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if pods.enlaceOperativoFileName != null %}
+                                {{ pods.enlaceOperativoFileName }}
+                            {% else %}
+                                ----
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if pods.dateToPay != null %}
+                                {{ pods.dateToPay|date("d-m-Y") }}
+                            {% else %}
+                                ----
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a class="notAjax" href="{{ path('back_return_pay_pod',{'idPOD':pods.idPurchaseOrdersDescription}) }}">Retornar Dinero</a>
+                            <a class="notAjax" href="{{ path('back_retry_pay_po',{'idPO':pods.purchaseOrders.idPurchaseOrders}) }}">Volver a Intentar</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+            </table>
+        </div>
+    </div>
+{% endblock %}

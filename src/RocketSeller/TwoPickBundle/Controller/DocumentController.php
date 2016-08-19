@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use RocketSeller\TwoPickBundle\Entity\Configuration;
 use RocketSeller\TwoPickBundle\Entity\Document;
 use RocketSeller\TwoPickBundle\Entity\DocumentType;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
@@ -33,6 +34,7 @@ use RocketSeller\TwoPickBundle\Traits\EmployerMethodsTrait;
 use RocketSeller\TwoPickBundle\Entity\Novelty;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use ZipArchive;
+use DateTime;
 use FOS\RestBundle\View\View;
 
 class DocumentController extends Controller
@@ -574,13 +576,32 @@ use EmployerMethodsTrait;
                 $employeePerson = $employee->getPersonPerson();
                 $employer = $employerHasEmployee->getEmployerEmployer();
                 $employerPerson = $employer->getPersonPerson();
-
+								
+								$replaceOldContracts = false;
+								$stillOnTest = false;
+								
+								/** @var Configuration $singleConfig */
+		            foreach ($employee->getPersonPerson()->getConfigurations() as $singleConfig){
+										if($singleConfig->getValue() == "PreLegal-SocialSecurityPayment"){
+											$replaceOldContracts = true;
+											break;
+										}
+		            }
+								
+		            /** @var DateTime $today */
+		            $today = new DateTime();
+								if($today <= $contract->getTestPeriod()){
+									$stillOnTest = true;
+								}
+								
                 $employeeInfo = array(
                     'name' => $this->fullName($employeePerson->getIdPerson()),
                     'docType' => $employeePerson->getDocumentType(),
                     'docNumber' => $employeePerson->getDocument(),
                     'residencia' => $employeePerson->getMainAddress(),
-                    'tel' => $employeePerson->getPhones()[0]
+                    'tel' => $employeePerson->getPhones()[0],
+	                  'replaceOldContracts' => $replaceOldContracts,
+	                  'stillOnTest' => $stillOnTest
                 );
 
                 $employerInfo = array(
@@ -631,7 +652,7 @@ use EmployerMethodsTrait;
                         $ref .= '-fijo';
                         break;
                 }
-
+								
                 $contractInfo = array(
                     "endDate" => $endDate,
                     "startDate" => $startDate,

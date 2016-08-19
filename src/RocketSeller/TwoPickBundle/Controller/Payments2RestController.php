@@ -1046,12 +1046,12 @@ class Payments2RestController extends FOSRestController
      */
     public function getTransactionStateAction( $radicatedNumber)
     {
-        $path = "ConsultarEstado";
+        $path = "ConsultarEstadoRecaudo";
         $parameters_fixed = array();
         $parameters_fixed['numeroRadicado'] = $radicatedNumber;
 
         /** @var View $res */
-        $responseView = $this->callApi($parameters_fixed, $path, "ConsultarEstado");
+        $responseView = $this->callApi($parameters_fixed, $path, "ConsultarEstadoRecaudo");
 
         return $responseView;
     }

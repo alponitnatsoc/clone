@@ -20,16 +20,34 @@
     	<header>
         	<!--aca va el nav que ya esta hecho-->
         	<div id="banner">
-            	<div id="cont-banner">
+							<div id="headForm">
+								<div class="contHeadForm">
+									<h1>Paga, afilia y administra a
+									tus empleados desde tu hogar</h1>
+									<p>
+										Descubre los beneficios de hacer las cosas bien
+									</p>
+									<div class="formCont">
+										<form>
+											<input class="inputHalf" type="text" name="firstname" placeholder="Nombre">
+											<input class="inputHalf" type="text" name="firstname" placeholder="Apellido"><br />
+											<input class="inputFull" type="text" name="firstname" placeholder="Celular"><br />
+											<input class="inputFull" type="text" name="firstname" placeholder="Correo electrónico">
+											<button class="btn naranja obten">Obtén 1 mes gratis</button>
+										</form>
+									</div>
+								</div>
+							</div>
+            	<!--<div id="cont-banner">
                 	<div id="tbanner1">
                     	<h1 class="bold">Somos el área de nómina de los pequeños empleadores</h1>
                         <p class="light-italic">La herramienta más sencilla para administrar empleados domésticos</p>
                     </div>
                     <div id="tbanner2">
                     	<a href="/register"><div id="btn-prueba" class="semi-italic">Regístrate ahora</div></a>
-                        <!--<a href="#openModal"><div class="btn-video semi-italic">Ver video</div></a>-->
+                        <!-<a href="#openModal"><div class="btn-video semi-italic">Ver video</div></a>->
                     </div>
-                </div>
+                </div>-->
             </div>
         </header>
 
@@ -45,8 +63,11 @@
 
          <!-------------------- beneficios------------------------ -->
         <section>
+					<div class="titleSec">
+						<h2 class="light grisclarofont">Soluciona cada mes, en un solo lugar todo lo relacionado a la gestión de tus empleados </h2>
+					</div>
         	<div id="beneficios" class="section group">
-            	<h2 class="light grisclarofont">Soluciona cada mes, en un solo lugar todo lo relacionado a la gestión de tus empleados </h2>
+
                 <div class="col span_1_of_4 beneficios">
                 	<img src="{{ asset('public/img/landing/benefit1.png') }}" alt="">
                 	<h3 class="light">Contratación guiada</h3>
@@ -77,7 +98,7 @@
                 	<p class="light-italic">Administramos todos los detalles del día a día de tus empleados</p>
                 </div>
             </div>
-            <a href="{{ path('beneficios') }}"><div class="callto naranja bold">› Beneficios</div></a>
+            <!--<a href="{{ path('beneficios') }}"><div class="callto naranja bold">› Beneficios</div></a>-->
         </section>
 
         <!--<section>
