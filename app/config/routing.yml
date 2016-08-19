@@ -89,6 +89,14 @@ show_calculator_form:
 manage_contracts:
     path:      /manage/contracts/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Contract:showContracts }
+change_state_employer_employee:
+    path:      /manage/employee/change/state/{id}
+    defaults:  {_controller: RocketSellerTwoPickBundle:Employee:changeStateEmployee}
+manage_employees:
+    path:      /manage/employees
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:manageEmployees }
+
+
 add_contract:
     path:      /register/contract/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Contract:addContract }
@@ -309,6 +317,7 @@ hwi_google_login:
 hwi_linkedin_login:
     pattern: /login/check-linkedin
 #
+
 #FOSRest
 rest_secured:
     type : rest
@@ -320,15 +329,18 @@ rest_public:
     resource : "routing_rest_public.yml"
     prefix : /api/public/v1
 #
+
 #Api Doc
 nelmio_apidoc:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
     prefix:   /api/doc/
 #
+
 #FOSUser
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
 #
+
 #Sonata Admin
 admin:
     resource: '@SonataAdminBundle/Resources/config/routing/sonata_admin.xml'
@@ -339,6 +351,7 @@ _sonata_admin:
     type: sonata_admin
     prefix: /admin
 #
+
 gallery:
     resource: '@SonataMediaBundle/Resources/config/routing/gallery.xml'
     prefix: /media/gallery
@@ -474,16 +487,6 @@ welcome_post_register:
 view_document_contract_state:
     path: /contract/condition/{idEHE}
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:contractCondition }
-
-
-back_employer_menu:
-    path: /back-menu-employer/{id}
-    defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:menuEmployer }
-
-back_person_cvs_export:
-    path: /back-person-cvs-export/{idAction}
-    defaults:  { _controller: RocketSellerTwoPickBundle:Export:generateCsvByAction }
-
 express_registration_contract_employee:
     path: /express-registration/{id}/employee-contract/{idEmployee}
     defaults:  { _controller: RocketSellerTwoPickBundle:Contract:addContractExpress }
@@ -498,10 +501,6 @@ home_landing:
 beneficios:
     path:     /beneficios
     defaults: { _controller: RocketSellerTwoPickBundle:Public:beneficios }
-
-calculadora:
-    path:     /calculadora
-    defaults: { _controller: RocketSellerTwoPickBundle:Public:calculadora }
 
 precios:
     path:     /precios

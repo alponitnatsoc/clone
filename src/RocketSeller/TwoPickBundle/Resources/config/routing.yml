@@ -44,7 +44,7 @@ routes:
 
 #Back Office
 back_office:
-    path: /backoffice
+    path:     /backoffice
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:index}
 show_procedures:
     path:     /backoffice/procedures
@@ -105,8 +105,8 @@ show_procedure:
 
 #empleador
 check_register:
-    path:     /backoffice/check/register/{idAction}
-    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:checkRegister }
+    path:         /backoffice/check/register/{idAction}
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:checkRegister }
 validate_employer_documents:
         path:     /backoffice/check/employer/documents/{idAction}
         defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:checkDocuments}
@@ -114,11 +114,11 @@ validate_mandatory:
         path:     /backoffice/check/employer/mandatory/{idAction}
         defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:validateMandatory}
 show_info:
-    path:     /backoffice/check/info/{idAction}
-    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:checkInfo}
+    path:         /backoffice/check/info/{idAction}
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:checkInfo}
 view_documents:
-    path:     /backoffice/view/emploeyer/documents/{idAction}
-    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:viewDocuments}
+    path:         /backoffice/view/emploeyer/documents/{idAction}
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:viewDocuments}
 
 #empleado
 check_employee:
@@ -132,42 +132,48 @@ validate_employee_documents:
         path:     /backoffice/check/employee/documents/{idAction}
         defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:checkEmployeeDocuments}
 view_employee_documents:
-    path:     /backoffice/view/emploeyee/documents/{idAction}
-    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:viewEmployeeDocuments}
+    path:         /backoffice/view/emploeyee/documents/{idAction}
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:viewEmployeeDocuments}
 validate_contract:
         path:     /backoffice/check/employee/contract/{idAction}
         defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:validateContract}
 
 change_action_status:
-    path:     /backoffice/procedure/{procedureId}/{actionId}/{status}
-    defaults: { _controller: RocketSellerTwoPickBundle:Procedure:changeVueltaState }
+    path:         /backoffice/procedure/{procedureId}/{actionId}/{status}
+    defaults:     { _controller: RocketSellerTwoPickBundle:Procedure:changeVueltaState }
 change_action_error_status:
-    path:     /backoffice/procedure/action/error/{procedureId}/{actionError}/{status}
-    defaults: { _controller: RocketSellerTwoPickBundle:Procedure:changeErrorStatus }
+    path:         /backoffice/procedure/action/error/{procedureId}/{actionError}/{status}
+    defaults:     { _controller: RocketSellerTwoPickBundle:Procedure:changeErrorStatus }
 report_error:
-    path:     /backoffice/report/{idAction}
-    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:reportError }
+    path:         /backoffice/report/{idAction}
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:reportError }
 back_add_sql:
-    path:     /backoffice/add/sql/{idEmployerHasEmployee}/{procedureId}
-    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:addToSQL }
+    path:         /backoffice/add/sql/{idEmployerHasEmployee}/{procedureId}
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:addToSQL }
 export_documents_entity:
-    path:     /entity/documents/export/{entityType}/{idEntity}
-    defaults: { _controller: RocketSellerTwoPickBundle:Export:exportDocuments , entityType : null , idEntity: -1 }
+    path:         /entity/documents/export/{entityType}/{idEntity}
+    defaults:     { _controller: RocketSellerTwoPickBundle:Export:exportDocuments , entityType : null , idEntity: -1 }
 export_documents_person:
-    path:     /backoffice/export/person/documents/{idPerson}
-    defaults: { _controller: RocketSellerTwoPickBundle:Export:exportDocumentsByPerson }
+    path:         /backoffice/export/person/documents/{idPerson}
+    defaults:     { _controller: RocketSellerTwoPickBundle:Export:exportDocumentsByPerson }
 export_document_by_id:
-    path:     /backoffice/export/document/{idDoc}
-    defaults: { _controller: RocketSellerTwoPickBundle:Export:exportDocumentByIdDocument, idDoc: -1}
+    path:         /backoffice/export/document/{idDoc}
+    defaults:     { _controller: RocketSellerTwoPickBundle:Export:exportDocumentByIdDocument, idDoc: -1}
 export_contract:
-    path:     /backoffice/export/employerHasEmployee/contract/{idContract}
-    defaults: {_controller: RocketSellerTwoPickBundle:Export:exportContract}
+    path:         /backoffice/export/employerHasEmployee/contract/{idContract}
+    defaults:     {_controller: RocketSellerTwoPickBundle:Export:exportContract}
 export_all_documents:
-    path:     /backoffice/export/action/documents/{idAction}
-    defaults: { _controller: RocketSellerTwoPickBundle:Export:exportAllDocuments }
+    path:         /backoffice/export/action/documents/{idAction}
+    defaults:     { _controller: RocketSellerTwoPickBundle:Export:exportAllDocuments }
 complete_employee:
-    path:     /backoffice/procedure/{procedureId}/complete/employee/{idEmployerHasEmployee}
-    defaults: { _controller: RocketSellerTwoPickBundle:Procedure:changeEmployeeStatus }
+    path:         /backoffice/procedure/{procedureId}/complete/employee/{idEmployerHasEmployee}
+    defaults:     { _controller: RocketSellerTwoPickBundle:Procedure:changeEmployeeStatus }
 export_landing:
-    path:     /backoffice/export/landing
-    defaults: { _controller: RocketSellerTwoPickBundle:Export:exportLanding }
+    path:         /backoffice/export/landing
+    defaults:     { _controller: RocketSellerTwoPickBundle:Export:exportLanding }
+back_employer_menu:
+    path:         /backoffice/employer/menu/{id}
+    defaults:     { _controller: RocketSellerTwoPickBundle:ExpressRegistration:menuEmployer }
+back_person_cvs_export:
+    path:         /backoffice/export/excel/{idAction}
+    defaults:     { _controller: RocketSellerTwoPickBundle:Export:generateCsvByAction }
