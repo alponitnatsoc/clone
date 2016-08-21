@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\Phone;
@@ -396,6 +397,48 @@ class PersonRestController extends FOSRestController
                 }
                 $em->persist($user);
                 $em->flush();
+                //here we send back the CC to the view so it filters in the nex screen
+                $empWorkplaces = $employer->getWorkplaces();
+                $depsToBeFullfilled = new ArrayCollection();
+                /** @var Workplace $empWorkplace */
+                foreach ($empWorkplaces as $empWorkplace) {
+                    $tempDept = $empWorkplace->getDepartment();
+                    if(!$depsToBeFullfilled->contains($tempDept)){
+                        $depsToBeFullfilled->add($tempDept);
+                    }
+                }
+                $ccToBefullfilled = array();
+                $realDepartments = new ArrayCollection();
+                $flag=0;
+                /** @var Department $deps */
+                foreach ($depsToBeFullfilled as $deps) {
+                    if($deps->getDepartmentCode()=="11"||$deps->getDepartmentCode()=="25"){
+                        if($flag==0){
+                            $flag=1;
+                        }else{
+                            //this means that there are more the one employee that belong to cundinamarca an bogota
+                            //so we dont get the entities
+                            continue;
+                        }
+                    }
+                    $ccToBefullfilled[$deps->getIdDepartment()]=$deps->getEntities();
+                    $realDepartments->add($deps);
+                }
+                $entities = $employer->getEntities();
+                $counter=0;
+                /** @var EmployerHasEntity $entity */
+                foreach ($entities as $entity) {
+                    /** @var Department $realDepartment */
+                    foreach ($realDepartments as $realDepartment) {
+                        /** @var Department $tempiDep */
+                        foreach ($entity->getEntityEntity()->getDepartments() as $tempiDep) {
+                            if($tempiDep->getIdDepartment()==$realDepartment->getIdDepartment()){
+                                $counter++;
+                            }
+                        }
+                    }
+                }
+
                 if ($employer->getEmployerHasEmployees()->count() == 0) {
                     $view->setData(array('url' => $this->generateUrl('register_employee', array('id' => -1, 'tab' => 1))))->setStatusCode(200);
                 } elseif ($user->getStatus() == 2 ) {
@@ -404,7 +447,7 @@ class PersonRestController extends FOSRestController
                 else {
                     $view->setStatusCode(200);
                 }
-                return $view;
+                return $view->setData(array("Severances"=>count($ccToBefullfilled)-$counter));
             } else {
                 $view = $this->getErrorsView($errors);
                 return $view;

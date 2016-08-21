@@ -242,8 +242,8 @@ show_form_entity:
     requirements:
         id:     \d+
 edit_profile:
-    path:      /register/edit/{step}
-    defaults:  { _controller: RocketSellerTwoPickBundle:Person:editPerson, step: 0 }
+    path:      /register/edit/{tab}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Person:editPerson, tab: 1 }
 edit_employer:
     path:      /employer/edit/{step}
     defaults:  { _controller: RocketSellerTwoPickBundle:Employer:editEmployer, step: 0 }
