@@ -464,8 +464,6 @@ function startEmployer() {
                 workDepartment: departments
             }
         }).done(function (data) {
-            console.log(data);
-            console.log("execute the add "+data["Severances"]+" times");
             var times=0;
             if($("#register_employer_severances_0_severancesAC").val()==""){
                 times = parseInt(data["Severances"])-1;
