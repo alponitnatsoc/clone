@@ -62,7 +62,7 @@ class PayrollMethodRestController extends FOSRestController
        $request = $this->container->get('request');
        $actContract=$actPayrroll->getContractContract();
        if($actPayrroll->getDaysSent()==0&&$actContract->getTimeCommitmentTimeCommitment()->getCode()=="XD"){
-           if($actContract->getFrequencyFrequency()=="Q"&&$actPayrroll->getPeriod()==4){
+           if($actContract->getFrequencyFrequency()->getPayrollCode()=="Q"&&$actPayrroll->getPeriod()==4){
                $dayStart="16";
            }else{
                $dayStart="1";
