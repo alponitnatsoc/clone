@@ -161,7 +161,10 @@ class PayrollController extends Controller
         if ($insertionAnswer->getStatusCode() != 200) {
             return false;
         }
-        return $this->render('RocketSellerTwoPickBundle:Payroll:pay.html.twig', json_decode($insertionAnswer->getContent(), true));
+        $ANS=json_decode($insertionAnswer->getContent(), true);
+        $ANS=json_decode($ANS, true);
+
+        return $this->render('RocketSellerTwoPickBundle:Payroll:pay.html.twig', $ANS);
 
     }
 
@@ -202,9 +205,10 @@ class PayrollController extends Controller
             if ($insertionAnswer->getStatusCode() != 200) {
                 return false;
             }
-            return $this->render('RocketSellerTwoPickBundle:Payroll:calculate.html.twig', json_decode($insertionAnswer->getContent(), true));
 
-
+            $ANS=json_decode($insertionAnswer->getContent(), true);
+            $ANS=json_decode($ANS, true);
+            return $this->render('RocketSellerTwoPickBundle:Payroll:calculate.html.twig', $ANS);
 
         } else {
             return $this->redirectToRoute("payroll");

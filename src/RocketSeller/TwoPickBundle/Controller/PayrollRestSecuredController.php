@@ -4,6 +4,7 @@ namespace RocketSeller\TwoPickBundle\Controller;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use JMS\Serializer\SerializationContext;
 use RocketSeller\TwoPickBundle\Entity\Config;
 use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\Person;
@@ -91,12 +92,18 @@ class PayrollRestSecuredController extends FOSRestController
                 }
 
             }
+            $context = new SerializationContext();
+            $context->setSerializeNull(true);
+            $serializer = $this->get('jms_serializer');
 
-            return $view->setStatusCode(200)->setData(array(
+
+            $answer = $serializer->serialize(array(
                 'dataNomina' => $pods,
                 'debt' => $owePurchaseOrders,
                 'flagAtLeastOne' => $flagAtLeastOne
-            ));
+            ), 'json', $context);
+
+            return $view->setStatusCode(200)->setData($answer);
         }
         return $view->setStatusCode(404);
     }
@@ -407,11 +414,18 @@ class PayrollRestSecuredController extends FOSRestController
         $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getClientListPaymentMethods', array('idUser' => $user->getId()), array('_format' => 'json'));
         $responsePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
         $realtoPay->setValue($total);
-        return $view->setStatusCode(200)->setData(array(
+        $context = new SerializationContext();
+        $context->setSerializeNull(true);
+        $serializer = $this->get('jms_serializer');
+
+
+        $answer = $serializer->serialize(array(
             'toPay' => $realtoPay,
             'paid' => $paidPO,
             'payMethods' => $responsePaymentsMethods["payment-methods"]
-        ));
+        ), 'json', $context);
+
+        return $view->setStatusCode(200)->setData($answer);
 
     }
 
