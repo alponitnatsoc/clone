@@ -70,7 +70,7 @@ h1 {margin: 0}
 .pregunta p {margin: 0}
 .preguntas a {text-decoration: none}
 .contenido-cat {
-	background: #fbfbfb;
+	background: #FFF;
     border-radius: 5px;
     text-align: center;
     padding: 50px 0;
@@ -92,7 +92,7 @@ h1 {margin: 0}
 }
 #callregistro {color: #6d6d71; margin: 50px 0 90px 0;text-align:center}
 a .contenido-cat:hover {
-	background: none !important}
+	background: #f7f7f7 !important}
 /*grid responsive*/
 
 .span_1_of_3 {
