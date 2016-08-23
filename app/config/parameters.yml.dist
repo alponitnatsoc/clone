@@ -44,4 +44,3 @@ parameters:
        representante: Camilo Méndez
        identificacion: CC XXX de Colombia
     route_home: RocketSellerTwoPickBundle:Public:home
-
