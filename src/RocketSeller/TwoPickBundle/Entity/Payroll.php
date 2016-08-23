@@ -100,7 +100,17 @@ class Payroll
      * @var \RocketSeller\TwoPickBundle\Entity\Document
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Document")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="document_id_document", referencedColumnName="id_document")
+     *   @ORM\JoinColumn(name="payslip_id_payslip", referencedColumnName="id_document")
+     * })
+     * @Exclude
+     */
+    private $payslip;
+
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Document
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Document")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="signature_id_signature", referencedColumnName="id_document")
      * })
      * @Exclude
      */
@@ -449,6 +459,29 @@ class Payroll
         return $this->signature;
     }
 
+    /**
+     * Set payslip
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Document $payslip
+     *
+     * @return Payroll
+     */
+    public function setPayslip(\RocketSeller\TwoPickBundle\Entity\Document $payslip = null)
+    {
+        $this->payslip = $payslip;
+
+        return $this;
+    }
+
+    /**
+     * Get payslip
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Document
+     */
+    public function getPayslip()
+    {
+        return $this->payslip;
+    }
 
     /**
      * Constructor

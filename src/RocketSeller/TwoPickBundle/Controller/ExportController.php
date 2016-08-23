@@ -11,6 +11,7 @@ use PHPExcel_Style_Border;
 use PHPExcel_Style_Color;
 use PHPExcel_Style_Fill;
 use PHPExcel_Style_Font;
+use PHPExcel_Writer_Excel2007;
 use RocketSeller\TwoPickBundle\Entity\Employee;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use RocketSeller\TwoPickBundle\Entity\Action;
@@ -1393,8 +1394,8 @@ class ExportController extends Controller
                 }
             }
             // create the writer
-            $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'excel2007');
-            $writer->save('excel_file.xlsx');
+            $objWriter = new PHPExcel_Writer_Excel2007($phpExcelObject);
+            $objWriter->save('excel_file.xlsx');
             # create new zip opbject
             $zip = new ZipArchive();
             # create a temp file & open it
