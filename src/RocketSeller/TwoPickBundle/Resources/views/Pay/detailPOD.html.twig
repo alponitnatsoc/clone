@@ -12,6 +12,10 @@
             {% set account = payMethod.cellphone %}
         {% endif %}
         {% set accountType = payMethod.accountTypeAccountType.name %}
+    {% else %}
+        {% set bank = "---" %}
+        {% set account = "---" %}
+        {% set accountType = "---" %}
     {% endif %}
     <div class="row">
         <div class="panel-heading">
