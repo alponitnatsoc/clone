@@ -10,11 +10,14 @@ use FOS\RestBundle\Controller\Annotations\Route;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
 use RocketSeller\TwoPickBundle\Entity\Novelty;
+use RocketSeller\TwoPickBundle\Entity\NoveltyTypeFields;
+use RocketSeller\TwoPickBundle\Entity\NoveltyTypeHasDocumentType;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\WeekWorkableDays;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
+use RocketSeller\TwoPickBundle\Controller\NoveltyController;
 use Symfony\Component\Validator\ConstraintViolationList;
 use DateTime;
 
@@ -25,7 +28,7 @@ class NoveltyRestController extends FOSRestController
    *
    * @ApiDoc(
    *   resource = true,
-   *   description = "Returns the list of novelty types",
+   *   description = "Returns the list of novelty types with specific time commitment",
    *   statusCodes = {
    *     200 = "Returned when successful"
    *   }
@@ -33,13 +36,114 @@ class NoveltyRestController extends FOSRestController
    *
    * @return View
    */
-   public function getNoveltyTypesAction() {
-     $novletyRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:NoveltyType");
-     $novleties = $novletyRepo->findAll();
+   public function getNoveltyTypesAction($timeCommitmentCode) {
+     $novletyTypeRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:NoveltyType");
+     $novletyTypes = $novletyTypeRepo->findAll();
+
+     $resultNoveltyTypes = array();
+     foreach ($novletyTypes as $NT) {
+       if (strpos($NT->getDisplayOn(), $timeCommitmentCode) !== false) {
+         array_push($resultNoveltyTypes, $NT);
+       }
+     }
+
      $view = View::create();
 
-     return $view->setStatusCode(200)->setData(array('novelties'=>$novleties));
+     return $view->setStatusCode(200)->setData(array('novelties'=>$resultNoveltyTypes));
    }
+
+   /**
+    * update worked days<br/>
+    *
+    * @ApiDoc(
+    *   resource = true,
+    *   description = "update worked days",
+    *   statusCodes = {
+    *     200 = "Returned when successful"
+    *   }
+    * )
+    *
+    * @param paramFetcher $paramFetcher ParamFetcher
+    *
+    * @RequestParam(name="empId", nullable=false, strict=true, description="employee id")
+    * @RequestParam(name="idNovelty", nullable=false, strict=true, description="novelty id")
+    * @RequestParam(name="daysAmount", nullable=false, strict=true, description="daysAmount")
+    * @RequestParam(name="idPerson", nullable=false, strict=true, description="id person of logged user")
+    *
+    * @return View
+    */
+    public function postUpdateWorkedDaysAction(ParamFetcher $paramFetcher) {
+
+      $empId = $paramFetcher->get('empId');
+      $idNovelty = $paramFetcher->get('idNovelty');
+      $daysAmount = $paramFetcher->get('daysAmount');
+      $idPerson = $paramFetcher->get('idPerson');
+      $params = array(
+          'empId' => $empId,
+          'idNovelty' => $idNovelty,
+          'daysAmount' => $daysAmount,
+          'idPerson' => $idPerson
+      );
+      $result = $this->forward('RocketSellerTwoPickBundle:Novelty:updateWorkedDays', $params);
+      // updateWorkedDaysAction($empId, $idNovelty, $daysAmount);
+
+      $view = View::create();
+
+      return $view->setStatusCode(200)->setData(array('result'=>$result));
+    }
+
+   /**
+    * registers a new novelty<br/>
+    *
+    * @ApiDoc(
+    *   resource = true,
+    *   description = "registers a new novelty",
+    *   statusCodes = {
+    *     200 = "Returned when successful"
+    *   }
+    * )
+    *
+    * @param paramFetcher $paramFetcher ParamFetcher
+    *
+    * @RequestParam(name="noveltyFields", nullable=false, strict=true, description="novelty fields")
+    * @RequestParam(name="novletyTypeId", nullable=false, strict=true, description="novelty type")
+    * @RequestParam(name="payrrollId", nullable=false, strict=true, description="payrroll")
+    *
+    * @return View
+    */
+    public function postRegisterNoveltyAction(ParamFetcher $paramFetcher) {
+
+      $noveltyFields = $paramFetcher->get('noveltyFields');
+      $novletyTypeId = $paramFetcher->get('novletyTypeId');
+      $payrrollId = $paramFetcher->get('payrrollId');
+
+      $novletyType = $this->getDoctrine()
+          ->getRepository('RocketSellerTwoPickBundle:NoveltyType')
+          ->find($novletyTypeId);
+
+      $payroll = $this->getDoctrine()
+          ->getRepository('RocketSellerTwoPickBundle:Payroll')
+          ->find($payrrollId);
+
+      $novelty = new Novelty();
+
+      $novelty->setName($noveltyFields['name']);
+      if($noveltyFields['dateStart'])
+        $novelty->setDateStart($noveltyFields['dateStart']);
+      if($noveltyFields['dateStart'])
+        $novelty->setDateStart($noveltyFields['dateStart']);
+      if($noveltyFields['units'])
+        $novelty->setUnits($noveltyFields['units']);
+      if($noveltyFields['amount'])
+        $novelty->setAmount($noveltyFields['amount']);
+
+      //esperar a daniel
+      $result = "hola";
+      // $result = this->validateAndPersistNovelty($novelty, $payrroll, $noveltyType);
+      $view = View::create();
+
+      return $view->setStatusCode(200)->setData(array('result'=>$result));
+    }
 
     /**
      * Add the novelty<br/>
@@ -62,10 +166,29 @@ class NoveltyRestController extends FOSRestController
     public function getAddNoveltySqlAction($idNovelty)
     {
 
-        $em=$this->getDoctrine();
+        $em=$this->getDoctrine()->getManager();
         $noveltyRepo=$em->getRepository("RocketSellerTwoPickBundle:Novelty");
         /** @var Novelty $novelty */
         $novelty=$noveltyRepo->find($idNovelty);
+
+        $noveltyRequiredFields  = $novelty->getNoveltyTypeNoveltyType()->getRequiredFields();
+        $utils = $this->get('app.symplifica_utils');
+        /** @var NoveltyTypeFields $requiredField */
+        foreach($noveltyRequiredFields as $requiredField){
+            if($requiredField->getDisplayable() == false){
+                if ($requiredField->getColumnName() == "date_end"){
+                    $dataToSet = $utils->novelty_date_constrain_to_date_after($requiredField->getNoveltyDataConstrain(), $novelty);
+                    $novelty->setDateEnd($dataToSet);
+                }
+                elseif ($requiredField->getColumnName() == "date_start"){
+                    $dataToSet = $utils->novelty_date_constrain_to_date_after($requiredField->getNoveltyDataConstrain(), $novelty);
+                    $novelty->setDateStart($dataToSet);
+                }
+            }
+        }
+        $em->persist($novelty);
+        $em->flush();
+
         $view = View::create();
         $request = $this->container->get('request');
         $noveltyType=$novelty->getNoveltyTypeNoveltyType();
@@ -226,6 +349,57 @@ class NoveltyRestController extends FOSRestController
     }
 
     /**
+     * Get the validation errors
+     *
+     *
+     * @param $dateStart
+     * @param $dateEnd
+     *
+     * @return View
+     */
+    public function getWorkableDaysBetweenDatesAction($dateStart, $dateEnd)
+    {
+        //datetime format YYYY-mm-dd
+        $em=$this->getDoctrine()->getManager();
+
+        $wkd=array();
+        $wkd[5]=true;
+        $wkd[4]=true;
+        $wkd[3]=true;
+        $wkd[2]=true;
+        $wkd[1]=true;
+        $dateRStart= new DateTime($dateStart);
+        $dateREnd= new DateTime($dateEnd);
+        $mult=1;
+        if($dateRStart>$dateREnd){
+            $dateRStart = $dateREnd;
+            $dateREnd = new DateTime($dateStart);
+            $mult = -1;
+        }
+
+        $dateRStart->modify('+1 day');
+        $dateREnd->modify('+1 day');
+        $interval=$dateRStart->diff($dateREnd);
+        $answer=0;
+        $numberDays=$interval->format("%a");
+        $days=[];
+        for($i=0;$i<$numberDays;$i++){
+            $dateToCheck=new DateTime();
+            $dateToCheck->setDate($dateRStart->format("Y"),$dateRStart->format("m"),intval($dateRStart->format("d"))+$i);
+
+            if($this->workable($dateToCheck)&&isset($wkd[$dateToCheck->format("w")])){
+                $answer++;
+                $days[]=$dateToCheck->format("Y-m-d");
+            }
+
+        }
+        $view = View::create();
+        $view->setStatusCode(200)->setData(array("days"=>$answer*$mult,"dateToCheck"=>$days,"wkd"=>$wkd));
+
+        return $view;
+    }
+
+    /**
      * @param DateTime $dateToCheck
      * @return bool
      */
@@ -276,6 +450,227 @@ class NoveltyRestController extends FOSRestController
         return true;
     }
 
+    /**
+     * Post correct noveltytypesHasDocumentType
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Correct the database documents asigned to eah novelty type",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function postCorrectNoveltyDocumentsAction()
+    {
+        $response ="";
+        $response = $response . " CORRIGIENDO DOCUMENTOS ASOCIADOS A LAS NOVEDADES...<br><br>";
+        $em = $this->getDoctrine()->getManager();
+        /** @var NoveltyTypeHasDocumentType $nTHDT */
+
+        //LICENCIA DE MATERNIDAD
+        $nTHDT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(1);
+        $nTHDT->setNoveltyTypeNoveltyType($em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array("payroll_code"=>25)));
+        $nTHDT->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'RCNV')));
+        $em->persist($nTHDT);
+        $nTHDT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(2);
+        $nTHDT->setNoveltyTypeNoveltyType($em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array("payroll_code"=>25)));
+        $nTHDT->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'LDM')));
+        $em->persist($nTHDT);
+        $nTHDT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(3);
+        $nTHDT->setNoveltyTypeNoveltyType($em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array("payroll_code"=>25)));
+        $nTHDT->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'HCDE')));
+        $em->persist($nTHDT);
+
+        //LICENCIA DE PATERNIDAD
+        $nTHDT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(4);
+        $nTHDT->setNoveltyTypeNoveltyType($em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array("payroll_code"=>26)));
+        $nTHDT->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'RCNV')));
+        $em->persist($nTHDT);
+        $nTHDT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(5);
+        $nTHDT->setNoveltyTypeNoveltyType($em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array("payroll_code"=>26)));
+        $nTHDT->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'LDM')));
+        $em->persist($nTHDT);
+        $nTHDT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(6);
+        $nTHDT->setNoveltyTypeNoveltyType($em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array("payroll_code"=>26)));
+        $nTHDT->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'LDP')));
+        $em->persist($nTHDT);
+        $nTHDT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(7);
+        $nTHDT->setNoveltyTypeNoveltyType($em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array("payroll_code"=>26)));
+        $nTHDT->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'HCDE')));
+        $em->persist($nTHDT);
+
+        //LICENCIA NO REMUNERADA
+        $nTHDT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(8);
+        $nTHDT->setNoveltyTypeNoveltyType($em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array("payroll_code"=>3120)));
+        $nTHDT->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'LNRE')));
+        $em->persist($nTHDT);
+
+        //LICENCIA REMUNERADA
+        $nTHDT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(9);
+        $nTHDT->setNoveltyTypeNoveltyType($em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array("payroll_code"=>23)));
+        $nTHDT->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'LREM')));
+        $em->persist($nTHDT);
+
+        //SUSPENSION
+        $nTHDT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(10);
+        $nTHDT->setNoveltyTypeNoveltyType($em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array("payroll_code"=>3125)));
+        $nTHDT->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'SUSP')));
+        $em->persist($nTHDT);
+
+        //INCAPACIDAD GENERAL
+        $nTHDT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(11);
+        $nTHDT->setNoveltyTypeNoveltyType($em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array("payroll_code"=>15)));
+        $nTHDT->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'HCDE')));
+        $em->persist($nTHDT);
+        $nTHDT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(12);
+        $nTHDT->setNoveltyTypeNoveltyType($em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array("payroll_code"=>15)));
+        $nTHDT->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'INC')));
+        $em->persist($nTHDT);
+
+        //ACCIDENTE DE TRABAJO
+        $nTHDT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(13);
+        $nTHDT->setNoveltyTypeNoveltyType($em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array("payroll_code"=>27)));
+        $nTHDT->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'RADT')));
+        $em->persist($nTHDT);
+
+        //INCAPACIDAD LABORAL
+        $nTHDT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(14);
+        $nTHDT->setNoveltyTypeNoveltyType($em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array("payroll_code"=>28)));
+        $nTHDT->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'HCDE')));
+        $em->persist($nTHDT);
+        $nTHDT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(15);
+        $nTHDT->setNoveltyTypeNoveltyType($em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array("payroll_code"=>28)));
+        $nTHDT->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'INCP')));
+        $em->persist($nTHDT);
+        $nTHDT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(16);
+        $nTHDT->setNoveltyTypeNoveltyType($em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array("payroll_code"=>28)));
+        $nTHDT->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'RADT')));
+        $em->persist($nTHDT);
+
+        //AUMENTO DE SUELDO --
+
+        //BONIFICACION HIDDEN --
+
+        //RECARGO NOCTURNO --
+
+        //RECARGO NOCTURNO FESTIVO --
+
+        //HORA EXTRA DIURNA --
+
+        //HORA EXTRA NOCTURNA --
+
+        //HORA EXTRA FESTIVA DIURNA --
+
+        //FESTIVO DIURNO --
+
+        //HORA EXTRA FESTIVA NOCTURNA --
+
+        //SUBSIDIO DE TRANSPORTE --
+
+        //VACACIONES
+        $nTHDT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(17);
+        $nTHDT->setNoveltyTypeNoveltyType($em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array("payroll_code"=>145)));
+        $nTHDT->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'SDV')));
+        $em->persist($nTHDT);
+
+        //VACACIONES EN DINERO
+        $nTHDT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(18);
+        $nTHDT->setNoveltyTypeNoveltyType($em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array("payroll_code"=>150)));
+        $nTHDT->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'SDVD')));
+        $em->persist($nTHDT);
+
+        //BONIFICACIÓN --
+
+        //PRESTAMO
+        $nTHDT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(19);
+        $nTHDT->setNoveltyTypeNoveltyType($em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array("name"=>'Prestamo')));
+        $nTHDT->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'ADES')));
+        $em->persist($nTHDT);
+
+        //APORTES SALUD --
+
+        //APORTES PENSION --
+
+        //PRIMA LEGAL --
+
+        //CESANTIAS DEFINITIVAS --
+
+        //INTERESES SOBRE SESANTIAS --
+
+        //INDEMNIZACION --
+
+        //SUELDO --
+
+        //GASTO DE INCAPACIDAD --
+
+        //AJUSTE DE INCAPACIDAD --
+
+        //RETENCION EN LA FUENTE --
+
+        //LLEGADA TARDE
+        $nT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array('name'=>'Llegada tarde'));
+        $nT->setPayrollCode(-1);
+        $em->persist($nT);
+        $em->flush();
+        $nTHDT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(20);
+        $nTHDT->setNoveltyTypeNoveltyType($em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array("payroll_code"=>-1)));
+        $nTHDT->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'DSN')));
+        $em->persist($nTHDT);
+
+        //ABANDONO PUESTO DE TRABAJO
+        $nT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array('name'=>'Abandono puesto de trabajo'));
+        $nT->setPayrollCode(-2);
+        $em->persist($nT);
+        $em->flush();
+        $nTHDT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(21);
+        $nTHDT->setNoveltyTypeNoveltyType($em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array("payroll_code"=>-2)));
+        $nTHDT->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'DSN')));
+        $em->persist($nTHDT);
+
+        //VERSION LIBRE DE HECHOS
+        $nT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array('name'=>'Versión libre de hechos'));
+        $nT->setPayrollCode(-3);
+        $em->persist($nT);
+        $em->flush();
+        $nTHDT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(22);
+        $nTHDT->setNoveltyTypeNoveltyType($em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array("payroll_code"=>-3)));
+        $nTHDT->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'DSN')));
+        $em->persist($nTHDT);
+
+        //DOTACION
+        $nT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array('name'=>'Dotación'));
+        $nT->setPayrollCode(-4);
+        $em->persist($nT);
+        $em->flush();
+        $nTHDT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(23);
+        $nTHDT->setNoveltyTypeNoveltyType($em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array("payroll_code"=>-4)));
+        $nTHDT->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'DOT')));
+        $em->persist($nTHDT);
+
+        //TERMINAR CONTRATO --
+
+        //ANTICIPO
+        $nTHDT = $em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(24);
+        $nTHDT->setNoveltyTypeNoveltyType($em->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array("name"=>'Anticipo')));
+        $nTHDT->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'ADES')));
+        $em->persist($nTHDT);
+        $em->remove($em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(25));
+        $em->remove($em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(26));
+        $em->remove($em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(27));
+        $em->remove($em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(28));
+        $em->remove($em->getRepository("RocketSellerTwoPickBundle:NoveltyTypeHasDocumentType")->find(29));
+
+        $response = $response . " FINALIZADO.<br><br>";
+        $em->flush();
+        $view = View::create();
+        $view->setData($response)->setStatusCode(200);
+        return $view;
+
+    }
 
 }
 ?>

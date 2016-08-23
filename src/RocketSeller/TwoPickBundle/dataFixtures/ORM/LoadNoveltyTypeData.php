@@ -21,6 +21,7 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $NoveltyMaternity->setPeriod('dia');
         $NoveltyMaternity->setGrupo('Licencias-Permisos');
         $NoveltyMaternity->setNaturaleza('DEV');
+	      $NoveltyMaternity->setDisplayOn('TC');
         $manager->persist($NoveltyMaternity);
 
         $NoveltyUnpaid = new NoveltyType();
@@ -30,6 +31,7 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $NoveltyUnpaid->setPeriod('dia');
         $NoveltyUnpaid->setGrupo('Licencias-Permisos');
         $NoveltyUnpaid->setNaturaleza('DED');
+	      $NoveltyUnpaid->setDisplayOn('TC');
         $manager->persist($NoveltyUnpaid);
 
         $NoveltyPaid = new NoveltyType();
@@ -37,8 +39,9 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $NoveltyPaid->setPayrollCode('23');
         $NoveltyPaid->setAbsenteeism('5');
         $NoveltyPaid->setPeriod('dia');
-        $NoveltyPaid->setGrupo('no_show');
+        $NoveltyPaid->setGrupo('Licencias-Permisos');
         $NoveltyPaid->setNaturaleza('DEV');
+	      $NoveltyPaid->setDisplayOn('TC XD');
         $manager->persist($NoveltyPaid);
 
         $NoveltySuspension = new NoveltyType();
@@ -48,6 +51,7 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $NoveltySuspension->setPeriod('dia');
         $NoveltySuspension->setGrupo('Suspensión');
         $NoveltySuspension->setNaturaleza('DED');
+	      $NoveltySuspension->setDisplayOn('TC');
         $manager->persist($NoveltySuspension);
 
         $NoveltyGeneralIllness = new NoveltyType();
@@ -57,6 +61,7 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $NoveltyGeneralIllness->setPeriod('dia');
         $NoveltyGeneralIllness->setGrupo('Incapacidad');
         $NoveltyGeneralIllness->setNaturaleza('DEV');
+	      $NoveltyGeneralIllness->setDisplayOn('TC');
         $manager->persist($NoveltyGeneralIllness);
 
         $NoveltyWorkAccident = new NoveltyType();
@@ -75,6 +80,7 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $NoveltyProfessionalIllness->setPeriod('dia');
         $NoveltyProfessionalIllness->setGrupo('Incapacidad');
         $NoveltyProfessionalIllness->setNaturaleza('DEV');
+	      $NoveltyProfessionalIllness->setDisplayOn('TC XD');
         $manager->persist($NoveltyProfessionalIllness);
 
         $NoveltyPaternityLeave = new NoveltyType();
@@ -84,6 +90,7 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $NoveltyPaternityLeave->setPeriod('dia');
         $NoveltyPaternityLeave->setGrupo('Licencias-Permisos');
         $NoveltyPaternityLeave->setNaturaleza('DEV');
+	      $NoveltyPaternityLeave->setDisplayOn('TC');
         $manager->persist($NoveltyPaternityLeave);
 
         /* All the entries with type Novelty */
@@ -91,7 +98,7 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $NoveltySalaryAdjust->setName('Aumento de sueldo');
         $NoveltySalaryAdjust->setPayrollCode('2');
         $NoveltySalaryAdjust->setPeriod('dia');
-        $NoveltySalaryAdjust->setGrupo('Ajuste Salarial');
+        $NoveltySalaryAdjust->setGrupo('no_show');
         $NoveltySalaryAdjust->setNaturaleza('DEV');
         $manager->persist($NoveltySalaryAdjust);
 
@@ -125,6 +132,7 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $NoveltyExtraHour->setPeriod('hora');
         $NoveltyExtraHour->setGrupo('Horas extras');
         $NoveltyExtraHour->setNaturaleza('DEV');
+	      $NoveltyExtraHour->setDisplayOn('TC');
         $manager->persist($NoveltyExtraHour);
 
         $NoveltyExtraHourNight = new NoveltyType();
@@ -133,6 +141,7 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $NoveltyExtraHourNight->setPeriod('hora');
         $NoveltyExtraHourNight->setGrupo('Horas extras');
         $NoveltyExtraHourNight->setNaturaleza('DEV');
+	      $NoveltyExtraHourNight->setDisplayOn('TC');
         $manager->persist($NoveltyExtraHourNight);
 
         $NoveltyExtraHourHoliday = new NoveltyType();
@@ -141,6 +150,7 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $NoveltyExtraHourHoliday->setPeriod('hora');
         $NoveltyExtraHourHoliday->setGrupo('Horas extras');
         $NoveltyExtraHourHoliday->setNaturaleza('DEV');
+	      $NoveltyExtraHourHoliday->setDisplayOn('TC');
         $manager->persist($NoveltyExtraHourHoliday);
 
         $NoveltyHoliday = new NoveltyType();
@@ -157,6 +167,7 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $NoveltyHolidayNightExtraHour->setPeriod('hora');
         $NoveltyHolidayNightExtraHour->setGrupo('Horas extras');
         $NoveltyHolidayNightExtraHour->setNaturaleza('DEV');
+	      $NoveltyHolidayNightExtraHour->setDisplayOn('TC');
         $manager->persist($NoveltyHolidayNightExtraHour);
 
         $NoveltyTransport = new NoveltyType();
@@ -173,6 +184,7 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $NoveltyVacation->setPeriod('dia');
         $NoveltyVacation->setGrupo('Vacaciones');
         $NoveltyVacation->setNaturaleza('DEV');
+	      $NoveltyVacation->setDisplayOn('TC XD');
         $manager->persist($NoveltyVacation);
 
         $NoveltyVacationMoney = new NoveltyType();
@@ -189,6 +201,7 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $NoveltyLibertyBonus->setPeriod('unidad');
         $NoveltyLibertyBonus->setGrupo('Bonificación');
         $NoveltyLibertyBonus->setNaturaleza('DEV');
+	      $NoveltyLibertyBonus->setDisplayOn('TC XD');
         $manager->persist($NoveltyLibertyBonus);
 
         $NoveltyDiscountLoan = new NoveltyType();
@@ -197,6 +210,7 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $NoveltyDiscountLoan->setPeriod('unidad');
         $NoveltyDiscountLoan->setGrupo('Prestamos-Anticipos');
         $NoveltyDiscountLoan->setNaturaleza('DED');
+	      $NoveltyDiscountLoan->setDisplayOn('TC XD');
         $manager->persist($NoveltyDiscountLoan);
 
         // Entities that shouldn't be inserted, only for query.
@@ -304,14 +318,14 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
 
         $despido = new NoveltyType();
         $despido->setName('Terminar contrato');
-        $despido->setGrupo('Terminación contrato');
+        $despido->setGrupo('no_show');
         $manager->persist($despido);
 
         $anticip = new NoveltyType();
         $anticip->setName('Anticipo');
         $anticip->setPayrollCode('4810');
         $anticip->setPeriod('unidad');
-        $anticip->setGrupo('Prestamos-Anticipos');
+        $anticip->setGrupo('no_show');
         $anticip->setNaturaleza('DED');
         $manager->persist($anticip);
 

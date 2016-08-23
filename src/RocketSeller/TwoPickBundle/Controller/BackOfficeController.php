@@ -13,6 +13,7 @@ use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\PromotionCode;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -76,6 +77,95 @@ class BackOfficeController extends Controller
         $clientBetaReal=$codesTypeRepo->findOneBy(array("shortName"=>"CB"));
         $codes= $codesRepo->findBy(array("userUser"=>null,'promotionCodeTypePromotionCodeType'=>$clientBetaReal));
         return $this->render('RocketSellerTwoPickBundle:BackOffice:promotionCodes.html.twig',array('codes'=>$codes));
+
+    }
+
+    public function showRejectedPODAction()
+    {
+        $codesRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription");
+        $podStatusRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
+        $rejectedState = $podStatusRepo->findOneBy(array("idNovoPay" => "-2"));
+        $rejectedPods = $codesRepo->findBy(array('purchaseOrdersStatus'=>$rejectedState));
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:rejectedPurchaseOrdersDescriptions.html.twig',array('rejectedPods'=>$rejectedPods));
+
+    }
+
+    public function retryPayAction($idPO)
+    {
+        /** @var User $user */
+        $user=$this->getUser();
+        $roles = $user->getRoles();
+        $poRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrders");
+        /** @var PurchaseOrders $realPO */
+        $realPO = $poRepo->find($idPO);
+        $flag=false;
+        if($realPO!=null && $user->getId()==$realPO->getIdUser()->getId()){
+            $flag=true;
+        }
+        foreach ($roles as $key=>$role) {
+            if($role=="ROLE_BACK_OFFICE")
+                $flag=true;
+        }
+        if(!$flag){
+            $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+            return $this->redirectToRoute("show_rejected_pods");
+        }
+        $answer = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getDispersePurchaseOrder', ['idPurchaseOrder' => $idPO]);
+        if ($answer->getStatusCode() != 200) {
+            $mesange = "not so good man";
+        } else {
+            $mesange = "all good man";
+        }
+        return $this->redirectToRoute("show_rejected_pods");
+    }
+
+    public function returnMoneyPayAction($idPOD)
+    {
+        $codesRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription");
+        /** @var PurchaseOrdersDescription $pod */
+        $pod = $codesRepo->find($idPOD);
+        /** @var User $user */
+        $user=$this->getUser();
+        $roles = $user->getRoles();
+        /** @var PurchaseOrders $realPO */
+        $realPO = $pod!=null ? $pod->getPurchaseOrders() : null;
+        $flag=false;
+        if($realPO!=null && $user->getId()==$realPO->getIdUser()->getId()){
+            $flag=true;
+        }
+        foreach ($roles as $key=>$role) {
+            if($role=="ROLE_BACK_OFFICE")
+                $flag=true;
+        }
+        if(!$flag){
+            $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+            return $this->redirectToRoute("show_rejected_pods");
+        }
+        $idhightech = $pod->getPurchaseOrders()->getIdUser()->getPersonPerson()->getEmployer()->getIdHighTech();
+        $targetAccount = $pod->getPurchaseOrders()->getPayMethodId();
+        $value = $pod->getValue();
+        $podStatusRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
+        $devolutionState = $podStatusRepo->findOneBy(array("idNovoPay" => "-3"));
+        $em=$this->getDoctrine()->getManager();
+
+        $request = $this->container->get('request');
+        $request->setMethod("POST");
+        $request->request->add(array(
+            "source" => 100,//by now change this when novopayment its in
+            "accountNumber" => $idhightech,
+            "accountId" => $targetAccount,
+            "value" => $value
+        ));
+        $answer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postRegisterDevolution', array('request'=>$request), array('_format' => 'json'));
+
+        if ($answer->getStatusCode() != 200) {
+            $mesange = "not so good man";
+        } else {
+            $pod->setPurchaseOrdersStatus($devolutionState);
+            $em->persist($pod);
+            $em->flush();
+        }
+        return $this->redirectToRoute("show_rejected_pods");
 
     }
 
@@ -318,7 +408,7 @@ class BackOfficeController extends Controller
         /** @var Employer $employer */
         $employer = $user->getPersonPerson()->getEmployer();
         /** @var Document $cedula */
-        $cedula = $action->getPersonPerson()->getDocByType("Cedula");
+        $cedula = $action->getPersonPerson()->getDocumentDocument();
         if ($cedula) {
             if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
                 $pathCedula = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
@@ -342,7 +432,7 @@ class BackOfficeController extends Controller
             $employerHasEmployee = null;
         }
         if($employerHasEmployee == null){
-            return $this->render('RocketSellerTwoPickBundle:BackOffice:checkRegister.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action,'employerHasEmployee'=>$employerHasEmployee,'cedula'=>$cedula,'path_document'=>$pathCedula,'nameDoc'=>$nameCedula));
+            return $this->render('RocketSellerTwoPickBundle:BackOffice:checkRegister.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action,'cedula'=>$cedula,'path_document'=>$pathCedula,'nameDoc'=>$nameCedula));
         }else{
             return $this->render('RocketSellerTwoPickBundle:BackOffice:checkEmployee.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action,'employerHasEmployee'=>$employerHasEmployee,'cedula'=>$cedula,'path_document'=>$pathCedula,'nameDoc'=>$nameCedula));
         }
@@ -427,7 +517,7 @@ class BackOfficeController extends Controller
         /** @var Employer $employer */
         $employer = $user->getPersonPerson()->getEmployer();
         /** @var Document $cedula */
-        $cedula = $action->getPersonPerson()->getDocByType("Cedula");
+        $cedula = $action->getPersonPerson()->getDocumentDocument();
         if ($cedula) {
             if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
                 $pathCedula = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
@@ -440,7 +530,7 @@ class BackOfficeController extends Controller
             $pathCedula='';
             $nameCedula='';
         }
-        $rut = $action->getPersonPerson()->getDocByType("Rut");
+        $rut = $action->getPersonPerson()->getRutDocument();
         if ($rut) {
             if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
                 $pathRut = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
@@ -470,10 +560,8 @@ class BackOfficeController extends Controller
         $person = $action->getPersonPerson();
         /** @var User $user */
         $user =  $action->getUserUser();
-        /** @var Employer $employer */
-        $employer = $user->getPersonPerson()->getEmployer();
         /** @var Document $cedula */
-        $mandato = $action->getPersonPerson()->getDocByType("Mandato");
+        $mandato = $action->getPersonPerson()->getEmployer()->getMandatoryDocument();
         if ($mandato) {
             if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
                 $pathMandato = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($mandato->getMediaMedia(), 'reference');
@@ -486,7 +574,6 @@ class BackOfficeController extends Controller
             $pathMandato='';
             $nameMandato='';
         }
-
         return $this->render('RocketSellerTwoPickBundle:BackOffice:ValidateMandato.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action, 'mandato'=>$mandato,'path_document'=>$pathMandato,'nameDoc'=>$nameMandato));
     }
 
@@ -503,24 +590,30 @@ class BackOfficeController extends Controller
         $person = $action->getPersonPerson();
         /** @var User $user */
         $user =  $action->getUserUser();
+        /** @var Employee $employee */
+        $employee = $action->getPersonPerson()->getEmployee();
         /** @var Employer $employer */
-        $employer = $user->getPersonPerson()->getEmployer();
+        $employer = $action->getUserUser()->getPersonPerson()->getEmployer();
         /** @var Document $cedula */
-        $contrato= $action->getPersonPerson()->getDocByType('Contrato',$user->getPersonPerson()->getEmployer()->getIdEmployer());
-        if ($contrato) {
+        $eHE = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")->findOneBy(array('employerEmployer'=>$employer,'employeeEmployee'=>$employee));
+        /** @var Contract $contract */
+        $contract = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:Contract")->findOneBy(array('employerHasEmployeeEmployerHasEmployee'=>$eHE,'state'=>1));
+        if($contract)
+            $docContrato = $contract->getDocumentDocument();
+        if ($docContrato) {
             if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
-                $pathContrato = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($contrato->getMediaMedia(), 'reference');
-                $nameContrato = $contrato->getMediaMedia()->getName();
+                $pathContrato = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($docContrato->getMediaMedia(), 'reference');
+                $nameContrato = $docContrato->getMediaMedia()->getName();
             }else{
-                $pathContrato = 'https://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($contrato->getMediaMedia(), 'reference');
-                $nameContrato = $contrato->getMediaMedia()->getName();
+                $pathContrato = 'https://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($docContrato->getMediaMedia(), 'reference');
+                $nameContrato = $docContrato->getMediaMedia()->getName();
             }
         }else{
             $pathContrato='';
             $nameContrato='';
         }
 
-        return $this->render('RocketSellerTwoPickBundle:BackOffice:ValidateContract.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action, 'contrato'=>$contrato,'path_document'=>$pathContrato,'nameDoc'=>$nameContrato));
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:ValidateContract.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action, 'contrato'=>$docContrato,'path_document'=>$pathContrato,'nameDoc'=>$nameContrato, 'contract'=>$contract));
     }
 
     public function viewDocumentsAction($idAction)
@@ -535,7 +628,7 @@ class BackOfficeController extends Controller
         /** @var Employer $employer */
         $employer = $user->getPersonPerson()->getEmployer();
         /** @var Document $cedula */
-        $cedula = $action->getPersonPerson()->getDocByType("Cedula");
+        $cedula = $action->getPersonPerson()->getDocumentDocument();
         if ($cedula) {
             if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
                 $pathCedula = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
@@ -548,7 +641,7 @@ class BackOfficeController extends Controller
             $pathCedula='';
             $nameCedula='';
         }
-        $rut = $action->getPersonPerson()->getDocByType("Rut");
+        $rut = $action->getPersonPerson()->getRutDocument();
         if ($rut) {
             if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
                 $pathRut = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
@@ -578,11 +671,12 @@ class BackOfficeController extends Controller
         $person = $action->getPersonPerson();
         /** @var User $user */
         $user =  $action->getUserUser();
-
         /** @var Employer $employer */
         $employer = $user->getPersonPerson()->getEmployer();
+        /** @var Employee $employee */
+        $employee = $person->getEmployee();
         /** @var Document $cedula */
-        $cedula = $action->getPersonPerson()->getDocByType("Cedula");
+        $cedula = $action->getPersonPerson()->getDocumentDocument();
         if ($cedula) {
             if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
                 $pathCedula = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
@@ -595,7 +689,9 @@ class BackOfficeController extends Controller
             $pathCedula='';
             $nameCedula='';
         }
-        $carta = $action->getPersonPerson()->getDocByType("Carta autorización Symplifica",$user->getPersonPerson()->getEmployer()->getIdEmployer());
+        $eHE = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")->findOneBy(array('employeeEmployee'=>$employee,'employerEmployer'=>$employer));
+        if($eHE)
+            $carta = $eHE->getAuthDocument();
         if ($carta) {
             if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
                 $pathCarta = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($carta->getMediaMedia(), 'reference');
@@ -609,7 +705,7 @@ class BackOfficeController extends Controller
             $nameCarta='';
         }
 
-        return $this->render('RocketSellerTwoPickBundle:BackOffice:ValidateEmployeeDocuments.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action, 'cedula'=>$cedula,'path_document'=>$pathCedula,'nameDoc'=>$nameCedula ,'carta'=>$carta,'pathCarta'=>$pathCarta,'nameCarta'=>$nameCarta));
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:ValidateEmployeeDocuments.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action, 'cedula'=>$cedula,'path_document'=>$pathCedula,'nameDoc'=>$nameCedula ,'carta'=>$carta,'pathCarta'=>$pathCarta,'nameCarta'=>$nameCarta,'eHE'=>$eHE));
     }
 
     public function viewEmployeeDocumentsAction($idAction)
@@ -620,11 +716,12 @@ class BackOfficeController extends Controller
         $person = $action->getPersonPerson();
         /** @var User $user */
         $user =  $action->getUserUser();
-
         /** @var Employer $employer */
         $employer = $user->getPersonPerson()->getEmployer();
+        /** @var Employee $employee */
+        $employee = $person->getEmployee();
         /** @var Document $cedula */
-        $cedula = $action->getPersonPerson()->getDocByType("Cedula");
+        $cedula = $action->getPersonPerson()->getDocumentDocument();
         if ($cedula) {
             if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
                 $pathCedula = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
@@ -637,7 +734,9 @@ class BackOfficeController extends Controller
             $pathCedula='';
             $nameCedula='';
         }
-        $carta = $action->getPersonPerson()->getDocByType("Carta autorización Symplifica",$user->getPersonPerson()->getEmployer()->getIdEmployer());
+        $eHE = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")->findOneBy(array('employeeEmployee'=>$employee,'employerEmployer'=>$employer));
+        if($eHE)
+            $carta = $eHE->getAuthDocument();
         if ($carta) {
             if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
                 $pathCarta = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($carta->getMediaMedia(), 'reference');
@@ -651,7 +750,7 @@ class BackOfficeController extends Controller
             $nameCarta='';
         }
 
-        return $this->render('RocketSellerTwoPickBundle:BackOffice:ViewEmployeeDocuments.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action, 'cedula'=>$cedula,'path_document'=>$pathCedula,'nameDoc'=>$nameCedula ,'carta'=>$carta,'pathCarta'=>$pathCarta,'nameCarta'=>$nameCarta));
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:ViewEmployeeDocuments.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action, 'cedula'=>$cedula,'path_document'=>$pathCedula,'nameDoc'=>$nameCedula ,'carta'=>$carta,'pathCarta'=>$pathCarta,'nameCarta'=>$nameCarta,'eHE'=>$eHE));
     }
 
 
@@ -775,8 +874,8 @@ class BackOfficeController extends Controller
             if( $contract->getEmployerHasEmployeeEmployerHasEmployee()->getState() >= 4){
               $realSalary = 0;
               if($contract->getTimeCommitmentTimeCommitment()->getCode() == "XD"){
-                $realSalary = $contract->getSalary() / $contract->getWorkableDaysMonth();
-                $realSalary = $realSalary * (($contract->getWorkableDaysMonth() / 4) * 4.34523810);
+                $realSalary = $contract->getSalary() /*/ $contract->getWorkableDaysMonth()*/;
+                //$realSalary = $realSalary * (($contract->getWorkableDaysMonth() / 4) * 4.34523810);
               }
 
               // Logic to determine the contract planilla type
@@ -872,7 +971,7 @@ class BackOfficeController extends Controller
             $docToStart = $person->getDocument();
           }
 
-          //If already have resetted the tadabase, continues from the last generated document, otherwise starts at 712700
+          //If already have resetted the database, continues from the last generated document, otherwise starts at 712700
           if(abs(712700 - intval($docToStart)) > 20000){
             $docToStart = 712700;
           }
@@ -963,9 +1062,7 @@ class BackOfficeController extends Controller
               $this->addToHighTech($singleUser);
             }
           }
-          
-          //TODO remove this line
-
+	        
           return $this->redirectToRoute("back_office");
         }
 

@@ -23,253 +23,344 @@ use GuzzleHttp\Client;
 
 use EightPoints\Bundle\GuzzleBundle;
 
-  /**
-  * Contains the web service to be exposed to novopayment, it will be called
-  * by them when the dispersion process if finished.
-  *
-  */
+/**
+ * Contains the web service to be exposed to novopayment, it will be called
+ * by them when the dispersion process if finished.
+ *
+ */
 class HighTechRestController extends FOSRestController
 {
-  /**
-   * Verifies that the parameters to the web services, are in place and that
-   * have the ccorrect format.
-   * @param Array $parameters, Contains the parameters by the client.
-   * @param Array $regex, contains the key as parameter and a regex.
-   * @param Array $mandatory, contains a bool indicating if it is mandatory.
-   */
-   public function validateParamters($parameters, $regex, $mandatory)
-   {
+    /**
+     * Verifies that the parameters to the web services, are in place and that
+     * have the ccorrect format.
+     * @param array $parameters , Contains the parameters by the client.
+     * @param array $regex , contains the key as parameter and a regex.
+     * @param array $mandatory , contains a bool indicating if it is mandatory.
+     */
+    public function validateParamters($parameters, $regex, $mandatory)
+    {
 
-       foreach ($mandatory as $key => $value) {
-           if (array_key_exists($key, $mandatory) &&
-                   $mandatory[$key] &&
-                   (!array_key_exists($key, $parameters)))
-               throw new HttpException(422, "The parameter " . $key . " is empty");
+        foreach ($mandatory as $key => $value) {
+            if (array_key_exists($key, $mandatory) &&
+                $mandatory[$key] &&
+                (!array_key_exists($key, $parameters))
+            )
+                throw new HttpException(422, "The parameter " . $key . " is empty");
 
-           if (array_key_exists($key, $regex) &&
-                   array_key_exists($key, $parameters) &&
-                   !preg_match('/^' . $regex[$key] . '$/', $parameters[$key]))
-               throw new HttpException(422, "The format of the parameter " .
-               $key . " is invalid, it doesn't match" .
-               $regex[$key]);
+            if (array_key_exists($key, $regex) &&
+                array_key_exists($key, $parameters) &&
+                !preg_match('/^' . $regex[$key] . '$/', $parameters[$key])
+            )
+                throw new HttpException(422, "The format of the parameter " .
+                    $key . " is invalid, it doesn't match" .
+                    $regex[$key]);
 
-           if (!$mandatory[$key] && (!array_key_exists($key, $parameters)))
-               $parameters[$key] = '';
-       }
-   }
-
-  /**
-   * @POST("notificacion/recaudo")
-   * Get a notification of the collection of the money, to update in our system.<br/>
-   *
-   * @ApiDoc(
-   *   resource = true,
-   *   description = "Get a notification of the collection of the money,
-   *                  to update in our system.",
-   *   statusCodes = {
-   *     200 = "OK",
-   *     201 = "Accepted",
-   *     400 = "Bad Request",
-   *     401 = "Unauthorized"
-   *   }
-   * )
-   *
-   * @param Request $request.
-   * Rest Parameters:
-   *
-   * (name="numeroRadicado", nullable=false, requirements="([0-9])+", strict=true, description="the id of operation returned by HT in web service #8.")
-   * (name="estado", nullable=false, requirements="([0-9])+", strict=true, description="Status of the operation, where:
-   *                                                   0 OK, 90 Fondos Insuficientes, 91 Cuenta Embargada, 92 No Autorizada, 93 Cuenta No Existe."
-   *
-   * @return View
-   */
-  public function postCollectionNotificationAction(Request $request)
-  {
-    $parameters = $request->request->all();
-    $regex = array();
-    $mandatory = array();
-
-    // Set all the parameters info.
-    $regex['numeroRadicado'] = '([0-9])+'; $mandatory['numeroRadicado'] = true;
-    $regex['estado'] = '([0-9])+'; $mandatory['estado'] = true;
-
-    $this->validateParamters($parameters, $regex, $mandatory);
-    // Validate that the id exists.
-
-
-    $this->validateParamters($parameters, $regex, $mandatory);
-    $id = $parameters['numeroRadicado'];
-    $state = $parameters['estado'];
-    // Validate that the id exists.
-    $dispersion = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrders");
-
-    /** @var PurchaseOrders $dis */
-    $dis = $dispersion->findOneBy(array('radicatedNumber' => $id));
-    if ($dis == null) {
-      throw new HttpException(404, "The id: " . $id . " was not found.");
+            if (!$mandatory[$key] && (!array_key_exists($key, $parameters)))
+                $parameters[$key] = '';
+        }
     }
-    $em = $this->getDoctrine()->getManager();
-    if($dis->getAlreadyRecived()==1){
-      $view = View::create();
-      $retorno = $view->setStatusCode(200)->setData(array('already'=>"sent"));
-      return $retorno;
-    }else{
-      $dis->setAlreadyRecived(1);
-      $em->persist($dis);
-      $em->flush();
+
+    /**
+     * @POST("notificacion/recaudo")
+     * Get a notification of the collection of the money, to update in our system.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Get a notification of the collection of the money,
+     *                  to update in our system.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     201 = "Accepted",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized"
+     *   }
+     * )
+     *
+     * @param Request $request .
+     * Rest Parameters:
+     *
+     * (name="numeroRadicado", nullable=false, requirements="([0-9])+", strict=true, description="the id of operation returned by HT in web service #8.")
+     * (name="estado", nullable=false, requirements="([0-9])+", strict=true, description="Status of the operation, where:
+     *                                                   0 OK, 90 Fondos Insuficientes, 91 Cuenta Embargada, 92 No Autorizada, 93 Cuenta No Existe."
+     *
+     * @return View
+     */
+    public function postCollectionNotificationAction(Request $request)
+    {
+        $parameters = $request->request->all();
+        $regex = array();
+        $mandatory = array();
+
+        // Set all the parameters info.
+        $regex['numeroRadicado'] = '([0-9])+';
+        $mandatory['numeroRadicado'] = true;
+        $regex['estado'] = '([0-9])+';
+        $mandatory['estado'] = true;
+
+        $this->validateParamters($parameters, $regex, $mandatory);
+        // Validate that the id exists.
+
+
+        $this->validateParamters($parameters, $regex, $mandatory);
+        $id = $parameters['numeroRadicado'];
+        $state = $parameters['estado'];
+        // Validate that the id exists.
+        $dispersion = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrders");
+
+        /** @var PurchaseOrders $dis */
+        $dis = $dispersion->findOneBy(array('radicatedNumber' => $id));
+        if ($dis == null) {
+            throw new HttpException(404, "The id: " . $id . " was not found.");
+        }
+        $em = $this->getDoctrine()->getManager();
+        if ($dis->getAlreadyRecived() == 1) {
+            $view = View::create();
+            $retorno = $view->setStatusCode(200)->setData(array('already' => "sent"));
+            return $retorno;
+        } else {
+            $dis->setAlreadyRecived(1);
+            $em->persist($dis);
+            $em->flush();
+        }
+        $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
+        $retorno = null;
+        if ($state == 0) {
+            // I will update it to id 5.
+            $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => '00'));
+            //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
+            $dis->setPurchaseOrdersStatus($pos);
+            $answer = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getDispersePurchaseOrder', ['idPurchaseOrder' => $dis->getIdPurchaseOrders()]);
+            if ($answer->getStatusCode() != 200) {
+                $mesange = "not so good man";
+            } else {
+                $mesange = "all good man";
+            }
+
+            //this will happen on the recaudo
+            /** @var Config $ucfg */
+            $ucfg = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Config")->findOneBy(array('name' => 'ufg'));
+            $invoiceNumber = intval($ucfg->getValue()) + 1;
+            $ucfg->setValue($invoiceNumber);
+            $dis->setInvoiceNumber($invoiceNumber);
+            $em->persist($ucfg);
+            $em->persist($dis);
+            $em->flush();
+
+            $userEmail = $dis->getIdUser()->getUsernameCanonical();
+            $fechaRecaudo = new DateTime();
+            $value = $dis->getValue();
+            $employerPerson = $dis->getIdUser()->getPersonPerson();
+            //TODO-Andres enviar el correo que el recaudo se relizó satisfactoriamente
+            //TODO-Andres Adjuntar la factura
+
+        } else {
+            $userEmail = $dis->getIdUser()->getUsernameCanonical();
+            $fechaRechazo = new DateTime();
+            $value = $dis->getValue();
+            $employerPerson = $dis->getIdUser()->getPersonPerson();
+            //nicetohave buscar este ID
+            $paymethodId = $dis->getPayMethodId();
+
+            //TODO-Andres enviar el correo a "" notificando que no se pudo hacer la transaccion con la informacion de, la fecha del rechazo, el monto, el empleador(nombres, telefono,correo)
+            // también a backoffice, notificando la misma informaciónla info la saca de las variables de arriba
+
+
+            $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => 'P1'));
+            //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
+            $dis->setPurchaseOrdersStatus($pos);
+            $date = new DateTime('01-01-0001 00:00:00');
+            $dis->setDatePaid($date);
+        }
+        $em->persist($dis);
+        $em->flush();
+        $view = View::create();
+        $retorno = $view->setStatusCode(200)->setData(array("mesange" => $mesange));
+        return $retorno;
+
+
     }
-    $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
-    $retorno = null;
-    if($state == 0) {
-      // I will update it to id 5.
-      $pos=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'00'));
-               //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
-      $dis->setPurchaseOrdersStatus($pos);
-      $answer=$this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getDispersePurchaseOrder', ['idPurchaseOrder' => $dis->getIdPurchaseOrders()]);
-      if($answer->getStatusCode()!=200){
-        $mesange="not so good man";
-        //TODO persistir algo en la bd que diga que algo segurmente pasó con la cuenta
-      }else{
-        $mesange="all good man";
-      }
-    } else {
-      //TODO enviar el correo a "" notificando que no se pudo hacer la transaccion con la informacion de, la fecha del rechazo, el monto, el empleador(nombres, telefono,correo) y el empleado(nombres, numero de cuenta),
 
-      $pos=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'P1'));
-               //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
-      $dis->setPurchaseOrdersStatus($pos);
-      $date = new DateTime('01-01-0001 00:00:00');
-      $dis->setDatePaid($date);
+    /**
+     * @POST("notificacion/pago")
+     * Get a notification of the payment, to update in our system.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Get a notification of the payment, to update in our system.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     201 = "Accepted",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized"
+     *   }
+     * )
+     *
+     * @param Request $request .
+     * Rest Parameters:
+     *
+     * (name="numeroRadicado", nullable=false, requirements="([0-9])+", strict=true, description="the id of operation returned by HT in web service #8.")
+     * (name="estado", nullable=false, requirements="([0-9])+", strict=true, description="Status of the operation, where:
+     *                                                   0 OK, 90 Fondos Insuficientes, 91 Cuenta Embargada, 92 No Autorizada, 93 Cuenta No Existe."
+     *
+     * @return View
+     */
+    public function postPaymentNotificationAction(Request $request)
+    {
+        $parameters = $request->request->all();
+        $regex = array();
+        $mandatory = array();
+
+        // Set all the parameters info.
+        $regex['numeroRadicado'] = '([0-9])+';
+        $mandatory['numeroRadicado'] = true;
+        $regex['estado'] = '([0-9])+';
+        $mandatory['estado'] = true;
+
+
+        $this->validateParamters($parameters, $regex, $mandatory);
+
+        $id = $parameters['numeroRadicado'];
+        $state = $parameters['estado'];
+        $payRepository = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Pay");
+
+        /** @var Pay $pay */
+        $pay = $payRepository->findOneBy(array('idDispercionNovo' => $id));
+        if ($pay == null) {
+            throw new HttpException(404, "The id: " . $id . " was not found.");
+        }
+        $em = $this->getDoctrine()->getManager();
+        $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
+        $retorno = null;
+        if ($state == 0) {
+            $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => '-1'));
+            //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
+            $pay->setPurchaseOrdersStatusPurchaseOrdersStatus($pos);
+            $pay->getPurchaseOrdersDescription()->setPurchaseOrdersStatus($pos);
+            //TODO-Andres enviar el correo que la dispersión se relizó satisfactoriamente
+            //TODO-Andres Adjuntar el comprobante si aplica
+            if($pay->getPurchaseOrdersDescription()->getProductProduct()->getSimpleName()=="PN"){
+                //esto significa que hay que enviar el comporbante
+
+            }
+
+        } else {
+            $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => '-2'));
+            //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
+            $pay->setPurchaseOrdersStatusPurchaseOrdersStatus($pos);
+            $pay->getPurchaseOrdersDescription()->setPurchaseOrdersStatus($pos);
+            $view = View::create();
+
+
+            $rejectedPurchaseOrderDescription = $pay->getPurchaseOrdersDescription();
+            $employerPerson = $rejectedPurchaseOrderDescription->getPurchaseOrders()->getIdUser()->getPersonPerson();
+            $rejectDate = new DateTime();
+            $value = $rejectedPurchaseOrderDescription->getValue();
+            $product = $rejectedPurchaseOrderDescription->getProductProduct();
+            //TODO-Andres enviar el correo a "" notificando que no se pudo hacer la transaccion con la informacion de, la fecha del rechazo, el monto, el empleador(nombres, telefono,correo)
+
+
+
+        }
+        $em->persist($pay);
+        $em->flush();
+
+        // Succesfull operation.
+        $view = View::create();
+        $view->setStatusCode(200);
+        $view->setData([]);
+        return $view;
+
     }
-    $em->persist($dis);
-    $em->flush();
-    $view = View::create();
-    $retorno = $view->setStatusCode(200)->setData(array("mesange"=>$mesange));
-    return $retorno;
 
+    /**
+     * @POST("notificacion/registro")
+     * Get a notification of the payment, to update in our system.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Get a notification of the payment, to update in our system.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     201 = "Accepted",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized"
+     *   }
+     * )
+     *
+     * @param Request $request .
+     * Rest Parameters:
+     *
+     * (name="numeroRadicado", nullable=false, requirements="([0-9])+", strict=true, description="the id of operation returned by HT in web service #8.")
+     * (name="estado", nullable=false, requirements="([0-9])+", strict=true, description="Status of the operation, where:
+     *                                                   0 OK, 90 Fondos Insuficientes, 91 Cuenta Embargada, 92 No Autorizada, 93 Cuenta No Existe."
+     *
+     * @return View
+     */
+    public function postPaymentSubscriptionAction(Request $request)
+    {
+        $parameters = $request->request->all();
+        $regex = array();
+        $mandatory = array();
 
-  }
+        // Set all the parameters info.
+        $regex['numeroRadicado'] = '([0-9])+';
+        $mandatory['numeroRadicado'] = true;
+        $regex['estado'] = '([0-9])+';
+        $mandatory['estado'] = true;
 
-  /**
-   * @POST("notificacion/pago")
-   * Get a notification of the payment, to update in our system.<br/>
-   *
-   * @ApiDoc(
-   *   resource = true,
-   *   description = "Get a notification of the payment, to update in our system.",
-   *   statusCodes = {
-   *     200 = "OK",
-   *     201 = "Accepted",
-   *     400 = "Bad Request",
-   *     401 = "Unauthorized"
-   *   }
-   * )
-   *
-   * @param Request $request.
-   * Rest Parameters:
-   *
-   * (name="numeroRadicado", nullable=false, requirements="([0-9])+", strict=true, description="the id of operation returned by HT in web service #8.")
-   * (name="estado", nullable=false, requirements="([0-9])+", strict=true, description="Status of the operation, where:
-   *                                                   0 OK, 90 Fondos Insuficientes, 91 Cuenta Embargada, 92 No Autorizada, 93 Cuenta No Existe."
-   *
-   * @return View
-   */
-  public function postPaymentNotificationAction(Request $request)
-  {
-    $parameters = $request->request->all();
-    $regex = array();
-    $mandatory = array();
+        $this->validateParamters($parameters, $regex, $mandatory);
 
-    // Set all the parameters info.
-    $regex['numeroRadicado'] = '([0-9])+'; $mandatory['numeroRadicado'] = true;
-    $regex['estado'] = '([0-9])+'; $mandatory['estado'] = true;
+        // Succesfull operation.
+        $view = View::create();
+        $view->setStatusCode(200);
+        $view->setData([]);
+        return $view;
 
-
-
-    $this->validateParamters($parameters, $regex, $mandatory);
-
-    $id = $parameters['numeroRadicado'];
-    $state = $parameters['estado'];
-    $payRepository = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Pay");
-
-    /** @var Pay $pay */
-    $pay = $payRepository->findOneBy(array('idDispercionNovo' => $id));
-    if ($pay == null) {
-      throw new HttpException(404, "The id: " . $id . " was not found.");
     }
-    $em = $this->getDoctrine()->getManager();
-    $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
-    $retorno = null;
-    if($state == 0) {
-      $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'-1'));
-               //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
-      $pay->setPurchaseOrdersStatusPurchaseOrdersStatus($pos);
-      $pay->getPurchaseOrdersDescription()->setPurchaseOrdersStatus($pos);
-    } else {
-      $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'-2'));
-               //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
-      $pay->setPurchaseOrdersStatusPurchaseOrdersStatus($pos);
-      $pay->getPurchaseOrdersDescription()->setPurchaseOrdersStatus($pos);
-      $view = View::create();
 
-      //TODO(gabriel.montero): Aca se debe crear una notificicacion tanto para el backoffice, como para el usuario
-      //TODO enviar el correo a "" notificando que no se pudo hacer la transaccion con la informacion de, la fecha del rechazo, el monto, el empleador(nombres, telefono,correo) y el empleado(nombres, numero de cuenta),
-      // Indicando que la transaccion no fue exitosa y se debe revisar la informacion del empleado.
-      // Esto tambien debe disparar una accion que cuente un tiempo y retorne la plata automaticamente si no hay cambios.
+    /**
+     * @POST("notificacion/registro")
+     * Get a notification of the payment, to update in our system.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Get a notification of the payment, to update in our system.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized"
+     *   }
+     * )
+     *
+     * @param Request $request .
+     * Rest Parameters:
+     *
+     * (name="methodId", nullable=false, requirements="([0-9])+", strict=true, description="the id of operation returned by HT in web service #8.")
+     * (name="estado", nullable=false, requirements="([0-9])+", strict=true, description="Status of the operation, where:
+     *                                                   0 OK, 90 NOTOk."
+     *
+     * @return View
+     */
+    public function postAccountSubscriptionAction(Request $request)
+    {
+        $parameters = $request->request->all();
+        $regex = array();
+        $mandatory = array();
+
+        // Set all the parameters info.
+        $regex['methodId'] = '([0-9])+';
+        $mandatory['methodId'] = true;
+        $regex['estado'] = '([0-9])+';
+        $mandatory['estado'] = true;
+
+        $this->validateParamters($parameters, $regex, $mandatory);
+
+        // Succesfull operation.
+        $view = View::create();
+        $view->setStatusCode(200);
+        $view->setData([]);
+        return $view;
+
     }
-    $em->persist($pay);
-    $em->flush();
-
-    // Succesfull operation.
-    $view = View::create();
-    $view->setStatusCode(200);
-    $view->setData([]);
-    return $view;
-
-  }
-
-  /**
-   * @POST("notificacion/registro")
-   * Get a notification of the payment, to update in our system.<br/>
-   *
-   * @ApiDoc(
-   *   resource = true,
-   *   description = "Get a notification of the payment, to update in our system.",
-   *   statusCodes = {
-   *     200 = "OK",
-   *     201 = "Accepted",
-   *     400 = "Bad Request",
-   *     401 = "Unauthorized"
-   *   }
-   * )
-   *
-   * @param Request $request.
-   * Rest Parameters:
-   *
-   * (name="numeroRadicado", nullable=false, requirements="([0-9])+", strict=true, description="the id of operation returned by HT in web service #8.")
-   * (name="estado", nullable=false, requirements="([0-9])+", strict=true, description="Status of the operation, where:
-   *                                                   0 OK, 90 Fondos Insuficientes, 91 Cuenta Embargada, 92 No Autorizada, 93 Cuenta No Existe."
-   *
-   * @return View
-   */
-  public function postPaymentSubscriptionAction(Request $request)
-  {
-    $parameters = $request->request->all();
-    $regex = array();
-    $mandatory = array();
-
-    // Set all the parameters info.
-    $regex['numeroRadicado'] = '([0-9])+'; $mandatory['numeroRadicado'] = true;
-    $regex['estado'] = '([0-9])+'; $mandatory['estado'] = true;
-
-    $this->validateParamters($parameters, $regex, $mandatory);
-
-    // Succesfull operation.
-    $view = View::create();
-    $view->setStatusCode(200);
-    $view->setData([]);
-    return $view;
-
-  }
 
 }

@@ -36,15 +36,17 @@ class NoveltyController extends Controller {
         $noveltyTypeToShow=new ArrayCollection();
 
         $payRollRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
+	      /** @var Payroll $payRol */
         $payRol = $payRollRepo->find($idPayroll);
         $empId = $payRol->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getIdEmployerHasEmployee();
 
         /** @var NoveltyType $NT */
         foreach ($noveltyTypes as $NT) {
-            if($NT->getGrupo()!="no_show"){
+            if($NT->getGrupo()!="no_show" && strpos($NT->getDisplayOn(), $payRol->getContractContract()->getTimeCommitmentTimeCommitment()->getCode() ) !== false){
                 $noveltyTypeToShow->add($NT);
             }
-            if(!isset($noveltyTypesGroups[$NT->getGrupo()])&&$NT->getGrupo()!="no_show"){
+
+            if(!isset($noveltyTypesGroups[$NT->getGrupo()])&&$NT->getGrupo()!="no_show" && strpos($NT->getDisplayOn(), $payRol->getContractContract()->getTimeCommitmentTimeCommitment()->getCode() ) !== false ){
                 $noveltyTypesGroups[$NT->getGrupo()]=$NT->getGrupo();
             }
         }
@@ -96,7 +98,7 @@ class NoveltyController extends Controller {
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function addNoveltyAction($idPayroll, $noveltyTypeId, Request $request) {
-        $payRollRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
+    	  $payRollRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
         /** @var Payroll $payRol */
         $payRol = $payRollRepo->find($idPayroll);
         if ($payRol == null) {
@@ -144,30 +146,134 @@ class NoveltyController extends Controller {
         $form = $this->createForm(new NoveltyForm($requiredFields, /*$hasDocuments*/ false,$this->generateUrl("novelty_add",array("noveltyTypeId"=>$noveltyType->getIdNoveltyType(),"idPayroll"=>$idPayroll)),$idPayroll), $novelty);// This is because Camilo wanted that its simple to the user to create novelties
         $form->handleRequest($request);
         if ($form->isValid()) {
-            //check if novelty date start is valid
-            if($novelty->getDateStart()!=null){
-                $plus=$payRol->getPeriod()==4?24:14;
-                $dateEndPayroll=new DateTime();
-                $dateEndPayroll->setDate($payRol->getYear(),$payRol->getMonth(),1+$plus);
-                if($novelty->getDateStart()>$dateEndPayroll){
-                    return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
-                        'form' => $form->createView(),
-                        'errno'=> 'La fecha no puede ser mayor a la fecha de terminación del periodo de nómina! '.$dateEndPayroll->format("Y-m-d")
-                    ));
-                }
-            }
+
+	          $utils = $this->get('app.symplifica_utils');
+
+	          $constrainList = $novelty->getNoveltyTypeNoveltyType()->getRequiredFields();
+
+	          /** @var NoveltyTypeFields $constrain */
+	          foreach ($constrainList as $constrain){
+	          	if($constrain->getColumnName() == "date_start" && $constrain->getDisplayable() == true){
+	          		if($novelty->getDateStart() == null){
+				          return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
+					          'form' => $form->createView(),
+					          'errno'=> 'No pueden haber campos vacios, completelos antes de continuar'
+				          ));
+			          }
+			          else{
+				          //Calls dedicated function to evaluate the constrain of Dates
+				          $isValidD = $utils->novelty_date_constrain_to_date_validation($constrain->getNoveltyDataConstrain(), $novelty->getDateStart(), $payRol);
+
+				          if($isValidD[0] == false){
+					          return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
+						          'form' => $form->createView(),
+						          'errno'=> $isValidD[1]
+					          ));
+				          }
+			          }
+		          }
+
+		          //The last if is necessary since the vacation end date has a special condition
+		          if($constrain->getColumnName() == "date_end" && $constrain->getDisplayable() == true && $novelty->getNoveltyTypeNoveltyType()->getPayrollCode()!=145){
+			          if($novelty->getDateEnd() == null){
+				          return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
+					          'form' => $form->createView(),
+					          'errno'=> 'No pueden haber campos vacios, completelos antes de continuar'
+				          ));
+			          }
+			          else{
+				          //Calls dedicated function to evaluate the constrain of Dates
+				          $isValidD = $utils->novelty_date_constrain_to_date_validation($constrain->getNoveltyDataConstrain(), $novelty->getDateEnd(), $payRol);
+
+				          if($isValidD[0] == false){
+					          return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
+						          'form' => $form->createView(),
+						          'errno'=> $isValidD[1]
+					          ));
+				          }
+			          }
+		          }
+
+		          if($constrain->getColumnName() == "amount" && $constrain->getDisplayable() == true){
+			          if($novelty->getAmount() == null){
+				          return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
+					          'form' => $form->createView(),
+					          'errno'=> 'No pueden haber campos vacios, completelos antes de continuar'
+				          ));
+			          }
+			          else{
+			          	//Calls dedicated function to evaluate the constrain of Amount
+				          $isValidA = $utils->novelty_amount_constrain_validation($constrain->getNoveltyDataConstrain(), $novelty->getAmount(), $payRol->getContractContract());
+
+				          if($isValidA[0] == false){
+					          return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
+						          'form' => $form->createView(),
+						          'errno'=> $isValidA[1]
+					          ));
+				          }
+			          }
+		          }
+
+		          if($constrain->getColumnName() == "units" && $constrain->getDisplayable() == true){
+			          if($novelty->getUnits() == null){
+				          return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
+					          'form' => $form->createView(),
+					          'errno'=> 'No pueden haber campos vacios, completelos antes de continuar'
+				          ));
+			          }
+			          else{
+				          //Calls dedicated function to evaluate the constrain of Units
+				          $isValidA = $utils->novelty_units_constrain_validation($constrain->getNoveltyDataConstrain(), $novelty->getUnits());
+
+				          if($isValidA[0] == false){
+					          return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
+						          'form' => $form->createView(),
+						          'errno'=> $isValidA[1]
+					          ));
+				          }
+			          }
+		          }
+
+		          //String just needs to not be empty
+		          if($constrain->getColumnName() == "description" && $constrain->getDisplayable() == true){
+			          if($novelty->getDescription() == null){
+				          return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
+					          'form' => $form->createView(),
+					          'errno'=> 'No pueden haber campos vacios, completelos antes de continuar'
+				          ));
+			          }
+		          }
+	          }
+
             //si es una novedad de vacaciones
             if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode()==145){
-                $request->setMethod("GET");
-                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getValidVacationDaysContract',array(
-                    "dateStart"=>$novelty->getDateStart()->format("Y-m-d"),
-                    "dateEnd"=>$novelty->getDateEnd()->format("Y-m-d"),
-                    "contractId"=>$payRol->getContractContract()->getIdContract(),
-                    "payrollId"=>"-1",
-                    ), array('_format' => 'json'));
-                $days=json_decode($insertionAnswer->getContent(),true)["days"];
-                $novelty->setUnits($days);
+
+            	if($novelty->getDateEnd() <= $novelty->getDateStart()) {
+		            return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
+			            'form' => $form->createView(),
+			            'errno'=> 'El rango de fechas para las vacaciones no es valido'
+		            ));
+            	}
+
+              $request->setMethod("GET");
+              $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getValidVacationDaysContract',array(
+                  "dateStart"=>$novelty->getDateStart()->format("Y-m-d"),
+                  "dateEnd"=>$novelty->getDateEnd()->format("Y-m-d"),
+                  "contractId"=>$payRol->getContractContract()->getIdContract(),
+                  "payrollId"=>"-1",
+                  ), array('_format' => 'json'));
+              $days=json_decode($insertionAnswer->getContent(),true)["days"];
+
+	            if($days > 45) {
+		            return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
+			            'form' => $form->createView(),
+			            'errno'=> 'El rango de fechas excede el máximo número de días permitido (45)'
+		            ));
+	            }
+
+              $novelty->setUnits($days);
             }
+
             $novelty->setName($noveltyType->getName());
             $payRol->addNovelty($novelty);
             $em = $this->getDoctrine()->getEntityManager();
@@ -184,10 +290,10 @@ class NoveltyController extends Controller {
                 $em->flush();
                 return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
                     'form' => $form->createView(),
-                    'errno'=> 'No Se pudo agregar la novedad intente mas tarde!'
+                    'errno'=> 'No se pudo agregar la novedad, intente más tarde, si el problema persiste, pongase en contacto con nosotros'
                 ));
             }
-            if ( !$this->checkNoveltyFulfilment($novelty, $form)) {
+            if ( !$this->checkNoveltyFulfilment($novelty, $form)) { //Crea las notificaciones de los documentos asociados
                 /** @var User $user */
                 $user = $this->getUser();
                 $notification = $notification=$this->createNotification(null,1,null,"","Faltan llenar algunos datos de la novedad " . $novelty->getName(),"Novedad Incompleta","Completar","alert",$user->getPersonPerson());
@@ -301,7 +407,7 @@ class NoveltyController extends Controller {
         $requiredFields = $noveltyType->getRequiredFields();
         /** @var NoveltyTypeFields $field */
         foreach ($requiredFields as $field) {
-            if ($form->get($field->getColumnName())->getData() == null)
+            if ($field->getDisplayable()==true && $form->get($field->getColumnName())->getData() == null )
                 return false;
         }
         return true;
@@ -325,16 +431,17 @@ class NoveltyController extends Controller {
             'employee' => $novelty->getSqlPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()));
     }
 
-    public function  updateWorkedDaysAction($empId, $idNovelty, $daysAmount){
-
+    public function  updateWorkedDaysAction($empId, $idNovelty, $daysAmount, $idPerson = -1){
       $request = $this->container->get('request');
 
       $noveltyRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Novelty");
       $novelty=$noveltyRepo->findOneBy(array('idNovelty' => $idNovelty));
 
-      $user = $this->getUser();
-
-      if($user->getPersonPerson()->getIdPerson() != $novelty->getSqlPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson()->getIdPerson()){
+      if($idPerson == -1) {
+        $user = $this->getUser();
+        $idPerson = $user->getPersonPerson()->getIdPerson();
+      }
+      if($idPerson != $novelty->getSqlPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson()->getIdPerson()){
         return $this->redirectToRoute('show_dashboard');
       }
 
@@ -352,7 +459,8 @@ class NoveltyController extends Controller {
           "employee_id"=>$empId,
           "novelty_consec"=>$info['NOV_CONSEC']
       ));
-      $deleteAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postDeleteNoveltyEmployee', array('_format' => 'json'));
+
+      $deleteAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postDeleteNoveltyEmployee',array('request'=>$request), array('_format' => 'json'));
       if($deleteAnswer->getStatusCode()!=200){
           return $this->redirectToRoute('show_dashboard');
       }
@@ -369,7 +477,7 @@ class NoveltyController extends Controller {
           "novelty_base"=>$novelty->getSqlValue() / $novelty->getUnits()
       ));
 
-      $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddNoveltyEmployee', array('_format' => 'json'));
+      $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddNoveltyEmployee', array('request' => $request ), array('_format' => 'json'));
       if($insertionAnswer->getStatusCode()!=200){
           return $this->redirectToRoute('show_dashboard');
       }

@@ -4,12 +4,14 @@ namespace RocketSeller\TwoPickBundle\Controller;
 use Doctrine\DBAL\Query\QueryBuilder;
 use RocketSeller\TwoPickBundle\Entity\City;
 use RocketSeller\TwoPickBundle\Entity\Department;
+use RocketSeller\TwoPickBundle\Entity\Document;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use FOS\RestBundle\Controller\FOSRestController;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\Phone;
@@ -395,6 +397,48 @@ class PersonRestController extends FOSRestController
                 }
                 $em->persist($user);
                 $em->flush();
+                //here we send back the CC to the view so it filters in the nex screen
+                $empWorkplaces = $employer->getWorkplaces();
+                $depsToBeFullfilled = new ArrayCollection();
+                /** @var Workplace $empWorkplace */
+                foreach ($empWorkplaces as $empWorkplace) {
+                    $tempDept = $empWorkplace->getDepartment();
+                    if(!$depsToBeFullfilled->contains($tempDept)){
+                        $depsToBeFullfilled->add($tempDept);
+                    }
+                }
+                $ccToBefullfilled = array();
+                $realDepartments = new ArrayCollection();
+                $flag=0;
+                /** @var Department $deps */
+                foreach ($depsToBeFullfilled as $deps) {
+                    if($deps->getDepartmentCode()=="11"||$deps->getDepartmentCode()=="25"){
+                        if($flag==0){
+                            $flag=1;
+                        }else{
+                            //this means that there are more the one employee that belong to cundinamarca an bogota
+                            //so we dont get the entities
+                            continue;
+                        }
+                    }
+                    $ccToBefullfilled[$deps->getIdDepartment()]=$deps->getEntities();
+                    $realDepartments->add($deps);
+                }
+                $entities = $employer->getEntities();
+                $counter=0;
+                /** @var EmployerHasEntity $entity */
+                foreach ($entities as $entity) {
+                    /** @var Department $realDepartment */
+                    foreach ($realDepartments as $realDepartment) {
+                        /** @var Department $tempiDep */
+                        foreach ($entity->getEntityEntity()->getDepartments() as $tempiDep) {
+                            if($tempiDep->getIdDepartment()==$realDepartment->getIdDepartment()){
+                                $counter++;
+                            }
+                        }
+                    }
+                }
+
                 if ($employer->getEmployerHasEmployees()->count() == 0) {
                     $view->setData(array('url' => $this->generateUrl('register_employee', array('id' => -1, 'tab' => 1))))->setStatusCode(200);
                 } elseif ($user->getStatus() == 2 ) {
@@ -403,7 +447,7 @@ class PersonRestController extends FOSRestController
                 else {
                     $view->setStatusCode(200);
                 }
-                return $view;
+                return $view->setData(array("Severances"=>count($ccToBefullfilled)-$counter));
             } else {
                 $view = $this->getErrorsView($errors);
                 return $view;
@@ -613,6 +657,46 @@ class PersonRestController extends FOSRestController
         }
         $view = View::create($msgs);
         $view->setStatusCode(400);
+
+        return $view;
+    }
+
+    /**
+     * Link existing documents to the person and deleting the previous relation<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Link existing documents to the person from the antique database Schema",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when error"
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function postLinkPersonsDocumentsAction()
+    {
+        $msgs = "Linking persons documents<br>";
+        $msgs = $msgs." Crossing the persons in database<br>";
+        //getting all the persons in the database
+        $persons = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:Person")->findAll();
+        //crossing the persons to find their documents
+        /** @var Person $person */
+        foreach ($persons as $person){
+            //if person docs array is not clear
+            if(!$person->getDocs()->clear()){
+                //Crossing person documents
+                /** @var Document $document */
+                foreach ($person->getDocs() as $document){
+                    if($document->getDocumentTypeDocumentType()->getDocCode()=='CC'){
+                          //todo action
+                    }
+                }
+            }
+        }
+        $view = View::create($msgs);
+        $view->setStatusCode(200);
 
         return $view;
     }

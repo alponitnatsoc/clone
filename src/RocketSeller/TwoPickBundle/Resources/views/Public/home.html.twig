@@ -20,33 +20,59 @@
     	<header>
         	<!--aca va el nav que ya esta hecho-->
         	<div id="banner">
-            	<div id="cont-banner">
+							<div id="headForm">
+								<div class="contHeadForm">
+									<h1>Paga, afilia y administra a
+									tus empleados desde tu hogar</h1>
+									<p>
+										Descubre los beneficios de hacer las cosas bien
+									</p>
+									<div class="formCont">
+										<form>
+											<input class="inputHalf" type="text" name="firstname" placeholder="Nombre">
+											<input class="inputHalf" type="text" name="firstname" placeholder="Apellido"><br />
+											<input class="inputFull" type="text" name="firstname" placeholder="Celular"><br />
+											<input class="inputFull" type="text" name="firstname" placeholder="Correo electrónico">
+											<button class="btn naranja obten">Obtén 1 mes gratis</button>
+										</form>
+									</div>
+								</div>
+							</div>
+            	<!--<div id="cont-banner">
                 	<div id="tbanner1">
                     	<h1 class="bold">Somos el área de nómina de los pequeños empleadores</h1>
                         <p class="light-italic">La herramienta más sencilla para administrar empleados domésticos</p>
                     </div>
                     <div id="tbanner2">
                     	<a href="/register"><div id="btn-prueba" class="semi-italic">Regístrate ahora</div></a>
-                        <!--<a href="#openModal"><div class="btn-video semi-italic">Ver video</div></a>-->
+                        <!-<a href="#openModal"><div class="btn-video semi-italic">Ver video</div></a>->
                     </div>
-                </div>
+                </div>-->
             </div>
         </header>
 
-        <!-------------------- The Modal------------------------ -->
+        <!-------------------The Modal-------------------------->
 
 
         <div id="openModal" class="modalDialog">
-            <div>	<a href="#close" title="Close" class="close" onclick="stopVideo()">X</a>
 
-                <iframe id="mainVideoFrame" width="100%" height="400" src="https://www.youtube.com/embed/ScMzIvxBSi4" frameborder="0" allowfullscreen></iframe>
+            <div>
+							<div class="xdiv">
+								<a href="#close" title="Close" class="close" onclick="stopVideo()">Cerrar</a>
+							</div>
+							<video controls id="myvideo" loop>
+							  <source src="{{ asset('public/video/benenficios.mp4') }}"></source>
+							</video>
             </div>
         </div>
 
-         <!-------------------- beneficios------------------------ -->
+         <!--------------------beneficios-------------------------->
         <section>
+					<div class="titleSec">
+						<h2 class="light grisclarofont">Soluciona cada mes, en un solo lugar todo lo relacionado a la gestión de tus empleados </h2>
+					</div>
         	<div id="beneficios" class="section group">
-            	<h2 class="light grisclarofont">Soluciona cada mes, en un solo lugar todo lo relacionado a la gestión de tus empleados </h2>
+
                 <div class="col span_1_of_4 beneficios">
                 	<img src="{{ asset('public/img/landing/benefit1.png') }}" alt="">
                 	<h3 class="light">Contratación guiada</h3>
@@ -58,7 +84,7 @@
                 	<img src="{{ asset('public/img/landing/benefit2.png') }}" alt="">
                 	<h3 class="light beneh3">Fácil afiliación</h3>
 
-                	<p class="light-italic">Te afiliamos a ti y a tu empleado a las administradoras de seguridad social
+                	<p class="light">Te afiliamos a ti y a tu empleado a las administradoras de seguridad social
 
 </p>
                 </div>
@@ -67,20 +93,20 @@
                 	<img src="{{ asset('public/img/landing/benefit3.png') }}" alt="">
                 	<h3 class="light">Pago electrónico</h3>
 
-                	<p class="light-italic">Te ahorramos tiempo gestionando tus pagos y aportes con un solo clic</p>
+                	<p class="light">Te ahorramos tiempo gestionando tus pagos y aportes con un solo clic</p>
                 </div>
 
                 <div class="col span_1_of_4 beneficios">
                 	<img src="{{ asset('public/img/landing/benefit4.png') }}" alt="">
                 	<h3 class="light">Fácil administración</h3>
 
-                	<p class="light-italic">Administramos todos los detalles del día a día de tus empleados</p>
+                	<p class="light">Administramos todos los detalles del día a día de tus empleados</p>
                 </div>
             </div>
-            <a href="{{ path('beneficios') }}"><div class="callto naranja bold">› Beneficios</div></a>
+            <!--<a href="{{ path('beneficios') }}"><div class="callto naranja bold">› Beneficios</div></a>-->
         </section>
 
-        <!--<section>
+        <section>
         	<div id="video">
             	<div id="video-info">
                 	<a href="#openModal"><img src="{{ asset('public/img/home/play.png') }}" alt=""></a>
@@ -89,7 +115,7 @@
                     <a href="/register"><div class="callto2 naranja bold">Prueba un mes gratis</div></a>
                 </div>
             </div>
-        </section>-->
+        </section>
 
 				<section class="back">
 						<div id="cont-3precios" class="section group">
@@ -99,7 +125,7 @@
 							<div class="col span_1_of_3 centrar">
 									<img src="{{asset('public/img/home/parcial.png')}}">
 										<h3 style="font-size: 18px;" class="light-italic grisclarofont">Para empleados que laboran de <strong>1 a 2 días a la semana</strong></h3><br>
-										<div class="caja-precio">
+										<div class="caja-precio azuloscuro">
 											<p class="bold"><span class="extrabold span">$16.500</span><br>mensual<br>Por empleado</p>
 										</div>
 								</div>
@@ -107,7 +133,7 @@
 								<div class="col span_1_of_3 centrar">
 									<img src="{{asset('public/img/home/medio.png')}}">
 										<h3 style="font-size: 18px;" class="light-italic grisclarofont">Para empleados que laboran de <strong>3 a 4 días a la semana</strong></h3><br>
-										<div class="caja-precio">
+										<div class="caja-precio azuloscuro">
 											<p class="bold"><span class="extrabold span">$22.500</span><br>mensual<br>Por empleado</p>
 										</div>
 								</div>
@@ -115,7 +141,7 @@
 								<div class="col span_1_of_3 centrar">
 									<img src="{{asset('public/img/home/completo.png')}}">
 										<h3 style="font-size: 18px;" class="light-italic grisclarofont">Para empleados que laboran <strong>5 o más días a la semana</strong></h3><br>
-										<div class="caja-precio">
+										<div class="caja-precio azuloscuro">
 											<p class="bold"><span class="extrabold span">$29.500</span><br>mensual<br>Por empleado</p>
 										</div>
 								</div>

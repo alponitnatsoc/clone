@@ -69,20 +69,60 @@ security:
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
 
     access_control:
-        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/connect, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/, role: ROLE_ADMIN }
-        - { path: ^/login/.*, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/welcome, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/legal, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/dashboard, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/subscription, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/manage, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/payroll, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/liquidations/.*, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/backoffice, roles: ROLE_BACK_OFFICE }
+        - { path: ^/admin.*, roles: ROLE_ADMIN }
+        - { path: ^/backoffice.*, roles: ROLE_BACK_OFFICE }
+        - { path: ^/media.*, roles: ROLE_BACK_OFFICE }
+
+        - { path: ^/add.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/change-flag.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/choose.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/contract.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/datacredit.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/dashboard.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/daviplata.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/document.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/download.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/edit/.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/entity.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/employee.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/employer.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/express.*, roles: ROLE_BACK_OFFICE }
+        - { path: ^/export.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/help.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/invitation.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/legal-status.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/legal-payment.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/legal-assist.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/legal-acceptance.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/liquidation.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/logs.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/matrix.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/manage.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/notifications.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/novelty.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/nosotros-back.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/ordenes.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/old.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/pages.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/protest.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/paymentmethod.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/pay.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/pdf.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/welcome.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/registration.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/register/contract/.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/remove.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/routes.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/send-email.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/settings.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/subscription.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/subscripcion.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/user.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/usuario.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/view.*, roles: IS_AUTHENTICATED_FULLY }
+
+
+
         # Web services access.
         # 190.7.130.163, is the symplifica office ip.
         # 181.143.94.42, is the multiplica office ip.

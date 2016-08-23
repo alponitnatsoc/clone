@@ -14,13 +14,11 @@ function startEmployee() {
     var loadedEndDateYear = $("#register_employee_employeeHasEmployers_endDate_year").val();
 
     $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
-        console.log("3rd time")
         $.ajax({
           url: "//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js",
           dataType: "script",
           timeout: 4000
       }).done(function() {
-            console.log("4th time");
         validator = $("form[name='register_employee']").validate({
             //onfocusout: true,
             rules: {
@@ -42,7 +40,7 @@ function startEmployee() {
                 "register_employee[employeeHasEmployers][employeeType]": "required",
                 "register_employee[employeeHasEmployers][contractType]": "required",
                 "register_employee[employeeHasEmployers][timeCommitment]": "required",
-                "register_employee[employeeHasEmployers][sisben]": "required",
+                //"register_employee[employeeHasEmployers][sisben]": "required",
                 "register_employee[employeeHasEmployers][position]": "required",
                 "register_employee[employeeHasEmployers][workplaces]": "required",
                 "register_employee[employeeHasEmployers][transportAid]": "required",
@@ -81,7 +79,7 @@ function startEmployee() {
                 "register_employee[employeeHasEmployers][employeeType]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][contractType]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][timeCommitment]": "Por favor selecciona una opción",
-                "register_employee[employeeHasEmployers][sisben]": "Por favor selecciona una opción",
+                //"register_employee[employeeHasEmployers][sisben]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][position]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][workplaces]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][transportAid]": "Por favor selecciona una opción",
@@ -222,11 +220,11 @@ function startEmployee() {
           valid = false;
       }
 
-      if($("#register_employee_employeeHasEmployers_timeCommitment_2").prop("checked") == true){
+      /*if($("#register_employee_employeeHasEmployers_timeCommitment_2").prop("checked") == true){
         if (!validator.element($("[name='register_employee[employeeHasEmployers][sisben]']"))) {
             valid = false;
         }
-      }
+      }*/
 
       if (!validator.element($("#register_employee_employeeHasEmployers_workplaces"))) {
           valid = false;
@@ -267,7 +265,7 @@ function startEmployee() {
             $(".complete").each(function () {
                 $(this).hide();
             });
-            checkSisben();
+            //checkSisben();
         } else {
             $('#radio_diario').prop('checked', false);
             $('#radio_mensual').prop('checked', true);
@@ -281,7 +279,7 @@ function startEmployee() {
         calculator();
     });
 
-    var sisbenBut = $("input[name='register_employee[employeeHasEmployers][sisben]']");
+    /*var sisbenBut = $("input[name='register_employee[employeeHasEmployers][sisben]']");
     sisbenBut.change(function () {
       var selectedVal = $("input[name='register_employee[employeeHasEmployers][sisben]']:checked").parent().text();
 
@@ -289,7 +287,7 @@ function startEmployee() {
         showModal(21);
       }
       calculator();
-    });
+    });*/
 
     $("#register_employee_employeeHasEmployers_position").on("change", function () {
       calculator();
@@ -334,7 +332,7 @@ function startEmployee() {
         $(".complete").each(function () {
             $(this).hide();
         });
-        checkSisben();
+       // checkSisben();
     } else {
         $(".days").each(function () {
             $(this).hide();
@@ -615,9 +613,9 @@ function startEmployee() {
         var i = 0;
         var flagValid = true;
         var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
-        var sisben = $("input[name='register_employee[employeeHasEmployers][sisben]']:checked").parent().text();
+        //var sisben = $("input[name='register_employee[employeeHasEmployers][sisben]']:checked").parent().text();
 
-        if (selectedVal == " Trabajador por días"&&sisben==" Si") {
+        if (selectedVal == " Trabajador por días" /*&&sisben==" Si"*/) {
           /*  $(form).find("select[name*='[ars]']").each(function () {
                 if (!validator.element($(this))) {
                     flagValid = false;
@@ -689,7 +687,7 @@ function startEmployee() {
         if (!flagValid) {
             return;
         }
-        if (selectedVal == " Trabajador por días"&&sisben==" Si") {
+        if (selectedVal == " Trabajador por días" /*&&sisben==" Si"*/) {
             $("#register_employee_entities_wealth").val("");
         }/*else{
             $("#register_employee_entities_ars").val("");
@@ -932,6 +930,7 @@ function startEmployee() {
             showModal(13);
             return false;
         }
+        //TOGO
         if (!validateSalary()) {
             return false;
         }
@@ -954,6 +953,11 @@ function startEmployee() {
             }
         });
 
+        var sisbenS = null;
+        if( timeCommitment.val() == "2" ){
+            sisbenS = "1";
+        }
+
         $.ajax({
             url: $(this).attr('href'),
             type: 'POST',
@@ -973,7 +977,7 @@ function startEmployee() {
                 periodicityBenefits: periodicityBenef,
                 idWorkplace: idWorkplace.val(),
                 transportAid: $(form).find("input[name='register_employee[employeeHasEmployers][transportAid]']:checked").val(),
-                sisben: $(form).find("input[name='register_employee[employeeHasEmployers][sisben]']:checked").val(),
+                sisben: sisbenS,
                 //benefitsConditions: $(form).find("textarea[name='register_employee[employeeHasEmployers][benefitsConditions]']").val(),
                 employeeId: $(form).find("input[name='register_employee[idEmployee]']").val(),
                 startDate: $("#register_employee_employeeHasEmployers_startDate_year").val()+"-"+$("#register_employee_employeeHasEmployers_startDate_month").val()+"-"+$("#register_employee_employeeHasEmployers_startDate_day").val(),
@@ -1571,6 +1575,7 @@ var transportAidDaily;
 var vacations30D;
 var dotationDaily;
 var firstLoad = true;
+var lockCalc = false;
 function loadConstrains() {
     var constraints = null;
     $.ajax({
@@ -1646,12 +1651,14 @@ function calculator() {
     $("#diasTrabajadosMod").text("");
     var aid = 0;
     var aidD = 0;
-    var sisben = $("input[name='register_employee[employeeHasEmployers][sisben]']:checked").val();
+    var sisben = null;
     var transport = $("input[name='register_employee[employeeHasEmployers][transportAid]']:checked").val();
     if (type.parent().text() == " Trabajador por días") {
         type = "days";
-        numberOfDays=$("#register_employee_employeeHasEmployers_weekWorkableDays").val() * 4.34523810;
-        $("#diasTrabajadosMod").text("Los cálculos asumen que el empleado trabajará en promedio " + numberOfDays.toFixed(2) + " días al mes");
+        sisben = 1;
+        //numberOfDays=$("#register_employee_employeeHasEmployers_weekWorkableDays").val() * 4.34523810;
+        numberOfDays=$("#register_employee_employeeHasEmployers_weekWorkableDays").val() * 4;
+        $("#diasTrabajadosMod").text("Los cálculos asumen que el empleado trabajará " + numberOfDays/*.toFixed(2)*/ + " días al mes");
     } else {
         $("#diasTrabajadosMod").text("");
         type = "complete";
@@ -1702,7 +1709,11 @@ function calculator() {
             salaryD2 = (salaryD - transportAidDaily)+(PensEmployeeCal2/numberOfDays);
         }
 
+        console.log(salaryD2 + " vs " + smmlv/numberOfDays);
+
+        var displayError = false;
         if (salaryD2  > smmlv/numberOfDays || sisben == -1) {
+            displayError = true;
             if (((salaryD + transportAidDaily + aidD) * numberOfDays) > smmlv) {
                 base = (salaryD + aidD) * numberOfDays;
             } else {
@@ -1860,16 +1871,18 @@ function calculator() {
 
         if(type=="days"&& EPSEmployerCal>0 && sisben==1){
             $("#arsNotAplicable").show();
+            lockCalc = true;
         }else{
             $("#arsNotAplicable").hide();
+            lockCalc = false;
         }
 
-        if (sisben == -1 && type=="days"){
+        /*if ( displayError == true && type=="days" ){
             $("#dontHaveSisben").show();
         }
         else {
             $("#dontHaveSisben").hide();
-        }
+        }*/
     }
     // Calculate the days again.
     var i = 0;
@@ -1974,6 +1987,10 @@ function validateSalary() {
             return false;
         }
 
+        if(lockCalc == true){
+            return false;
+        }
+
     } else {
         var salarioMinimo = smmlv;
 
@@ -2056,16 +2073,19 @@ function payMethodListener() {
         var selectedVal = $hasIt.val();
         if (selectedVal == 0) {
             $hasIt.parent().parent().find(".form-group").not(".formFieldsNo").each(function () {
+                $hasIt.parent().parent().find( "label[for*='cellphone']" ).text("Celular del empleado que usará para Daviplata");
                 //$(this).hide();
             });
         } else {
             $hasIt.parent().parent().find(".form-group").each(function () {
+                $hasIt.parent().parent().find( "label[for*='cellphone']" ).text("Número celular Daviplata");
                 $(this).show();
             })
         }
         $hasIt.on("change", function () {
             var selectedVal = $(this).val();
             if (selectedVal == 1) {
+                $hasIt.parent().parent().find( "label[for*='cellphone']" ).text("Número celular Daviplata");
                 $hasIt.parent().parent().find(".form-group").each(function () {
                     $(this).show();
                 })
@@ -2074,6 +2094,7 @@ function payMethodListener() {
                 /*$hasIt.parent().parent().find(".form-group").not(".formFieldsNo").each(function () {
                     $(this).hide();
                 });*/
+                $hasIt.parent().parent().find( "label[for*='cellphone']" ).text("Celular del empleado que usará para Daviplata");
                 $("#noDaviplata").modal("show");
             }
         });
@@ -2189,7 +2210,8 @@ function reverseCalculator(){
   var aidD = 0;
   var sisben = $("input[name='register_employee[employeeHasEmployers][sisben]']:checked").val();
   var transport = $("input[name='register_employee[employeeHasEmployers][transportAid]']:checked").val();
-  var numberOfDays= $("#register_employee_employeeHasEmployers_weekWorkableDays").val() * 4.345;
+  //var numberOfDays= $("#register_employee_employeeHasEmployers_weekWorkableDays").val() * 4.345;
+  var numberOfDays= $("#register_employee_employeeHasEmployers_weekWorkableDays").val() * 4;
 
   var PensEmployeeCal = 0;
   var base = 0;

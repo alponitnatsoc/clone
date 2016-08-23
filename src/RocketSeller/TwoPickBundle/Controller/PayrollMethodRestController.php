@@ -266,8 +266,9 @@ class PayrollMethodRestController extends FOSRestController
                                 }else{
                                     $nextYear=$activePayrrol->getYear();
                                 }
-                                $newActivePayroll->setMonth($nextMonth);
-                                $newActivePayroll->setYear($nextYear);
+                                $temporalDate = new DateTime($nextYear."-".$nextMonth."-01");
+                                $newActivePayroll->setMonth($temporalDate->format("m"));
+                                $newActivePayroll->setYear($temporalDate->format("y"));
                                 $newActivePayroll->setPeriod($nextPeriod);
                                 $contract->addPayroll($newActivePayroll);
                                 $contract->setActivePayroll($newActivePayroll);

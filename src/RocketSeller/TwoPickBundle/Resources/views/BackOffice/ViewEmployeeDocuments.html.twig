@@ -16,7 +16,7 @@
                 <h4 class="col-md-6 panel-heading">CARTA DE AUTORIZACIÓN</h4>
             </div>
             <div class="col-md-12">
-                {% if person.docByType("Cedula")=='' %}
+                {% if person.documentDocument=='' %}
                     <div class="col-md-6" style="margin-top:250px; text-align:center">
                         <p>Llamar al cliente {{ user.personPerson.fullName}} y recordarle que suba la cedula de este empleado</p>
                     </div>
@@ -27,7 +27,7 @@
                     </div>
                 {% endif %}
 
-                {% if person.docByType("Carta autorización Symplifica",user.personPerson.employer.idEmployer)=='' %}
+                {% if eHE.authDocument=='' %}
                     <div class="col-md-6" style="margin-top:250px; text-align:center">
                         <p>Llamar al cliente {{ user.personPerson.fullName}} y recordarle que suba la carta de autorización para este empleado</p>
                     </div>
@@ -41,24 +41,22 @@
             <div class="panel panel-default">
                 <div class="col-sm-6" style="margin-top: 30px; text-align:center">
                     {% if nameDoc=='' and nameCarta==''%}
-
                     {% elseif nameCarta=='' %}
                         <h4>Descargar documentos</h4>
                         <p>{{ cedula.documentTypeDocumentType.name}} {{ person.fullName }}</p>
                         <p>El usuario no a subido la carta de autorizacón a Symplifica</p>
-                        <a class="btn btn-orange notAjax" href="{{ path('export_documents_person',{'idPerson':action.personPerson.idPerson})}}">Descargar</a>
+                        <a class="btn btn-orange notAjax" href="{{ path('export_document_by_id',{'idDoc':cedula.idDocument})}}">Descargar</a>
                         <br>
                     {% elseif nameDoc=='' %}
                         <h4>Descargar documentos</h4>
                         <p>El usuario no a subido la cedula de este empleado</p>
                         <p>{{ carta.documentTypeDocumentType.name }} {{ person.fullName }}</p>
-                        <a class="btn btn-orange notAjax" href="{{ path('export_documents_person',{'idPerson':action.personPerson.idPerson})}}">Descargar</a>
+                        <a class="btn btn-orange notAjax" href="{{ path('export_document_by_id',{'idDoc':carta.idDocument})}}">Descargar</a>
                         <br>
                     {% else %}
                         <h4>Descargar documentos</h4>
-                        <p>{{ cedula.documentTypeDocumentType.name }} {{ person.fullName }}</p>
-                        <p>{{ carta.documentTypeDocumentType.name }} {{ person.fullName }}</p>
-                        <a class="btn btn-orange notAjax" href="{{ path('export_documents_person',{'idPerson':action.personPerson.idPerson})}}">Descargar</a>
+                        <a class="btn btn-bitbucket notAjax" href="{{ path('export_document_by_id',{'idDoc':cedula.idDocument})}}" style="width: 230px;margin-bottom: 10px">Descargar Cédula</a>
+                        <a class="btn btn-bitbucket notAjax" href="{{ path('export_document_by_id',{'idDoc':carta.idDocument})}}" style="width: 230px;margin-bottom: 10px">Descargar Carta Autorización</a>
                         <br>
                     {% endif %}
                     <br>
@@ -67,7 +65,7 @@
             <div class="col-sm-6" style="margin-top: 20px; text-align:center">
                 <div>
                     <h4>Generar archivo Excel</h4>
-                    <a class="btn btn-orange notAjax" href="{{ path('back_person_cvs_export', {'idAction':action.idAction })}}">Generar</a>
+                    <a class="btn btn-orange notAjax" target="_blank" href="{{ path('back_person_cvs_export', {'idAction':action.idAction })}}">Generar</a>
                     <br>
                 </div>
             </div>

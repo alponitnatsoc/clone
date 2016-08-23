@@ -26,18 +26,12 @@ class LoadProcedureTypeData extends AbstractFixture implements OrderedFixtureInt
         $procedureTypeSubirPlanilla->setName('Subir Planillas');
         $procedureTypeSubirPlanilla->setCode('SPL');
         $manager->persist($procedureTypeSubirPlanilla);
-
-        $procedureTypeEmpleado = new ProcedureType();
-        $procedureTypeEmpleado->setName('Registro empleado');
-        $procedureTypeEmpleado->setCode('RE');
-        $manager->persist($procedureTypeEmpleado);
         
         $manager->flush();
 
         $this->addReference('procedureType-registro', $procedureTypeInscription);
         $this->addReference('procedureType-pila', $procedureTypePagoPila);
         $this->addReference('procedureType-planilla', $procedureTypeSubirPlanilla);
-        $this->addReference('procedureType-empleado', $procedureTypeEmpleado);
     }
     public function getOrder()
     {

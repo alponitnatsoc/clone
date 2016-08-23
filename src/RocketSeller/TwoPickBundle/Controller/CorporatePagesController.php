@@ -18,12 +18,6 @@ class CorporatePagesController extends Controller
                 // ...
             ));    }
 
-    public function preguntasFrecuentesAction()
-    {
-        return $this->render('RocketSellerTwoPickBundle:CorporatePages:preguntas-frecuentes.html.twig', array(
-                // ...
-            ));    }
-
     public function politicaPrivacidadAction()
     {
         return $this->render('RocketSellerTwoPickBundle:CorporatePages:politicas-de-privacidad.html.twig', array(

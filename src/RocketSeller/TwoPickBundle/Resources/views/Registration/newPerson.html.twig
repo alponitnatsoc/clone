@@ -100,14 +100,14 @@
         {{ form_start(form) }}
 
         <ul id="formNav" class="nav-justified nav-4-tabs">
-            <li class="active"><a data-toggle="tab" data-target="#basicData">Datos básicos</a></li>
-            <li><a data-toggle="tab" data-target="#contactData">Datos de contacto</a></li>
-            <li><a data-toggle="tab" data-target="#workplacesData">Lugares de trabajo</a></li>
-            <li><a data-toggle="tab" data-target="#employerEntities">Tus entidades</a></li>
+            <li {%   if tab==1 %} class="active" {% endif %}><a data-toggle="tab" data-target="#basicData">Datos básicos</a></li>
+            <li {%   if tab==2 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contactData">Datos de contacto</a></li>
+            <li {%   if tab==3 %} class="active" {% endif %}><a data-toggle="tab" data-target="#workplacesData">Lugares de trabajo</a></li>
+            <li {%   if tab==4 %} class="active" {% endif %}><a data-toggle="tab" data-target="#employerEntities">Tus entidades</a></li>
         </ul>
 
         <div class="tab-content">
-            <div id="basicData" class="tab-pane fade in active">
+            <div id="basicData" class="tab-pane fade in {%   if tab==1 %} active {% endif %}">
                 {# render the task's only field: description #}
                 <div class="formulario col-xs-12">
                     <div class="col-md-11 col-sm-12 col-xs-12 blockUpData content-input" style="border-bottom: none;">
@@ -200,7 +200,7 @@
                 <br /><br />
             </div>
 
-            <div id="contactData" class="tab-pane fade in">
+            <div id="contactData" class="tab-pane fade in {%   if tab==2 %} active {% endif %}">
                 <div class="formulario col-xs-12">
 
                     <div class="col-sm-12 col-xs-12 blockUpData">
@@ -219,7 +219,7 @@
                                         {{ form_row(phone.id) }}
                                         <div class="col-sm-6 label-group">
                                             {{ form_label(phone.phoneNumber)}}
-                                            <br><span style="font-size:12px;position:relative;bottom:10px; color:#CCC">Enviaremos un codigo de seguridad a este numero</span>
+                                            <br><span style="font-size:12px;position:relative;bottom:10px; color:#1fcecb">Enviaremos un código de seguridad a este número</span>
                                         </div>
                                         <div class="col-sm-6 form-group input">
                                             {{ form_widget(phone.phoneNumber)}}
@@ -258,7 +258,7 @@
                 </div>
             </div>
 
-            <div id="workplacesData" class="tab-pane fade h3">
+            <div id="workplacesData" class="tab-pane fade in {%   if tab==3 %} active {% endif %}">
                 <div class="col-xs-12 formulario">
                     <div class="col-sm-12 blockUpData content-input" style="border-bottom: none;">
 
@@ -326,7 +326,7 @@
                     <br /><br />
                 </div>
             </div>
-            <div id="employerEntities" class="tab-pane fade in">
+            <div id="employerEntities" class="tab-pane fade in {%   if tab==4 %} active {% endif %}">
                 <div class="formulario" style="padding-top: 30px; border-bottom: 1px solid #E6E7E8;">
 
                     <div class="col-sm-12 col-xs-12 border">

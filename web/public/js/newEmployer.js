@@ -87,9 +87,9 @@ function startEmployer() {
     });
     var $collectionHolderPhones;
     var $addPhoneLink = $('<a href="#" class="add_phone_link" style="padding-top:2px !important;padding:10px;color:#00cdcc;text-decoration: none;"><i class="fa fa-plus-circle fa-2x" style="vertical-align: middle; color:#00cdcc;font-size:18px;"></i> <span style="display: inline;font-size:13px">Agregar otro lugar de trabajo</span></a>');
-    var $addSeveranceLink = $('<a href="#" class="add_severance_link" style="padding-top:2px !important;padding:10px;color:#00cdcc;text-decoration: none;margin-top:10px;display:block;"><i class="fa fa-plus-circle fa-2x" style="vertical-align: middle; color:#00cdcc;font-size:18px;"></i> <span style="display: inline;font-size:13px;">Agregar otra caja de compensación</span></a>');
+    var $addSeveranceLink = $('<a href="#" class="add_severance_link hidden" style="padding-top:2px !important;padding:10px;color:#00cdcc;text-decoration: none;margin-top:10px;display:block;"><i class="fa fa-plus-circle fa-2x" style="vertical-align: middle; color:#00cdcc;font-size:18px;"></i> <span style="display: inline;font-size:13px;">Agregar otra caja de compensación</span></a>');
     var $newLinkLi = $('<li class="col-md-12 text-center" id="addWorkplace"></li>').append($addPhoneLink);
-    var $newLinkSeveranceLi = $('<li class="col-md-12 text-center" id="addSeverance"></li>').append($addSeveranceLink);
+    var $newLinkSeveranceLi = $('<li id="newSeveranceLinkLi" class="col-md-12 text-center" id="addSeverance"></li>').append($addSeveranceLink);
     var $collectionHolder;
     $collectionHolderPhones = $('ul.phones');
     var $collectionHolderSeverances = $('ul.severances');
@@ -133,11 +133,11 @@ function startEmployer() {
 
         });
     });
-    $addSeveranceLink.on('click', function (e) {
+    /*$addSeveranceLink.on('click', function (e) {
         // prevent the link from creating a "#" on the URL
         e.preventDefault();
         addSeveranceForm($collectionHolderSeverances, $newLinkSeveranceLi);
-    });
+    });*/
 
     // count the current form inputs we have (e.g. 2), use that as the new
     // index when inserting a new item (e.g. 2)
@@ -386,47 +386,7 @@ function startEmployer() {
     if (dropDownWork == 1 && $("input[name='register_employer[sameWorkHouse]']:checked").val() != '0') {
         //$('ul.workplaces').hide();
     }
-    /* $('#register_employer_numberOfWorkplaces').val($dropDownWork);
-     //listener para el que agrega workplaces
-     $('#register_employer_numberOfWorkplaces').change(function() {
-     // get the numberof Workplaces that the user wants
-     console.log($collectionHolder.data('index'));
-     var workplacesCount= $(this).val();
-     // get the new index the numer of workplaces that the user has on screen
-     var index = parseInt($collectionHolder.data('index'));
-     var diference=workplacesCount-index;
-     if (diference<0) {
-     //remove the diference of workplaces;
-     diference=diference+1;
-     for (var i = diference; i <= 0; i++) {
-     $('#workSpace_'+(index)).remove();
-     console.log("Index Dele:" + index );
-     index=parseInt(index)-1;
-     };
-     $collectionHolder.data('index', workplacesCount);
 
-
-     }
-     else{
-     //add the diference of workplaces
-     for (var i = 0; i < diference; i++) {
-     // Get the data-prototype explained earlier
-     var prototype = $collectionHolder.data('prototype');
-     // Replace '__name__' in the prototype's HTML to
-     // instead be a number based on how many items we have
-     var newForm = prototype.replace(/__name__/g, index);
-     // increase the index with one for the next item
-     $collectionHolder.data('index', index + 1);
-     index=parseInt(index)+1;
-     console.log("Index New:" + index );
-     // Display the form in the page in an li, before the "Add a tag" link li
-     var $newFormLi = $('<li id="workSpace_'+ index +'" class="workSpaceLi"></li>').append('<div class="col-sm-12 col-xs-12" style="border-bottom: 1px solid rgba(0, 0, 0, 0);"><div class="col-sm-12 col-xs-12">'+newForm+'</div></div>');
-     $collectionHolder.append($newFormLi);
-     }
-     //add the corresponding listeners
-     addListeners();
-     }
-     });*/
     $("[name='register_employer']").on("submit", function (e) {
         e.preventDefault();
 
@@ -504,6 +464,19 @@ function startEmployer() {
                 workDepartment: departments
             }
         }).done(function (data) {
+            var times=0;
+            if($("#register_employer_severances_0_severancesAC").val()==""){
+                times = parseInt(data["Severances"])-1;
+            }else{
+                times = parseInt(data["Severances"]);
+            }
+            var $collectionHolderSeverances = $('ul.severances');
+            var newlinliseverance = $("#newSeveranceLinkLi");
+            for(var i=0;i<times;i++){
+                addSeveranceForm($collectionHolderSeverances, newlinliseverance);
+            }
+
+
             $('.nav-justified > .active').next('li').find('a').trigger('click');
         }).fail(function (jqXHR, textStatus, errorThrown) {
             if(jqXHR==errorHandleTry(jqXHR)){

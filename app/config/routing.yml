@@ -30,7 +30,15 @@ legal_acceptance:
     path:      /legal-acceptance/{state}
     defaults:  { _controller: RocketSellerTwoPickBundle:LegalAssistance:legalAcceptance, state: incorrect}
 
-
+show_pod_description:
+    path:     /show/pod/description/{idPOD}
+    defaults: { _controller: RocketSellerTwoPickBundle:Pay:showPODDescription}
+user_retry_pay_po:
+    path:     /user/back/retry/pay/{idPO}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:retryPay}
+user_return_pay_pod:
+    path:     /user/back/return/pay/{idPOD}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:returnMoneyPay}
 data_credit_questions:
     path:      /datacredit/check/{userId}
     defaults:  { _controller: RocketSellerTwoPickBundle:Subscription:askDataCreditQuestions}
@@ -43,9 +51,6 @@ registration_confirmed_start:
 matrix_choose:
     path:      /matrix/choose/{tab}
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:matrixChoose, tab: 3}
-testzip:
-    path:      /export/user/documents
-    defaults:  { _controller: RocketSellerTwoPickBundle:Export:exportDocuments}
 testcvs:
     path:      /export/user/fields
     defaults:  { _controller: RocketSellerTwoPickBundle:Export:generateCsv}
@@ -72,7 +77,7 @@ documentos:
     defaults:  { _controller: RocketSellerTwoPickBundle:Document:addDocument}
 
 documentos_employee:
-    path:      /document/add/{id}/{idDocumentType}/{idNotification}
+    path:      /document/add/{entityType}/{entityId}/{docCode}/{idNotification}
     defaults:  { _controller: RocketSellerTwoPickBundle:Document:addDoc , idNotification: 0}
 
 documentos_contract:
@@ -92,6 +97,14 @@ show_calculator_form:
 manage_contracts:
     path:      /manage/contracts/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Contract:showContracts }
+change_state_employer_employee:
+    path:      /manage/employee/change/state/{id}
+    defaults:  {_controller: RocketSellerTwoPickBundle:Employee:changeStateEmployee}
+manage_employees:
+    path:      /manage/employees
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:manageEmployees }
+
+
 add_contract:
     path:      /register/contract/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Contract:addContract }
@@ -237,8 +250,8 @@ show_form_entity:
     requirements:
         id:     \d+
 edit_profile:
-    path:      /register/edit/{step}
-    defaults:  { _controller: RocketSellerTwoPickBundle:Person:editPerson, step: 0 }
+    path:      /register/edit/{tab}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Person:editPerson, tab: 1 }
 edit_employer:
     path:      /employer/edit/{step}
     defaults:  { _controller: RocketSellerTwoPickBundle:Employer:editEmployer, step: 0 }
@@ -312,6 +325,7 @@ hwi_google_login:
 hwi_linkedin_login:
     pattern: /login/check-linkedin
 #
+
 #FOSRest
 rest_secured:
     type : rest
@@ -323,15 +337,18 @@ rest_public:
     resource : "routing_rest_public.yml"
     prefix : /api/public/v1
 #
+
 #Api Doc
 nelmio_apidoc:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
     prefix:   /api/doc/
 #
+
 #FOSUser
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
 #
+
 #Sonata Admin
 admin:
     resource: '@SonataAdminBundle/Resources/config/routing/sonata_admin.xml'
@@ -342,6 +359,7 @@ _sonata_admin:
     type: sonata_admin
     prefix: /admin
 #
+
 gallery:
     resource: '@SonataMediaBundle/Resources/config/routing/gallery.xml'
     prefix: /media/gallery
@@ -349,10 +367,6 @@ gallery:
 media:
     resource: '@SonataMediaBundle/Resources/config/routing/media.xml'
     prefix: /media
-
-export_document_byDocType:
-    path:     /Document/export/Person/{idPerson}/{idDocType}
-    defaults: { _controller: RocketSellerTwoPickBundle:Export:exportDocumentByPersonDocType }
 
 home_products:
     path:     /productos
@@ -481,16 +495,6 @@ welcome_post_register:
 view_document_contract_state:
     path: /contract/condition/{idEHE}
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:contractCondition }
-
-
-back_employer_menu:
-    path: /back-menu-employer/{id}
-    defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:menuEmployer }
-
-back_person_cvs_export:
-    path: /back-person-cvs-export/{idAction}
-    defaults:  { _controller: RocketSellerTwoPickBundle:Export:generateCsvByAction }
-
 express_registration_contract_employee:
     path: /express-registration/{id}/employee-contract/{idEmployee}
     defaults:  { _controller: RocketSellerTwoPickBundle:Contract:addContractExpress }
@@ -505,10 +509,6 @@ home_landing:
 beneficios:
     path:     /beneficios
     defaults: { _controller: RocketSellerTwoPickBundle:Public:beneficios }
-
-calculadora:
-    path:     /calculadora
-    defaults: { _controller: RocketSellerTwoPickBundle:Public:calculadora }
 
 precios:
     path:     /precios

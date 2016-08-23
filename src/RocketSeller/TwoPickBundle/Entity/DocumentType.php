@@ -41,6 +41,19 @@ class DocumentType
     private $refPdf;
 
     /**
+     * Set idDocumentType
+     *
+     * @param integer $idDocumentType
+     *
+     * @return DocumentType
+     */
+    public function setIdDocumentType($idDocumentType)
+    {
+        $this->idDocumentType = $idDocumentType;
+        return $this;
+    }
+
+    /**
      * Get idDocumentType
      *
      * @return integer
