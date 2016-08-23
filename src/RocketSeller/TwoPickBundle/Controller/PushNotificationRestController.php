@@ -79,11 +79,10 @@ class PushNotificationRestController extends FOSRestController
         curl_setopt($curl, CURLOPT_POSTFIELDS,     $post_body);
 
         $result = curl_exec($curl);
-        echo $result;
         curl_close($curl);
 
         $view = View::create();
         $view->setStatusCode(200);
-        return $view->setData(array());
+        return $view->setData(array('result'=>$result));
     }
 }
