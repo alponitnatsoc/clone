@@ -89,6 +89,10 @@
             {% set account = payMethod.cellphone %}
         {% endif %}
         {% set accountType = payMethod.accountTypeAccountType.name %}
+    {% else %}
+        {% set bank = "---" %}
+        {% set account = "---" %}
+        {% set accountType = "---" %}
     {% endif %}
     <div class="contenedorItem">
         <div class="h1cont">
