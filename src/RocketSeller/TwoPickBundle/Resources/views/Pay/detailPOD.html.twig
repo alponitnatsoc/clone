@@ -1,0 +1,76 @@
+{% extends "::base.html.twig" %}
+{% block content %}
+    <div class="page-header">
+        <small>Detalle del item</small>
+    </div>
+    {% if pod.productProduct.simpleName == "PN" %}
+        {% set payMethod = pod.payMethod %}
+        {% set bank = payMethod.bankBank.name %}
+        {% if payMethod.accountNumber != null %}
+            {% set account = payMethod.accountNumber %}
+        {% else %}
+            {% set account = payMethod.cellphone %}
+        {% endif %}
+        {% set accountType = payMethod.accountTypeAccountType.name %}
+    {% endif %}
+    <div class="row">
+        <div class="panel-heading">
+            <h3 class="panel-title">Detalle Orden de compra</h3>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Producto</h3>
+                </div>
+                <div class="panel-body">
+                    {{ pod.productProduct.name }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Valor</h3>
+                </div>
+                <div class="panel-body">
+                    {{ pod.value }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Banco</h3>
+                </div>
+                <div class="panel-body">
+                    {{ bank }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Tipo de Cuenta</h3>
+                </div>
+                <div class="panel-body">
+                    {{ accountType }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Número de Cuenta</h3>
+                </div>
+                <div class="panel-body">
+                    {{ account }}
+                </div>
+            </div>
+        </div>
+        {% if pod.paymentStatus == "-2" %}
+            <a href="{{ path('user_retry_pay_po',{'idPO':pod.purchaseOrders.idPurchaseOrders}) }}" class="notAjax">Reintentar</a><br/>
+            <a href="" class="notAjax">Cambiar Datos</a><br/>
+            <a href="{{ path('user_return_pay_pod',{'idPOD':pod.idPurchaseOrdersDescription}) }}" class="notAjax">Devolverme mi dinero</a><br/>
+        {% endif %}
+    </div>
+{% endblock %}

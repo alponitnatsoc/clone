@@ -26,7 +26,7 @@ class PersonController extends Controller
     * Maneja la edición de una  persona con los datos básicos,
     * @return La vista de el formulario de editar persona
     **/
-    public function editPersonAction()
+    public function editPersonAction($tab)
     {
 
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
@@ -100,7 +100,9 @@ class PersonController extends Controller
 
         return $this->render(
             'RocketSellerTwoPickBundle:Registration:newPerson.html.twig',
-            array('form' => $form->createView())
+            array(
+                'form' => $form->createView(),
+                'tab' => $tab)
         );
     }
     /*
