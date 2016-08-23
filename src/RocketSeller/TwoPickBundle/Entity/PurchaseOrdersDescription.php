@@ -375,4 +375,26 @@ class PurchaseOrdersDescription
     {
         return $this->dateToPay;
     }
+
+    /**
+     * Get payMethod
+     * @return null|PayMethod
+     */
+    public function getPayMethod()
+    {
+        if($this->getPayrollPayroll()!=null){
+            return $this->getPayrollPayroll()->getContractContract()->getPayMethodPayMethod();
+        }
+        return null;
+    }/**
+     * Get payment Status
+     * @return null|int
+     */
+    public function getPaymentStatus()
+    {
+        if($this->getPurchaseOrdersStatus()!=null){
+            return $this->getPurchaseOrdersStatus()->getIdNovoPay();
+        }
+        return null;
+    }
 }

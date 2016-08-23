@@ -92,6 +92,24 @@ class BackOfficeController extends Controller
 
     public function retryPayAction($idPO)
     {
+        /** @var User $user */
+        $user=$this->getUser();
+        $roles = $user->getRoles();
+        $poRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrders");
+        /** @var PurchaseOrders $realPO */
+        $realPO = $poRepo->find($idPO);
+        $flag=false;
+        if($realPO!=null && $user->getId()==$realPO->getIdUser()->getId()){
+            $flag=true;
+        }
+        foreach ($roles as $key=>$role) {
+            if($role=="ROLE_BACK_OFFICE")
+                $flag=true;
+        }
+        if(!$flag){
+            $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+            return $this->redirectToRoute("show_rejected_pods");
+        }
         $answer = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getDispersePurchaseOrder', ['idPurchaseOrder' => $idPO]);
         if ($answer->getStatusCode() != 200) {
             $mesange = "not so good man";
@@ -106,6 +124,23 @@ class BackOfficeController extends Controller
         $codesRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription");
         /** @var PurchaseOrdersDescription $pod */
         $pod = $codesRepo->find($idPOD);
+        /** @var User $user */
+        $user=$this->getUser();
+        $roles = $user->getRoles();
+        /** @var PurchaseOrders $realPO */
+        $realPO = $pod!=null ? $pod->getPurchaseOrders() : null;
+        $flag=false;
+        if($realPO!=null && $user->getId()==$realPO->getIdUser()->getId()){
+            $flag=true;
+        }
+        foreach ($roles as $key=>$role) {
+            if($role=="ROLE_BACK_OFFICE")
+                $flag=true;
+        }
+        if(!$flag){
+            $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+            return $this->redirectToRoute("show_rejected_pods");
+        }
         $idhightech = $pod->getPurchaseOrders()->getIdUser()->getPersonPerson()->getEmployer()->getIdHighTech();
         $targetAccount = $pod->getPurchaseOrders()->getPayMethodId();
         $value = $pod->getValue();

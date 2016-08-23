@@ -1,6 +1,7 @@
 <?php
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Entity\User;
@@ -20,6 +21,36 @@ class PayController extends Controller
 
     use EmployerHasEmployeeMethodsTrait;
     use PayMethodsTrait;
+
+    public function showPODDescriptionAction($idPOD){
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            throw $this->createAccessDeniedException();
+        }
+        $podRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription");
+        /** @var PurchaseOrdersDescription $realPod */
+        $realPod = $podRepo->find($idPOD);
+        if($this->getUser()->getId() == $realPod->getPurchaseOrders()->getIdUser()->getId()){
+            return $this->render('RocketSellerTwoPickBundle:Pay:detailPOD.html.twig', array(
+                "pod" => $realPod
+            ));
+        }
+        return $this->redirectToRoute("show_dashboard");
+    }
+
+    public function editPODDescriptionAction($idPOD){
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            throw $this->createAccessDeniedException();
+        }
+        $podRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription");
+        /** @var PurchaseOrdersDescription $realPod */
+        $realPod = $podRepo->find($idPOD);
+        if($this->getUser()->getId() == $realPod->getPurchaseOrders()->getIdUser()->getId()&&$realPod->getPurchaseOrdersStatus()->getIdNovoPay()=="-2"){
+            return $this->render('RocketSellerTwoPickBundle:Pay:detailPOD.html.twig', array(
+                "pod" => $realPod
+            ));
+        }
+        return $this->redirectToRoute("show_dashboard");
+    }
 
     /**
      * @param Request $request
