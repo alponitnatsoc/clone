@@ -34,8 +34,8 @@ list_pods_description:
     path:     /list/pods/description
     defaults: { _controller: RocketSellerTwoPickBundle:Pay:showListPODDescription}
 show_pod_description:
-    path:     /show/pod/description/{idPOD}
-    defaults: { _controller: RocketSellerTwoPickBundle:Pay:showPODDescription}
+    path:     /show/pod/description/{idPOD}/{notifRef}
+    defaults: { _controller: RocketSellerTwoPickBundle:Pay:showPODDescription, notifRef: -1}
 edit_pod_description:
     path:     /edit/pod/description/{idPOD}
     defaults: { _controller: RocketSellerTwoPickBundle:Pay:editPODDescription}
