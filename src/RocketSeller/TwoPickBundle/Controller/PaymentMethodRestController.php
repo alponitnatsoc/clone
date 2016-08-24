@@ -891,6 +891,19 @@ class PaymentMethodRestController extends FOSRestController
 
     private function rejectProcess(PurchaseOrdersDescription $pod)
     {
-        //TODO-Gabriel Relizar la lógica del rechazo
+        $notification= new Notification();
+        $notification->setAccion("Ver");
+        $notification->setStatus("1");
+        $notification->setDescription("El item de ". $pod->getProductProduct()->getName()." presentó un error");
+        $notification->setType("alert");
+        $notification->setPersonPerson($pod->getPurchaseOrders()->getIdUser()->getPersonPerson());
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($notification);
+        $em->flush();
+        $notification->setRelatedLink($this->generateUrl("show_pod_description" ,array(
+            'idPOD'=>$pod->getIdPurchaseOrdersDescription(),
+            'notifRef'=>$notification->getId())));
+        $em->persist($notification);
+        $em->flush();
     }
 }

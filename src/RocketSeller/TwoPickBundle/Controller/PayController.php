@@ -2,6 +2,7 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\PayType;
 use RocketSeller\TwoPickBundle\Entity\Phone;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
@@ -27,7 +28,7 @@ class PayController extends Controller
     use EmployerHasEmployeeMethodsTrait;
     use PayMethodsTrait;
 
-    public function showPODDescriptionAction($idPOD){
+    public function showPODDescriptionAction($idPOD,$notifRef){
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
         }
@@ -35,6 +36,17 @@ class PayController extends Controller
         /** @var PurchaseOrdersDescription $realPod */
         $realPod = $podRepo->find($idPOD);
         if($this->getUser()->getId() == $realPod->getPurchaseOrders()->getIdUser()->getId()){
+            if($notifRef!=-1){
+                $notRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Notification");
+                /** @var Notification $realNot */
+                $realNot=$notRepo->find($notifRef);
+                if($realNot!=null){
+                    $em=$this->getDoctrine()->getManager();
+                    $realNot->setStatus(0);
+                    $em->persist($realNot);
+                    $em->flush();
+                }
+            }
             return $this->render('RocketSellerTwoPickBundle:Pay:detailPOD.html.twig', array(
                 "pod" => $realPod
             ));
