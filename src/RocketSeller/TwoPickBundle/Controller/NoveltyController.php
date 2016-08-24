@@ -277,16 +277,19 @@ class NoveltyController extends Controller {
             'employee' => $novelty->getSqlPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()));
     }
 
-    public function  updateWorkedDaysAction($empId, $idNovelty, $daysAmount){
+    public function  updateWorkedDaysAction($empId, $idNovelty, $daysAmount, $idPerson = -1){
 
       $request = $this->container->get('request');
 
       $noveltyRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Novelty");
       $novelty=$noveltyRepo->findOneBy(array('idNovelty' => $idNovelty));
 
-      $user = $this->getUser();
+      if($idPerson == -1) {
+        $user = $this->getUser();
+        $idPerson = $user->getPersonPerson()->getIdPerson();
+      }
 
-      if($user->getPersonPerson()->getIdPerson() != $novelty->getSqlPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson()->getIdPerson()){
+      if($idPerson != $novelty->getSqlPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson()->getIdPerson()){
         return $this->redirectToRoute('show_dashboard');
       }
 
@@ -304,7 +307,7 @@ class NoveltyController extends Controller {
           "employee_id"=>$empId,
           "novelty_consec"=>$info['NOV_CONSEC']
       ));
-      $deleteAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postDeleteNoveltyEmployee', array('_format' => 'json'));
+      $deleteAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postDeleteNoveltyEmployee', array('request'=>$request), array('_format' => 'json'));
       if($deleteAnswer->getStatusCode()!=200){
           return $this->redirectToRoute('show_dashboard');
       }
@@ -321,7 +324,7 @@ class NoveltyController extends Controller {
           "novelty_base"=>$novelty->getSqlValue() / $novelty->getUnits()
       ));
 
-      $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddNoveltyEmployee', array('_format' => 'json'));
+      $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddNoveltyEmployee', array('request' => $request ), array('_format' => 'json'));
       if($insertionAnswer->getStatusCode()!=200){
           return $this->redirectToRoute('show_dashboard');
       }
