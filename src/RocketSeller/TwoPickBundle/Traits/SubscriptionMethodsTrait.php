@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Traits;
 
 use DateTime;
+use Doctrine\Common\Persistence\ObjectRepository;
 use FOS\RestBundle\View\View;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
@@ -22,7 +23,7 @@ use Doctrine\ORM\EntityManager;
 trait SubscriptionMethodsTrait
 {
 
-       use EmployeeMethodsTrait;
+    use EmployeeMethodsTrait;
 
     protected function findProductByNumDays($productos, $days)
     {
@@ -357,7 +358,7 @@ trait SubscriptionMethodsTrait
                         return false;
                     }
                     $dateToStart = new DateTime($dateToSend->format("Y") . "-" . (intval($dateToSend->format("m"))) . "-1");
-                    $dateToStart = new DateTime(date ( 'Y-m-d' , strtotime ( '+1 month' , strtotime ( $dateToStart->format("Y-m-d") ) ) ));
+                    $dateToStart = new DateTime(date('Y-m-d', strtotime('+1 month', strtotime($dateToStart->format("Y-m-d")))));
                 }
             }
             $request->setMethod("POST");
@@ -392,7 +393,7 @@ trait SubscriptionMethodsTrait
                 }
                 if ($eType->getPayrollCode() == "AFP") {
                     if ($entity->getPayrollCode() == 0) {
-                        $coverage = 2 ; //2 si es pensionado o  si no amporta
+                        $coverage = 2; //2 si es pensionado o  si no amporta
                     } else {
                         $coverage = 1;
                     }
@@ -615,7 +616,7 @@ trait SubscriptionMethodsTrait
         $employer = $person->getEmployer();
         $request = $this->container->get('request');
         $em = $this->getDoctrine()->getManager();
-        if($employer->getIdHighTech()==null){
+        if ($employer->getIdHighTech() == null) {
             $request->setMethod("POST");
             $request->request->add(array(
                 "documentType" => $person->getDocumentType(),
@@ -635,8 +636,8 @@ trait SubscriptionMethodsTrait
             $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postRegisterNaturalPerson', array('_format' => 'json'));
             //dump($insertionAnswer);
             //echo "Status Code Employer: " . $person->getNames() . " -> " . $insertionAnswer->getStatusCode();
-        }else{
-            $insertionAnswer=View::create();
+        } else {
+            $insertionAnswer = View::create();
             $insertionAnswer->setStatusCode(404);
         }
 
@@ -654,7 +655,7 @@ trait SubscriptionMethodsTrait
             /** @var EmployerHasEmployee $employeeC */
             foreach ($eHEes as $employeeC) {
                 //dump($employeeC);
-                if ($employeeC->getState() > 1 && $employeeC->getExistentHighTec()!=1 ) {
+                if ($employeeC->getState() > 1 && $employeeC->getExistentHighTec() != 1) {
                     //check if it exist
 
                     $contracts = $employeeC->getContracts();
@@ -715,6 +716,106 @@ trait SubscriptionMethodsTrait
             $this->addFlash('error', $insertionAnswer->getContent());
             return false;
         }
+        return true;
+    }
+
+    protected function addEmployeeToHighTech(EmployerHasEmployee $employeeC)
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        /* @var $person Person */
+        $person = $user->getPersonPerson();
+        /* @var $employer Employer */
+        $employer = $person->getEmployer();
+        $request = $this->container->get('request');
+        $em = $this->getDoctrine()->getManager();
+
+        //dump($employeeC);
+        if ($employeeC->getState() >= 3) {
+            //check if it exist
+
+            $contracts = $employeeC->getContracts();
+            /** @var Contract $cont */
+            $contract = null;
+            foreach ($contracts as $cont) {
+                if ($cont->getState() == 1) {
+                    $contract = $cont;
+                }
+            }
+
+            /* @var $payMC PayMethod */
+            $payMC = $contract->getPayMethodPayMethod();
+            /* @var $payType PayType */
+            $payType = $payMC->getPayTypePayType();
+
+            if ($payType->getPayrollCode() != 'EFE') {
+                $paymentMethodId = $payMC->getAccountTypeAccountType();
+                if ($paymentMethodId) {
+                    if ($payType->getName() == "Daviplata*") {
+                        $paymentMethodId = "DP";
+                    } else {
+                        $paymentMethodId = $payMC->getAccountTypeAccountType()->getName() == "Ahorros" ? "AH" : ($payMC->getAccountTypeAccountType()->getName() == "Corriente" ? "CC" : "EN");
+                    }
+                }
+                //TODO change this as the same of the dispersion
+                $paymentMethodAN = $payMC->getAccountNumber() == null ? $payMC->getCellPhone() : $payMC->getAccountNumber();
+                $employeePerson = $employeeC->getEmployeeEmployee()->getPersonPerson();
+                $request->setMethod("POST");
+                $request->request->add(array(
+                    "accountNumber" => $employer->getIdHighTech(),
+                    "documentEmployer" => $employer->getPersonPerson()->getDocument(),
+                    "documentTypeEmployer" => $employer->getPersonPerson()->getDocumentType(),
+                    "documentTypeEmployee" => $employeePerson->getDocumentType(),
+                    "documentEmployee" => $employeePerson->getDocument(),
+                    "employeeName" => $employeePerson->getFullName(),
+                    "employeeAddress" => $employeePerson->getMainAddress(),
+                    "employeeCellphone" => $employeePerson->getPhones()->get(0)->getPhoneNumber(),
+                    "employeeMail" => $employeePerson->getEmail() == null ? $employeePerson->getDocumentType() . $person->getDocument() .
+                        "@" . $employeePerson->getNames() . ".com" : $employeePerson->getEmail(),
+                    "employeeAccountType" => $paymentMethodId,
+                    "employeeAccountNumber" => $paymentMethodAN,
+                    "employeeBankCode" => $payMC->getBankBank()->getHightechCode() ?: 23,
+                ));
+                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postRegisterBeneficiary', array('request' => $request), array('_format' => 'json'));
+                if (!($insertionAnswer->getStatusCode() == 200)) {
+                    $this->addFlash('error', $insertionAnswer->getContent());
+
+                    return false;
+                }
+                $employeeC->setExistentHighTec(1);
+                $em->persist($employeeC);
+                $em->flush();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected function removeEmployeeToHighTech(EmployerHasEmployee $employeeC)
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        /* @var $person Person */
+        $person = $user->getPersonPerson();
+        /* @var $employer Employer */
+        $employer = $person->getEmployer();
+        $request = $this->container->get('request');
+        $em = $this->getDoctrine()->getManager();
+        $employeePerson = $employeeC->getEmployeeEmployee()->getPersonPerson();
+        $request->setMethod("POST");
+        $request->request->add(array(
+            "accountNumber" => $employer->getIdHighTech(),
+            "documentEmployee" => $employeePerson->getDocument(),
+            "documentTypeEmployee" => $employeePerson->getDocumentType(),
+        ));
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:deleteRemoveBeneficiary', array('request' => $request), array('_format' => 'json'));
+        if (!($insertionAnswer->getStatusCode() == 200)) {
+            $this->addFlash('error', $insertionAnswer->getContent());
+            return false;
+        }
+        $employeeC->setExistentHighTec(null);
+        $em->persist($employeeC);
+        $em->flush();
         return true;
     }
 
@@ -963,8 +1064,8 @@ trait SubscriptionMethodsTrait
         $em = $this->getDoctrine()->getManager();
         $user->setStatus(2);
         /** @var EmployerHasEmployee $employerHasEmployee */
-        foreach ( $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees() as $employerHasEmployee){
-            if($employerHasEmployee->getState()>0 and $employerHasEmployee->getEmployeeEmployee()->getRegisterState()==100){
+        foreach ($user->getPersonPerson()->getEmployer()->getEmployerHasEmployees() as $employerHasEmployee) {
+            if ($employerHasEmployee->getState() > 0 and $employerHasEmployee->getEmployeeEmployee()->getRegisterState() == 100) {
                 $employerHasEmployee->setState(3);
             }
         }
@@ -981,21 +1082,21 @@ trait SubscriptionMethodsTrait
         $this->crearTramites($user);
         $this->validateDocuments($user);
         $this->addToSQL($user);
-        $davPlataMail=false;
+        $davPlataMail = false;
         /** @var EmployerHasEmployee $eHE */
-        foreach ($user->getPersonPerson()->getEmployer()->getEmployerHasEmployees() as $eHE){
-            if($davPlataMail)break;
+        foreach ($user->getPersonPerson()->getEmployer()->getEmployerHasEmployees() as $eHE) {
+            if ($davPlataMail) break;
             /** @var Contract $contract */
-            foreach ($eHE->getContracts() as $contract){
-                if($contract->getState()==1){
-                    if($contract->getPayMethodPayMethod()->getPayTypePayType()->getImage()=="/img/icon_daviplata.png"){
-                        $davPlataMail=true;
+            foreach ($eHE->getContracts() as $contract) {
+                if ($contract->getState() == 1) {
+                    if ($contract->getPayMethodPayMethod()->getPayTypePayType()->getImage() == "/img/icon_daviplata.png") {
+                        $davPlataMail = true;
                         break;
                     }
                 }
             }
         }
-        if($davPlataMail){
+        if ($davPlataMail) {
             /** @var \RocketSeller\TwoPickBundle\Mailer\TwigSwiftMailer $smailer */
             $smailer = $this->get('symplifica.mailer.twig_swift');
             $smailer->sendDaviplataMessage($user);

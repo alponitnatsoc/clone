@@ -30,12 +30,18 @@ legal_acceptance:
     path:      /legal-acceptance/{state}
     defaults:  { _controller: RocketSellerTwoPickBundle:LegalAssistance:legalAcceptance, state: incorrect}
 
+list_pods_description:
+    path:     /list/pods/description
+    defaults: { _controller: RocketSellerTwoPickBundle:Pay:showListPODDescription}
 show_pod_description:
     path:     /show/pod/description/{idPOD}
     defaults: { _controller: RocketSellerTwoPickBundle:Pay:showPODDescription}
+edit_pod_description:
+    path:     /edit/pod/description/{idPOD}
+    defaults: { _controller: RocketSellerTwoPickBundle:Pay:editPODDescription}
 user_retry_pay_po:
-    path:     /user/back/retry/pay/{idPO}
-    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:retryPay}
+    path:     /user/back/retry/pay/{idPOD}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:retryPayPOD}
 user_return_pay_pod:
     path:     /user/back/return/pay/{idPOD}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:returnMoneyPay}

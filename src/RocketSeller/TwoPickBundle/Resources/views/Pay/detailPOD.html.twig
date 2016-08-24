@@ -131,10 +131,10 @@
         {% if pod.paymentStatus == "-2" %}
         <div class="botnDetailpod">
           <div class="boton">
-            <a href="{{ path('user_retry_pay_po',{'idPO':pod.purchaseOrders.idPurchaseOrders}) }}" class="notAjax">Reintentar</a><br/>
+            <a href="{{ path('user_retry_pay_po',{'idPOD':pod.idPurchaseOrdersDescription}) }}" class="notAjax">Reintentar</a><br/>
           </div>
           <div class="boton">
-            <a href="" class="notAjax">Cambiar Datos</a><br/>
+            <a href="{{ path('edit_pod_description',{'idPOD':pod.idPurchaseOrdersDescription}) }}" class="notAjax">Cambiar Datos</a><br/>
           </div>
           <div class="boton">
             <a href="{{ path('user_return_pay_pod',{'idPOD':pod.idPurchaseOrdersDescription}) }}" class="notAjax">Devolverme mi dinero</a><br/>

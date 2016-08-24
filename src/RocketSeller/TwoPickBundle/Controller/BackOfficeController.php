@@ -99,8 +99,10 @@ class BackOfficeController extends Controller
         /** @var PurchaseOrders $realPO */
         $realPO = $poRepo->find($idPO);
         $flag=false;
+        $userFl=false;
         if($realPO!=null && $user->getId()==$realPO->getIdUser()->getId()){
             $flag=true;
+            $userFl=true;
         }
         foreach ($roles as $key=>$role) {
             if($role=="ROLE_BACK_OFFICE")
@@ -116,6 +118,42 @@ class BackOfficeController extends Controller
         } else {
             $mesange = "all good man";
         }
+        if($userFl){
+            return $this->redirectToRoute("list_pods_description");
+        }
+        return $this->redirectToRoute("show_rejected_pods");
+    }
+    public function retryPayPODAction($idPOD)
+    {
+        /** @var User $user */
+        $user=$this->getUser();
+        $roles = $user->getRoles();
+        $poRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription");
+        /** @var PurchaseOrdersDescription $realPO */
+        $realPO = $poRepo->find($idPOD);
+        $flag=false;
+        $userFl=false;
+        if($realPO!=null && $user->getId()==$realPO->getPurchaseOrders()->getIdUser()->getId()){
+            $flag=true;
+            $userFl=true;
+        }
+        foreach ($roles as $key=>$role) {
+            if($role=="ROLE_BACK_OFFICE")
+                $flag=true;
+        }
+        if(!$flag){
+            $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+            return $this->redirectToRoute("show_rejected_pods");
+        }
+        $answer = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getDispersePurchaseOrdersDescription', ['idPurchaseOrderDescription' => $idPOD]);
+        if ($answer->getStatusCode() != 200) {
+            $mesange = "not so good man";
+        } else {
+            $mesange = "all good man";
+        }
+        if($userFl){
+            return $this->redirectToRoute("show_pod_description", array('idPOD'=>$idPOD));
+        }
         return $this->redirectToRoute("show_rejected_pods");
     }
 
@@ -130,8 +168,10 @@ class BackOfficeController extends Controller
         /** @var PurchaseOrders $realPO */
         $realPO = $pod!=null ? $pod->getPurchaseOrders() : null;
         $flag=false;
+        $userFl=false;
         if($realPO!=null && $user->getId()==$realPO->getIdUser()->getId()){
             $flag=true;
+            $userFl=true;
         }
         foreach ($roles as $key=>$role) {
             if($role=="ROLE_BACK_OFFICE")
@@ -164,6 +204,10 @@ class BackOfficeController extends Controller
             $pod->setPurchaseOrdersStatus($devolutionState);
             $em->persist($pod);
             $em->flush();
+        }
+
+        if($userFl){
+            return $this->redirectToRoute("show_pod_description", array('idPOD'=>$idPOD));
         }
         return $this->redirectToRoute("show_rejected_pods");
 

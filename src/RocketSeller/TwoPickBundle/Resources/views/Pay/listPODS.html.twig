@@ -1,0 +1,23 @@
+{% extends "::base.html.twig" %}
+{% block content %}
+    {% if pods|length >0 %}
+        <table>
+            <tr>
+                <th>Id</th>
+                <th>Valor</th>
+                <th>Estado</th>
+                <th>Accion</th>
+            </tr>
+        {% for pod in pods %}
+            <tr>
+                <td>{{ pod.idPurchaseOrdersDescription }}</td>
+                <td>{{ pod.value }}</td>
+                <td>{{ pod.purchaseOrdersStatus.name }}</td>
+                <td><a href="{{ path('show_pod_description',{'idPOD':pod.idPurchaseOrdersDescription}) }}" class="notAjax">{% if pod.purchaseOrdersStatus.idNovoPay == "-2" %}Resolver{% else %}Ver{% endif %}</a></td>
+            </tr>
+
+        {% endfor %}
+        </table>
+    {% else %}
+    {% endif %}
+{% endblock %}

@@ -73,6 +73,9 @@ show_rejected_pods:
 back_retry_pay_po:
     path:     /backoffice/back/retry/pay/{idPO}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:retryPay}
+back_retry_pay_pod:
+    path:     /backoffice/back/retry/pay/pod/{idPOD}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:retryPayPOD}
 back_return_pay_pod:
     path:     /backoffice/back/return/pay/{idPOD}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:returnMoneyPay}
