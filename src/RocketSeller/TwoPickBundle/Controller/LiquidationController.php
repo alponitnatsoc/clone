@@ -278,7 +278,7 @@ class LiquidationController extends Controller
             'contractPeriod' => $contract[0]->getTimeCommitmentTimeCommitment()->getName(),
             'salary' => $contract[0]->getSalary(),
             'vacationDays' => "",
-            'startDay' => strftime("%d de %B de %Y", $startDate->getTimestamp()),
+            'startDay' => $startDate,
             'startDate' => $startDate,
             'idEmperHasEmpee' => $employerHasEmployee->getIdEmployerHasEmployee(),
             'frequency' => $frequency,
