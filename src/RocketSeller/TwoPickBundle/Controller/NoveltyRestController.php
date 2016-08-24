@@ -105,41 +105,39 @@ class NoveltyRestController extends FOSRestController
     *
     * @param paramFetcher $paramFetcher ParamFetcher
     *
-    * @RequestParam(name="noveltyFields", nullable=false, strict=true, description="novelty fields")
-    * @RequestParam(name="novletyTypeId", nullable=false, strict=true, description="novelty type")
-    * @RequestParam(name="payrrollId", nullable=false, strict=true, description="payrroll")
+    * @RequestParam(array=true, name="noveltyFields", nullable=false, strict=true, description="hash name of document pages")
+    * @RequestParam(name="idNoveltyType", nullable=false, strict=true, description="novelty type")
+    * @RequestParam(name="idContract", nullable=false, strict=true, description="id contract")
     *
     * @return View
     */
     public function postRegisterNoveltyAction(ParamFetcher $paramFetcher) {
 
       $noveltyFields = $paramFetcher->get('noveltyFields');
-      $novletyTypeId = $paramFetcher->get('novletyTypeId');
-      $payrrollId = $paramFetcher->get('payrrollId');
+      $idNoveltyType = $paramFetcher->get('idNoveltyType');
+      $idContract = $paramFetcher->get('idContract');
+      // $idPayroll = $paramFetcher->get('idPayroll');
+      $em=$this->getDoctrine()->getManager();
+      $contractRepo=$em->getRepository("RocketSellerTwoPickBundle:Contract");
 
-      $novletyType = $this->getDoctrine()
-          ->getRepository('RocketSellerTwoPickBundle:NoveltyType')
-          ->find($novletyTypeId);
-
-      $payroll = $this->getDoctrine()
-          ->getRepository('RocketSellerTwoPickBundle:Payroll')
-          ->find($payrrollId);
-
-      $novelty = new Novelty();
-
-      $novelty->setName($noveltyFields['name']);
-      if($noveltyFields['dateStart'])
-        $novelty->setDateStart($noveltyFields['dateStart']);
-      if($noveltyFields['dateStart'])
-        $novelty->setDateStart($noveltyFields['dateStart']);
-      if($noveltyFields['units'])
-        $novelty->setUnits($noveltyFields['units']);
-      if($noveltyFields['amount'])
-        $novelty->setAmount($noveltyFields['amount']);
-
+      $contract = $contractRepo->find($idContract);
+      $idPayroll = $contract->getActivePayroll()->getIdPayroll();
       //esperar a daniel
+
+      $params = array(
+          'idPayroll' => $idPayroll,
+          'idNoveltyType' => $idNoveltyType,
+          'noveltyFields' => $noveltyFields,
+      );
+
+      // $novletyService = $this->get('app.novelty_service');
       $result = "hola";
-      // $result = this->validateAndPersistNovelty($novelty, $payrroll, $noveltyType);
+      // $result = $novletyService->validateAndPersistNovelty($novelty, $payroll, $noveltyType);
+      // $this->validateAndPersistNovelty($novelty, $payroll, $noveltyType);
+
+      $result = $this->forward('RocketSellerTwoPickBundle:Novelty:validateAndPersistNovelty', $params);
+
+      // validateAndPersistNovelty($novelty, $payroll, $noveltyType);
       $view = View::create();
 
       return $view->setStatusCode(200)->setData(array('result'=>$result));
@@ -239,7 +237,7 @@ class NoveltyRestController extends FOSRestController
             ));
 
 
-            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:'.$methodToCall, array('_format' => 'json'));
+            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:'.$methodToCall, array('request' => $request), array('_format' => 'json'));
             if($insertionAnswer->getStatusCode()!=200){
                 return $view->setStatusCode($insertionAnswer->getStatusCode())->setData(array("error"=>"No se pudo agregar la novedad"));
             }

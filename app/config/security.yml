@@ -145,3 +145,4 @@ security:
         # This two next lines are used to allow access to those ips, in any service.
         - { path: ^/api/public/v1/secured, role: IS_AUTHENTICATED_ANONYMOUSLY, ips: [10.0.0.1, 127.0.0.1, 190.7.130.163, 52.73.123.224, 52.91.121.67] }
         - { path: ^/api/public/v1/secured, role: [ROLE_NO_ACCESS] }
+        - { path: ^/novelty/workableDays/validateandpersist/^, role: IS_AUTHENTICATED_ANONYMOUSLY, ips: [10.0.0.1, 127.0.0.1, 190.7.130.163, 52.73.123.224, 52.91.121.67] }

@@ -78,6 +78,9 @@ novelty_worked_days:
 novelty_update_worked_days:
     path:      /novelty/workableDays/{empId}/update/{idNovelty}/{daysAmount}
     defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:updateWorkedDays}
+novelty_validate_and_persist_novelty:
+    path:      /novelty/workableDays/validateandpersist/{idPayroll}/{idNoveltyType}/{novletyFields}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:validateAndPersistNovelty}
 documentos:
     path:      /document/add/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Document:addDocument}
