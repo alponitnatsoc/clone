@@ -555,3 +555,7 @@ politicas_privacidad:
 store_config:
     path: /store_config/{legalOptions}/{redirectTo}/{changeFlag}
     defaults: { _controller: RocketSellerTwoPickBundle:Configuration:storeConfig, changeFlag: 99}
+
+employer_liquidation:
+    path: /employer/liquidate/{eheId}/mail/
+    defaults: { _controller: RocketSellerTwoPickBundle:Liquidation:correoLiquidacion}
