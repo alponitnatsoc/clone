@@ -8,8 +8,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
+use RocketSeller\TwoPickBundle\Entity\Novelty;
+use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\CalculatorConstraints;
@@ -493,7 +496,6 @@ class PilaPlainTextRestController extends FOSRestController
     public function getIBC($employeeInfo, $minWage, $contractType) {
       $salario_minimo = $minWage;
       $total = 0;
-
       if($contractType == "XD"){
         return $salario_minimo;
       }
@@ -538,7 +540,7 @@ class PilaPlainTextRestController extends FOSRestController
 
     public function employeeParame($consecutivo,$tipoDocumento,$documento,$subtipoCotizante,$deparmentCode,$municipioCode,
     $firstLastName,$secondLastName,$firstFirstName,$secondFirstName,$codigoAFP,$codigoEPS,$codigoCCF,$diasSinDescuento,$diasConDescuento,
-    $salary,$ibc_arl_caja,$ibc_salud,$ibc_pension,$porcentaje_pension,$aporte_pension,$porcentaje_salud,$aporte_salud,$porcentaje_arl,$aporte_arl,$porcentaje_caja,$aporte_caja,$exonerated,
+    $salary,$ibc_arl,$ibc_caja,$ibc_salud,$ibc_pension,$porcentaje_pension,$aporte_pension,$porcentaje_salud,$aporte_salud,$porcentaje_arl,$aporte_arl,$porcentaje_caja,$aporte_caja,$exonerated,
     $ingreso,$retiro,$variacionSalario,$variacionTransitoriaSalario,$suspensionTemporal,$enfermedadGeneral,$licenciaMaternidadPaternidad,$vacaciones,$incapacidadAccidente, $contractType, $diasLicencia, $minWage) {
       //Articulo 10 resolucion 1747 de 2008.
       // Campo 1.
@@ -553,7 +555,7 @@ class PilaPlainTextRestController extends FOSRestController
       if( $contractType == "XD" ){
         $this->add(26, 27, '51');   // 02 si es tiempo completo 51 si es tiempo parcial importante cambiar.!!!!!!!!!!!!!
       }
-      else {
+      elseif ( $contractType == "TC"){
         $this->add(26, 27, '02');
       }
       // Campo 6.
@@ -612,7 +614,11 @@ class PilaPlainTextRestController extends FOSRestController
       /* Here finish the novelties */
 
       // Campo 31.
-      $this->add(154, 159, $codigoAFP);
+      if($codigoAFP == "0"){
+        $this->add(154, 159, '');
+      }else{
+        $this->add(154, 159, $codigoAFP);
+      }
       // Campo 32.
       $this->add(160, 165, '');// Only if the employee is changing AFP.
       // Campo 33.
@@ -621,39 +627,99 @@ class PilaPlainTextRestController extends FOSRestController
       $this->add(172, 177, '');// Only if the employee is changing EPS.
       // Campo 35.
       $this->add(178, 183, $codigoCCF);
-      // Campo 36.
-      $this->add(184, 185, $diasSinDescuento);
-      // Campo 37. - Si la persona no cotiza salud, entonces se envia 0 dias
-      if ( isset($codigoEPS) ){
-        $this->add(186, 187, $diasSinDescuento);
-      }
-      else{
+  
+      $salarioTabla = 0;
+  
+      if( $contractType == "XD" ){
+        
+        $diasTabla = "";
+        
+        if($diasSinDescuento >= 1 && $diasSinDescuento <= 7){
+          $diasTabla = "07";
+          $salarioTabla = round($minWage / 4);
+        }
+        elseif ($diasSinDescuento >= 8 && $diasSinDescuento <= 14){
+          $diasTabla = "14";
+          $salarioTabla = round($minWage / 2);
+        }
+        elseif($diasSinDescuento >= 15 && $diasSinDescuento <= 21){
+          $diasTabla = "21";
+          $salarioTabla = round((3 * $minWage) / 4);
+        }
+        else{
+          $diasTabla = "30";
+          $salarioTabla = $minWage;
+        }
+  
+        $salarioTabla = $this->leftZeros($salarioTabla, 9);
+        // Campo 36.
+        if($codigoAFP == "0"){
+          $this->add(184, 185, '00');
+        }else{
+          $this->add(184, 185, $diasTabla);
+        }
+        // Campo 37. - La persona no cotiza salud, entonces se envia 0 dias
         $this->add(186, 187, '00');
+        // Campo 38.
+        $this->add(188, 189, 30);
+        // Campo 39.
+        $this->add(190, 191, $diasTabla);
+        
       }
-      //Independientemente debe ser 30
-      $diasConDescuento3839 = 30 - $diasLicencia;
-      $diasConDescuento3839 = $this->leftZeros($diasConDescuento3839, 2);
-      // Campo 38.
-      $this->add(188, 189, $diasConDescuento3839);
-      // Campo 39.
-      $this->add(190, 191, $diasConDescuento3839);
+      elseif ( $contractType == "TC"){
+        
+        // Campo 36.
+        $this->add(184, 185, $diasSinDescuento);
+        // Campo 37. - Si la persona no cotiza salud, entonces se envia 0 dias
+        if ( strlen($codigoEPS) != 0 ){
+          $this->add(186, 187, $diasSinDescuento);
+        }
+        else{
+          $this->add(186, 187, '00');
+        }
+        // Campo 38.
+        $this->add(188, 189, $diasSinDescuento);
+        // Campo 39.
+        $this->add(190, 191, $diasSinDescuento);
+      }
+      
       // Campo 40.
       $this->add(192, 200, $salary);
       // Campo 41.
       $this->add(201, 201, '');
-      // Campo 42. // Redondear...
-      $this->add(202, 210, $ibc_pension);
-      // Campo 43.
-      $this->add(211, 219, $ibc_salud);
-      // Campo 44.
-      //Debe ser 1smmlv
-      $this->add(220, 228, $ibc_arl_caja);
-      // Campo 45.
-      $this->add(229, 237, $ibc_arl_caja);
+  
+      if( $contractType == "XD" ){
+        // Campo 42. Si no cotiza a pension se envia 0, de resto el salario se envia por tabla
+        if($codigoAFP == "0"){
+          $this->add(202, 210, "000000000");
+        }else{
+          $this->add(202, 210, $salarioTabla);
+        }
+        // Campo 43. Al ser XD no cotiza salud, por lo tanto se envia 0
+        $this->add(211, 219, "000000000");
+        // Campo 44.
+        //Debe ser 1smmlv, al ser XD la ARL se cotiza sobre 30 dias y salario minimo
+        $this->add(220, 228, $this->leftZeros($minWage, 9));
+        // Campo 45. La caja de compensacion se cotiza sobre tabla
+        $this->add(229, 237, $salarioTabla);
+      }
+      elseif ( $contractType == "TC"){
+        // Campo 42.
+        $this->add(202, 210, $ibc_pension);
+        // Campo 43.
+        $this->add(211, 219, $ibc_salud);
+        // Campo 44.
+        //Debe ser 1smmlv
+        $this->add(220, 228, $ibc_arl);
+        // Campo 45.
+        $this->add(229, 237, $ibc_caja);
+      }
+      
       // Campo 46.
       $this->add(238, 244, $porcentaje_pension, true);
       // Campo 47.
       $this->add(245, 253, $aporte_pension);
+     
       // Campo 48 a 53.
       $this->add(254, 307, '', true);
       // Campo 54.
@@ -704,11 +770,11 @@ class PilaPlainTextRestController extends FOSRestController
 
     // Type is E or S.
     // Count is the number of employees of this type.
-    public function createLineaEmpleado($pilaArr, $exonerated=false, $idEmployer){
+    public function createLineaEmpleado($pilaArr, $exonerated=false, $idEmployer, $monthPayroll){
       $calculatorConstraintsRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:CalculatorConstraints');
       $minWage = $calculatorConstraintsRepo->findOneBy(array("name" => "smmlv"));
       $minWage = $minWage ->getValue();
-
+      
       $consecutivo = 1;
       if($exonerated)
         $exonerated = 'S';
@@ -716,8 +782,11 @@ class PilaPlainTextRestController extends FOSRestController
         $exonerated = 'N';
 
       $lineArr = array();
+      
+      /**
+       * @var Payroll  $pila
+       */
       foreach($pilaArr as $key => $pila) {
-        //dump($employee);die();
         $employee = $pila->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee();
         $contractType = $pila->getContractContract()->getTimeCommitmentTimeCommitment()->getCode();
         // Add left zeros to count.
@@ -743,7 +812,7 @@ class PilaPlainTextRestController extends FOSRestController
         if($this->aporta($employee))
             $subtipoCotizante = '';
         else
-            $subtipoCotizante = '4';
+            $subtipoCotizante = '04';
 
         $deparmentCode = $employee->getPersonPerson()->getDepartment()->getDepartmentCode();
         $municipioCode = $employee->getPersonPerson()->getCity()->getCityCode();
@@ -751,8 +820,23 @@ class PilaPlainTextRestController extends FOSRestController
         $firstLastName = $employee->getPersonPerson()->getLastName1();
         $secondLastName = $employee->getPersonPerson()->getLastName2() ?: '';
         $firstFirstName = $employee->getPersonPerson()->getNames();
-        $secondFirstName = isset(explode(' ', $firstFirstName)[1]) ? explode(' ', $firstFirstName)[1] : '';
-        $firstFirstName = explode(' ', $firstFirstName)[0];
+        
+        //If the person has a complex Second Name it should be concatenate in the second string
+        $names =  explode(' ', $firstFirstName);
+        
+        $secondFirstName = ' ';
+        if( count($names) > 1){
+          $secondFirstName = $names[1];
+        }
+        if( count($names) > 2){
+          $secondFirstName = $secondFirstName . ' ' . $names[2];
+        }
+        
+        $firstFirstName = $names[0];
+        
+        //$secondFirstName = isset(explode(' ', $firstFirstName)[1]) ? explode(' ', $firstFirstName)[1] : '';
+        //$firstFirstName = explode(' ', $firstFirstName)[0];
+        
         $codigoAFP = $this->codigoEntidad($employee->getIdEmployee(), 3); //3 is afp.
         $codigoEPS = $this->codigoEntidad($employee->getIdEmployee(), 1); //1 is eps.
         $codigoCCF = $this->codigoEntidadEmployer($idEmployer, 4); // 4 is ccf.
@@ -765,8 +849,7 @@ class PilaPlainTextRestController extends FOSRestController
         $employeeInfo = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll', array(
             "employeeId" => $idEmployerHasEmployee,
                 ), array('_format' => 'json'));
-
-
+        
 
         if ($employeeInfo->getStatusCode() != 200) {
           throw new \Exception('Error getting the information from SQL. Id employee: ' . $idEmployerHasEmployee);
@@ -799,20 +882,105 @@ class PilaPlainTextRestController extends FOSRestController
                 ), array('_format' => 'json')
         );
         $finalLiquidation = json_decode($finalLiquidation->getContent(), true);
-        $diasSinDescuento = $this->diasSinDescuento($employeeInfo)/* - $this->diasLicencia($employeeInfo)*/;
-        $diasConDescuento = $this->diasConDescuento($employeeInfo) - $this->diasLicencia($employeeInfo);
+  
+        $diasSinDescuento = 0;
+        $diasConDescuento = 0;
+        
+        if($contractType == "XD"){
+          
+          $payrollRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Payroll');
+          $payrollArray = $payrollRepo->findBy(array('year'=>$monthPayroll->format('Y'),'month'=>$monthPayroll->format('m'), 'contractContract'=>$pila->getContractContract()));
+          
+          //Para todos los payrolls del mes, pueden ser 1 o 2, dependiendo si es mensual, quincenal o si acabo de entrar a symplifica
+          
+          /** @var Payroll $singlePayroll */
+          foreach ($payrollArray as $singlePayroll){
+            $noveltyArray = $singlePayroll->getSqlNovelties();
+            /** @var Novelty $singleNovelty */
+            foreach ($noveltyArray as $singleNovelty){
+              if($singleNovelty->getNoveltyTypeNoveltyType()->getPayrollCode() == 1){
+                $diasSinDescuento = $diasSinDescuento + intval($singleNovelty->getUnits());
+                $diasConDescuento = $diasConDescuento + intval($singleNovelty->getUnits());
+                break;
+              }
+            }
+          }
+  
+          //Si es Quincenal y solo tiene 1 payroll (significa que entro en la 2da quincena y esto daria problemas)
+          if($pila->getContractContract()->getFrequencyFrequency()->getPayrollCode() == 'Q' && count($payrollArray) == 1){
+            //Hay 2 casos, el contrato es nuevo o antiguo, si es antiguo hay que agregar los dias promedio
+            //Es antiguo si el mes de inicio no coincide
+            if( $pila->getContractContract()->getStartDate()->format('Y-m') != $monthPayroll->format('Y-m')  ){
+              $diasSinDescuento = $diasSinDescuento + ($pila->getContractContract()->getWorkableDaysMonth()/2);
+              $diasConDescuento = $diasConDescuento + ($pila->getContractContract()->getWorkableDaysMonth()/2);
+            }
+          }
+          
+          $diasConDescuento = $diasConDescuento - $this->diasLicencia($employeeInfo);
+          
+        }elseif ($contractType == "TC"){
+          $payrollRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Payroll');
+          $payrollArray = $payrollRepo->findBy(array('year'=>$monthPayroll->format('Y'),'month'=>$monthPayroll->format('m'), 'contractContract'=>$pila->getContractContract()));
+  
+          //Para todos los payrolls del mes, pueden ser 1 o 2, dependiendo si es mensual, quincenal o si acabo de entrar a symplifica
+          
+          /** @var Payroll $singlePayroll */
+          foreach ($payrollArray as $singlePayroll){
+            $noveltyArray = $singlePayroll->getSqlNovelties();
+            /** @var Novelty $singleNovelty */
+            foreach ($noveltyArray as $singleNovelty){
+              if($singleNovelty->getNoveltyTypeNoveltyType()->getPayrollCode() == 1){
+                if(intval($singleNovelty->getUnits()) > 0){
+                  $diasSinDescuento = $diasSinDescuento + intval($singleNovelty->getUnits());
+                }
+                $diasConDescuento = $diasConDescuento + intval($singleNovelty->getUnits());
+              }
+            }
+          }
+          
+          
+          //Si es Quincenal y solo tiene 1 payroll (significa que entro en la 2da quincena y esto daria problemas)
+          if($pila->getContractContract()->getFrequencyFrequency()->getPayrollCode() == 'Q' && count($payrollArray) == 1){
+            //Hay 2 casos, el contrato es nuevo o antiguo, si es antiguo hay que agregar los dias promedio
+            //Es antiguo si el mes de inicio no coincide
+            if( $pila->getContractContract()->getStartDate()->format('Y-m') != $monthPayroll->format('Y-m')  ){
+              $diasSinDescuento = $diasSinDescuento + 15;
+              $diasConDescuento = $diasConDescuento + 15;
+            }
+          }
+        }
+        
         $diasLicencia = $this->diasLicencia($employeeInfo);
-
+       
         $diasSinDescuento = $this->leftZeros($diasSinDescuento, 2);
         $diasConDescuento = $this->leftZeros($diasConDescuento, 2);
         $ibc_arl_caja = $this->getIBC($employeeInfo, $minWage, $contractType) -  $this->valorLicencia($employeeInfo);
         $ibc_arl_caja = $this->leftZeros($ibc_arl_caja, 9);
 
-        $ibc_salud = $this->getIBCSalud($employeeInfo) -  $this->valorLicencia($employeeInfo);
-        $ibc_pension= $this->getIBCPension($employeeInfo) - $this->valorLicencia($employeeInfo);
+        $ibc_salud = $this->getIBCSalud($employeeInfo) /*-  $this->valorLicencia($employeeInfo)*/;
+        $ibc_pension= $this->getIBCPension($employeeInfo) /*- $this->valorLicencia($employeeInfo)*/;
         $ibc_salud = $this->leftZeros($ibc_salud, 9);
         $ibc_pension = $this->leftZeros($ibc_pension, 9);
-
+        
+        $redondeo = 0;
+        if( round(($pila->getContractContract()->getSalary() / 30) * $diasSinDescuento, -3) < (($minWage / 30) * $diasSinDescuento) ){
+          $redondeo = 0;
+        }
+        else{
+          $redondeo = -3;
+        }
+        $ibc_arl = round(($pila->getContractContract()->getSalary() / 30) * $diasSinDescuento, $redondeo);
+        $ibc_caja = round(($pila->getContractContract()->getSalary() / 30) * $diasSinDescuento, $redondeo);
+        $ibc_salud = round(($pila->getContractContract()->getSalary() / 30) * $diasSinDescuento, $redondeo);
+        $ibc_pension = round(($pila->getContractContract()->getSalary() / 30) * $diasSinDescuento, $redondeo);
+        
+        $ibc_arl = $this->leftZeros($ibc_arl, 9);
+        $ibc_caja = $this->leftZeros($ibc_caja, 9);
+        $ibc_salud = $this->leftZeros($ibc_salud, 9);
+        $ibc_pension = $this->leftZeros($ibc_pension, 9);
+        
+        
+        
         $aporte_pension = 0;
         $porcentaje_pension = '0.16';
         foreach($employerInfo as $item) {
@@ -856,7 +1024,6 @@ class PilaPlainTextRestController extends FOSRestController
 
           $start_date = $contract->getStartDate();
         }
-
         $aporte_arl = 0;
         foreach($employerInfo as $item) {
           if($item['TENT_CODIGO'] == 'ARP' && $item['APR_APORTE_CIA'] != 0)
@@ -916,21 +1083,10 @@ class PilaPlainTextRestController extends FOSRestController
           $vacaciones = 'X';
 
         $incapacidadAccidente = $this->incapacidadAccidente($employeeInfo);
-
-        //TOTEST
-        if($ingreso == 'X' ){
-          if($contractType == "TC"){
-            $diasSinDescuento = 30;
-            $diasConDescuento = 30 - $this->diasLicencia($employeeInfo);
-
-            $diasSinDescuento = $this->leftZeros($diasSinDescuento, 2);
-            $diasConDescuento = $this->leftZeros($diasConDescuento, 2);
-          }
-        }
-
+        
         $this->employeeParame($consecutivo,$tipoDocumento,$documento,$subtipoCotizante,$deparmentCode,$municipioCode,
         $firstLastName,$secondLastName,$firstFirstName,$secondFirstName,$codigoAFP,$codigoEPS,$codigoCCF,$diasSinDescuento,$diasConDescuento,
-        $salary,$ibc_arl_caja,$ibc_salud,$ibc_pension,$porcentaje_pension,$aporte_pension,$porcentaje_salud,$aporte_salud,$porcentaje_arl,$aporte_arl,$porcentaje_caja,$aporte_caja,$exonerated,
+        $salary,$ibc_arl, $ibc_caja, $ibc_salud,$ibc_pension,$porcentaje_pension,$aporte_pension,$porcentaje_salud,$aporte_salud,$porcentaje_arl,$aporte_arl,$porcentaje_caja,$aporte_caja,$exonerated,
         $ingreso,$retiro,$variacionSalario,$variacionTransitoriaSalario,'',$enfermedadGeneral,$licenciaMaternidadPaternidad,$vacaciones,$incapacidadAccidente,$contractType, $diasLicencia, $minWage);
         $line = $this->executeLine();
         $this->elementos = array();
@@ -986,7 +1142,7 @@ class PilaPlainTextRestController extends FOSRestController
 
         $this->employeeParame($consecutivo,$tipoDocumento,$documento,$subtipoCotizante,$deparmentCode,$municipioCode,
         $firstLastName,$secondLastName,$firstFirstName,$secondFirstName,$codigoAFP,$codigoEPS,$codigoCCF,$diasSinDescuento,$diasConDescuento,
-        $salary,$ibc,$ibc,$ibc,$porcentaje_pension,$aporte_pension,$porcentaje_salud,$aporte_salud,$porcentaje_arl,$aporte_arl,$porcentaje_caja,$aporte_caja,$exonerated,
+        $salary,$ibc_arl, $ibc_caja, $ibc_salud,$ibc_pension,$porcentaje_pension,$aporte_pension,$porcentaje_salud,$aporte_salud,$porcentaje_arl,$aporte_arl,$porcentaje_caja,$aporte_caja,$exonerated,
         $ingreso,$retiro,$variacionSalario,$variacionTransitoriaSalario,$suspensionTemporal,$enfermedadGeneral,$licenciaMaternidadPaternidad,$vacaciones,$incapacidadAccidente,$contractType, $diasLicencia, $minWage);
 
         $line = $line . $this->executeLine();
@@ -1011,7 +1167,7 @@ class PilaPlainTextRestController extends FOSRestController
 
     // Type is E or S.
     // Count is the number of employees of this type.
-    public function createEncabezado($employer, $type, $count){
+    public function createEncabezado($employer, $type, $count, $pilaMonth){
       $elementos = &$this->elementos;
       $elementos = array();
 
@@ -1043,13 +1199,16 @@ class PilaPlainTextRestController extends FOSRestController
           $entidadARL = $i->getEntityEntity()->getPilaCode();
         }
       }
-      $currentPeriod = date("Y-m");
-      $pastPeriod = date("Y-m", strtotime("-1 months"));
+      
+      $pastPeriod = $pilaMonth->format("Y-m");
+      $pilaMonth->modify('+1 month');
+      $currentPeriod = $pilaMonth->format("Y-m");
+      
       $tipoAportante = '';
       if($type == 'E')
         $tipoAportante = '1';
       else
-        $tipoAportante = '2';  /// Camiar debe ser 2 siempre importante cambiar, esto es inutil se debe cambiar.
+        $tipoAportante = '2';  /// Cambiar debe ser 2 siempre importante cambiar, esto es inutil se debe cambiar.
 
       // Add left zeros to count.
       $count2 = ''.$count;
@@ -1125,13 +1284,14 @@ class PilaPlainTextRestController extends FOSRestController
      * @return String
      */
     public function getMonthlyPlainTextAction($podId) {
-      // TOGO 0
-
       $podRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription");
       $pod = $podRepo->findOneBy(array("idPurchaseOrdersDescription" => $podId));
 
       $pilaArr = $pod->getPayrollsPila();
+      
       $type = $pilaArr[0]->getContractContract()->getPlanillaTypePlanillaType()->getCode();
+      $pilaMonth =  new DateTime($pilaArr[0]->getYear() . "-" . $pilaArr[0]->getMonth() . "-01");
+      $pilaEmp = new DateTime($pilaArr[0]->getYear() . "-" . $pilaArr[0]->getMonth() . "-01");
 
       $numberEmployees = 0;
 
@@ -1157,10 +1317,10 @@ class PilaPlainTextRestController extends FOSRestController
       //S es tiempo completo (Convencional)
       //E es tiempo parcial sin Sisben (Domestico)
 
-      $line = $this->createEncabezado($employer, $type, $numberEmployees);
+      $line = $this->createEncabezado($employer, $type, $numberEmployees, $pilaMonth);
       $line .= "\n";
       $this->elementos = array();
-      $line .= $this->createLineaEmpleado($pilaArr, $exonerated, $employer->getIdEmployer());
+      $line .= $this->createLineaEmpleado($pilaArr, $exonerated, $employer->getIdEmployer(), $pilaEmp);
       $filename = 'PILA_' . $type . $employer->getPersonPerson()->getLastName1() .$employer->getIdEmployer() . '.txt';
       header("Content-type: text/plain; charset=utf-8");
       header("Content-Disposition: attachment; filename=$filename");
