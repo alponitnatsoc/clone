@@ -19,8 +19,32 @@ function startEmployee() {
           dataType: "script",
           timeout: 4000
       }).done(function() {
+        //var focus_element = undefined;
         validator = $("form[name='register_employee']").validate({
-            //onfocusout: true,
+            errorPlacement: function(error, element) {
+                var placement = $(element).data('error');
+                //if(typeof focus_element == 'undefined') {
+                  //focus_element = element;
+                //}
+                if(placement) {
+                    $(placement).append(error);
+                } else {
+                    error.insertAfter(element);
+                }
+                //focus_element.focus();
+            },
+            /*onfocusout: false,
+            invalidHandler: function(form, validator) {
+                var errors = validator.numberOfInvalids();
+                console.log('Errors');
+                console.log(errors);
+                if (errors) {
+                    console.log(errors);
+                    console.log(validator.errorList);
+                    console.log(validator.errorList[0]);
+                    validator.errorList[0].element.focus();
+                }
+            },*/
             rules: {
                 "register_employee[person][documentType]": "required",
                 "register_employee[person][document]": {required: true, number: true},

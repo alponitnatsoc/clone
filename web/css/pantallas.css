@@ -24,10 +24,11 @@ a {text-decoration: none}
 .extrabold {font-family: 'Open Sans', sans-serif;font-weight: 800}
 
 .casiValidado {
-	width: 100%;
-	border: 1px #CCC dashed;
-	padding:10px 0;
-	border-radius:5px}
+		width: 100%;
+    background: #fbfbfb;
+    padding: 50px 0;
+    border-radius: 5px;
+    text-align: center;}
 
 .casiValidado p {
 	width: 80%;
@@ -47,6 +48,9 @@ a {text-decoration: none}
 #title-siccesdocs {
 	text-align: center;
 	margin: 0 0 50px 0}
+	#title-siccesdocs h1 {
+		font-size: 25px;
+	}
 
 #cont-genssuccescont {
 	width: 80%;
