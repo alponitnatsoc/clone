@@ -34,8 +34,8 @@ list_pods_description:
     path:     /list/pods/description
     defaults: { _controller: RocketSellerTwoPickBundle:Pay:showListPODDescription}
 show_pod_description:
-    path:     /show/pod/description/{idPOD}
-    defaults: { _controller: RocketSellerTwoPickBundle:Pay:showPODDescription}
+    path:     /show/pod/description/{idPOD}/{notifRef}
+    defaults: { _controller: RocketSellerTwoPickBundle:Pay:showPODDescription, notifRef: -1}
 edit_pod_description:
     path:     /edit/pod/description/{idPOD}
     defaults: { _controller: RocketSellerTwoPickBundle:Pay:editPODDescription}
@@ -78,6 +78,9 @@ novelty_worked_days:
 novelty_update_worked_days:
     path:      /novelty/workableDays/{empId}/update/{idNovelty}/{daysAmount}
     defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:updateWorkedDays}
+novelty_validate_and_persist_novelty:
+    path:      /novelty/workableDays/validateandpersist/{idPayroll}/{idNoveltyType}/{novletyFields}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:validateAndPersistNovelty}
 documentos:
     path:      /document/add/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Document:addDocument}
@@ -555,3 +558,7 @@ politicas_privacidad:
 store_config:
     path: /store_config/{legalOptions}/{redirectTo}/{changeFlag}
     defaults: { _controller: RocketSellerTwoPickBundle:Configuration:storeConfig, changeFlag: 99}
+
+employer_liquidation:
+    path: /employer/liquidate/{eheId}/mail/
+    defaults: { _controller: RocketSellerTwoPickBundle:Liquidation:correoLiquidacion}

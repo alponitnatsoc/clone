@@ -17,29 +17,23 @@ body {
 <hr />
 <p>&nbsp;</p>
 {% set local = "now"|date("d-m-y") %}
-{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', 'es-CO') }}</strong><br />#}
-{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', 'es-CO') }}</strong></p>#}
 <p>&nbsp;</p>
-<p style="text-align: center;"><strong>CERTIFICACIÓN</strong></p>
+<p style="text-align: center;"><strong>CERTIFICADO LABORAL</strong></p>
 <p>&nbsp;</p>
-<p style="text-align: justify;">Que el señor(a) {{ data.employee.name }}, identificado(a) con {{ data.employee.docType }}
-número {{ data.employee.docNumber }}, trabaja actualmente en nuestra empresa desde el día {{ data.contract.fechaInicio.date|localizeddate('long', 'none', 'es-CO') }},
-mediante un contrato de trabajo {{ data.contract.type }}, y en ejercicio del mismo fue asignado como trabajador de la
-empresa {{ data.employer.name }} desempeñándose en el cargo de {{ data.contract.position }}, con una asignación mensual de
-{{ data.contract.salary }}, y sus prestaciones de ley.</p>
-<p style="text-align: justify;">La presente certificación se expide en {{ data.contract.city }}, a solicitud del interesado a los
-{{ "now"|localizeddate('none', 'none', 'es-CO', null, "d 'días del mes de' MMMM 'del año' Y") }} con destino a QUIEN INTERESE.</p>
-<p>&nbsp;</p>
-<p>Cordialmente,</p>
+<p style="text-align: justify;">Yo, {{ data.employer.name|upper }} identificado con c&eacutedula de ciudadan&iacutea {{ data.employer.docNumber|number_format(0,',','.') }},
+    CERTIFICO que {{ data.employee.name|upper }} identificado con c&eacutedula de ciudadan&iacutea {{ data.employee.docNumber|number_format(0,',','.') }} de {{ data.employee.docExpPlace }},
+    trabaja para mi como {{ data.contract.position|upper }} desde el {{ data.contract.fechaInicio|localizeddate('none', 'none', 'es-CO', null, "dd 'de' MMMM 'de' Y") }}, a trav&eacutes de un contrato a {{ data.contract.type }}
+    y devengando un salario de ${{ data.contract.salary|number_format(0,',','.') }} mensuales promedio.</p>
 
+<p style="text-align: justify;">Esta constancia se expide a solicitud del interesado a los
+    {{ "now"|localizeddate('none', 'none', 'es-CO', null, "d 'días del mes de' MMMM 'del año' Y") }}.</p>
 
+<p>Atentamente,</p>
 _____________________________________
-<p>{{ data.employer.name }}</p>
-<p>{{ data.employer.docType }} Nº {{ data.employer.docNumber }}</p>
-<p>{{ data.employer.tel.phoneNumber }}
+<p>{{ data.employer.name|upper }}</p>
+<p>{{ data.employer.docType }} {{ data.employer.docNumber|number_format(0,',','.') }}</p>
 
 <p>&nbsp;</p>
 <hr />
-
 </body>
 </html>

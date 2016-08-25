@@ -170,29 +170,58 @@ class EmployerController extends Controller
             /* @var $EmployerHasEmployee EmployerHasEmployee */
             $EmployerHasEmployee = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')
                     ->findOneBy(array('employerEmployer' => $employer, 'employeeEmployee' => $employee));
-
-            //$contrato = $EmployerHasEmployee->getContractByState(1);
-
-            $contrato = $em->getRepository('RocketSellerTwoPickBundle:Contract')
+	        
+            $contract = $em->getRepository('RocketSellerTwoPickBundle:Contract')
                     ->findOneBy(array('employerHasEmployeeEmployerHasEmployee' => $EmployerHasEmployee, 'state' => 1));
 
             switch ($idCertificate) {
                 case '1':
-                    $nameCertificate = "Certificado laboral";
-                    $content = $this->render('RocketSellerTwoPickBundle:Employer:certificadoLaboral.html.twig', array(
-                                'employee' => $employee,
-                                'certificate' => $nameCertificate,
-                                'employer' => $employer,
-                                'contrato' => $contrato
-                                    )
+	                  $nameCertificate = "Certificado laboral";
+                	  /** @var Person $employeePerson */
+		                $employeePerson = $employee->getPersonPerson();
+		                $employeeInfo = array(
+			                'name' => $employeePerson->getFullName(),
+			                'docType' => $employeePerson->getDocumentType(),
+			                'docNumber' => $employeePerson->getDocument(),
+			                'docExpPlace' => $employeePerson->getDocumentExpeditionPlace(),
+		                );
+		
+		                $employerPerson = $employer->getPersonPerson();
+		                $employerInfo = array(
+			                'name' => $employerPerson->getFullName(),
+			                'docType' => $employerPerson->getDocumentType(),
+			                'docNumber' => $employerPerson->getDocument(),
+			                'docExpPlace' => $employerPerson->getDocumentExpeditionPlace(),
+		                );
+		                $contractInfo = array(
+			                'city' => $contract->getWorkplaceWorkplace()->getCity()->getName(),
+			                'position' => $contract->getPositionPosition()->getName(),
+			                'fechaInicio' => $contract->getStartDate(),
+			                'fechaFin' => $contract->getEndDate(),
+			                'numero' => $contract->getIdContract(),
+			                'type' => $contract->getContractTypeContractType()->getName(),
+			                'salary' => $contract->getSalary()
+		                );
+	
+		                $data = array(
+			                'employee' => $employeeInfo,
+			                'employer' => $employerInfo,
+			                'contract' => $contractInfo
+		                );
+	                   $content = $this->render('RocketSellerTwoPickBundle:Employer:certificadoLaboral.html.twig', array(
+                                'data' => $data,
+			                            )
                             )->getContent();
                     break;
+	            
                 case '2':
                     $nameCertificate = "Certificado de aportes";
                     $content = $this->render('RocketSellerTwoPickBundle:Employer:certificadoDefault.html.twig', array(
                                 'employee' => $employee,
                                 'certificate' => $nameCertificate,
-                                'employer' => $employer)
+                                'employer' => $employer,
+		                            'eheId' => $EmployerHasEmployee->getIdEmployerHasEmployee()
+	                                  )
                             )->getContent();
                     break;
                 case '3':
@@ -200,7 +229,9 @@ class EmployerController extends Controller
                     $content = $this->render('RocketSellerTwoPickBundle:Employer:certificadoDefault.html.twig', array(
                                 'employee' => $employee,
                                 'certificate' => $nameCertificate,
-                                'employer' => $employer)
+                                'employer' => $employer,
+		                            'eheId' => $EmployerHasEmployee->getIdEmployerHasEmployee()
+	                                  )
                             )->getContent();
                     break;
                 default:
@@ -208,7 +239,9 @@ class EmployerController extends Controller
                     $content = $this->render('RocketSellerTwoPickBundle:Employer:certificadoDefault.html.twig', array(
                                 'employee' => $employee,
                                 'certificate' => $nameCertificate,
-                                'employer' => $employer)
+                                'employer' => $employer,
+		                            'eheId' => $EmployerHasEmployee->getIdEmployerHasEmployee()
+	                                  )
                             )->getContent();
                     break;
             }
@@ -221,7 +254,8 @@ class EmployerController extends Controller
                         'employee' => $employee,
                         'certificate' => $objCertificate,
                         'employer' => $employer,
-                        'content' => $content));
+                        'content' => $content,
+	                      'eheId' => $EmployerHasEmployee->getIdEmployerHasEmployee()));
         } else {
             /** @var Person $person */
             $person = $this->getUser()->getPersonPerson();
@@ -454,7 +488,7 @@ class EmployerController extends Controller
                 ->find($parameter);
         return $loadedClass;
     }
-
+    
     public function generatePdfAction(Request $request)
     {
         $idEmployee = $this->get('request')->request->get('idEmployee');
@@ -473,15 +507,8 @@ class EmployerController extends Controller
 
         switch ($certificate) {
             case '1':
-                $cert = "Certificado laboral";
-                $content = $this->render('RocketSellerTwoPickBundle:Employer:certificadoLaboral.html.twig', array(
-                            'employee' => $employee,
-                            'certificate' => $cert,
-                            'employer' => $employer,
-                            'contrato' => $contrato
-                                )
-                        )->getContent();
-                break;
+            	  //Devuelve la descarga del certificado laboral activo
+	              return $this->redirectToRoute('download_documents',array('ref' => 'cert-laboral-activo', 'id' => $this->get('request')->request->get('idEhe'), 'type' => 'pdf'));
             case '2':
                 $cert = "Certificado de aportes";
                 $content = $this->render('RocketSellerTwoPickBundle:Employer:certificadoDefault.html.twig', array(
@@ -507,7 +534,7 @@ class EmployerController extends Controller
                         )->getContent();
                 break;
         }
-
+	    
         $pdf = new PDF_HTML();
         $pdf->AddPage();
         $pdf->SetFont('Arial');

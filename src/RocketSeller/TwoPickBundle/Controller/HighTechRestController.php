@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
+use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\Pay;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -258,7 +259,19 @@ class HighTechRestController extends FOSRestController
             $product = $rejectedPurchaseOrderDescription->getProductProduct();
             //TODO-Andres enviar el correo a "" notificando que no se pudo hacer la transaccion con la informacion de, la fecha del rechazo, el monto, el empleador(nombres, telefono,correo)
 
-
+            $notification= new Notification();
+            $notification->setAccion("Ver");
+            $notification->setStatus("1");
+            $notification->setDescription("El item de ". $rejectedPurchaseOrderDescription->getProductProduct()->getName()." presentó un error");
+            $notification->setType("alert");
+            $notification->setPersonPerson($rejectedPurchaseOrderDescription->getPurchaseOrders()->getIdUser()->getPersonPerson());
+            $em->persist($notification);
+            $em->flush();
+            $notification->setRelatedLink($this->generateUrl("show_pod_description" ,array(
+                'idPOD'=>$rejectedPurchaseOrderDescription->getIdPurchaseOrdersDescription(),
+                'notifRef'=>$notification->getId())));
+            $em->persist($notification);
+            $em->flush();
 
         }
         $em->persist($pay);

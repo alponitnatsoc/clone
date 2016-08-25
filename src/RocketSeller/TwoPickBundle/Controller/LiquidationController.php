@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use RocketSeller\TwoPickBundle\Entity\Liquidation;
@@ -21,6 +22,7 @@ use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\DocumentType;
 use RocketSeller\TwoPickBundle\Traits\NotificationMethodsTrait;
 use RocketSeller\TwoPickBundle\Entity\NoveltyType;
+use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -278,7 +280,7 @@ class LiquidationController extends Controller
             'contractPeriod' => $contract[0]->getTimeCommitmentTimeCommitment()->getName(),
             'salary' => $contract[0]->getSalary(),
             'vacationDays' => "",
-            'startDay' => strftime("%d de %B de %Y", $startDate->getTimestamp()),
+            'startDay' => $startDate,
             'startDate' => $startDate,
             'idEmperHasEmpee' => $employerHasEmployee->getIdEmployerHasEmployee(),
             'frequency' => $frequency,
@@ -709,4 +711,39 @@ class LiquidationController extends Controller
             )
         );
     }
+	
+	public function correoLiquidacionAction($eheId)
+	{
+		$em = $this->getDoctrine()->getManager();
+		
+		/** @var EmployerHasEmployee $ehe */
+		$ehe = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->findOneBy(array("idEmployerHasEmployee" => $eheId));
+		
+		$employer = $ehe->getEmployerEmployer();
+		$employee = $ehe->getEmployeeEmployee();
+		
+		/** @var User $user */
+		$user = $this->getUser();
+		
+		if($user->getPersonPerson()->getIdPerson() != $employer->getPersonPerson()->getIdPerson()){
+			return $this->redirectToRoute('show_dashboard');
+		}
+		
+		//TODO-Andres
+		//Enviar correo a johonson.aguirre@symplifica.com
+		//Asunto: Asesoria liquidacion Symplifica
+		//Contenido: Atención Johonson, un empleador esta interesado en terminar el contrato con su empleado, a continuacion la informacion
+		
+		//Nombre del empleador $employer->getPersonPerson()->getFullName();
+		//Sociedad del empleador $employer->getIdSqlSociety();
+		//Cedula del empleador $employer->getPersonPerson()->getDocument();
+		//Correo del empleador $employer->getPersonPerson()->getEmail();
+		//Numeros de tel del empleador $employer->getPersonPerson()->getPhones()->getValues();
+		//En la anterior, imprimir el arreglo o la primera posicion, como le quede mas facil
+		
+		//Nombre del empleado $employee->getPersonPerson()->getFullName();
+		//Numero del empleado en SQL $ehe->getIdEmployerHasEmployee();
+		
+		return new Response(200);
+	}
 }
