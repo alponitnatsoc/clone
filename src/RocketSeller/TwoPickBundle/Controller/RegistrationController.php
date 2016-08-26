@@ -162,7 +162,7 @@ class RegistrationController extends BaseController
             $form = $formFactory->createForm();
             $form->setData($user);
             $allreque=$request->request->all();
-            if($allreque["nname"]!=null){
+            if(isset($allreque["nname"])){
                 $form->get("name")->setData($allreque["nname"]);
                 $form->get("lastName")->setData($allreque["nlast"]);
                 $form->get("email")->setData($allreque["nemail"]);
