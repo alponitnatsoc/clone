@@ -4,6 +4,7 @@ namespace RocketSeller\TwoPickBundle\Controller;
 
 use RocketSeller\TwoPickBundle\Entity\LandingRegistration;
 use RocketSeller\TwoPickBundle\Entity\User;
+use RocketSeller\TwoPickBundle\Form\PublicCalculator;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Form\Type\ContactType;
@@ -52,6 +53,8 @@ class PublicController extends Controller
     }
 
     public function calculadoraAction() {
+	      $timeCommitments = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:ContractType")->findAll();
+		    $form = $this->createForm(new PublicCalculator($timeCommitments));
         return $this->render('RocketSellerTwoPickBundle:Public:calculadora.html.twig');
     }
 

@@ -193,7 +193,9 @@ class Document
      */
     public function getMediaMedia()
     {
+
         return $this->mediaMedia;
+
     }
 
     /**
@@ -242,5 +244,30 @@ class Document
     public function getEmployerEmployer()
     {
         return $this->employerEmployer;
+    }
+
+    public function __toString()
+    {
+        return (string) $this->name;
+    }
+
+    public function getPath()
+    {
+        global $kernel;
+        if ('AppCache' == get_class($kernel)) {
+            $kernel = $kernel->getKernel();
+        }
+        $service = $kernel->getContainer()->get('sonata.media.twig.extension');
+
+        if($this->getMediaMedia()){
+            if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
+                return 'http://'.'127.0.0.1:8000' . $service->path($this->getMediaMedia(), 'reference');
+            }else {
+                return 'https://' . $_SERVER['HTTP_HOST'] . $service->path($this->getMediaMedia(), 'reference');
+            }
+        }else{
+            return '';
+        }
+
     }
 }

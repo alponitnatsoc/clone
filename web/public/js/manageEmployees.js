@@ -186,6 +186,28 @@ function manageEmployees() {
     $("#btn-erase").on("click", function (e) {
         $(this).text("Borrando...");
     })
+
+    $("#terminar_contrato_button").on("click", function (e){
+        $('#terminacion_contrato_modal').modal('show');
+    });
+
+    $("#solicitar_llamada").on("click", function (e){
+        var ehe = $("#ehe-id").val();
+        var urlL = "/employer/liquidate/" + ehe + "/mail/";
+        e.preventDefault();
+        $.ajax({
+            url: urlL,
+            type: 'POST',
+            data: {
+            }
+        }).done(function (data) {
+            alert("Se ha enviado la solicitud, pronto serás contactado de vuelta");
+            window.location.reload();
+
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert("La solicitud no pudo ser generada, intentalo de nuevo más tarde");
+        });
+    });
 }
 function loadNovelty(url) {
     $.ajax({

@@ -332,6 +332,35 @@ class NoveltyController extends Controller {
       return $this->redirectToRoute('payroll');
     }
 
+    public function validateAndPersistNoveltyAction($idPayroll, $idNoveltyType, $noveltyFields){
+      $noveltyType = $this->getDoctrine()
+          ->getRepository('RocketSellerTwoPickBundle:NoveltyType')
+          ->find($idNoveltyType);
+
+      $payroll = $this->getDoctrine()
+          ->getRepository('RocketSellerTwoPickBundle:Payroll')
+          ->find($idPayroll);
+      $novelty = new Novelty();
+      $novelty->setNoveltyTypeNoveltyType($noveltyType);
+      $novelty->setPayrollDetailPayrollDetail(new PayrollDetail());
+
+      if(array_key_exists('name', $noveltyFields))
+        $novelty->setName($noveltyFields['name']);
+      if(array_key_exists('dateStart', $noveltyFields))
+        $novelty->setDateStart(DateTime::createFromFormat('m/d/Y', $noveltyFields['dateStart']));
+
+      if(array_key_exists('dateEnd', $noveltyFields))
+        $novelty->setDateEnd(DateTime::createFromFormat('m/d/Y', $noveltyFields['dateEnd']));
+
+      if(array_key_exists('units', $noveltyFields))
+        $novelty->setUnits($noveltyFields['units']);
+
+      if(array_key_exists('amount', $noveltyFields))
+        $novelty->setAmount($noveltyFields['amount']);
+
+      return $this->validateAndPersistNovelty($novelty, $payroll, $noveltyType);
+    }
+
     /**
      * @param Novelty $novelty
      * @param Payroll $payRol

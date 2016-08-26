@@ -1,4 +1,8 @@
 {% extends "::base.html.twig" %}
+{%  from '@RocketSellerTwoPick/modal_templates/modal_picker.twig' import modal %}
+{% block modales %}
+    {{ modal(26) }}
+{% endblock %}
 {% block fos_user_content %}
     <div class="employees">
         <div class="col-sm-12 col-xs-12">
@@ -210,7 +214,8 @@
                     <div class="col-sm-12">
                             {% if employerHasEmployee.state > 3 %}
                             <div class="col-sm-12 center">
-                                <a class="btn btn-sm btn-top-red btn-primary  notAjax" href="{{ path('final_liquidation', { 'id': employerHasEmployee.idEmployerHasEmployee }) }}">Terminar contrato</a>
+                                <a id="terminar_contrato_button" class="btn btn-sm btn-top-red btn-primary  notAjax" {#href="{{ path('final_liquidation', { 'id': employerHasEmployee.idEmployerHasEmployee }) }}"#} >Terminar contrato</a>
+                                <input type="hidden" id="ehe-id" name="ehe-id" value="{{ employerHasEmployee.idEmployerHasEmployee }}"/>
                             </div>
                             {% endif %}
                     </div>
