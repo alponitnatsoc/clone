@@ -51,13 +51,7 @@ class PublicController extends Controller
             "breadcrumbs" => array("Inicio" => "/", "Beneficios" => "")
         ));
     }
-
-    public function calculadoraAction() {
-	      $timeCommitments = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:ContractType")->findAll();
-		    $form = $this->createForm(new PublicCalculator($timeCommitments));
-        return $this->render('RocketSellerTwoPickBundle:Public:calculadora.html.twig');
-    }
-
+	
     public function preciosAction() {
         return $this->render('RocketSellerTwoPickBundle:Public:precios.html.twig', array(
             "breadcrumbs" => array("Inicio" => "/", "Precios" => "")

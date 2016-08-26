@@ -100,6 +100,12 @@ class LoadCalculatorData extends AbstractFixture implements OrderedFixtureInterf
         $calcCons->setName("dotacion");
         $calcCons->setValue("50000");
         $calcConstraints->add($calcCons);
+	
+		    $calcCons=new CalculatorConstraints();
+		    $calcCons->setPositionPosition($domestic);
+		    $calcCons->setName("prima");
+		    $calcCons->setValue("0.0833333333");
+		    $calcConstraints->add($calcCons);
 
 
         foreach ($calcConstraints as $CC) {

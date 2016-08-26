@@ -13,46 +13,50 @@ function addNoveltySelectListener() {
     $("#nombreNovedad").text(selectedText);
     if(selectedText =="Hora extra diurna"){
       $("#notaNovedad").show();
-      $("#notaNovedad").text("Hora extra diurna es el tiempo de trabajo adicional a las 8 horas diarias o a la jornada pactada entre las partes en un horario de 6am a 10pm.");
+      $("#notaNovedad").text("Hora extra diurna es el tiempo de trabajo adicional a las 8 horas diarias o a la jornada pactada en un horario de 6 A.M. y las 10 P.M.");
     }
 
     if(selectedText =="Hora extra festiva diurna"){
       $("#notaNovedad").show();
-      $("#notaNovedad").text("Hora extra diurna festiva es aquella hora que se trabaja adicional a las 8 horas diarias o a la jornada pactada entre las partes en un horario de 6am a 10 pm; en un día festivo o dominical.");
+      $("#notaNovedad").text("Hora extra festiva diurna es el tiempo de trabajo adicional a las 8 horas diarias o a la jornada pactada en un horario entre las  6 A.M. y las 10 P.M. en un día festivo.");
     }
 
     if(selectedText =="Hora extra nocturna"){
       $("#notaNovedad").show();
-      $("#notaNovedad").text("Hora extra nocturna es aquella hora que se trabaja adicional a las 8 horas diarias o a la jornada pactada entre las partes en un horario de 10:00pm a 6 am.");
+      $("#notaNovedad").text("Hora extra nocturna es el tiempo de trabajo adicional a las 8 horas diarias o a la jornada pactada en un horario entre las 10 P.M. y las 6 A.M.");
     }
 
     if(selectedText =="Hora extra festiva nocturna"  ){
       $("#notaNovedad").show();
-      $("#notaNovedad").text("Hora extra nocturna festiva es aquella hora que se trabaja adicional a las 8 horas diarias o a la jornada pactada entre las partes en un horario de 10pm a 6am; en un día festivo o dominical.");
+      $("#notaNovedad").text("Hora extra festiva nocturna es el tiempo de trabajo adicional a las 8 horas diarias o a la jornada en un horario entre las 10 P.M. y las 6 A.M. en un día festivo.");
     }
 
     if(selectedText =="Licencia de maternidad" ||
         selectedText =="Licencia de paternidad" ||
           selectedText =="Incapacidad general"){
           $("#notaNovedad").show();
-          $("#notaNovedad").html("Esta información debe provenir del comprobante de incapacidad recibido por la EPS.</br>Por ahora, no realizamos el proceso de cobro de dicha incapacidad.</br>Para mayor información, contacte su EPS");
+          $("#notaNovedad").html("Esta información debes obtenerla del comprobante otorgado por la EPS.</br>Por ahora, no realizamos el proceso de cobro, debes contactar directamente a la EPS para obtener el dinero de la incapacidad.");
+    }
+
+    if(selectedText == "Licencia remunerada"){
+      $("#notaNovedad").show();
+      $("#notaNovedad").html("Esta licencia la otorgas por autorización y criterio tuyo bajo un permiso solicitado por tu empleado o por una calamidad doméstica justificada");
     }
 
     if(selectedText == "Incapacidad laboral"){
-          $("#notaNovedad").show();
-          $("#notaNovedad").html("Esta información debe provenir del comprobante de incapacidad recibido por la ARL.</br>Por ahora, no realizamos el proceso de cobro de dicha incapacidad.</br>Para mayor información, contacte su ARL");
+      $("#notaNovedad").show();
+      $("#notaNovedad").html("Esta información debes obtenerla del comprobante otorgado por la ARL.</br>Por ahora, no realizamos el proceso de cobro, debes contactar directamente a la ARL para obtener el dinero de la incapacidad.");
     }
 
     if(selectedText == "Suspensión"){
-          $("#notaNovedad").show();
-          $("#notaNovedad").html("Posibles razones para suspender a alguien:</br>&#10148;Incumplimiento de horario.</br>&#10148;Inasistencia laboral no justificada.</br>&#10148;Incumplimiento de sus funciones de contrato.");
+      $("#notaNovedad").show();
+      $("#notaNovedad").html("Posibles razones para suspender a tu empleado:</br>&#10148;Incumplimiento de horario.</br>&#10148;Inasistencia laboral no justificada.</br>&#10148;Incumplimiento de sus funciones de contrato.");
     }
 
     if(selectedText == "Bonificación"){
-          $("#notaNovedad").show();
-          $("#notaNovedad").html("Recuerde que las bonificaciones recurrentes se vuelven parte constitutiva del salario.");
+      $("#notaNovedad").show();
+      $("#notaNovedad").html("Recuerda que las bonificaciones recurrentes se vuelven parte del salario.");
     }
-
 
     if($("#novelty_fields_noveltyType").find("option:selected").text()=="Vacaciones"){
         $("#notaNovedad").show();
