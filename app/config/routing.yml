@@ -562,3 +562,7 @@ store_config:
 employer_liquidation:
     path: /employer/liquidate/{eheId}/mail/
     defaults: { _controller: RocketSellerTwoPickBundle:Liquidation:correoLiquidacion}
+
+calculadora:
+    path: /calculadora
+    defaults: { _controller: RocketSellerTwoPickBundle:Public:calculadora}

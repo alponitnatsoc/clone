@@ -957,6 +957,9 @@ function startEmployee() {
         if( timeCommitment.val() == "2" ){
             sisbenS = "1";
         }
+        else{
+            sisbenS = "-1";
+        }
 
         $.ajax({
             url: $(this).attr('href'),
@@ -1059,6 +1062,16 @@ function startEmployee() {
 
     $("#errorWealth").hide();
 
+    //TODO HERE
+    var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
+    if (selectedVal == " Trabajador por días") {
+        $("#wealthBlock").hide();
+    }
+    else {
+        $("#wealthBlock").show();
+    }
+
+
 }
 function addPhoneForm($collectionHolderB, $newLinkLi) {
     var prototype = $collectionHolderB.data('prototype');
@@ -1128,7 +1141,7 @@ function changeValues(data) {
   var salario_bruto = Math.round((data.plainSalary - data.transportCal)/0.92);
   var total_modal = data.plainSalary + data.transportCal + data.EPSEmployerCal + data.PensEmployerCal + data.cajaCal + data.arlCal;
   var pagos_netos = (Math.round(data.plainSalary) + Math.round(data.transportCal)) - (Math.round(data.EPSEmployeeCal) + Math.round(data.PensEmployeeCal));
-  var total_prestaciones = Math.round(data.cesCal + data.taxCesCal + data.vacationsCal);
+  var total_prestaciones = Math.round(data.cesCal + data.taxCesCal + data.vacationsCal + data.primaCal);
 
   document.getElementById('salario_ingreso_bruto').innerHTML = getPrice(Math.round(data.plainSalary)/division);
   document.getElementById('subsidio_transporte').innerHTML = getPrice(Math.round(data.transportCal)/division);
@@ -1147,7 +1160,7 @@ function changeValues(data) {
   document.getElementById('cesantias').innerHTML = getPrice(Math.round(data.cesCal)/division);
   document.getElementById('int_cesantias').innerHTML = getPrice(Math.round(data.taxCesCal)/division);
   document.getElementById('vacaciones').innerHTML = getPrice(Math.round(data.vacationsCal)/division);
-  document.getElementById('prima').innerHTML = "Próximamente entra en vigencia decreto para su pago";
+  document.getElementById('prima').innerHTML = getPrice(Math.round(data.primaCal)/division);
   document.getElementById('total_prestaciones').innerHTML = getPrice(total_prestaciones/division);
 
   sueldo_plano = Math.round(data.plainSalary/data.numberOfDays);
@@ -1576,6 +1589,7 @@ var vacations30D;
 var dotationDaily;
 var firstLoad = true;
 var lockCalc = false;
+var prima;
 function loadConstrains() {
     var constraints = null;
     $.ajax({
@@ -1602,6 +1616,7 @@ function loadConstrains() {
                 transportAidDaily = transportAid / 30;
                 vacations30D = vacations / 30;
                 dotationDaily = dotation / 30;
+                prima =  parseFloat(constraints['prima']);
                 calculator();
             }
         }
@@ -1681,6 +1696,7 @@ function calculator() {
     var icbfCal = 0;
     var salaryM2 = 0;
     var base = 0;
+    var primaCal = 0;
     if (aid == 0) {
         aidD = 0;
     }
@@ -1740,6 +1756,7 @@ function calculator() {
             arlCal = arlProf * base;
             //cesCal = ((ces) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
             cesCal = ((ces) * (((salaryD + aidD) * numberOfDays ) + transportAidDaily*numberOfDays));
+            primaCal = ((prima) * (((salaryD + aidD) * numberOfDays ) + transportAidDaily*numberOfDays));
             //taxCesCal = ((taxCes) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
             taxCesCal = ((taxCes) * (((salaryD + aidD) * numberOfDays) + transportAidDaily*numberOfDays));
             cajaCal = caja * base;
@@ -1787,6 +1804,7 @@ function calculator() {
             arlCal = arlProf * base;
             //cesCal = ((ces) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
             cesCal = ((ces) * (((salaryD + aidD) * numberOfDays ) + transportAidDaily*numberOfDays));
+            primaCal = ((prima) * (((salaryD + aidD) * numberOfDays ) + transportAidDaily*numberOfDays));
             //taxCesCal = ((taxCes) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
             taxCesCal = ((taxCes) * (((salaryD + aidD) * numberOfDays) + transportAidDaily*numberOfDays));
             vacationsCal = vacations30D * numberOfDays * salaryD;
@@ -1816,6 +1834,7 @@ function calculator() {
         PensEmployeeCal = lPensEmployee * (salaryM + aidD);
         arlCal = arlProf * (salaryM + aidD);
         cesCal = ces * (salaryM + aidD + transportAid2);
+        primaCal = prima * (salaryM + aidD + transportAid2);
         taxCesCal = taxCes * (salaryM + aidD + transportAid2);
         cajaCal = caja * (salaryM + aidD);
         vacationsCal = vacations30D * (salaryM + aidD);
@@ -1847,6 +1866,7 @@ function calculator() {
         resposne['senaCal'] = 0;
         resposne['icbfCal'] = 0;
         resposne['totalIncome'] = 0;
+        resposne['primaCal'] = 0;
     } else {
         resposne['totalExpenses'] = totalExpenses;
         resposne['dailyExpenses'] = totalExpenses / numberOfDays;
@@ -1868,6 +1888,7 @@ function calculator() {
         resposne['plainSalary'] = plainSalary;
         resposne['numberOfDays'] = numberOfDays;
         resposne['salaryM2'] = salaryM2;
+        resposne['primaCal'] = primaCal;
 
         if(type=="days"&& EPSEmployerCal>0 && sisben==1){
             $("#arsNotAplicable").show();
@@ -1914,11 +1935,13 @@ $("input[name='register_employee[employeeHasEmployers][timeCommitment]']").on("c
     $('#radio_diario').prop('checked', false);
     $('#radio_mensual').prop('checked', true);
     $("#labelCosto").html("Costo del empleado +</br> seguridad social (sin prestaciones)");
+    $("#wealthBlock").show();
   }
   else {
     $('#radio_diario').prop('checked', true);
     $('#radio_mensual').prop('checked', false);
     $("#labelCosto").html("Costo diario </br> del empleado (sin prestaciones)");
+    $("#wealthBlock").hide();
   }
 });
 

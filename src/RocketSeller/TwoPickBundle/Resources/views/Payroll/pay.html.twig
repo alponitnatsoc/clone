@@ -70,7 +70,7 @@
                                             <div class="numerodias light-italic">
                                                 {% if data.payroll_payroll.sql_novelties|length > 0 %}
                                                     {% set novelties = data.payroll_payroll.sql_novelties %}
-                                                    {% for novelty in novelties if novelty.novelty_type_novelty_type.id_novelty_type == 29 %}
+                                                    {% for novelty in novelties if (novelty.novelty_type_novelty_type.payroll_code == 1 and novelty.sql_nov_consec != "") %}
                                                             Días trabajados al mes: <span class="diasMes">{{ novelty.units }}</span>
                                                             <a class="notAjax workedDays btn-xs" href="/novelty/workableDays/{{ novelty.id_novelty }}">
                                                               <span class="editarDias">&#10095; Editar</span></a>
