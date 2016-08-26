@@ -71,7 +71,6 @@ class RegistrationController extends BaseController
 
         $form = $formFactory->createForm();
         $form->setData($user);
-
         $form->handleRequest($request);
         $exists=$userManager->findUserByEmail($user->getEmail());
         $errorss="";
@@ -162,6 +161,12 @@ class RegistrationController extends BaseController
             }
             $form = $formFactory->createForm();
             $form->setData($user);
+            $allreque=$request->request->all();
+            if($allreque["nname"]!=null){
+                $form->get("name")->setData($allreque["nname"]);
+                $form->get("lastName")->setData($allreque["nlast"]);
+                $form->get("email")->setData($allreque["nemail"]);
+            }
         }
 
         $queryCode = $request->query->get("c");
