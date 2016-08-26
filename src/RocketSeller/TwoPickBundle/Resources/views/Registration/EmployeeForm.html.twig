@@ -564,7 +564,12 @@
                                             {{ form_label(form.employeeHasEmployers.timeCommitment) }}
                                         </div>
                                         <div class="col-sm-6 form-group">
-                                            {{ form_widget(form.employeeHasEmployers.timeCommitment) }}
+                                            {#{ form_widget(form.employeeHasEmployers.timeCommitment, { 'attr': {'data-error': '#error_time_commitment'} }) }#}
+
+                                            {% for key, item in form.employeeHasEmployers.timeCommitment.children %}
+                                              {{ form_widget(item, { 'attr': {'data-error': '#error_time_commitment'} }) }}
+                                            {% endfor %}
+                                            <div id="error_time_commitment"></div>
                                         </div>
                                     </div>
 

@@ -172,6 +172,7 @@ use EmployerMethodsTrait;
         $documentType = $this->getDoctrine()
             ->getRepository('RocketSellerTwoPickBundle:DocumentType')
             ->findOneBy(array("docCode"=>$docCode));
+        $exists = false;
         /** @var Document $document */
         //switching between entities
         switch ($entityType){
@@ -183,7 +184,27 @@ use EmployerMethodsTrait;
                 switch ($docCode){
                     case "CC":
                         if($person->getDocumentDocument()){
-                            $document = $person->getDocumentDocument();
+                            $oldDocument = $person->getDocumentDocument();
+                            if($oldDocument->getMediaMedia()){
+                                /** @var Media $media */
+                                $media = $oldDocument->getMediaMedia();
+                                if($media->getProviderName()){
+                                    $provider = $this->get($media->getProviderName());
+                                    $provider->removeThumbnails($media);
+                                }
+                                $em->remove($em->getRepository('\Application\Sonata\MediaBundle\Entity\Media')->find($media->getId()));
+                                $em->remove($em->getRepository('ApplicationSonataMediaBundle:Media')->find($media->getId()));
+                                $person->setDocumentDocument(null);
+                                $em->flush();
+                                $em->remove($em->getRepository('RocketSellerTwoPickBundle:Document')->find($oldDocument->getIdDocument()));
+                                $em->flush();
+                            }
+                            $document = new Document();
+                            $document->setName($documentType->getName());
+                            $document->setDocumentTypeDocumentType($documentType);
+                            $document->setStatus(0);
+                            $person->setDocument($document);
+
                         }else{
                             $document = new Document();
                             $document->setName($documentType->getName());
@@ -194,7 +215,26 @@ use EmployerMethodsTrait;
                         break;
                     case "RUT":
                         if($person->getRutDocument()){
-                            $document = $person->getRutDocument();
+                            $oldDocument = $person->getDocumentDocument();
+                            if($oldDocument->getMediaMedia()){
+                                /** @var Media $media */
+                                $media = $oldDocument->getMediaMedia();
+                                if($media->getProviderName()){
+                                    $provider = $this->get($media->getProviderName());
+                                    $provider->removeThumbnails($media);
+                                }
+                                $em->remove($em->getRepository('\Application\Sonata\MediaBundle\Entity\Media')->find($media->getId()));
+                                $em->remove($em->getRepository('ApplicationSonataMediaBundle:Media')->find($media->getId()));
+                                $person->setDocumentDocument(null);
+                                $em->flush();
+                                $em->remove($em->getRepository('RocketSellerTwoPickBundle:Document')->find($oldDocument->getIdDocument()));
+                                $em->flush();
+                            }
+                            $document = new Document();
+                            $document->setName($documentType->getName());
+                            $document->setDocumentTypeDocumentType($documentType);
+                            $document->setStatus(0);
+                            $person->setDocument($document);
                         }else{
                             $document = new Document();
                             $document->setName($documentType->getName());
@@ -205,7 +245,26 @@ use EmployerMethodsTrait;
                         break;
                     case "RCDN":
                         if($person->getBirthRegDocument()){
-                            $document = $person->getBirthRegDocument();
+                            $oldDocument = $person->getDocumentDocument();
+                            if($oldDocument->getMediaMedia()){
+                                /** @var Media $media */
+                                $media = $oldDocument->getMediaMedia();
+                                if($media->getProviderName()){
+                                    $provider = $this->get($media->getProviderName());
+                                    $provider->removeThumbnails($media);
+                                }
+                                $em->remove($em->getRepository('\Application\Sonata\MediaBundle\Entity\Media')->find($media->getId()));
+                                $em->remove($em->getRepository('ApplicationSonataMediaBundle:Media')->find($media->getId()));
+                                $person->setDocumentDocument(null);
+                                $em->flush();
+                                $em->remove($em->getRepository('RocketSellerTwoPickBundle:Document')->find($oldDocument->getIdDocument()));
+                                $em->flush();
+                            }
+                            $document = new Document();
+                            $document->setName($documentType->getName());
+                            $document->setDocumentTypeDocumentType($documentType);
+                            $document->setStatus(0);
+                            $person->setDocument($document);
                         }else{
                             $document = new Document();
                             $document->setName($documentType->getName());
@@ -216,7 +275,26 @@ use EmployerMethodsTrait;
                         break;
                     case "TI":
                         if($person->getDocumentDocument()){
-                            $document = $person->getDocumentDocument();
+                            $oldDocument = $person->getDocumentDocument();
+                            if($oldDocument->getMediaMedia()){
+                                /** @var Media $media */
+                                $media = $oldDocument->getMediaMedia();
+                                if($media->getProviderName()){
+                                    $provider = $this->get($media->getProviderName());
+                                    $provider->removeThumbnails($media);
+                                }
+                                $em->remove($em->getRepository('\Application\Sonata\MediaBundle\Entity\Media')->find($media->getId()));
+                                $em->remove($em->getRepository('ApplicationSonataMediaBundle:Media')->find($media->getId()));
+                                $person->setDocumentDocument(null);
+                                $em->flush();
+                                $em->remove($em->getRepository('RocketSellerTwoPickBundle:Document')->find($oldDocument->getIdDocument()));
+                                $em->flush();
+                            }
+                            $document = new Document();
+                            $document->setName($documentType->getName());
+                            $document->setDocumentTypeDocumentType($documentType);
+                            $document->setStatus(0);
+                            $person->setDocument($document);
                         }else{
                             $document = new Document();
                             $document->setName($documentType->getName());
@@ -233,7 +311,26 @@ use EmployerMethodsTrait;
                 $employer = $em->getRepository("RocketSellerTwoPickBundle:Employer")->find($entityId);
                 $name = $employer->getPersonPerson()->getFullName();
                 if($employer->getMandatoryDocument()){
-                    $document = $employer->getMandatoryDocument();
+                    $oldDocument= $employer->getMandatoryDocument();
+                    if($oldDocument->getMediaMedia()){
+                        /** @var Media $media */
+                        $media = $oldDocument->getMediaMedia();
+                        if($media->getProviderName()){
+                            $provider = $this->get($media->getProviderName());
+                            $provider->removeThumbnails($media);
+                        }
+                        $em->remove($em->getRepository('\Application\Sonata\MediaBundle\Entity\Media')->find($media->getId()));
+                        $em->remove($em->getRepository('ApplicationSonataMediaBundle:Media')->find($media->getId()));
+                        $employer->setMandatoryDocument(null);
+                        $em->flush();
+                        $em->remove($em->getRepository('RocketSellerTwoPickBundle:Document')->find($oldDocument->getIdDocument()));
+                        $em->flush();
+                    }
+                    $document = new Document();
+                    $document->setName($documentType->getName());
+                    $document->setDocumentTypeDocumentType($documentType);
+                    $document->setStatus(0);
+                    $employer->setMandatoryDocument($document);
                 }else{
                     $document = new Document();
                     $document->setName($documentType->getName());
@@ -248,7 +345,26 @@ use EmployerMethodsTrait;
                 $eHE = $em->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")->find($entityId);
                 $name = $eHE->getEmployeeEmployee()->getPersonPerson()->getFullName();
                 if($eHE->getAuthDocument()){
-                    $document = $eHE->getAuthDocument();
+                    $oldDocument = $eHE->getAuthDocument();
+                    if($oldDocument->getMediaMedia()){
+                        /** @var Media $media */
+                        $media = $oldDocument->getMediaMedia();
+                        if($media->getProviderName()){
+                            $provider = $this->get($media->getProviderName());
+                            $provider->removeThumbnails($media);
+                        }
+                        $em->remove($em->getRepository('\Application\Sonata\MediaBundle\Entity\Media')->find($media->getId()));
+                        $em->remove($em->getRepository('ApplicationSonataMediaBundle:Media')->find($media->getId()));
+                        $eHE->setAuthDocument(null);
+                        $em->flush();
+                        $em->remove($em->getRepository('RocketSellerTwoPickBundle:Document')->find($oldDocument->getIdDocument()));
+                        $em->flush();
+                    }
+                    $document = new Document();
+                    $document->setName($documentType->getName());
+                    $document->setDocumentTypeDocumentType($documentType);
+                    $document->setStatus(0);
+                    $eHE->setAuthDocument($document);
                 }else{
                     $document = new Document();
                     $document->setName($documentType->getName());
@@ -263,7 +379,26 @@ use EmployerMethodsTrait;
                 $contract = $em->getRepository("RocketSellerTwoPickBundle:Contract")->find($entityId);
                 $name = $contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName();
                 if($contract->getDocumentDocument()){
-                    $document = $contract->getDocumentDocument();
+                    $oldDocument = $contract->getDocumentDocument();
+                    if($oldDocument->getMediaMedia()){
+                        /** @var Media $media */
+                        $media = $oldDocument->getMediaMedia();
+                        if($media->getProviderName()){
+                            $provider = $this->get($media->getProviderName());
+                            $provider->removeThumbnails($media);
+                        }
+                        $em->remove($em->getRepository('\Application\Sonata\MediaBundle\Entity\Media')->find($media->getId()));
+                        $em->remove($em->getRepository('ApplicationSonataMediaBundle:Media')->find($media->getId()));
+                        $contract->setDocumentDocument(null);
+                        $em->flush();
+                        $em->remove($em->getRepository('RocketSellerTwoPickBundle:Document')->find($oldDocument->getIdDocument()));
+                        $em->flush();
+                    }
+                    $document = new Document();
+                    $document->setName($documentType->getName());
+                    $document->setDocumentTypeDocumentType($documentType);
+                    $document->setStatus(0);
+                    $contract->setDocumentDocument($document);
                 }else{
                     $document = new Document();
                     $document->setName($documentType->getName());
@@ -278,7 +413,26 @@ use EmployerMethodsTrait;
                 $payroll = $em->getRepository("RocketSellerTwoPickBundle:Payroll")->find($entityId);
                 $name = "pago de ".$payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName();
                 if($payroll->getPayslip()){
-                    $document = $payroll->getPayslip();
+                    $oldDocument = $payroll->getPayslip();
+                    if($oldDocument->getMediaMedia()){
+                        /** @var Media $media */
+                        $media = $oldDocument->getMediaMedia();
+                        if($media->getProviderName()){
+                            $provider = $this->get($media->getProviderName());
+                            $provider->removeThumbnails($media);
+                        }
+                        $em->remove($em->getRepository('\Application\Sonata\MediaBundle\Entity\Media')->find($media->getId()));
+                        $em->remove($em->getRepository('ApplicationSonataMediaBundle:Media')->find($media->getId()));
+                        $payroll->setPayslip(null);
+                        $em->flush();
+                        $em->remove($em->getRepository('RocketSellerTwoPickBundle:Document')->find($oldDocument->getIdDocument()));
+                        $em->flush();
+                    }
+                    $document = new Document();
+                    $document->setName($documentType->getName());
+                    $document->setDocumentTypeDocumentType($documentType);
+                    $document->setStatus(0);
+                    $payroll->setPayslip($document);
                 }else{
                     $document = new Document();
                     $document->setName($documentType->getName());
@@ -290,14 +444,12 @@ use EmployerMethodsTrait;
                 break;
         }
         $form = $this->createForm(new DocumentRegistration(), $document);
-
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             if (in_array($document->getMediaMedia()->getContentType(), $fileTypePermitted)) {
-
-                $medias = $document->getMediaMedia();
                 /** @var Media $media */
+                $medias = $document->getMediaMedia();
                 foreach ($medias as $media) {
                     $media->setBinaryContent($media);
                     $media->setName($document->getName());
