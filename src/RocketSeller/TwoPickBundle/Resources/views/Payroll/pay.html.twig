@@ -49,61 +49,61 @@
                                     <div class="tittle-pay nominaBack">
                                         <div class="pagoforma">
 
-                                          {% if payType != 'EFE' %}
-                                              <label style="font-weight: 100;"><input type="radio" class="toPayArray"
-                                                                                      name="{{ data.id_purchase_orders_description }}"
-                                                                                      value="p-{{ data.id_purchase_orders_description }}">
-                                                  Pagar </label>
-                                              <label style="font-weight: 100;margin-left: 15px;"><input type="radio"
-                                                                                                        class="alreadyPaid"
-                                                                                                        name="{{ data.id_purchase_orders_description }}"
-                                                                                                        value="ap-{{ data.id_purchase_orders_description }}">
-                                                  Pagaré fuera de la plataforma </label>
-                                          {% else %}
-                                              <label style="font-weight: 100;margin-left: 15px;"><input type="radio"
-                                                                                                        class="alreadyPaid"
-                                                                                                        name="{{ data.id_purchase_orders_description }}"
-                                                                                                        value="ap-{{ data.id_purchase_orders_description }}">
-                                                  Pago en efectivo - Generar comprobante </label>
-                                          {% endif %}
+                                            {% if payType != 'EFE' %}
+                                                <label style="font-weight: 100;"><input type="radio" class="toPayArray"
+                                                                                        name="{{ data.id_purchase_orders_description }}"
+                                                                                        value="p-{{ data.id_purchase_orders_description }}">
+                                                    Pagar </label>
+                                                <label style="font-weight: 100;margin-left: 15px;"><input type="radio"
+                                                                                                          class="alreadyPaid"
+                                                                                                          name="{{ data.id_purchase_orders_description }}"
+                                                                                                          value="ap-{{ data.id_purchase_orders_description }}">
+                                                    Pagaré fuera de la plataforma </label>
+                                            {% else %}
+                                                <label style="font-weight: 100;margin-left: 15px;"><input type="radio"
+                                                                                                          class="alreadyPaid"
+                                                                                                          name="{{ data.id_purchase_orders_description }}"
+                                                                                                          value="ap-{{ data.id_purchase_orders_description }}">
+                                                    Pago en efectivo - Generar comprobante </label>
+                                            {% endif %}
 
                                         </div>
 
-                                            {% if data.payroll_payroll.contract_contract.time_commitment_time_commitment.code == "XD" %}
+                                        {% if data.payroll_payroll.contract_contract.time_commitment_time_commitment.code == "XD" %}
                                             <div class="numerodias light-italic">
                                                 {% if data.payroll_payroll.sql_novelties|length > 0 %}
                                                     {% set novelties = data.payroll_payroll.sql_novelties %}
                                                     {% for novelty in novelties if (novelty.novelty_type_novelty_type.payroll_code == 1 and novelty.sql_nov_consec != "") %}
-                                                            Días trabajados al mes: <span class="diasMes">{{ novelty.units }}</span>
-                                                            <a class="notAjax workedDays btn-xs" href="/novelty/workableDays/{{ novelty.id_novelty }}">
-                                                              <span class="editarDias">&#10095; Editar</span></a>
+                                                        Días trabajados al mes: <span class="diasMes">{{ novelty.units }}</span>
+                                                        <a class="notAjax workedDays btn-xs" href="/novelty/workableDays/{{ novelty.id_novelty }}">
+                                                            <span class="editarDias">&#10095; Editar</span></a>
                                                     {% endfor %}
                                                 {% endif %}
-                                                </div>
-                                            {% endif %}
+                                            </div>
+                                        {% endif %}
 
                                     </div>
                                     <div class="datadesc nominaBorder col-sm-12">
                                         <div class="col-sm-4">
-                                          <h2 class="h2">{{ employeeName }}</h2>
-                                          <span><a class="notAjax addNovelty btn-xs btn-lightBlue" href="/novelty/select/{{ id_payroll }}">Agregar novedad</a></span>
+                                            <h2 class="h2">{{ employeeName }}</h2>
+                                            <span><a class="notAjax addNovelty btn-xs btn-lightBlue" href="/novelty/select/{{ id_payroll }}">Agregar novedad</a></span>
                                         </div>
                                         <div class="col-sm-2">
                                             <p>Novedades</p>
                                             <h2 class="h2">-</h2>
                                         </div>
                                         <div class="col-sm-2">
-                                          <p>Ingresos</p>
-                                          <h2 class="h2">-</h2>
+                                            <p>Ingresos</p>
+                                            <h2 class="h2">-</h2>
                                         </div>
                                         <div class="col-sm-2">
-                                          <p>Deducciones</p>
-                                          <h2 class="h2">-</h2>
+                                            <p>Deducciones</p>
+                                            <h2 class="h2">-</h2>
                                         </div>
                                         <div class="col-sm-2">
-                                          <p>Total</p>
-                                          <h2 class="h2">${{ data.value|number_format(0, '.', ',') }}</h2>
-                                          <span style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax showDetails" href="/payroll/show/details/{{ id_payroll }}">&#10093; Detalles</span>
+                                            <p>Total</p>
+                                            <h2 class="h2">${{ data.value|number_format(0, '.', ',') }}</h2>
+                                            <span style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax showDetails" href="/payroll/show/details/{{ id_payroll }}">&#10093; Detalles</span>
                                         </div>
                                     </div>
                                     <!--<div class="height center col-sm-12">
@@ -141,10 +141,10 @@
                         {% endfor %}
                         {% if pilaData!=null %}
                             {% for dataPila in pilaData %}
-                            <div class="deuda light grisclarofont">
-                                <div align="center" colspan="4">Pago de aportes</div>
-                                {% set payrolls = dataPila.payrolls_pila %}
-                            </div>
+                                <div class="deuda light grisclarofont">
+                                    <div align="center" colspan="4">Pago de aportes</div>
+                                    {% set payrolls = dataPila.payrolls_pila %}
+                                </div>
                                 <div class="borderclass">
                                     <div class="tittle-pay-aportes">
                                         <div class="pagoforma">
@@ -161,21 +161,21 @@
                                     </div>
                                     <div class="datadesc aportesBorder col-sm-12">
                                         <div class="col-sm-10 title-span pila-empl azulmediofont bold">
-                                                <ul>
-                                                    {% for payroll in payrolls %}
-                                                        {% set employeePP = payroll.contract_contract.employer_has_employee_employer_has_employee.employee_employee.person_person %}
-                                                        <li>{{ employeePP.names ~' '~ employeePP.last_name1 }}</li>
-                                                    {% endfor %}
-                                                </ul>
+                                            <ul>
+                                                {% for payroll in payrolls %}
+                                                    {% set employeePP = payroll.contract_contract.employer_has_employee_employer_has_employee.employee_employee.person_person %}
+                                                    <li>{{ employeePP.names ~' '~ employeePP.last_name1 }}</li>
+                                                {% endfor %}
+                                            </ul>
                                         </div>
                                         <div class="col-sm-2">
-                                          <p>Total</p>
-                                          <h2 class="h2">${{ dataPila.value|number_format(0, '.', ',') }}</h2>
-                                          <span style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax showDetails" href="">&#10093; Detalles</span>
+                                            <p>Total</p>
+                                            <h2 class="h2">${{ dataPila.value|number_format(0, '.', ',') }}</h2>
+                                            <span style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax showDetails" href="">&#10093; Detalles</span>
                                         </div>
                                     </div>
                                     {#<div class="center" style="clear: both;background: #CCC;padding: 10px 0;">#}
-                                        {#<a style="color:#5D5D5D;font-weight: 600" class="notAjax" href="">&#10093; Detalles</a>#}
+                                    {#<a style="color:#5D5D5D;font-weight: 600" class="notAjax" href="">&#10093; Detalles</a>#}
                                     {#</div>#}
                                 </div>
                             {% endfor %}
@@ -193,51 +193,51 @@
                                 {% if data.product_product.simple_name == "PN" %}
                                     <div class="borderclass">
                                         <div class="tittle-pay moraNomina">
-                                          {% set employee = data.payroll_payroll.contract_contract.employer_has_employee_employer_has_employee.employee_employee.person_person %}
-                                          {% set employeeName = employee.names ~' '~ employee.last_name1 %}
-                                          {% set payType = data.payroll_payroll.contract_contract.pay_method_pay_method.pay_type_pay_type.payroll_code %}
-                                          <div class="center">
-                                              {% if payType != 'EFE' %}
-                                                  <label style="font-weight: 100;"><input type="radio" class="toPayArray"
-                                                                                          name="{{ data.id_purchase_orders_description }}"
-                                                                                          value="p-{{ data.id_purchase_orders_description }}">
-                                                      Pagar </label>
-                                                  <label style="font-weight: 100;margin-left: 15px;"><input type="radio"
-                                                                                                            class="alreadyPaid"
-                                                                                                            name="{{ data.id_purchase_orders_description }}"
-                                                                                                            value="ap-{{ data.id_purchase_orders_description }}">
-                                                      Pagaré fuera de la plataforma </label>
-                                              {% else %}
-                                                  <label style="font-weight: 100;margin-left: 15px;"><input type="radio"
-                                                                                                            class="alreadyPaid"
-                                                                                                            name="{{ data.id_purchase_orders_description }}"
-                                                                                                            value="ap-{{ data.id_purchase_orders_description }}">
-                                                      Pago en efectivo - Generar comprobante </label>
-                                              {% endif %}
-                                          </div>
+                                            {% set employee = data.payroll_payroll.contract_contract.employer_has_employee_employer_has_employee.employee_employee.person_person %}
+                                            {% set employeeName = employee.names ~' '~ employee.last_name1 %}
+                                            {% set payType = data.payroll_payroll.contract_contract.pay_method_pay_method.pay_type_pay_type.payroll_code %}
+                                            <div class="center">
+                                                {% if payType != 'EFE' %}
+                                                    <label style="font-weight: 100;"><input type="radio" class="toPayArray"
+                                                                                            name="{{ data.id_purchase_orders_description }}"
+                                                                                            value="p-{{ data.id_purchase_orders_description }}">
+                                                        Pagar </label>
+                                                    <label style="font-weight: 100;margin-left: 15px;"><input type="radio"
+                                                                                                              class="alreadyPaid"
+                                                                                                              name="{{ data.id_purchase_orders_description }}"
+                                                                                                              value="ap-{{ data.id_purchase_orders_description }}">
+                                                        Pagaré fuera de la plataforma </label>
+                                                {% else %}
+                                                    <label style="font-weight: 100;margin-left: 15px;"><input type="radio"
+                                                                                                              class="alreadyPaid"
+                                                                                                              name="{{ data.id_purchase_orders_description }}"
+                                                                                                              value="ap-{{ data.id_purchase_orders_description }}">
+                                                        Pago en efectivo - Generar comprobante </label>
+                                                {% endif %}
+                                            </div>
                                         </div>
                                         <div class="datadesc moraNominaBorder col-sm-12">
-                                          <div class="col-sm-4">
-                                            <h2 class="h2">{{ employeeName }}<br />
-                                            {{ utils.period_number_to_name(data.payroll_payroll.period) }} {{ utils.month_number_to_name(data.payroll_payroll.month) }}</h2>
-                                          </div>
-                                          <div class="col-sm-2">
-                                              <p>Novedades</p>
-                                              <h2 class="h2">-</h2>
-                                          </div>
-                                          <div class="col-sm-2">
-                                            <p>Ingresos</p>
-                                            <h2 class="h2">-</h2>
-                                          </div>
-                                          <div class="col-sm-2">
-                                            <p>Deducciones</p>
-                                            <h2 class="h2">-</h2>
-                                          </div>
-                                          <div class="col-sm-2">
-                                            <p>Total</p>
-                                            <h2 class="h2">${{ data.value|number_format(0, '.', ',') }}</h2>
-                                            <span style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax showDetails" href="">&#10093; Detalles</span>
-                                          </div>
+                                            <div class="col-sm-4">
+                                                <h2 class="h2">{{ employeeName }}<br />
+                                                    {{ utils.period_number_to_name(data.payroll_payroll.period) }} {{ utils.month_number_to_name(data.payroll_payroll.month) }}</h2>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <p>Novedades</p>
+                                                <h2 class="h2">-</h2>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <p>Ingresos</p>
+                                                <h2 class="h2">-</h2>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <p>Deducciones</p>
+                                                <h2 class="h2">-</h2>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <p>Total</p>
+                                                <h2 class="h2">${{ data.value|number_format(0, '.', ',') }}</h2>
+                                                <span style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax showDetails" href="">&#10093; Detalles</span>
+                                            </div>
                                         </div>
 
                                         <!--<div class="height center">
@@ -292,19 +292,19 @@
                                         {% set payrolls = pilaData.payrolls_pila %}
                                     </div>
                                     <div class="datadesc moraNominaBorder col-sm-12">
-                                      <div class="col-sm-10 title-span pila-empl azulmediofont bold">
-                                          <ul>
-                                              {% for payroll in payrolls %}
-                                                  {% set employeePP = payroll.contract_contract.employer_has_employee_employer_has_employee.employee_employee.person_person %}
-                                                  <li>{{ employeePP.names ~' '~ employeePP.last_name1 }}</li>
-                                              {% endfor %}
-                                          </ul>
-                                      </div>
-                                      <div class="col-sm-2">
-                                        <p>Total</p>
-                                        <h2 class="h2">${{ pilaData.value|number_format(0, '.', ',') }}</h2>
-                                        <span style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax showDetails" href="">&#10093; Detalles</span>
-                                      </div>
+                                        <div class="col-sm-10 title-span pila-empl azulmediofont bold">
+                                            <ul>
+                                                {% for payroll in payrolls %}
+                                                    {% set employeePP = payroll.contract_contract.employer_has_employee_employer_has_employee.employee_employee.person_person %}
+                                                    <li>{{ employeePP.names ~' '~ employeePP.last_name1 }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <p>Total</p>
+                                            <h2 class="h2">${{ pilaData.value|number_format(0, '.', ',') }}</h2>
+                                            <span style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax showDetails" href="">&#10093; Detalles</span>
+                                        </div>
                                     </div>
                                     <!--<div class="height">
                                         <div class="title-span pila-empl left azulmediofont semi-italic">

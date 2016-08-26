@@ -15,146 +15,146 @@ function startEmployee() {
 
     $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
         $.ajax({
-          url: "//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js",
-          dataType: "script",
-          timeout: 4000
-      }).done(function() {
-        //var focus_element = undefined;
-        validator = $("form[name='register_employee']").validate({
-            errorPlacement: function(error, element) {
-                var placement = $(element).data('error');
-                //if(typeof focus_element == 'undefined') {
-                  //focus_element = element;
-                //}
-                if(placement) {
-                    $(placement).append(error);
-                } else {
-                    error.insertAfter(element);
-                }
-                //focus_element.focus();
-            },
-            /*onfocusout: false,
-            invalidHandler: function(form, validator) {
-                var errors = validator.numberOfInvalids();
-                console.log('Errors');
-                console.log(errors);
-                if (errors) {
-                    console.log(errors);
-                    console.log(validator.errorList);
-                    console.log(validator.errorList[0]);
-                    validator.errorList[0].element.focus();
-                }
-            },*/
-            rules: {
-                "register_employee[person][documentType]": "required",
-                "register_employee[person][document]": {required: true, number: true},
-                "register_employee[person][names]": "required",
-                "register_employee[person][lastName1]": "required",
-                "register_employee[person][mainAddress]": "required",
-                //"register_employee[employeeHasEmployers][salary]": "required",
-                "register_employee[person][department]": "required",
-                "register_employee[person][city]": "required",
-                "register_employee[personExtra][civilStatus]": "required",
-                "register_employee[personExtra][gender]": "required",
-                "register_employee[personExtra][documentExpeditionDate]": "required",
-                "register_employee[personExtra][documentExpeditionPlace]": "required",
-                "register_employee[personExtra][birthCountry]": "required",
-                "register_employee[personExtra][birthDepartment]": "required",
-                "register_employee[personExtra][birthCity]": "required",
-                "register_employee[employeeHasEmployers][employeeType]": "required",
-                "register_employee[employeeHasEmployers][contractType]": "required",
-                "register_employee[employeeHasEmployers][timeCommitment]": "required",
-                //"register_employee[employeeHasEmployers][sisben]": "required",
-                "register_employee[employeeHasEmployers][position]": "required",
-                "register_employee[employeeHasEmployers][workplaces]": "required",
-                "register_employee[employeeHasEmployers][transportAid]": "required",
-                "register_employee[employeeHasEmployers][payMethod]": "required",
-                "register_employee[employeeHasEmployers][paysPens]": "required",
-                "register_employee[verificationCode]": "required",
-                "register_employee[employeeHasEmployers][frequencyFrequency]": "required",
-                "register_employee[employeeHasEmployers][holidayDebt]": "required",
-                "register_employee[entities][pension]":"required"
-                /*,
-                 "register_employee[credit_card]": "required",
-                 "register_employee[cvv]": "required",
-                 "register_employee[expiry_date]": "required",
-                 "register_employee[name_on_card]": "required"*/
-
-            },
-            messages: {
-                "register_employee[person][documentType]": "Por favor selecciona un tipo de documento",
-                "register_employee[person][document]": {
-                    required: "Por favor ingresa un documento",
-                    number: "ingresa solamente dígitos"
+            url: "//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js",
+            dataType: "script",
+            timeout: 4000
+        }).done(function() {
+            //var focus_element = undefined;
+            validator = $("form[name='register_employee']").validate({
+                errorPlacement: function(error, element) {
+                    var placement = $(element).data('error');
+                    //if(typeof focus_element == 'undefined') {
+                    //focus_element = element;
+                    //}
+                    if(placement) {
+                        $(placement).append(error);
+                    } else {
+                        error.insertAfter(element);
+                    }
+                    //focus_element.focus();
                 },
-                "register_employee[person][names]": "Por favor ingresa el nombre",
-                "register_employee[person][lastName1]": "Por favor ingresa el primer apellido",
-                "register_employee[person][mainAddress]": "Por favor ingresa una dirección",
-                //"register_employee[employeeHasEmployers][salary]": "Por favor ingresa un salario",
-                "register_employee[person][department]": "Por favor selecciona un departamento",
-                "register_employee[person][city]": "Por favor selecciona una ciudad",
-                "register_employee[personExtra][civilStatus]": "Por favor selecciona una opción",
-                "register_employee[personExtra][gender]": "Por favor selecciona una opción",
-                "register_employee[personExtra][documentExpeditionDate]": "Por favor selecciona una opción",
-                "register_employee[personExtra][documentExpeditionPlace]": "Por favor selecciona una opción",
-                "register_employee[personExtra][birthCountry]": "Por favor selecciona una opción",
-                "register_employee[personExtra][birthDepartment]": "Por favor selecciona una opción",
-                "register_employee[personExtra][birthCity]": "Por favor selecciona una opción",
-                "register_employee[employeeHasEmployers][employeeType]": "Por favor selecciona una opción",
-                "register_employee[employeeHasEmployers][contractType]": "Por favor selecciona una opción",
-                "register_employee[employeeHasEmployers][timeCommitment]": "Por favor selecciona una opción",
-                //"register_employee[employeeHasEmployers][sisben]": "Por favor selecciona una opción",
-                "register_employee[employeeHasEmployers][position]": "Por favor selecciona una opción",
-                "register_employee[employeeHasEmployers][workplaces]": "Por favor selecciona una opción",
-                "register_employee[employeeHasEmployers][transportAid]": "Por favor selecciona una opción",
-                "register_employee[employeeHasEmployers][payMethod]": "Por favor selecciona una opción",
-                "register_employee[employeeHasEmployers][paysPens]": "Por favor selecciona una opción",
-                "register_employee[verificationCode]": "Por favor ingrese el código",
-                "register_employee[employeeHasEmployers][frequencyFrequency]": "Por favor selecciona una opción",
-                "register_employee[employeeHasEmployers][holidayDebt]" : "Por favor ingrese un número de días o cambie de opción",
-                "register_employee[entities][pension]":"Debes seleccionar una entidad"
-                /*,
-                 "register_employee[credit_card]": "Por favor ingresa el número de la tarjeta",
-                 "register_employee[cvv]": "Por favor ingresa el código de seguridad de la tarjeta",
-                 "register_employee[expiry_date]": "Por favor ingresa la fecha de expiración de la tarjeta",
-                 "register_employee[name_on_card]": "Por favor ingresa el nombre del titular de la tarjeta"*/
-            }
-        });
+                /*onfocusout: false,
+                 invalidHandler: function(form, validator) {
+                 var errors = validator.numberOfInvalids();
+                 console.log('Errors');
+                 console.log(errors);
+                 if (errors) {
+                 console.log(errors);
+                 console.log(validator.errorList);
+                 console.log(validator.errorList[0]);
+                 validator.errorList[0].element.focus();
+                 }
+                 },*/
+                rules: {
+                    "register_employee[person][documentType]": "required",
+                    "register_employee[person][document]": {required: true, number: true},
+                    "register_employee[person][names]": "required",
+                    "register_employee[person][lastName1]": "required",
+                    "register_employee[person][mainAddress]": "required",
+                    //"register_employee[employeeHasEmployers][salary]": "required",
+                    "register_employee[person][department]": "required",
+                    "register_employee[person][city]": "required",
+                    "register_employee[personExtra][civilStatus]": "required",
+                    "register_employee[personExtra][gender]": "required",
+                    "register_employee[personExtra][documentExpeditionDate]": "required",
+                    "register_employee[personExtra][documentExpeditionPlace]": "required",
+                    "register_employee[personExtra][birthCountry]": "required",
+                    "register_employee[personExtra][birthDepartment]": "required",
+                    "register_employee[personExtra][birthCity]": "required",
+                    "register_employee[employeeHasEmployers][employeeType]": "required",
+                    "register_employee[employeeHasEmployers][contractType]": "required",
+                    "register_employee[employeeHasEmployers][timeCommitment]": "required",
+                    //"register_employee[employeeHasEmployers][sisben]": "required",
+                    "register_employee[employeeHasEmployers][position]": "required",
+                    "register_employee[employeeHasEmployers][workplaces]": "required",
+                    "register_employee[employeeHasEmployers][transportAid]": "required",
+                    "register_employee[employeeHasEmployers][payMethod]": "required",
+                    "register_employee[employeeHasEmployers][paysPens]": "required",
+                    "register_employee[verificationCode]": "required",
+                    "register_employee[employeeHasEmployers][frequencyFrequency]": "required",
+                    "register_employee[employeeHasEmployers][holidayDebt]": "required",
+                    "register_employee[entities][pension]":"required"
+                    /*,
+                     "register_employee[credit_card]": "required",
+                     "register_employee[cvv]": "required",
+                     "register_employee[expiry_date]": "required",
+                     "register_employee[name_on_card]": "required"*/
 
-        $("ul.phones input[name*='phoneNumber']").each(function () {
-            $(this).rules("add", {
-                minlength: 7,
-                required: true,
-                number: true,
+                },
                 messages: {
-                    minlength: "Por favor ingresa un número valido",
-                    required: "Por favor ingresa un número de telefono",
-                    number: "Por favor ingresa solo digitos"
+                    "register_employee[person][documentType]": "Por favor selecciona un tipo de documento",
+                    "register_employee[person][document]": {
+                        required: "Por favor ingresa un documento",
+                        number: "ingresa solamente dígitos"
+                    },
+                    "register_employee[person][names]": "Por favor ingresa el nombre",
+                    "register_employee[person][lastName1]": "Por favor ingresa el primer apellido",
+                    "register_employee[person][mainAddress]": "Por favor ingresa una dirección",
+                    //"register_employee[employeeHasEmployers][salary]": "Por favor ingresa un salario",
+                    "register_employee[person][department]": "Por favor selecciona un departamento",
+                    "register_employee[person][city]": "Por favor selecciona una ciudad",
+                    "register_employee[personExtra][civilStatus]": "Por favor selecciona una opción",
+                    "register_employee[personExtra][gender]": "Por favor selecciona una opción",
+                    "register_employee[personExtra][documentExpeditionDate]": "Por favor selecciona una opción",
+                    "register_employee[personExtra][documentExpeditionPlace]": "Por favor selecciona una opción",
+                    "register_employee[personExtra][birthCountry]": "Por favor selecciona una opción",
+                    "register_employee[personExtra][birthDepartment]": "Por favor selecciona una opción",
+                    "register_employee[personExtra][birthCity]": "Por favor selecciona una opción",
+                    "register_employee[employeeHasEmployers][employeeType]": "Por favor selecciona una opción",
+                    "register_employee[employeeHasEmployers][contractType]": "Por favor selecciona una opción",
+                    "register_employee[employeeHasEmployers][timeCommitment]": "Por favor selecciona una opción",
+                    //"register_employee[employeeHasEmployers][sisben]": "Por favor selecciona una opción",
+                    "register_employee[employeeHasEmployers][position]": "Por favor selecciona una opción",
+                    "register_employee[employeeHasEmployers][workplaces]": "Por favor selecciona una opción",
+                    "register_employee[employeeHasEmployers][transportAid]": "Por favor selecciona una opción",
+                    "register_employee[employeeHasEmployers][payMethod]": "Por favor selecciona una opción",
+                    "register_employee[employeeHasEmployers][paysPens]": "Por favor selecciona una opción",
+                    "register_employee[verificationCode]": "Por favor ingrese el código",
+                    "register_employee[employeeHasEmployers][frequencyFrequency]": "Por favor selecciona una opción",
+                    "register_employee[employeeHasEmployers][holidayDebt]" : "Por favor ingrese un número de días o cambie de opción",
+                    "register_employee[entities][pension]":"Debes seleccionar una entidad"
+                    /*,
+                     "register_employee[credit_card]": "Por favor ingresa el número de la tarjeta",
+                     "register_employee[cvv]": "Por favor ingresa el código de seguridad de la tarjeta",
+                     "register_employee[expiry_date]": "Por favor ingresa la fecha de expiración de la tarjeta",
+                     "register_employee[name_on_card]": "Por favor ingresa el nombre del titular de la tarjeta"*/
                 }
             });
-        });
 
-        $("ul.benefits input[name*='amount']").each(function () {
-            $(this).rules("add", {
-                required: true,
-                number: true,
-                messages: {
-                    required: "Por favor ingresa una cantidad",
-                    number: "Por favor ingresa solo digitos"
-                }
+            $("ul.phones input[name*='phoneNumber']").each(function () {
+                $(this).rules("add", {
+                    minlength: 7,
+                    required: true,
+                    number: true,
+                    messages: {
+                        minlength: "Por favor ingresa un número valido",
+                        required: "Por favor ingresa un número de telefono",
+                        number: "Por favor ingresa solo digitos"
+                    }
+                });
             });
-        });
-        $("input[class*='autocom']").each(function () {
-            $(this).rules("add", {
-                required: true,
-                messages: {
-                    required: "Por favor escribe en el campo, hasta encontrar tu entidad o a la cual te gustaría ser afiliado"
-                }
+
+            $("ul.benefits input[name*='amount']").each(function () {
+                $(this).rules("add", {
+                    required: true,
+                    number: true,
+                    messages: {
+                        required: "Por favor ingresa una cantidad",
+                        number: "Por favor ingresa solo digitos"
+                    }
+                });
             });
+            $("input[class*='autocom']").each(function () {
+                $(this).rules("add", {
+                    required: true,
+                    messages: {
+                        required: "Por favor escribe en el campo, hasta encontrar tu entidad o a la cual te gustaría ser afiliado"
+                    }
+                });
+            });
+        }).fail(function() {
+            location.reload();
         });
-      }).fail(function() {
-          location.reload();
-      });
     });
     $('.btnPrevious-form').click(function () {
         $('#formNav > .active').prev('li').find('a').trigger('click');
@@ -163,52 +163,52 @@ function startEmployee() {
         $('#contractNav > .active').prev('li').find('a').trigger('click');
     });
     $('.btnNext-contract').click(function () {
-          var dateOk = true;
-          var mustCheck = false;
+        var dateOk = true;
+        var mustCheck = false;
 
-          if($("#changeBehavior").text() !="1"){
+        if($("#changeBehavior").text() !="1"){
             if( loadedStartDateDay != $("#register_employee_employeeHasEmployers_startDate_day").val()
-                  || loadedStartDateMonth != $("#register_employee_employeeHasEmployers_startDate_month").val()
-                    || loadedStartDateYear != $("#register_employee_employeeHasEmployers_startDate_year").val()){
-                      mustCheck = true;
-                      if (!checkDate(new Date(
-                              $("#register_employee_employeeHasEmployers_startDate_year").val(),
-                              parseInt($("#register_employee_employeeHasEmployers_startDate_month").val()),
-                              $("#register_employee_employeeHasEmployers_startDate_day").val()
-                          ))) {
-                          var $permittedDate= $("#datePermitted");
-                          $("#register_employee_employeeHasEmployers_startDate_year").val(parseInt($permittedDate.find(".year").text()));
-                          $("#register_employee_employeeHasEmployers_startDate_month").val(parseInt($permittedDate.find(".month").text()));
-                          $("#register_employee_employeeHasEmployers_startDate_day").val(parseInt($permittedDate.find(".day").text()));
-                          dateOk = false;
-                      }
-                    }
-          }
+                || loadedStartDateMonth != $("#register_employee_employeeHasEmployers_startDate_month").val()
+                || loadedStartDateYear != $("#register_employee_employeeHasEmployers_startDate_year").val()){
+                mustCheck = true;
+                if (!checkDate(new Date(
+                        $("#register_employee_employeeHasEmployers_startDate_year").val(),
+                        parseInt($("#register_employee_employeeHasEmployers_startDate_month").val()),
+                        $("#register_employee_employeeHasEmployers_startDate_day").val()
+                    ))) {
+                    var $permittedDate= $("#datePermitted");
+                    $("#register_employee_employeeHasEmployers_startDate_year").val(parseInt($permittedDate.find(".year").text()));
+                    $("#register_employee_employeeHasEmployers_startDate_month").val(parseInt($permittedDate.find(".month").text()));
+                    $("#register_employee_employeeHasEmployers_startDate_day").val(parseInt($permittedDate.find(".day").text()));
+                    dateOk = false;
+                }
+            }
+        }
 
-          if( $("#fijo").find("input[type=radio]").prop("checked") == true  && dateOk == true){
+        if( $("#fijo").find("input[type=radio]").prop("checked") == true  && dateOk == true){
 
-              if( loadedEndDateDay != $("#register_employee_employeeHasEmployers_endDate_day").val()
-                    || loadedEndDateMonth != $("#register_employee_employeeHasEmployers_endDate_month").val()
-                      || loadedEndDateYear != $("#register_employee_employeeHasEmployers_endDate_year").val()
-                        || mustCheck == true){
+            if( loadedEndDateDay != $("#register_employee_employeeHasEmployers_endDate_day").val()
+                || loadedEndDateMonth != $("#register_employee_employeeHasEmployers_endDate_month").val()
+                || loadedEndDateYear != $("#register_employee_employeeHasEmployers_endDate_year").val()
+                || mustCheck == true){
 
-                      if (!checkDateVsStart(new Date(
-                              $("#register_employee_employeeHasEmployers_endDate_year").val(),
-                              parseInt($("#register_employee_employeeHasEmployers_endDate_month").val()),
-                              $("#register_employee_employeeHasEmployers_endDate_day").val()
-                          ))) {
+                if (!checkDateVsStart(new Date(
+                        $("#register_employee_employeeHasEmployers_endDate_year").val(),
+                        parseInt($("#register_employee_employeeHasEmployers_endDate_month").val()),
+                        $("#register_employee_employeeHasEmployers_endDate_day").val()
+                    ))) {
 
-                        var setEndDate = oneYearFromNow(new Date(
-                                $("#register_employee_employeeHasEmployers_startDate_year").val(),
-                                parseInt($("#register_employee_employeeHasEmployers_startDate_month").val()),
-                                $("#register_employee_employeeHasEmployers_startDate_day").val()));
+                    var setEndDate = oneYearFromNow(new Date(
+                        $("#register_employee_employeeHasEmployers_startDate_year").val(),
+                        parseInt($("#register_employee_employeeHasEmployers_startDate_month").val()),
+                        $("#register_employee_employeeHasEmployers_startDate_day").val()));
 
-                        $("#register_employee_employeeHasEmployers_endDate_year").val($("#register_employee_employeeHasEmployers_startDate_year").val());
-                        $("#register_employee_employeeHasEmployers_endDate_month").val(parseInt($("#register_employee_employeeHasEmployers_startDate_month").val()));
-                        $("#register_employee_employeeHasEmployers_endDate_day").val($("#register_employee_employeeHasEmployers_startDate_day").val());
-                        dateOk = false;
-                      }
-          }
+                    $("#register_employee_employeeHasEmployers_endDate_year").val($("#register_employee_employeeHasEmployers_startDate_year").val());
+                    $("#register_employee_employeeHasEmployers_endDate_month").val(parseInt($("#register_employee_employeeHasEmployers_startDate_month").val()));
+                    $("#register_employee_employeeHasEmployers_endDate_day").val($("#register_employee_employeeHasEmployers_startDate_day").val());
+                    dateOk = false;
+                }
+            }
         }
 
         var valid = true;
@@ -216,8 +216,8 @@ function startEmployee() {
         if ( $("#changeBehavior").text() == "1" ){
             $("#alDiaDias").find("input[type=radio]").each(function () {
                 if( $(this).prop("checked") == true){
-                  shouldBeEmpty = true;
-                  $("#register_employee_employeeHasEmployers_holidayDebt").val(0);
+                    shouldBeEmpty = true;
+                    $("#register_employee_employeeHasEmployers_holidayDebt").val(0);
                 }
             });
 
@@ -229,34 +229,34 @@ function startEmployee() {
         }
 
         if(dateOk == true && valid == true){
-          $('#contractNav > .active').next('li').find('a').trigger('click');
+            $('#contractNav > .active').next('li').find('a').trigger('click');
         }
     });
 
     $('.btnNext-infoPago').click(function () {
 
-      var valid = true;
-      if (!validator.element($("#register_employee_employeeHasEmployers_position"))) {
-          valid = false;
-      }
-
-      if (!validator.element($("[name='register_employee[employeeHasEmployers][timeCommitment]']"))) {
-          valid = false;
-      }
-
-      /*if($("#register_employee_employeeHasEmployers_timeCommitment_2").prop("checked") == true){
-        if (!validator.element($("[name='register_employee[employeeHasEmployers][sisben]']"))) {
+        var valid = true;
+        if (!validator.element($("#register_employee_employeeHasEmployers_position"))) {
             valid = false;
         }
-      }*/
 
-      if (!validator.element($("#register_employee_employeeHasEmployers_workplaces"))) {
-          valid = false;
-      }
+        if (!validator.element($("[name='register_employee[employeeHasEmployers][timeCommitment]']"))) {
+            valid = false;
+        }
 
-      if(valid == true){
-          $('#contractNav > .active').next('li').find('a').trigger('click');
-      }
+        /*if($("#register_employee_employeeHasEmployers_timeCommitment_2").prop("checked") == true){
+         if (!validator.element($("[name='register_employee[employeeHasEmployers][sisben]']"))) {
+         valid = false;
+         }
+         }*/
+
+        if (!validator.element($("#register_employee_employeeHasEmployers_workplaces"))) {
+            valid = false;
+        }
+
+        if(valid == true){
+            $('#contractNav > .active').next('li').find('a').trigger('click');
+        }
     });
 
 
@@ -271,12 +271,12 @@ function startEmployee() {
     $("#existentDataToShow").hide();
     var timeCommitment = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']");
     if($("#register_employee_employeeHasEmployers_timeCommitment_2").is("[checked]")){
-      $('#radio_diario').prop('checked', true);
-      $('#radio_mensual').prop('checked', false);
+        $('#radio_diario').prop('checked', true);
+        $('#radio_mensual').prop('checked', false);
     }
     else{
-      $('#radio_diario').prop('checked', false);
-      $('#radio_mensual').prop('checked', true);
+        $('#radio_diario').prop('checked', false);
+        $('#radio_mensual').prop('checked', true);
     }
     timeCommitment.change(function () {
         var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
@@ -304,50 +304,50 @@ function startEmployee() {
     });
 
     /*var sisbenBut = $("input[name='register_employee[employeeHasEmployers][sisben]']");
-    sisbenBut.change(function () {
-      var selectedVal = $("input[name='register_employee[employeeHasEmployers][sisben]']:checked").parent().text();
+     sisbenBut.change(function () {
+     var selectedVal = $("input[name='register_employee[employeeHasEmployers][sisben]']:checked").parent().text();
 
-      if(selectedVal == " No"){
-        showModal(21);
-      }
-      calculator();
-    });*/
+     if(selectedVal == " No"){
+     showModal(21);
+     }
+     calculator();
+     });*/
 
     $("#register_employee_employeeHasEmployers_position").on("change", function () {
-      calculator();
+        calculator();
     });
     /*$("#register_employee_employeeHasEmployers_startDate").on("change", function () {
-        if($("#changeBehavior").text()=="1"){
-            return;
-        }
-        if (!checkDate(new Date(
-                $(this).find("#register_employee_employeeHasEmployers_startDate_year").val(),
-                parseInt($(this).find("#register_employee_employeeHasEmployers_startDate_month").val()) - 1,
-                $(this).find("#register_employee_employeeHasEmployers_startDate_day").val()
-            ))) {
-            var $permittedDate= $("#datePermitted");
-            $(this).find("#register_employee_employeeHasEmployers_startDate_year").val(parseInt($permittedDate.find(".year").text()));
-            $(this).find("#register_employee_employeeHasEmployers_startDate_month").val(parseInt($permittedDate.find(".month").text()));
-            $(this).find("#register_employee_employeeHasEmployers_startDate_day").val(parseInt($permittedDate.find(".day").text()));
-        }
+     if($("#changeBehavior").text()=="1"){
+     return;
+     }
+     if (!checkDate(new Date(
+     $(this).find("#register_employee_employeeHasEmployers_startDate_year").val(),
+     parseInt($(this).find("#register_employee_employeeHasEmployers_startDate_month").val()) - 1,
+     $(this).find("#register_employee_employeeHasEmployers_startDate_day").val()
+     ))) {
+     var $permittedDate= $("#datePermitted");
+     $(this).find("#register_employee_employeeHasEmployers_startDate_year").val(parseInt($permittedDate.find(".year").text()));
+     $(this).find("#register_employee_employeeHasEmployers_startDate_month").val(parseInt($permittedDate.find(".month").text()));
+     $(this).find("#register_employee_employeeHasEmployers_startDate_day").val(parseInt($permittedDate.find(".day").text()));
+     }
 
-    });
-    $("#register_employee_employeeHasEmployers_endDate").on("change", function () {
-        if (!checkDate(new Date(
-                $(this).find("#register_employee_employeeHasEmployers_endDate_year").val(),
-                parseInt($(this).find("#register_employee_employeeHasEmployers_endDate_month").val()) - 1,
-                $(this).find("#register_employee_employeeHasEmployers_endDate_day").val()
-            ))) {
-            var datenow = new Date();
-            var year = datenow.getFullYear();
-            var month = datenow.getMonth();
-            var day = datenow.getDate();
+     });
+     $("#register_employee_employeeHasEmployers_endDate").on("change", function () {
+     if (!checkDate(new Date(
+     $(this).find("#register_employee_employeeHasEmployers_endDate_year").val(),
+     parseInt($(this).find("#register_employee_employeeHasEmployers_endDate_month").val()) - 1,
+     $(this).find("#register_employee_employeeHasEmployers_endDate_day").val()
+     ))) {
+     var datenow = new Date();
+     var year = datenow.getFullYear();
+     var month = datenow.getMonth();
+     var day = datenow.getDate();
 
-            $(this).find("#register_employee_employeeHasEmployers_endDate_year").val(year + 1);
-            $(this).find("#register_employee_employeeHasEmployers_endDate_month").val(month + 1);
-            $(this).find("#register_employee_employeeHasEmployers_endDate_day").val(day);
-        }
-    });*/
+     $(this).find("#register_employee_employeeHasEmployers_endDate_year").val(year + 1);
+     $(this).find("#register_employee_employeeHasEmployers_endDate_month").val(month + 1);
+     $(this).find("#register_employee_employeeHasEmployers_endDate_day").val(day);
+     }
+     });*/
     var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
     if (selectedVal == " Trabajador por días") {
         $(".days").each(function () {
@@ -356,7 +356,7 @@ function startEmployee() {
         $(".complete").each(function () {
             $(this).hide();
         });
-       // checkSisben();
+        // checkSisben();
     } else {
         $(".days").each(function () {
             $(this).hide();
@@ -456,56 +456,56 @@ function startEmployee() {
         });
 
         $(form).find("input[name='method_type_fields[cellphone]']").each(function () {
-          $(this).rules("add", {
-              maxlength: 10,
-              required: true,
-              number: true,
-              pattern: /3[\d]{9}/,
-              messages: {
-                  required: "Por favor ingresa un número de teléfono de celular en el siguiente formato, ejemplo 3508330000",
-                  number: "Por favor ingresa solo digitos",
-                  pattern: "El número no tiene la estructura de un celular colombiano",
-                  maxlength: "No es un número de celular válido; ejemplo 3508330000"
-              }
-          });
+            $(this).rules("add", {
+                maxlength: 10,
+                required: true,
+                number: true,
+                pattern: /3[\d]{9}/,
+                messages: {
+                    required: "Por favor ingresa un número de teléfono de celular en el siguiente formato, ejemplo 3508330000",
+                    number: "Por favor ingresa solo digitos",
+                    pattern: "El número no tiene la estructura de un celular colombiano",
+                    maxlength: "No es un número de celular válido; ejemplo 3508330000"
+                }
+            });
         });
 
         $(form).find("select[name='method_type_fields[hasIt]']").each(function () {
-          $(this).rules("add", {
-              required: true,
-              messages: {
-                  required: "Necesitamos saber si tiene cuenta Daviplata"
-              }
-          });
+            $(this).rules("add", {
+                required: true,
+                messages: {
+                    required: "Necesitamos saber si tiene cuenta Daviplata"
+                }
+            });
         });
 
         $(form).find("input[name='method_type_fields[accountNumber]']").each(function () {
-          $(this).rules("add", {
-              required: true,
-              number: true,
-              messages: {
-                  required: "Por favor ingresa el número de cuenta",
-                  number: "Por favor ingresa solo digitos"
-              }
-          });
+            $(this).rules("add", {
+                required: true,
+                number: true,
+                messages: {
+                    required: "Por favor ingresa el número de cuenta",
+                    number: "Por favor ingresa solo digitos"
+                }
+            });
         });
 
         $(form).find("select[name='method_type_fields[accountTypeAccountType]']").each(function () {
-          $(this).rules("add", {
-              required: true,
-              messages: {
-                  required: "Escoge el tipo de cuenta"
-              }
-          });
+            $(this).rules("add", {
+                required: true,
+                messages: {
+                    required: "Escoge el tipo de cuenta"
+                }
+            });
         });
 
         $(form).find("select[name='method_type_fields[bankBank]']").each(function () {
-          $(this).rules("add", {
-              required: true,
-              messages: {
-                  required: "Selecciona el banco"
-              }
-          });
+            $(this).rules("add", {
+                required: true,
+                messages: {
+                    required: "Selecciona el banco"
+                }
+            });
         });
 
         if (!form.valid()) {
@@ -605,8 +605,8 @@ function startEmployee() {
                 contractId: $("input[name='register_employee[idContract]']").val()
             }
         }).done(function (data) {
-                history.pushState("", "", data["url"]);
-                sendAjax(data["url"]);
+            history.pushState("", "", data["url"]);
+            sendAjax(data["url"]);
         }).fail(function (jqXHR, textStatus, errorThrown) {
             alert("El código de verificación es incorrecto, un nuevo código ha sido enviado");
         });
@@ -625,8 +625,8 @@ function startEmployee() {
                 contractId: $("input[name='register_employee[idContract]']").val()
             }
         }).done(function (data) {
-                history.pushState("", "", data["url"]);
-                sendAjax(data["url"]);
+            history.pushState("", "", data["url"]);
+            sendAjax(data["url"]);
         }).fail(function (jqXHR, textStatus, errorThrown) {
             showModal(14);
         });
@@ -640,19 +640,19 @@ function startEmployee() {
         //var sisben = $("input[name='register_employee[employeeHasEmployers][sisben]']:checked").parent().text();
 
         if (selectedVal == " Trabajador por días" /*&&sisben==" Si"*/) {
-          /*  $(form).find("select[name*='[ars]']").each(function () {
-                if (!validator.element($(this))) {
-                    flagValid = false;
-                    return;
-                }
-            });
+            /*  $(form).find("select[name*='[ars]']").each(function () {
+             if (!validator.element($(this))) {
+             flagValid = false;
+             return;
+             }
+             });
 
-            $(form).find("input[name*='[arsAC]']").each(function () {
-                if (!validator.element($(this))) {
-                    flagValid = false;
-                    return;
-                }
-            });*/
+             $(form).find("input[name*='[arsAC]']").each(function () {
+             if (!validator.element($(this))) {
+             flagValid = false;
+             return;
+             }
+             });*/
         }else{
             $(form).find("select[name*='[wealth]']").each(function () {
                 if (!validator.element($(this))) {
@@ -714,41 +714,41 @@ function startEmployee() {
         if (selectedVal == " Trabajador por días" /*&&sisben==" Si"*/) {
             $("#register_employee_entities_wealth").val("");
         }/*else{
-            $("#register_employee_entities_ars").val("");
-        }*/
+         $("#register_employee_entities_ars").val("");
+         }*/
 
         var severancesExists;
         $("#register_employee_entities_severancesExists").find("input[type=radio]").each(function () {
-          if($(this).is(":checked")){
-            severancesExists = $(this).val();
-          }
+            if($(this).is(":checked")){
+                severancesExists = $(this).val();
+            }
         });
 
         var wealthExists;
         $("#register_employee_entities_wealthExists").find("input[type=radio]").each(function () {
-          if($(this).is(":checked")){
-            wealthExists = $(this).val();
-          }
+            if($(this).is(":checked")){
+                wealthExists = $(this).val();
+            }
         });
 
         var pensionExists;
         $("#register_employee_entities_pensionExists").find("input[type=radio]").each(function () {
-          if($(this).is(":checked")){
-            pensionExists = $(this).val();
-          }
+            if($(this).is(":checked")){
+                pensionExists = $(this).val();
+            }
         });
 
         if( $("#register_employee_entities_wealthAC").is(":visible") == true){
-          var wealthL = $(form).find("#register_employee_entities_wealth");
-          var wealthACL = $(form).find("#register_employee_entities_wealthAC");
-          $(wealthL).val($("#register_employee_entities_wealth option").filter(function () { return $.trim($(this).html()) == $.trim($(wealthACL).val()); }).val());
-          if($(wealthL).val() == undefined || $(wealthL).val() == ""){
-            $("#errorWealth").show();
-            return;
-          }
-          else {
-            $("#errorWealth").hide();
-          }
+            var wealthL = $(form).find("#register_employee_entities_wealth");
+            var wealthACL = $(form).find("#register_employee_entities_wealthAC");
+            $(wealthL).val($("#register_employee_entities_wealth option").filter(function () { return $.trim($(this).html()) == $.trim($(wealthACL).val()); }).val());
+            if($(wealthL).val() == undefined || $(wealthL).val() == ""){
+                $("#errorWealth").show();
+                return;
+            }
+            else {
+                $("#errorWealth").hide();
+            }
         }
 
 
@@ -963,17 +963,17 @@ function startEmployee() {
         var numericValueHolidayDebt = Math.abs($(form).find("#register_employee_employeeHasEmployers_holidayDebt").val());
         $("#meDebeDias").find("input[type=radio]").each(function () {
             if( $(this).prop("checked") == true){
-              holidayDebtTrueValue = numericValueHolidayDebt * -1;
+                holidayDebtTrueValue = numericValueHolidayDebt * -1;
             }
         });
         $("#alDiaDias").find("input[type=radio]").each(function () {
             if( $(this).prop("checked") == true){
-              holidayDebtTrueValue = 0;
+                holidayDebtTrueValue = 0;
             }
         });
         $("#leDeboDias").find("input[type=radio]").each(function () {
             if( $(this).prop("checked") == true){
-              holidayDebtTrueValue = numericValueHolidayDebt;
+                holidayDebtTrueValue = numericValueHolidayDebt;
             }
         });
 
@@ -1030,17 +1030,17 @@ function startEmployee() {
     });
 
     if($("#register_employee_employeeHasEmployers_holidayDebt").val() == 0){
-      $("#alDiaDias").find("input[type=radio]").each(function () {
-          $(this).prop("checked", true);
-      });
+        $("#alDiaDias").find("input[type=radio]").each(function () {
+            $(this).prop("checked", true);
+        });
     }else if ($("#register_employee_employeeHasEmployers_holidayDebt").val() > 0) {
-      $("#leDeboDias").find("input[type=radio]").each(function () {
-          $(this).prop("checked", true);
-      });
+        $("#leDeboDias").find("input[type=radio]").each(function () {
+            $(this).prop("checked", true);
+        });
     }else {
-      $("#meDebeDias").find("input[type=radio]").each(function () {
-          $(this).prop("checked", true);
-      });
+        $("#meDebeDias").find("input[type=radio]").each(function () {
+            $(this).prop("checked", true);
+        });
     }
 
     $("#register_employee_employeeHasEmployers_holidayDebt").val(Math.abs($("#register_employee_employeeHasEmployers_holidayDebt").val()));
@@ -1048,28 +1048,28 @@ function startEmployee() {
     loadConstrains();
 
     if($("#register_employee_employeeHasEmployers_timeCommitment_2").is("[checked]")){
-      $(document).ajaxStop(function () {
-        if(leavingPage == false){
-          reverseCalculator();
-          leavingPage = true;
-        }
-      });
+        $(document).ajaxStop(function () {
+            if(leavingPage == false){
+                reverseCalculator();
+                leavingPage = true;
+            }
+        });
     }
 
     if( $("#register_employee_employeeHasEmployers_transportAid_0").prop("checked") == false
-          && $("#register_employee_employeeHasEmployers_transportAid_1").prop("checked") == false ){
-          $("#register_employee_employeeHasEmployers_transportAid_1").prop("checked",true);
-        }
+        && $("#register_employee_employeeHasEmployers_transportAid_1").prop("checked") == false ){
+        $("#register_employee_employeeHasEmployers_transportAid_1").prop("checked",true);
+    }
 
     $( "label[for='register_employee_person_phones_0_phoneNumber']").text("Número de teléfono");
 
     if( $("#register_employee_entities_pension").val() == 50 ){
-      $("#register_employee_employeeHasEmployers_paysPens_1").prop('checked', true);
-      $("#pensionHide").hide();
+        $("#register_employee_employeeHasEmployers_paysPens_1").prop('checked', true);
+        $("#pensionHide").hide();
     }
     else {
-      $("#register_employee_employeeHasEmployers_paysPens_0").prop('checked', true);
-      $("#pensionHide").show();
+        $("#register_employee_employeeHasEmployers_paysPens_0").prop('checked', true);
+        $("#pensionHide").show();
     }
     calculator();
 
@@ -1152,58 +1152,58 @@ var sueldo_plano = 0;
 var radioChange = false;
 
 function changeValues(data) {
-  // We call calculator to have everything fresh.
-  var division = 1;
-  var elementExists = document.getElementById("radio_diario");
-  if(elementExists != null)
-    if(document.getElementById('radio_diario').checked) {
-      division = data.numberOfDays;
-    }else {
-      division = 1;
+    // We call calculator to have everything fresh.
+    var division = 1;
+    var elementExists = document.getElementById("radio_diario");
+    if(elementExists != null)
+        if(document.getElementById('radio_diario').checked) {
+            division = data.numberOfDays;
+        }else {
+            division = 1;
+        }
+    // Plain salary is what the employee should recieve.
+    var salario_bruto = Math.round((data.plainSalary - data.transportCal)/0.92);
+    var total_modal = data.plainSalary + data.transportCal + data.EPSEmployerCal + data.PensEmployerCal + data.cajaCal + data.arlCal;
+    var pagos_netos = (Math.round(data.plainSalary) + Math.round(data.transportCal)) - (Math.round(data.EPSEmployeeCal) + Math.round(data.PensEmployeeCal));
+    var total_prestaciones = Math.round(data.cesCal + data.taxCesCal + data.vacationsCal + data.primaCal);
+
+    document.getElementById('salario_ingreso_bruto').innerHTML = getPrice(Math.round(data.plainSalary)/division);
+    document.getElementById('subsidio_transporte').innerHTML = getPrice(Math.round(data.transportCal)/division);
+    document.getElementById('descuento_salud').innerHTML = getPrice(Math.round(data.EPSEmployeeCal)/division);
+    document.getElementById('descuento_pension').innerHTML = getPrice(Math.round(data.PensEmployeeCal)/division);
+    document.getElementById('pagos_netos').innerHTML = getPrice(Math.round(pagos_netos/division));
+
+    document.getElementById('salario_ingreso_bruto2').innerHTML = getPrice(Math.round(data.plainSalary)/division);
+    document.getElementById('subsidio_transporte2').innerHTML = getPrice(Math.round(data.transportCal)/division);
+    document.getElementById('salud_empleador').innerHTML = getPrice(Math.round(data.EPSEmployerCal)/division);
+    document.getElementById('pension_empleador').innerHTML = getPrice(Math.round(data.PensEmployerCal)/division);
+    document.getElementById('ccf_empleador').innerHTML = getPrice(Math.round(data.cajaCal)/division);
+    document.getElementById('arl_empleador').innerHTML = getPrice(Math.round(data.arlCal)/division);
+    document.getElementById('costo_total').innerHTML = getPrice(Math.round(total_modal)/division);
+
+    document.getElementById('cesantias').innerHTML = getPrice(Math.round(data.cesCal)/division);
+    document.getElementById('int_cesantias').innerHTML = getPrice(Math.round(data.taxCesCal)/division);
+    document.getElementById('vacaciones').innerHTML = getPrice(Math.round(data.vacationsCal)/division);
+    document.getElementById('prima').innerHTML = getPrice(Math.round(data.primaCal)/division);
+    document.getElementById('total_prestaciones').innerHTML = getPrice(total_prestaciones/division);
+
+    sueldo_plano = Math.round(data.plainSalary/data.numberOfDays);
+
+    if( radioChange == false ){
+        $("#totalExpensesVal").val(getPrice(Math.round(pagos_netos/division)));
+        $("#totalExpensesVal2").val(getPrice(Math.round(total_modal)/division));
+        $("#totalExpensesValD").val(getPrice(Math.round(data.plainSalary)/division));
+    } else {
+        radioChange = false;
     }
-  // Plain salary is what the employee should recieve.
-  var salario_bruto = Math.round((data.plainSalary - data.transportCal)/0.92);
-  var total_modal = data.plainSalary + data.transportCal + data.EPSEmployerCal + data.PensEmployerCal + data.cajaCal + data.arlCal;
-  var pagos_netos = (Math.round(data.plainSalary) + Math.round(data.transportCal)) - (Math.round(data.EPSEmployeeCal) + Math.round(data.PensEmployeeCal));
-  var total_prestaciones = Math.round(data.cesCal + data.taxCesCal + data.vacationsCal + data.primaCal);
-
-  document.getElementById('salario_ingreso_bruto').innerHTML = getPrice(Math.round(data.plainSalary)/division);
-  document.getElementById('subsidio_transporte').innerHTML = getPrice(Math.round(data.transportCal)/division);
-  document.getElementById('descuento_salud').innerHTML = getPrice(Math.round(data.EPSEmployeeCal)/division);
-  document.getElementById('descuento_pension').innerHTML = getPrice(Math.round(data.PensEmployeeCal)/division);
-  document.getElementById('pagos_netos').innerHTML = getPrice(Math.round(pagos_netos/division));
-
-  document.getElementById('salario_ingreso_bruto2').innerHTML = getPrice(Math.round(data.plainSalary)/division);
-  document.getElementById('subsidio_transporte2').innerHTML = getPrice(Math.round(data.transportCal)/division);
-  document.getElementById('salud_empleador').innerHTML = getPrice(Math.round(data.EPSEmployerCal)/division);
-  document.getElementById('pension_empleador').innerHTML = getPrice(Math.round(data.PensEmployerCal)/division);
-  document.getElementById('ccf_empleador').innerHTML = getPrice(Math.round(data.cajaCal)/division);
-  document.getElementById('arl_empleador').innerHTML = getPrice(Math.round(data.arlCal)/division);
-  document.getElementById('costo_total').innerHTML = getPrice(Math.round(total_modal)/division);
-
-  document.getElementById('cesantias').innerHTML = getPrice(Math.round(data.cesCal)/division);
-  document.getElementById('int_cesantias').innerHTML = getPrice(Math.round(data.taxCesCal)/division);
-  document.getElementById('vacaciones').innerHTML = getPrice(Math.round(data.vacationsCal)/division);
-  document.getElementById('prima').innerHTML = getPrice(Math.round(data.primaCal)/division);
-  document.getElementById('total_prestaciones').innerHTML = getPrice(total_prestaciones/division);
-
-  sueldo_plano = Math.round(data.plainSalary/data.numberOfDays);
-
-  if( radioChange == false ){
-    $("#totalExpensesVal").val(getPrice(Math.round(pagos_netos/division)));
-    $("#totalExpensesVal2").val(getPrice(Math.round(total_modal)/division));
-    $("#totalExpensesValD").val(getPrice(Math.round(data.plainSalary)/division));
-  } else {
-    radioChange = false;
-  }
 
 
-  if($("#totalExpensesVal2").val() == 'NaN')
-    $("#totalExpensesVal2").val(getPrice(0));
-  if($("#totalExpensesValD").val() == 'NaN')
-    $("#totalExpensesValD").val(getPrice(0));
-  if($("#totalExpensesVal").val() == 'NaN')
-    $("#totalExpensesVal").val(getPrice(0));
+    if($("#totalExpensesVal2").val() == 'NaN')
+        $("#totalExpensesVal2").val(getPrice(0));
+    if($("#totalExpensesValD").val() == 'NaN')
+        $("#totalExpensesValD").val(getPrice(0));
+    if($("#totalExpensesVal").val() == 'NaN')
+        $("#totalExpensesVal").val(getPrice(0));
 
 
 }
@@ -1306,41 +1306,41 @@ function jsonCalcToHTML(data) {
     htmls += "</table>    ";
 
     /*
-    htmls += "<ul class='lista_listo clearfix'><li class='col-sm-6'><span class='titulo'><strong>Costo total</strong><br/>para el empleador</span> <span class='cifra'>" + getPrice(Math.floor(data.totalExpenses)) + "</span></li>";
-    htmls += "<li class='col-sm-6'><span class='titulo'><strong>Ingreso neto</strong><br />para el empleado</span> <span class='cifra'>" + getPrice(Math.floor(data.totalIncome)) + "</span></li>";
-    //htmls += "<li class='col-sm-6'><span class='cifra'>" + getPrice(Math.floor(data.dailyExpenses)) + "</span></li>";
-    //htmls += "<li class='col-sm-6'><span class='cifra'>" + getPrice(Math.floor(data.dailyIncome)) + "</span></li>";
-    htmls += "</ul>";
-    htmls += "<h2 class='modal-title'>Detalles:</h2>" +
-        "<ul class='lista_listo_detalle'>";
-    htmls += "<li>11Gastos Empleador EPS: " + getPrice(Math.floor(data.EPSEmployerCal)) + "</li>";
-    htmls += "<li>11Gastos Empleador Pensión: " + getPrice(Math.floor(data.PensEmployerCal)) + "</li>";
-    htmls += "<li>Gastos Empleado ARL: " + getPrice(Math.floor(data.arlCal)) + "</li>";
-    htmls += "<li>Gastos Empleado Cesantias: " + getPrice(Math.floor(data.cesCal)) + "</li>";
-    htmls += "<li>Gastos Empleado Intereses/cesantias: " + getPrice(Math.floor(data.taxCesCal)) + "</li>";
-    htmls += "<li>Gastos Empleado Caja Comp: " + getPrice(Math.floor(data.cajaCal)) + "</li>";
-    htmls += "<li>Gastos Empleado Vacaciones: " + getPrice(Math.floor(data.vacationsCal)) + "</li>";
-    htmls += "<li>Gastos Auxilio de Trasnporte: " + getPrice(Math.floor(data.transportCal)) + "</li>";
-    htmls += "<li>Gastos Dotacion/150000 pesos trimestre: " + getPrice(Math.floor(data.dotationCal)) + "</li>";
-    htmls += "<li>Gastos SENA: " + getPrice(Math.floor(data.senaCal)) + "</li>";
-    htmls += "<li>Gastos ICBF: " + getPrice(Math.floor(data.icbfCal)) + "</li>";
-    htmls += "<li>Gastos Empleado EPS: " + getPrice(Math.floor(data.EPSEmployeeCal)) + "</li>";
-    htmls += "<li>Gastos Empleado Pensión: " + getPrice(Math.floor(data.PensEmployeeCal)) + "</li>";
-    htmls += "</ul>";
-    */
+     htmls += "<ul class='lista_listo clearfix'><li class='col-sm-6'><span class='titulo'><strong>Costo total</strong><br/>para el empleador</span> <span class='cifra'>" + getPrice(Math.floor(data.totalExpenses)) + "</span></li>";
+     htmls += "<li class='col-sm-6'><span class='titulo'><strong>Ingreso neto</strong><br />para el empleado</span> <span class='cifra'>" + getPrice(Math.floor(data.totalIncome)) + "</span></li>";
+     //htmls += "<li class='col-sm-6'><span class='cifra'>" + getPrice(Math.floor(data.dailyExpenses)) + "</span></li>";
+     //htmls += "<li class='col-sm-6'><span class='cifra'>" + getPrice(Math.floor(data.dailyIncome)) + "</span></li>";
+     htmls += "</ul>";
+     htmls += "<h2 class='modal-title'>Detalles:</h2>" +
+     "<ul class='lista_listo_detalle'>";
+     htmls += "<li>11Gastos Empleador EPS: " + getPrice(Math.floor(data.EPSEmployerCal)) + "</li>";
+     htmls += "<li>11Gastos Empleador Pensión: " + getPrice(Math.floor(data.PensEmployerCal)) + "</li>";
+     htmls += "<li>Gastos Empleado ARL: " + getPrice(Math.floor(data.arlCal)) + "</li>";
+     htmls += "<li>Gastos Empleado Cesantias: " + getPrice(Math.floor(data.cesCal)) + "</li>";
+     htmls += "<li>Gastos Empleado Intereses/cesantias: " + getPrice(Math.floor(data.taxCesCal)) + "</li>";
+     htmls += "<li>Gastos Empleado Caja Comp: " + getPrice(Math.floor(data.cajaCal)) + "</li>";
+     htmls += "<li>Gastos Empleado Vacaciones: " + getPrice(Math.floor(data.vacationsCal)) + "</li>";
+     htmls += "<li>Gastos Auxilio de Trasnporte: " + getPrice(Math.floor(data.transportCal)) + "</li>";
+     htmls += "<li>Gastos Dotacion/150000 pesos trimestre: " + getPrice(Math.floor(data.dotationCal)) + "</li>";
+     htmls += "<li>Gastos SENA: " + getPrice(Math.floor(data.senaCal)) + "</li>";
+     htmls += "<li>Gastos ICBF: " + getPrice(Math.floor(data.icbfCal)) + "</li>";
+     htmls += "<li>Gastos Empleado EPS: " + getPrice(Math.floor(data.EPSEmployeeCal)) + "</li>";
+     htmls += "<li>Gastos Empleado Pensión: " + getPrice(Math.floor(data.PensEmployeeCal)) + "</li>";
+     htmls += "</ul>";
+     */
     return htmls;
 }
 
 function addListeners() {
-  $("#sisbenTooltip").on('click', function(){
-    $(this).tooltip('show');
-  });
-  $("#pensionTooltip").on('click', function(){
-    $(this).tooltip('show');
-  });
-  $("#costoTooltip").on('click', function(){
-    $(this).tooltip('show');
-  });
+    $("#sisbenTooltip").on('click', function(){
+        $(this).tooltip('show');
+    });
+    $("#pensionTooltip").on('click', function(){
+        $(this).tooltip('show');
+    });
+    $("#costoTooltip").on('click', function(){
+        $(this).tooltip('show');
+    });
     $("#ex6").bootstrapSlider();
     $("#ex6").on("slide", function (slideEvt) {
         $("#register_employee_employeeHasEmployers_salaryD").val(slideEvt.value);
@@ -1535,28 +1535,28 @@ function addListeners() {
     });
 
     $("#meDebeDias").click(function(){
-      $("#register_employee_employeeHasEmployers_holidayDebt").show();
-      $("#register_employee_employeeHasEmployers_holidayDebt").removeClass("error");
-      $("#register_employee_employeeHasEmployers_holidayDebt").addClass("valid");
-      $(this).find("input[type=radio]").each(function () {
-        $(this).prop("checked", true);
-      });
+        $("#register_employee_employeeHasEmployers_holidayDebt").show();
+        $("#register_employee_employeeHasEmployers_holidayDebt").removeClass("error");
+        $("#register_employee_employeeHasEmployers_holidayDebt").addClass("valid");
+        $(this).find("input[type=radio]").each(function () {
+            $(this).prop("checked", true);
+        });
     });
     $("#alDiaDias").click(function(){
-      //$("#register_employee_employeeHasEmployers_holidayDebt").val(0);
-      $("#register_employee_employeeHasEmployers_holidayDebt-error").hide();
-      $("#register_employee_employeeHasEmployers_holidayDebt").hide();
-      $(this).find("input[type=radio]").each(function () {
-        $(this).prop("checked", true);
-      });
+        //$("#register_employee_employeeHasEmployers_holidayDebt").val(0);
+        $("#register_employee_employeeHasEmployers_holidayDebt-error").hide();
+        $("#register_employee_employeeHasEmployers_holidayDebt").hide();
+        $(this).find("input[type=radio]").each(function () {
+            $(this).prop("checked", true);
+        });
     });
     $("#leDeboDias").click(function(){
-      $("#register_employee_employeeHasEmployers_holidayDebt").show();
-      $("#register_employee_employeeHasEmployers_holidayDebt").removeClass("error");
-      $("#register_employee_employeeHasEmployers_holidayDebt").addClass("valid");
-      $(this).find("input[type=radio]").each(function () {
-        $(this).prop("checked", true);
-      });
+        $("#register_employee_employeeHasEmployers_holidayDebt").show();
+        $("#register_employee_employeeHasEmployers_holidayDebt").removeClass("error");
+        $("#register_employee_employeeHasEmployers_holidayDebt").addClass("valid");
+        $(this).find("input[type=radio]").each(function () {
+            $(this).prop("checked", true);
+        });
     });
 
     $("#fijo").click(function(){
@@ -1565,7 +1565,7 @@ function addListeners() {
         $("#tipocont2").show("slow");
         $("#tipocont2").show(3000);
         $("#fijo").find("input[type=radio]").each(function () {
-          $(this).prop("checked", true);
+            $(this).prop("checked", true);
         });
     });
     $("#indef").click(function(){
@@ -1574,23 +1574,23 @@ function addListeners() {
         $("#tipocont1").show("slow");
         $("#tipocont1").show(3000);
         $("#indef").find("input[type=radio]").each(function () {
-          $(this).prop("checked", true);
+            $(this).prop("checked", true);
         });
     });
 
-   $("#cerrarModalDetalle").click(function(){
-     //TODO Cambiar coso a la presel
-     var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
-     if (selectedVal == " Trabajador por días") {
-         $('#radio_diario').prop('checked', true);
-         $('#radio_mensual').prop('checked', false);
-     }
-     else {
-         $('#radio_diario').prop('checked', true);
-         $('#radio_mensual').prop('checked', false);
-     }
-     calculator();
-   });
+    $("#cerrarModalDetalle").click(function(){
+        //TODO Cambiar coso a la presel
+        var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
+        if (selectedVal == " Trabajador por días") {
+            $('#radio_diario').prop('checked', true);
+            $('#radio_mensual').prop('checked', false);
+        }
+        else {
+            $('#radio_diario').prop('checked', true);
+            $('#radio_mensual').prop('checked', false);
+        }
+        calculator();
+    });
 }
 //Extract Constraints
 var leavingPage =  false;
@@ -1666,16 +1666,16 @@ function calculator() {
 
     var arlProf = 0;
     if( arlChoose == 1 ){ //empleada
-      arlProf = 0.00522;
+        arlProf = 0.00522;
     }
     else if (arlChoose == 2) { //conductor
-      arlProf = 0.02436;
+        arlProf = 0.02436;
     }
     else if (arlChoose == 3) { //ninero
-      arlProf = 0.00522;
+        arlProf = 0.00522;
     }
     else if (arlChoose == 5) { //mayordomo
-      arlProf = 0.01044;
+        arlProf = 0.01044;
     }
 
     var aportaPens = $("#register_employee_employeeHasEmployers_paysPens").find("input:checked").val();
@@ -1683,8 +1683,8 @@ function calculator() {
     var lPensEmployee = PensEmployee;
 
     if(aportaPens == "-1"){
-      lPensEmployer = 0;
-      lPensEmployee = 0;
+        lPensEmployer = 0;
+        lPensEmployee = 0;
     }
 
     $("#diasTrabajadosMod").text("");
@@ -1763,7 +1763,7 @@ function calculator() {
             var localEPS = smmlv / 30 / numberOfDays;;
             var localPens =smmlv / 30 / numberOfDays;
             if(aportaPens == "-1"){
-              localPens = 0;
+                localPens = 0;
             }
             salaryD = salaryD - transportAidDaily + localEPS + localPens;
             //salaryD = (salaryD - transportAidDaily)/(1-(lPensEmployee + EPSEmployee));
@@ -1775,7 +1775,7 @@ function calculator() {
             PensEmployerCal = lPensEmployer * base;
             PensEmployeeCal = smmlv / 30;
             if(aportaPens == "-1"){
-              PensEmployeeCal = 0;
+                PensEmployeeCal = 0;
             }
             arlCal = arlProf * base;
             //cesCal = ((ces) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
@@ -1923,28 +1923,28 @@ function calculator() {
         }
 
         /*if ( displayError == true && type=="days" ){
-            $("#dontHaveSisben").show();
-        }
-        else {
-            $("#dontHaveSisben").hide();
-        }*/
+         $("#dontHaveSisben").show();
+         }
+         else {
+         $("#dontHaveSisben").hide();
+         }*/
     }
     // Calculate the days again.
     var i = 0;
 
     $("[name='register_employee[employeeHasEmployers][weekDays][]']:checked").each(function () {
-            i++;
-        });
+        i++;
+    });
     $("#register_employee_employeeHasEmployers_weekWorkableDays").val(i);
     var htmlRes = jsonCalcToHTML(resposne);
     if ($("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text() == " Trabajador por días") {
-      if( firstLoad == true){
-        $("#labelCosto").html("Costo diario </br> del empleado (sin prestaciones)");
-        firstLoad = false;
-      }
+        if( firstLoad == true){
+            $("#labelCosto").html("Costo diario </br> del empleado (sin prestaciones)");
+            firstLoad = false;
+        }
 
-      //$('#radio_diario').prop('checked', true);
-      //$('#radio_mensual').prop('checked', false);
+        //$('#radio_diario').prop('checked', true);
+        //$('#radio_mensual').prop('checked', false);
     }
     changeValues(resposne);
 
@@ -1955,18 +1955,18 @@ function calculator() {
 }
 
 $("input[name='register_employee[employeeHasEmployers][timeCommitment]']").on("click", function () {
-  if( $(this).val() == 1 ){
-    $('#radio_diario').prop('checked', false);
-    $('#radio_mensual').prop('checked', true);
-    $("#labelCosto").html("Costo del empleado +</br> seguridad social (sin prestaciones)");
-    $("#wealthBlock").show();
-  }
-  else {
-    $('#radio_diario').prop('checked', true);
-    $('#radio_mensual').prop('checked', false);
-    $("#labelCosto").html("Costo diario </br> del empleado (sin prestaciones)");
-    $("#wealthBlock").hide();
-  }
+    if( $(this).val() == 1 ){
+        $('#radio_diario').prop('checked', false);
+        $('#radio_mensual').prop('checked', true);
+        $("#labelCosto").html("Costo del empleado +</br> seguridad social (sin prestaciones)");
+        $("#wealthBlock").show();
+    }
+    else {
+        $('#radio_diario').prop('checked', true);
+        $('#radio_mensual').prop('checked', false);
+        $("#labelCosto").html("Costo diario </br> del empleado (sin prestaciones)");
+        $("#wealthBlock").hide();
+    }
 });
 
 function checkDate(date) {
@@ -1986,10 +1986,10 @@ function checkDate(date) {
 function checkDateVsStart(date) {
     var $permittedDate= $("#datePermitted");
     var dateNow = new Date(
-            $("#register_employee_employeeHasEmployers_startDate_year").val(),
-            parseInt($("#register_employee_employeeHasEmployers_startDate_month").val()),
-            $("#register_employee_employeeHasEmployers_startDate_day").val()
-        );
+        $("#register_employee_employeeHasEmployers_startDate_year").val(),
+        parseInt($("#register_employee_employeeHasEmployers_startDate_month").val()),
+        $("#register_employee_employeeHasEmployers_startDate_day").val()
+    );
 
     if (date < dateNow) {
         $("#dateContract2").modal("show");
@@ -2139,8 +2139,8 @@ function payMethodListener() {
             } else {
 
                 /*$hasIt.parent().parent().find(".form-group").not(".formFieldsNo").each(function () {
-                    $(this).hide();
-                });*/
+                 $(this).hide();
+                 });*/
                 $hasIt.parent().parent().find( "label[for*='cellphone']" ).text("Celular del empleado que usará para Daviplata");
                 $("#noDaviplata").modal("show");
             }
@@ -2203,10 +2203,10 @@ function initEntitiesFields(){
             source: function(request, response) {
                 var results;
                 if(request.term.length != 0){
-                  results = $.ui.autocomplete.filter(dataWe, request.term);
+                    results = $.ui.autocomplete.filter(dataWe, request.term);
                 }
                 else {
-                  results = $.ui.autocomplete.filter("", request.term);
+                    results = $.ui.autocomplete.filter("", request.term);
                 }
                 response(results.slice(0, 5));
             },                minLength: 0,
@@ -2214,18 +2214,18 @@ function initEntitiesFields(){
                 event.preventDefault();
                 $(this).val(ui.item.label);
                 $($(this).parent()).parent().find("select").each(function() {
-                  if($(this).parent().parent().attr("class") == "hidden"){
-                    $(this).val(ui.item.value);
-                  }
+                    if($(this).parent().parent().attr("class") == "hidden"){
+                        $(this).val(ui.item.value);
+                    }
                 });
             },
             focus: function(event, ui) {
                 event.preventDefault();
                 $(this).val(ui.item.label);
                 $($(this).parent()).parent().find("select").each(function() {
-                  if($(this).parent().parent().attr("class") == "hidden"){
-                    $(this).val(ui.item.value);
-                  }
+                    if($(this).parent().parent().attr("class") == "hidden"){
+                        $(this).val(ui.item.value);
+                    }
                 });
             }
 
@@ -2239,64 +2239,64 @@ function initEntitiesFields(){
 }
 
 function oneYearFromNow(date){
-  date.setDate( date.getDate() + 364 );
-  return date;
+    date.setDate( date.getDate() + 364 );
+    return date;
 }
 
 function reverseCalculator(){
 
-  var plainSalary = parseFloat(accounting.unformat($("#register_employee_employeeHasEmployers_salaryD").val()));
-  if(plainSalary == ""){
-    $("#register_employee_employeeHasEmployers_salaryD").val(0);
-    calculator();
-    return;
-  }
-  var salaryD = 0;
-
-  var aid = 0;
-  var aidD = 0;
-  var sisben = $("input[name='register_employee[employeeHasEmployers][sisben]']:checked").val();
-  var transport = $("input[name='register_employee[employeeHasEmployers][transportAid]']:checked").val();
-  //var numberOfDays= $("#register_employee_employeeHasEmployers_weekWorkableDays").val() * 4.345;
-  var numberOfDays= $("#register_employee_employeeHasEmployers_weekWorkableDays").val() * 4;
-
-  var PensEmployeeCal = 0;
-  var base = 0;
-
-  var aportaPens = $("#register_employee_employeeHasEmployers_paysPens").find("input:checked").val();
-  var lPensEmployee = PensEmployee;
-
-  var pensL = smmlv / 30 / numberOfDays;
-  var saluL = smmlv / 30 / numberOfDays;
-
-  if(aportaPens == "-1"){
-    lPensEmployee = 0;
-    pensL = 0;
-  }
-
-  if( sisben == -1 || (plainSalary + transportAidDaily + aidD) * numberOfDays > smmlv){
-    salaryD = plainSalary + transportAidDaily - pensL - saluL;
-  }
-  else {
-    base = smmlv;
-    salaryD = plainSalary;
-
-    if (numberOfDays <= 7) {
-        PensEmployeeCal = lPensEmployee * base / 4;
-        salaryD = (salaryD + transportAidDaily) - (PensEmployeeCal/numberOfDays);
-    } else if (numberOfDays <= 14) {
-        PensEmployeeCal = lPensEmployee * base / 2;
-        salaryD = (salaryD + transportAidDaily) - (PensEmployeeCal/numberOfDays);
-    } else if (numberOfDays <= 21) {
-        PensEmployeeCal = lPensEmployee * base * 3 / 4;
-        salaryD = (salaryD + transportAidDaily) - (PensEmployeeCal/numberOfDays);
-    } else {
-        PensEmployeeCal = lPensEmployee * base;
-        salaryD = (salaryD + transportAidDaily) - (PensEmployeeCal/numberOfDays);
+    var plainSalary = parseFloat(accounting.unformat($("#register_employee_employeeHasEmployers_salaryD").val()));
+    if(plainSalary == ""){
+        $("#register_employee_employeeHasEmployers_salaryD").val(0);
+        calculator();
+        return;
     }
-  }
+    var salaryD = 0;
 
-  $("#register_employee_employeeHasEmployers_salaryD").val(Math.round(salaryD));
-  calculator();
+    var aid = 0;
+    var aidD = 0;
+    var sisben = $("input[name='register_employee[employeeHasEmployers][sisben]']:checked").val();
+    var transport = $("input[name='register_employee[employeeHasEmployers][transportAid]']:checked").val();
+    //var numberOfDays= $("#register_employee_employeeHasEmployers_weekWorkableDays").val() * 4.345;
+    var numberOfDays= $("#register_employee_employeeHasEmployers_weekWorkableDays").val() * 4;
+
+    var PensEmployeeCal = 0;
+    var base = 0;
+
+    var aportaPens = $("#register_employee_employeeHasEmployers_paysPens").find("input:checked").val();
+    var lPensEmployee = PensEmployee;
+
+    var pensL = smmlv / 30 / numberOfDays;
+    var saluL = smmlv / 30 / numberOfDays;
+
+    if(aportaPens == "-1"){
+        lPensEmployee = 0;
+        pensL = 0;
+    }
+
+    if( sisben == -1 || (plainSalary + transportAidDaily + aidD) * numberOfDays > smmlv){
+        salaryD = plainSalary + transportAidDaily - pensL - saluL;
+    }
+    else {
+        base = smmlv;
+        salaryD = plainSalary;
+
+        if (numberOfDays <= 7) {
+            PensEmployeeCal = lPensEmployee * base / 4;
+            salaryD = (salaryD + transportAidDaily) - (PensEmployeeCal/numberOfDays);
+        } else if (numberOfDays <= 14) {
+            PensEmployeeCal = lPensEmployee * base / 2;
+            salaryD = (salaryD + transportAidDaily) - (PensEmployeeCal/numberOfDays);
+        } else if (numberOfDays <= 21) {
+            PensEmployeeCal = lPensEmployee * base * 3 / 4;
+            salaryD = (salaryD + transportAidDaily) - (PensEmployeeCal/numberOfDays);
+        } else {
+            PensEmployeeCal = lPensEmployee * base;
+            salaryD = (salaryD + transportAidDaily) - (PensEmployeeCal/numberOfDays);
+        }
+    }
+
+    $("#register_employee_employeeHasEmployers_salaryD").val(Math.round(salaryD));
+    calculator();
 
 }
