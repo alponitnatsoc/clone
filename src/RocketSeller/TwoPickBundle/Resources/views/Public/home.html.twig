@@ -28,13 +28,13 @@
 										Descubre los beneficios de hacer las cosas bien
 									</p>
 									<div class="formCont">
-										<form>
+										{{ form_start(form) }}
 											<input class="inputHalf" type="text" name="firstname" placeholder="Nombre">
-											<input class="inputHalf" type="text" name="firstname" placeholder="Apellido"><br />
-											<input class="inputFull" type="text" name="firstname" placeholder="Celular"><br />
-											<input class="inputFull" type="text" name="firstname" placeholder="Correo electrónico">
-											<button class="btn naranja obten">Obtén 1 mes gratis</button>
-										</form>
+											<input class="inputHalf" type="text" name="lastname" placeholder="Apellido"><br />
+											<input class="inputFull" type="number" name="cellphone" placeholder="Celular"><br />
+											<input class="inputFull" type="email" name="email" placeholder="Correo electrónico">
+											{{ form_widget(form.save, { 'attr': {'class': 'btn naranja obten'}}) }}
+										{{ form_end(form) }}
 									</div>
 								</div>
 							</div>

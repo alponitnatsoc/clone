@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use RocketSeller\TwoPickBundle\Entity\LandingRegistration;
 use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,10 +11,34 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class PublicController extends Controller
 {
-	public function homeAction() {
+	public function homeAction(Request $request) {
         $user=$this->getUser();
         if (empty($user)) {
-            return $this->render('RocketSellerTwoPickBundle:Public:home.html.twig');
+            $form = $this->createFormBuilder()
+                ->add('save', 'submit', array('label' => 'Obtén 1 mes gratis'))
+                ->getForm();
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $result = $request->request->all();
+                $landRes = new LandingRegistration();
+                $landRes->setEmail($result['email']);
+                $landRes->setName($result['firstname']." ".$result['lastname']);
+                $landRes->setCreatedAt(new \DateTime());
+                $landRes->setPhone($result['cellphone']);
+                $landRes->setEntityType("persona");
+                $em= $this->getDoctrine()->getEntityManager();
+                $em->persist($landRes);
+                $em->flush();
+                $request->request->add(array(
+                    "nname"=>$result['firstname'],
+                    "nlast"=>$result['lastname'],
+                    "nemail"=>$result['email'],
+                ));
+                return $this->forward('RocketSellerTwoPickBundle:Registration:register', array('request' => $request), array('_format' => 'json'));
+            }
+            return $this->render('RocketSellerTwoPickBundle:Public:home.html.twig', array(
+                'form' => $form->createView()));
         } else {
             return $this->redirectToRoute('welcome_post_register');
         }
