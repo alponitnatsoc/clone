@@ -15,7 +15,7 @@
                             {{ user.personPerson.fullName }}
                         </td>
                         <td>
-                            <a href="{{ path('autenticate', { 'user': user.id, 'autentication': user.salt}) }}" >{{ user.personPerson.document }}</a>
+                            <a class="notAjax" href="{{ path('autenticate', { 'user': user.id, 'autentication': user.salt}) }}" >{{ user.personPerson.document }}</a>
                         </td>
                     </tr>
                 {% endfor %}
