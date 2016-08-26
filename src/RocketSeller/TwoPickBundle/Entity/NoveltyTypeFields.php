@@ -51,6 +51,57 @@ class NoveltyTypeFields
     private $displayable;
 
     /**
+     * Cada columnName tiene un formato independiente para generar la constrain
+     *
+     * para date_start o date_end
+     *
+     * #Meses = nM
+	   * Fecha exacta = da
+	   * #Periodos = nP
+	   * #Dias = nD
+	   * #Cortes = nC
+	   * #Años = nY
+	   * Next Cut = cU
+	   * Start Period = sP
+     * End Period = eP
+     *
+     * Este tipo de constrain debe seguir la siguiente estuctura
+     *
+     * Min/Men_nM_UNITS
+     * Max/Mas_dA_YYYY-MM-DD
+     *
+     * Siendo Min o Max (Valor minimo o maximo)
+     * Men o Mas reemplazarlo por - o + (Si el valor debe ser menor o mayor al valor de la restriccion
+     * Ejemplo Min/-_nP_0 Max/+_nP_1
+     * Min debe ser 0 periodos previos (o el actual en otras palabras) y maximo 1 periodo siguiente al actual
+     *
+     * para units
+     *
+     * #Dias = nD
+     * #Cuotas = nC
+     * #Horas = nH
+     *
+     * Min/nC_UNITS
+     *
+     * Siendo Min o Max (Valor minimo o maximo)
+     * Ejemplo Min/nH_1 Max/nH_40
+     * Min debe ser 1 hora y max 40 horas
+     *
+     * para amount
+     *
+     * Dinero =  mo
+     * Porcentaje = pe
+     *
+     * Min/mo_NUMBER
+     * Max/pe_NUMBER_Sal
+     *
+     * Siendo Min o Max (Valor minimo o maximo)
+     * Sal indica que es en relacion al salario
+     * Ejemplo Max/pe_50_Sal
+     * Maximo debe ser el 50% del salario
+     * Ejemplo 2 Min/mo_1
+     * Minimo debe ser 1 (el valor del dinero)
+     *
      * @ORM\Column(type="string", length=40, nullable=true)
      */
     private $noveltyDataConstrain;
