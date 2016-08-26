@@ -136,11 +136,19 @@
     </div>
     {{ form_start(form, {'attr': {'id': 'estilo_calculadora'}}) }}
     {{ form_errors(form) }}
+
+    <div class="position">
+        {{ form_row(form.position) }}
+    </div>
     <div class="tipo-empleado">
         {{ form_row(form.tipo) }}
     </div>
     <hr />
     <div class="all">
+        <div class="common dual">
+            {{ form_row(form.pension) }}
+            {{ form_row(form.transporte) }}
+        </div>
         <div class="days dual">
             {{ form_row(form.salarioD) }}
         </div>
@@ -150,16 +158,8 @@
 
         <div class="days dual">
             {{ form_row(form.numberOfDays) }}
-            {{ form_row(form.sisben) }}
         </div>
-        <div class="common dual">
-            {{ form_row(form.transporte) }}
 
-            {{ form_row(form.auxilio) }}
-            <div class="aid">
-                {{ form_row(form.auxilioD) }}
-            </div>
-        </div>
         <div class="col-sm-12 col-xs-12 center">
             {{ form_row(form.save) }}
         </div>
@@ -167,22 +167,637 @@
     {{ form_widget(form) }}
     {{ form_end(form) }}
 </div>
-<div class="modal fade" id="calculatorResultsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Detalles Calculadora</h3>
-            </div>
-            <div class="modal-body">
 
-            </div>
-            <div class="modal-footer">
-                <button id="employerDismiss" type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 
+    <div class="modal fade" id="calculatorResultsModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <!--
+                <div class="modal-header">
+                    <h3 class="modal-title">Detalles Calculadora</h3>
+                </div>
+            -->
+                <button id="cerrarModalDetalle" type="button" class="close"
+                        data-dismiss="modal" aria-label="Close"
+                        style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;">
+                    <span aria-hidden="true">&times;</span></button>
+                <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1"
+                     style="margin-top: 0;">
+                    <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 20px;">
+                        &nbsp;&nbsp;&nbsp;<i class="glyphicon glyphicon-usd"
+                                             style="font-size:17px"></i>&nbsp; Estimación
+                        del costo de tu empleado
+                    </div>
+                </div>
+                <div class="modal-body">
+
+                    <!--Aca debe ir lo del modal que hizo Gustavo -->
+                    <style>
+                        /* Estilo del modal de la calculadora salarial */
+                        .light {
+                            font-family: 'Open Sans', sans-serif;
+                            font-weight: 300
+                        }
+
+                        .semi-italic {
+                            font-family: 'Open Sans', sans-serif;
+                            font-weight: 600;
+                            font-style: italic
+                        }
+
+                        #verDatos {
+                            width: 300px;
+                            margin: 0 auto;
+                            text-align: center
+                        }
+
+                        .border {
+                            border-radius: 5px;
+                            border: 1px solid #CCC
+                        }
+
+                        .franja-gris {
+                            background: #CCC;
+                            padding: 5px 0;
+                            text-align: center;
+                            color: #5D5D5D;
+                            font-family: 'Open Sans', sans-serif;
+                            font-weight: 700
+                        }
+
+                        .concepto {
+                            border-right: 1px solid #CCC;
+                            padding: 5px 0 5px 25px;
+                            box-sizing: border-box;
+                            border-bottom: solid 1px #CCC;
+                            font-family: 'Open Sans', sans-serif;
+                            font-weight: 300;
+                            color: #868482
+
+                        }
+
+                        .pagos {
+                            background: #3A4A58;
+                            padding: 5px 0 5px 25px;
+                            box-sizing: border-box;
+                            color: #FFF;
+                            font-family: 'Open Sans', sans-serif;
+                            font-weight: 300
+                        }
+
+                        .centrar {
+                            text-align: center;
+                            font-family: 'Open Sans', sans-serif;
+                            font-weight: 600;
+                            font-style: italic;
+                            color: #5D5D5D
+                        }
+
+                        .padding {
+                            padding: 20px 30px 20px 30px;
+                        }
+
+                        /*tooltip hover*/
+
+                        .toolstyle {
+                            background: #efefef;
+                            color: #888888;
+                            padding: 13px 15px;
+                            border-radius: 5px;
+                            display: none;
+                            border: dashed 1px #CCC;
+                            margin: 10px 0 0 0;
+                            cursor: pointer;
+                        }
+
+                        @media only screen and (max-width: 600px) {
+                            .concepto {
+                                width: 50%
+                            }
+                        }
+                    </style>
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+                    <script>
+                        $(document).ready(function () {
+                            $("#tool1tr").click(function () {
+                                $("#tool1").toggle();
+                            });
+                            $("#tool2tr").click(function () {
+                                $("#tool2").toggle();
+                            });
+                            $("#tool3tr").click(function () {
+                                $("#tool3").toggle();
+                            });
+                        });
+                    </script>
+
+
+                    <div id="detalle-calculadora">
+                        <section>
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tr>
+                                    <td>
+                                        <table align="center" border="0" cellpadding="0"
+                                               cellspacing="0">
+                                            <tr>
+                                                <!---------------------------------------------empieza Ingresos promedio del empleado (sin prestaciones)-->
+                                                <td class="padding">
+                                                    <p class="centrar">
+                                                        Ingreso estimado del empleado (sin
+                                                        prestaciones) <span id="tool1tr"
+                                                                            class="glyphicon glyphicon-question-sign"></span>
+                                                        <span id="tool1"
+                                                              class="toolstyle light">Este es el valor neto que recibirá el empleado. No incluye prestaciones y puede variar según los días trabajados y novedades reportadas. Las prestaciones se pueden ver más abajo</span>
+                                                    </p>
+                                                    <table class="border" border="0"
+                                                           cellpadding="0" cellspacing="0"
+                                                           width="100%">
+                                                        <tr>
+                                                            <td class="franja-gris">
+                                                                Salario y Auxilios (+)
+                                                            </td>
+                                                        </tr>
+                                                        <tr><!--empieza doble columna-->
+                                                            <td>
+                                                                <table border="0"
+                                                                       cellpadding="0"
+                                                                       cellspacing="0"
+                                                                       width="100%">
+                                                                    <tr>
+                                                                        <td class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            Salario
+                                                                        </td>
+                                                                        <td id="salario_ingreso_bruto"
+                                                                            class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            $68.141
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr><!--termina doble columna-->
+                                                        <tr><!--empieza doble columna-->
+                                                            <td>
+                                                                <table border="0"
+                                                                       cellpadding="0"
+                                                                       cellspacing="0"
+                                                                       width="100%">
+                                                                    <tr>
+                                                                        <td class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            Auxilio de
+                                                                            transporte
+                                                                        </td>
+                                                                        <td id="subsidio_transporte"
+                                                                            class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            $69.120
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr><!--termina doble columna-->
+                                                        <tr>
+                                                            <td class="franja-gris">
+                                                                Descuentos (-)
+                                                            </td>
+                                                        </tr>
+                                                        <tr><!--empieza doble columna-->
+                                                            <td>
+                                                                <table border="0"
+                                                                       cellpadding="0"
+                                                                       cellspacing="0"
+                                                                       width="100%">
+                                                                    <tr>
+                                                                        <td class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            Salud
+                                                                        </td>
+                                                                        <td id="descuento_salud"
+                                                                            class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            $69.120
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr><!--termina doble columna-->
+                                                        <tr><!--empieza doble columna-->
+                                                            <td>
+                                                                <table border="0"
+                                                                       cellpadding="0"
+                                                                       cellspacing="0"
+                                                                       width="100%">
+                                                                    <tr>
+                                                                        <td class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            Pensión
+                                                                        </td>
+                                                                        <td id="descuento_pension"
+                                                                            class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            $69.120
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr><!--termina doble columna-->
+                                                        <tr><!--empieza doble columna-->
+                                                            <td>
+                                                                <table border="0"
+                                                                       cellpadding="0"
+                                                                       cellspacing="0"
+                                                                       width="100%">
+                                                                    <tr>
+                                                                        <td class="pagos"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            Esto recibe el
+                                                                            empleado
+                                                                        </td>
+                                                                        <td id="pagos_netos"
+                                                                            class="pagos"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            $69.120
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr><!--termina doble columna-->
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <!------------------------------------termina Ingresos promedio del empleado (sin prestaciones)-->
+                                            <tr>
+                                                <!--------------------------------------Empieza Pagos recurrentes promedio diarios-->
+                                                <td class="padding">
+                                                    <p class="centrar">
+                                                        Costo del empleado (sin
+                                                        prestaciones) <i id="tool2tr"
+                                                                         class="glyphicon glyphicon-question-sign"></i>
+                                                        <span id="tool2"
+                                                              class="toolstyle light">Este es el resumen del costo recurrente que va a tener el empleador. No incluye prestaciones y puede variar según los días trabajados y novedades reportadas. Más abajo se detalla el costo de las prestaciones</span>
+                                                    </p>
+                                                    <table class="border" border="0"
+                                                           cellpadding="0" cellspacing="0"
+                                                           width="100%">
+                                                        <tr>
+                                                            <td class="franja-gris">
+                                                                Salario y Auxilios (+)
+                                                            </td>
+                                                        </tr>
+                                                        <tr><!--empieza doble columna-->
+                                                            <td>
+                                                                <table border="0"
+                                                                       cellpadding="0"
+                                                                       cellspacing="0"
+                                                                       width="100%">
+                                                                    <tr>
+                                                                        <td class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            Salario
+                                                                        </td>
+                                                                        <td id="salario_ingreso_bruto2"
+                                                                            class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            $68.140
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr><!--termina doble columna-->
+                                                        <tr><!--empieza doble columna-->
+                                                            <td>
+                                                                <table border="0"
+                                                                       cellpadding="0"
+                                                                       cellspacing="0"
+                                                                       width="100%">
+                                                                    <tr>
+                                                                        <td class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            Auxilio de
+                                                                            transporte
+                                                                        </td>
+                                                                        <td id="subsidio_transporte2"
+                                                                            class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            $68.140
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr><!--termina doble columna-->
+                                                        <tr>
+                                                            <td class="franja-gris">
+                                                                Aportes a seguridad social
+                                                                (+)
+                                                            </td>
+                                                        </tr>
+                                                        <tr><!--empieza doble columna-->
+                                                            <td>
+                                                                <table border="0"
+                                                                       cellpadding="0"
+                                                                       cellspacing="0"
+                                                                       width="100%">
+                                                                    <tr>
+                                                                        <td class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            Salud
+                                                                        </td>
+                                                                        <td id="salud_empleador"
+                                                                            class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            $68.140
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr><!--termina doble columna-->
+                                                        <tr><!--empieza doble columna-->
+                                                            <td>
+                                                                <table border="0"
+                                                                       cellpadding="0"
+                                                                       cellspacing="0"
+                                                                       width="100%">
+                                                                    <tr>
+                                                                        <td class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            Pensión
+                                                                        </td>
+                                                                        <td id="pension_empleador"
+                                                                            class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            $68.140
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr><!--termina doble columna-->
+                                                        <tr><!--empieza doble columna-->
+                                                            <td>
+                                                                <table border="0"
+                                                                       cellpadding="0"
+                                                                       cellspacing="0"
+                                                                       width="100%">
+                                                                    <tr>
+                                                                        <td class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            Caja de
+                                                                            compensación
+                                                                        </td>
+                                                                        <td id="ccf_empleador"
+                                                                            class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            $68.140
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr><!--termina doble columna-->
+                                                        <tr><!--empieza doble columna-->
+                                                            <td>
+                                                                <table border="0"
+                                                                       cellpadding="0"
+                                                                       cellspacing="0"
+                                                                       width="100%">
+                                                                    <tr>
+                                                                        <td class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            Riesgos
+                                                                            profesionales
+                                                                        </td>
+                                                                        <td id="arl_empleador"
+                                                                            class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            $68.140
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr><!--termina doble columna-->
+                                                        <tr><!--empieza doble columna-->
+                                                            <td>
+                                                                <table border="0"
+                                                                       cellpadding="0"
+                                                                       cellspacing="0"
+                                                                       width="100%">
+                                                                    <tr>
+                                                                        <td class="pagos"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            Costo sin
+                                                                            prestaciones
+                                                                        </td>
+                                                                        <td id="costo_total"
+                                                                            class="pagos"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            $200.140
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr><!--termina doble columna-->
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <!----------------------------------------------------------------termina Pagos recurrentes promedio diarios-->
+                                            <tr>
+                                                <!----------------------------------------------------------------Empieza Prestaciones promedio por diarios-->
+                                                <td class="padding">
+                                                    <p class="centrar">
+                                                        Prestaciones promedio <i
+                                                                id="tool3tr"
+                                                                class="glyphicon glyphicon-question-sign"></i>
+                                                        <span id="tool3"
+                                                              class="toolstyle light">Estas son las provisiones. Es decir, lo que deberías ahorrar promedio en el periodo para pagar las prestaciones cuando se ejecutan. Estos valores en realidad se pagan una vez al año o cuando se termina el contrato</span>
+                                                    </p>
+                                                    <table class="border" border="0"
+                                                           cellpadding="0" cellspacing="0"
+                                                           width="100%">
+                                                        <tr>
+                                                            <td class="franja-gris">
+                                                                Cesantías (+)
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <!--------------empieza doble columna cesantias------------------------->
+                                                            <td>
+                                                                <table border="0"
+                                                                       cellpadding="0"
+                                                                       cellspacing="0"
+                                                                       width="100%">
+                                                                    <tr>
+                                                                        <td class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            Cesantías
+                                                                        </td>
+                                                                        <td id="cesantias"
+                                                                            class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            $68.812
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr><!--termina doble columna-->
+                                                        <tr><!--empieza doble columna-->
+                                                            <td>
+                                                                <table border="0"
+                                                                       cellpadding="0"
+                                                                       cellspacing="0"
+                                                                       width="100%">
+                                                                    <tr>
+                                                                        <td class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            Intereses de
+                                                                            cesantías
+                                                                        </td>
+                                                                        <td id="int_cesantias"
+                                                                            class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            $68.140
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <!--------------termina doble columna cesantias------------------------->
+                                                        <tr>
+                                                            <td class="franja-gris">
+                                                                Vacaciones
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <!--------------empieza doble columna vacaciones------------------------->
+                                                            <td>
+                                                                <table border="0"
+                                                                       cellpadding="0"
+                                                                       cellspacing="0"
+                                                                       width="100%">
+                                                                    <tr>
+                                                                        <td class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            Vacaciones
+                                                                        </td>
+                                                                        <td id="vacaciones"
+                                                                            class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            $68.812
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <!--------------termina doble columna vacaciones------------------------->
+                                                        <tr>
+                                                            <td class="franja-gris">
+                                                                Prima
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <!--------------empieza doble columna prima------------------------->
+                                                            <td>
+                                                                <table border="0"
+                                                                       cellpadding="0"
+                                                                       cellspacing="0"
+                                                                       width="100%">
+                                                                    <tr>
+                                                                        <td class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            Prima
+                                                                        </td>
+                                                                        <td id="prima"
+                                                                            class="concepto"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            $68.812
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <!--------------termina doble columna prima------------------------->
+                                                        <tr>
+                                                            <!--------------empieza doble columna total prestaciones------------------------->
+                                                            <td>
+                                                                <table border="0"
+                                                                       cellpadding="0"
+                                                                       cellspacing="0"
+                                                                       width="100%">
+                                                                    <tr>
+                                                                        <td class="pagos"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            Total
+                                                                            prestaciones
+                                                                        </td>
+                                                                        <td id="total_prestaciones"
+                                                                            class="pagos"
+                                                                            width="260"
+                                                                            valign="top">
+                                                                            $68.812
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <!--------------termina doble columna total prestaciones------------------------->
+                                                    </table>
+                                                </td>
+                                            </tr><!--termina tercera tabla-->
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </section>
+                    </div>
+                </div>
+                <p id="diasTrabajadosMod" class="centrar"><i>
+                    </i></p>
+                <div class="modal-footer" style="text-align: center;">
+                    <button id="employerDismiss" type="button" class="btn btn-orange"
+                            data-dismiss="modal">Cerrar
+                    </button>
+
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+
+
+
 {% endblock %}
 {% block javascripts %}
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>

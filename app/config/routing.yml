@@ -565,4 +565,4 @@ employer_liquidation:
 
 calculadora:
     path: /calculadora
-    defaults: { _controller: RocketSellerTwoPickBundle:Public:calculadora}
+    defaults: { _controller: RocketSellerTwoPickBundle:Calculator:showCalculator}

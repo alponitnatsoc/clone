@@ -1749,8 +1749,6 @@ function calculator() {
             salaryD2 = (salaryD - transportAidDaily)+(PensEmployeeCal2/numberOfDays);
         }
 
-        console.log(salaryD2 + " vs " + smmlv/numberOfDays);
-
         var displayError = false;
         if (salaryD2  > smmlv/numberOfDays || sisben == -1) {
             displayError = true;
