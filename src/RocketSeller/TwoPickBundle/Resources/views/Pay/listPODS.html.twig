@@ -1,23 +1,40 @@
 {% extends "::base.html.twig" %}
 {% block content %}
+<link rel="stylesheet" type="text/css" href="{{ asset('css/public/pagospage.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ asset('css/public/estadoPago.css') }}"/>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700' rel='stylesheet' type='text/css'>
     {% if pods|length >0 %}
-        <table>
-            <tr>
-                <th>Id</th>
-                <th>Valor</th>
-                <th>Estado</th>
-                <th>Accion</th>
-            </tr>
+        <div class="listpod col-sm-12">
+          <div class="h1cont">
+            <img width="70" src="{{ asset('public/img/landing/benefit3.png') }}" alt="">
+            <h1 class="bold">Transacciones en proceso</h1>
+          </div>
+          <div class="detalleCompra">
         {% for pod in pods %}
-            <tr>
-                <td>{{ pod.idPurchaseOrdersDescription }}</td>
-                <td>{{ pod.value }}</td>
-                <td>{{ pod.purchaseOrdersStatus.name }}</td>
-                <td><a href="{{ path('show_pod_description',{'idPOD':pod.idPurchaseOrdersDescription}) }}" class="notAjax">{% if pod.purchaseOrdersStatus.idNovoPay == "-2" %}Resolver{% else %}Ver{% endif %}</a></td>
-            </tr>
+            <ul>
+                <li class="borderBottom">
+                  <p class="left borderRight bold">Id</p>
+                  <p class="right">{{ pod.idPurchaseOrdersDescription }}</p>
+                </li>
+                <li class="borderBottom">
+                  <p class="left borderRight bold">Valor</p>
+                  <p class="right">{{ pod.value }}</p>
+                </li>
+                <li class="borderBottom">
+                  <p class="left borderRight bold">Estado</p>
+                  <p class="right">{{ pod.purchaseOrdersStatus.name }}</p>
+                </li>
+                <li style="background: #e0e0e0;">
+                  <p class="left borderRight bold">Acción</p>
+                  <a href="{{ path('show_pod_description',{'idPOD':pod.idPurchaseOrdersDescription}) }}" class="notAjax">
+                    <p class="right bold">{% if pod.purchaseOrdersStatus.idNovoPay == "-2" %}&#10095; Resolver{% else %}&#10095; Ver{% endif %}</p>
+                  </a>
+                </li>
+            </ul>
 
         {% endfor %}
-        </table>
+          </div>
+      </div>
     {% else %}
     {% endif %}
 {% endblock %}
