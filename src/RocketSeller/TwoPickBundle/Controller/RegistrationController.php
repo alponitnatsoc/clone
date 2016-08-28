@@ -126,25 +126,27 @@ class RegistrationController extends BaseController
             $promoCodeRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCode");
             /** @var PromotionCode $realCode */
             $realCode=$promoCodeRepo->findOneBy(array("code"=>$invitationCode));
-            if($realCode==null){
-                return $this->redirect("https://symplifica.com/");
-            }
-            if($realCode->getUserUser()==null){
-                if($realCode->getPromotionCodeTypePromotionCodeType()->getShortName()!="AC"){
-                    $realCode->setUserUser($user);
-                    /** @var User $user */
-                    $user->setIsFree($realCode->getPromotionCodeTypePromotionCodeType()->getDuration());
-                    $realCode->setStartDate(new \DateTime());
-                    $endDate= new DateTime(date("Y-m-d", strtotime("+".$user->getIsFree()." month", strtotime($realCode->getStartDate()->format("Y-m-d")))));
-                    $realCode->setEndDate($endDate);
+            if($realCode!=null){
+                if($realCode->getUserUser()==null){
+                    if($realCode->getPromotionCodeTypePromotionCodeType()->getShortName()!="AC"){
+                        $realCode->setUserUser($user);
+                        /** @var User $user */
+                        $user->setIsFree($realCode->getPromotionCodeTypePromotionCodeType()->getDuration());
+                        $realCode->setStartDate(new \DateTime());
+                        $endDate= new DateTime(date("Y-m-d", strtotime("+".$user->getIsFree()." month", strtotime($realCode->getStartDate()->format("Y-m-d")))));
+                        $realCode->setEndDate($endDate);
+                    }else{
+                        //we dont burn the code when the shortname is AC
+                        $user->setIsFree($realCode->getPromotionCodeTypePromotionCodeType()->getDuration());
+                    }
+                    $userManager->updateUser($user);
                 }else{
-                    $user->setIsFree($realCode->getPromotionCodeTypePromotionCodeType()->getDuration());
+                    //two users can't have the same code
+                    return $this->redirect("https://symplifica.com/");
                 }
-                $userManager->updateUser($user);
             }else{
-                return $this->redirect("https://symplifica.com/");
+                $userManager->updateUser($user);
             }
-
 
 
             if (null === $response = $event->getResponse()) {

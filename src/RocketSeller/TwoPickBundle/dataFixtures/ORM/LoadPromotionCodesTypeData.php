@@ -28,10 +28,18 @@ class LoadPromotionCodesTypeData extends AbstractFixture implements OrderedFixtu
         $manager->persist($clientBackdoor);
 
 
+        $clientFeriaHogar= new PromotionCodeType();
+        $clientFeriaHogar->setDescription("Feria hogar 2016");
+        $clientFeriaHogar->setShortName("AC");
+        $clientFeriaHogar->setDuration(2);
+        $manager->persist($clientFeriaHogar);
+
+
         $manager->flush();
 
         $this->addReference('promotion-code-type-beta', $clientBeta);
         $this->addReference('promotion-code-type-backdoor', $clientBackdoor);
+        $this->addReference('promotion-code-type-feria-hogar', $clientFeriaHogar);
     }
     public function getOrder()
     {
