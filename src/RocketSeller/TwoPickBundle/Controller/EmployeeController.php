@@ -266,6 +266,12 @@ class EmployeeController extends Controller
                     }
                     /** @var Contract $contract */
                     foreach ($contracts as $contract) {
+                    	  $salaryString = "$";
+	                      if($contract->getTimeCommitmentTimeCommitment()->getCode() == "XD"){
+	                      	$salaryString .= $contract->getSalary()/$contract->getWorkableDaysMonth() . " diario";
+	                      }elseif ($contract->getTimeCommitmentTimeCommitment()->getCode() ==  "TC"){
+	                      	$salaryString .= $contract->getSalary() . " mensual";
+	                      }
                         $acPayroll = $contract->getActivePayroll();
                         $employeesData[] = array(
                             "idEmployerHasEmployee" => $ehE->getIdEmployerHasEmployee(),
@@ -274,6 +280,9 @@ class EmployeeController extends Controller
                             "state" => $ehE->getState(),
                             "fullName" => $ehE->getEmployeeEmployee()->getPersonPerson()->getFullName(),
                             "stateRegister" => $ehE->getEmployeeEmployee()->getRegisterState(),
+	                          "contractType" => $contract->getContractTypeContractType()->getName(),
+	                          "salary" => $salaryString
+	                          
                         );
                         break;
                     }
