@@ -1066,10 +1066,14 @@ function startEmployee() {
     if( $("#register_employee_entities_pension").val() == 50 ){
         $("#register_employee_employeeHasEmployers_paysPens_1").prop('checked', true);
         $("#pensionHide").hide();
+        //$("#register_employee_entities_pension option[value*=50]").prop('disabled',false);
+        $("#register_employee_entities_pension option[value*=50]").show();
     }
     else {
         $("#register_employee_employeeHasEmployers_paysPens_0").prop('checked', true);
         $("#pensionHide").show();
+        //$("#register_employee_entities_pension option[value*=50]").prop('disabled',true);
+        $("#register_employee_entities_pension option[value*=50]").hide();
     }
     calculator();
 
@@ -1077,9 +1081,14 @@ function startEmployee() {
         if($(this).find("input:checked").val()=="1"){
             $("#pensionHide").show();
             $("#register_employee_entities_pension").val("");
+            //$("#register_employee_entities_pension option[value*=50]").prop('disabled',true);
+            $("#register_employee_entities_pension option[value*=50]").hide();
         }else{
             $("#pensionHide").hide();
+            //$("#register_employee_entities_pension option[value*=50]").prop('disabled',false);
+            $("#register_employee_entities_pension option[value*=50]").show();
             $("#register_employee_entities_pension").val(50);
+
         }
         calculator();
     });
@@ -1579,14 +1588,26 @@ function addListeners() {
     });
 
     $("#cerrarModalDetalle").click(function(){
-        //TODO Cambiar coso a la presel
         var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
         if (selectedVal == " Trabajador por días") {
             $('#radio_diario').prop('checked', true);
             $('#radio_mensual').prop('checked', false);
         }
         else {
+            $('#radio_diario').prop('checked', false);
+            $('#radio_mensual').prop('checked', true);
+        }
+        calculator();
+    });
+
+    $("#employerDismiss").click(function(){
+        var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
+        if (selectedVal == " Trabajador por días") {
             $('#radio_diario').prop('checked', true);
+            $('#radio_mensual').prop('checked', false);
+        }
+        else {
+            $('#radio_diario').prop('checked', false);
             $('#radio_mensual').prop('checked', false);
         }
         calculator();
