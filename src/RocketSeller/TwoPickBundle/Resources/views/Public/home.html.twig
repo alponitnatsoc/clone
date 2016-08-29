@@ -22,8 +22,8 @@
         	<div id="banner">
 							<div id="headForm">
 								<div class="contHeadForm">
-									<h1>Paga, afilia y administra a
-									tus empleados desde tu hogar</h1>
+									<h1>Afilia, adminsitra y paga a tus empleados
+									domésticos desde cualquier lugar</h1>
 									<p>
 										Descubre los beneficios de hacer las cosas bien
 									</p>
@@ -35,6 +35,11 @@
 											<input class="inputFull" type="email" name="email" placeholder="Correo electrónico">
 											{{ form_widget(form.save, { 'attr': {'class': 'btn naranja obten'}}) }}
 										{{ form_end(form) }}
+										<div class="form-group txt-A1-terms">
+								        <input type="checkbox" id="chktyc" required />
+								        Al registrarme acepto todos los <a href="{{ path('terminos_condiciones') }}" target="_blank">Términos y Condiciones</a>
+								        y las <a href="{{ path('politicas_privacidad') }}" target="_blank">Políticas de Privacidad</a>
+								    </div>
 									</div>
 								</div>
 							</div>
