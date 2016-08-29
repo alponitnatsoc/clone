@@ -63,10 +63,10 @@
 
             <div>
 							<div class="xdiv">
-								<a href="#close" title="Close" class="close" onclick="stopVideo()">Cerrar</a>
+								<a href="#close" title="Close" class="close">Cerrar</a>
 							</div>
-							<video controls id="myvideo" loop>
-							  <source src="{{ asset('public/video/benenficios.mp4') }}"></source>
+							<video controls id="video1" onclick="playPause()">
+							  <source src="{{ asset('public/video/video.mp4') }}"></source>
 							</video>
             </div>
         </div>
@@ -129,7 +129,7 @@
 								</div>
 							<div class="col span_1_of_3 centrar">
 									<img src="{{asset('public/img/home/parcial.png')}}">
-										<h3 style="font-size: 18px;" class="light-italic grisclarofont">Para empleados que laboran de <strong>1 a 2 días a la semana</strong></h3><br>
+										<h3 style="font-size: 18px;" class="light-italic grisclarofont">Para empleados que trabajan de <strong>1 a 2 días a la semana</strong></h3><br>
 										<div class="caja-precio azuloscuro">
 											<p class="bold"><span class="extrabold span">$16.500</span><br>mensual<br>Por empleado</p>
 										</div>
@@ -137,7 +137,7 @@
 
 								<div class="col span_1_of_3 centrar">
 									<img src="{{asset('public/img/home/medio.png')}}">
-										<h3 style="font-size: 18px;" class="light-italic grisclarofont">Para empleados que laboran de <strong>3 a 4 días a la semana</strong></h3><br>
+										<h3 style="font-size: 18px;" class="light-italic grisclarofont">Para empleados que trabajan de <strong>3 a 4 días a la semana</strong></h3><br>
 										<div class="caja-precio azuloscuro">
 											<p class="bold"><span class="extrabold span">$22.500</span><br>mensual<br>Por empleado</p>
 										</div>
@@ -145,7 +145,7 @@
 
 								<div class="col span_1_of_3 centrar">
 									<img src="{{asset('public/img/home/completo.png')}}">
-										<h3 style="font-size: 18px;" class="light-italic grisclarofont">Para empleados que laboran <strong>5 o más días a la semana</strong></h3><br>
+										<h3 style="font-size: 18px;" class="light-italic grisclarofont">Para empleados que trabajan <strong>5 o más días a la semana</strong></h3><br>
 										<div class="caja-precio azuloscuro">
 											<p class="bold"><span class="extrabold span">$29.500</span><br>mensual<br>Por empleado</p>
 										</div>
@@ -304,6 +304,15 @@ de empleados que quieras administrar</h4>
 </body>
 <script type="text/javascript" src="{{ asset('public/js/home/bootstrap-slider.js') }}"></script>
 <script type="text/javascript">
+	var myVideo = document.getElementById("video1");
+
+	function playPause() {
+		if (myVideo.paused)
+				myVideo.play();
+		else
+				myVideo.pause();
+	}
+
 	$(".ex8").slider({
 		tooltip: 'always'
 	});
