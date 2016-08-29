@@ -1,4 +1,4 @@
-users : 
+users :
     type: rest
     resource:     "RocketSellerTwoPickBundle:UserRest"
     name_prefix:  api_secured_
@@ -13,4 +13,8 @@ payrolls :
 device :
     type: rest
     resource:     "RocketSellerTwoPickBundle:DeviceRestSecured"
+    name_prefix:  api_secured_
+document :
+    type: rest
+    resource:     "RocketSellerTwoPickBundle:DocumentRestSecured"
     name_prefix:  api_secured_
