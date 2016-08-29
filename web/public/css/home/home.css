@@ -54,11 +54,11 @@ header {
 	width: 465px;
 	float: right;
 	background: rgba(255,255,255,0.6);
-  padding: 25px;
+  padding: 0 25px;
   border-radius: 5px;
 }
 .contHeadForm h1 {
-	font-size: 25px;
+	font-size: 20px;
 	text-align: right;
 }
 .contHeadForm p {
