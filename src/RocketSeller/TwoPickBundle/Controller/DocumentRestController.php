@@ -224,7 +224,7 @@ class DocumentRestController extends FOSRestController
         );
         $documentResult = $this->forward('RocketSellerTwoPickBundle:Document:downloadDocuments', $params);
         $file = $documentResult->getContent();
-        $file_path = "uploads/tempDocumentPages/tempFile.png";
+        $file_path = "uploads/tempDocumentPages/tempFile.pdf";
         file_put_contents($file_path, $file);
 
         $mediaManager = $this->container->get('sonata.media.manager.media');

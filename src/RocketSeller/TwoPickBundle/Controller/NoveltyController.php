@@ -499,18 +499,19 @@ class NoveltyController extends Controller {
 	    }
 
 	    //TODO Update when documents are reworked
-	    if(!$this->checkNoveltyFulfilment($novelty)){
-	    	//Crea las notificaciones de los documentos asociados
-		    /** @var User $user */
-		    $user = $this->getUser();
-		    $notification = $this->createNotification(null,1,null,"","Faltan llenar algunos datos de la novedad" . $novelty->getName(),"Novedad Incompleta", "Completar", "alert", $user->getPersonPerson());
-		    $em->persist($notification);
-		    $em->flush();
-		    $notification->setRelatedLink($this->generateUrl("novelty_edit",array('noveltyId' => $novelty->getIdNovelty(), 'notificationReferenced' => $notification->getId())));
-
-		    $em->persist($notification);
-		    $em->flush();
-	    }
+	    
+//	    if(!$this->checkNoveltyFulfilment($novelty)){
+//	    	//Crea las notificaciones de los documentos asociados
+//		    /** @var User $user */
+//		    $user = $this->getUser();
+//		    $notification = $this->createNotification(null,1,null,"","Faltan llenar algunos datos de la novedad" . $novelty->getName(),"Novedad Incompleta", "Completar", "alert", $user->getPersonPerson());
+//		    $em->persist($notification);
+//		    $em->flush();
+//		    $notification->setRelatedLink($this->generateUrl("novelty_edit",array('noveltyId' => $novelty->getIdNovelty(), 'notificationReferenced' => $notification->getId())));
+//
+//		    $em->persist($notification);
+//		    $em->flush();
+//	    }
 
 	    return $answerArr;
     }
