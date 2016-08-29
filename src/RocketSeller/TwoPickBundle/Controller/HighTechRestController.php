@@ -155,6 +155,7 @@ class HighTechRestController extends FOSRestController
             //TODO-Andres Adjuntar la factura
 
         } else {
+            $mesange = "not so good man";
             $userEmail = $dis->getIdUser()->getUsernameCanonical();
             $fechaRechazo = new DateTime();
             $value = $dis->getValue();
