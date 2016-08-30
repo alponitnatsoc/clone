@@ -1706,6 +1706,9 @@ function calculator() {
     else if (arlChoose == 3) { //ninero
         arlProf = 0.00522;
     }
+    else if (arlChoose == 4) { //enfermero
+        arlProf = 0.00522;
+    }
     else if (arlChoose == 5) { //mayordomo
         arlProf = 0.01044;
     }
