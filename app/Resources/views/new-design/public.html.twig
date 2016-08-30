@@ -206,7 +206,9 @@
           return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
       }
       $(document).ready(function () {
-
+        $("body").click(function(){
+          $("#slideLogin").slideToggle();
+        });
         $("#btnLogin").click(function(){
           $("#slideLogin").slideToggle();
         });
@@ -242,7 +244,7 @@
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog modal-md vertical-align-center" role="document">
                     <div class="modal-content"><div class="modal-body" style="padding: 0">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;width:100px"><span aria-hidden="true">&times;</span></button>
                             <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
                                 <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">¿Olvidaste tu contraseña?</div>
                             </div>
