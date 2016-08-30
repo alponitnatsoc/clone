@@ -22,8 +22,8 @@
         	<div id="banner">
 							<div id="headForm">
 								<div class="contHeadForm">
-									<h1>Paga, afilia y administra a
-									tus empleados desde tu hogar</h1>
+									<h1>Afilia, adminsitra y paga a tus empleados
+									domésticos desde cualquier lugar</h1>
 									<p>
 										Descubre los beneficios de hacer las cosas bien
 									</p>
@@ -35,6 +35,11 @@
 											<input class="inputFull" type="email" name="email" placeholder="Correo electrónico">
 											{{ form_widget(form.save, { 'attr': {'class': 'btn naranja obten'}}) }}
 										{{ form_end(form) }}
+										<div class="form-group txt-A1-terms">
+								        <input type="checkbox" id="chktyc" required />
+								        Al registrarme acepto todos los <a href="{{ path('terminos_condiciones') }}" target="_blank">Términos y Condiciones</a>
+								        y las <a href="{{ path('politicas_privacidad') }}" target="_blank">Políticas de Privacidad</a>
+								    </div>
 									</div>
 								</div>
 							</div>
@@ -44,7 +49,7 @@
                         <p class="light-italic">La herramienta más sencilla para administrar empleados domésticos</p>
                     </div>
                     <div id="tbanner2">
-                    	<a href="/register"><div id="btn-prueba" class="semi-italic">Regístrate ahora</div></a>
+                    	<a href="/register"><div id="btn-prueba" class="semi-italic">Prueba un mes gratis</div></a>
                         <!-<a href="#openModal"><div class="btn-video semi-italic">Ver video</div></a>->
                     </div>
                 </div>-->
@@ -58,10 +63,10 @@
 
             <div>
 							<div class="xdiv">
-								<a href="#close" title="Close" class="close" onclick="stopVideo()">Cerrar</a>
+								<a href="#close" title="Close" class="close">Cerrar</a>
 							</div>
-							<video controls id="myvideo" loop>
-							  <source src="{{ asset('public/video/benenficios.mp4') }}"></source>
+							<video controls id="video1" onclick="playPause()">
+							  <source src="{{ asset('public/video/video.mp4') }}"></source>
 							</video>
             </div>
         </div>
@@ -100,7 +105,7 @@
                 	<img src="{{ asset('public/img/landing/benefit4.png') }}" alt="">
                 	<h3 class="light">Fácil administración</h3>
 
-                	<p class="light">Administramos todos los detalles del día a día de tus empleados</p>
+                	<p class="light">Nos encargamos de todos los detalles del día a día de tus empleados</p>
                 </div>
             </div>
             <!--<a href="{{ path('beneficios') }}"><div class="callto naranja bold">› Beneficios</div></a>-->
@@ -110,8 +115,8 @@
         	<div id="video">
             	<div id="video-info">
                 	<a href="#openModal"><img src="{{ asset('public/img/home/play.png') }}" alt=""></a>
-                    <h3 class="naranjafont extrabold">Explora nuestro producto en 1 minuto</h3>
-                    <p class="light">Conoce cómo te hacemos la vida más fácil</p>
+                    <h3 class="naranjafont extrabold">Da clic y conoce como hacer tu vida más fácil</h3>
+                    <p class="light">Symplifica en 2 minutos</p>
                     <a href="/register"><div class="callto2 naranja bold">Prueba un mes gratis</div></a>
                 </div>
             </div>
@@ -124,7 +129,7 @@
 								</div>
 							<div class="col span_1_of_3 centrar">
 									<img src="{{asset('public/img/home/parcial.png')}}">
-										<h3 style="font-size: 18px;" class="light-italic grisclarofont">Para empleados que laboran de <strong>1 a 2 días a la semana</strong></h3><br>
+										<h3 style="font-size: 18px;" class="light-italic grisclarofont">Para empleados que trabajan de <strong>1 a 2 días a la semana</strong></h3><br>
 										<div class="caja-precio azuloscuro">
 											<p class="bold"><span class="extrabold span">$16.500</span><br>mensual<br>Por empleado</p>
 										</div>
@@ -132,7 +137,7 @@
 
 								<div class="col span_1_of_3 centrar">
 									<img src="{{asset('public/img/home/medio.png')}}">
-										<h3 style="font-size: 18px;" class="light-italic grisclarofont">Para empleados que laboran de <strong>3 a 4 días a la semana</strong></h3><br>
+										<h3 style="font-size: 18px;" class="light-italic grisclarofont">Para empleados que trabajan de <strong>3 a 4 días a la semana</strong></h3><br>
 										<div class="caja-precio azuloscuro">
 											<p class="bold"><span class="extrabold span">$22.500</span><br>mensual<br>Por empleado</p>
 										</div>
@@ -140,7 +145,7 @@
 
 								<div class="col span_1_of_3 centrar">
 									<img src="{{asset('public/img/home/completo.png')}}">
-										<h3 style="font-size: 18px;" class="light-italic grisclarofont">Para empleados que laboran <strong>5 o más días a la semana</strong></h3><br>
+										<h3 style="font-size: 18px;" class="light-italic grisclarofont">Para empleados que trabajan <strong>5 o más días a la semana</strong></h3><br>
 										<div class="caja-precio azuloscuro">
 											<p class="bold"><span class="extrabold span">$29.500</span><br>mensual<br>Por empleado</p>
 										</div>
@@ -271,7 +276,7 @@ de empleados que quieras administrar</h4>
 
                 </div>
             </div>
-            <a href="/register"><div class="callto2 naranja bold">Regístrate ahora</div></a>
+            <a href="/register"><div class="callto2 naranja bold">Prueba un mes gratis</div></a>
         </section>-->
 
         <div id="intro-pc">
@@ -299,6 +304,15 @@ de empleados que quieras administrar</h4>
 </body>
 <script type="text/javascript" src="{{ asset('public/js/home/bootstrap-slider.js') }}"></script>
 <script type="text/javascript">
+	var myVideo = document.getElementById("video1");
+
+	function playPause() {
+		if (myVideo.paused)
+				myVideo.play();
+		else
+				myVideo.pause();
+	}
+
 	$(".ex8").slider({
 		tooltip: 'always'
 	});

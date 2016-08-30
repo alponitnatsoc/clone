@@ -19,7 +19,7 @@ class RegistrationType extends AbstractType
             ->add('lastName', 'text', array("attr" => array('placeholder' => 'Primer apellido'), 'mapped' => false))
             ->add('email', 'email', array('translation_domain' => 'FOSUserBundle', "attr" => array('placeholder' => 'form.email')))
             ->add('plainPassword','password', array("attr" => array('placeholder' => 'form.password', 'pattern'=>'^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{7,})\S$') ,'translation_domain' => 'FOSUserBundle'))
-            ->add('creationCode','text', array("attr" => array('placeholder' => 'Código promocional'), 'mapped' => false));
+            ->add('creationCode','text', array("attr" => array('placeholder' => 'Código promocional'), 'mapped' => false, 'required'=>false));
             /*->add('invitation', 'text', array(
                         "attr" => array(
                             'placeholder' => 'Ingresa un código de referido'

@@ -62,6 +62,30 @@ class LoadPromotionCodesTypeHasProductData extends AbstractFixture implements Or
 
         $manager->persist($pcthpBack3);
 
+        $pcthpFeria= new PromotionCodeTypeHasProduct();
+        $pcthpFeria->setPromotionCodeTypePromotionCodeType($this->getReference('promotion-code-type-feria-hogar'));
+        $pcthpFeria->setProductProduct($this->getReference('product-type-ps1'));
+        $pcthpFeria->setPercent(100);
+
+
+        $manager->persist($pcthpFeria);
+
+        $pcthpFeria2= new PromotionCodeTypeHasProduct();
+        $pcthpFeria2->setPromotionCodeTypePromotionCodeType($this->getReference('promotion-code-type-feria-hogar'));
+        $pcthpFeria2->setProductProduct($this->getReference('product-type-ps2'));
+        $pcthpFeria2->setPercent(100);
+
+
+        $manager->persist($pcthpFeria2);
+
+        $pcthpFeria3= new PromotionCodeTypeHasProduct();
+        $pcthpFeria3->setPromotionCodeTypePromotionCodeType($this->getReference('promotion-code-type-feria-hogar'));
+        $pcthpFeria3->setProductProduct($this->getReference('product-type-ps3'));
+        $pcthpFeria3->setPercent(100);
+
+
+        $manager->persist($pcthpFeria3);
+
 
         $manager->flush();
     }

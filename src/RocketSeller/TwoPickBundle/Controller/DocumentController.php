@@ -750,10 +750,10 @@ use EmployerMethodsTrait;
                 $employeePerson = $employee->getPersonPerson();
                 $employer = $employerHasEmployee->getEmployerEmployer();
                 $employerPerson = $employer->getPersonPerson();
-								
+
 								$replaceOldContracts = false;
 								$stillOnTest = false;
-								
+
 								/** @var Configuration $singleConfig */
 		            foreach ($employee->getPersonPerson()->getConfigurations() as $singleConfig){
 										if($singleConfig->getValue() == "PreLegal-SocialSecurityPayment"){
@@ -761,13 +761,13 @@ use EmployerMethodsTrait;
 											break;
 										}
 		            }
-								
+
 		            /** @var DateTime $today */
 		            $today = new DateTime();
 								if($today <= $contract->getTestPeriod()){
 									$stillOnTest = true;
 								}
-								
+
                 $employeeInfo = array(
                     'name' => $this->fullName($employeePerson->getIdPerson()),
                     'docType' => $employeePerson->getDocumentType(),
@@ -826,7 +826,7 @@ use EmployerMethodsTrait;
                         $ref .= '-fijo';
                         break;
                 }
-								
+
                 $contractInfo = array(
                     "endDate" => $endDate,
                     "startDate" => $startDate,
@@ -1077,8 +1077,8 @@ use EmployerMethodsTrait;
                 $signatureUrl = null;
 
                 $document = $payroll->getSignature();
-                // document is already stored in db
-                if($document != null && $signatureUrl == null) {
+                // signatre is already stored in db
+                if($document != null) {
 
                     $fileUrl = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
                     $data = file_get_contents($fileUrl);

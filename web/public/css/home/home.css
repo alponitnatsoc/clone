@@ -54,11 +54,11 @@ header {
 	width: 465px;
 	float: right;
 	background: rgba(255,255,255,0.6);
-  padding: 25px;
+  padding: 0 25px;
   border-radius: 5px;
 }
 .contHeadForm h1 {
-	font-size: 25px;
+	font-size: 20px;
 	text-align: right;
 }
 .contHeadForm p {
@@ -207,11 +207,13 @@ font-weight: 100;}
 video {
 	position: fixed;
 	right: 0;
+	top: 0;
+	left: 0;
 	bottom: 0;
 	min-width: 90%;
 	min-height: 100%;
 	width: 100%;
-	height: auto;
+	height: 88%;
 	z-index: -100;
 	background-size: cover;
 }

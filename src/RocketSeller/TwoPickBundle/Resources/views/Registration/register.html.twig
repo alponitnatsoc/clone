@@ -75,10 +75,15 @@
                 textfield.setCustomValidity('Debes leer y aceptar los términos y condiciones');
             }
         });
+        $("#codeLink").on('click', function (e) {
+            e.preventDefault();
+            $("#code_field").show();
+        });
 
         // Verifying the password.
         // We hide the requirements, until the user hits the password.
         $("#req_pass").hide();
+        $("#code_field").hide();
         $('#app_user_registration_form_plainPassword').attr('oninvalid', 'setCustomValidity("Tu contraseña no cumple con nuestros parametros de seguridad")');
         $('#app_user_registration_form_plainPassword').attr('oninput', "setCustomValidity('')");
 
