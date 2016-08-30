@@ -2049,11 +2049,7 @@ class EmployeeRestController extends FOSRestController {
 
         $em->persist($person);
         $em->flush();
-
-
-
-
-
+	    
         $view->setStatusCode(200);
         return $view;
     }

@@ -237,3 +237,13 @@ function loadNovelty(url) {
         alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
     });
 }
+
+function disableLockedFields(){
+    $("#form_birthDate_day").prop("disabled", true);
+    $("#form_birthDate_month").prop("disabled", true);
+    $("#form_birthDate_year").prop("disabled", true);
+    $("#form_birthCountry").prop("disabled", true);
+    $("#form_birthDepartment").prop("disabled", true);
+    $("#form_birthCity").prop("disabled", true);
+
+}

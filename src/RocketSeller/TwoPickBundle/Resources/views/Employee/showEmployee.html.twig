@@ -141,7 +141,7 @@
                 <div class="bottom-box-edit col-sm-12" hidden="true" style="height:auto;overflow:hidden">
                     <div class="col-sm-6 dataInfo">
                         <ul class="col-sm-12" style="background: #fbfbfb">
-                            <h4 class="col-sm-12">Datos basicos</h4>
+                            <h4 class="col-sm-12">Datos básicos</h4>
                             <li>
                                 {{ form_start(form2)}}
                                 <p class="title"><i>Estado civil</i></p>
@@ -239,7 +239,11 @@
                                     </li>
                                     <li>
                                         <p class="title left"><i>Salario</i></p>
-                                        <p class="liEmpl right"><strong>${{contract.salary}}</strong></p>
+                                        {% if contract.timeCommitmentTimeCommitment.code == "XD" %}
+                                            <p class="liEmpl right"><strong>${{contract.salary/ contract.workableDaysMonth }}</strong></p>
+                                        {% elseif contract.timeCommitmentTimeCommitment.code == "TC" %}
+                                            <p class="liEmpl right"><strong>${{contract.salary}}</strong></p>
+                                        {%  endif %}
                                     </li>
                                     <li>
                                         <p class="title left"><i>Cargo</i></p>
@@ -288,7 +292,11 @@
                                     </li>
                                     <li>
                                         <p class="title left"><i>Salario</i></p>
-                                        <input style="margin: 10px 0;" id="form_contract_salary" name="contract[salary]" required="required" class="form-control liEmpl" type="text">
+                                        {% if contract.timeCommitmentTimeCommitment.code == "XD" %}
+                                            <p class="liEmpl right"><strong>${{contract.salary/ contract.workableDaysMonth }}</strong></p>
+                                        {% elseif contract.timeCommitmentTimeCommitment.code == "TC" %}
+                                            <p class="liEmpl right"><strong>${{contract.salary}}</strong></p>
+                                        {%  endif %}
                                     </li>
                                     <li>
                                         <p class="title left"><i>Dedicación de tiempo</i></p>
@@ -300,7 +308,7 @@
                                     </li>
                                     <li>
                                         <p class="title left"><i>Cargo</i></p>
-                                        <p class="liEmpl right"><strong>{{contract.contractTypeContractType.name}}</strong></p>
+                                        <p class="liEmpl right"><strong>{{contract.positionPosition.name}}</strong></p>
                                     </li>
                                     <li>
                                         <p class="title left"><i>Fecha fin de contrato</i></p>
@@ -359,9 +367,9 @@
                             </div>
                         {% endif %}
 
-                    <div class="col-sm-12 col-sm-offset-5">
+                    {#<div class="col-sm-12 col-sm-offset-5">
                         <span class="edit-contract btn btn-orange notAjax" href="">Editar</span>
-                    </div>
+                    </div>#}
                     <div class="contract-save col-sm-12 col-sm-offset-5">
                         <span class="save-contract btn btn-orange notAjax" style="display:none;" href="{{ path('api_public_post_save_edit_contract') }}">Salvar</span>
                     </div>
@@ -763,6 +771,7 @@
     <script src="{{ asset('public/js/manageEmployees.js') }}"></script>
     <script type="text/javascript">
                         $(document).ready(function () {
+                            disableLockedFields();
                             manageEmployees();
                             editEmployee();
                             var validator = null;
