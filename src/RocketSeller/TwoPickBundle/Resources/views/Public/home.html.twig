@@ -22,10 +22,10 @@
         	<div id="banner">
 							<div id="headForm">
 								<div class="contHeadForm">
-									<h1>Afilia, adminsitra y paga a tus empleados
+									<h1>Afilia, paga y adminsitra a tus empleados
 									domésticos desde cualquier lugar</h1>
 									<p>
-										Descubre los beneficios de hacer las cosas bien
+										Te ayudamos a hacer las cosas bien
 									</p>
 									<div class="formCont">
 										{{ form_start(form) }}
@@ -55,21 +55,6 @@
                 </div>-->
             </div>
         </header>
-
-        <!-------------------The Modal-------------------------->
-
-
-        <div id="openModal" class="modalDialog">
-
-            <div>
-							<div class="xdiv">
-								<a href="#close" title="Close" class="close">Cerrar</a>
-							</div>
-							<video controls id="video1" onclick="playPause()">
-							  <source src="{{ asset('public/video/video.mp4') }}"></source>
-							</video>
-            </div>
-        </div>
 
          <!--------------------beneficios-------------------------->
         <section>
@@ -110,13 +95,29 @@
             </div>
             <!--<a href="{{ path('beneficios') }}"><div class="callto naranja bold">› Beneficios</div></a>-->
         </section>
+				<!-------------------The Modal-------------------------->
 
+
+        <div id="openModal" class="modalDialog">
+
+            <div>
+							<div class="xdiv">
+								<a href="#close" title="Close" id="pausar" class="close">Cerrar</a>
+							</div>
+							<video controls onclick="playPause()" id="video1">
+							  <source src="{{ asset('public/video/video.mp4') }}"></source>
+							</video>
+            </div>
+        </div>
+<!--seccion del video-------------------------------------------------->
         <section>
         	<div id="video">
             	<div id="video-info">
-                	<a href="#openModal"><img src="{{ asset('public/img/home/play.png') }}" alt=""></a>
-                    <h3 class="naranjafont extrabold">Da clic y conoce como hacer tu vida más fácil</h3>
-                    <p class="light">Symplifica en 2 minutos</p>
+                		<div onclick="playimg()" id="video2">
+											<a href="#openModal"><img src="{{ asset('public/img/home/play.png') }}" alt=""></a>
+										</div>
+                    <h3 class="naranjafont extrabold">Dale play al video y descubre en 2 minutos</h3>
+                    <p class="light">por qué deberías usar Symplifica</p>
                     <a href="/register"><div class="callto2 naranja bold">Prueba un mes gratis</div></a>
                 </div>
             </div>
@@ -304,6 +305,14 @@ de empleados que quieras administrar</h4>
 </body>
 <script type="text/javascript" src="{{ asset('public/js/home/bootstrap-slider.js') }}"></script>
 <script type="text/javascript">
+
+$('#pausar').click(function(){
+ document.getElementById('video1').pause();
+});
+$('#video2').click(function(){
+ document.getElementById('video1').play();
+});
+
 	var myVideo = document.getElementById("video1");
 
 	function playPause() {

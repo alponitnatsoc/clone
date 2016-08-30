@@ -100,11 +100,18 @@ function startEmployerEdit() {
         if (!form.valid()) {
             return;
         }
+
+        //Does not submit the form, just tab into the next part
+        $('.nav-justified > .active').next('li').find('a').trigger('click');
+
+
+
         //if (!(validator.element(documentType) && validator.element(document) && validator.element(names) && validator.element(lastName1))) {
         //    alert("Llenaste algunos campos incorrectamente");
         //    return;
         //}
 
+        /*
         $.ajax({
             url: $(this).attr('href'),
             type: 'POST',
@@ -127,7 +134,7 @@ function startEmployerEdit() {
             if(jqXHR==errorHandleTry(jqXHR)){
                 alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
             }
-        });
+        });*/
       });
     });
     $('#btn-2').click(function (e) {
@@ -161,6 +168,7 @@ function startEmployerEdit() {
             alert("Llenaste algunos campos incorrectamente");
             return;
         }
+
         $.ajax({
             url: $(this).attr('href'),
             type: 'POST',
@@ -306,7 +314,6 @@ function startEmployerEdit() {
 
         var sameWorkHouse = $(form).find("input[name='edit_employer[sameWorkHouse]']");
 
-        $('#editedModal').modal('toggle');
         $.ajax({
             url: form.attr('action'),
             type: $(form).attr('method'),
@@ -318,36 +325,44 @@ function startEmployerEdit() {
                 workDepartment: departments
             }
         }).done(function (data) {
+
+            $('#editedModal').modal('toggle');
             console.log(data);
-            if (data["url"] != null) {
-                console.log(data["url"]);
-                redirUri = data["url"];
-            } else {
-                $('#main').replaceWith(
-                        // ... with the returned one from the AJAX response.
-                        $(data).find('#main'));
-                addClick();
-                if (!jsLoader(url)) {
-                    addSumbit();
-                }
-            }
+
         }).fail(function (jqXHR, textStatus, errorThrown) {
             if(jqXHR==errorHandleTry(jqXHR)){
                 alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
             }
         });
     });
+
+
     $("#employerDismiss").on('click', function () {
-        sendAjax(redirUri);
-        history.pushState({}, '', redirUri);
+        window.location.href = "/employer/show";
     });
 
-    $("#edit_employer_person_documentType").prop("disabled", true);
 
+    //Disabling fields that should not be edited
+    //First tab
+    $("#edit_employer_person_documentType").prop("disabled", true);
     $("#edit_employer_person_document").prop("readonly", true);
+    $("#edit_employer_person_names").prop("readonly", true);
+    $("#edit_employer_person_lastName1").prop("readonly", true);
+    $("#edit_employer_person_lastName2").prop("readonly", true);
+    $("#edit_employer_person_birthDate_day").prop("disabled", true);
+    $("#edit_employer_person_birthDate_month").prop("disabled", true);
+    $("#edit_employer_person_birthDate_year").prop("disabled", true);
+
+    //Second tab
+    $("#edit_employer_person_phones_0_phoneNumber").prop("disabled", true);
+
+    //Third tab
+    $("ul.workplaces input[name*='id']").each(function () {
+        $("select[name*='department']").prop("disabled",true);
+        $("select[name*='city']").prop("disabled",true);
+    });
 
 }
-
 
 function jsonToHTML(data) {
     var htmls = "<option value=''>Seleccionar una opción</option>";
