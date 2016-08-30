@@ -1247,6 +1247,14 @@ class BackOfficeController extends Controller
 //            'idPod'=>1,
 //        );
 //        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+        /** test daviPlata Email */
+        $context = array(
+            'emailType'=>'daviPlata',
+            'toEmail'=>'andres.ramirez@symplifica.com',
+            'user'=>$this->getUser(),
+            'subject'=>'Información Daviplata',
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 
         return $this->redirect($this->generateUrl('back_office'));
     }

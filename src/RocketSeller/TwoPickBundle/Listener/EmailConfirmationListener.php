@@ -15,6 +15,7 @@ use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
 // use FOS\UserBundle\Mailer\MailerInterface;
 use FOS\UserBundle\Util\TokenGeneratorInterface;
+use RocketSeller\TwoPickBundle\RocketSellerTwoPickBundle;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -55,9 +56,7 @@ class EmailConfirmationListener implements EventSubscriberInterface
         if (null === $user->getConfirmationToken()) {
             $user->setConfirmationToken($this->tokenGenerator->generateToken());
         }
-
-        $this->mailer->sendConfirmationEmailMessage($user);
-
+        $this->mailer->sendEmailByTypeMessage(array('emailType'=>'confirmation','user'=>$user));
         $this->session->set('fos_user_send_confirmation_email/email', $user->getEmail());
         $url = $this->router->generate('fos_user_registration_check_email');
         $event->setResponse(new RedirectResponse($url));
@@ -69,7 +68,7 @@ class EmailConfirmationListener implements EventSubscriberInterface
         if (!$user->isEnabled()) {
             return;
         }
-        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage(array('emailType'=>'welcome','user'=>$user));
+        $this->mailer->sendEmailByTypeMessage(array('emailType'=>'welcome','user'=>$user));
     }
 
     public function onChangePasswordComplete(FormEvent $event)
