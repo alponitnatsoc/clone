@@ -29,10 +29,10 @@
 									</p>
 									<div class="formCont">
 										{{ form_start(form) }}
-											<input class="inputHalf" type="text" name="firstname" placeholder="Nombre">
-											<input class="inputHalf" type="text" name="lastname" placeholder="Apellido"><br />
-											<input class="inputFull" type="number" name="cellphone" placeholder="Celular"><br />
-											<input class="inputFull" type="email" name="email" placeholder="Correo electrónico">
+											<input id="formfirstname" class="inputHalf" type="text" name="firstname" placeholder="Nombre" required>
+											<input id="formlastname" class="inputHalf" type="text" name="lastname" placeholder="Apellido" required><br />
+											<input id="formcellphone" class="inputFull" type="number" name="cellphone" placeholder="Celular" required><br />
+											<input id="formemail" class="inputFull" type="email" name="email" placeholder="Correo electrónico" required>
 											{{ form_widget(form.save, { 'attr': {'class': 'btn naranja obten'}}) }}
 										{{ form_end(form) }}
 										<div class="form-group txt-A1-terms">
@@ -316,6 +316,17 @@ de empleados que quieras administrar</h4>
 	$(".ex8").slider({
 		tooltip: 'always'
 	});
+	$('#formfirstname').attr('oninvalid', 'setCustomValidity("El campo no puede estar vacio")');
+	$('#formfirstname').attr('oninput', "setCustomValidity('')");
+
+	$('#formlastname').attr('oninvalid', 'setCustomValidity("El campo no puede estar vacio")');
+	$('#formlastname').attr('oninput', "setCustomValidity('')");
+
+	$('#formcellphone').attr('oninvalid', 'setCustomValidity("El campo no puede estar vacio")');
+	$('#formcellphone').attr('oninput', "setCustomValidity('')");
+
+	$('#formemail').attr('oninvalid', 'setCustomValidity("El correo escrito no es valido")');
+	$('#formemail').attr('oninput', "setCustomValidity('')");
 
     function numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -414,6 +425,8 @@ de empleados que quieras administrar</h4>
             $("#palabra-empleados").text("empleado");
 
     }
+
+
 
 		function stopVideo(){
 			$('#mainVideoFrame').attr('src', $('#mainVideoFrame').attr('src'));

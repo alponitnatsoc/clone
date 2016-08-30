@@ -595,7 +595,7 @@ function startEmployee() {
         }
 
         e.preventDefault();
-        var form = $("form");
+        var form = $("[name='register_employee']");
         var url= $(this).attr('href');
         $.ajax({
             url: $(this).attr('href'),
@@ -615,7 +615,7 @@ function startEmployee() {
     $('#btn-reenviar').click(function (e) {
         // We send a fake code, so that it generates a new one.
         e.preventDefault();
-        var form = $("form");
+        var form = $("[name='register_employee']");
         var url= $(this).attr('href');
         $.ajax({
             url: $(this).attr('href'),
@@ -633,7 +633,7 @@ function startEmployee() {
     });
     $('#btn-entities').click(function (e) {
         e.preventDefault();
-        var form = $("form");
+        var form = $("[name='register_employee']");
         var i = 0;
         var flagValid = true;
         var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
@@ -2105,7 +2105,7 @@ function inquiry() {
     }).done(function (data) {
         //alert("La cédula que nos proporcionó, ya existe en nuestro sistema, los dátos serán cargados automáticamente");
         //load the data
-        var form = $("form");
+        var form = $("[name='register_employee']");
         $(form).find("input[name='register_employee[person][names]']").val(data["names"]);
         $(form).find("input[name='register_employee[person][lastName2]']").val(data["lastName2"]);
         $(form).find("select[name='register_employee[personExtra][civilStatus]']").val(data["civilStatus"]);
