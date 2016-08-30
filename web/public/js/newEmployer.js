@@ -17,7 +17,7 @@ function startEmployer() {
         validator = $("form[name='register_employer']").validate({
             rules: {
                 "register_employer[person][documentType]": "required",
-                "register_employer[person][document]": "required",
+                "register_employer[person][document]": {required : true, maxlength : 10},
                 "register_employer[person][names]": "required",
                 "register_employer[person][lastName1]": "required",
                 "register_employer[documentExpeditionDate][day]": "required",
@@ -35,7 +35,7 @@ function startEmployer() {
             },
             messages: {
                 "register_employer[person][documentType]": "Por favor selecciona el tipo de documento",
-                "register_employer[person][document]": "Por favor ingresa tu documento",
+                "register_employer[person][document]": { required :"Por favor ingresa tu documento", maxlength :"El documento no puede ser tan largo"},
                 "register_employer[person][names]": "Por favor ingresa tu nombre",
                 "register_employer[person][lastName1]": "Por favor ingresa tu primer apellido",
                 "register_employer[documentExpeditionDate][day]": "Por favor selecciona un día",
