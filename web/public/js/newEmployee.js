@@ -47,7 +47,7 @@ function startEmployee() {
                  },*/
                 rules: {
                     "register_employee[person][documentType]": "required",
-                    "register_employee[person][document]": {required: true, number: true},
+                    "register_employee[person][document]": {required: true, number: true, maxlength:10},
                     "register_employee[person][names]": "required",
                     "register_employee[person][lastName1]": "required",
                     "register_employee[person][mainAddress]": "required",
@@ -90,7 +90,8 @@ function startEmployee() {
                     "register_employee[person][documentType]": "Por favor selecciona un tipo de documento",
                     "register_employee[person][document]": {
                         required: "Por favor ingresa un documento",
-                        number: "ingresa solamente dígitos"
+                        number: "ingresa solamente dígitos",
+                        maxlength: "El documento no puede ser tan largo"
                     },
                     "register_employee[person][names]": "Por favor ingresa el nombre",
                     "register_employee[person][lastName1]": "Por favor ingresa el primer apellido",
