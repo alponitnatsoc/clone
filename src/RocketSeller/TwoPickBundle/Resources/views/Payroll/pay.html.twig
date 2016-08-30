@@ -35,16 +35,15 @@
                 <form method="post" action="{{ path('payroll_calculate') }}" id="form_calculate">
                     {% set pilaData=null %}
                     <div id="cont-payment">
-
+                      <div class="deuda light grisclarofont">
+                          <div align="center" colspan="4">Pago de nómina</div>
+                      </div>
                         {% for data in dataNomina %}
                             {% if data.payroll_payroll != null %}
                                 {% set employee = data.payroll_payroll.contract_contract.employer_has_employee_employer_has_employee.employee_employee.person_person %}
                                 {% set payType = data.payroll_payroll.contract_contract.pay_method_pay_method.pay_type_pay_type.payroll_code %}
                                 {% set employeeName = employee.names ~' '~ employee.last_name1 %}
                                 {% set id_payroll = data.payroll_payroll.id_payroll %}
-                                <div class="deuda light grisclarofont">
-                                    <div align="center" colspan="4">Pago de de nómina</div>
-                                </div>
                                 <div class="borderclass">
                                     <div class="tittle-pay nominaBack">
                                         <div class="pagoforma">
