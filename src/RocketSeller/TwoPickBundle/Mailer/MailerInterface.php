@@ -96,14 +96,14 @@ interface MailerInterface
 //     */
 //    public function sendHelpEmailMessage($name, $fromEmail,$subject,$message,$ip,$phone);
 
-    /**
-     * Send an reminder DaviPlata email
-     *
-     * @param UserInterface $user
-     *
-     * @return void
-     */
-    public function sendDaviplataMessage(UserInterface $user);
+//    /**
+//     * Send an reminder DaviPlata email
+//     *
+//     * @param UserInterface $user
+//     *
+//     * @return void
+//     */
+//    public function sendDaviplataMessage(UserInterface $user);
 
     /**
      * Send an reminder OneDay email

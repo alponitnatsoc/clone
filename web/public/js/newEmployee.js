@@ -122,7 +122,8 @@ function startEmployee() {
                     "register_employee[verificationCode]": "Por favor ingrese el código",
                     "register_employee[employeeHasEmployers][frequencyFrequency]": "Por favor selecciona una opción",
                     "register_employee[employeeHasEmployers][holidayDebt]" : "Por favor ingrese un número de días o cambie de opción",
-                    "register_employee[entities][pension]":"Debes seleccionar una entidad"
+                    "register_employee[entities][pension]":"Debes seleccionar una entidad",
+                    "register_employee[entities][severances]":"Debes seleccionar una entidad"
                     /*,
                      "register_employee[credit_card]": "Por favor ingresa el número de la tarjeta",
                      "register_employee[cvv]": "Por favor ingresa el código de seguridad de la tarjeta",

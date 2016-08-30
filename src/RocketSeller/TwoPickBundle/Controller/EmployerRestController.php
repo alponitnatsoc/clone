@@ -512,7 +512,7 @@ class EmployerRestController extends FOSRestController
             return $view->setStatusCode(403);
         }
         $smailer = $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage(array('emailType'=>'reminder','toEmail'=>$email));
-        
+
         if ($smailer) {
             return $view->setStatusCode(200)->setData(array());
         } else {

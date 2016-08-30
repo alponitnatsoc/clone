@@ -1098,8 +1098,8 @@ trait SubscriptionMethodsTrait
         }
         if ($davPlataMail) {
             /** @var \RocketSeller\TwoPickBundle\Mailer\TwigSwiftMailer $smailer */
-            $smailer = $this->get('symplifica.mailer.twig_swift');
-            $smailer->sendDaviplataMessage($user);
+            $smailer=$this->get('symplifica.mailer.twig_swift');
+            $smailer->sendEmailByTypeMessage(array('emailType'=>'daviplata','user'=>$user,'subject'=>'Información Daviplata'));
         }
         $em->persist($user);
         $em->flush();

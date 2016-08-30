@@ -41,6 +41,20 @@ class TwigSwiftMailer extends Controller implements MailerInterface
 
     public function sendEmailByTypeMessage($context){
         switch ($context['emailType']){
+            //$context['emailType']=='welcome'
+            case 'welcome':
+                /** $context must have:
+                 * User $user
+                 */
+                $template = $this->parameters['template']['welcome'];
+                $interval = new \DateInterval("P30D");
+                $date = $context['user']->getDateCreated()->add($interval);
+                $context['toEmail']= $context['user']->getEmail();
+                $context['fechaFin']= strftime("%d de %B de %Y", $date->getTimestamp());//mas 30 dias
+                $context['codigoReferidos'] = $context['user']->getCode();
+                return $this->sendMessage($template,$context,$this->parameters['from_email']['confirmation'], $context['toEmail']);
+                break;
+            //$context['emailType']=='confirmation'
             case 'confirmation':
                 /** $context must have:
                  * User $user
@@ -50,6 +64,17 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                 $context['confirmationUrl']=$url;
                 $context['toEmail']=$context['user']->getEmail();
                 return $this->sendMessage($template, $context, $this->parameters['from_email']['confirmation'], $context['toEmail']);
+                break;
+            //$context['emailType']=='resetting'
+            case 'resetting':
+                /** $context must have:
+                 * User $user
+                 */
+                $template = $this->parameters['template']['resetting'];
+                $url = $this->router->generate('fos_user_resetting_reset', array('token' => $context['user']->getConfirmationToken()), UrlGeneratorInterface::ABSOLUTE_URL);
+                $context['confirmationUrl']=$url;
+                $context['toEmail']=$context['user']->getEmail();
+                return $this->sendMessage($template, $context,$this->parameters['from_email']['confirmation'], $context['toEmail']);
                 break;
             //$context['emailType']=='help'
             case 'help':
@@ -182,27 +207,39 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                 $template = $this->parameters['template']['backoffice_warning'];
                 return $this->sendMessage($template,$context,'registro@symplifica.com', $context['toEmail']);
                 break;
-            case 'welcome':
+            case 'daviplata':
                 /** $context must have:
-                 * User $user
+                 * string toEmail
+                 * User user
+                 * string subject
                  */
-                $template = $this->parameters['template']['welcome'];
-                $interval = new \DateInterval("P30D");
-                $date = $context['user']->getDateCreated()->add($interval);
-                $context['toEmail']= $context['user']->getEmail();
-                $context['fechaFin']= strftime("%d de %B de %Y", $date->getTimestamp());//mas 30 dias
-                $context['codigoReferidos'] = $context['user']->getCode();
+                $template = $this->parameters['template']['daviplata'];
                 return $this->sendMessage($template,$context,'registro@symplifica.com', $context['toEmail']);
                 break;
         }
 
     }
 
+    public function sendWelcomeEmailMessage(UserInterface $user)
+    {
+        $template = $this->parameters['template']['welcome'];
+
+        $interval = new \DateInterval("P30D");
+        $date = $user->getDateCreated()->add($interval);
+
+        $context = array(
+            'fechaFin' => strftime("%d de %B de %Y", $date->getTimestamp()), //mas 30 dias
+            'codigoReferidos' => $user->getCode(),
+            'user' => $user
+        );
+
+        return $this->sendMessage($template, $context, $this->parameters['from_email']['confirmation'], $user->getEmail());
+    }
+
     public function sendConfirmationEmailMessage(UserInterface $user)
     {
         $template = $this->parameters['template']['confirmation'];
         $url = $this->router->generate('fos_user_registration_confirm', array('token' => $user->getConfirmationToken()), UrlGeneratorInterface::ABSOLUTE_URL);
-
         $context = array(
             'user' => $user,
             'confirmationUrl' => $url
@@ -211,7 +248,16 @@ class TwigSwiftMailer extends Controller implements MailerInterface
         return $this->sendMessage($template, $context, $this->parameters['from_email']['confirmation'], $user->getEmail());
     }
 
-    
+    public function sendResettingEmailMessage(UserInterface $user)
+    {
+        $template = $this->parameters['template']['resetting'];
+        $url = $this->router->generate('fos_user_resetting_reset', array('token' => $user->getConfirmationToken()), UrlGeneratorInterface::ABSOLUTE_URL);
+        $context = array(
+            'user' => $user,
+            'confirmationUrl' => $url
+        );
+        return $this->sendMessage($template, $context, $this->parameters['from_email']['resetting'], $user->getEmail());
+    }
 
 //    public function sendHelpEmailMessage($name, $fromEmail,$subject,$message,$ip,$phone)
 //    {
@@ -227,19 +273,6 @@ class TwigSwiftMailer extends Controller implements MailerInterface
 //
 //        return $this->sendMessage($template, $context, $fromEmail ,'contactanos@symplifica.com');
 //    }
-
-    public function sendResettingEmailMessage(UserInterface $user)
-    {
-        $template = $this->parameters['template']['resetting'];
-        $url = $this->router->generate('fos_user_resetting_reset', array('token' => $user->getConfirmationToken()), UrlGeneratorInterface::ABSOLUTE_URL);
-
-        $context = array(
-            'user' => $user,
-            'confirmationUrl' => $url
-        );
-
-        return $this->sendMessage($template, $context, $this->parameters['from_email']['resetting'], $user->getEmail());
-    }
 
 //    public function sendReminderEmailMessage(UserInterface $user, $toEmail)
 //    {
@@ -279,22 +312,18 @@ class TwigSwiftMailer extends Controller implements MailerInterface
 //        );
 //        return $this->sendMessage($template,$context,'registro@symplifica.com', $to);
 //    }
-    
-    public function sendWelcomeEmailMessage(UserInterface $user)
-    {
-        $template = $this->parameters['template']['welcome'];
 
-        $interval = new \DateInterval("P30D");
-        $date = $user->getDateCreated()->add($interval);
+//        public function sendDaviplataMessage(UserInterface $user){
+//        $to = $user->getEmail();
+//        $template = $this->parameters['template']['daviplata'];
+//        $context = array(
+//            'toEmail' => $user->getEmail(),
+//            'user' => $user,
+//            'subject'=> "Informacion Daviplata"
+//        );
+//        $this->sendMessage($template,$context,$this->parameters['from_email']['confirmation'], $to);
+//    }
 
-        $context = array(
-            'fechaFin' => strftime("%d de %B de %Y", $date->getTimestamp()), //mas 30 dias
-            'codigoReferidos' => $user->getCode(),
-            'user' => $user
-        );
-
-        return $this->sendMessage($template, $context, $this->parameters['from_email']['confirmation'], $user->getEmail());
-    }
 
     public function sendEmail(UserInterface $user, $templateName, $fromEmail, $toEmail, $path = null)
     {
@@ -306,16 +335,7 @@ class TwigSwiftMailer extends Controller implements MailerInterface
         return $this->sendMessage($templateName, $context, $fromEmail, $toEmail, $path);
     }
     
-    public function sendDaviplataMessage(UserInterface $user){
-        $to = $user->getEmail();
-        $template = $this->parameters['template']['daviplata'];
-        $context = array(
-            'toEmail' => $user->getEmail(),
-            'user' => $user,
-            'subject'=> "Informacion Daviplata"
-        );
-        $this->sendMessage($template,$context,$this->parameters['from_email']['confirmation'], $to);
-    }
+
 
     public function sendOneDayMessage(UserInterface $user,EmployerHasEmployee $eHE){
         $to = $user->getEmail();
@@ -446,7 +466,7 @@ class TwigSwiftMailer extends Controller implements MailerInterface
         $htmlBody = $template->renderBlock('body_html', $context);
         $message ="";
 
-        if($fromEmail==$this->parameters['from_email']['confirmation'] or $fromEmail ==$this->parameters['from_email']['resetting']){
+        if($fromEmail==$this->parameters['from_email']['confirmation']){
             $message = \Swift_Message::newInstance()
                 ->setSubject($subject)
                 ->setFrom($fromEmail)

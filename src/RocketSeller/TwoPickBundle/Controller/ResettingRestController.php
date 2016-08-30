@@ -65,8 +65,7 @@ class ResettingRestController extends FOSRestController
             $tokenGenerator = $this->get('fos_user.util.token_generator');
             $user->setConfirmationToken($tokenGenerator->generateToken());
         }
-
-        $tmp = $this->get('fos_user.mailer')->sendResettingEmailMessage($user);
+        $tmp = $this->get('fos_user.mailer')->sendEmailByTypeMessage(array('emailType'=>'resetting','user'=>$user));
         $user->setPasswordRequestedAt(new \DateTime());
         $this->get('fos_user.user_manager')->updateUser($user);
 
