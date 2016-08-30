@@ -1240,6 +1240,13 @@ class BackOfficeController extends Controller
 //            'payMethod'=>'Tarjeta de Credito'
 //        );
 //        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+        /** test backWarning Email */
+//        $context = array(
+//            'emailType'=>'backWarning',
+//            'toEmail'=>'gabriel.montero@symplifica.com',
+//            'idPod'=>1,
+//        );
+//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 
         return $this->redirect($this->generateUrl('back_office'));
     }

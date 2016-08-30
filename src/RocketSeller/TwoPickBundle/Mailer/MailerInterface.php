@@ -171,11 +171,11 @@ interface MailerInterface
      */
     public function sendTestEmailsMessage($context);
 
-    /**
-     * Send a remind backoffice to check payrolls
-     *
-     * @param int $idPayroll
-     */
-    public function sendBackOfficeWarningMessage( $idPayroll);
+//    /**
+//     * Send a remind backoffice to check payrolls
+//     *
+//     * @param int $idPayroll
+//     */
+//    public function sendBackOfficeWarningMessage( $idPayroll);
 
     }
