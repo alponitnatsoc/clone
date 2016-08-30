@@ -523,7 +523,10 @@ function calculatorL(type, numberOfDays, salaryM, salaryD, sisben, transport, ar
       arlProf = 0.02436;
     }
     else if (arlChoose == 3) { //ninero
-      arlProf = 0.00522;
+        arlProf = 0.00522;
+    }
+    else if (arlChoose == 4) { //ninero
+        arlProf = 0.00522;
     }
     else if (arlChoose == 5) { //mayordomo
       arlProf = 0.01044;
