@@ -48,8 +48,8 @@
                 <div style="width:80%;margin:0 auto;font-size: 20px; font-family: 'Open Sans', sans-serif; font-weight: 700; color: #5D5E5E;text-align:left">¡Hemos recibido tu pago con éxito!</div><br /><br />
                 <div style="font-size: 15px; font-style: italic; font-family: 'Open Sans', sans-serif; font-weight: 100; color: #858688;width:80%;margin:0 auto;text-align:left">
                 	En este momento nos encontramos realizando las transacciones correspondientes, en un día hábil se realizara la dispersión y te avisaremos del estado del pago a tu empleado.<br><br>
-                    <strong>Fecha de recaudo:</strong> XXX<br>
-                    <strong>Valor del recaudo:</strong> {{ value }}
+                    <strong>Fecha de recaudo:</strong> {{ fechaRecaudo|localizeddate('long', 'none', 'es-CO') }}<br>
+                    <strong>Valor del recaudo:</strong> ${{ value|number_format(0, '.', ',') }}
 
 </div><br /><br />
                 <br /><br />

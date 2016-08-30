@@ -625,7 +625,7 @@ class EmployeeController extends Controller
         $contractEmployee = $activeContract->getDocumentDocument();
         $contractDate = "";
         if($contractEmployee){
-            $contractDate = $contractEmployee->getMediaMedia()->getUpdatedAt()->format("l j"). " de " . $contractEmployee->getMediaMedia()->getUpdatedAt()->format("F") ;
+            $contractDate = $contractEmployee->getMediaMedia()->getUpdatedAt();
         }
         $entidades = array();
         foreach ($entities as $entity) {
@@ -862,7 +862,7 @@ class EmployeeController extends Controller
             $invitationEmail = $this->get('request')->request->get('email');
 
             $smailer = $this->get('symplifica.mailer.twig_swift');
-            $send = $smailer->sendEmail($this->getUser(), "FOSUserBundle:Invitation:email.txt.twig", "from.email@com.co", $toEmail);
+            $send = $smailer->sendEmail($this->getUser(), "FOSUserBundle:Invitation:email.txt.twig", "from.email@com.co", $this->getUser()->getEmail());
         } else {
             return $this->render(
                             'RocketSellerTwoPickBundle:Employee:shareProfile.html.twig', array('employee' => $employee));

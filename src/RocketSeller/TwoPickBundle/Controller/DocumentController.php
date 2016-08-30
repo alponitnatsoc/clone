@@ -164,6 +164,60 @@ use EmployerMethodsTrait;
             'application/pdf',
             //'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         );
+
+        $data = $this->verifyDocument($entityType, $entityId, $docCode, $idNotification);
+
+        /** @var Document $document */
+        $document = $data['document'];
+        /** @var Notification $notification */
+        $notification = $data['notification'];
+        /** @var string $personName */
+        $personName = $data['personName'];
+        /** @var DocumentType $documentType */
+        $documentType = $data['documentType'];
+        $form = $this->createForm(new DocumentRegistration(), $document);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            if (in_array($document->getMediaMedia()->getContentType(), $fileTypePermitted)) {
+                $this->persitDocument($document ,$notification);
+                return $this->redirectToRoute('show_dashboard');
+            } else {
+                $this->addFlash('fail_format', 'NVF');
+                return $this->redirectToRoute('show_dashboard');
+            }
+        }
+        return $this->render(
+            'RocketSellerTwoPickBundle:Document:addDocumentForm.html.twig', array('form' => $form->createView(), "entityType" => $entityType, "entityId" => $entityId, "docCode" => $docCode, "idNotification" => $idNotification, 'personName' => $personName, "documentName" => $documentType->getName()));
+    }
+
+    public function persitDocument(Document $document, Notification $notification ){
+        $em = $this->getDoctrine()->getManager();
+        /** @var Media $media */
+        $medias = $document->getMediaMedia();
+        foreach ($medias as $media) {
+            $media->setBinaryContent($media);
+            $media->setName($document->getName());
+            $media->setProviderStatus(Media::STATUS_OK);
+            $media->setProviderReference($media->getBinaryContent());
+            $em->persist($media);
+            $em->flush();
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $document->setStatus(1);
+        $em->persist($document);
+        $em->flush();
+        $notification->setStatus(0);
+        $em->persist($notification);
+        $em->flush();
+        $request = $this->container->get('request');
+        $request->setMethod("GET");
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:EmployerRest:getEmployerDocumentsState', array('idUser' => $this->getUser()->getId()), array('_format' => 'json'));
+        $responsePaymentsMethods = json_decode($insertionAnswer->getContent(), true);
+    }
+
+    public function verifyDocument($entityType, $entityId, $docCode, $idNotification){
         $em = $this->getDoctrine()->getManager();
         /** @var Notification $notification */
         $notification = $em->getRepository("RocketSellerTwoPickBundle:Notification")->find($idNotification);
@@ -173,6 +227,7 @@ use EmployerMethodsTrait;
             ->getRepository('RocketSellerTwoPickBundle:DocumentType')
             ->findOneBy(array("docCode"=>$docCode));
         $exists = false;
+
         /** @var Document $document */
         //switching between entities
         switch ($entityType){
@@ -215,7 +270,7 @@ use EmployerMethodsTrait;
                         break;
                     case "RUT":
                         if($person->getRutDocument()){
-                            $oldDocument = $person->getDocumentDocument();
+                            $oldDocument = $person->getRutDocument();
                             if($oldDocument->getMediaMedia()){
                                 /** @var Media $media */
                                 $media = $oldDocument->getMediaMedia();
@@ -225,7 +280,7 @@ use EmployerMethodsTrait;
                                 }
                                 $em->remove($em->getRepository('\Application\Sonata\MediaBundle\Entity\Media')->find($media->getId()));
                                 $em->remove($em->getRepository('ApplicationSonataMediaBundle:Media')->find($media->getId()));
-                                $person->setDocumentDocument(null);
+                                $person->setRutDocument(null);
                                 $em->flush();
                                 $em->remove($em->getRepository('RocketSellerTwoPickBundle:Document')->find($oldDocument->getIdDocument()));
                                 $em->flush();
@@ -245,7 +300,7 @@ use EmployerMethodsTrait;
                         break;
                     case "RCDN":
                         if($person->getBirthRegDocument()){
-                            $oldDocument = $person->getDocumentDocument();
+                            $oldDocument = $person->getBirthRegDocument();
                             if($oldDocument->getMediaMedia()){
                                 /** @var Media $media */
                                 $media = $oldDocument->getMediaMedia();
@@ -255,7 +310,7 @@ use EmployerMethodsTrait;
                                 }
                                 $em->remove($em->getRepository('\Application\Sonata\MediaBundle\Entity\Media')->find($media->getId()));
                                 $em->remove($em->getRepository('ApplicationSonataMediaBundle:Media')->find($media->getId()));
-                                $person->setDocumentDocument(null);
+                                $person->setBirthRegDocument(null);
                                 $em->flush();
                                 $em->remove($em->getRepository('RocketSellerTwoPickBundle:Document')->find($oldDocument->getIdDocument()));
                                 $em->flush();
@@ -443,40 +498,7 @@ use EmployerMethodsTrait;
                 $em->persist($payroll);
                 break;
         }
-        $form = $this->createForm(new DocumentRegistration(), $document);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            if (in_array($document->getMediaMedia()->getContentType(), $fileTypePermitted)) {
-                /** @var Media $media */
-                $medias = $document->getMediaMedia();
-                foreach ($medias as $media) {
-                    $media->setBinaryContent($media);
-                    $media->setName($document->getName());
-                    $media->setProviderStatus(Media::STATUS_OK);
-                    $media->setProviderReference($media->getBinaryContent());
-                    $em->persist($media);
-                    $em->flush();
-                }
-                $em = $this->getDoctrine()->getManager();
-                $document->setStatus(1);
-                $em->persist($document);
-                $em->flush();
-                $notification->setStatus(0);
-                $em->persist($notification);
-                $em->flush();
-                $request = $this->container->get('request');
-                $request->setMethod("GET");
-                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:EmployerRest:getEmployerDocumentsState', array('idUser' => $this->getUser()->getId()), array('_format' => 'json'));
-                $responsePaymentsMethods = json_decode($insertionAnswer->getContent(), true);
-                return $this->redirectToRoute('show_dashboard');
-            } else {
-                $this->addFlash('fail_format', 'NVF');
-                return $this->redirectToRoute('show_dashboard');
-            }
-        }
-        return $this->render(
-            'RocketSellerTwoPickBundle:Document:addDocumentForm.html.twig', array('form' => $form->createView(), "entityType" => $entityType, "entityId" => $entityId, "docCode" => $docCode, "idNotification" => $idNotification, 'personName' => $name, "documentName" => $documentType->getName()));
+        return array('document'=>$document,'notification'=>$notification,'personName'=> $name,'documentType'=>$documentType);
     }
 
     public function addDocModalAction($id, $idDocumentType, Request $request)

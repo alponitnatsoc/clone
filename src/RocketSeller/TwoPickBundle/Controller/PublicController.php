@@ -99,7 +99,7 @@ class PublicController extends Controller
                         $sub = 'Otros';
                         break;
                 }
-                $send = $this->get('symplifica.mailer.twig_swift')->sendHelpEmailMessage($form->get('name')->getData(),$form->get('email')->getData(),$sub,$form->get('message')->getData(),$request->getClientIp(),$form->get('phone')->getData());
+                $send = $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage(array('emailType'=>'help','name'=>$form->get('name')->getData(),'fromEmail'=>$form->get('email')->getData(), 'subject'=>$sub, 'message'=>$form->get('message')->getData(),'ip'=>$request->getClientIp(),'phone'=>$form->get('phone')->getData()));
                 if($send){
                     $this->addFlash('success', 'Tu email ha sido enviado. Nos pondremos en contacto en menos de 24 horas');
                 }else{

@@ -42,7 +42,7 @@ class RegistrationRestController extends FOSRestController
         if ($user->getConfirmationToken() !== null) {
 
             $tsm = $this->get('symplifica.mailer.twig_swift');
-            $response = $tsm->sendConfirmationEmailMessage($user);
+            $response = $tsm->sendEmailByTypeMessage(array('emailType'=>'confirmation','user'=>$user));
         } else {
             $response = "Esta cuenta ya fue verificada";
         }

@@ -147,25 +147,53 @@ class HighTechRestController extends FOSRestController
             $em->persist($dis);
             $em->flush();
 
-            $userEmail = $dis->getIdUser()->getUsernameCanonical();
-            $fechaRecaudo = new DateTime();
-            $value = $dis->getValue();
-            $employerPerson = $dis->getIdUser()->getPersonPerson();
-            //TODO-Andres enviar el correo que el recaudo se relizó satisfactoriamente
-            //TODO-Andres Adjuntar la factura
+            /** @var \DateTime $date */
+            $date = new DateTime();
+            $date->setTimezone(new \DateTimeZone('America/Bogota'));
+            $params = array(
+                'ref'=> 'factura',
+                'id' => $dis->getIdPurchaseOrders(),
+                'type' => 'pdf',
+                'attach' => null
+            );
+            $documentResult = $this->forward('RocketSellerTwoPickBundle:Document:downloadDocuments', $params);
+            $file =  $documentResult->getContent();
+            if (!file_exists('uploads/temp/facturas')) {
+                mkdir('uploads/temp/facturas', 0777, true);
+            }
+            $path = 'uploads/temp/facturas/'.$dis->getIdUser()->getPersonPerson()->getIdPerson().'_tempFacturaFile.pdf';
+            file_put_contents($path, $file);
+            $context = array(
+                'emailType'=>'succesRecollect',
+                'toEmail' => $dis->getIdUser()->getEmail(),
+                'userName' => $dis->getIdUser()->getPersonPerson()->getFullName(),
+                'fechaRecaudo' => $date,
+                'value'=>$dis->getValue(),
+                'path'=>$path,
+                'documentName'=>'Factura '.date_format($date,'d-m-y H:i:s').'.pdf',
+            );
+
+            $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 
         } else {
-            $mesange = "not so good man";
-            $userEmail = $dis->getIdUser()->getUsernameCanonical();
-            $fechaRechazo = new DateTime();
-            $value = $dis->getValue();
-            $employerPerson = $dis->getIdUser()->getPersonPerson();
             //nicetohave buscar este ID
             $paymethodId = $dis->getPayMethodId();
-
-            //TODO-Andres enviar el correo a "" notificando que no se pudo hacer la transaccion con la informacion de, la fecha del rechazo, el monto, el empleador(nombres, telefono,correo)
-            // también a backoffice, notificando la misma informaciónla info la saca de las variables de arriba
-
+            $context=array(
+                'emailType'=>'failDispersion',
+                'userEmail'=>$dis->getIdUser()->getEmail(),
+                'toEmail'=>$dis->getIdUser()->getEmail(),
+                'userName'=>$dis->getIdUser()->getPersonPerson()->getFullName()
+            );
+            $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+            $contextBack=array(
+                'emailType'=>'regectionCollect',
+                'userEmail'=>$dis->getIdUser()->getEmail(),
+                'userName'=>$dis->getIdUser()->getPersonPerson()->getFullName(),
+                'rejectionDate'=>new DateTime(),
+                'toEmail'=> 'backOfficeSymplifica@gmail.com',
+                'phone'=>$dis->getIdUser()->getPersonPerson()->getPhones()->first()
+            );
+            $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
 
             $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => 'P1'));
             //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
@@ -238,12 +266,31 @@ class HighTechRestController extends FOSRestController
             //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
             $pay->setPurchaseOrdersStatusPurchaseOrdersStatus($pos);
             $pay->getPurchaseOrdersDescription()->setPurchaseOrdersStatus($pos);
-            //TODO-Andres enviar el correo que la dispersión se relizó satisfactoriamente
-            //TODO-Andres Adjuntar el comprobante si aplica
-            if($pay->getPurchaseOrdersDescription()->getProductProduct()->getSimpleName()=="PN"){
-                //esto significa que hay que enviar el comporbante
 
+            $context=array(
+                'emailType'=>'succesDispersion',
+                'toEmail'=>$pay->getUserIdUser()->getEmail(),
+                'userName'=>$pay->getUserIdUser()->getPersonPerson()->getFullName(),
+            );
+            if($pay->getPurchaseOrdersDescription()->getProductProduct()->getSimpleName()=="PN"){
+                $params = array(
+                    'ref'=> 'comprobante',
+                    'id' => $pay->getPurchaseOrdersDescription()->getPayrollPayroll()->getIdPayroll(),
+                    'type' => 'pdf',
+                    'attach' => null
+                );
+                $documentResult = $this->forward('RocketSellerTwoPickBundle:Document:downloadDocuments', $params);
+                $file =  $documentResult->getContent();
+                if (!file_exists('uploads/temp/comprobantes')) {
+                    mkdir('uploads/temp/comprobantes', 0777, true);
+                }
+                $path = 'uploads/temp/comprobantes/'.$pay->getUserIdUser()->getPersonPerson()->getIdPerson().'_tempFacturaFile.pdf';
+                file_put_contents($path, $file);
+                $context['path']=$path;
+                $context['comprobante']=true;
+                $context['documentName']='Comprobante '.date_format(new DateTime(),'d-m-y H:i:s').'.pdf';
             }
+            $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 
         } else {
             $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => '-2'));
@@ -258,7 +305,23 @@ class HighTechRestController extends FOSRestController
             $rejectDate = new DateTime();
             $value = $rejectedPurchaseOrderDescription->getValue();
             $product = $rejectedPurchaseOrderDescription->getProductProduct();
-            //TODO-Andres enviar el correo a "" notificando que no se pudo hacer la transaccion con la informacion de, la fecha del rechazo, el monto, el empleador(nombres, telefono,correo)
+
+            $context=array(
+                'emailType'=>'failDispersion',
+                'userEmail'=>$pay->getUserIdUser()->getEmail(),
+                'toEmail'=>$pay->getUserIdUser()->getEmail(),
+                'userName'=>$pay->getUserIdUser()->getPersonPerson()->getFullName(),
+            );
+            $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+            $contextBack=array(
+                'emailType'=>'regectionDispersion',
+                'userEmail'=>$pay->getUserIdUser()->getEmail(),
+                'userName'=>$pay->getUserIdUser()->getFullName(),
+                'rejectionDate'=>new DateTime(),
+                'toEmail'=> 'backOfficeSymplifica@gmail.com',
+                'phone'=>$pay->getUserIdUser()->getPersonPerson()->getPhones()->first()
+            );
+            $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
 
             $notification= new Notification();
             $notification->setAccion("Ver");

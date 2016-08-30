@@ -8,53 +8,70 @@
             <div class="panel panel-title">
                 Tramites
             </div>
-        <br>
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4>Tramites Pendientes</h4>
-            </div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th style="vertical-align: middle" rowspan="2">Empleador</th>
-                        <th style="vertical-align: middle" rowspan="2">Cedula</th>
-                        <th style="vertical-align: middle" rowspan="2">Tipo de Tramite</th>
-                        <th colspan="2">Empleados</th>
-                        <th style="vertical-align: middle" rowspan="2">Fecha Pago</th>
-                        <th style="vertical-align: middle" rowspan="2">Accion</th>
-                    </tr>
-                    <tr>
-                        <th>Pendientes</th>
-                        <th>Finalizados</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for procedure in procedures %}
-                    <tr>
-                        <td>{{ procedure.employerEmployer.personPerson.fullName}}</td>
-                        <td>{{ procedure.employerEmployer.personPerson.document}}</td>
-                        <td>{{ procedure.procedureTypeProcedureType.name }}</td>
-                        {% set pendientes =  procedure.employerEmployer.toFinish %}
-                        <td {%  if  pendientes > 0 %}
+            <br>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Tramites Pendientes</h4>
+                </div>
+                {% set order = { 'Name': app.request.get('order') } %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th style="vertical-align: middle" rowspan="2">
+                                {% set orderBy = app.request.get('orderBy') %}
+                                {% if orderBy == 'ASC'%}
+                                    {% set orderBy = 'DESC' %}
+                                {% else %}
+                                    {% set orderBy = 'ASC' %}
+                                {% endif %}
+                                <a id="orderByName" class ='notAjax' href="{{ path('show_procedures',order|merge( { 'order':'Name', 'orderBy':orderBy })) }}">Empleador</a>
+                            </th>
+                            <th style="vertical-align: middle" rowspan="2">Cedula</th>
+                            <th style="vertical-align: middle" rowspan="2">Tipo de Tramite</th>
+                            <th colspan="3">Empleados</th>
+                            <th style="vertical-align: middle" rowspan="2">Fecha Pago</th>
+                            <th style="vertical-align: middle" rowspan="2">Accion</th>
+                        </tr>
+                        <tr>
+                            <th>Pendientes</th>
+                            <th>Errores</th>
+                            <th>Finalizados</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for procedure in procedures %}
+                        <tr>
+                            <td>{{ procedure.employerEmployer.personPerson.fullName}}</td>
+                            <td>{{ procedure.employerEmployer.personPerson.document}}</td>
+                            <td>{{ procedure.procedureTypeProcedureType.name }}</td>
+                            {% set pendientes =  procedure.employerEmployer.toFinish %}
+                            <td {%  if  pendientes > 0 %}
+                                    style="color: #9C2F2F"
+                                {% else %}
+                                    style="color: black"
+                                {% endif %}
+                            >{{ pendientes}}</td>
+                            {% set errores =  procedure.employerEmployer.errors %}
+                            <td {%  if  errores > 0 %}
                                 style="color: #9C2F2F"
                             {% else %}
-                                style="color: black"
-                            {% endif %}
-                        >{{ pendientes}}</td>
-                        {% set terminados =  procedure.employerEmployer.finished%}
-                        <td {%  if  terminados > 0 %}
                                 style="color: #00CC00"
-                            {% else %}
-                                style="color: black"
                             {% endif %}
-                        >{{ terminados}}</td>
-                        <td>{{ procedure.createdAt|date('y-m-d h:i:s a') }}</td>
-                        <td><a class="notAjax" href="{{ path('show_procedure',{'procedureId':procedure.idProcedure})}}">Ver</a></td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                            >{{ errores}}</td>
+                            {% set terminados =  procedure.employerEmployer.finished%}
+                            <td {%  if  terminados > 0 %}
+                                    style="color: #00CC00"
+                                {% else %}
+                                    style="color: black"
+                                {% endif %}
+                            >{{ terminados}}</td>
+                            <td>{{ procedure.createdAt|date('y-m-d h:i:s a') }}</td>
+                            <td><a class="notAjax" href="{{ path('show_procedure',{'procedureId':procedure.idProcedure})}}">Ver</a></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 {% endblock %}

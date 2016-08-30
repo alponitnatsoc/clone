@@ -50,7 +50,7 @@ class ReminderRestController extends FOSRestController
                                 if($contract->getActivePayroll()){
                                     if($contract->getActivePayroll()->getMonth()==$date->format('m')){
                                         $smailer = $this->get('symplifica.mailer.twig_swift');
-                                        $send = $smailer->sendReminderPayEmailMessage($user,3);
+                                        $send = $smailer->sendEmailByTypeMessage(array('emailType'=>'reminderPay','toEmail'=>$user->getEmail(),'userName'=>$user->getPersonPerson()->getFullName(),'days'=>3));
                                         $response = $response."- - -Periodo activo: ".$contract->getActivePayroll()->getMonth().' '.$contract->getActivePayroll()->getYear()."<br>";
                                         if($send){
                                             $enviado=true;
@@ -74,7 +74,7 @@ class ReminderRestController extends FOSRestController
                     $response = $response."- -NO ESTA APROBADO. <br><br>";
                 }
             }
-        }elseif($date->format('d') == 11){
+        }elseif($date->format('d') == 10){
             $users = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:User")->findAll();
             $response = $response."- SE EJECUTA LA TAREA QUINCENAL".'<br><br>';
             /** @var User $user */
@@ -91,7 +91,7 @@ class ReminderRestController extends FOSRestController
                                 if($contract->getActivePayroll() and $contract->getActivePayroll()->getPeriod() == 2 and !$enviado){
                                     if($contract->getActivePayroll()->getMonth()==$date->format('m')){
                                         $smailer = $this->get('symplifica.mailer.twig_swift');
-                                        $send= $smailer->sendReminderPayEmailMessage($user,2);
+                                        $send=$smailer->sendEmailByTypeMessage(array('emailType'=>'reminderPay','toEmail'=>$user->getEmail(),'userName'=>$user->getPersonPerson()->getFullName(),'days'=>2));
                                         $response = $response."- - -Periodo activo: ".$contract->getActivePayroll()->getMonth().' '.$contract->getActivePayroll()->getYear()."<br>";
                                         if($send){
                                             $enviado=true;
@@ -163,7 +163,7 @@ class ReminderRestController extends FOSRestController
                                 if($contract->getActivePayroll()){
                                     if($contract->getActivePayroll()->getMonth()==$date->format('m')){
                                         $smailer = $this->get('symplifica.mailer.twig_swift');
-                                        $send = $smailer->sendLastReminderPayEmailMessage($user,3);
+                                        $send=$smailer->sendEmailByTypeMessage(array('emailType'=>'lastReminderPay','toEmail'=>$user->getEmail(),'userName'=>$user->getPersonPerson()->getFullName(),'days'=>3));
                                         $response = $response."- - -Periodo activo: ".$contract->getActivePayroll()->getMonth().' '.$contract->getActivePayroll()->getYear()."<br>";
                                         if($send){
                                             $enviado=true;
@@ -204,7 +204,7 @@ class ReminderRestController extends FOSRestController
                                 if($contract->getActivePayroll() and $contract->getActivePayroll()->getPeriod() == 2){
                                     if($contract->getActivePayroll()->getMonth()==$date->format('m')){
                                         $smailer = $this->get('symplifica.mailer.twig_swift');
-                                        $send= $smailer->sendLastReminderPayEmailMessage($user,2);
+                                        $send=$smailer->sendEmailByTypeMessage(array('emailType'=>'lastReminderPay','toEmail'=>$user->getEmail(),'userName'=>$user->getPersonPerson()->getFullName(),'days'=>2));
                                         $response = $response."- - -Periodo activo: ".$contract->getActivePayroll()->getMonth().' '.$contract->getActivePayroll()->getYear()."<br>";
                                         if($send){
                                             $enviado=true;

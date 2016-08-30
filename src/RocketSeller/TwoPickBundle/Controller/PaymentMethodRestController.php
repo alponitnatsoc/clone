@@ -226,8 +226,15 @@ class PaymentMethodRestController extends FOSRestController
             /** @var User $realUser */
             $realUser = $userRepo->find($paramFetcher->get("userId"));
             if($realUser!=null){
-                //TODO-Andres Enviar correo diciendo al usuario que se demora 3 días y lo mantendremos informado
-                //el Usuario es $realUser
+                //TODO Andres paymentMethod?
+                $context = array(
+                    'emailType'=>'validatePayMethod',
+                    'toEmail'=>$realUser->getEmail(),
+                    'userName'=>$realUser->getPersonPerson()->getFullName(),
+                    'starDate'=>new DateTime(),
+                    'payMethod'=>$paramFetcher->get('pay_method')
+                );
+                $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
             }
 
         }
@@ -689,7 +696,7 @@ class PaymentMethodRestController extends FOSRestController
                 if($purchaseOrderDescription->getEnlaceOperativoFileName()==null){
                     /** @var TwigSwiftMailer $smailer */
                     $smailer = $this->get('symplifica.mailer.twig_swift');
-                    $result=$smailer->sendBackOfficeWarningMessage($this->getUser(),$purchaseOrderDescription->getIdPurchaseOrdersDescription());
+                    $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage(array('emailType'=>'backWarning','toEmail'=>'johonson.aguirre@symplifica.com','idPod'=>$purchaseOrderDescription->getIdPurchaseOrdersDescription()));
                     return array('code'=>512,'data'=>array('error' => array('Dispersion' => 'Backoffice no ha subido el número de pila')));
                 }else{
                     $filePila=$purchaseOrderDescription->getEnlaceOperativoFileName();

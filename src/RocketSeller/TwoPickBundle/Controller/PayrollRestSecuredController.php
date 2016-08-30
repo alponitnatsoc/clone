@@ -765,6 +765,7 @@ class PayrollRestSecuredController extends FOSRestController
             $em->flush();
 
             $rejectedPurchaseOrder=$realtoPay;
+
             //TODO-Andres Send email of the rejected pay purchase order
             // Con la descripción que se está procesando el pago. la Purchase order es $procesingPurchaseOrder
             return $view->setStatusCode(200)->setData(array('result' => "e"));
