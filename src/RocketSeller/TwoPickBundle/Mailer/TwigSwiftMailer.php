@@ -10,17 +10,21 @@
  */
 
 namespace RocketSeller\TwoPickBundle\Mailer;
-
+use FOS\RestBundle\Controller\FOSRestController;
 use FOS\UserBundle\Model\UserInterface;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Phone;
 use RocketSeller\TwoPickBundle\Entity\User;
+use Swift_Attachment;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use ZipArchive;
 
 /**
  * @author Christophe Coevoet <stof@notk.org>
  */
-class TwigSwiftMailer implements MailerInterface
+class TwigSwiftMailer extends Controller implements MailerInterface
 {
     protected $mailer;
     protected $router;
@@ -33,6 +37,140 @@ class TwigSwiftMailer implements MailerInterface
         $this->router = $router;
         $this->twig = $twig;
         $this->parameters = $parameters;
+    }
+
+    public function sendEmailByTypeMessage($context){
+        switch ($context['emailType']){
+            case 'confirmation':
+                $template = $this->parameters['template']['confirmation'];
+                $url = $this->router->generate('fos_user_registration_confirm', array('token' => $context['user']->getConfirmationToken()), UrlGeneratorInterface::ABSOLUTE_URL);
+                $context['confirmationUrl']=$url;
+                return $this->sendMessage($template, $context, $this->parameters['from_email']['confirmation'], $context['user']->getEmail());
+                break;
+            //$context['emailType']=='help'
+            case 'help':
+                /** $context must have:
+                 * string name
+                 * string fromEmail
+                 * string message
+                 * string ip
+                 * string phone
+                 */
+                $template = $this->parameters['template']['help'];
+                return $this->sendMessage($template, $context, 'registro@symplifica.com','contactanos@symplifica.com');
+                break;
+            //$context['emailType']=='reminder'
+            case 'reminder':
+                /** $context must have:
+                 * string toEmail
+                 */
+                $template = $this->parameters['template']['reminder'];
+                return $this->sendMessage($template, $context, 'registro@symplifica.com' ,$context['toEmail']);
+                break;
+            //$context['emailType']=='reminderPay'
+            case 'reminderPay':
+                /** $context must have:
+                 * string toEmail
+                 * int days
+                 * string userName
+                 */
+                $template = $this->parameters['template']['remindNovelty'];
+                return $this->sendMessage($template,$context,'registro@symplifica.com', $context['toEmail']);
+                break;
+            case 'lastReminderPay':
+                /** $context must have:
+                 * string toEmail
+                 * int days
+                 * string userName
+                 */
+                $template = $this->parameters['template']['lastRemindNovelty'];
+                return $this->sendMessage($template,$context,'registro@symplifica.com', $context['toEmail']);
+                break;
+            case 'succesRecollect':
+                /** $context must have:
+                 * string toEmail
+                 * string documentName
+                 * string userName
+                 * DateTime fechaRecaudo
+                 * float value
+                 */
+                $template = $this->parameters['template']['succesRecollect'];
+
+                return $this->sendMessage($template,$context,'registro@symplifica.com', $context['toEmail'],$context['path']);
+                break;
+            case 'failRecollect':
+                /** $context must have:
+                 * string userEmail
+                 * string toEmail
+                 * string documentName
+                 * string userName
+                 * DateTime rejectionDate
+                 * float value
+                 * string phone
+                 */
+                $template = $this->parameters['template']['failRecollect'];
+                return $this->sendMessage($template,$context,'registro@symplifica.com', $context['toEmail']);
+                break;
+            case 'regectionCollect':
+                /** $context must have:
+                 * string userEmail
+                 * string toEmail
+                 * string documentName
+                 * string userName
+                 * DateTime rejectionDate
+                 * float value
+                 * string phone
+                 */
+                $template = $this->parameters['template']['regectionCollect'];
+                return $this->sendMessage($template,$context,'registro@symplifica.com', $context['toEmail']);
+                break;
+            case 'regectionDispersion':
+                /** $context must have:
+                 * string userEmail
+                 * string toEmail
+                 * string documentName
+                 * string userName
+                 * DateTime rejectionDate
+                 * string phone
+                 */
+                $template = $this->parameters['template']['regectionDispersion'];
+                return $this->sendMessage($template,$context,'registro@symplifica.com', $context['toEmail']);
+                break;
+            case 'succesDispersion':
+                /** $context must have:
+                 * string toEmail
+                 * string userName
+                 * if comprobante
+                 * string path
+                 * string documentName
+                 */
+                $template = $this->parameters['template']['succesDispersion'];
+                if($context['comprobante']){
+                    return $this->sendMessage($template,$context,'registro@symplifica.com', $context['toEmail'],$context['path']);
+                }else{
+                    return $this->sendMessage($template,$context,'registro@symplifica.com', $context['toEmail']);
+                }
+                break;
+            case 'failDispersion':
+                /** $context must have:
+                 * string toEmail
+                 * string userName
+                 */
+                $template = $this->parameters['template']['failDispersion'];
+                return $this->sendMessage($template,$context,'registro@symplifica.com', $context['toEmail']);
+                break;
+            case 'validatePayMethod':
+                /** $context must have:
+                 * string toEmail
+                 * string userName
+                 * string payMethod
+                 * DateTime startDate
+                 */
+                $template = $this->parameters['template']['validatePayMethod'];
+                return $this->sendMessage($template,$context,'registro@symplifica.com', $context['toEmail']);
+                break;
+        }
+
     }
 
     public function sendConfirmationEmailMessage(UserInterface $user)
@@ -50,21 +188,20 @@ class TwigSwiftMailer implements MailerInterface
 
     
 
-    public function sendHelpEmailMessage($name, $fromEmail,$subject,$message,$ip,$phone)
-    {
-        $template = $this->parameters['template']['help'];
-        $context = array(
-            'name' => $name,
-            'fromEmail' =>$fromEmail,
-            'subject' =>$subject,
-            'message' =>$message,
-            'ip'=> $ip,
-            'phone'=>$phone
-        );
-        
-        return $this->sendMessage($template, $context, $fromEmail ,'contactanos@symplifica.com');
-    }
-    
+//    public function sendHelpEmailMessage($name, $fromEmail,$subject,$message,$ip,$phone)
+//    {
+//        $template = $this->parameters['template']['help'];
+//        $context = array(
+//            'name' => $name,
+//            'fromEmail' =>$fromEmail,
+//            'subject' =>$subject,
+//            'message' =>$message,
+//            'ip'=> $ip,
+//            'phone'=>$phone
+//        );
+//
+//        return $this->sendMessage($template, $context, $fromEmail ,'contactanos@symplifica.com');
+//    }
 
     public function sendResettingEmailMessage(UserInterface $user)
     {
@@ -79,45 +216,44 @@ class TwigSwiftMailer implements MailerInterface
         return $this->sendMessage($template, $context, $this->parameters['from_email']['resetting'], $user->getEmail());
     }
 
-    public function sendReminderEmailMessage(UserInterface $user, $toEmail)
-    {
-        $template = $this->parameters['template']['reminder'];
-        $context = array(
-            'user' => $user,
-            'subject' => 'Documentos necesarios para el registro',
-            'toEmail' => $toEmail
-        );
+//    public function sendReminderEmailMessage(UserInterface $user, $toEmail)
+//    {
+//        $template = $this->parameters['template']['reminder'];
+//        $context = array(
+//            'user' => $user,
+//            'subject' => 'Documentos necesarios para el registro',
+//            'toEmail' => $toEmail
+//        );
+//
+//        return $this->sendMessage($template, $context, 'registro@symplifica.com' ,$toEmail);
+//    }
 
-        return $this->sendMessage($template, $context, 'registro@symplifica.com' ,$toEmail);
-    }
+//    public function sendReminderPayEmailMessage(User $user , $days)
+//    {
+//        $to = $user->getEmail();
+//        $template = $this->parameters['template']['remindNovelty'];
+//        $context = array(
+//            'toEmail' => $user->getEmail(),
+//            'subject'=> "Recordatorio Agregar Novedades",
+//            'dias' => $days,
+//            'userName' => $user->getPersonPerson()->getFullName(),
+//        );
+//        return $this->sendMessage($template,$context,'registro@symplifica.com', $to);
+//    }
 
-    public function sendReminderPayEmailMessage(User $user , $days)
-    {
-        $to = $user->getEmail();
-        $template = $this->parameters['template']['remindNovelty'];
-        $context = array(
-            'toEmail' => $user->getEmail(),
-            'user' => $user,
-            'subject'=> "Recordatorio Agregar Novedades",
-            'dias' => $days,
-            'userName' => $user->getPersonPerson()->getFullName(),
-        );
-        return $this->sendMessage($template,$context,'registro@symplifica.com', $to);
-    }
-
-    public function sendLastReminderPayEmailMessage(User $user , $days)
-    {
-        $to = $user->getEmail();
-        $template = $this->parameters['template']['lastRemindNovelty'];
-        $context = array(
-            'toEmail' => $user->getEmail(),
-            'user' => $user,
-            'subject'=> "Recordatorio Agregar Novedades",
-            'dias' => $days,
-            'userName' => $user->getPersonPerson()->getFullName(),
-        );
-        return $this->sendMessage($template,$context,'registro@symplifica.com', $to);
-    }
+//    public function sendLastReminderPayEmailMessage(User $user , $days)
+//    {
+//        $to = $user->getEmail();
+//        $template = $this->parameters['template']['lastRemindNovelty'];
+//        $context = array(
+//            'toEmail' => $user->getEmail(),
+//            'user' => $user,
+//            'subject'=> "Recordatorio Agregar Novedades",
+//            'dias' => $days,
+//            'userName' => $user->getPersonPerson()->getFullName(),
+//        );
+//        return $this->sendMessage($template,$context,'registro@symplifica.com', $to);
+//    }
     
     public function sendWelcomeEmailMessage(UserInterface $user)
     {
@@ -167,6 +303,7 @@ class TwigSwiftMailer implements MailerInterface
         );
         return $this->sendMessage($template,$context,$this->parameters['from_email']['confirmation'], $to);
     }
+
     public function sendDiasHabilesMessage(User $user,EmployerHasEmployee $eHE){
         $to = $user->getEmail();
         $template = $this->parameters['template']['diashabiles'];
@@ -224,7 +361,51 @@ class TwigSwiftMailer implements MailerInterface
         );
         return $this->sendMessage($template,$context,'registro@symplifica.com', $to);
     }
-    
+
+//    public function sendSuccesRecollectMessage(User $user,$fechaRecaudo,$value,$dis,$path)
+//    {
+//        $to = $user->getEmail();
+//        $template = $this->parameters['template']['succesRecollect'];
+//        $context = array(
+//            'document'=>'Factura'.date_format($fechaRecaudo,'d-m-y H:i:s').'.pdf',
+//            'toEmail' => $user->getEmail(),
+//            'user' => $user,
+//            'subject'=> "Exito Recaudo",
+//            'userName' => $user->getPersonPerson()->getFullName(),
+//            'fechaRecaudo' => $fechaRecaudo,
+//            'value'=>$value
+//        );
+//        return $this->sendMessage($template,$context,'registro@symplifica.com', $to,$path);
+//    }
+
+//    public function sendFailRecollectMessage(User $user,$fechaRecaudo,$value)
+//    {
+//        $to = $user->getEmail();
+//
+//        $context = array(
+//            'toEmail' => $user->getEmail(),
+//            'user' => $user,
+//            'subject'=> "Fallo Recaudo",
+//            'userName' => $user->getPersonPerson()->getFullName(),
+//            'fechaRecaudo' => $fechaRecaudo,
+//            'value'=>$value,
+//            'phone'=>$user->getPersonPerson()->getPhones()->first()->getPhoneNumber()
+//
+//        );
+//        return $this->sendMessage($template,$context,'registro@symplifica.com', $to);
+//    }
+
+    public function sendTestEmailsMessage($context)
+    {
+        $path = null;
+        $template = $this->parameters['template'][$context['template']];
+        if($context['path']){
+            $path = $context['path'];
+        }
+        $to = $context['toEmail'];
+        return $this->sendMessage($template,$context,'registro@symplifica.com', $to,$path);
+    }
+
     /**
      * @param string $templateName
      * @param array  $context
@@ -240,6 +421,7 @@ class TwigSwiftMailer implements MailerInterface
         $textBody = $template->renderBlock('body_text', $context);
         $htmlBody = $template->renderBlock('body_html', $context);
         $message ="";
+
         if($fromEmail==$this->parameters['from_email']['confirmation'] or $fromEmail ==$this->parameters['from_email']['resetting']){
             $message = \Swift_Message::newInstance()
                 ->setSubject($subject)
@@ -255,16 +437,15 @@ class TwigSwiftMailer implements MailerInterface
                 ->setPriority(1);
         }
 
-        if ($path) {
-            $message->attach(\Swift_Attachment::fromPath($path));
-        }
         if (!empty($htmlBody)) {
             $message->setBody($htmlBody, 'text/html')
                 ->addPart($textBody, 'text/plain');
         } else {
             $message->setBody($textBody, 'text/plain');
         }
-
+        if ($path) {
+            $message->attach(Swift_Attachment::fromPath(getcwd().'/'.$path)->setFilename($context['documentName']));
+        }
         return $this->mailer->send($message);
     }
 

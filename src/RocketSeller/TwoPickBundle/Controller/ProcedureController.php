@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use DateTime;
+use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\DocumentType;
 use RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity;
@@ -28,6 +29,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 class ProcedureController extends Controller
 {
 	use EmployeeMethodsTrait;
+
 	/**
 	 * Funcion que carga la pagina de tramites para el backoffice
 	 * Muestra un acceso directo a tramites pendientes de:
@@ -36,11 +38,18 @@ class ProcedureController extends Controller
 	 *
 	 * @return Response /backoffice/procedures
      */
-	public function indexAction()
+	public function indexAction(Request $request)
     {
 		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
-		$procedures = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:RealProcedure')->findAll();
-		
+        $order = ($request->query->get('order')) ? $request->query->get('order') : 'Name';
+        switch($order){
+            case 'Name':
+                $param = 'employerEmployer.personPerson.fullName';
+                $order = ($request->query->get('orderByName'))?$request->query->get('orderByName') : 'DESC';
+                break;
+        }
+		$procedures = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:RealProcedure')->findAll(array($param=>$order));
+
 		return $this->render(
             '@RocketSellerTwoPick/BackOffice/procedures.html.twig',array('procedures'=>$procedures)
         );

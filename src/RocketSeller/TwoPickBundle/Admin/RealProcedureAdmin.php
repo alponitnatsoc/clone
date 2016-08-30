@@ -44,10 +44,6 @@ class RealProcedureAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('userUser', 'sonata_type_model_list', array(
-                ), array(
-                    'placeholder' => 'No person selected'
-                ))
             ->add('procedureTypeProcedureType', 'sonata_type_model_list', array(
                 ), array(
                     'placeholder' => 'No person selected'

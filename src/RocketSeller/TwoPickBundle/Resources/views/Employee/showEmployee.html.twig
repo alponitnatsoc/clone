@@ -341,7 +341,7 @@
                               </div>
                               <div class="col-sm-11">
                                 <h4 style="font-weight: bold;color: #00858C;">Copia firmada del contrato</h4>
-                                <p>Consulta aquí la copia digitalizada del contrato que guardaste en el sistema el día {{ contractDate }}.
+                                <p>Consulta aquí la copia digitalizada del contrato que guardaste en el sistema el día {{ contractDate|localizeddate('long', 'none', 'es-CO') }}.
                                   <a href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':contractEmployee.idDocument}) }}" class="notAjax" target="_blank">
                                   <strong>&#10095; Descargar contrato</strong></a></p>
                               </div>

@@ -70,6 +70,12 @@ class User extends BaseUser
         $this->code = substr(md5(uniqid(rand(), true)), 0, 8);
         $this->purchaseOrders = new \Doctrine\Common\Collections\ArrayCollection();
         $this->promotionCodes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->realProcedure = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->action = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->devices = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->payments = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->invitations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->referrals = new \Doctrine\Common\Collections\ArrayCollection();
         // your own logic
     }
 

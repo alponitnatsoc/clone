@@ -412,17 +412,33 @@ class Employee
      */
     public function getEmployeeHasUnfinishedActions($idEmployer)
     {
+
         $actions=$this->getPersonPerson()->getAction();
         /** @var Action $action */
         if($actions->isEmpty()){
             $this->employeeHasUnfinishedActions = 0;
         }else{
             $this->employeeHasUnfinishedActions = 0;
+            $new = false;
+            $error = false;
             foreach($actions as $action){
-                if ($action->getStatus() === "Nuevo" and $action->getUserUser()->getPersonPerson()->getEmployer()->getIdEmployer()==$idEmployer){
-                    $this->setEmployeeHasUnfinishedActions(1);
-                    return $this->employeeHasUnfinishedActions;
+                if ($action->getStatus() == "Nuevo" and $action->getUserUser()->getPersonPerson()->getEmployer()->getIdEmployer()==$idEmployer){
+                    $new = true;
+//                    $this->setEmployeeHasUnfinishedActions(1);
+//                    return $this->employeeHasUnfinishedActions;
                 }
+                if ($action->getStatus() == "Error" and $action->getUserUser()->getPersonPerson()->getEmployer()->getIdEmployer()==$idEmployer){
+                    $error = true;
+//                    $this->setEmployeeHasUnfinishedActions(2);
+//                    return $this->employeeHasUnfinishedActions;
+                }
+            }
+            if($error){
+                $this->setEmployeeHasUnfinishedActions(2);
+                return $this->employeeHasUnfinishedActions;
+            }elseif ($new){
+                $this->setEmployeeHasUnfinishedActions(1);
+                return $this->employeeHasUnfinishedActions;
             }
         }
         return $this->employeeHasUnfinishedActions;

@@ -885,7 +885,7 @@ class Person
 
     public function __toString()
     {
-        return (string) $this->names;
+        return (string) $this->getFullName();
     }
 
     /**

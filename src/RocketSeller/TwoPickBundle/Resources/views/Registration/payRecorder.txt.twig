@@ -1,5 +1,5 @@
 {% trans_default_domain 'FOSUserBundle' %}
-{% block subject %}{% autoescape false %}Repota novedades de tu empleado{% endautoescape %}{% endblock %}
+{% block subject %}{% autoescape false %}Reporta novedades de tu empleado{% endautoescape %}{% endblock %}
 {% block body_html %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -45,7 +45,7 @@
                 <div style="font-size: 30px; font-family: 'Open Sans', sans-serif; font-weight: 300; color: #858688; width: 70%; margin: 0 auto">
                   {{ userName }}
                 </div><br /><br /><br />
-                <div style="text-align:left;font-size: 20px; font-family: 'Open Sans', sans-serif; font-weight: 700; color: #5D5E5E;width: 70%;margin: 0 auto;">Cuéntanos si algunas de estas novedades se han presentado con tu empleado {% if dias == 2 %}quincenal{% endif %} durante este periodo:</div><br /><br />
+                <div style="text-align:left;font-size: 20px; font-family: 'Open Sans', sans-serif; font-weight: 700; color: #5D5E5E;width: 70%;margin: 0 auto;">Cuéntanos si algunas de estas novedades se han presentado con tu empleado {% if days == 2 %}quincenal{% endif %} durante este periodo:</div><br /><br />
                 <div style="text-align:left;font-size: 15px; font-style: italic; font-family: 'Open Sans', sans-serif; font-weight: 100; color: #858688;width:80%;margin:0 auto">
                     <div style="text-align:center;border:1px solid #CCC;padding:10px 20px;border-radius:5px"><strong>
                         - Incapacidades<br> - Trabajó más o menos días de lo pactado<br>
@@ -62,7 +62,7 @@
                     <br><br>
 
 <strong>Si no tienes novedades</strong> da clic al botón "Ir a Symplifica", y sigue el proceso de pago.<br><br>
-Te recordamos que el <strong>plazo máximo</strong> para reportar novedades de tus empleados {% if dias == 2 %}quincenales{% endif %} es el día <strong>{% if  dias == 3%}22{% else %}12{% endif %}</strong> de este mes.<br><br>
+Te recordamos que el <strong>plazo máximo</strong> para reportar novedades de tus empleados {% if days == 2 %}quincenales{% endif %} es el día <strong>{% if  days == 3%}22{% else %}12{% endif %}</strong> de este mes.<br><br>
 </div><br /><br />
                   <a style="text-decoration:none" href="https://beta.symplifica.com/payroll"><div style="margin: 0 auto;font-size: 20px;font-family: 'Open Sans', sans-serif;color: #ffffff;text-align: center; width: 200px;background: #DF9136;padding: 5px 0;">
                 Ir a Symplifica

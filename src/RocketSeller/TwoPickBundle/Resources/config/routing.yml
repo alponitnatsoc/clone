@@ -189,3 +189,7 @@ back_employer_menu:
 back_person_cvs_export:
     path:         /backoffice/export/excel/{idAction}
     defaults:     { _controller: RocketSellerTwoPickBundle:Export:generateCsvByAction }
+
+back_test_email:
+    path:         /backoffice/test/email
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:testEmail}

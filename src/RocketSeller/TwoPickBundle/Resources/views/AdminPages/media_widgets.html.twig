@@ -1,0 +1,53 @@
+{% block sonata_media_type_widget %}
+    {% if value is not empty and value.providerReference %}
+        <div class="form-group">
+            {% if value.documentDocument is defined %}
+                {% set path =  value.documentDocument.path %}
+                {% if path is defined %}
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+                    <script>
+                        $(document).ready(function(){
+                            $("#hide{{ value.documentDocument.idDocument }}").click(function(){
+                                $("#algo{{ value.documentDocument.idDocument }}").hide();
+                                $("#hide{{ value.documentDocument.idDocument }}").hide();
+                                $("#show{{ value.documentDocument.idDocument }}").show();
+                            });
+                            $("#show{{ value.documentDocument.idDocument }}").click(function(){
+                                $("#algo{{ value.documentDocument.idDocument }}").show();
+                                $("#hide{{ value.documentDocument.idDocument }}").show();
+                                $("#show{{ value.documentDocument.idDocument }}").hide();
+                            });
+                            $("#hideEdit{{ value.documentDocument.idDocument }}").click(function(){
+                                $("#algomas{{ value.documentDocument.idDocument }}").hide();
+                                $("#hideEdit{{ value.documentDocument.idDocument }}").hide();
+                                $("#showEdit{{ value.documentDocument.idDocument }}").show();
+                            });
+                            $("#showEdit{{ value.documentDocument.idDocument }}").click(function(){
+                                $("#algomas{{ value.documentDocument.idDocument }}").show();
+                                $("#hideEdit{{ value.documentDocument.idDocument }}").show();
+                                $("#showEdit{{ value.documentDocument.idDocument }}").hide();
+                            });
+                        });
+                    </script>
+                    <a id="hide{{ value.documentDocument.idDocument }}" class="btn" style="display: none;margin-left: 20px">Ocultar Documento</a>
+                    <a id="show{{ value.documentDocument.idDocument }}" class="btn" style="margin-left: 20px">Mostrar Documento</a>
+                    <div id ="algo{{ value.documentDocument.idDocument }}" style="display: none" >
+                        <embed width="900" height="1200" src= {{ path  }}  alt=”pdf”
+                               pluginspage=”//www.adobe.com/products/acrobat/readstep2.html”>
+                        </embed>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div><br/>
+
+        <div class="span3 pull-left">
+            {{ 'link_media'|trans({}, 'SonataMediaBundle') }}
+            {{ block('form_widget') }}
+        </div>
+    {% else %}
+        <div class="span3 pull-left">
+            {{ 'link_media'|trans({}, 'SonataMediaBundle') }}
+            {{ block('form_widget') }}
+        </div>
+    {% endif %}
+{% endblock sonata_media_type_widget %}

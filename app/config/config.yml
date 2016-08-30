@@ -40,7 +40,7 @@ twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
     form:
-        resources: ['bootstrap_3_layout.html.twig', 'SonataMediaBundle:Form:media_widgets.html.twig']
+        resources: ['bootstrap_3_layout.html.twig', 'RocketSellerTwoPickBundle:AdminPages:media_widgets.html.twig']
     globals:
         fos_csrf_provider: "@form.csrf_provider"
         symplifica_info: "%symplifica_info%"
@@ -302,6 +302,15 @@ sonata_media:
             download:
                 strategy: sonata.media.security.connected_strategy
                 mode: http
+        backoffice:
+            providers:
+                - sonata.media.provider.image
+                - sonata.media.provider.file
+            formats:
+                preview:   { width: 100, quality: 100}
+            download:
+                strategy: sonata.media.security.connected_strategy
+                mode: http
     cdn:
         server:
             path: /uploads/media # http://media.sonata-project.org/
@@ -314,6 +323,28 @@ sonata_media:
     providers:
         image:
             resizer: sonata.media.resizer.square
+sonata_admin:
+
+#    dashboard:
+#        groups:
+#            app.admin.group.user:
+#                label: Usuarios
+#                label_catalogue: RocketSeller\TwoPickBundle
+#                items: ~
+#                item_adds:
+#                    - sonata.admin.user
+#                    - sonata.admin.person
+#                roles: [ ROLE_BACK_OFFICE , ROLE_ADMIN]
+#
+#            app.admin.group.person:
+#                label: Person
+#                label_catalogue: RocketSeller\TwoPickBundle
+#                items: ~
+#                item_adds:
+#                roles: [ ROLE_ADMIN ]
+
+
+
 vresh_twilio:
     #(Required) Your Account SID from www.twilio.com/user/account
     sid: 'AC1cbb80c722300b240bce151c107f927a'

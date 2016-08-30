@@ -23,7 +23,7 @@ use RocketSeller\TwoPickBundle\Entity\ActionError;
 use RocketSeller\TwoPickBundle\Entity\Action;
 use RocketSeller\TwoPickBundle\Traits\SubscriptionMethodsTrait;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Validator\Constraints\DateTime;
+use DateTime;
 
 
 class BackOfficeController extends Controller
@@ -42,12 +42,18 @@ class BackOfficeController extends Controller
      */
     public function indexAction()
     {
-        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        if(!$this->isGranted('ROLE_BACK_OFFICE')){
+            $this->createAccessDeniedException();
+        }
+
         return $this->render('RocketSellerTwoPickBundle:BackOffice:index.html.twig');
     }
 
     public function generateCodesAction($amount)
     {
+        /** @var User $user */
+        $user = $this->getUser();
+        $user->getRealProcedure();
 
         $codesTypeRepo= $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCodeType");
         $em=$this->getDoctrine()->getManager();
@@ -1106,10 +1112,135 @@ class BackOfficeController extends Controller
               $this->addToHighTech($singleUser);
             }
           }
-	        
-          return $this->redirectToRoute("back_office");
-        }
 
-        return $this->redirectToRoute("show_dashboard");
+            return $this->redirect($this->generateUrl('back_office'));
+        }
+        return $this->redirect($this->generateUrl('show_dashboard'));
+    }
+
+    public function testEmailAction(){
+        /** test help Email */
+//        $context=array(
+//            'emailType'=>'help',
+//            'name' => 'Andrés Felipe',
+//            'fromEmail' =>'andres.ramirez@symplifica.com',
+//            'message' =>'Prueba email de ayuda',
+//            'ip'=> '127.0.0.1',
+//            'phone'=>'3009999999'
+//        );
+//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test reminderPay Email */
+//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage(array('emailType'=>'reminderPay','toEmail'=>'andres.ramirez@symplifica.com','userName'=>'Andrés Felipe','days'=>3));
+
+        /** test lastReminderPay Email */
+//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage(array('emailType'=>'lastReminderPay','toEmail'=>'andres.ramirez@symplifica.com','userName'=>'Andrés Felipe','days'=>2));
+
+        /** test reminder Email */
+//       $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage(array('emailType'=>'reminder','toEmail'=>'andres.ramirez@symplifica.com'));
+
+        /** test succesRecollect Email */
+//        /** @var \DateTime $date */
+//        $date = new DateTime();
+//        $date->setTimezone(new \DateTimeZone('America/Bogota'));
+//        $params = array(
+//            'ref'=> 'factura',
+//            'id' => 3,
+//            'type' => 'pdf',
+//            'attach' => null
+//        );
+//        $documentResult = $this->forward('RocketSellerTwoPickBundle:Document:downloadDocuments', $params);
+//        $file =  $documentResult->getContent();
+//        if (!file_exists('uploads/temp/facturas')) {
+//            mkdir('uploads/temp/facturas', 0777, true);
+//        }
+//        $path = 'uploads/temp/facturas/'.$this->getUser()->getPersonPerson()->getIdPerson().'_tempFacturaFile.pdf';
+//        file_put_contents($path, $file);
+//        $context = array(
+//            'emailType'=>'succesRecollect',
+//            'toEmail' => 'andres.ramirez@symplifica.com',
+//            'userName' => 'Andrés Felipe',
+//            'fechaRecaudo' => $date,
+//            'value'=>40690.93,
+//            'path'=>$path,
+//            'documentName'=>'Factura '.date_format($date,'d-m-y H:i:s').'.pdf',
+//        );
+//
+//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+        /** test failRecollect Email */
+//        $context=array(
+//            'emailType'=>'failRecollect',
+//            'userEmail'=>'algo@alg.com',
+//            'toEmail'=>'andres.ramirez@symplifica.com',
+//            'userName'=>'Andrés Felipe',
+//            'rejectionDate'=>new DateTime(),
+//            'value' => 230750.23,
+//            'phone'=>'3183941645'
+//        );
+//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test regectionCollect Email */
+//        $context=array(
+//            'emailType'=>'regectionCollect',
+//            'userEmail'=>'algo@algo.com',
+//            'toEmail'=>'andres.ramirez@symplifica.com',
+//            'userName'=>'Andrés Felipe',
+//            'rejectionDate'=>new DateTime(),
+//            'value' => 230750.23,
+//            'phone'=>'3183941645'
+//        );
+//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+        /** test regectionDispersion Email */
+//        $context=array(
+//            'emailType'=>'regectionDispersion',
+//            'userEmail'=>'algo@algo.com',
+//            'toEmail'=>'andres.ramirez@symplifica.com',
+//            'userName'=>'Andrés Felipe',
+//            'rejectionDate'=>new DateTime(),
+//            'phone'=>'3183941645'
+//        );
+//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+        /** test succesfulDispersion Eamil */
+//        $context=array(
+//            'emailType'=>'succesDispersion',
+//            'toEmail'=>'andres.ramirez@symplifica.com',
+//            'userName'=>'Andrés Felipe Ramírez',
+//        );
+//        $params = array(
+//            'ref'=> 'comprobante',
+//            'id' => 4,
+//            'type' => 'pdf',
+//            'attach' => null
+//        );
+//        $documentResult = $this->forward('RocketSellerTwoPickBundle:Document:downloadDocuments', $params);
+//        $file =  $documentResult->getContent();
+//        if (!file_exists('uploads/temp/comprobantes')) {
+//            mkdir('uploads/temp/comprobantes', 0777, true);
+//        }
+//        $path = 'uploads/temp/comprobantes/'.'2'.'_tempComprobanteFile.pdf';
+//        file_put_contents($path, $file);
+//        $context['path']=$path;
+//        $context['comprobante']=true;
+//        $context['documentName']='Comprobante '.date_format(new DateTime(),'d-m-y H:i:s').'.pdf';
+//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+        /** test failDispersion Eamil */
+//        $context=array(
+//            'emailType'=>'failDispersion',
+//            'userEmail'=>'algo@algo.com',
+//            'toEmail'=>'andres.ramirez@symplifica.com',
+//            'userName'=>'Andrés Felipe'
+//        );
+//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+        /** test addPayMethod */
+//        $context = array(
+//            'emailType'=>'validatePayMethod',
+//            'toEmail'=>'andres.ramirez@symplifica.com',
+//            'userName'=>'Andrés Felipe Ramírez',
+//            'starDate'=>new DateTime(),
+//            'payMethod'=>'Tarjeta de Credito'
+//        );
+//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        return $this->redirect($this->generateUrl('back_office'));
     }
 }
