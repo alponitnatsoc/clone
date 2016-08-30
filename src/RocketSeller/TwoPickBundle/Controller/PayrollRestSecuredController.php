@@ -271,6 +271,9 @@ class PayrollRestSecuredController extends FOSRestController
                 }
                 $permittedDate=new DateTime(json_decode($insertionAnswer->getContent(),true)['date']);
                 $tempPOD->setDateToPay($permittedDate);
+	              $em->persist($tempPOD);
+	              $em->flush();
+	            
                 //here starts the mora
                 //TODO leer el comentario de abajo
                 // esta mora se calcula por entidad por empleado, idealmente se debería calcular por planilla, lo que
@@ -838,8 +841,8 @@ class PayrollRestSecuredController extends FOSRestController
             /** @var PilaTax $taxForPayroll */
             $taxForPayroll=$pilaTaxRepo->findOneBy(
                 array(
-                    'month'=> $payrollNow->getMonth(),
-                    'year'=> $payrollNow->getYear()));
+                    'month'=> intval($payrollNow->getMonth()),
+                    'year'=> intval($payrollNow->getYear())));
             $tax=$taxForPayroll->getTax();
             $payrollsPila=$tempPOD->getPayrollsPila();
             $tempTotal=0;
