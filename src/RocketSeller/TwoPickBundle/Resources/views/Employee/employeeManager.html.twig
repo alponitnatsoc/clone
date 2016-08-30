@@ -72,7 +72,7 @@
                         </div>
                         <div class="col-xxs-4 col-xs-4 col-sm-2 actionButton">
                             {% if employeeStatus <= 2 %}
-                                {%  if employee.percentage == 100  and employeeStatus == 0 %}
+                                {%  if employee.percentage is defined  and employee.percentage == 100  and employeeStatus == 0 %}
                                     <a href="/manage/employee/{{employee.idEmployee}}">Ver detalles</a>
                                 {%  else %}
                                     <a href="/register/employee/{{employee.idEmployee}}">Editar</a>
