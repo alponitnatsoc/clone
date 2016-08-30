@@ -117,6 +117,15 @@ class Contract
     private $weekWorkableDays;
 
     /**
+     * 0 Pending
+     * 1 Uploaded
+     * 2 Error
+     * 3 Validated
+     * @ORM\Column(type="integer", nullable=TRUE)
+     */
+    private $backStatus=0;
+
+    /**
      * @var \RocketSeller\TwoPickBundle\Entity\EmployeeContractType
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EmployeeContractType")
      * @ORM\JoinColumns({

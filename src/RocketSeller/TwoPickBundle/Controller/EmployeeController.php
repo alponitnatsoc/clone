@@ -89,8 +89,6 @@ class EmployeeController extends Controller
      */
     public function changeStateEmployeeAction($id)
     {
-//$user = $this->getUser();
-        /** @var Contract $contract */
         $employerEmployee = $this->getEmployerEmployee($id);
         if($employerEmployee->getState()==0){
 	        if($employerEmployee->getExistentSQL() == true){
