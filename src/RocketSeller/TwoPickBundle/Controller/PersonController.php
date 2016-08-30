@@ -2,6 +2,7 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
 use RocketSeller\TwoPickBundle\Entity\EntityType;
+use RocketSeller\TwoPickBundle\Entity\LandingRegistration;
 use RocketSeller\TwoPickBundle\Entity\Phone;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\Person;
@@ -54,6 +55,11 @@ class PersonController extends Controller
         if($people->getPhones()->count()==0||$people->getPhones()==null){
             $phone=new Phone();
             $people->addPhone($phone);
+            $landingRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:LandingRegistration");
+            /** @var LandingRegistration $landingReg */
+            $landingReg = $landingRepo->findOneBy(array('email'=>$user->getEmail()));
+            if($landingReg!=null)
+                $phone->setPhoneNumber($landingReg->getPhone());
         }
         $entityTypeRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EntityType");
         $entityTypes = $entityTypeRepo->findAll();
