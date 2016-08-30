@@ -56,11 +56,19 @@
                         </div>
                         <div class="col-xxs-3 col-xs-3 col-sm-2 employeeItems grisoscurofont bLeft bRight">
                             <span class="bold">Salario</span><br/>
-                            <span>{{ employee.salary }}</span>
+                            {%  if employee.salary is defined %}
+                                <span>{{ employee.salary }}</span>
+                            {% else  %}
+                                <span>-</span>
+                            {%  endif %}
                         </div>
                         <div class="col-xxs-3 col-xs-3 col-sm-2 employeeItems grisoscurofont bRight">
                             <span class="bold">Tipo de contrato</span><br/>
-                            <span>{{ employee.contractType }}</span>
+                            {%  if employee.contractType is defined %}
+                                <span>{{ employee.contractType }}</span>
+                            {% else  %}
+                                <span>-</span>
+                            {%  endif %}
                         </div>
                         <div class="col-xxs-4 col-xs-4 col-sm-2 actionButton">
                             {% if employeeStatus <= 2 %}
