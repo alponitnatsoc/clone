@@ -94,7 +94,7 @@ class EmployeeController extends Controller
         $employerEmployee = $this->getEmployerEmployee($id);
         if($employerEmployee->getState()==0){
 	        if($employerEmployee->getExistentSQL() == true){
-		        $employerEmployee->setState(5);
+		        $employerEmployee->setState(4);
 	        }
 	        else{
 		        $employerEmployee->setState(2);
