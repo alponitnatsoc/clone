@@ -206,6 +206,7 @@
 						</table>
 					<div style="margin-top:10px; margin-bottom:20px; text-align:center;">
 						{% if employerHasEmployee.state == 4 %}
+							<a class="btn btn-bitbucket notAjax" style="margin-bottom: 20px" href="{{path('export_all_documents',{'idAction':act.idAction})}}">Descargar Documentos</a>
 							<p> proceso de: {{ employerHasEmployee.employeeEmployee.personPerson.names}} terminado</p>
 						{% elseif employerHasEmployee.state == 3 and employerHasEmployee.existentSQL == 1 %}
 							<a class="btn btn-orange notAjax" href="{{ path('complete_employee',{'idEmployerHasEmployee':employerHasEmployee.idEmployerHasEmployee,'procedureId':procedure.idProcedure })}}"> Terminar proceso </a>
