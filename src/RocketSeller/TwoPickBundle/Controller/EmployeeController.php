@@ -93,7 +93,12 @@ class EmployeeController extends Controller
         /** @var Contract $contract */
         $employerEmployee = $this->getEmployerEmployee($id);
         if($employerEmployee->getState()==0){
-            $employerEmployee->setState(2);
+	        if($employerEmployee->getExistentSQL() == true){
+		        $employerEmployee->setState(5);
+	        }
+	        else{
+		        $employerEmployee->setState(2);
+	        }
         }elseif ($employerEmployee->getState()>0){
             $employerEmployee->setState(0);
 
@@ -281,7 +286,8 @@ class EmployeeController extends Controller
                             "fullName" => $ehE->getEmployeeEmployee()->getPersonPerson()->getFullName(),
                             "stateRegister" => $ehE->getEmployeeEmployee()->getRegisterState(),
 	                          "contractType" => $contract->getContractTypeContractType()->getName(),
-	                          "salary" => $salaryString
+	                          "salary" => $salaryString,
+	                          "percentage" => $ehE->getEmployeeEmployee()->getRegisterState()
 	                          
                         );
                         break;
@@ -628,17 +634,17 @@ class EmployeeController extends Controller
             $contractDate = $contractEmployee->getMediaMedia()->getUpdatedAt();
         }
         $entidades = array();
-        foreach ($entities as $entity) {
-            if ($entity->getEntityEntity()->getEntityTypeEntityType()->getName() == "EPS") {
+	    foreach ($entities as $entity) {
+            if ($entity->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "EPS") {
                 $entidades["EPS"] = $entity->getEntityEntity();
-            } elseif ($entity->getEntityEntity()->getEntityTypeEntityType()->getName() == "Pension") {
+            } elseif ($entity->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "AFP") {
                 $entidades["Pension"] = $entity->getEntityEntity();
             }
         }
         foreach ($entitiesEmployer as $entity) {
-            if ($entity->getEntityEntity()->getEntityTypeEntityType()->getName() == "ARL") {
+            if ($entity->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "ARP") {
                 $entidades["ARL"] = $entity->getEntityEntity();
-            } elseif ($entity->getEntityEntity()->getEntityTypeEntityType()->getName() == "CC Familiar") {
+            } elseif ($entity->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "PARAFISCAL") {
                 $entidades["CC"] = $entity->getEntityEntity();
             }
         }
