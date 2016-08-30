@@ -245,5 +245,4 @@ function disableLockedFields(){
     $("#form_birthCountry").prop("disabled", true);
     $("#form_birthDepartment").prop("disabled", true);
     $("#form_birthCity").prop("disabled", true);
-
 }
