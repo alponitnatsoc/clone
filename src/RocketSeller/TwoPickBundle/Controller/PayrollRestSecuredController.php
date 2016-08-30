@@ -840,8 +840,8 @@ class PayrollRestSecuredController extends FOSRestController
             /** @var PilaTax $taxForPayroll */
             $taxForPayroll=$pilaTaxRepo->findOneBy(
                 array(
-                    'month'=> $payrollNow->getMonth(),
-                    'year'=> $payrollNow->getYear()));
+                    'month'=> intval($payrollNow->getMonth()),
+                    'year'=> intval($payrollNow->getYear())));
             $tax=$taxForPayroll->getTax();
             $payrollsPila=$tempPOD->getPayrollsPila();
             $tempTotal=0;
