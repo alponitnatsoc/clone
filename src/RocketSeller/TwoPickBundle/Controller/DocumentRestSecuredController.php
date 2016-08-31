@@ -26,6 +26,146 @@ class DocumentRestSecuredController extends FOSRestController
 {
 
   /**
+   * upload single page of document (image)
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = "upload single page of document (image)",
+   *   statusCodes = {
+   *     200 = "Created successfully",
+   *     400 = "Bad Request",
+   *   }
+   * )
+   *
+   * @param paramFetcher $paramFetcher ParamFetcher
+   *
+   * @RequestParam(name="pageImage", nullable=false, strict=true, description="image of a document page (base64)")
+   * @RequestParam(name="entityType", nullable=false, strict=true, description="entity type name")
+   * @RequestParam(name="entityId", nullable=false, strict=true, description="id of the instance of entity type")
+   *
+   * @return View
+   */
+  public function postUploadSinglePageImageAction(ParamFetcher $paramFetcher) {
+      $em = $this->getDoctrine()->getManager();
+
+      $pageImage = $paramFetcher->get('pageImage');
+      $entityType = $paramFetcher->get('entityType');
+      $entityId = $paramFetcher->get('entityId');
+
+
+      $format = null;
+      $len = strlen($pageImage);
+      if (strrpos($pageImage, 'png', (21-$len))) $format = 'png';
+      elseif (strrpos($pageImage, 'jpg', (21-$len))) $format = 'jpg';
+      elseif (strrpos($pageImage, 'jpeg', (21-$len))) $format = 'jpeg';
+
+      if($format == null) {
+          $view = View::create();
+          $view->setStatusCode(400);
+          return $view->setData(array());
+      }
+
+      $img = str_replace("data:image/$format;base64,", '', $pageImage);
+      $img = str_replace(' ', '+', $img);
+      $data = base64_decode($img);
+
+      $hashName= hash('sha256', $pageImage . date("Y.m.d") . date("h:i:sa"));
+
+      $dir = "uploads/tempDocumentPages";
+      if (!file_exists($dir)) {
+        mkdir($dir, 0777, true);
+      }
+      $dir .= "/$entityType";
+      if (!file_exists($dir)) {
+          mkdir($dir, 0777, true);
+      }
+      $dir .= "/$entityId";
+      if (!file_exists($dir)) {
+          mkdir($dir, 0777, true);
+      }
+
+      $path = "$dir/$hashName.$format";
+      file_put_contents($path, $data);
+      $view = View::create();
+      $view->setStatusCode(200);
+
+      return $view->setData(array(
+          'hashName' => "$hashName.$format"
+      ));
+  }
+
+  /**
+   * create document from multiple image pages in pdf format
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = "create document from multiple image pages in pdf format",
+   *   statusCodes = {
+   *     200 = "Created successfully",
+   *     400 = "Bad Request",
+   *   }
+   * )
+   *
+   * @param paramFetcher $paramFetcher ParamFetcher
+   *
+   * @RequestParam(array=true, name="pages", nullable=false, strict=true, description="hash name of document pages")
+   * @RequestParam(name="entityType", nullable=false, strict=true, description="entity type name")
+   * @RequestParam(name="entityId", nullable=false, strict=true, description="id of the instance of entity type")
+   *
+   * @return View
+   */
+  public function postCreateDocumentFromImgPagesAction(ParamFetcher $paramFetcher) {
+      $em = $this->getDoctrine()->getManager();
+
+      $pages = $paramFetcher->get('pages');
+      $entityType = $paramFetcher->get('entityType');
+      $entityId = $paramFetcher->get('entityId');
+
+      $absPath = getcwd();
+      $absPath = str_replace('/', '_', $absPath);
+      $HashNames = "";
+      foreach($pages as $hashName) {
+          if($hashName == null || $hashName == "") {
+            $view = View::create();
+            $view->setStatusCode(400);
+
+            return $view->setData(array());
+          }
+          $path = $absPath . '_uploads_tempDocumentPages_' . $entityType .
+                             '_' . $entityId . '_' . $hashName;
+          $HashNames .= $path . ',';
+      }
+      $params = array(
+          'ref'=> 'joiner',
+          'id' => $HashNames,
+          'type' => 'pdf',
+          'attach' => null
+      );
+      $documentResult = $this->forward('RocketSellerTwoPickBundle:Document:downloadDocuments', $params);
+      $file = $documentResult->getContent();
+      $fileName = "tempFile.pdf";
+      $file_path = "uploads/tempDocumentPages/$fileName";
+      file_put_contents($file_path, $file);
+
+      foreach($pages as $hashName) {
+          $path = "uploads/tempDocumentPages/$entityType/$entityId/$hashName";
+          unlink($path);
+      }
+      // scan for other elements in the folder
+      $dir = "uploads/tempDocumentPages/$entityType/$entityId";
+      foreach(scandir($dir) as $file) {
+          if ('.' === $file || '..' === $file) continue;
+          unlink("$dir/$file");
+      }
+      rmdir($dir);
+
+      $view = View::create();
+      $view->setStatusCode(200);
+
+      return $view->setData(array("fileName" => $fileName));
+  }
+  
+  /**
    * download document <br/>
    *
    * @ApiDoc(
