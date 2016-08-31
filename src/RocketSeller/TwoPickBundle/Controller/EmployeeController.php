@@ -269,11 +269,11 @@ class EmployeeController extends Controller
                     }
                     /** @var Contract $contract */
                     foreach ($contracts as $contract) {
-                    	  $salaryString = "$";
+                    	  $salaryString = 0;
 	                      if($contract->getTimeCommitmentTimeCommitment()->getCode() == "XD"){
-	                      	$salaryString .= $contract->getSalary()/$contract->getWorkableDaysMonth() . " diario";
+	                      	$salaryString = $contract->getSalary()/$contract->getWorkableDaysMonth();
 	                      }elseif ($contract->getTimeCommitmentTimeCommitment()->getCode() ==  "TC"){
-	                      	$salaryString .= $contract->getSalary() . " mensual";
+	                      	$salaryString = $contract->getSalary();
 	                      }
                         $acPayroll = $contract->getActivePayroll();
                         $employeesData[] = array(
@@ -285,7 +285,8 @@ class EmployeeController extends Controller
                             "stateRegister" => $ehE->getEmployeeEmployee()->getRegisterState(),
 	                          "contractType" => $contract->getContractTypeContractType()->getName(),
 	                          "salary" => $salaryString,
-	                          "percentage" => $ehE->getEmployeeEmployee()->getRegisterState()
+	                          "percentage" => $ehE->getEmployeeEmployee()->getRegisterState(),
+	                          "timeCommitment" => $contract->getTimeCommitmentTimeCommitment()->getCode()
 	                          
                         );
                         break;
