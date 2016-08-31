@@ -34,11 +34,12 @@
 											<input id="formcellphone" class="inputFull" type="number" name="cellphone" placeholder="Celular" required><br />
 											<input id="formemail" class="inputFull" type="email" name="email" placeholder="Correo electrónico" required>
 											{{ form_widget(form.save, { 'attr': {'class': 'btn naranja obten'}}) }}
+											<div class="form-group txt-A1-terms">
+											<input type="checkbox" id="chktyc" required />
+											Al registrarme acepto todos los <a href="{{ path('terminos_condiciones') }}" target="_blank">Términos y Condiciones</a>
+											y las <a href="{{ path('politicas_privacidad') }}" target="_blank">Políticas de Privacidad</a>
 										{{ form_end(form) }}
-										<div class="form-group txt-A1-terms">
-								        <input type="checkbox" id="chktyc" required />
-								        Al registrarme acepto todos los <a href="{{ path('terminos_condiciones') }}" target="_blank">Términos y Condiciones</a>
-								        y las <a href="{{ path('politicas_privacidad') }}" target="_blank">Políticas de Privacidad</a>
+
 								    </div>
 									</div>
 								</div>
@@ -336,6 +337,9 @@ $('#video2').click(function(){
 
 	$('#formemail').attr('oninvalid', 'setCustomValidity("El correo escrito no es valido")');
 	$('#formemail').attr('oninput', "setCustomValidity('')");
+
+	$('#chktyc').attr('oninvalid', 'setCustomValidity("Acepta los Términos y Condiciones para continuar")');
+	$('#chktyc').attr('oninput', "setCustomValidity('')");
 
     function numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
