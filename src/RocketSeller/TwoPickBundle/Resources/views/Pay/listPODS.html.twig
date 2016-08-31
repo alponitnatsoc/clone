@@ -36,6 +36,19 @@
           </div>
       </div>
     {% else %}
-        No tienes transacciones en proceso
+    <link rel="stylesheet" type="text/css" href="{{ asset('/../css/pantallas.css') }}"/>
+    <div style="clear: both;height: 60px;"></div>
+    <div id="cont-succesdocs">
+        <div id="texto-succesdocs">
+            <div id="pagoadelantado">
+                <div id="contenidopagoadelando">
+                    <img src="{{ asset('/public/img/landing/benefit7.png') }}" width="80px" height="auto">
+                    <h1 class="azulclarofont bold centrar">No tienes transacciones en proceso</h1>
+                    <p class="light grisclarofont">En el momento en que realices un pago, podras conocer el estado
+                    de la transacción en esta misma pagina <strong>"Transacciones en Proceso"</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
     {% endif %}
 {% endblock %}

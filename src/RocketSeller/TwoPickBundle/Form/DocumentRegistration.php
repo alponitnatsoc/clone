@@ -15,13 +15,12 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class DocumentRegistration extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
         $builder
             ->add('mediaMedia', 'sonata_media_type', array(
-                'label'=> 'algo',
+                'label'=> 'media',
                 'provider' => 'sonata.media.provider.file',
                 'context'  => 'person'
             ))
@@ -33,11 +32,13 @@ class DocumentRegistration extends AbstractType
                 'expanded' => false,
                 'property_path' => 'documentTypeDocumentType'
             ))
-
             ->add('save', 'submit', array(
                 'label' => 'Subir',
-            ));
-        $builder->get('mediaMedia')->add('binaryContent', 'file', ['label' => 'Subir Archivo' , 'translation_domain'=>'messages']);
+            ))
+            ;
+
+//        $builder->get('mediaMedia')->add('galleryHasMedias','sonata_type_collection',array());
+//        $builder->get('mediaMedia')->add('binaryContent', 'file', array('label' => 'Subir Archivo'));
     }
 
 

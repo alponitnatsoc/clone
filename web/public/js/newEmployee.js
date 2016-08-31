@@ -1509,6 +1509,10 @@ function addListeners() {
         e.preventDefault();
         $("#calculatorResultsModal").modal('toggle');
     });
+    $("#link_calculator2").on("click", function (e) {
+        e.preventDefault();
+        $("#calculatorResultsModal").modal('toggle');
+    });
     $('select').filter(function () {
         return this.id.match(/department/);
     }).change(function () {
