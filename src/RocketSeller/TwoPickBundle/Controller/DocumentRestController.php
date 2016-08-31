@@ -224,41 +224,48 @@ class DocumentRestController extends FOSRestController
         );
         $documentResult = $this->forward('RocketSellerTwoPickBundle:Document:downloadDocuments', $params);
         $file = $documentResult->getContent();
-        $file_path = "uploads/tempDocumentPages/tempFile.pdf";
+        $fileName = "tempFile.pdf";
+        $file_path = "uploads/tempDocumentPages/$fileName";
         file_put_contents($file_path, $file);
 
-        $mediaManager = $this->container->get('sonata.media.manager.media');
-        $media = $mediaManager->create();
-        $media->setBinaryContent($file_path);
-        $media->setProviderName('sonata.media.provider.file');
-        $media->setName($document->getName());
-        $media->setProviderStatus(Media::STATUS_OK);
-        $media->setContext('person');
-        $media->setDocumentDocument($document);
-
-        $em->persist($media);
-
-        $notification->setStatus(0);
-        $em->persist($notification);
-
-        $em->flush();
-        unlink($file_path);
-
+        // $mediaManager = $this->container->get('sonata.media.manager.media');
+        // $media = $mediaManager->create();
+        // $media->setBinaryContent($file_path);
+        // $media->setProviderName('sonata.media.provider.file');
+        // $media->setName($document->getName());
+        // $media->setProviderStatus(Media::STATUS_OK);
+        // $media->setContext('person');
+        // $media->setDocumentDocument($document);
+        //
+        // $em->persist($media);
+        //
+        // $notification->setStatus(0);
+        // $em->persist($notification);
+        //
+        // $em->flush();
+        // unlink($file_path);
+        //
         foreach($pages as $hashName) {
             $path = "uploads/tempDocumentPages/$idPerson/$hashName";
             unlink($path);
         }
-        //delete files that are still inside the directory
-        foreach (scandir("uploads/tempDocumentPages/$idPerson") as $file) {
-            if ($file == '.' || $file == '..') continue;
-            unlink("uploads/tempDocumentPages/$idPerson/$file");
+        // scan for other elements in the folder
+        $dir = "uploads/tempDocumentPages/$idPerson";
+        foreach(scandir($dir) as $file) {
+            if ('.' === $file || '..' === $file) continue;
+            unlink("$dir/$file");
         }
+        // //delete files that are still inside the directory
+        // foreach (scandir("uploads/tempDocumentPages/$idPerson") as $file) {
+        //     if ($file == '.' || $file == '..') continue;
+        //     unlink("uploads/tempDocumentPages/$idPerson/$file");
+        // }
         rmdir("uploads/tempDocumentPages/$idPerson");
 
         $view = View::create();
         $view->setStatusCode(200);
 
-        return $view->setData(array());
+        return $view->setData(array("fileName" => $fileName));
     }
 
     /**

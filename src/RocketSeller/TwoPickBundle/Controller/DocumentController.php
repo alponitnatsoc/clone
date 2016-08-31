@@ -258,7 +258,7 @@ use EmployerMethodsTrait;
                             $document->setName($documentType->getName());
                             $document->setDocumentTypeDocumentType($documentType);
                             $document->setStatus(0);
-                            $person->setDocument($document);
+                            $person->setDocumentDocument($document);
 
                         }else{
                             $document = new Document();
@@ -289,7 +289,7 @@ use EmployerMethodsTrait;
                             $document->setName($documentType->getName());
                             $document->setDocumentTypeDocumentType($documentType);
                             $document->setStatus(0);
-                            $person->setDocument($document);
+                            $person->setRutDocument($document);
                         }else{
                             $document = new Document();
                             $document->setName($documentType->getName());
@@ -319,7 +319,7 @@ use EmployerMethodsTrait;
                             $document->setName($documentType->getName());
                             $document->setDocumentTypeDocumentType($documentType);
                             $document->setStatus(0);
-                            $person->setDocument($document);
+                            $person->setBirthRegDocument($document);
                         }else{
                             $document = new Document();
                             $document->setName($documentType->getName());
@@ -349,7 +349,7 @@ use EmployerMethodsTrait;
                             $document->setName($documentType->getName());
                             $document->setDocumentTypeDocumentType($documentType);
                             $document->setStatus(0);
-                            $person->setDocument($document);
+                            $person->setDocumentDocument($document);
                         }else{
                             $document = new Document();
                             $document->setName($documentType->getName());
@@ -500,6 +500,46 @@ use EmployerMethodsTrait;
         }
         return array('document'=>$document,'notification'=>$notification,'personName'=> $name,'documentType'=>$documentType);
     }
+
+    /**
+     * to be called by the api consumed by the mobile app
+     */
+     /**
+      * to be called by the api consumed by the mobile app
+      */
+     public function verifyAndPersitDocumentAction($entityType, $entityId, $docCode, $idNotification, $fileName) {
+       $data = $this->verifyDocument($entityType, $entityId, $docCode, $idNotification);
+
+       /** @var Document $document */
+       $document = $data['document'];
+       /** @var Notification $notification */
+       $notification = $data['notification'];
+       /** @var string $personName */
+       $personName = $data['personName'];
+       /** @var DocumentType $documentType */
+       $documentType = $data['documentType'];
+
+       $absPath = getcwd();
+
+       $file_path = "$absPath/uploads/tempDocumentPages/$fileName";
+       $mediaManager = $this->container->get('sonata.media.manager.media');
+       $media = $mediaManager->create();
+       $media->setBinaryContent($file_path);
+       $media->setProviderName('sonata.media.provider.file');
+       $media->setName($document->getName());
+       $media->setProviderStatus(Media::STATUS_OK);
+       $media->setContext('person');
+       $media->setDocumentDocument($document);
+
+       $document->setMediaMedia($media);
+
+       $this->persitDocument($document ,$notification);
+
+       $view = View::create();
+       $view->setStatusCode(200);
+
+       return $view->setData(array());
+     }
 
     public function addDocModalAction($id, $idDocumentType, Request $request)
     {
