@@ -154,7 +154,11 @@
                             {%  if dayService != 0 %}
                                 <h4 style="color: gray;"><i>Días restantes de servicio gratuito</i></h4>
                                 <div class="service-days">
-                                    <h1>{{ dayService }} días</h1>
+                                    {% if dayService > 1 %}
+                                     <h1>{{ dayService }} días</h1>
+                                    {% else %}
+                                     <h1>{{ dayService }} día</h1>
+                                    {% endif %}
                                 </div>
                             {%  endif %}
 

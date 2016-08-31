@@ -113,7 +113,7 @@ class UserController extends Controller
         $responsePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
         
 	      //get the remaining days of service
-		    $isFreeUntil =  $user->getDateCreated();
+		    $isFreeUntil = new DateTime($user->getDateCreated()->format('Y') . "-" .$user->getDateCreated()->format('m') . "-" . $user->getDateCreated()->format('d'));
 		    $isFreeMonths = $user->getIsFree();
 	    
 		    if($isFreeMonths == 0){
@@ -239,7 +239,8 @@ class UserController extends Controller
                 }
             }
         }
-
+	
+	    dump($user->getDateCreated());
         return $this->render('RocketSellerTwoPickBundle:User:show.html.twig', array(
             'form' => $form->createView(),
             'flag' => $flag,
