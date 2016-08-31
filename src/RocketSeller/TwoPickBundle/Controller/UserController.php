@@ -111,12 +111,21 @@ class UserController extends Controller
         //Get pay Methods from Novo
         $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getClientListPaymentMethods', array('idUser' => $user->getId()), array('_format' => 'json'));
         $responsePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
-        //get the remaining days of service
-        $dEnd  = new DateTime();
-        $dStart = new DateTime();
-        $dStart->setDate($dEnd->format("Y"), $dEnd->format("m")+1, $user->getDayToPay());
-        $dDiff = $dStart->diff($dEnd);
-        //amount to pay and each active employee
+        
+	      //get the remaining days of service
+		    $isFreeUntil =  $user->getDateCreated();
+		    $isFreeMonths = $user->getIsFree();
+	    
+		    if($isFreeMonths == 0){
+			     $dDiff = 0;
+		    }
+		    else{
+			    $isFreeUntil->modify("+" . $isFreeMonths . " months");
+			    $rightNow =  new DateTime();
+			    $dDiff = $rightNow->diff($isFreeUntil);
+		    }
+	    
+	      //amount to pay and each active employee
         $productRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
         /** @var Product $productSymp1 */
         /** @var Product $productSymp2 */
@@ -240,7 +249,7 @@ class UserController extends Controller
             'dayService' => $dDiff->days,
             'eHEToSend' => array('fullTime'=>$fullTime, 'partialTime'=>$atemporel),
             'amountToPay' => $amountToPay,
-            'factDate' => $dStart,
+            //'factDate' => $dStart,
             'dateCreated' => $user->getDateCreated()
         ));
     }
