@@ -124,6 +124,7 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                 $template = $this->parameters['template']['remindNovelty'];
                 return $this->sendMessage($template,$context,'registro@symplifica.com', $context['toEmail']);
                 break;
+            //$context['emailType']=='lastReminderPay'
             case 'lastReminderPay':
                 /** $context must have:
                  * string toEmail
@@ -224,6 +225,8 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                 $template = $this->parameters['template']['backoffice_warning'];
                 return $this->sendMessage($template,$context,'registro@symplifica.com', $context['toEmail']);
                 break;
+            /** tested OK */
+            //$context['emailType']=='liquidation'
             case 'liquidation':
                 /** $context must have:
                  * string toEmail
