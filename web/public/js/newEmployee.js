@@ -47,7 +47,7 @@ function startEmployee() {
                  },*/
                 rules: {
                     "register_employee[person][documentType]": "required",
-                    "register_employee[person][document]": {required: true, number: true},
+                    "register_employee[person][document]": {required: true, number: true, maxlength:10},
                     "register_employee[person][names]": "required",
                     "register_employee[person][lastName1]": "required",
                     "register_employee[person][mainAddress]": "required",
@@ -56,7 +56,12 @@ function startEmployee() {
                     "register_employee[person][city]": "required",
                     "register_employee[personExtra][civilStatus]": "required",
                     "register_employee[personExtra][gender]": "required",
-                    "register_employee[personExtra][documentExpeditionDate]": "required",
+                    "register_employee[personExtra][documentExpeditionDate][day]": "required",
+                    "register_employee[personExtra][documentExpeditionDate][month]": "required",
+                    "register_employee[personExtra][documentExpeditionDate][year]": "required",
+                    "register_employee[person][birthDate][day]": "required",
+                    "register_employee[person][birthDate][month]": "required",
+                    "register_employee[person][birthDate][year]": "required",
                     "register_employee[personExtra][documentExpeditionPlace]": "required",
                     "register_employee[personExtra][birthCountry]": "required",
                     "register_employee[personExtra][birthDepartment]": "required",
@@ -85,7 +90,8 @@ function startEmployee() {
                     "register_employee[person][documentType]": "Por favor selecciona un tipo de documento",
                     "register_employee[person][document]": {
                         required: "Por favor ingresa un documento",
-                        number: "ingresa solamente dígitos"
+                        number: "ingresa solamente dígitos",
+                        maxlength: "El documento no puede ser tan largo"
                     },
                     "register_employee[person][names]": "Por favor ingresa el nombre",
                     "register_employee[person][lastName1]": "Por favor ingresa el primer apellido",
@@ -95,8 +101,13 @@ function startEmployee() {
                     "register_employee[person][city]": "Por favor selecciona una ciudad",
                     "register_employee[personExtra][civilStatus]": "Por favor selecciona una opción",
                     "register_employee[personExtra][gender]": "Por favor selecciona una opción",
-                    "register_employee[personExtra][documentExpeditionDate]": "Por favor selecciona una opción",
-                    "register_employee[personExtra][documentExpeditionPlace]": "Por favor selecciona una opción",
+                    "register_employee[personExtra][documentExpeditionDate][day]": "Por favor selecciona una opción",
+                    "register_employee[personExtra][documentExpeditionDate][month]": "Por favor selecciona una opción",
+                    "register_employee[personExtra][documentExpeditionDate][year]": "Por favor selecciona una opción",
+                    "register_employee[person][birthDate][day]": "Por favor selecciona una opción",
+                    "register_employee[person][birthDate][month]": "Por favor selecciona una opción",
+                    "register_employee[person][birthDate][year]": "Por favor selecciona una opción",
+                    "register_employee[personExtra][documentExpeditionPlace]": "Por favor escribe algún lugar",
                     "register_employee[personExtra][birthCountry]": "Por favor selecciona una opción",
                     "register_employee[personExtra][birthDepartment]": "Por favor selecciona una opción",
                     "register_employee[personExtra][birthCity]": "Por favor selecciona una opción",
@@ -1694,6 +1705,9 @@ function calculator() {
         arlProf = 0.02436;
     }
     else if (arlChoose == 3) { //ninero
+        arlProf = 0.00522;
+    }
+    else if (arlChoose == 4) { //enfermero
         arlProf = 0.00522;
     }
     else if (arlChoose == 5) { //mayordomo

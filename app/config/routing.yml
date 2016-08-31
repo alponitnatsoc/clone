@@ -100,6 +100,10 @@ download_pdf_documents:
     path:      /download/{document}
     defaults:  { _controller: RocketSellerTwoPickBundle:Document:downloadDocumentPDF }
 
+documents_verify_persist:
+    path:      /document/verify/persist/{entityType}/{entityId}/{docCode}/{idNotification}/{fileName}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Document:verifyAndPersitDocument}
+
 show_calculator_form:
     path:      /calculator/calculate
     defaults:  { _controller: RocketSellerTwoPickBundle:Calculator:showCalculator}

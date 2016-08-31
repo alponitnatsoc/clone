@@ -41,8 +41,21 @@ class SubscriptionController extends Controller
             $data = $this->getSubscriptionCost($user, false);
             $constrains = $this->forward('RocketSellerTwoPickBundle:CalculatorRest:getCalculatorConstraints', array('_format' => 'json'));
             $constrains = json_decode($constrains->getContent(), true);
-
-            return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionChoices.html.twig', array(
+	        
+	          $isFreeUntil =  $user->getDateCreated();
+	          $isFreeMonths = $user->getIsFree();
+	
+	          $utils = $this->get('app.symplifica_utils');
+	        
+	          if($isFreeMonths == 0){
+	          	$isFreeUntil = "";
+	          }
+	          else{
+		          $isFreeUntil->modify("+" . $isFreeMonths . " months");
+		          $isFreeUntil = "Gratis hasta " . $utils->month_number_to_name($isFreeUntil->format('m')) . " " . $isFreeUntil->format('d Y');
+	          }
+	        
+	          return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionChoices.html.twig', array(
                 'employees' => $data['employees'],
                 'productos' => $data['productos'], //$this->orderProducts($employees['productos']),
                 'constrains' => isset($constrains['response']['smmlv']) ? $constrains['response'] : false,
@@ -53,7 +66,8 @@ class SubscriptionController extends Controller
                 'total_con_descuentos' => $data['total_con_descuentos'],
                 'descuento_haveRefered' => $data['descuento_haveRefered'],
                 'user' => $user,
-                'startDate' => $startDate
+                'startDate' => $startDate,
+	              'isFreeUntil' => $isFreeUntil
             ));
         } else {
 

@@ -263,7 +263,8 @@
                     <div class="col-sm-12 blockUpData content-input" style="border-bottom: none;">
 
                         <div class="col-sm-12 remember border">
-                            <label class="control-label cajasd" style="font-weight: 600 !important;" >Se deben incluir todos los sitios de trabajo en donde tu empleado ejercerá sus labores.</label>
+                            <label class="control-label cajasd" style="color: #00858c !important;">Se deben incluir todos los sitios de trabajo en donde tu empleado ejercerá sus labores,
+                              da clic en <strong>"Agrega otro lugar de trabajo"</strong> si tu empleado va a trabajar en más de un sitio de trabajo bajo el mismo contrato.</label>
                         </div>
 
                         <div class="col-sm-12" style="border-top: 1px solid #e6e7e8; padding-top: 20px; text-align: center; ">
@@ -313,7 +314,6 @@
                                                 {{ form_widget(workplace.city) }}
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -332,8 +332,8 @@
                     <div class="col-sm-12 col-xs-12 border">
                         <p class="cajasd" style="font-weight:600; font-size: 16px;">
                           Escoge la Caja de compensación Familiar y Administradora de riesgos Laborales a la que te gustaría afiliarte.
-                          <span style="font-weight:100;color:#5D5D5D">&#10097; Si ya te encuentras afiliado como empleador debes seleccionarlas.</span>
-                          <span style="font-weight:100;color:#5D5D5D">&#10097; No realizamos cambios de entidades.</span>
+                          <span style="font-weight:100;color:#5D5D5D">&#10095; Si ya te encuentras afiliado debes seleccionar las mismas a las que estas afiliado.</span>
+                          <span style="font-weight:100;color:#5D5D5D">&#10095; No realizamos cambios de entidades.</span>
                         </p>
                     </div>
 
@@ -388,7 +388,7 @@
                                         {{ form_row(form.arl) }}
                                     </div>
                                 </div>
-                                <p id="msgARL" class="col-sm-12" style="font-weight:100 !important; color:red;">Temporalmente solo podemos gestionar su afiliación a Sura</p>
+                                <p id="msgARL" class="col-sm-12" style="font-weight:100 !important; color:red;">Temporalmente solo podemos gestionar las afiliaciones de primera vez a SURA</p>
                                 <div class="col-sm-12 col-xs-12">
                                     <div class="col-sm-6 label-group">
                                         {{ form_label(form.arlExists) }}
