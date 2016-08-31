@@ -306,7 +306,7 @@
                                          data-href="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}">{{ employee.state >0?'Inactivar':'Activar' }}</div>
                                 </div>
                                 <div class="right-susc numberpay suscriptionInd padding-all-10"
-                                  data-id="{{ employee.idEmployerHasEmployee }}">
+                                  data-id="{{ employee.idEmployerHasEmployee }}"> {{ isFreeUntil }}
                                 </div>
                             </div>
                           {% endif %}
