@@ -151,10 +151,17 @@
                 <div class="col-sm-12 center">
                     <div class="col-sm-12 col-xs-12 center">
                         <div class="row">
-                            <h4 style="color: gray;"><i>Días restantes de servicio gratuito</i></h4>
-                            <div class="service-days">
-                                <h1>{{ dayService }} días</h1>
-                            </div>
+                            {%  if dayService != 0 %}
+                                <h4 style="color: gray;"><i>Días restantes de servicio gratuito</i></h4>
+                                <div class="service-days">
+                                    {% if dayService > 1 %}
+                                     <h1>{{ dayService }} días</h1>
+                                    {% else %}
+                                     <h1>{{ dayService }} día</h1>
+                                    {% endif %}
+                                </div>
+                            {%  endif %}
+
                             <h5 style="color: gray;">Cliente desde {{ dateCreated|date("F")|trans|lower }} {{ dateCreated|date("d") }} de {{ dateCreated|date("Y") }}</h5>
                         </div>
                         {% if app.user.paymentState == 0 %}
@@ -171,24 +178,26 @@
                                 <div class="table table-bordered ">
                                     <div>
                                         <div class="col-sm-12 proxText">
-                                            <div class="vert-align col-sm-6 col-xs-6"><span>{{ factDate|date("F")|trans }} {{ factDate|date("d") }} {{ factDate|date("Y") }}</span></div>
+                                            {#<div class="vert-align col-sm-6 col-xs-6"><span>{{ factDate|date("F")|trans }} {{ factDate|date("d") }} {{ factDate|date("Y") }}</span></div>#}
+                                            <div class="vert-align col-sm-6 col-xs-6"><span>Valor total suscripción mensual</span></div>
                                             <div class="vert-align col-sm-6 col-xs-6">
                                                 <span>$ {{ amountToPay|number_format(0) }} COP</span>
                                             </div>
                                             <div col-sm-12 style="clear: both;">
                                                 <ul style="list-style:none; margin: 0; padding:0">
                                                   {% if eHEToSend.partialTime > 0 %}
-                                                    {% if eHEToSend.partialTime == 1 %}
-                                                      <li>{{ eHEToSend.partialTime }} Empleado de tiempo parcial</li>
-                                                    {% else %}
-                                                      <li>{{ eHEToSend.partialTime }} Empleados de tiempo parcial</li>
-                                                    {% endif %}
-                                                  {% else %}
-                                                    {% if eHEToSend.fullTime == 1 %}
-                                                      <li>{{ eHEToSend.fullTime }} Empleado de tiempo completo</li>
-                                                    {% else %}
-                                                      <li>{{ eHEToSend.fullTime }} Empleados de tiempo completo</li>
-                                                    {% endif %}
+                                                        {% if eHEToSend.partialTime == 1 %}
+                                                          <li>{{ eHEToSend.partialTime }} Empleado de tiempo parcial</li>
+                                                        {% else %}
+                                                          <li>{{ eHEToSend.partialTime }} Empleados de tiempo parcial</li>
+                                                        {% endif %}
+                                                  {% endif %}
+                                                  {% if eHEToSend.fullTime > 0 %}
+                                                        {% if eHEToSend.fullTime == 1 %}
+                                                          <li>{{ eHEToSend.fullTime }} Empleado de tiempo completo</li>
+                                                        {% else %}
+                                                          <li>{{ eHEToSend.fullTime }} Empleados de tiempo completo</li>
+                                                        {% endif %}
                                                   {% endif %}
                                                 </ul>
                                             </div>

@@ -54,11 +54,11 @@ p{
 margin: 0 auto 20px auto;
 }
 .section {
-	margin: 50px 0 200px 0
+	margin: 10px 0 150px 0
 }
 .nuevoContact {
 		width: 80%;
-    margin: 35px auto;
+    margin: 0 auto 35px auto;
     height: auto;
     text-align: center;
     overflow: hidden;
@@ -97,8 +97,7 @@ text-align: center;
 }
 .OptContent {
 	width: 1100px;
-	margin: 0 auto;
-	margin: 30px auto;
+	margin: 0 auto 20px auto;
 }
 .OptCon {
 	float: left;

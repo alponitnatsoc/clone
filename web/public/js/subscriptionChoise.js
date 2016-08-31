@@ -470,7 +470,8 @@ function fillTable(){
         endValue = endValue * 0.9;
       }
 
-      if(freeMonths == 1){
+      $(this).html(getPrice(endValue) + "</br>" + $(this).html());
+      /*if(freeMonths == 1){
         $(this).html(getPrice(endValue) + "</br>GRATIS Por el próximo mes");
       }
       else if( freeMonths > 1){
@@ -478,10 +479,10 @@ function fillTable(){
       }
       else{
         $(this).html(getPrice(endValue));
-      }
+      }*/
     }
     else {
-      $(this).html(getPrice(0));
+      $(this).html(getPrice(0) + "</br>" + $(this).html());
     }
 
   });

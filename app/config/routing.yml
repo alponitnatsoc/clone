@@ -100,6 +100,10 @@ download_pdf_documents:
     path:      /download/{document}
     defaults:  { _controller: RocketSellerTwoPickBundle:Document:downloadDocumentPDF }
 
+documents_verify_persist:
+    path:      /document/verify/persist/{entityType}/{entityId}/{docCode}/{idNotification}/{fileName}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Document:verifyAndPersitDocument}
+
 show_calculator_form:
     path:      /calculator/calculate
     defaults:  { _controller: RocketSellerTwoPickBundle:Calculator:showCalculator}
@@ -127,13 +131,6 @@ change_state_contract:
     path:   /edit/contract/state/{id}
     defaults: {_controller: RocketSellerTwoPickBundle:Contract:stateContract}
 
-change_state_employer_employee:
-    path:   /manage/employee/change/state/{id}
-    defaults: {_controller: RocketSellerTwoPickBundle:Employee:changeStateEmployee}
-
-manage_employees:
-    path:      /manage/employees
-    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:manageEmployees }
 
 remove_employee:
     path:      /remove/employee/{idEhe}
