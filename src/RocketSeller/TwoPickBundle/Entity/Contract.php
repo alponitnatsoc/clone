@@ -933,4 +933,28 @@ class Contract
     {
         return $this->planillaTypePlanillaType;
     }
+
+    /**
+     * Set backStatus
+     *
+     * @param integer $backStatus
+     *
+     * @return Contract
+     */
+    public function setBackStatus($backStatus)
+    {
+        $this->backStatus = $backStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get backStatus
+     *
+     * @return integer
+     */
+    public function getBackStatus()
+    {
+        return $this->backStatus;
+    }
 }

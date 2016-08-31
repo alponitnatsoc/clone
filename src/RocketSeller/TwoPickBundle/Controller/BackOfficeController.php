@@ -1248,11 +1248,24 @@ class BackOfficeController extends Controller
 //        );
 //        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
         /** test daviPlata Email */
-        $context = array(
-            'emailType'=>'daviPlata',
-            'toEmail'=>'andres.ramirez@symplifica.com',
-            'user'=>$this->getUser(),
-            'subject'=>'Información Daviplata',
+//        $context = array(
+//            'emailType'=>'daviPlata',
+//            'toEmail'=>'andres.ramirez@symplifica.com',
+//            'user'=>$this->getUser(),
+//            'subject'=>'Información Daviplata',
+//        );
+//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+        /** test liquidation Email */
+        $context=array(
+            'emailType'=>'liquidation',
+            'toEmail'=>'daniel.rico@symplifica.com',
+            'userName'=>'Esto es una prueba para daniel',
+            'employerSociety'=> '123123',
+            'documentNumber'=>'1020772509',
+            'userEmail'=>'algo@algo.com',
+            'phone'=>'5138283475',
+            'employeeName'=>'Empleado Prueba',
+            'sqlNumber'=>'101201'
         );
         $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 

@@ -1,0 +1,22 @@
+{% extends "::base.html.twig" %}
+{% from '@RocketSellerTwoPick/modal_templates/modal_picker.twig' import modal %}
+{% block modales %}
+    {{ parent() }}
+    {% for message_format in app.session.flashBag.get('fail_format')%}
+        {% if message_format == 'NVF' %}
+            {{ modal(15) }}
+        {% endif %}
+    {% endfor %}
+    {{ modal(24) }}
+{% endblock %}
+{% block fos_user_content %}
+        <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
+            <div class="col-sm-12 col-xs-12 up-Intro">Subir Galleria de {{ person.names}}</div>
+        </div>
+        <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
+            {{ form_start(form,{'action': path('document_gallery',{'idPerson':person.idPerson}), 'method': 'POST'}) }}
+
+            {{ form_end(form) }}
+        </div>
+
+{% endblock fos_user_content %}

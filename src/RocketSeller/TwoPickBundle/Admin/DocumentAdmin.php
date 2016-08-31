@@ -44,6 +44,11 @@ class DocumentAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
+            ->add('mediaMedia','sonata_media_type',array(
+                    'context'=>'person',
+                    'provider'=>'sonata.media.provider.file'
+                )
+            )
             ->add('idDocument')
         ;
     }

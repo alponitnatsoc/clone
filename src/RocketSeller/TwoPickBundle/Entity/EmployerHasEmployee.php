@@ -75,8 +75,7 @@ class EmployerHasEmployee
      * 1 - active
      * 2 - Twilio Verification
      * 3 - symplifica paid
-     * 4 - backoffice confirmed
-     * 5 - backoffice completed
+     * 4 - backoffice completed
      * @ORM\Column(type="integer", length=1, nullable=TRUE)
      */
     private $state = 1;
@@ -122,10 +121,7 @@ class EmployerHasEmployee
      * 11 - all docs validated message
      * 12 - all docs error message
      * 13 - backoffice finished message
-     * 14 - employee contract upload is pending
-     * 15 - message contract uploaded 
-     * 16 - backoffice finished
-     * 17 - employee contract error
+     * 14 - backoffice finished
      * @ORM\Column(type="integer", length=1, nullable=TRUE)
      */
     private $documentStatus = -2;
