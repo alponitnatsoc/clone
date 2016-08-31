@@ -34,11 +34,12 @@
 											<input id="formcellphone" class="inputFull" type="number" name="cellphone" placeholder="Celular" required><br />
 											<input id="formemail" class="inputFull" type="email" name="email" placeholder="Correo electrónico" required>
 											{{ form_widget(form.save, { 'attr': {'class': 'btn naranja obten'}}) }}
+											<div class="form-group txt-A1-terms">
+											<input type="checkbox" id="chktyc" required />
+											Al registrarme acepto todos los <a href="{{ path('terminos_condiciones') }}" target="_blank">Términos y Condiciones</a>
+											y las <a href="{{ path('politicas_privacidad') }}" target="_blank">Políticas de Privacidad</a>
 										{{ form_end(form) }}
-										<div class="form-group txt-A1-terms">
-								        <input type="checkbox" id="chktyc" required />
-								        Al registrarme acepto todos los <a href="{{ path('terminos_condiciones') }}" target="_blank">Términos y Condiciones</a>
-								        y las <a href="{{ path('politicas_privacidad') }}" target="_blank">Políticas de Privacidad</a>
+
 								    </div>
 									</div>
 								</div>
@@ -74,7 +75,7 @@
                 	<img src="{{ asset('public/img/landing/benefit2.png') }}" alt="">
                 	<h3 class="light beneh3">Afiliación</h3>
 
-                	<p class="light">Afiliamos a tus empleados a seguridad social sin trámites complicados.
+                	<p class="light">Afiliamos a tus empleados a las entidades de seguridad social sin trámites complicados.
 
 </p>
                 </div>
@@ -83,14 +84,14 @@
                 	<img src="{{ asset('public/img/landing/benefit3.png') }}" alt="">
                 	<h3 class="light">Pago electrónico</h3>
 
-                	<p class="light">Olvídate de sacar dinero, podrás pagar en línea el sueldo y aportes con un solo clic.</p>
+                	<p class="light">Te damos la opción de pagar en línea la nómina y los aportes a seguridad con un solo clic.</p>
                 </div>
 
                 <div class="col span_1_of_4 beneficios">
                 	<img src="{{ asset('public/img/home/cat6.png') }}" alt="">
                 	<h3 class="light">Notificaciones</h3>
 
-                	<p class="light">Te avisaremos las fechas importantes y realizaremos el trabajo duro por ti.</p>
+                	<p class="light">Te recordamos las fechas que no puedes olvidar y realizamos el trabajo duro por ti.</p>
                 </div>
             </div>
             <!--<a href="{{ path('beneficios') }}"><div class="callto naranja bold">› Beneficios</div></a>-->
@@ -336,6 +337,9 @@ $('#video2').click(function(){
 
 	$('#formemail').attr('oninvalid', 'setCustomValidity("El correo escrito no es valido")');
 	$('#formemail').attr('oninput', "setCustomValidity('')");
+
+	$('#chktyc').attr('oninvalid', 'setCustomValidity("Acepta los Términos y Condiciones para continuar")');
+	$('#chktyc').attr('oninput', "setCustomValidity('')");
 
     function numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

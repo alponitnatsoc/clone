@@ -28,8 +28,8 @@
   text-align: center;
   padding: 10px 0;
   font-size: 15px;
-  font-weight: bold;
-  color: #5D5D5D;
+  font-weight: 600;
+  color: #5D5D5D !important;
   text-decoration: none !important;
 }
 .bottom-box-edit li {

@@ -240,8 +240,7 @@ class UserController extends Controller
             }
         }
 	
-	    dump($user->getDateCreated());
-        return $this->render('RocketSellerTwoPickBundle:User:show.html.twig', array(
+	      return $this->render('RocketSellerTwoPickBundle:User:show.html.twig', array(
             'form' => $form->createView(),
             'flag' => $flag,
             'invoices' => $invoicesEmited,

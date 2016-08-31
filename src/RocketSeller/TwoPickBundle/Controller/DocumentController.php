@@ -889,8 +889,8 @@ use EmployerMethodsTrait;
                     'docExpPlace' => $employerPerson->getDocumentExpeditionPlace(),
                     'arl' => $this->getEmployerArl($employer->getIdEmployer()),
                     'ccf' => $this->getEmployerCcf($employer->getIdEmployer()),
-                    'email' => $employerPerson->getEmail(),
-                    'tel' => $employerPerson->getPhones()[0]
+                    'email' => $this->getUser()->getEmail(),
+                    'tel' => $employerPerson->getPhones()[0]->getPhoneNumber()
                 );
                 $contractInfo = array(
                     'city' => $contract[0]->getWorkplaceWorkplace()->getCity()->getName(),
