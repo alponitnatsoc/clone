@@ -110,6 +110,7 @@ class ProcedureController extends Controller
     {
     	try {
             $em = $this->getDoctrine()->getManager();
+            /** @var EmployerHasEmployee $employerHasEmployee */
             $employerHasEmployee = $this->loadClassById($idEmployerHasEmployee,'EmployerHasEmployee');
             //$actComplete = $this->checkActionCompletation($idEmployerHasEmployee,$procedureId);
             $employerHasEmployee->setState(4);
@@ -118,6 +119,30 @@ class ProcedureController extends Controller
             $smailer = $this->get('symplifica.mailer.twig_swift');
             $smailer->sendBackValidatedMessage($this->getUser(),$employerHasEmployee);
             $this->addFlash("employee_ended_successfully", 'Exito al terminar los tramites del empleado');
+            $contracts = $employerHasEmployee->getContracts();
+            /** @var Contract $contract */
+            foreach ($contracts as $contract) {
+                if($contract->getState()==1){
+                    //we update the payroll
+                    $activeP = $contract->getActivePayroll();
+                    $dateNow=new DateTime();
+                    if($contract->getStartDate()>$dateNow){
+                        $realMonth=$contract->getStartDate()->format("m");
+                        $realYear=$contract->getStartDate()->format("Y");
+                        $realPeriod=intval($contract->getStartDate()->format("d"))<=15&&$contract->getFrequencyFrequency()->getPayrollCode()=="Q"?2:4;
+                    }else{
+                        $realMonth=$dateNow->format("m");
+                        $realYear=$dateNow->format("Y");
+                        $realPeriod=intval($dateNow->format("d"))<=15&&$contract->getFrequencyFrequency()->getPayrollCode()=="Q"?2:4;
+                    }
+                    $activeP->setMonth($realMonth);
+                    $activeP->setYear($realYear);
+                    $activeP->setPeriod($realPeriod);
+                    $em->persist($activeP);
+                    $em->flush();
+                    break;
+                }
+            }
             return $this->redirectToRoute('show_procedure',array('procedureId'=>$procedureId));
         }catch(Exeption $e){
             $this->addFlash("employee_ended_faild", 'Ocurrio un error terminando el empleado: '. $e);
