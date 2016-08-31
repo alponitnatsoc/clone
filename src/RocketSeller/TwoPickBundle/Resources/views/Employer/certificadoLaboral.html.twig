@@ -16,6 +16,6 @@
     _____________________________________
     <p>{{ data.employer.name|upper }}</p>
     <p>{{ data.employer.docType }} {{ data.employer.docNumber|number_format(0,',','.') }}</p>
-
+    <p>Correo: {{ data.employer.mail }} - Tel: {{ data.employer.phone }}</p>
     <p>&nbsp;</p>
 {% endblock %}

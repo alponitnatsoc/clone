@@ -131,13 +131,6 @@ change_state_contract:
     path:   /edit/contract/state/{id}
     defaults: {_controller: RocketSellerTwoPickBundle:Contract:stateContract}
 
-change_state_employer_employee:
-    path:   /manage/employee/change/state/{id}
-    defaults: {_controller: RocketSellerTwoPickBundle:Employee:changeStateEmployee}
-
-manage_employees:
-    path:      /manage/employees
-    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:manageEmployees }
 
 remove_employee:
     path:      /remove/employee/{idEhe}

@@ -2414,7 +2414,7 @@ class PayrollRestController extends FOSRestController
         // Set all the parameters info.
         $regex['employee_id'] = '([0-9])+';
         $mandatory['employee_id'] = true;
-        $regex['pending_days'] = '([0-9])+(\.[0-9]+)?';
+        $regex['pending_days'] = '(-)?([0-9])+(\.[0-9]+)?';
         $mandatory['pending_days'] = true;
 
         $this->validateParamters($parameters, $regex, $mandatory);

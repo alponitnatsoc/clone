@@ -185,13 +185,16 @@ class EmployerController extends Controller
 			                'docNumber' => $employeePerson->getDocument(),
 			                'docExpPlace' => $employeePerson->getDocumentExpeditionPlace(),
 		                );
-		
+										
+										/** @var Person $employerPerson */
 		                $employerPerson = $employer->getPersonPerson();
 		                $employerInfo = array(
 			                'name' => $employerPerson->getFullName(),
 			                'docType' => $employerPerson->getDocumentType(),
 			                'docNumber' => $employerPerson->getDocument(),
 			                'docExpPlace' => $employerPerson->getDocumentExpeditionPlace(),
+			                'mail' => $this->getUser()->getEmail(),
+											'phone' => $employerPerson->getPhones()->first()->getPhoneNumber()
 		                );
 		                $contractInfo = array(
 			                'city' => $contract->getWorkplaceWorkplace()->getCity()->getName(),
