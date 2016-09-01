@@ -78,6 +78,16 @@ services:
                     lastRemindNovelty: 'FOSUserBundle:Registration:lastPayRecorder.txt.twig'
                     log: 'FOSUserBundle:SendEmail:logEmail.html.twig'
                     reminderDaviplata : 'FOSUserBundle:Registration:daviplataRecorder.txt.twig'
+                    succesRecollect : 'FOSUserBundle:Pay:exitoRecaudoEmail.txt.twig'
+                    failRecollect : 'FOSUserBundle:Pay:falloRecaudoEmail.txt.twig'
+                    regectionCollect : 'FOSUserBundle:Backoffice:rejectionTransactionLog.txt.twig'
+                    regectionDispersion : 'FOSUserBundle:Backoffice:rejectionDispersionLog.txt.twig'
+                    succesDispersion : 'FOSUserBundle:Pay:exitoDispersionEmail.txt.twig'
+                    failDispersion : 'FOSUserBundle:Pay:falloDispersionEmail.txt.twig'
+                    validatePayMethod : 'FOSUserBundle:Pay:validatePaymentMethodEmail.txt.twig'
+                    transactionRejected : 'FOSUserBundle:Pay:payRejectedEmail.txt.twig'
+                    transactionAcepted : 'FOSUserBundle:Pay:succesfulTransaction.txt.twig'
+                    liquidation: 'FOSUserBundle:BackOffice:liquidationProcess.txt.twig'
 
                 from_email:
                   confirmation: '%fos_user.registration.confirmation.from_email%'

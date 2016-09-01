@@ -40,9 +40,9 @@ class CalculatorController extends Controller
             ->add('numberOfDays', 'choice',array(
                 'choices'=>range(1,30),
                 'label'=>'Número de días trabajados al mes'))
-            ->add('transporte', 'choice',array('choices'=>array('1'=>'si','0'=>'no'), 'expanded'=>true,'multiple'=>false,'label'=>'¿Ese valor incluye el subsidio de transporte?'))
-            ->add('auxilio', 'choice',array('choices'=>array('1'=>'si','0'=>'no'), 'expanded'=>true,'multiple'=>false,'label'=>'¿Le paga bonificación / auxilio anual?'))
-            ->add('sisben', 'choice',array('choices'=>array('1'=>'si','0'=>'no'),'empty_value'=>false, 'expanded'=>true,'multiple'=>false,'label'=>'¿Pertenece al Sisben?',"required"=>false))
+            ->add('transporte', 'choice',array('choices'=>array('1'=>'si','0'=>'no'), 'expanded'=>true,'multiple'=>false,'label'=>'¿Residirá en el lugar de trabajo?'))
+            /*
+		        ->add('auxilio', 'choice',array('choices'=>array('1'=>'si','0'=>'no'), 'expanded'=>true,'multiple'=>false,'label'=>'¿Le paga bonificación / auxilio anual?'))
             ->add('auxilioD', 'money',array(
                 'currency'=>'COP',
                 'label'=>' ',
@@ -52,6 +52,19 @@ class CalculatorController extends Controller
                     'onclick' => 'formatMoney($(this))'
                 )
             ))
+            ->add('sisben', 'choice',array('choices'=>array('1'=>'si','0'=>'no'),'empty_value'=>false, 'expanded'=>true,'multiple'=>false,'label'=>'¿Pertenece al Sisben?',"required"=>false))
+	          */
+            ->add('pension', 'choice',array('choices'=>array('1'=>'si','0'=>'no'), 'expanded'=>true,'multiple'=>false,'label'=>'¿El empleado requiere aportar a pensión?'))
+		        ->add('position', 'entity', array(
+			        'class' => 'RocketSellerTwoPickBundle:Position',
+			        'property' => 'name',
+			        'multiple' => false,
+			        'expanded' => false,
+			        'property_path' => 'positionPosition',
+			        'label'=>'Defina el cargo que asignará a su empleado:',
+			        'placeholder' => 'Seleccionar una opción',
+			        'required' => true
+		        ))
             ->add('save', 'submit', array('label' => 'Calcular'))
             ->getForm();
 

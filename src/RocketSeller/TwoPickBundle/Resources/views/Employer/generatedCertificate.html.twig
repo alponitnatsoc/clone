@@ -29,7 +29,7 @@
             text-align: center;
         }
         .glyphicon{
-            margin: 10px;
+          margin: 0 10px 0 0
         }
         .divSubmit{
             margin: 10px;
@@ -48,7 +48,6 @@
 {% block content %}
     <div class="center certificatesucces">
         <div class="glyphicon glyphicon-ok-sign"></div>El certificado fue creado exitosamente.
-
     </div>
 
     <div class="center col-md-12 col-sm-12 campofechascert">
@@ -74,7 +73,8 @@
         <div class="divSubmit center col-md-12">
             <input type="hidden" name="idEmployee" value="{{ employee.idEmployee }}"/>
             <input type="hidden" name="idCertificate" value="{{ certificate['id'] }}"/>
-            <button class="btn btn-symplifica" type="submit">Imprimir</button>
+            <input type="hidden" name="idEhe" value="{{ eheId }}"/>
+            <button class="btn btn-symplifica" type="submit">Descargar</button>
         </div>
     </form>
 {% endblock %}

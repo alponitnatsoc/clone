@@ -584,7 +584,8 @@ class PersonRestController extends FOSRestController
                 'email' => $person->getEmail(),
                 'city' => array('id_city'=>$person->getCity()->getIdCity()),
                 'phones' => $person->getPhones()->get(0)->getPhoneNumber(),
-                'idEmployee' => $person->getEmployee()!=null ? $person->getEmployee()->getIdEmployee() : "-2"
+                'idEmployee' => $person->getEmployee()!=null ? $person->getEmployee()->getIdEmployee() : "-2",
+                'idEmployer' => $person->getEmployer()!=null ? $person->getEmployer()->getIdEmployer() : "-2",
             ))->setStatusCode(200);
             return $view;
         } else {
@@ -633,7 +634,8 @@ class PersonRestController extends FOSRestController
                 'city' => "",
                 'email' => isset($answer['mail']) ? $answer['mail'] : "",
                 'phones' => isset($answer['telefono']) ? $answer['telefono'] : "",
-                'idEmployee' => "-1"
+                'idEmployee' => "-1",
+                'idEmployer' => "-1",
             ))->setStatusCode(200);
             return $view;
         }

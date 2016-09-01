@@ -220,4 +220,14 @@ class RealProcedure
     {
         return $this->createdAt;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getProcedureTypeProcedureType()->getName();
+    }
+
+
 }

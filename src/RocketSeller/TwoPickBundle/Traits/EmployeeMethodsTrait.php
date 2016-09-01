@@ -16,6 +16,7 @@ use RocketSeller\TwoPickBundle\Entity\Employee;
 use RocketSeller\TwoPickBundle\Entity\RealProcedure;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\Notification;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 trait EmployeeMethodsTrait
 {
@@ -83,15 +84,45 @@ trait EmployeeMethodsTrait
      */
     protected function employerDocumentsReady(Person $person)
     {
-        $em = $this->getDoctrine()->getManager();
         //Initialising de pending docs counter
         $pendingDocs = 0;
-        if(!$person->getDocumentDocument())
+
+        if($person->getDocumentDocument()){
+            try{
+                $media = $person->getDocumentDocument()->getMediaMedia();
+                if($media==null)
+                    $pendingDocs++;
+            }catch(Exception $e){
+                $pendingDocs++;
+            }
+        }else{
             $pendingDocs++;
-        if(!$person->getRutDocument())
+        }
+
+        if($person->getRutDocument()){
+            try{
+                $media = $person->getRutDocument()->getMediaMedia();
+                if($media==null)
+                    $pendingDocs++;
+            }catch(Exception $e){
+                $pendingDocs++;
+            }
+        }else{
             $pendingDocs++;
-        if(!$person->getEmployer()->getMandatoryDocument())
+        }
+
+        if($person->getEmployer()->getMandatoryDocument()){
+            try{
+                $media = $person->getEmployer()->getMandatoryDocument()->getMediaMedia();
+                if($media==null)
+                    $pendingDocs++;
+            }catch(Exception $e){
+                $pendingDocs++;
+            }
+        }else{
             $pendingDocs++;
+        }
+
         //returning the count of pending docs MAX 3
         return $pendingDocs;
     }
@@ -100,23 +131,37 @@ trait EmployeeMethodsTrait
      * Función que verifica los documentos subidos para el empleado
      * los estados del contrato pueden ser 1 cuando existe un documento contrato para el contrato activo o 0 si no existe
      * @param EmployerHasEmployee $eHE employerHasEmployee del que se van a obtener los documentos
-     * @return array vector con el numero de documentos pendientes en la posición 0 y el estado del contrato en la posición
+     * @return int Numero de documentos pendientes
      */
     protected function employeeDocumentsReady(EmployerHasEmployee $eHE)
     {
-
+        //initialising de pending docs counter for employee
         $ePendingDocs=0;
-        $pContract = 0;
-        if(!$eHE->getAuthDocument())
+        if($eHE->getAuthDocument()){
+            try{
+                $media = $eHE->getAuthDocument()->getMediaMedia();
+                if($media==null)
+                    $ePendingDocs++;
+            }catch(Exception $e){
+                $ePendingDocs++;
+            }
+        }else{
             $ePendingDocs++;
-        if(!$eHE->getEmployeeEmployee()->getPersonPerson()->getDocumentDocument())
+        }
+
+        if($eHE->getEmployeeEmployee()->getPersonPerson()->getDocumentDocument()){
+            try{
+                $media = $eHE->getEmployeeEmployee()->getPersonPerson()->getDocumentDocument()->getMediaMedia();
+                if($media==null)
+                    $ePendingDocs++;
+            }catch(Exception $e){
+                $ePendingDocs++;
+            }
+        }else{
             $ePendingDocs++;
-        $em = $this->getDoctrine()->getManager();
-        /** @var Contract $contract */
-        $contract = $em->getRepository("RocketSellerTwoPickBundle:Contract")->findOneBy(array('employerHasEmployeeEmployerHasEmployee'=>$eHE,'state'=>1));
-        if(!$contract->getDocumentDocument())
-            $pContract ++;
-        return array('pending'=>$ePendingDocs,'contract'=>$pContract);
+        }
+        //returning employee pending docs
+        return $ePendingDocs;
     }
 
     /**
@@ -342,16 +387,19 @@ trait EmployeeMethodsTrait
      */
     protected function allDocumentsReady(User $user){
 
+        //getting the person
         $person = $user->getPersonPerson();
+        //getting all the employees
         $eHEs = $person->getEmployer()->getEmployerHasEmployees();
+        //crossing the emmployees
         /** @var EmployerHasEmployee $eHE */
         foreach($eHEs as $eHE){
-            //if the employer is payed
+            //if the employee is payed
             if($eHE->getState()>=3){
-                //if employee state is not payed changing the document state to all documents pending
+                //if employee state is not payed or all documents pending changing the document state to all documents pending
                 if($eHE->getDocumentStatus()==-2 or $eHE->getDocumentStatus()==-1)
                     $eHE->setDocumentStatus(-1);
-                //get the actual document state of the employerHasEmployee
+                //get the actual document state of the employerHasEmployee must be at least -1
                 $case = $eHE->getDocumentStatus();
                 //if the antique state is all documents pending verifying that documents are still pending
                 if($case == -1){
@@ -360,16 +408,16 @@ trait EmployeeMethodsTrait
                     //getting the amount of documents pending for the employee
                     $ePend = $this->employeeDocumentsReady($eHE);
                     //if employer and employee documents pending are greater than 0 state is -1 all docs pending
-                    if($ePend['pending']!=0 and $pend !=0){
+                    if($ePend>0 and $pend >0){
                         $eHE->setDocumentStatus(-1);
                     //if employee pending docs greater than 0 but employer pending docs equal 0 state is 0 employee documents pending
-                    }elseif($ePend['pending']!=0 and $pend ==0){
+                    }elseif($ePend>0 and $pend ==0){
                         $eHE->setDocumentStatus(0);
                     //if employee pending docs equal to 0 but employer pending docs greater than 0 state is 1 employer documents pending
-                    }elseif($ePend['pending']==0 and $pend !=0){
+                    }elseif($ePend==0 and $pend >0){
                         $eHE->setDocumentStatus(1);
                     //if both employer and employee pending docs are equal to 0 state is 2 message docs ready
-                    }elseif($pend==0 and $ePend['pending']==0){
+                    }elseif($pend==0 and $ePend==0){
                         $eHE->setDocumentStatus(2);
                     }
                 //if the antique state is employee documents pending checking if employee documents are still pending

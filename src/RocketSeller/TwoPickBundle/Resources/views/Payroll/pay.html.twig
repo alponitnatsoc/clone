@@ -35,16 +35,15 @@
                 <form method="post" action="{{ path('payroll_calculate') }}" id="form_calculate">
                     {% set pilaData=null %}
                     <div id="cont-payment">
-
+                      <div class="deuda light grisclarofont">
+                          <div align="center" colspan="4">Pago de nómina</div>
+                      </div>
                         {% for data in dataNomina %}
                             {% if data.payroll_payroll != null %}
                                 {% set employee = data.payroll_payroll.contract_contract.employer_has_employee_employer_has_employee.employee_employee.person_person %}
                                 {% set payType = data.payroll_payroll.contract_contract.pay_method_pay_method.pay_type_pay_type.payroll_code %}
                                 {% set employeeName = employee.names ~' '~ employee.last_name1 %}
                                 {% set id_payroll = data.payroll_payroll.id_payroll %}
-                                <div class="deuda light grisclarofont">
-                                    <div align="center" colspan="4">Pago de de nómina</div>
-                                </div>
                                 <div class="borderclass">
                                     <div class="tittle-pay nominaBack">
                                         <div class="pagoforma">
@@ -103,7 +102,7 @@
                                         <div class="col-sm-2">
                                             <p>Total</p>
                                             <h2 class="h2">${{ data.value|number_format(0, '.', ',') }}</h2>
-                                            <span style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax showDetails" href="/payroll/show/details/{{ id_payroll }}">&#10093; Detalles</span>
+                                            <span style="cursor:pointer" style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax showDetails" href="/payroll/show/details/{{ id_payroll }}">&#10093; Detalles</span>
                                         </div>
                                     </div>
                                     <!--<div class="height center col-sm-12">
@@ -171,7 +170,7 @@
                                         <div class="col-sm-2">
                                             <p>Total</p>
                                             <h2 class="h2">${{ dataPila.value|number_format(0, '.', ',') }}</h2>
-                                            <span style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax showDetails" href="">&#10093; Detalles</span>
+                                            <span style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax showDetails" href="#">&#10093; Detalles</span>
                                         </div>
                                     </div>
                                     {#<div class="center" style="clear: both;background: #CCC;padding: 10px 0;">#}
@@ -182,15 +181,18 @@
 
                         {% endif %}
                         {% if debt|length >0 %}
-                            <div class="deuda light grisclarofont">
-                                <div align="center" colspan="4"> Nominas en deuda</div>
-                            </div>
+                        <!--<div class="deuda light grisclarofont">
+                            <div align="center" colspan="4"> Nominas en deuda</div>
+                        </div>-->
                         {% endif %}
                         {% for po in debt %}
                             {% set pods = po.purchase_order_descriptions %}
                             {% set pilaData=null %}
                             {% for data in pods %}
                                 {% if data.product_product.simple_name == "PN" %}
+                                <div class="deuda light grisclarofont">
+                                    <div align="center" colspan="4">Nóminas Pendientes</div>
+                                </div>
                                     <div class="borderclass">
                                         <div class="tittle-pay moraNomina">
                                             {% set employee = data.payroll_payroll.contract_contract.employer_has_employee_employer_has_employee.employee_employee.person_person %}
@@ -271,11 +273,11 @@
                             {% endfor %}
                             {% if pilaData!=null %}
                                 <div class="deuda light grisclarofont">
-                                    <div align="center" colspan="4"> Aportes en deuda</div>
+                                    <div align="center" colspan="4">Aportes Pendientes por Pagar</div>
                                 </div>
                                 <div class="borderclass">
                                     <div class="tittle-pay moraNomina">
-                                        <div class="center">
+                                        <div class="pagoforma">
                                             <label style="font-weight:100"><input type="radio" class="toPayArray"
                                                                                   name="{{ pilaData.id_purchase_orders_description }}"
                                                                                   value="p-{{ pilaData.id_purchase_orders_description }}">
@@ -379,7 +381,7 @@
                 <div id="texto-succesdocs">
                     <div id="pagoadelantado">
                         <div id="contenidopagoadelando">
-                            <img src="{{ asset('/public/img/home/icon3.png') }}" width="100px" height="auto">
+                            <img src="{{ asset('/public/img/landing/benefit3.png') }}" width="80px" height="auto">
                             <h1 class="azulclarofont bold centrar">¿Puedo pagar por adelantado?</h1>
                             <p class="light grisclarofont">Solo debes dar clic en botón de abajo o dirigirte al menú
                                 seccion de empleados y reportar la novedad de <strong>“adelanto de nómina”</strong></p>

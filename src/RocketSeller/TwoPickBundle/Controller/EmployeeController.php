@@ -89,11 +89,14 @@ class EmployeeController extends Controller
      */
     public function changeStateEmployeeAction($id)
     {
-//$user = $this->getUser();
-        /** @var Contract $contract */
         $employerEmployee = $this->getEmployerEmployee($id);
         if($employerEmployee->getState()==0){
-            $employerEmployee->setState(2);
+	        if($employerEmployee->getExistentSQL() == true){
+		        $employerEmployee->setState(4);
+	        }
+	        else{
+		        $employerEmployee->setState(2);
+	        }
         }elseif ($employerEmployee->getState()>0){
             $employerEmployee->setState(0);
 
@@ -266,6 +269,12 @@ class EmployeeController extends Controller
                     }
                     /** @var Contract $contract */
                     foreach ($contracts as $contract) {
+                    	  $salaryString = 0;
+	                      if($contract->getTimeCommitmentTimeCommitment()->getCode() == "XD"){
+	                      	$salaryString = $contract->getSalary()/$contract->getWorkableDaysMonth();
+	                      }elseif ($contract->getTimeCommitmentTimeCommitment()->getCode() ==  "TC"){
+	                      	$salaryString = $contract->getSalary();
+	                      }
                         $acPayroll = $contract->getActivePayroll();
                         $employeesData[] = array(
                             "idEmployerHasEmployee" => $ehE->getIdEmployerHasEmployee(),
@@ -274,6 +283,11 @@ class EmployeeController extends Controller
                             "state" => $ehE->getState(),
                             "fullName" => $ehE->getEmployeeEmployee()->getPersonPerson()->getFullName(),
                             "stateRegister" => $ehE->getEmployeeEmployee()->getRegisterState(),
+	                          "contractType" => $contract->getContractTypeContractType()->getName(),
+	                          "salary" => $salaryString,
+	                          "percentage" => $ehE->getEmployeeEmployee()->getRegisterState(),
+	                          "timeCommitment" => $contract->getTimeCommitmentTimeCommitment()->getCode()
+	                          
                         );
                         break;
                     }
@@ -616,20 +630,20 @@ class EmployeeController extends Controller
         $contractEmployee = $activeContract->getDocumentDocument();
         $contractDate = "";
         if($contractEmployee){
-            $contractDate = $contractEmployee->getMediaMedia()->getUpdatedAt()->format("l j"). " de " . $contractEmployee->getMediaMedia()->getUpdatedAt()->format("F") ;
+            $contractDate = $contractEmployee->getMediaMedia()->getUpdatedAt();
         }
         $entidades = array();
-        foreach ($entities as $entity) {
-            if ($entity->getEntityEntity()->getEntityTypeEntityType()->getName() == "EPS") {
+	    foreach ($entities as $entity) {
+            if ($entity->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "EPS") {
                 $entidades["EPS"] = $entity->getEntityEntity();
-            } elseif ($entity->getEntityEntity()->getEntityTypeEntityType()->getName() == "Pension") {
+            } elseif ($entity->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "AFP") {
                 $entidades["Pension"] = $entity->getEntityEntity();
             }
         }
         foreach ($entitiesEmployer as $entity) {
-            if ($entity->getEntityEntity()->getEntityTypeEntityType()->getName() == "ARL") {
+            if ($entity->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "ARP") {
                 $entidades["ARL"] = $entity->getEntityEntity();
-            } elseif ($entity->getEntityEntity()->getEntityTypeEntityType()->getName() == "CC Familiar") {
+            } elseif ($entity->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "PARAFISCAL") {
                 $entidades["CC"] = $entity->getEntityEntity();
             }
         }
@@ -853,7 +867,7 @@ class EmployeeController extends Controller
             $invitationEmail = $this->get('request')->request->get('email');
 
             $smailer = $this->get('symplifica.mailer.twig_swift');
-            $send = $smailer->sendEmail($this->getUser(), "FOSUserBundle:Invitation:email.txt.twig", "from.email@com.co", $toEmail);
+            $send = $smailer->sendEmail($this->getUser(), "FOSUserBundle:Invitation:email.txt.twig", "from.email@com.co", $this->getUser()->getEmail());
         } else {
             return $this->render(
                             'RocketSellerTwoPickBundle:Employee:shareProfile.html.twig', array('employee' => $employee));

@@ -17,9 +17,15 @@ function startEmployer() {
         validator = $("form[name='register_employer']").validate({
             rules: {
                 "register_employer[person][documentType]": "required",
-                "register_employer[person][document]": "required",
+                "register_employer[person][document]": {required : true, maxlength : 10},
                 "register_employer[person][names]": "required",
                 "register_employer[person][lastName1]": "required",
+                "register_employer[documentExpeditionDate][day]": "required",
+                "register_employer[documentExpeditionDate][month]": "required",
+                "register_employer[documentExpeditionDate][year]": "required",
+                "register_employer[birthDate][day]": "required",
+                "register_employer[birthDate][month]": "required",
+                "register_employer[birthDate][year]": "required",
                 "register_employer[person][mainAddress]": "required",
                 "register_employer[sameWorkHouse]": "required",
                 "register_employer[person][department]": "required",
@@ -29,9 +35,15 @@ function startEmployer() {
             },
             messages: {
                 "register_employer[person][documentType]": "Por favor selecciona el tipo de documento",
-                "register_employer[person][document]": "Por favor ingresa tu documento",
+                "register_employer[person][document]": { required :"Por favor ingresa tu documento", maxlength :"El documento no puede ser tan largo"},
                 "register_employer[person][names]": "Por favor ingresa tu nombre",
                 "register_employer[person][lastName1]": "Por favor ingresa tu primer apellido",
+                "register_employer[documentExpeditionDate][day]": "Por favor selecciona un día",
+                "register_employer[documentExpeditionDate][month]": "Por favor selecciona un mes",
+                "register_employer[documentExpeditionDate][year]": "Por favor selecciona un año",
+                "register_employer[person][birthDate][day]": "Por favor selecciona un día",
+                "register_employer[person][birthDate][month]": "Por favor selecciona un mes",
+                "register_employer[person][birthDate][year]": "Por favor selecciona un año",
                 "register_employer[person][mainAddress]": "Por favor ingrese una dirección",
                 "register_employer[sameWorkHouse]": "Por favor selecciona una opción",
                 "register_employer[person][department]": "Por favor selecciona un departamento",
@@ -148,7 +160,7 @@ function startEmployer() {
     var redirUri = "";
     $('#btn-save-entities').click(function (e) {
         e.preventDefault();
-        var form = $("form");
+        var form = $("[name='register_employer']");
         var errors = { register_employer_severances_0_severancesAC: "La entidad no existe en nuestra base de datos, favor revisa su escritura" };
         var severances = [];
         var severancesExist = [];
@@ -244,7 +256,6 @@ function startEmployer() {
     });
     $('#btn-inquiry').click(function (e) {
         e.preventDefault();
-        var form = $("form");
         var documentType = $(form).find("select[name='register_employer[person][documentType]']");
         var document = $(form).find("input[name='register_employer[person][document]']");
         var lastName1 = $(form).find("input[name='register_employer[person][lastName1]']");
@@ -274,7 +285,7 @@ function startEmployer() {
     });
     $('#btn-1').click(function (e) {
         e.preventDefault();
-        var form = $("form");
+        var form = $("[name='register_employer']");
         var documentType = $(form).find("select[name='register_employer[person][documentType]']");
         var document = $(form).find("input[name='register_employer[person][document]']");
         var names = $(form).find("input[name='register_employer[person][names]']");
@@ -315,7 +326,7 @@ function startEmployer() {
     });
     $('#btn-2').click(function (e) {
         e.preventDefault();
-        var form = $("form");
+        var form = $("[name='register_employer']");
         var idsPhones = [], phones = [];
         var mainAddress = $(form).find("input[name='register_employer[person][mainAddress]']");
         var department = $(form).find("select[name='register_employer[person][department]']");
@@ -495,9 +506,9 @@ function jsonToHTML(data) {
     return htmls;
 }
 function addListeners() {
-    var documentType = $("select[name='register_employee[person][documentType]']");
-    var document = $("input[name='register_employee[person][document]']");
-    var lastName1 = $("input[name='register_employee[person][lastName1]']");
+    var documentType = $("#register_employer_person_documentType");
+    var document = $("#register_employer_person_document");
+    var lastName1 = $("#register_employer_person_lastName1");
     $(documentType).blur( function () {
         if(documentType.val()!=""&&document.val()!=""&&lastName1.val()!=""){
             checkExistance();
@@ -512,6 +523,9 @@ function addListeners() {
         if(documentType.val()!=""&&document.val()!=""&&lastName1.val()!=""){
             checkExistance();
         }
+    });
+    $("#documentExistent").on('click', function () {
+        window.location.href = "/dashboard";
     });
     $('select').filter(function () {
         return this.id.match(/department/);
@@ -616,10 +630,9 @@ function addTagFormDeleteLink($tagFormLi, $tipo) {
     });
 }
 function checkExistance(){
-    var form = $("form");
-    var documentType = $(form).find("select[name='register_employee[person][documentType]']");
-    var document = $(form).find("input[name='register_employee[person][document]']");
-    var lastName1 = $(form).find("input[name='register_employee[person][lastName1]']");
+    var documentType = $("#register_employer_person_documentType");
+    var document = $("#register_employer_person_document");
+    var lastName1 = $("#register_employer_person_lastName1");
     $.ajax({
         url: "/api/public/v1/inquiries/documents",
         type: 'POST',
@@ -630,12 +643,14 @@ function checkExistance(){
             personType: '1'
         }
     }).done(function (data) {
-
-        $("#documentExistent").modal("show");
-        sendAjax("/dashboard");
+        console.log(data);
+        if(!(data["idEmployer"]=="-1"||data["idEmployer"]=="-2")){
+            $("#documentExistent").modal("show");
+        }
     }).fail(function (jqXHR, textStatus, errorThrown) {
         //show the other stuf
     });
+
 }
 function addAutoComplete(autoTo, data){
     $(autoTo).autocomplete({

@@ -17,7 +17,8 @@
                             {% if ready[eHE.idEmployerHasEmployee] == 2 or ready[eHE.idEmployerHasEmployee] == 3 %}
                                 {% set name = eHE.employeeEmployee.personPerson.fullName %}
                                 <div class="casiValidado">
-                                    <h1 class="azulclarofont light centrar">¡Haz subido todos los documentos de <br><strong>{{ name }}</strong></h1>
+                                    <img src="{{ asset('/public/img/home/icon7.png') }}" width="70px" height="auto">
+                                    <h1 class="grisclarofont light centrar">¡Haz subido todos los documentos de <br><strong>{{ name }}</strong>!</h1>
                                     <p class="light grisclarofont">En un máximo de 1 día hábil iniciaremos a validar tu proceso y radicarlo ante las entidades de seguridad social
                                         de ser necesario.</p>
                                 </div>

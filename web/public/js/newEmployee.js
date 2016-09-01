@@ -47,7 +47,7 @@ function startEmployee() {
                  },*/
                 rules: {
                     "register_employee[person][documentType]": "required",
-                    "register_employee[person][document]": {required: true, number: true},
+                    "register_employee[person][document]": {required: true, number: true, maxlength:10},
                     "register_employee[person][names]": "required",
                     "register_employee[person][lastName1]": "required",
                     "register_employee[person][mainAddress]": "required",
@@ -56,7 +56,12 @@ function startEmployee() {
                     "register_employee[person][city]": "required",
                     "register_employee[personExtra][civilStatus]": "required",
                     "register_employee[personExtra][gender]": "required",
-                    "register_employee[personExtra][documentExpeditionDate]": "required",
+                    "register_employee[personExtra][documentExpeditionDate][day]": "required",
+                    "register_employee[personExtra][documentExpeditionDate][month]": "required",
+                    "register_employee[personExtra][documentExpeditionDate][year]": "required",
+                    "register_employee[person][birthDate][day]": "required",
+                    "register_employee[person][birthDate][month]": "required",
+                    "register_employee[person][birthDate][year]": "required",
                     "register_employee[personExtra][documentExpeditionPlace]": "required",
                     "register_employee[personExtra][birthCountry]": "required",
                     "register_employee[personExtra][birthDepartment]": "required",
@@ -85,7 +90,8 @@ function startEmployee() {
                     "register_employee[person][documentType]": "Por favor selecciona un tipo de documento",
                     "register_employee[person][document]": {
                         required: "Por favor ingresa un documento",
-                        number: "ingresa solamente dígitos"
+                        number: "ingresa solamente dígitos",
+                        maxlength: "El documento no puede ser tan largo"
                     },
                     "register_employee[person][names]": "Por favor ingresa el nombre",
                     "register_employee[person][lastName1]": "Por favor ingresa el primer apellido",
@@ -95,8 +101,13 @@ function startEmployee() {
                     "register_employee[person][city]": "Por favor selecciona una ciudad",
                     "register_employee[personExtra][civilStatus]": "Por favor selecciona una opción",
                     "register_employee[personExtra][gender]": "Por favor selecciona una opción",
-                    "register_employee[personExtra][documentExpeditionDate]": "Por favor selecciona una opción",
-                    "register_employee[personExtra][documentExpeditionPlace]": "Por favor selecciona una opción",
+                    "register_employee[personExtra][documentExpeditionDate][day]": "Por favor selecciona una opción",
+                    "register_employee[personExtra][documentExpeditionDate][month]": "Por favor selecciona una opción",
+                    "register_employee[personExtra][documentExpeditionDate][year]": "Por favor selecciona una opción",
+                    "register_employee[person][birthDate][day]": "Por favor selecciona una opción",
+                    "register_employee[person][birthDate][month]": "Por favor selecciona una opción",
+                    "register_employee[person][birthDate][year]": "Por favor selecciona una opción",
+                    "register_employee[personExtra][documentExpeditionPlace]": "Por favor escribe algún lugar",
                     "register_employee[personExtra][birthCountry]": "Por favor selecciona una opción",
                     "register_employee[personExtra][birthDepartment]": "Por favor selecciona una opción",
                     "register_employee[personExtra][birthCity]": "Por favor selecciona una opción",
@@ -112,7 +123,8 @@ function startEmployee() {
                     "register_employee[verificationCode]": "Por favor ingrese el código",
                     "register_employee[employeeHasEmployers][frequencyFrequency]": "Por favor selecciona una opción",
                     "register_employee[employeeHasEmployers][holidayDebt]" : "Por favor ingrese un número de días o cambie de opción",
-                    "register_employee[entities][pension]":"Debes seleccionar una entidad"
+                    "register_employee[entities][pension]":"Debes seleccionar una entidad",
+                    "register_employee[entities][severances]":"Debes seleccionar una entidad"
                     /*,
                      "register_employee[credit_card]": "Por favor ingresa el número de la tarjeta",
                      "register_employee[cvv]": "Por favor ingresa el código de seguridad de la tarjeta",
@@ -595,7 +607,7 @@ function startEmployee() {
         }
 
         e.preventDefault();
-        var form = $("form");
+        var form = $("[name='register_employee']");
         var url= $(this).attr('href');
         $.ajax({
             url: $(this).attr('href'),
@@ -615,7 +627,7 @@ function startEmployee() {
     $('#btn-reenviar').click(function (e) {
         // We send a fake code, so that it generates a new one.
         e.preventDefault();
-        var form = $("form");
+        var form = $("[name='register_employee']");
         var url= $(this).attr('href');
         $.ajax({
             url: $(this).attr('href'),
@@ -633,7 +645,7 @@ function startEmployee() {
     });
     $('#btn-entities').click(function (e) {
         e.preventDefault();
-        var form = $("form");
+        var form = $("[name='register_employee']");
         var i = 0;
         var flagValid = true;
         var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
@@ -1033,6 +1045,7 @@ function startEmployee() {
         $("#alDiaDias").find("input[type=radio]").each(function () {
             $(this).prop("checked", true);
         });
+        $("#register_employee_employeeHasEmployers_holidayDebt").hide();
     }else if ($("#register_employee_employeeHasEmployers_holidayDebt").val() > 0) {
         $("#leDeboDias").find("input[type=radio]").each(function () {
             $(this).prop("checked", true);
@@ -1066,10 +1079,14 @@ function startEmployee() {
     if( $("#register_employee_entities_pension").val() == 50 ){
         $("#register_employee_employeeHasEmployers_paysPens_1").prop('checked', true);
         $("#pensionHide").hide();
+        //$("#register_employee_entities_pension option[value*=50]").prop('disabled',false);
+        $("#register_employee_entities_pension option[value*=50]").show();
     }
     else {
         $("#register_employee_employeeHasEmployers_paysPens_0").prop('checked', true);
         $("#pensionHide").show();
+        //$("#register_employee_entities_pension option[value*=50]").prop('disabled',true);
+        $("#register_employee_entities_pension option[value*=50]").hide();
     }
     calculator();
 
@@ -1077,9 +1094,14 @@ function startEmployee() {
         if($(this).find("input:checked").val()=="1"){
             $("#pensionHide").show();
             $("#register_employee_entities_pension").val("");
+            //$("#register_employee_entities_pension option[value*=50]").prop('disabled',true);
+            $("#register_employee_entities_pension option[value*=50]").hide();
         }else{
             $("#pensionHide").hide();
+            //$("#register_employee_entities_pension option[value*=50]").prop('disabled',false);
+            $("#register_employee_entities_pension option[value*=50]").show();
             $("#register_employee_entities_pension").val(50);
+
         }
         calculator();
     });
@@ -1095,6 +1117,7 @@ function startEmployee() {
         $("#wealthBlock").show();
     }
 
+   // $("#")
 
 }
 function addPhoneForm($collectionHolderB, $newLinkLi) {
@@ -1486,6 +1509,10 @@ function addListeners() {
         e.preventDefault();
         $("#calculatorResultsModal").modal('toggle');
     });
+    $("#link_calculator2").on("click", function (e) {
+        e.preventDefault();
+        $("#calculatorResultsModal").modal('toggle');
+    });
     $('select').filter(function () {
         return this.id.match(/department/);
     }).change(function () {
@@ -1579,14 +1606,26 @@ function addListeners() {
     });
 
     $("#cerrarModalDetalle").click(function(){
-        //TODO Cambiar coso a la presel
         var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
         if (selectedVal == " Trabajador por días") {
             $('#radio_diario').prop('checked', true);
             $('#radio_mensual').prop('checked', false);
         }
         else {
+            $('#radio_diario').prop('checked', false);
+            $('#radio_mensual').prop('checked', true);
+        }
+        calculator();
+    });
+
+    $("#employerDismiss").click(function(){
+        var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
+        if (selectedVal == " Trabajador por días") {
             $('#radio_diario').prop('checked', true);
+            $('#radio_mensual').prop('checked', false);
+        }
+        else {
+            $('#radio_diario').prop('checked', false);
             $('#radio_mensual').prop('checked', false);
         }
         calculator();
@@ -1674,6 +1713,9 @@ function calculator() {
     else if (arlChoose == 3) { //ninero
         arlProf = 0.00522;
     }
+    else if (arlChoose == 4) { //enfermero
+        arlProf = 0.00522;
+    }
     else if (arlChoose == 5) { //mayordomo
         arlProf = 0.01044;
     }
@@ -1748,8 +1790,6 @@ function calculator() {
             PensEmployeeCal2 = lPensEmployee * base2;
             salaryD2 = (salaryD - transportAidDaily)+(PensEmployeeCal2/numberOfDays);
         }
-
-        console.log(salaryD2 + " vs " + smmlv/numberOfDays);
 
         var displayError = false;
         if (salaryD2  > smmlv/numberOfDays || sisben == -1) {
@@ -2086,7 +2126,7 @@ function inquiry() {
     }).done(function (data) {
         //alert("La cédula que nos proporcionó, ya existe en nuestro sistema, los dátos serán cargados automáticamente");
         //load the data
-        var form = $("form");
+        var form = $("[name='register_employee']");
         $(form).find("input[name='register_employee[person][names]']").val(data["names"]);
         $(form).find("input[name='register_employee[person][lastName2]']").val(data["lastName2"]);
         $(form).find("select[name='register_employee[personExtra][civilStatus]']").val(data["civilStatus"]);

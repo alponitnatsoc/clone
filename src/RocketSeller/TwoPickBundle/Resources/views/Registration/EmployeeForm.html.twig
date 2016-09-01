@@ -395,7 +395,7 @@
                             <div id="hOp6C" class="hidden" >{% set hOp6 = legalOptions.6 %}{{legalOptions.6}}</div>
                             <div id="contractTypeTab" class="tab-pane fade in active">
                                 <div class="row">
-                                    <h2 class="text-center" style="font-size: 24px;margin-top: 10px;border-bottom: 1px solid #E6E7E8;padding-bottom: 30px;">Bienvenido a nuestro<br /><span style="font-weight:100;font-size: 21px;">asistente de contratación de empleado</span></h2>
+                                    <h2 class="text-center" style="font-size: 24px;margin-top: 10px;border-bottom: 1px solid #E6E7E8;padding-bottom: 30px;">Bienvenido a nuestro<br /><span style="font-weight:100;font-size: 21px;">asistente de contratación del empleado</span></h2>
                                     {% if changeBehaviorFlag == 1 and hOp6 == 0 %}
                                       <p class="text-center typeQuestion" style="font-size: 16px;">Debido a que ya cuentas con un contrato verbal con tu empleado y este equivale a un contrato a término indefinido, debes seleccionar esta opción.</p>
                                     {% else %}
@@ -564,7 +564,12 @@
                                             {{ form_label(form.employeeHasEmployers.timeCommitment) }}
                                         </div>
                                         <div class="col-sm-6 form-group">
-                                            {{ form_widget(form.employeeHasEmployers.timeCommitment) }}
+                                            {#{ form_widget(form.employeeHasEmployers.timeCommitment, { 'attr': {'data-error': '#error_time_commitment'} }) }#}
+
+                                            {% for key, item in form.employeeHasEmployers.timeCommitment.children %}
+                                              {{ form_widget(item, { 'attr': {'data-error': '#error_time_commitment'} }) }}
+                                            {% endfor %}
+                                            <div id="error_time_commitment"></div>
                                         </div>
                                     </div>
 
@@ -719,22 +724,28 @@ Adicional están los días de vacaciones, cesantías, intereses sobre cesantías
                                     <div style="opacity: 0.7;" class="col-sm-12 remember text-center">
                                         <h4 onclick="$(this).next().slideToggle()" style="font-size: 14px;cursor: pointer"><i class="glyphicon glyphicon-exclamation-sign"></i>¿Qué incluye el pago con seguridad social?</h4>
                                         <span id="textPorque">
-                                          El aporte mensual de seguridad social para tu empleado será de acuerdo con el salario de
-                                          devengue mensual. Para SALUD se deberá aportar el 12.5%; dividido de la siguiente forma:<br><br>
+                                          Los aportes mensuales de seguridad social de tu empleado se calculan de acuerdo al salario devengado en el
+                                           mes o a los días trabajados si es de tiempo parcial.<br><br>
+                                           Para SALUD se deberá aportar el 12.5%; dividido de la siguiente forma:<br><br>
                                           -Trabajador 4%<br>
                                           -Empleador 8,5%<br><br>
-                                          Para PENSION el total de aportes será de 16%, dividido de la siguiente forma:<br>
+                                          Para PENSION el total de aportes será de 16% sobre la base de cotización:<br>
                                           Trabajador 4%<br>
                                           Empleador 12%<br><br>
-                                          Para la ARL será de acuerdo con el grado de riesgo laboral; 0,522, 1,044, 2,436, 4,35, 6,96 %<br>
-                                          Para la CAJA es el 4% aportado por el empleador<br>
-                                          Debes tener en cuenta que cada año tendrás que pagar un valor adicional el cual ahorraras mensualmente para las siguientes prestaciones:<br><br>
-                                          -Cesantías: 8,33%<br>
-                                          -Intereses de cesantías: 12%<br>
-                                          -Prima: 8,33%<br>
-                                          -Vacaciones: 4,17%
+                                          Para la ARL será de acuerdo con el grado de riesgo laboral. Existen 5 tarifas de riesgo:<br>
+                                          - 0,522% (la mayoría de empleados domésticos tienen este nivel de riesgo)<br>
+                                          - 1,044%<br>
+                                          - 2,436%<br>
+                                          - 4,35%<br />
+                                          - 6,96 %<br /><br />
+                                          Para la CAJA DE COMPENSACIÓN es el 4% sobre el ingreso base de cotización, el aporte lo realiza el empleador.<br />
+                                          Debes tener en cuenta que cada año tendrás que pagar las siguientes prestaciones, y deberías ahorrarlo mensualmente:<br /><br />
+                                          - Cesantías: 8,33% (Un mes de salario al año).<br />
+                                          - Intereses de cesantías: 12% sobre el valor de las cesantías.<br />
+                                          - Prima: 8,33%.<br />
+                                          - Vacaciones: 4,17% (15 días al año)
                                     <div class="modal-resumen-pagos">
-                                      <a id="link_calculator" style="; cursor: pointer; margin-top:10px;display:block;color: #666;font-size: 14px;" class="notAjax">&#155; Ver detalle</a>
+                                      <a id="link_calculator2" style="; cursor: pointer; margin-top:10px;display:block;color: #666;font-size: 14px;" class="notAjax">&#155; Ver detalle</a>
                                     </div></span>
                                     </div>
 

@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use DateTime;
+use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\DocumentType;
 use RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity;
@@ -28,6 +29,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 class ProcedureController extends Controller
 {
 	use EmployeeMethodsTrait;
+
 	/**
 	 * Funcion que carga la pagina de tramites para el backoffice
 	 * Muestra un acceso directo a tramites pendientes de:
@@ -36,11 +38,18 @@ class ProcedureController extends Controller
 	 *
 	 * @return Response /backoffice/procedures
      */
-	public function indexAction()
+	public function indexAction(Request $request)
     {
 		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
-		$procedures = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:RealProcedure')->findAll();
-		
+        $order = ($request->query->get('order')) ? $request->query->get('order') : 'Name';
+        switch($order){
+            case 'Name':
+                $param = 'employerEmployer.personPerson.fullName';
+                $order = ($request->query->get('orderByName'))?$request->query->get('orderByName') : 'DESC';
+                break;
+        }
+		$procedures = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:RealProcedure')->findAll(array($param=>$order));
+
 		return $this->render(
             '@RocketSellerTwoPick/BackOffice/procedures.html.twig',array('procedures'=>$procedures)
         );
@@ -101,6 +110,7 @@ class ProcedureController extends Controller
     {
     	try {
             $em = $this->getDoctrine()->getManager();
+            /** @var EmployerHasEmployee $employerHasEmployee */
             $employerHasEmployee = $this->loadClassById($idEmployerHasEmployee,'EmployerHasEmployee');
             //$actComplete = $this->checkActionCompletation($idEmployerHasEmployee,$procedureId);
             $employerHasEmployee->setState(4);
@@ -109,6 +119,30 @@ class ProcedureController extends Controller
             $smailer = $this->get('symplifica.mailer.twig_swift');
             $smailer->sendBackValidatedMessage($this->getUser(),$employerHasEmployee);
             $this->addFlash("employee_ended_successfully", 'Exito al terminar los tramites del empleado');
+            $contracts = $employerHasEmployee->getContracts();
+            /** @var Contract $contract */
+            foreach ($contracts as $contract) {
+                if($contract->getState()==1){
+                    //we update the payroll
+                    $activeP = $contract->getActivePayroll();
+                    $dateNow=new DateTime();
+                    if($contract->getStartDate()>$dateNow){
+                        $realMonth=$contract->getStartDate()->format("m");
+                        $realYear=$contract->getStartDate()->format("Y");
+                        $realPeriod=intval($contract->getStartDate()->format("d"))<=15&&$contract->getFrequencyFrequency()->getPayrollCode()=="Q"?2:4;
+                    }else{
+                        $realMonth=$dateNow->format("m");
+                        $realYear=$dateNow->format("Y");
+                        $realPeriod=intval($dateNow->format("d"))<=15&&$contract->getFrequencyFrequency()->getPayrollCode()=="Q"?2:4;
+                    }
+                    $activeP->setMonth($realMonth);
+                    $activeP->setYear($realYear);
+                    $activeP->setPeriod($realPeriod);
+                    $em->persist($activeP);
+                    $em->flush();
+                    break;
+                }
+            }
             return $this->redirectToRoute('show_procedure',array('procedureId'=>$procedureId));
         }catch(Exeption $e){
             $this->addFlash("employee_ended_faild", 'Ocurrio un error terminando el empleado: '. $e);

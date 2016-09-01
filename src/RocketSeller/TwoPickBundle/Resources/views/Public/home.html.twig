@@ -4,7 +4,8 @@
 <html xmlns="http://www.w3.org/1999/html">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 <title>Symplifica</title>
 <link rel="stylesheet" type="text/css" href="{{ asset('public/css/home/home.css') }}"/>
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700' rel='stylesheet' type='text/css'>
@@ -22,19 +23,25 @@
         	<div id="banner">
 							<div id="headForm">
 								<div class="contHeadForm">
-									<h1>Paga, afilia y administra a
-									tus empleados desde tu hogar</h1>
+									<h1>Afilia, paga y adminsitra a tus empleados
+									domésticos desde cualquier lugar</h1>
 									<p>
-										Descubre los beneficios de hacer las cosas bien
+										Te ayudamos a hacer las cosas bien
 									</p>
 									<div class="formCont">
-										<form>
-											<input class="inputHalf" type="text" name="firstname" placeholder="Nombre">
-											<input class="inputHalf" type="text" name="firstname" placeholder="Apellido"><br />
-											<input class="inputFull" type="text" name="firstname" placeholder="Celular"><br />
-											<input class="inputFull" type="text" name="firstname" placeholder="Correo electrónico">
-											<button class="btn naranja obten">Obtén 1 mes gratis</button>
-										</form>
+										{{ form_start(form) }}
+											<input id="formfirstname" class="inputHalf" type="text" name="firstname" placeholder="Nombre" required>
+											<input id="formlastname" class="inputHalf" type="text" name="lastname" placeholder="Apellido" required><br />
+											<input id="formcellphone" class="inputFull" type="number" name="cellphone" placeholder="Celular" required><br />
+											<input id="formemail" class="inputFull" type="email" name="email" placeholder="Correo electrónico" required>
+											{{ form_widget(form.save, { 'attr': {'class': 'btn naranja obten'}}) }}
+											<div class="form-group txt-A1-terms">
+											<input type="checkbox" id="chktyc" required />
+											Al registrarme acepto todos los <a href="{{ path('terminos_condiciones') }}" target="_blank">Términos y Condiciones</a>
+											y las <a href="{{ path('politicas_privacidad') }}" target="_blank">Políticas de Privacidad</a>
+										{{ form_end(form) }}
+
+								    </div>
 									</div>
 								</div>
 							</div>
@@ -44,27 +51,12 @@
                         <p class="light-italic">La herramienta más sencilla para administrar empleados domésticos</p>
                     </div>
                     <div id="tbanner2">
-                    	<a href="/register"><div id="btn-prueba" class="semi-italic">Regístrate ahora</div></a>
+                    	<a href="/register"><div id="btn-prueba" class="semi-italic">Prueba un mes gratis</div></a>
                         <!-<a href="#openModal"><div class="btn-video semi-italic">Ver video</div></a>->
                     </div>
                 </div>-->
             </div>
         </header>
-
-        <!-------------------The Modal-------------------------->
-
-
-        <div id="openModal" class="modalDialog">
-
-            <div>
-							<div class="xdiv">
-								<a href="#close" title="Close" class="close" onclick="stopVideo()">Cerrar</a>
-							</div>
-							<video controls id="myvideo" loop>
-							  <source src="{{ asset('public/video/benenficios.mp4') }}"></source>
-							</video>
-            </div>
-        </div>
 
          <!--------------------beneficios-------------------------->
         <section>
@@ -75,16 +67,16 @@
 
                 <div class="col span_1_of_4 beneficios">
                 	<img src="{{ asset('public/img/landing/benefit1.png') }}" alt="">
-                	<h3 class="light">Contratación guiada</h3>
+                	<h3 class="light">Contrato</h3>
 
-                	<p class="light-italic">Te guiamos en la correcta contratación de todos tus empleados</p>
+                	<p class="light">Te guiamos en la contratación de tu empleado y generamos un contrato de acuerdo a la ley.</p>
                 </div>
 
                 <div class="col span_1_of_4 beneficios">
                 	<img src="{{ asset('public/img/landing/benefit2.png') }}" alt="">
-                	<h3 class="light beneh3">Fácil afiliación</h3>
+                	<h3 class="light beneh3">Afiliación</h3>
 
-                	<p class="light">Te afiliamos a ti y a tu empleado a las administradoras de seguridad social
+                	<p class="light">Afiliamos a tus empleados a las entidades de seguridad social sin trámites complicados.
 
 </p>
                 </div>
@@ -93,25 +85,41 @@
                 	<img src="{{ asset('public/img/landing/benefit3.png') }}" alt="">
                 	<h3 class="light">Pago electrónico</h3>
 
-                	<p class="light">Te ahorramos tiempo gestionando tus pagos y aportes con un solo clic</p>
+                	<p class="light">Te damos la opción de pagar en línea la nómina y los aportes a seguridad con un solo clic.</p>
                 </div>
 
                 <div class="col span_1_of_4 beneficios">
-                	<img src="{{ asset('public/img/landing/benefit4.png') }}" alt="">
-                	<h3 class="light">Fácil administración</h3>
+                	<img src="{{ asset('public/img/home/cat6.png') }}" alt="">
+                	<h3 class="light">Notificaciones</h3>
 
-                	<p class="light">Administramos todos los detalles del día a día de tus empleados</p>
+                	<p class="light">Te recordamos las fechas que no puedes olvidar y realizamos el trabajo duro por ti.</p>
                 </div>
             </div>
             <!--<a href="{{ path('beneficios') }}"><div class="callto naranja bold">› Beneficios</div></a>-->
         </section>
+				<!-------------------The Modal-------------------------->
 
+
+        <div id="openModal" class="modalDialog">
+
+            <div>
+							<div class="xdiv">
+								<a href="#close" title="Close" id="pausar" class="close">Cerrar</a>
+							</div>
+							<video controls onclick="playPause()" id="video1">
+							  <source src="{{ asset('public/video/video.mp4') }}"></source>
+							</video>
+            </div>
+        </div>
+<!--seccion del video-------------------------------------------------->
         <section>
         	<div id="video">
             	<div id="video-info">
-                	<a href="#openModal"><img src="{{ asset('public/img/home/play.png') }}" alt=""></a>
-                    <h3 class="naranjafont extrabold">Explora nuestro producto en 1 minuto</h3>
-                    <p class="light">Conoce cómo te hacemos la vida más fácil</p>
+                		<div onclick="playimg()" id="video2">
+											<a href="#openModal"><img src="{{ asset('public/img/home/play.png') }}" alt=""></a>
+										</div>
+                    <h3 class="naranjafont extrabold">Dale play al video y descubre en 2 minutos</h3>
+                    <p class="light">por qué deberías usar Symplifica</p>
                     <a href="/register"><div class="callto2 naranja bold">Prueba un mes gratis</div></a>
                 </div>
             </div>
@@ -124,7 +132,7 @@
 								</div>
 							<div class="col span_1_of_3 centrar">
 									<img src="{{asset('public/img/home/parcial.png')}}">
-										<h3 style="font-size: 18px;" class="light-italic grisclarofont">Para empleados que laboran de <strong>1 a 2 días a la semana</strong></h3><br>
+										<h3 style="font-size: 18px;" class="light-italic grisclarofont">Para empleados que trabajan de <strong>1 a 2 días a la semana</strong></h3><br>
 										<div class="caja-precio azuloscuro">
 											<p class="bold"><span class="extrabold span">$16.500</span><br>mensual<br>Por empleado</p>
 										</div>
@@ -132,7 +140,7 @@
 
 								<div class="col span_1_of_3 centrar">
 									<img src="{{asset('public/img/home/medio.png')}}">
-										<h3 style="font-size: 18px;" class="light-italic grisclarofont">Para empleados que laboran de <strong>3 a 4 días a la semana</strong></h3><br>
+										<h3 style="font-size: 18px;" class="light-italic grisclarofont">Para empleados que trabajan de <strong>3 a 4 días a la semana</strong></h3><br>
 										<div class="caja-precio azuloscuro">
 											<p class="bold"><span class="extrabold span">$22.500</span><br>mensual<br>Por empleado</p>
 										</div>
@@ -140,7 +148,7 @@
 
 								<div class="col span_1_of_3 centrar">
 									<img src="{{asset('public/img/home/completo.png')}}">
-										<h3 style="font-size: 18px;" class="light-italic grisclarofont">Para empleados que laboran <strong>5 o más días a la semana</strong></h3><br>
+										<h3 style="font-size: 18px;" class="light-italic grisclarofont">Para empleados que trabajan <strong>5 o más días a la semana</strong></h3><br>
 										<div class="caja-precio azuloscuro">
 											<p class="bold"><span class="extrabold span">$29.500</span><br>mensual<br>Por empleado</p>
 										</div>
@@ -271,7 +279,7 @@ de empleados que quieras administrar</h4>
 
                 </div>
             </div>
-            <a href="/register"><div class="callto2 naranja bold">Regístrate ahora</div></a>
+            <a href="/register"><div class="callto2 naranja bold">Prueba un mes gratis</div></a>
         </section>-->
 
         <div id="intro-pc">
@@ -299,9 +307,40 @@ de empleados que quieras administrar</h4>
 </body>
 <script type="text/javascript" src="{{ asset('public/js/home/bootstrap-slider.js') }}"></script>
 <script type="text/javascript">
+
+$('#pausar').click(function(){
+ document.getElementById('video1').pause();
+});
+$('#video2').click(function(){
+ document.getElementById('video1').play();
+});
+
+	var myVideo = document.getElementById("video1");
+
+	function playPause() {
+		if (myVideo.paused)
+				myVideo.play();
+		else
+				myVideo.pause();
+	}
+
 	$(".ex8").slider({
 		tooltip: 'always'
 	});
+	$('#formfirstname').attr('oninvalid', 'setCustomValidity("El campo no puede estar vacio")');
+	$('#formfirstname').attr('oninput', "setCustomValidity('')");
+
+	$('#formlastname').attr('oninvalid', 'setCustomValidity("El campo no puede estar vacio")');
+	$('#formlastname').attr('oninput', "setCustomValidity('')");
+
+	$('#formcellphone').attr('oninvalid', 'setCustomValidity("El campo no puede estar vacio")');
+	$('#formcellphone').attr('oninput', "setCustomValidity('')");
+
+	$('#formemail').attr('oninvalid', 'setCustomValidity("El correo escrito no es valido")');
+	$('#formemail').attr('oninput', "setCustomValidity('')");
+
+	$('#chktyc').attr('oninvalid', 'setCustomValidity("Acepta los Términos y Condiciones para continuar")');
+	$('#chktyc').attr('onclick', "setCustomValidity('')");
 
     function numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -400,6 +439,8 @@ de empleados que quieras administrar</h4>
             $("#palabra-empleados").text("empleado");
 
     }
+
+
 
 		function stopVideo(){
 			$('#mainVideoFrame').attr('src', $('#mainVideoFrame').attr('src'));

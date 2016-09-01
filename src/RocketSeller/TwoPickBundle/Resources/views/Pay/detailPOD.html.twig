@@ -1,83 +1,7 @@
 {% extends "::base.html.twig" %}
 {% block content %}
-<style>
-.liTitle {
-  color: #ffffff;
-  font-weight: 500;
-  font-size: 15px;
-  background: #3c4b5a;
-  margin: 0;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  padding: 10px 0 !important;
-  text-align: center;
-}
-.contenedorItem {
-  clear: both;
-  padding: 40px 0 0;
-}
-.contenedorItem h1 {
-  font-size: 20px;
-  color: #00858c;
-  text-align: center;
-}
-.borderBottom {
-  border-bottom: 1px solid #e6e6e6;
-}
-.borderRight {
-  border-right: 1px solid #e6e6e6;
-}
-  .detalleCompra {
-    background: #fbfbfb;
-    height: auto;
-    overflow: hidden;
-    width: 90%;
-    margin: 0 auto;
-    border-radius: 5px;
-}
-.detalleCompra p {
-  margin: 0;
-  padding: 8px 0;
-  color: #7d7d7d;
-}
-  .detalleCompra ul {
-    padding: 0;
-    margin: 0;
-    height: auto;
-    overflow: hidden;
-  }
-  .detalleCompra li {
-    list-style-type: none;
-    clear: both;
-    height: auto;
-    overflow: hidden;
-    padding: 0 20px;
-  }
-  .h1cont {
-    text-align: center;
-    padding: 20px 0 25px 0;
-  }
-  .botnDetailpod {
-    width: 90%;
-    margin: 0 auto;
-    height: auto;
-    overflow: hidden;
-    text-align: center;
-  }
-  .boton {
-    width: 30%;
-    float: left;
-    text-align: center;
-    margin: 15px 1.6% 0;
-    background: #ff5c5d;
-    border-radius: 17px;
-    padding: 7px 0;
-}
-.boton a {
-  color: #FFF;
-}
-</style>
 <link rel="stylesheet" type="text/css" href="{{ asset('css/public/pagospage.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ asset('css/public/estadoPago.css') }}"/>
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700' rel='stylesheet' type='text/css'>
 
     {% if pod.productProduct.simpleName == "PN" %}
@@ -131,10 +55,10 @@
         {% if pod.paymentStatus == "-2" %}
         <div class="botnDetailpod">
           <div class="boton">
-            <a href="{{ path('user_retry_pay_po',{'idPO':pod.purchaseOrders.idPurchaseOrders}) }}" class="notAjax">Reintentar</a><br/>
+            <a href="{{ path('user_retry_pay_po',{'idPOD':pod.idPurchaseOrdersDescription}) }}" class="notAjax">Reintentar</a><br/>
           </div>
           <div class="boton">
-            <a href="" class="notAjax">Cambiar Datos</a><br/>
+            <a href="{{ path('edit_pod_description',{'idPOD':pod.idPurchaseOrdersDescription}) }}" class="notAjax">Cambiar Datos</a><br/>
           </div>
           <div class="boton">
             <a href="{{ path('user_return_pay_pod',{'idPOD':pod.idPurchaseOrdersDescription}) }}" class="notAjax">Devolverme mi dinero</a><br/>

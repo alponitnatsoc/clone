@@ -507,10 +507,8 @@ class Employer
         $employees = $this->getEmployerHasEmployees();
         /** @var EmployerHasEmployee $employee */
         foreach( $employees as $employee){
-            if ($employee->getState()>2){
-                if ($employee->getEmployeeEmployee()->getEmployeeHasUnfinishedActions($this->getIdEmployer())>0){
+            if ($employee->getState()>2 and $employee->getState()<5){
                     $this->toFinish += 1;
-                }
             }
         }
         return $this->toFinish;
@@ -531,6 +529,21 @@ class Employer
     }
 
     /**
+     * Get Employees with Errors
+     *
+     * @return integer
+     */
+    public function getErrors(){
+        $employees = $this->getEmployerHasEmployees();
+        /** @var EmployerHasEmployee $employee */
+        foreach( $employees as $employee){
+            if ($employee->getEmployeeEmployee()->getEmployeeHasUnfinishedActions($this->getIdEmployer())==2){
+                $this->finished+=1;
+            }
+        }
+        return $this->finished;
+    }
+    /**
      * Get finished
      *
      * @return integer
@@ -540,10 +553,10 @@ class Employer
         $employees = $this->getEmployerHasEmployees();
         /** @var EmployerHasEmployee $employee */
         foreach( $employees as $employee){
-            if ($employee->getState()>2){
-                if ($employee->getEmployeeEmployee()->getEmployeeHasUnfinishedActions($this->getIdEmployer())===0){
-                    $this->finished+=1;
-                }
+            if ($employee->getState()>4){
+                //if ($employee->getEmployeeEmployee()->getEmployeeHasUnfinishedActions($this->getIdEmployer())===0){
+                $this->finished+=1;
+                //}
             }
         }
         return $this->finished;

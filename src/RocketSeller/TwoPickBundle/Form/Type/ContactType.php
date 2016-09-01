@@ -78,7 +78,7 @@ class ContactType extends AbstractType
             $builder
                 ->add('phone', 'number',array(
                         'data'  =>$this->phone,
-                        'label' => 'Telefono / Celular:',
+                        'label' => 'Teléfono / Celular:',
                         'required' => true,
                         'attr' => array(
                             'placeholder' => 'Digita tu teléfono o número celular'
@@ -88,7 +88,7 @@ class ContactType extends AbstractType
         }else{
             $builder
                 ->add('phone', 'number',array(
-                        'label' => 'Telefono / Celular:',
+                        'label' => 'Teléfono / Celular:',
                         'required' => true,
                         'attr' => array(
                             'placeholder' => 'Digita tu teléfono o número celular'

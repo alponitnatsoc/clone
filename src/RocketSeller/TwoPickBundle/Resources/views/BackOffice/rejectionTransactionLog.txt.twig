@@ -1,0 +1,20 @@
+{% trans_default_domain 'FOSUserBundle' %}
+{% block subject %}{% autoescape false %}Fallo recaudo de {{userName }}{% endautoescape %}{% endblock %}
+{% block body_html %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600,600italic,700" rel="stylesheet" type="text/css">
+    <title>Responsive email</title>
+  </head>
+  <body>
+     Fallo el recaudo de <strong>{{ userName }}</strong><br>
+    <strong>Fecha de rechazo:</strong> {{ rejectionDate|localizeddate('long', 'none', 'es-CO') }}<br>
+    <strong>Monto rechazado:</strong> ${{ value|number_format(0, '.', ',') }}<br>
+    <strong>Teléfono:</strong>  {{ phone }}<br>
+    <strong>Correo electrónico:</strong> {{ userEmail }}
+  </body>
+</html>
+{% endblock %}

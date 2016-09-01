@@ -1,0 +1,52 @@
+{% extends "::base.html.twig" %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{{ asset('css/public/pagospage.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ asset('css/public/estadoPago.css') }}"/>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700' rel='stylesheet' type='text/css'>
+    {% if pod.productProduct.simpleName == "PN" %}
+        {% set payMethod = pod.payMethod %}
+        {% set bank = payMethod.bankBank.name %}
+        {% if payMethod.accountNumber != null %}
+            {% set account = payMethod.accountNumber %}
+        {% else %}
+            {% set account = payMethod.cellphone %}
+        {% endif %}
+        {% set accountType = payMethod.accountTypeAccountType.name %}
+    {% else %}
+        {% set bank = "---" %}
+        {% set account = "---" %}
+        {% set accountType = "---" %}
+    {% endif %}
+    <div class="row">
+      <div class="h1cont">
+        <img width="70" src="{{ asset('public/img/landing/benefit3.png') }}" alt="">
+        <h1 class="bold">Editar Orden de compra</h1>
+      </div>
+      <div class="detalleCompra">
+        <ul>
+          <li class="liTitle">
+            Detalle de compra
+          </li>
+          <li class="borderBottom">
+            <p class="left borderRight">Producto</p>
+            <p class="right bold">{{ pod.productProduct.name }}</p>
+          </li>
+          <li class="borderBottom">
+            <p class="left borderRight">Valor</p>
+            <p class="right bold">${{ pod.value }}</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default formpago">
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

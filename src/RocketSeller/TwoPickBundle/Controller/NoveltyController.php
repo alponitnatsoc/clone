@@ -277,16 +277,19 @@ class NoveltyController extends Controller {
             'employee' => $novelty->getSqlPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()));
     }
 
-    public function  updateWorkedDaysAction($empId, $idNovelty, $daysAmount){
+    public function  updateWorkedDaysAction($empId, $idNovelty, $daysAmount, $idPerson = -1){
 
       $request = $this->container->get('request');
 
       $noveltyRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Novelty");
       $novelty=$noveltyRepo->findOneBy(array('idNovelty' => $idNovelty));
 
-      $user = $this->getUser();
+      if($idPerson == -1) {
+        $user = $this->getUser();
+        $idPerson = $user->getPersonPerson()->getIdPerson();
+      }
 
-      if($user->getPersonPerson()->getIdPerson() != $novelty->getSqlPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson()->getIdPerson()){
+      if($idPerson != $novelty->getSqlPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson()->getIdPerson()){
         return $this->redirectToRoute('show_dashboard');
       }
 
@@ -304,7 +307,7 @@ class NoveltyController extends Controller {
           "employee_id"=>$empId,
           "novelty_consec"=>$info['NOV_CONSEC']
       ));
-      $deleteAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postDeleteNoveltyEmployee', array('_format' => 'json'));
+      $deleteAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postDeleteNoveltyEmployee', array('request'=>$request), array('_format' => 'json'));
       if($deleteAnswer->getStatusCode()!=200){
           return $this->redirectToRoute('show_dashboard');
       }
@@ -321,12 +324,41 @@ class NoveltyController extends Controller {
           "novelty_base"=>$novelty->getSqlValue() / $novelty->getUnits()
       ));
 
-      $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddNoveltyEmployee', array('_format' => 'json'));
+      $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddNoveltyEmployee', array('request' => $request ), array('_format' => 'json'));
       if($insertionAnswer->getStatusCode()!=200){
           return $this->redirectToRoute('show_dashboard');
       }
 
       return $this->redirectToRoute('payroll');
+    }
+
+    public function validateAndPersistNoveltyAction($idPayroll, $idNoveltyType, $noveltyFields){
+      $noveltyType = $this->getDoctrine()
+          ->getRepository('RocketSellerTwoPickBundle:NoveltyType')
+          ->find($idNoveltyType);
+
+      $payroll = $this->getDoctrine()
+          ->getRepository('RocketSellerTwoPickBundle:Payroll')
+          ->find($idPayroll);
+      $novelty = new Novelty();
+      $novelty->setNoveltyTypeNoveltyType($noveltyType);
+      $novelty->setPayrollDetailPayrollDetail(new PayrollDetail());
+
+      if(array_key_exists('name', $noveltyFields))
+        $novelty->setName($noveltyFields['name']);
+      if(array_key_exists('dateStart', $noveltyFields))
+        $novelty->setDateStart(DateTime::createFromFormat('m/d/Y', $noveltyFields['dateStart']));
+
+      if(array_key_exists('dateEnd', $noveltyFields))
+        $novelty->setDateEnd(DateTime::createFromFormat('m/d/Y', $noveltyFields['dateEnd']));
+
+      if(array_key_exists('units', $noveltyFields))
+        $novelty->setUnits($noveltyFields['units']);
+
+      if(array_key_exists('amount', $noveltyFields))
+        $novelty->setAmount($noveltyFields['amount']);
+
+      return $this->validateAndPersistNovelty($novelty, $payroll, $noveltyType);
     }
 
     /**

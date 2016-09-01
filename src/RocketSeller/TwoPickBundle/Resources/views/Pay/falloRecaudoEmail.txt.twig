@@ -1,0 +1,98 @@
+{% trans_default_domain 'FOSUserBundle' %}
+{% block subject %}{% autoescape false %}Recaudo fallido{% endautoescape %}{% endblock %}
+{% block body_html %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600,600italic,700" rel="stylesheet" type="text/css">
+    <title>Responsive email</title>
+    <style type="text/css">
+      body {margin: 10px 0; padding: 0 10px; background: #F9F2E7; font-size: 13px;}
+      table {border-collapse: collapse;}
+      td {font-family: arial, sans-serif; color: #333333;}
+
+      @media only screen and (max-width: 580px) {
+        body,table,td,p,a,li,blockquote {
+          -webkit-text-size-adjust:none !important;
+        }
+        table {width: 100% !important}
+
+        .responsive-image img {
+          height: auto !important;
+          max-width: 50% !important;
+          width: 50% !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr>
+        <td>
+          <table border="0" cellpadding="0" cellspacing="0" align="center" width="640" bgcolor="#FFFFFF">
+            <tr>
+              <td style="font-size: 0; line-height: 0; padding: 0 10px;" height="80" align="center" class="responsive-image">
+                <img src="https://symplifica.com/img/logo.png" alt="Symplifica" />
+              </td>
+            </tr>
+            <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr>
+            <tr>
+              <td style="padding: 10px 10px 20px 10px; text-align: center">
+                <div style="color:#75BEC1;font-size: 35px; font-family: 'Open Sans', sans-serif; font-weight: 700;">¡Hola!</div>
+                <br />
+                <div style="font-size: 30px; font-family: 'Open Sans', sans-serif; font-weight: 300; color: #858688; width: 70%; margin: 0 auto">
+                  {{ userName }}
+                </div><br /><br /><br />
+                <div style="width:80%;margin:0 auto;font-size: 20px; font-family: 'Open Sans', sans-serif; font-weight: 700; color: #5D5E5E;text-align:left">Lamentablemente tu pago fue rechazado</div><br /><br />
+                <div style="font-size: 15px; font-style: italic; font-family: 'Open Sans', sans-serif; font-weight: 100; color: #858688;width:80%;margin:0 auto;text-align:left">
+                	Verifica los datos de tu cuenta e intenta realizar de nuevo el pago o puedes cambiar tu método de pago en tu cuenta de Symplifica.<br><br>
+                    <strong>Fecha de rechazo:</strong> {{ rejectionDate|localizeddate('long', 'none', 'es-CO') }}<br>
+                    <strong>Monto rechazado:</strong> ${{ value|number_format(0, '.', ',') }}<br>
+                    <strong>Nombre:</strong> {{ userName }}<br>
+                    <strong>Teléfono:</strong>  {{ phone }}<br>
+                    <strong>Correo electrónico:</strong> {{ userEmail }}
+
+</div><br /><br />
+                <br /><br />
+                <a href="#" style="text-decoration:none" target="_blank"><div style="background:#DF9036; height: 35px; font-size:14px; width: 170px; margin: 0 auto; color:#FFFFFF;font-family: 'Open Sans', sans-serif; font-weight: 600; padding: 10px 0 0 0">Ir a Symplifica</div></a><br /><br />
+                <div style="font-size: 17px; font-family: 'Open Sans', sans-serif; font-weight: 300; color: #858688; width: 70%; margin: 0 auto">
+                  Atentamente,<br />
+                  Equipo Symplifica
+                </div>
+                <br />
+
+
+              </td>
+            </tr>
+
+            <tr><td style="font-size: 0; line-height: 0;" height="20">&nbsp;</td></tr>
+            <tr>
+              <td bgcolor="#485465">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="text-align:center; font-family: 'Open Sans', sans-serif; font-weight: 300;">
+                  <tr>
+                  	<td style="color: #fff; font-family: 'Open Sans', sans-serif; font-weight: 300;">Siguenos
+                    <a href="https://www.facebook.com/Symplifica-1538503439800792/timeline"><img src="https://symplifica.com/img/face.png" /></a>
+                    <a href="https://twitter.com/symplifica_?lang=en"><img src="https://symplifica.com/img/link.png" /></a>
+                    <a href="https://www.linkedin.com/company/symplifica?trk=tyah&trkInfo=clickedVertical%3Acompany%2CclickedEntityId%3A10358058%2Cidx%3A1-1-1%2CtarId%3A1456525736089%2Ctas%3Asymplifica"><img src="https://symplifica.com/img/tweet.png" /></a>
+                    </td>
+                  </tr>
+
+                  <tr>
+                  	<br>
+                    <td style="padding: 0 10px; color: #FFFFFF; font-family: 'Open Sans', sans-serif; font-weight: 300;">
+                      Términos y Condiciones I Copyright © Todos los derechos reservados Sympliﬁca
+                    </td>
+                  </tr>
+                  <tr><td style="font-size: 0; line-height: 0;" height="15">&nbsp;</td></tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+{% endblock %}

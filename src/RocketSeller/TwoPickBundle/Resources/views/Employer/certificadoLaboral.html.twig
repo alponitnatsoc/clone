@@ -1,21 +1,21 @@
 {% block content %}
-    <h1 align="center" style="font-weight: 800;">{{ employer.personPerson.names|upper}} {{ employer.personPerson.lastName1|upper}} {{ employer.personPerson.lastName2|upper}}</h1>
-    <p align="center" style="font-size: 20px;">{{ employer.personPerson.documentType|trans|lower }} {{ employer.personPerson.document }}</p>
-    <h2 align="center" style="font-weight: 100;">CERTIFICA QUE:</h1>
-    <p class="textocert">
-      {{ employee.personPerson.names|upper }} {{employee.personPerson.lastName1|upper }} {{ employee.personPerson.lastName2|upper}}
-      identificada con {{ (employee.personPerson.documentType~'_name')|trans|lower }} número {{ employee.personPerson.document }} de
-      {{ employee.personPerson.documentExpeditionPlace|lower|capitalize }} viene desempeñando labores de servicio doméstico desde el
-      {{ contrato.startDate|date("d") }} de {{ contrato.startDate|date("F")|trans|lower }} de {{ contrato.startDate|date("Y") }}.
-      De acuerdo a la relación contractual que se encuentra establecida conmigo,
-      {% if contrato.timeCommitmentTimeCommitment.code == "XD" %}
-        contrato por días,
-      {% endif %}
-      con una asignación salarial
-      {% if contrato.timeCommitmentTimeCommitment.code == "XD" %}
-        aproximada
-      {% endif %}
-      mensual de ${{ contrato.salary }} pesos colombianos.<br><br>
-      <strong>La anterior certificación se expide a solicitud del interesado, a los {{ "now"|date("d") }} días del mes de {{ "now"|localizeddate('long', 'none', 'es-CO', null , 'MMMM') }} de {{ "now"|date("Y") }}.</strong>
-    </p>
+    <p>&nbsp;</p>
+    {% set local = "now"|date("d-m-y") %}
+    <p>&nbsp;</p>
+    <p style="text-align: center;"><strong>CERTIFICADO LABORAL</strong></p>
+    <p>&nbsp;</p>
+    <p style="text-align: justify;">Yo, {{ data.employer.name|upper }} identificado con c&eacutedula de ciudadan&iacutea {{ data.employer.docNumber|number_format(0,',','.') }},
+        CERTIFICO que {{ data.employee.name|upper }} identificado con c&eacutedula de ciudadan&iacutea {{ data.employee.docNumber|number_format(0,',','.') }} de {{ data.employee.docExpPlace }},
+        trabaja para mi como {{ data.contract.position|upper }} desde el {{ data.contract.fechaInicio|localizeddate('none', 'none', 'es-CO', null, "dd 'de' MMMM 'de' Y") }}, a trav&eacutes de un contrato a {{ data.contract.type }}
+        y devengando un salario de ${{ data.contract.salary|number_format(0,',','.') }} mensuales promedio.</p>
+
+    <p style="text-align: justify;">Esta constancia se expide a solicitud del interesado a los
+        {{ "now"|localizeddate('none', 'none', 'es-CO', null, "d 'días del mes de' MMMM 'del año' Y") }}.</p>
+
+    <p>Atentamente,</p>
+    _____________________________________
+    <p>{{ data.employer.name|upper }}</p>
+    <p>{{ data.employer.docType }} {{ data.employer.docNumber|number_format(0,',','.') }}</p>
+    <p>Correo: {{ data.employer.mail }} - Tel: {{ data.employer.phone }}</p>
+    <p>&nbsp;</p>
 {% endblock %}

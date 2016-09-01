@@ -1,0 +1,21 @@
+{% extends 'SonataAdminBundle:CRUD:base_list_field.html.twig' %}
+
+{% block field%}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js">
+        $("#mostrar").click(function(){
+            $("#algo").slideToggle();
+        });
+    </script>
+    <button id="mostrar">Ver documento</button>
+    <div id="algo">
+        {% if object.documentDocument is defined and object.documentDocument != '' %}
+            {% set path =  object.documentDocument.path %}
+            {% if path is defined %}
+                <embed width="400" height="500" src= {{ path  }}  alt=”pdf”
+                       pluginspage=”//www.adobe.com/products/acrobat/readstep2.html”>
+                </embed>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endblock %}

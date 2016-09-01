@@ -6,9 +6,10 @@ security:
 
     role_hierarchy:
         ROLE_NEW: [ ROLE_USER ]
-        ROLE_BACK_OFFICE: [ ROLE_USER, ROLE_BACK_OFFICE ]
+        ROLE_BACK_OFFICE: [ ROLE_USER, ROLE_BACK_OFFICE , ROLE_SONATA_ADMIN ]
         ROLE_ADMIN:       [ ROLE_USER , ROLE_SONATA_ADMIN ]
-        ROLE_SUPER_ADMIN: [ ROLE_ADMIN , ROLE_SONATA_ADMIN ]
+        ROLE_SUPER_ADMIN: [ ROLE_ADMIN , ROLE_ALLOWED_TO_SWITCH ]
+
 
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
@@ -69,7 +70,7 @@ security:
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
 
     access_control:
-        - { path: ^/admin.*, roles: ROLE_ADMIN }
+        - { path: ^/admin.*, roles: [ROLE_ADMIN , ROLE_BACK_OFFICE] }
         - { path: ^/backoffice.*, roles: ROLE_BACK_OFFICE }
         - { path: ^/media.*, roles: ROLE_BACK_OFFICE }
 
@@ -145,3 +146,4 @@ security:
         # This two next lines are used to allow access to those ips, in any service.
         - { path: ^/api/public/v1/secured, role: IS_AUTHENTICATED_ANONYMOUSLY, ips: [10.0.0.1, 127.0.0.1, 190.7.130.163, 52.73.123.224, 52.91.121.67] }
         - { path: ^/api/public/v1/secured, role: [ROLE_NO_ACCESS] }
+        - { path: ^/novelty/workableDays/validateandpersist/^, role: IS_AUTHENTICATED_ANONYMOUSLY, ips: [10.0.0.1, 127.0.0.1, 190.7.130.163, 52.73.123.224, 52.91.121.67] }

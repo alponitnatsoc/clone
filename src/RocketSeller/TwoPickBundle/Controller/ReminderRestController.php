@@ -6,6 +6,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints\DateTime;
@@ -50,7 +51,7 @@ class ReminderRestController extends FOSRestController
                                 if($contract->getActivePayroll()){
                                     if($contract->getActivePayroll()->getMonth()==$date->format('m')){
                                         $smailer = $this->get('symplifica.mailer.twig_swift');
-                                        $send = $smailer->sendReminderPayEmailMessage($user,3);
+                                        $send = $smailer->sendEmailByTypeMessage(array('emailType'=>'reminderPay','toEmail'=>$user->getEmail(),'userName'=>$user->getPersonPerson()->getFullName(),'days'=>3));
                                         $response = $response."- - -Periodo activo: ".$contract->getActivePayroll()->getMonth().' '.$contract->getActivePayroll()->getYear()."<br>";
                                         if($send){
                                             $enviado=true;
@@ -74,7 +75,7 @@ class ReminderRestController extends FOSRestController
                     $response = $response."- -NO ESTA APROBADO. <br><br>";
                 }
             }
-        }elseif($date->format('d') == 11){
+        }elseif($date->format('d') == 10){
             $users = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:User")->findAll();
             $response = $response."- SE EJECUTA LA TAREA QUINCENAL".'<br><br>';
             /** @var User $user */
@@ -91,7 +92,7 @@ class ReminderRestController extends FOSRestController
                                 if($contract->getActivePayroll() and $contract->getActivePayroll()->getPeriod() == 2 and !$enviado){
                                     if($contract->getActivePayroll()->getMonth()==$date->format('m')){
                                         $smailer = $this->get('symplifica.mailer.twig_swift');
-                                        $send= $smailer->sendReminderPayEmailMessage($user,2);
+                                        $send=$smailer->sendEmailByTypeMessage(array('emailType'=>'reminderPay','toEmail'=>$user->getEmail(),'userName'=>$user->getPersonPerson()->getFullName(),'days'=>2));
                                         $response = $response."- - -Periodo activo: ".$contract->getActivePayroll()->getMonth().' '.$contract->getActivePayroll()->getYear()."<br>";
                                         if($send){
                                             $enviado=true;
@@ -163,7 +164,7 @@ class ReminderRestController extends FOSRestController
                                 if($contract->getActivePayroll()){
                                     if($contract->getActivePayroll()->getMonth()==$date->format('m')){
                                         $smailer = $this->get('symplifica.mailer.twig_swift');
-                                        $send = $smailer->sendLastReminderPayEmailMessage($user,3);
+                                        $send=$smailer->sendEmailByTypeMessage(array('emailType'=>'lastReminderPay','toEmail'=>$user->getEmail(),'userName'=>$user->getPersonPerson()->getFullName(),'days'=>3));
                                         $response = $response."- - -Periodo activo: ".$contract->getActivePayroll()->getMonth().' '.$contract->getActivePayroll()->getYear()."<br>";
                                         if($send){
                                             $enviado=true;
@@ -204,7 +205,7 @@ class ReminderRestController extends FOSRestController
                                 if($contract->getActivePayroll() and $contract->getActivePayroll()->getPeriod() == 2){
                                     if($contract->getActivePayroll()->getMonth()==$date->format('m')){
                                         $smailer = $this->get('symplifica.mailer.twig_swift');
-                                        $send= $smailer->sendLastReminderPayEmailMessage($user,2);
+                                        $send=$smailer->sendEmailByTypeMessage(array('emailType'=>'lastReminderPay','toEmail'=>$user->getEmail(),'userName'=>$user->getPersonPerson()->getFullName(),'days'=>2));
                                         $response = $response."- - -Periodo activo: ".$contract->getActivePayroll()->getMonth().' '.$contract->getActivePayroll()->getYear()."<br>";
                                         if($send){
                                             $enviado=true;
@@ -295,7 +296,13 @@ class ReminderRestController extends FOSRestController
                             if($contract){
                                 if($contract->getActivePayroll()->getMonth() == $date->format('m') and $contract->getActivePayroll()->getPeriod()==4){
                                     $smailer = $this->get('symplifica.mailer.twig_swift');
-                                    $send= $smailer->sendDaviplataReminderMessage($user,$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName());
+                                    $context = array(
+                                        'emailType'=>'daviplataReminder',
+                                        'toEmail'=>$user->getEmail(),
+                                        'userName'=>$user->getPersonPerson()->getFullName(),
+                                        'employeeName'=>$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName()
+                                    );
+                                    $send = $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
                                     $response = $response . "- - - Usuario= ".$user->getPersonPerson()->getFullName()." Empleado: ".$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName()."<br><br>";
                                     if($send){
                                         $enviado=true;
@@ -326,9 +333,14 @@ class ReminderRestController extends FOSRestController
                             $contract = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:Contract")->findOneBy(array('payMethodPayMethod' => $pMethod));
                             if ($contract) {
                                 if ($contract->getActivePayroll()->getMonth() == $date->format('m') and $contract->getActivePayroll()->getPeriod() == 2) {
-                                    $smailer = $this->get('symplifica.mailer.twig_swift');
                                     $response = $response . "- - - Usuario= ".$user->getPersonPerson()->getFullName()." Empleado: ".$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName()."<br><br>";
-                                    $send = $smailer->sendDaviplataReminderMessage($user, $contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName());
+                                    $context = array(
+                                        'emailType'=>'daviplataReminder',
+                                        'toEmail'=>$user->getEmail(),
+                                        'userName'=>$user->getPersonPerson()->getFullName(),
+                                        'employeeName'=>$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName()
+                                    );
+                                    $send = $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
                                     if ($send) {
                                         $response = $response . "- - -ENVIO EL CORREO<br><br>";
                                     } else {

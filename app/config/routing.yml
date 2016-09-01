@@ -30,12 +30,18 @@ legal_acceptance:
     path:      /legal-acceptance/{state}
     defaults:  { _controller: RocketSellerTwoPickBundle:LegalAssistance:legalAcceptance, state: incorrect}
 
+list_pods_description:
+    path:     /list/pods/description
+    defaults: { _controller: RocketSellerTwoPickBundle:Pay:showListPODDescription}
 show_pod_description:
-    path:     /show/pod/description/{idPOD}
-    defaults: { _controller: RocketSellerTwoPickBundle:Pay:showPODDescription}
+    path:     /show/pod/description/{idPOD}/{notifRef}
+    defaults: { _controller: RocketSellerTwoPickBundle:Pay:showPODDescription, notifRef: -1}
+edit_pod_description:
+    path:     /edit/pod/description/{idPOD}
+    defaults: { _controller: RocketSellerTwoPickBundle:Pay:editPODDescription}
 user_retry_pay_po:
-    path:     /user/back/retry/pay/{idPO}
-    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:retryPay}
+    path:     /user/back/retry/pay/{idPOD}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:retryPayPOD}
 user_return_pay_pod:
     path:     /user/back/return/pay/{idPOD}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:returnMoneyPay}
@@ -72,6 +78,9 @@ novelty_worked_days:
 novelty_update_worked_days:
     path:      /novelty/workableDays/{empId}/update/{idNovelty}/{daysAmount}
     defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:updateWorkedDays}
+novelty_validate_and_persist_novelty:
+    path:      /novelty/workableDays/validateandpersist/{idPayroll}/{idNoveltyType}/{novletyFields}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:validateAndPersistNovelty}
 documentos:
     path:      /document/add/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Document:addDocument}
@@ -91,6 +100,10 @@ download_pdf_documents:
     path:      /download/{document}
     defaults:  { _controller: RocketSellerTwoPickBundle:Document:downloadDocumentPDF }
 
+documents_verify_persist:
+    path:      /document/verify/persist/{entityType}/{entityId}/{docCode}/{idNotification}/{fileName}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Document:verifyAndPersitDocument}
+
 show_calculator_form:
     path:      /calculator/calculate
     defaults:  { _controller: RocketSellerTwoPickBundle:Calculator:showCalculator}
@@ -103,7 +116,6 @@ change_state_employer_employee:
 manage_employees:
     path:      /manage/employees
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:manageEmployees }
-
 
 add_contract:
     path:      /register/contract/{id}
@@ -118,13 +130,6 @@ change_state_contract:
     path:   /edit/contract/state/{id}
     defaults: {_controller: RocketSellerTwoPickBundle:Contract:stateContract}
 
-change_state_employer_employee:
-    path:   /manage/employee/change/state/{id}
-    defaults: {_controller: RocketSellerTwoPickBundle:Employee:changeStateEmployee}
-
-manage_employees:
-    path:      /manage/employees
-    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:manageEmployees }
 
 remove_employee:
     path:      /remove/employee/{idEhe}
@@ -549,3 +554,11 @@ politicas_privacidad:
 store_config:
     path: /store_config/{legalOptions}/{redirectTo}/{changeFlag}
     defaults: { _controller: RocketSellerTwoPickBundle:Configuration:storeConfig, changeFlag: 99}
+
+employer_liquidation:
+    path: /employer/liquidate/{eheId}/mail/
+    defaults: { _controller: RocketSellerTwoPickBundle:Liquidation:correoLiquidacion}
+
+calculadora:
+    path: /calculadora
+    defaults: { _controller: RocketSellerTwoPickBundle:Calculator:showCalculator}

@@ -150,7 +150,7 @@ class UtilsController
 		    	$answer = new DateTime($novelty->getDateEnd()->format('Y-m-d'));
 		    }
 		    elseif($singleEle == "units"){
-			    $day = $novelty->getUnits();
+			    $day = $novelty->getUnits() - 1; //Since the same day counts
 			    $answer->modify("+{$day} days");
 		    }
 	    }

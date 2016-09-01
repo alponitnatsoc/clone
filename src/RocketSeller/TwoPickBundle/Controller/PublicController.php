@@ -2,7 +2,9 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use RocketSeller\TwoPickBundle\Entity\LandingRegistration;
 use RocketSeller\TwoPickBundle\Entity\User;
+use RocketSeller\TwoPickBundle\Form\PublicCalculator;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Form\Type\ContactType;
@@ -10,10 +12,34 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class PublicController extends Controller
 {
-	public function homeAction() {
+	public function homeAction(Request $request) {
         $user=$this->getUser();
         if (empty($user)) {
-            return $this->render('RocketSellerTwoPickBundle:Public:home.html.twig');
+            $form = $this->createFormBuilder()
+                ->add('save', 'submit', array('label' => 'Obtén 1 mes gratis'))
+                ->getForm();
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $result = $request->request->all();
+                $landRes = new LandingRegistration();
+                $landRes->setEmail($result['email']);
+                $landRes->setName($result['firstname']." ".$result['lastname']);
+                $landRes->setCreatedAt(new \DateTime());
+                $landRes->setPhone($result['cellphone']);
+                $landRes->setEntityType("persona");
+                $em= $this->getDoctrine()->getEntityManager();
+                $em->persist($landRes);
+                $em->flush();
+                $request->request->add(array(
+                    "nname"=>$result['firstname'],
+                    "nlast"=>$result['lastname'],
+                    "nemail"=>$result['email'],
+                ));
+                return $this->forward('RocketSellerTwoPickBundle:Registration:register', array('request' => $request), array('_format' => 'json'));
+            }
+            return $this->render('RocketSellerTwoPickBundle:Public:home.html.twig', array(
+                'form' => $form->createView()));
         } else {
             return $this->redirectToRoute('welcome_post_register');
         }
@@ -25,11 +51,7 @@ class PublicController extends Controller
             "breadcrumbs" => array("Inicio" => "/", "Beneficios" => "")
         ));
     }
-
-    public function calculadoraAction() {
-        return $this->render('RocketSellerTwoPickBundle:Public:calculadora.html.twig');
-    }
-
+	
     public function preciosAction() {
         return $this->render('RocketSellerTwoPickBundle:Public:precios.html.twig', array(
             "breadcrumbs" => array("Inicio" => "/", "Precios" => "")
@@ -77,7 +99,7 @@ class PublicController extends Controller
                         $sub = 'Otros';
                         break;
                 }
-                $send = $this->get('symplifica.mailer.twig_swift')->sendHelpEmailMessage($form->get('name')->getData(),$form->get('email')->getData(),$sub,$form->get('message')->getData(),$request->getClientIp(),$form->get('phone')->getData());
+                $send = $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage(array('emailType'=>'help','name'=>$form->get('name')->getData(),'fromEmail'=>$form->get('email')->getData(), 'subject'=>$sub, 'message'=>$form->get('message')->getData(),'ip'=>$request->getClientIp(),'phone'=>$form->get('phone')->getData()));
                 if($send){
                     $this->addFlash('success', 'Tu email ha sido enviado. Nos pondremos en contacto en menos de 24 horas');
                 }else{

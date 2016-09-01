@@ -1,0 +1,54 @@
+{% extends "::base.html.twig" %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{{ asset('css/public/pagospage.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ asset('css/public/estadoPago.css') }}"/>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700' rel='stylesheet' type='text/css'>
+    {% if pods|length >0 %}
+        <div class="listpod col-sm-12">
+          <div class="h1cont">
+            <img width="70" src="{{ asset('public/img/landing/benefit3.png') }}" alt="">
+            <h1 class="bold">Transacciones en proceso</h1>
+          </div>
+          <div class="detalleCompra">
+        {% for pod in pods %}
+            <ul>
+                <li class="borderBottom">
+                  <p class="left borderRight bold">Id</p>
+                  <p class="right">{{ pod.idPurchaseOrdersDescription }}</p>
+                </li>
+                <li class="borderBottom">
+                  <p class="left borderRight bold">Valor</p>
+                  <p class="right">{{ pod.value }}</p>
+                </li>
+                <li class="borderBottom">
+                  <p class="left borderRight bold">Estado</p>
+                  <p class="right">{{ pod.purchaseOrdersStatus.name }}</p>
+                </li>
+                <li style="background: #e0e0e0;">
+                  <p class="left borderRight bold">Acción</p>
+                  <a href="{{ path('show_pod_description',{'idPOD':pod.idPurchaseOrdersDescription}) }}" class="notAjax">
+                    <p class="right bold">{% if pod.purchaseOrdersStatus.idNovoPay == "-2" %}&#10095; Resolver{% else %}&#10095; Ver{% endif %}</p>
+                  </a>
+                </li>
+            </ul>
+
+        {% endfor %}
+          </div>
+      </div>
+    {% else %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('/../css/pantallas.css') }}"/>
+    <div style="clear: both;height: 60px;"></div>
+    <div id="cont-succesdocs">
+        <div id="texto-succesdocs">
+            <div id="pagoadelantado">
+                <div id="contenidopagoadelando">
+                    <img src="{{ asset('/public/img/landing/benefit7.png') }}" width="80px" height="auto">
+                    <h1 class="azulclarofont bold centrar">No tienes transacciones en proceso</h1>
+                    <p class="light grisclarofont">En el momento en que realices un pago, podras conocer el estado
+                    de la transacción en esta misma pagina <strong>"Transacciones en Proceso"</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}

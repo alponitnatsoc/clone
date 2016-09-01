@@ -511,8 +511,8 @@ class EmployerRestController extends FOSRestController
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $view->setStatusCode(403);
         }
-        $smailer = $this->get('symplifica.mailer.twig_swift')->sendReminderEmailMessage($this->getUser(),$email);
-        
+        $smailer = $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage(array('emailType'=>'reminder','toEmail'=>$email));
+
         if ($smailer) {
             return $view->setStatusCode(200)->setData(array());
         } else {

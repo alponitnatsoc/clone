@@ -254,9 +254,12 @@ class PayrollMethodRestController extends FOSRestController
                                 //creating the new payroll
                                 $contract=$activePayrrol->getContractContract();
                                 $newActivePayroll=new Payroll();
-                                if($contract->getFrequencyFrequency()->getPayrollCode()=="Q"&&$period==4){
+                                if($period==4){
                                     $nextMonth=($month%12)+1;
-                                    $nextPeriod=2;
+                                    if($contract->getFrequencyFrequency()->getPayrollCode()=="Q")
+                                        $nextPeriod=2;
+                                    else
+                                        $nextPeriod=4;
                                 }else{
                                     $nextPeriod=4;
                                     $nextMonth=$month;
@@ -268,7 +271,7 @@ class PayrollMethodRestController extends FOSRestController
                                 }
                                 $temporalDate = new DateTime($nextYear."-".$nextMonth."-01");
                                 $newActivePayroll->setMonth($temporalDate->format("m"));
-                                $newActivePayroll->setYear($temporalDate->format("y"));
+                                $newActivePayroll->setYear($temporalDate->format("Y"));
                                 $newActivePayroll->setPeriod($nextPeriod);
                                 $contract->addPayroll($newActivePayroll);
                                 $contract->setActivePayroll($newActivePayroll);

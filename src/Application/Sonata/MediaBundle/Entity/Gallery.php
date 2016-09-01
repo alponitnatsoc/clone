@@ -34,7 +34,7 @@ class Gallery extends BaseGallery
      * @var \RocketSeller\TwoPickBundle\Entity\Person
      *
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Person", inversedBy="gallery")
-     * 
+     *
      */
     private $person;
 

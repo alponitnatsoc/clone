@@ -117,6 +117,15 @@ class Contract
     private $weekWorkableDays;
 
     /**
+     * 0 Pending
+     * 1 Uploaded
+     * 2 Error
+     * 3 Validated
+     * @ORM\Column(type="integer", nullable=TRUE)
+     */
+    private $backStatus=0;
+
+    /**
      * @var \RocketSeller\TwoPickBundle\Entity\EmployeeContractType
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EmployeeContractType")
      * @ORM\JoinColumns({
@@ -923,5 +932,29 @@ class Contract
     public function getPlanillaTypePlanillaType()
     {
         return $this->planillaTypePlanillaType;
+    }
+
+    /**
+     * Set backStatus
+     *
+     * @param integer $backStatus
+     *
+     * @return Contract
+     */
+    public function setBackStatus($backStatus)
+    {
+        $this->backStatus = $backStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get backStatus
+     *
+     * @return integer
+     */
+    public function getBackStatus()
+    {
+        return $this->backStatus;
     }
 }

@@ -83,7 +83,7 @@ class EmployerRegistration extends AbstractType
                 'class' => 'RocketSellerTwoPickBundle:Entity',
                 'choices' => $this->arlEntities,
                 'choice_label' =>'name',
-                'placeholder'=>"",
+                'placeholder'=>"Selecciona una opción",
                 'mapped' => false,
                 'label'=>'Administradora de Riesgos Labolares',
                 'required' => true

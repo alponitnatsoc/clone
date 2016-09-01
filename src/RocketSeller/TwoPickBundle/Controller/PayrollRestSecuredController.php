@@ -149,7 +149,7 @@ class PayrollRestSecuredController extends FOSRestController
         }
         $total = $totalPayroll = 0;
         $poS = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
-        $paidStatus = $poS->findOneBy(array('idNovoPay' => '00'));
+        $paidStatus = $poS->findOneBy(array('idNovoPay' => '-1'));
         $paidPO = new PurchaseOrders();
         $paidPO->setPurchaseOrdersStatus($paidStatus);
         $paidValue = 0;
@@ -745,10 +745,12 @@ class PayrollRestSecuredController extends FOSRestController
 
 
             $procesingPurchaseOrder=$realtoPay;
-            //TODO-Andres Send email of the purchase order
-            // Con la descripción que se está procesando el pago. la Purchase order es $procesingPurchaseOrder
-
-
+            $context=array(
+                'emailType'=>'transactionAcepted',
+                'toEmail'=>$procesingPurchaseOrder->getIdUser()->getEmail(),
+                'userName'=>$procesingPurchaseOrder->getIdUser()->getPersonPerson()->getFullName()
+            );
+            $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
             return $view->setStatusCode(200)->setData(array('result' => "s", 'idPO' => $realtoPay->getIdPurchaseOrders()));
 
         } else {
@@ -768,8 +770,13 @@ class PayrollRestSecuredController extends FOSRestController
             $em->flush();
 
             $rejectedPurchaseOrder=$realtoPay;
-            //TODO-Andres Send email of the rejected pay purchase order
-            // Con la descripción que se está procesando el pago. la Purchase order es $procesingPurchaseOrder
+            $context=array(
+                'emailType'=>'transactionRejected',
+                'toEmail'=>$rejectedPurchaseOrder->getIdUser()->getEmail(),
+                'userName'=>$rejectedPurchaseOrder->getIdUser()->getPersonPerson()->getFullName(),
+                'rejectionDate'=>new DateTime()
+            );
+            $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
             return $view->setStatusCode(200)->setData(array('result' => "e"));
         }
 

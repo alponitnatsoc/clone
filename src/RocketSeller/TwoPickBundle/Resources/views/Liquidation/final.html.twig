@@ -29,7 +29,7 @@
                 </div>
                 <div class="col-sm-6 text-center">
                     <h5><strong style="color: #3C4B5A">Fecha de inicio del contrato</strong></h5>
-                    <span id="startDate" style="color:#00858C" startdate="{{ contractInfo.startDate|date("Y-m-d")|trans }}">{{ contractInfo.startDay }}</span>
+                    <span id="startDate" style="color:#00858C" startdate="{{ contractInfo.startDate|date("Y-m-d")|trans }}">{{ contractInfo.startDay|localizeddate('none', 'none', 'es-CO', null, "dd 'de' MMMM 'de' Y") }}</span>
                 </div>
             </div>
             <div class="col-sm-10 col-sm-offset-1" style="margin-top: 35px;">

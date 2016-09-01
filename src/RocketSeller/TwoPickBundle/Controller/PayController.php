@@ -1,7 +1,13 @@
 <?php
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use RocketSeller\TwoPickBundle\Entity\Notification;
+use RocketSeller\TwoPickBundle\Entity\PayType;
+use RocketSeller\TwoPickBundle\Entity\Phone;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
+use RocketSeller\TwoPickBundle\Form\PayMethod;
+use RocketSeller\TwoPickBundle\Traits\SubscriptionMethodsTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Entity\User;
@@ -18,11 +24,11 @@ use RocketSeller\TwoPickBundle\Traits\PayMethodsTrait;
 
 class PayController extends Controller
 {
-
+    use SubscriptionMethodsTrait;
     use EmployerHasEmployeeMethodsTrait;
     use PayMethodsTrait;
 
-    public function showPODDescriptionAction($idPOD){
+    public function showPODDescriptionAction($idPOD,$notifRef){
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
         }
@@ -30,14 +36,49 @@ class PayController extends Controller
         /** @var PurchaseOrdersDescription $realPod */
         $realPod = $podRepo->find($idPOD);
         if($this->getUser()->getId() == $realPod->getPurchaseOrders()->getIdUser()->getId()){
+            if($notifRef!=-1){
+                $notRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Notification");
+                /** @var Notification $realNot */
+                $realNot=$notRepo->find($notifRef);
+                if($realNot!=null){
+                    $em=$this->getDoctrine()->getManager();
+                    $realNot->setStatus(0);
+                    $em->persist($realNot);
+                    $em->flush();
+                }
+            }
             return $this->render('RocketSellerTwoPickBundle:Pay:detailPOD.html.twig', array(
                 "pod" => $realPod
             ));
         }
         return $this->redirectToRoute("show_dashboard");
     }
+    public function showListPODDescriptionAction(){
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            throw $this->createAccessDeniedException();
+        }
+        /** @var User $user */
+        $user = $this->getUser();
+        $purchaseOrders = $user->getPurchaseOrders();
+        $answer= new ArrayCollection();
+        /** @var PurchaseOrders $purchaseOrder */
+        foreach ($purchaseOrders as $purchaseOrder) {
+            $pods = $purchaseOrder->getPurchaseOrderDescriptions();
+            /** @var PurchaseOrdersDescription $pod */
+            foreach ($pods as $pod) {
+                if($pod->getPurchaseOrdersStatus()==null){
+                    continue;
+                }
+                if($pod->getPurchaseOrdersStatus()->getIdNovoPay()=="00"||$pod->getPurchaseOrdersStatus()->getIdNovoPay()=="-2"){
+                    $answer->add($pod);
+                }
+            }
+        }
+        return $this->render('RocketSellerTwoPickBundle:Pay:listPODS.html.twig', array('pods'=>$answer));
 
-    public function editPODDescriptionAction($idPOD){
+    }
+
+    public function editPODDescriptionAction(Request $request,$idPOD){
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
         }
@@ -45,11 +86,82 @@ class PayController extends Controller
         /** @var PurchaseOrdersDescription $realPod */
         $realPod = $podRepo->find($idPOD);
         if($this->getUser()->getId() == $realPod->getPurchaseOrders()->getIdUser()->getId()&&$realPod->getPurchaseOrdersStatus()->getIdNovoPay()=="-2"){
-            return $this->render('RocketSellerTwoPickBundle:Pay:detailPOD.html.twig', array(
+            /** @var User $user */
+            $user = $this->getUser();
+            $payMethod = $realPod->getPayMethod();
+            /** @var Contract $contract */
+            $contract = $realPod->getPayrollPayroll()->getContractContract();
+            $fields = $payMethod->getPayTypePayType()->getPayMethodFields();
+            $options = array();
+            foreach ($fields as $field) {
+                $options[] = $field;
+            }
+            if ($contract == null || $contract->getPayMethodPayMethod() == null) {
+                $form = $this->createForm(new PayMethod($fields));
+            }else {
+                $form = $this->createForm(new PayMethod($fields), $contract->getPayMethodPayMethod());
+            }
+            $form
+                ->add('verification', 'number', array(
+                    'mapped' => false,
+                    'required' => true,
+                    'label' => "Codigo Mensaje de texto"))
+                ->add('save','submit', array(
+                    'label'=> 'Guardar'
+                ));
+            if($payMethod->getPayTypePayType()->getSimpleName()=="DAV")
+                $form->remove("hasIt");
+
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $verifCode = intval($form->get("verification")->getData());
+                if($user->getSmsCode()==$verifCode){
+                    //then is secure to change the account
+                    $em=$this->getDoctrine()->getManager();
+                    $em->persist($payMethod);
+                    $em->flush();
+                    //$remove=$this->removeEmployeeToHighTech($contract->getEmployerHasEmployeeEmployerHasEmployee());
+                    $adding=$this->addEmployeeToHighTech($contract->getEmployerHasEmployeeEmployerHasEmployee());
+                    if($adding){
+                        return $this->redirectToRoute("show_pod_description", array('idPOD'=>$realPod->getIdPurchaseOrdersDescription()));
+                    }else{
+                        return $this->redirectToRoute("edit_pod_description", array('idPOD'=>$realPod->getIdPurchaseOrdersDescription()));
+                    }
+
+                }
+            }
+            //send the code to the cellphone
+
+            $this->sendVerificationCode();
+
+
+
+            return $this->render('RocketSellerTwoPickBundle:Pay:editPOD.html.twig', array(
+                'form' => $form->createView(),
                 "pod" => $realPod
             ));
         }
         return $this->redirectToRoute("show_dashboard");
+    }
+    public function sendVerificationCode() {
+        $em = $this->getDoctrine()->getManager();
+
+        $user = $this->getUser();
+        $code = rand(10100, 99999);
+        $message = "Tu codigo de confirmacion de Symplifica es: " . $code;
+
+        $user->setSmsCode($code);
+        $em->persist($user);
+        $em->flush();
+
+        /** @var Phone $phone */
+        $phone = $user->getPersonPerson()->getPhones()[0];
+
+        $twilio = $this->get('twilio.api');
+        $cellphone = $phone;
+        $twilio->account->messages->sendMessage(
+            "+19562671001", "+57" . $cellphone->getPhoneNumber(), $message);
     }
 
     /**

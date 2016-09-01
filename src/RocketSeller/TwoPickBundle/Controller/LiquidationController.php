@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use RocketSeller\TwoPickBundle\Entity\Liquidation;
@@ -21,6 +22,7 @@ use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\DocumentType;
 use RocketSeller\TwoPickBundle\Traits\NotificationMethodsTrait;
 use RocketSeller\TwoPickBundle\Entity\NoveltyType;
+use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -278,7 +280,7 @@ class LiquidationController extends Controller
             'contractPeriod' => $contract[0]->getTimeCommitmentTimeCommitment()->getName(),
             'salary' => $contract[0]->getSalary(),
             'vacationDays' => "",
-            'startDay' => strftime("%d de %B de %Y", $startDate->getTimestamp()),
+            'startDay' => $startDate,
             'startDate' => $startDate,
             'idEmperHasEmpee' => $employerHasEmployee->getIdEmployerHasEmployee(),
             'frequency' => $frequency,
@@ -709,4 +711,36 @@ class LiquidationController extends Controller
             )
         );
     }
+	
+	public function correoLiquidacionAction($eheId)
+	{
+		$em = $this->getDoctrine()->getManager();
+		
+		/** @var EmployerHasEmployee $ehe */
+		$ehe = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->findOneBy(array("idEmployerHasEmployee" => $eheId));
+		
+		$employer = $ehe->getEmployerEmployer();
+		$employee = $ehe->getEmployeeEmployee();
+		
+		/** @var User $user */
+		$user = $this->getUser();
+		
+		if($user->getPersonPerson()->getIdPerson() != $employer->getPersonPerson()->getIdPerson()){
+			return $this->redirectToRoute('show_dashboard');
+		}
+
+        $context=array(
+            'emailType'=>'liquidation',
+            'toEmail'=>'johonson.aguirre@symplifica.com',
+            'userName'=>$employer->getPersonPerson()->getFullName(),
+            'employerSociety'=> $employer->getIdSqlSociety(),
+            'documentNumber'=>$employer->getPersonPerson()->getDocument(),
+            'userEmail'=>$employer->getPersonPerson()->getEmail(),
+            'phone'=>$employer->getPersonPerson()->getPhones()->first(),
+            'employeeName'=>$employee->getPersonPerson()->getFullName(),
+            'sqlNumber'=>$ehe->getIdEmployerHasEmployee()
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+		return new Response(200);
+	}
 }
