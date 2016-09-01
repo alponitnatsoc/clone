@@ -16,6 +16,7 @@ use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
+use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
 use RocketSeller\TwoPickBundle\Traits\PayrollMethodsTrait;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -143,6 +144,15 @@ class PayrollMethodRestController extends FOSRestController
             $year=$requ['year'];
             $period=$requ['period'];
             $day =  $requ['day'] ;
+            $tokenBack =  $requ['token'] ;
+            /** @var User $backuser */
+            $backuser = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('emailCanonical'=>'backofficesymplifica@gmail.com'));
+
+            if($backuser->getSalt()!=$tokenBack){
+                $view->setStatusCode(403);
+                $view->setData(array());
+                return $view;
+            }
         }else{
             $month = date("m");
             $year = date("Y");
