@@ -167,6 +167,7 @@ border-bottom: 3px solid #794815}
 	.caja-precio {width: 90%; margin-bottom: 30px}
 	.span_1_of_5,.span_3_of_5  {width: 100%;}
 	.no-colorcont {text-align: center}
+	.fondo-calculadora {display: none}
 
 	/*cambio calculadora de calculadora*/
 	.textocal1 {display: none}
