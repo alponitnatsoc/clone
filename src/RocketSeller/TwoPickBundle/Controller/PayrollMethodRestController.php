@@ -112,6 +112,7 @@ class PayrollMethodRestController extends FOSRestController
        return $insertionAnswer;
 
    }
+
     /**
      * Process to liquidate the payroll at the end of the month
      *
@@ -126,20 +127,32 @@ class PayrollMethodRestController extends FOSRestController
      *   }
      * )
      *
+     * @param Request $request
      * @return View
      */
-    public function putAutoLiquidatePayrollAction()
+    public function putAutoLiquidatePayrollAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
         $view = View::create();
         $format = array('_format' => 'json');
 
+        $requ = $request->request->all();
+        if(isset($requ['month'])){
+            $month=$requ['month'];
+            $year=$requ['year'];
+            $period=$requ['period'];
+            $day =  $requ['day'] ;
+        }else{
+            $month = date("m");
+            $year = date("Y");
+            $day = date("d");
+            $period =  4 ;
+        }
+        dump($month." ".$year." ".$period." ".$day);
+        die();
         $payrollEntity = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
-        $month = date("m");
-        $year = date("Y");
-        $day = date("d");
-        $period =  4 ;
+
         //TODO tengo que buscar las que no están pagas
         if ($day == 25) {
             $params = array(
