@@ -225,8 +225,8 @@
             </div>
             <div class="col-md-12">
                 <div class="center padding-top-botton-20" style="width:80%">
-                  Acontinuación ingresaras una cuenta que utilizarás para pagar cargos que apliquen a tu gestión, entre ellos la nómina de tu empleado
-                  (si decides pagarla por este medio) los aportes a seguridad social, los costosos transaccionales y la suscripción a
+                  A continuación ingresarás una cuenta que utilizarás para pagar cargos que apliquen a tu gestión, entre ellos: la nómina de tu empleado
+                  (si decides pagarla por este medio), los aportes a seguridad social, los costos transaccionales y la suscripción a
                   Symplifica. El pago mensual variará dependiendo de las novedades que reportes.
                 </div>
             </div>
@@ -272,7 +272,7 @@
             </div>
             <div class="empleadosmed">
               <div class="suscripempleados">
-                  <div class="col-md-6 contsuscripcionpago" style="{% if employees|length < 2 %}{% endif %}">
+                  <div class="col-md-12 contsuscripcionpago" style="{% if employees|length < 2 %}{% endif %}">
                       {% for employeeData in employees %}
 
                           {% set employee = employeeData['employee'] %}
@@ -282,8 +282,8 @@
                           {% if contrato.employerHasEmployeeEmployerHasEmployee.state >= 0 %}
 
                             <div class="row clearfix paddingbottom">
-                                <div class="col-md-12 padding-all-10 employee text-left nombrecont {{ employee.state>0 ?'activo':'inactivo' }}">
-                                    <div class="col-md-8 nopadding {{ employee.employeeEmployee.personPerson.gender!='MAS'?'female':'male' }} ">
+                                <div class="col-md-4 employee {{ employee.state>0 ?'activo':'inactivo' }}">
+                                    <div class="azulmediofont nopadding {{ employee.employeeEmployee.personPerson.gender!='MAS'?'female':'male' }} ">
                                         <div>
                                             <b class="employee_name nombrecont"
                                                style="font-size:large;">{{ utils.mb_capitalize(employee.employeeEmployee.personPerson.names)}}</b><br/>
@@ -300,12 +300,12 @@
                                     </div>
 
                                 </div>
-                                <div class="col-md-3 padding-all-10">
+                                <div class="col-md-4">
                                     <div class="btn btn-change-state-contract {{ employee.state>0 ?'on btn-grey':'off btn-orange ' }}"
                                          data-id="{{ employee.idEmployerHasEmployee }}"
                                          data-href="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}">{{ employee.state >0?'Inactivar':'Activar' }}</div>
                                 </div>
-                                <div class="right-susc numberpay suscriptionInd padding-all-10"
+                                <div class="col-md-4 right-susc numberpay suscriptionInd"
                                   data-id="{{ employee.idEmployerHasEmployee }}"> {{ isFreeUntil }}
                                 </div>
                             </div>
