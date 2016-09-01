@@ -147,9 +147,9 @@ class PayrollMethodRestController extends FOSRestController
             $month = date("m");
             $year = date("Y");
             $day = date("d");
-            $period =  4 ;
         }
         $payrollEntity = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
+        $period =  4 ;
 
         //TODO tengo que buscar las que no están pagas
         if ($day == 25) {
