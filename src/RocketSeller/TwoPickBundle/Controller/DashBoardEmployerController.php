@@ -24,30 +24,40 @@ class DashBoardEmployerController extends Controller {
     public function showDashBoardAction(Request $request) {
         /** @var User $user */
         $user = $this->getUser();
+        //checking user exist
         if (empty($user)) {
+            //if not redirect to login
             return $this->redirectToRoute('fos_user_security_login');
         }
+        //checking user is payed
         if($user->getStatus()<2 ) {
             return $this->forward('RocketSellerTwoPickBundle:DashBoard:showDashBoard');
         }
         try {
             $orderBy = ($request->query->get('orderBy')) ? $request->query->get('orderBy') : 'deadline';
+            //getting the notifications
             /** @var Collection $notifications */
             $notifications = $this->getNotifications($user->getPersonPerson(), $orderBy);
+            //setting flag tareas to false
             $tareas=false;
+            //crossing notifications
             /** @var Notification $notification */
             foreach ($notifications as $notification){
+                //if at least one notification status is 1 change tareas flag to true
                 if($notification->getStatus()==1){
                     $tareas=true;
                     break;
                 }
             }
-
+            //getting the user
             /** @var User $user */
             $user = $this->getUser();
+            //setting flags for end validation, clean dashboard and contract validated
             $endValid = false;
             $cleanDash = false;
-            //se calcula el estado de documentos de todos los empleados para el empleador
+            $valContract = false;
+            //
+
             foreach ($this->allDocumentsReady($user) as $docStat ){
                 //se asigna la bandera ready para cada id de empleado con su respectivo status
                 $ready[$docStat['idEHE']]=$docStat['docStatus'];
@@ -57,7 +67,9 @@ class DashBoardEmployerController extends Controller {
                     $eHE = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->find($docStat['idEHE']);
                     $smailer = $this->get('symplifica.mailer.twig_swift');
                     $smailer->sendOneDayMessage($this->getUser(),$eHE);
-                }elseif(!$tareas and ($docStat['docStatus']==2 or $docStat['docStatus']==3)){
+                }elseif(!$tareas and ($docStat['docStatus']==2)){
+                    $cleanDash =true;
+                }elseif(!$tareas and $docStat['docStatus']==3){
                     $cleanDash =true;
                 }
 

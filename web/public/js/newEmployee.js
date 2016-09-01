@@ -1045,6 +1045,7 @@ function startEmployee() {
         $("#alDiaDias").find("input[type=radio]").each(function () {
             $(this).prop("checked", true);
         });
+        $("#register_employee_employeeHasEmployers_holidayDebt").hide();
     }else if ($("#register_employee_employeeHasEmployers_holidayDebt").val() > 0) {
         $("#leDeboDias").find("input[type=radio]").each(function () {
             $(this).prop("checked", true);
@@ -1116,6 +1117,7 @@ function startEmployee() {
         $("#wealthBlock").show();
     }
 
+   // $("#")
 
 }
 function addPhoneForm($collectionHolderB, $newLinkLi) {
@@ -1504,6 +1506,10 @@ function addListeners() {
     formatMoney($("#register_employee_employeeHasEmployers_salary"));
 
     $("#link_calculator").on("click", function (e) {
+        e.preventDefault();
+        $("#calculatorResultsModal").modal('toggle');
+    });
+    $("#link_calculator2").on("click", function (e) {
         e.preventDefault();
         $("#calculatorResultsModal").modal('toggle');
     });

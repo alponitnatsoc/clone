@@ -19,13 +19,7 @@ class MediaForm extends AbstractType
     {
 
         $builder
-            ->add('media', 'sonata_media_type', array(
-                'provider' => 'sonata.media.provider.image',
-                'context'  => 'person',
-                'mapped'=> false,
-            ));
-
-
+            ->add('binaryContent','file', array('label' => 'Subir Archivo'));
     }
 
 

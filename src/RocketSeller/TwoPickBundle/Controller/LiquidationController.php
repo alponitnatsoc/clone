@@ -728,22 +728,19 @@ class LiquidationController extends Controller
 		if($user->getPersonPerson()->getIdPerson() != $employer->getPersonPerson()->getIdPerson()){
 			return $this->redirectToRoute('show_dashboard');
 		}
-		
-		//TODO-Andres
-		//Enviar correo a johonson.aguirre@symplifica.com
-		//Asunto: Asesoria liquidacion Symplifica
-		//Contenido: Atención Johonson, un empleador esta interesado en terminar el contrato con su empleado, a continuacion la informacion
-		
-		//Nombre del empleador $employer->getPersonPerson()->getFullName();
-		//Sociedad del empleador $employer->getIdSqlSociety();
-		//Cedula del empleador $employer->getPersonPerson()->getDocument();
-		//Correo del empleador $employer->getPersonPerson()->getEmail();
-		//Numeros de tel del empleador $employer->getPersonPerson()->getPhones()->getValues();
-		//En la anterior, imprimir el arreglo o la primera posicion, como le quede mas facil
-		
-		//Nombre del empleado $employee->getPersonPerson()->getFullName();
-		//Numero del empleado en SQL $ehe->getIdEmployerHasEmployee();
-		
+
+        $context=array(
+            'emailType'=>'liquidation',
+            'toEmail'=>'johonson.aguirre@symplifica.com',
+            'userName'=>$employer->getPersonPerson()->getFullName(),
+            'employerSociety'=> $employer->getIdSqlSociety(),
+            'documentNumber'=>$employer->getPersonPerson()->getDocument(),
+            'userEmail'=>$employer->getPersonPerson()->getEmail(),
+            'phone'=>$employer->getPersonPerson()->getPhones()->first(),
+            'employeeName'=>$employee->getPersonPerson()->getFullName(),
+            'sqlNumber'=>$ehe->getIdEmployerHasEmployee()
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 		return new Response(200);
 	}
 }
