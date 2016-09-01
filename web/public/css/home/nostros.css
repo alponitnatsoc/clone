@@ -24,9 +24,9 @@ h1 {margin: 0}
 
 /*-----------------------header------------------------*/
 
-#banner-beneficios {
+#banner-beneficios-nostros {
 	width: 100%;
-	height: 360px;
+	height: 460px;
 	background: url("../../img/home/banner6.png");
 	background-size:cover;
 	background-position:center;
@@ -34,9 +34,16 @@ h1 {margin: 0}
     box-sizing: border-box;
 }
 
-#banner-beneficios-cont {width: 100%;
+#banner-beneficios-cont {
+	width: 100%;
 	margin: 0 auto;
-	text-align: center}
+	text-align: center
+	padding-bottom: 30px;
+}
+
+	#banner-beneficios-cont h1 {
+		font-size: 25px;
+	}
 
 #banner-beneficios-cont p {color: #5b5b5f; width: 300px; text-align: center; margin: 0 auto}
 #breadcrumb {width: 300px; margin: 20px auto; text-align: center;}
@@ -44,7 +51,7 @@ h1 {margin: 0}
 
 /*---------------empieza seccion equipo-------------------*/
 
-#texto-descript {margin: 60px 0 70px 0; text-align: center}
+#texto-descript {margin: 45px 0 70px 0; text-align: center}
 #texto-descript p {width: 750px; text-align: center; margin: 0 auto;font-size: 16px;}
 #fondo { background:#F7F7F8; height: auto; overflow: hidden; padding: 60px 0}
 #team {width: 1100px; margin: 0 auto; text-align: center}
