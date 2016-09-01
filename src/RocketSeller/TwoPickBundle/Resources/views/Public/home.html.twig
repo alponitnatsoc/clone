@@ -339,7 +339,7 @@ $('#video2').click(function(){
 	$('#formemail').attr('oninput', "setCustomValidity('')");
 
 	$('#chktyc').attr('oninvalid', 'setCustomValidity("Acepta los Términos y Condiciones para continuar")');
-	$('#chktyc').attr('oninput', "setCustomValidity('')");
+	$('#chktyc').attr('onclick', "setCustomValidity('')");
 
     function numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

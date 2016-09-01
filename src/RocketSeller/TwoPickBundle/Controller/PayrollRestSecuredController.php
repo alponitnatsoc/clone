@@ -149,7 +149,7 @@ class PayrollRestSecuredController extends FOSRestController
         }
         $total = $totalPayroll = 0;
         $poS = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
-        $paidStatus = $poS->findOneBy(array('idNovoPay' => '00'));
+        $paidStatus = $poS->findOneBy(array('idNovoPay' => '-1'));
         $paidPO = new PurchaseOrders();
         $paidPO->setPurchaseOrdersStatus($paidStatus);
         $paidValue = 0;
