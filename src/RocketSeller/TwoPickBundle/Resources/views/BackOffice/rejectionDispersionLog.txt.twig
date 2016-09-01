@@ -14,6 +14,9 @@
     <strong>Fecha de rechazo de la dispersión:</strong> {{ rejectionDate|localizeddate('long', 'none', 'es-CO') }}<br>
     <strong>Teléfono:</strong>  {{ phone }}<br>
     <strong>Correo electrónico:</strong> {{ userEmail }}
+    <strong>Producto rechazado:</strong> {{ rejectedProduct }}
+    <strong>valor del producto:</strong> ${{ value|number_format(0, '.', ',') }}
+    <strong>Id POD:</strong> {{ idPOD }}
   </body>
 </html>
 {% endblock %}

@@ -317,9 +317,12 @@ class HighTechRestController extends FOSRestController
                 'emailType'=>'regectionDispersion',
                 'userEmail'=>$pay->getUserIdUser()->getEmail(),
                 'userName'=>$pay->getUserIdUser()->getFullName(),
-                'rejectionDate'=>new DateTime(),
+                'rejectionDate'=>$rejectDate,
                 'toEmail'=> 'backOfficeSymplifica@gmail.com',
-                'phone'=>$pay->getUserIdUser()->getPersonPerson()->getPhones()->first()
+                'phone'=>$pay->getUserIdUser()->getPersonPerson()->getPhones()->first(),
+                'rejectedProduct'=>$product,
+                'idPOD'=>$rejectedPurchaseOrderDescription->getIdPurchaseOrdersDescription(),
+                'value'=>$value
             );
             $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
 

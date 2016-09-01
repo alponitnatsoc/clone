@@ -418,6 +418,7 @@ use EmployerMethodsTrait;
                     $document->setDocumentTypeDocumentType($documentType);
                     $document->setStatus(0);
                     $contract->setDocumentDocument($document);
+                    $contract->setBackStatus(1);
                 }else{
                     $document = new Document();
                     $document->setName($documentType->getName());

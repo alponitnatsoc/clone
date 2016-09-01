@@ -226,7 +226,6 @@ class PaymentMethodRestController extends FOSRestController
             /** @var User $realUser */
             $realUser = $userRepo->find($paramFetcher->get("userId"));
             if($realUser!=null){
-                //TODO Andres paymentMethod?
                 $context = array(
                     'emailType'=>'validatePayMethod',
                     'toEmail'=>$realUser->getEmail(),
@@ -425,8 +424,25 @@ class PaymentMethodRestController extends FOSRestController
                     $rejectedPOD=$purchaseOrderDesc;
 
                     $this->rejectProcess($purchaseOrderDesc);//ojo no enviar el correo antes de esto
-
-                    //TODO-Andres  enviar el correo a "bacoffice, y empleador" notificando que no se pudo hacer la transaccion con la informacion de, la fecha del rechazo, el monto, el empleador(nombres, telefono,correo) y el id de la purchase order description con producto valor ,
+                    $context=array(
+                        'emailType'=>'failDispersion',
+                        'userEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
+                        'toEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
+                        'userName'=>$employerPerson->getFullName(),
+                    );
+                    $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+                    $contextBack=array(
+                        'emailType'=>'regectionDispersion',
+                        'userEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
+                        'userName'=>$employerPerson->getFullName(),
+                        'rejectionDate'=>$fechaRechazo,
+                        'toEmail'=> 'backOfficeSymplifica@gmail.com',
+                        'phone'=>$employerPerson->getPhones()->first(),
+                        'rejectedProduct'=>$rejectedProduct,
+                        'idPOD'=>$rejectedPOD->getIdPurchaseOrdersDescription(),
+                        'value'=>$valor
+                    );
+                    $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
                     $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'-2'));
                     $purchaseOrderDesc->setPurchaseOrdersStatus($pos);
                     $em->persist($purchaseOrderDesc);
@@ -467,8 +483,25 @@ class PaymentMethodRestController extends FOSRestController
                         $rejectedProduct=$purchaseOrderDesc->getProductProduct();
                         $rejectedPOD=$purchaseOrderDesc;
                         $this->rejectProcess($purchaseOrderDesc);//ojo no enviar el correo antes de esto
-
-                        //TODO-Andres  enviar el correo a "bacoffice y empleador" notificando que no se pudo hacer la transaccion con la informacion de, la fecha del rechazo, el monto, el empleador(nombres, telefono,correo) y el id de la purchase order description con producto valor ,
+                        $context=array(
+                            'emailType'=>'failDispersion',
+                            'userEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
+                            'toEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
+                            'userName'=>$employerPerson->getFullName(),
+                        );
+                        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+                        $contextBack=array(
+                            'emailType'=>'regectionDispersion',
+                            'userEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
+                            'userName'=>$employerPerson->getFullName(),
+                            'rejectionDate'=>$fechaRechazo,
+                            'toEmail'=> 'backOfficeSymplifica@gmail.com',
+                            'phone'=>$employerPerson->getPhones()->first(),
+                            'rejectedProduct'=>$rejectedProduct,
+                            'idPOD'=>$rejectedPOD->getIdPurchaseOrdersDescription(),
+                            'value'=>$valor
+                        );
+                        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
                         return $view->setStatusCode($dispersionAnswer['code'])->setData($dispersionAnswer['data']);
                     }else{
                         $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'00'));
@@ -532,7 +565,25 @@ class PaymentMethodRestController extends FOSRestController
 
                     $this->rejectProcess($desc);//ojo no enviar el correo antes de esto
 
-                    //TODO-Andres  enviar el correo a "bacoffice, y empleador" notificando que no se pudo hacer la transaccion con la informacion de, la fecha del rechazo, el monto, el empleador(nombres, telefono,correo) y el id de la purchase order description con producto valor ,
+                    $context=array(
+                        'emailType'=>'failDispersion',
+                        'userEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
+                        'toEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
+                        'userName'=>$employerPerson->getFullName(),
+                    );
+                    $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+                    $contextBack=array(
+                        'emailType'=>'regectionDispersion',
+                        'userEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
+                        'userName'=>$employerPerson->getFullName(),
+                        'rejectionDate'=>$fechaRechazo,
+                        'toEmail'=> 'backOfficeSymplifica@gmail.com',
+                        'phone'=>$employerPerson->getPhones()->first(),
+                        'rejectedProduct'=>$rejectedProduct,
+                        'idPOD'=>$rejectedPOD->getIdPurchaseOrdersDescription(),
+                        'value'=>$valor
+                    );
+                    $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
                     $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'-2'));
                     $desc->setPurchaseOrdersStatus($pos);
                     $em->persist($purchaseOrder);
@@ -569,8 +620,25 @@ class PaymentMethodRestController extends FOSRestController
                         $rejectedProduct=$desc->getProductProduct();
                         $rejectedPOD=$desc;
                         $this->rejectProcess($desc);//ojo no enviar el correo antes de esto
-
-                        //TODO-Andres  enviar el correo a "bacoffice y empleador" notificando que no se pudo hacer la transaccion con la informacion de, la fecha del rechazo, el monto, el empleador(nombres, telefono,correo) y el id de la purchase order description con producto valor ,
+                        $context=array(
+                            'emailType'=>'failDispersion',
+                            'userEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
+                            'toEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
+                            'userName'=>$employerPerson->getFullName(),
+                        );
+                        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+                        $contextBack=array(
+                            'emailType'=>'regectionDispersion',
+                            'userEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
+                            'userName'=>$employerPerson->getFullName(),
+                            'rejectionDate'=>$fechaRechazo,
+                            'toEmail'=> 'backOfficeSymplifica@gmail.com',
+                            'phone'=>$employerPerson->getPhones()->first(),
+                            'rejectedProduct'=>$rejectedProduct,
+                            'idPOD'=>$rejectedPOD->getIdPurchaseOrdersDescription(),
+                            'value'=>$valor
+                        );
+                        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
                         return $view->setStatusCode($dispersionAnswer['code'])->setData($dispersionAnswer['data']);
                     }else{
                         $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'00'));

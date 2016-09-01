@@ -48,8 +48,7 @@
 
                 <div style="font-size: 15px; font-style: italic; font-family: 'Open Sans', sans-serif; font-weight: 100; color: #858688;width:80%;margin:0 auto">
                 	<strong>Lamentablemente tu pago fue rechazado</strong><br><br>Verifica los datos de tu cuenta e intenta realizar de nuevo el pago o puedes cambiar tu método de pago en tu cuenta de Symplifica.<br /><br />
-                    <strong>Método de pago:</strong> {{ payMethod }}<br>
-                    <strong>Fecha de transacción:</strong> {{ startDate }}
+                    <strong>Fecha de la transacción:</strong> {{ rejectionDate|localizeddate('long', 'none', 'es-CO') }}
 
 
 </div><br /><br />

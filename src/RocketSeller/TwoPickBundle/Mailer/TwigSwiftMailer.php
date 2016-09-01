@@ -67,7 +67,6 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                 $context['toEmail']=$context['user']->getEmail();
                 return $this->sendMessage($template, $context, $this->parameters['from_email']['confirmation'], $context['toEmail']);
                 break;
-            /** tested OK */
             //$context['emailType']=='resetting'
             case 'resetting':
                 /** $context must have:
@@ -180,6 +179,9 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                  * string userName
                  * DateTime rejectionDate
                  * string phone
+                 * string rejectedProduct
+                 * int idPOD
+                 * float value
                  */
                 $template = $this->parameters['template']['regectionDispersion'];
                 return $this->sendMessage($template,$context,'registro@symplifica.com', $context['toEmail']);
@@ -239,6 +241,25 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                  * string sqlNumber
                  */
                 $template = $this->parameters['template']['liquidation'];
+                return $this->sendMessage($template,$context,'registro@symplifica.com', $context['toEmail']);
+                break;
+            //$context['emailType']=='transactionAcepted'
+            case 'transactionAcepted':
+                /** $context must have:
+                 * string toEmail
+                 * string userName
+                 */
+                $template = $this->parameters['template']['transactionAcepted'];
+                return $this->sendMessage($template,$context,'registro@symplifica.com', $context['toEmail']);
+                break;
+            //$context['emailType']=='transactionRejected'
+            case 'transactionRejected':
+                /** $context must have:
+                 * string toEmail
+                 * string userName
+                 * DateTime rejectionDate
+                 */
+                $template = $this->parameters['template']['transactionRejected'];
                 return $this->sendMessage($template,$context,'registro@symplifica.com', $context['toEmail']);
                 break;
         }
