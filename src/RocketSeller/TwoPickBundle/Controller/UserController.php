@@ -140,7 +140,7 @@ class UserController extends Controller
         $fullTime=0;$atemporel=0;
         /** @var EmployerHasEmployee $eHE */
         foreach ($employerHasEmployees as $eHE) {
-            if($eHE->getState()!=0){
+            if($eHE->getState()>0){
                 $eHEToSend->add($eHE);
                 if($eHE->getState()==2){
                     continue;
