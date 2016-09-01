@@ -16,6 +16,7 @@ use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
+use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
 use RocketSeller\TwoPickBundle\Traits\PayrollMethodsTrait;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -112,6 +113,7 @@ class PayrollMethodRestController extends FOSRestController
        return $insertionAnswer;
 
    }
+
     /**
      * Process to liquidate the payroll at the end of the month
      *
@@ -126,20 +128,39 @@ class PayrollMethodRestController extends FOSRestController
      *   }
      * )
      *
+     * @param Request $request
      * @return View
      */
-    public function putAutoLiquidatePayrollAction()
+    public function putAutoLiquidatePayrollAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
         $view = View::create();
         $format = array('_format' => 'json');
 
+        $requ = $request->request->all();
+        if(isset($requ['month'])){
+            $month=$requ['month'];
+            $year=$requ['year'];
+            $period=$requ['period'];
+            $day =  $requ['day'] ;
+            $tokenBack =  $requ['token'] ;
+            /** @var User $backuser */
+            $backuser = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('emailCanonical'=>'backofficesymplifica@gmail.com'));
+
+            if($backuser->getSalt()!=$tokenBack){
+                $view->setStatusCode(403);
+                $view->setData(array());
+                return $view;
+            }
+        }else{
+            $month = date("m");
+            $year = date("Y");
+            $day = date("d");
+        }
         $payrollEntity = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
-        $month = date("m");
-        $year = date("Y");
-        $day = date("d");
         $period =  4 ;
+
         //TODO tengo que buscar las que no están pagas
         if ($day == 25) {
             $params = array(
