@@ -836,7 +836,7 @@ class ExportController extends Controller
             /** @var Person $employee */
             $employee = $action->getPersonPerson();
             /** @var User $user */
-            $user = $this->getUser();
+            $user = $action->getUserUser();
             // ask the service for a Excel5
             $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
             //setting some properties
@@ -1528,7 +1528,7 @@ class ExportController extends Controller
         /** @var Person $employee */
         $employee = $action->getPersonPerson();
         /** @var User $user */
-        $user = $this->getUser();
+        $user = $action->getUserUser();
         // ask the service for a Excel5
         $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
         //setting some properties
