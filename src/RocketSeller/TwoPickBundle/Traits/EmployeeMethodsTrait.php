@@ -16,6 +16,7 @@ use RocketSeller\TwoPickBundle\Entity\Employee;
 use RocketSeller\TwoPickBundle\Entity\RealProcedure;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\Notification;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 trait EmployeeMethodsTrait
 {
@@ -85,12 +86,43 @@ trait EmployeeMethodsTrait
     {
         //Initialising de pending docs counter
         $pendingDocs = 0;
-        if(!$person->getDocumentDocument())
+
+        if($person->getDocumentDocument()){
+            try{
+                $media = $person->getDocumentDocument()->getMediaMedia();
+                if($media==null)
+                    $pendingDocs++;
+            }catch(Exception $e){
+                $pendingDocs++;
+            }
+        }else{
             $pendingDocs++;
-        if(!$person->getRutDocument())
+        }
+
+        if($person->getRutDocument()){
+            try{
+                $media = $person->getRutDocument()->getMediaMedia();
+                if($media==null)
+                    $pendingDocs++;
+            }catch(Exception $e){
+                $pendingDocs++;
+            }
+        }else{
             $pendingDocs++;
-        if(!$person->getEmployer()->getMandatoryDocument())
+        }
+
+        if($person->getEmployer()->getMandatoryDocument()){
+            try{
+                $media = $person->getEmployer()->getMandatoryDocument()->getMediaMedia();
+                if($media==null)
+                    $pendingDocs++;
+            }catch(Exception $e){
+                $pendingDocs++;
+            }
+        }else{
             $pendingDocs++;
+        }
+
         //returning the count of pending docs MAX 3
         return $pendingDocs;
     }
@@ -105,10 +137,29 @@ trait EmployeeMethodsTrait
     {
         //initialising de pending docs counter for employee
         $ePendingDocs=0;
-        if(!$eHE->getAuthDocument())
+        if($eHE->getAuthDocument()){
+            try{
+                $media = $eHE->getAuthDocument()->getMediaMedia();
+                if($media==null)
+                    $ePendingDocs++;
+            }catch(Exception $e){
+                $ePendingDocs++;
+            }
+        }else{
             $ePendingDocs++;
-        if(!$eHE->getEmployeeEmployee()->getPersonPerson()->getDocumentDocument())
+        }
+
+        if($eHE->getEmployeeEmployee()->getPersonPerson()->getDocumentDocument()){
+            try{
+                $media = $eHE->getEmployeeEmployee()->getPersonPerson()->getDocumentDocument()->getMediaMedia();
+                if($media==null)
+                    $ePendingDocs++;
+            }catch(Exception $e){
+                $ePendingDocs++;
+            }
+        }else{
             $ePendingDocs++;
+        }
         //returning employee pending docs
         return $ePendingDocs;
     }
@@ -357,13 +408,13 @@ trait EmployeeMethodsTrait
                     //getting the amount of documents pending for the employee
                     $ePend = $this->employeeDocumentsReady($eHE);
                     //if employer and employee documents pending are greater than 0 state is -1 all docs pending
-                    if($ePend!=0 and $pend !=0){
+                    if($ePend>0 and $pend >0){
                         $eHE->setDocumentStatus(-1);
                     //if employee pending docs greater than 0 but employer pending docs equal 0 state is 0 employee documents pending
-                    }elseif($ePend!=0 and $pend ==0){
+                    }elseif($ePend>0 and $pend ==0){
                         $eHE->setDocumentStatus(0);
                     //if employee pending docs equal to 0 but employer pending docs greater than 0 state is 1 employer documents pending
-                    }elseif($ePend==0 and $pend !=0){
+                    }elseif($ePend==0 and $pend >0){
                         $eHE->setDocumentStatus(1);
                     //if both employer and employee pending docs are equal to 0 state is 2 message docs ready
                     }elseif($pend==0 and $ePend==0){

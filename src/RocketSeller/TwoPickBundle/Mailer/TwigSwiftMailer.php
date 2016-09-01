@@ -262,9 +262,34 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                 $template = $this->parameters['template']['transactionRejected'];
                 return $this->sendMessage($template,$context,'registro@symplifica.com', $context['toEmail']);
                 break;
+            //$context['emailType']=='reminderDaviplata'
+            case 'reminderDaviplata':
+                /** $context must have:
+                 * string toEmail
+                 * string userName
+                 * string employeeName
+                 */
+                $template = $this->parameters['template']['reminderDaviplata'];
+                return $this->sendMessage($template,$context,'registro@symplifica.com', $context['toEmail']);
+                break;
         }
 
     }
+
+    public function sendDaviplataReminderMessage(User $user , $employeeName)
+    {
+        $to = $user->getEmail();
+        $template = $this->parameters['template']['reminderDaviplata'];
+        $context = array(
+            'toEmail' => $user->getEmail(),
+            'user' => $user,
+            'employeeName' => $employeeName,
+            'subject'=> "Recordatorio Crear Daviplata",
+            'userName' => $user->getPersonPerson()->getFullName(),
+        );
+        return $this->sendMessage($template,$context,'registro@symplifica.com', $to);
+    }
+
 
     public function sendWelcomeEmailMessage(UserInterface $user)
     {
@@ -439,19 +464,6 @@ class TwigSwiftMailer extends Controller implements MailerInterface
         return $this->sendMessage($template,$context,'log@symplifica.com', $to);
     }
 
-    public function sendDaviplataReminderMessage(User $user , $employeeName)
-    {
-        $to = $user->getEmail();
-        $template = $this->parameters['template']['reminderDaviplata'];
-        $context = array(
-            'toEmail' => $user->getEmail(),
-            'user' => $user,
-            'employeeName' => $employeeName,
-            'subject'=> "Recordatorio Crear Daviplata",
-            'userName' => $user->getPersonPerson()->getFullName(),
-        );
-        return $this->sendMessage($template,$context,'registro@symplifica.com', $to);
-    }
 
 //    public function sendSuccesRecollectMessage(User $user,$fechaRecaudo,$value,$dis,$path)
 //    {
