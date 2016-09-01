@@ -296,7 +296,13 @@ class ReminderRestController extends FOSRestController
                             if($contract){
                                 if($contract->getActivePayroll()->getMonth() == $date->format('m') and $contract->getActivePayroll()->getPeriod()==4){
                                     $smailer = $this->get('symplifica.mailer.twig_swift');
-                                    $send= $smailer->sendDaviplataReminderMessage($user,$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName());
+                                    $context = array(
+                                        'emailType'=>'daviplataReminder',
+                                        'toEmail'=>$user->getEmail(),
+                                        'userName'=>$user->getPersonPerson()->getFullName(),
+                                        'employeeName'=>$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName()
+                                    );
+                                    $send = $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
                                     $response = $response . "- - - Usuario= ".$user->getPersonPerson()->getFullName()." Empleado: ".$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName()."<br><br>";
                                     if($send){
                                         $enviado=true;
@@ -327,9 +333,14 @@ class ReminderRestController extends FOSRestController
                             $contract = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:Contract")->findOneBy(array('payMethodPayMethod' => $pMethod));
                             if ($contract) {
                                 if ($contract->getActivePayroll()->getMonth() == $date->format('m') and $contract->getActivePayroll()->getPeriod() == 2) {
-                                    $smailer = $this->get('symplifica.mailer.twig_swift');
                                     $response = $response . "- - - Usuario= ".$user->getPersonPerson()->getFullName()." Empleado: ".$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName()."<br><br>";
-                                    $send = $smailer->sendDaviplataReminderMessage($user, $contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName());
+                                    $context = array(
+                                        'emailType'=>'daviplataReminder',
+                                        'toEmail'=>$user->getEmail(),
+                                        'userName'=>$user->getPersonPerson()->getFullName(),
+                                        'employeeName'=>$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName()
+                                    );
+                                    $send = $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
                                     if ($send) {
                                         $response = $response . "- - -ENVIO EL CORREO<br><br>";
                                     } else {
