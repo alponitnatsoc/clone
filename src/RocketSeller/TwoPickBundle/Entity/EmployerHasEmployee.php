@@ -125,7 +125,16 @@ class EmployerHasEmployee
      * @ORM\Column(type="integer", length=1, nullable=TRUE)
      */
     private $documentStatus = -2;
-    
+
+    /**
+     * @ORM\Column(type="datetime", nullable=TRUE)
+     */
+    private $dateDocumentsUploaded;
+    /**
+     * @ORM\Column(type="datetime", nullable=TRUE)
+     */
+    private $dateFinished;
+
     /**
      * Set idEmployerHasEmployee
      *
@@ -450,5 +459,53 @@ class EmployerHasEmployee
     public function getAuthDocument()
     {
         return $this->authDocument;
+    }
+
+    /**
+     * Set dateDocumentsUploaded
+     *
+     * @param \DateTime $dateDocumentsUploaded
+     *
+     * @return EmployerHasEmployee
+     */
+    public function setDateDocumentsUploaded($dateDocumentsUploaded)
+    {
+        $this->dateDocumentsUploaded = $dateDocumentsUploaded;
+
+        return $this;
+    }
+
+    /**
+     * Get dateDocumentsUploaded
+     *
+     * @return \DateTime
+     */
+    public function getDateDocumentsUploaded()
+    {
+        return $this->dateDocumentsUploaded;
+    }
+
+    /**
+     * Set dateFinished
+     *
+     * @param \DateTime $dateFinished
+     *
+     * @return EmployerHasEmployee
+     */
+    public function setDateFinished($dateFinished)
+    {
+        $this->dateFinished = $dateFinished;
+
+        return $this;
+    }
+
+    /**
+     * Get dateFinished
+     *
+     * @return \DateTime
+     */
+    public function getDateFinished()
+    {
+        return $this->dateFinished;
     }
 }

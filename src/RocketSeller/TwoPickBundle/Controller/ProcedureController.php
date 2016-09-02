@@ -30,28 +30,48 @@ class ProcedureController extends Controller
 {
 	use EmployeeMethodsTrait;
 
-	/**
-	 * Funcion que carga la pagina de tramites para el backoffice
-	 * Muestra un acceso directo a tramites pendientes de:
-	 * 		Registro empleador Empleados
-	 * 		//otros tramites futuros
-	 *
-	 * @return Response /backoffice/procedures
+
+    /**
+     * Funcion que carga la pagina de tramites para el backoffice
+     * Muestra un acceso directo a tramites pendientes de:
+     * 		Registro empleador Empleados
+     * 		//otros tramites futuros
+     * @param string $orderType order type for the switch
+     * @param string $order order ASC or DESC
+     * @param Request $request
+     * @return Response /backoffice/procedures
      */
-	public function indexAction(Request $request)
+    public function indexAction($orderType, $order, Request $request)
     {
 		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
-        $order = ($request->query->get('order')) ? $request->query->get('order') : 'Name';
-        switch($order){
-            case 'Name':
-                $param = 'employerEmployer.personPerson.fullName';
-                $order = ($request->query->get('orderByName'))?$request->query->get('orderByName') : 'DESC';
+        $query = $this->getDoctrine()->getManager()->createQueryBuilder();
+        switch($orderType){
+            case 'name':
+                $query
+                    ->add('select','p')
+                    ->from('RocketSellerTwoPickBundle:RealProcedure','p')
+                    ->join('RocketSellerTwoPickBundle:Employer','em','WITH','p.employerEmployer = em.idEmployer')
+                    ->join('RocketSellerTwoPickBundle:Person','pe','WITH','em.personPerson = pe.idPerson')
+                    ->orderBy('pe.names',$order);
+                break;
+            case 'document':
+                $query
+                    ->add('select','p')
+                    ->from('RocketSellerTwoPickBundle:RealProcedure','p')
+                    ->join('RocketSellerTwoPickBundle:Employer','em','WITH','p.employerEmployer = em.idEmployer')
+                    ->join('RocketSellerTwoPickBundle:Person','pe','WITH','em.personPerson = pe.idPerson')
+                    ->orderBy('pe.document',$order);
+                break;
+            case 'date':
+                $query
+                    ->add('select','p')
+                    ->from('RocketSellerTwoPickBundle:RealProcedure','p')
+                    ->orderBy('p.createdAt',$order);
                 break;
         }
-		$procedures = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:RealProcedure')->findAll(array($param=>$order));
-
+        $procedures = $query->getQuery()->getResult();
 		return $this->render(
-            '@RocketSellerTwoPick/BackOffice/procedures.html.twig',array('procedures'=>$procedures)
+            '@RocketSellerTwoPick/BackOffice/procedures.html.twig',array('procedures'=>$procedures,'order'=>$order)
         );
     }
 

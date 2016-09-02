@@ -47,8 +47,8 @@ back_office:
     path:     /backoffice
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:index}
 show_procedures:
-    path:     /backoffice/procedures
-    defaults: { _controller: RocketSellerTwoPickBundle:Procedure:index}
+    path:     /backoffice/procedures/{orderType}/{order}
+    defaults: { _controller: RocketSellerTwoPickBundle:Procedure:index,orderType: 'date',order: 'ASC'}
 show_request:
     path:     /backoffice/request
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showRequest}

@@ -276,19 +276,7 @@ class TwigSwiftMailer extends Controller implements MailerInterface
 
     }
 
-    public function sendDaviplataReminderMessage(User $user , $employeeName)
-    {
-        $to = $user->getEmail();
-        $template = $this->parameters['template']['reminderDaviplata'];
-        $context = array(
-            'toEmail' => $user->getEmail(),
-            'user' => $user,
-            'employeeName' => $employeeName,
-            'subject'=> "Recordatorio Crear Daviplata",
-            'userName' => $user->getPersonPerson()->getFullName(),
-        );
-        return $this->sendMessage($template,$context,'registro@symplifica.com', $to);
-    }
+
 
 
     public function sendWelcomeEmailMessage(UserInterface $user)
@@ -330,6 +318,19 @@ class TwigSwiftMailer extends Controller implements MailerInterface
         return $this->sendMessage($template, $context, $this->parameters['from_email']['resetting'], $user->getEmail());
     }
 
+//    public function sendDaviplataReminderMessage(User $user , $employeeName)
+//    {
+//        $to = $user->getEmail();
+//        $template = $this->parameters['template']['reminderDaviplata'];
+//        $context = array(
+//            'toEmail' => $user->getEmail(),
+//            'user' => $user,
+//            'employeeName' => $employeeName,
+//            'subject'=> "Recordatorio Crear Daviplata",
+//            'userName' => $user->getPersonPerson()->getFullName(),
+//        );
+//        return $this->sendMessage($template,$context,'registro@symplifica.com', $to);
+//    }
 //    public function sendHelpEmailMessage($name, $fromEmail,$subject,$message,$ip,$phone)
 //    {
 //        $template = $this->parameters['template']['help'];

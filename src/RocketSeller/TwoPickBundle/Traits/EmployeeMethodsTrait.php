@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Traits;
 
+use DateTime;
 use Doctrine\Common\Persistence\ObjectManagerAware;
 use RocketSeller\TwoPickBundle\Controller\UtilsController;
 use RocketSeller\TwoPickBundle\Entity\Action;
@@ -419,6 +420,7 @@ trait EmployeeMethodsTrait
                     //if both employer and employee pending docs are equal to 0 state is 2 message docs ready
                     }elseif($pend==0 and $ePend==0){
                         $eHE->setDocumentStatus(2);
+                        $eHE->setDateDocumentsUploaded(new DateTime());
                     }
                 //if the antique state is employee documents pending checking if employee documents are still pending
                 }elseif($case == 0){
@@ -427,6 +429,7 @@ trait EmployeeMethodsTrait
                     //if amount of pending docs for employee equal to 0 state is 2 message docs ready
                     if($ePend['pending']==0){
                         $eHE->setDocumentStatus(2);
+                        $eHE->setDateDocumentsUploaded(new DateTime());
                     //if amount of pending docs for employee is greater than 0 state remains in 0 employee documents pending
                     }else{
                         $eHE->setDocumentStatus(0);
@@ -438,6 +441,7 @@ trait EmployeeMethodsTrait
                     //if amount of pending docs for employer equal to 0 state is 2 message docs ready
                     if($pend==0){
                         $eHE->setDocumentStatus(2);
+                        $eHE->setDateDocumentsUploaded(new DateTime());
                     //if amount of pending docs for employer is greater than 0 state remains in 1 employer documents pending
                     }else{
                         $eHE->setDocumentStatus(1);
