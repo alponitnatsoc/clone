@@ -454,6 +454,7 @@ use EmployerMethodsTrait;
                     $document->setName($documentType->getName());
                     $document->setDocumentTypeDocumentType($documentType);
                     $document->setStatus(0);
+                    $payroll->setPayslip($document);
                 }
                 $em->persist($payroll);
                 break;
