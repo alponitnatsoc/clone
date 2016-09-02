@@ -206,7 +206,7 @@
           return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
       }
       $(document).ready(function () {
-        $("body").click(function(){
+        $("body").on('click touch', function(){
           $("#slideLogin").slideUp();
         });
         $("#btnLogin").click(function(){
