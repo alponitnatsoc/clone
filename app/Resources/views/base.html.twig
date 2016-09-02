@@ -181,7 +181,7 @@
     {% block body %}
         <div class="container body-container navbar"{% block content_style %}{% endblock %}>
             <div class="row mainContentRow">
-                <div id="sidebar" class="col-sm-3">
+                <div id="sidebar" {% block classSideBarBase %}class="col-sm-3"{% endblock %}>
                     {% block sidebar %}
                         <div class="navbar-header">
                             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
@@ -264,7 +264,7 @@
                 </div>
 
 
-                <div id="main" class="col-sm-9 clearfix">
+                <div id="main" {% block classMainBase %}class="col-sm-9 clearfix"{% endblock %}>
                     {% block main %}
                         {% if app.user.status is defined %}
                             {% set status = app.user.status %}

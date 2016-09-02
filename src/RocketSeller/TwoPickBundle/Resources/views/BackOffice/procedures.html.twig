@@ -13,23 +13,28 @@
                 <div class="panel-heading">
                     <h4>Tramites Pendientes</h4>
                 </div>
-                {% set order = { 'Name': app.request.get('order') } %}
+                {% if order is not defined %}
+                    {% set order = 'ASC' %}
+                {% endif %}
+                {% if order == 'ASC' %}
+                    {% set order = 'DESC' %}
+                {% else %}
+                    {% set order = 'ASC' %}
+                {% endif %}
                 <table class="table">
                     <thead>
                         <tr>
                             <th style="vertical-align: middle" rowspan="2">
-                                {% set orderBy = app.request.get('orderBy') %}
-                                {% if orderBy == 'ASC'%}
-                                    {% set orderBy = 'DESC' %}
-                                {% else %}
-                                    {% set orderBy = 'ASC' %}
-                                {% endif %}
-                                <a id="orderByName" class ='notAjax' href="{{ path('show_procedures',order|merge( { 'order':'Name', 'orderBy':orderBy })) }}">Empleador</a>
+                                <a id="orderByName" class ='notAjax' href="{{ path('show_procedures',{'orderType':'name','order':order}) }}">Empleador</a>
                             </th>
-                            <th style="vertical-align: middle" rowspan="2">Cedula</th>
+                            <th style="vertical-align: middle" rowspan="2">
+                            <a id="orderByName" class ='notAjax' href="{{ path('show_procedures',{'orderType':'document','order':order}) }}">Cedula</a>
+                            </th>
                             <th style="vertical-align: middle" rowspan="2">Tipo de Tramite</th>
                             <th colspan="3">Empleados</th>
-                            <th style="vertical-align: middle" rowspan="2">Fecha Pago</th>
+                            <th style="vertical-align: middle" rowspan="2">
+                                <a id="orderByName" class ='notAjax' href="{{ path('show_procedures',{'orderType':'date','order':order}) }}">Fecha Pago</a>
+                            </th>
                             <th style="vertical-align: middle" rowspan="2">Accion</th>
                         </tr>
                         <tr>
