@@ -450,6 +450,7 @@ use EmployerMethodsTrait;
                     $document->setDocumentTypeDocumentType($documentType);
                     $document->setStatus(0);
                 }else{
+                    $document = new Document();
                     $document->setName($documentType->getName());
                     $document->setDocumentTypeDocumentType($documentType);
                     $document->setStatus(0);
