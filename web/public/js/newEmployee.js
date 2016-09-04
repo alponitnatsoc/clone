@@ -174,6 +174,9 @@ function startEmployee() {
     $('.btnPrevious-contract').click(function () {
         $('#contractNav > .active').prev('li').find('a').trigger('click');
     });
+    $('.btnPrevious-sms').click(function () {
+        $('#finalStepNav > .active').prev('li').find('a').trigger('click');
+    });
     $('.btnNext-contract').click(function () {
         var dateOk = true;
         var mustCheck = false;
