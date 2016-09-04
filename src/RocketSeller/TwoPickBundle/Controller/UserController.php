@@ -122,7 +122,7 @@ class UserController extends Controller
 		    else{
 			    $isFreeUntil->modify("+" . $isFreeMonths . " months");
 			    $rightNow =  new DateTime();
-			    $dDiff = $rightNow->diff($isFreeUntil);
+			    $dDiff = $rightNow->diff($isFreeUntil)->days;
 		    }
 
 	      //amount to pay and each active employee
@@ -246,7 +246,7 @@ class UserController extends Controller
             'invoices' => $invoicesEmited,
 //             'payMethods' => isset($responsePaymentsMethods["payment-methods"])?$responsePaymentsMethods["payment-methods"]:null,
             'payMethods' => $paymentMethodsType,
-            'dayService' => $dDiff->days,
+            'dayService' => $dDiff,
             'eHEToSend' => array('fullTime'=>$fullTime, 'partialTime'=>$atemporel),
             'amountToPay' => $amountToPay,
             //'factDate' => $dStart,
