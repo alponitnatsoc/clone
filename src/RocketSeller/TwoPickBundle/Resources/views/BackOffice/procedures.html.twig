@@ -4,7 +4,7 @@
 
 {% block fos_user_content %}
     <div id="main" class="col-sm-15">
-        <div class="col-md-12">
+        <div class="col-md-10">
             <div class="panel panel-title">
                 Tramites
             </div>
@@ -31,16 +31,11 @@
                             <a id="orderByName" class ='notAjax' href="{{ path('show_procedures',{'orderType':'document','order':order}) }}">Cedula</a>
                             </th>
                             <th style="vertical-align: middle" rowspan="2">Tipo de Tramite</th>
-                            <th colspan="3">Empleados</th>
+                            <th style="vertical-align: middle" rowspan="2">estado</th>
                             <th style="vertical-align: middle" rowspan="2">
                                 <a id="orderByName" class ='notAjax' href="{{ path('show_procedures',{'orderType':'date','order':order}) }}">Fecha Pago</a>
                             </th>
                             <th style="vertical-align: middle" rowspan="2">Accion</th>
-                        </tr>
-                        <tr>
-                            <th>Pendientes</th>
-                            <th>Errores</th>
-                            <th>Finalizados</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -49,27 +44,34 @@
                             <td>{{ procedure.employerEmployer.personPerson.fullName}}</td>
                             <td>{{ procedure.employerEmployer.personPerson.document}}</td>
                             <td>{{ procedure.procedureTypeProcedureType.name }}</td>
-                            {% set pendientes =  procedure.employerEmployer.toFinish %}
-                            <td {%  if  pendientes > 0 %}
+                            {#{% set pendientes =  procedure.employerEmployer.toFinish %}#}
+                            {% set estado =  procedure.employerEmployer.status %}
+                            <td {%  if  estado == 2 %}
                                     style="color: #9C2F2F"
-                                {% else %}
+                                {% elseif estado == 1 %}
+                                    style="color: #666666"
+                                {% elseif estado == 0 %}
                                     style="color: black"
+                                {% elseif estado == 3 %}
+                                    style="color: #d59401"
+                                {% elseif estado == 4 %}
+                                    style="color: #008800"
+                                {% elseif estado == 5 %}
+                                    style="color: #008800"
                                 {% endif %}
-                            >{{ pendientes}}</td>
-                            {% set errores =  procedure.employerEmployer.errors %}
-                            <td {%  if  errores > 0 %}
-                                style="color: #9C2F2F"
-                            {% else %}
-                                style="color: #00CC00"
-                            {% endif %}
-                            >{{ errores}}</td>
-                            {% set terminados =  procedure.employerEmployer.finished%}
-                            <td {%  if  terminados > 0 %}
-                                    style="color: #00CC00"
-                                {% else %}
-                                    style="color: black"
-                                {% endif %}
-                            >{{ terminados}}</td>
+                            >{%  if  estado == 2 %}
+                                    Error
+                                {% elseif estado == 1 %}
+                                    En tramite
+                                {% elseif estado == 0 %}
+                                    Nuevo
+                                {% elseif estado == 3 %}
+                                    Corregido
+                                {% elseif estado == 4 %}
+                                    Terminado
+                                {% elseif estado == 5 %}
+                                    Contrato Validado
+                                {% endif %}</td>
                             <td>{{ procedure.createdAt|date('y-m-d h:i:s a') }}</td>
                             <td><a class="notAjax" href="{{ path('show_procedure',{'procedureId':procedure.idProcedure})}}">Ver</a></td>
                         </tr>
@@ -78,5 +80,10 @@
                 </table>
             </div>
         </div>
+        <div class="col-sm-2" id="form_procedures" style="margin-top: 30px">
+            {{ form_start(form) }}
+            {{ form_end(form) }}
+        </div>
+        <br>
     </div>
 {% endblock %}

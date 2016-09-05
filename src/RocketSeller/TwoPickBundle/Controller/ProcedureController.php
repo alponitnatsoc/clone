@@ -3,6 +3,8 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use DateTime;
+use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\DocumentType;
@@ -44,6 +46,7 @@ class ProcedureController extends Controller
     public function indexAction($orderType, $order, Request $request)
     {
 		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        /** @var QueryBuilder $query */
         $query = $this->getDoctrine()->getManager()->createQueryBuilder();
         switch($orderType){
             case 'name':
@@ -52,7 +55,9 @@ class ProcedureController extends Controller
                     ->from('RocketSellerTwoPickBundle:RealProcedure','p')
                     ->join('RocketSellerTwoPickBundle:Employer','em','WITH','p.employerEmployer = em.idEmployer')
                     ->join('RocketSellerTwoPickBundle:Person','pe','WITH','em.personPerson = pe.idPerson')
-                    ->orderBy('pe.names',$order);
+                    ->orderBy('pe.names',$order)
+                    ->addOrderBy('pe.lastName1',$order)
+                    ->addOrderBy('pe.lastName2',$order);
                 break;
             case 'document':
                 $query
@@ -70,8 +75,158 @@ class ProcedureController extends Controller
                 break;
         }
         $procedures = $query->getQuery()->getResult();
+        /** @var RealProcedure $procedure */
+        foreach ($procedures as $procedure){
+            $actions = $procedure->getAction();
+            $new = true;
+            $completado = true;
+            $error = false;
+            $corregido = false;
+            $eCon = false;
+            $cContract = false;
+            $comContract = true;
+            $valCon = false;
+            /** @var Action $action */
+            foreach ($actions as $action){
+                if($action->getActionTypeActionType()->getCode()!='VC'){
+                    if($action->getStatus()=='Error'){
+                        $error = true;
+                    }
+                    if($action->getStatus()=='Corregido'){
+                        $corregido=true;
+                    }
+                    if($action->getStatus()!='Nuevo')
+                        $new = false;
+                    if($action->getStatus()!='Completado')
+                        $completado=false;
+                }else{
+                    $valCon = true;
+                    /** @var EmployerHasEmployee $EHE */
+                    $EHE = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->findOneBy(array(
+                        'employerEmployer'=>$action->getUserUser()->getPersonPerson()->getEmployer(),
+                        'employeeEmployee'=>$action->getPersonPerson()->getEmployee()
+                    ));
+                    /** @var Contract $contract */
+                    $contract = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Contract')->findOneBy(array(
+                        'employerHasEmployeeEmployerHasEmployee'=>$EHE,
+                        'state'=>1
+                    ));
+                    if($contract->getDocumentDocument()){
+                        if($action->getStatus()=='Error'){
+                            $eCon = true;
+                        }
+                        if($action->getStatus()=='Corregido'){
+                            $cContract=true;
+                        }
+                        if($action->getStatus()!='Completado'){
+                            $comContract=false;
+                        }
+                    }
+                }
+
+            }
+            if($new){
+                $procedure->getEmployerEmployer()->setStatus(0);
+            }elseif($error or $eCon){
+                $procedure->getEmployerEmployer()->setStatus(2);
+            }elseif($corregido or $cContract){
+                $procedure->getEmployerEmployer()->setStatus(3);
+            }elseif($completado and !$comContract){
+                $procedure->getEmployerEmployer()->setStatus(4);
+            }elseif($completado and $comContract){
+                $procedure->getEmployerEmployer()->setStatus(5);
+            }else{
+                $procedure->getEmployerEmployer()->setStatus(1);
+            }
+            $this->getDoctrine()->getManager()->persist($procedure);
+            $this->getDoctrine()->getManager()->flush();
+
+
+        }
+
+        $form = $this->createFormBuilder()
+            ->add('documento','text',array('label'=>'Numero de documento:','required'=>false,'attr'=>array('class'=>'documentNumberInput','style'=>'width: 90%;margin-left: 2px;'),'label_attr'=>array('class'=>'documenNumberLabel','style'=>'margin-left: 2px;')))
+            ->add('nombre','text',array('label'=>'Nombre del empleador:','required'=>false,'attr'=>array('class'=>'nameInput','style'=>'width: 90%;margin-left: 2px;'),'label_attr'=>array('class'=>'nameLabel','style'=>'margin-left: 2px;')))
+            ->add('estado','choice', array('label'=>'Estado','expanded'=>false,'multiple'=>false,'placeholder' => 'Seleccionar estado','required'=>false,
+                'choices' => array(
+                    1 => 'Nuevo',
+                    2 => 'En tramite',
+                    3 => 'Error',
+                    4 => 'Corregido',
+                    5 => 'Terminado',
+                    6 => 'Contrato Validado',
+                    7 => 'Todos',
+                )))
+            ->add('buscar', 'submit', array('label' => 'Buscar'))
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $docNum = false;
+            $name = false;
+            $status = false;
+            if ($form->get('documento')->getData()) {
+                $docNum = true;
+            }
+            if ($form->get('nombre')->getData()) {
+                $name = true;
+            }
+            if ($form->get('estado')->getData()){
+                if($form->get('estado')->getData()!=7)
+                    $status = true;
+            }
+            $query2 = $this->getDoctrine()->getManager()->createQueryBuilder();
+            $query2
+                ->add('select', 'p')
+                ->from('RocketSellerTwoPickBundle:RealProcedure', 'p')
+                ->join('RocketSellerTwoPickBundle:Employer', 'em', 'WITH', 'p.employerEmployer = em.idEmployer')
+                ->join('RocketSellerTwoPickBundle:Person', 'pe', 'WITH', 'em.personPerson = pe.idPerson');
+
+            try {
+                if($docNum){
+                    $query2
+                        ->where($query->expr()->orX(
+                            $query->expr()->eq('pe.document', '?1'),
+                            $query->expr()->like('pe.document', '?1 ')
+                        ))
+                        ->setParameter('1', '%' . $form->get('documento')->getData() . '%');
+                }
+                if($name){
+                    $query2
+                        ->where($query->expr()->orX(
+                            $query->expr()->eq('pe.names', '?1'),
+                            $query->expr()->like('pe.names', '?1 '),
+                            $query->expr()->eq('pe.lastName1', '?1'),
+                            $query->expr()->like('pe.lastName1', '?1 '),
+                            $query->expr()->eq('pe.lastName2', '?1'),
+                            $query->expr()->like('pe.lastName2', '?1 ')
+                        ))
+                        ->setParameter('1', '%' . $form->get('nombre')->getData() . '%');
+                }
+                if($status){
+                    $query2
+                        ->where($query->expr()->orX(
+                            $query->expr()->eq('em.status', '?1')
+                        ))
+                        ->setParameter('1',$form->get('estado')->getData()-1);
+
+                }
+                $query2
+                ->orderBy('pe.names', $order)
+                ->addOrderBy('pe.lastName1', $order)
+                ->addOrderBy('pe.lastName2', $order)
+                ->addOrderBy('em.status','DESC');
+
+                $procedures = $query2->getQuery()->getResult();
+            } catch (Exception $e) {
+                dump($e);
+            }
+            return $this->render('@RocketSellerTwoPick/BackOffice/procedures.html.twig',array('procedures'=>$procedures,'order'=>$order,'form' => $form->createView()));
+        }
+
 		return $this->render(
-            '@RocketSellerTwoPick/BackOffice/procedures.html.twig',array('procedures'=>$procedures,'order'=>$order)
+            '@RocketSellerTwoPick/BackOffice/procedures.html.twig',array('procedures'=>$procedures,'order'=>$order,'form' => $form->createView())
         );
     }
 
