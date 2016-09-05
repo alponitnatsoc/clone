@@ -246,7 +246,7 @@ class UtilsController
 	 */
 	private function get_date_from_period($sign, $value, Payroll $payroll){
 		
-		$localTimeCommitment = $payroll->getContractContract()->getTimeCommitmentTimeCommitment()->getCode();
+		//$localTimeCommitment = $payroll->getContractContract()->getTimeCommitmentTimeCommitment()->getCode();
 		
 		$actualPeriod = intval($payroll->getPeriod());
 		$actualMonth = intval($payroll->getMonth());
