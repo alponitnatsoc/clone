@@ -28,6 +28,10 @@ class PublicController extends Controller
                 $landRes->setCreatedAt(new \DateTime());
                 $landRes->setPhone($result['cellphone']);
                 $landRes->setEntityType("persona");
+                //TODO-Andres Enviar un correo diciendole que lso dátos fueron recibidos y que todo bien que si quiere continuar puede seguir en la página del registro
+                //email to send
+                $email=$landRes->getEmail();
+
                 $em= $this->getDoctrine()->getEntityManager();
                 $em->persist($landRes);
                 $em->flush();
