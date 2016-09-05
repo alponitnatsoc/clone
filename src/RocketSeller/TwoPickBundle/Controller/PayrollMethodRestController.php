@@ -334,10 +334,13 @@ class PayrollMethodRestController extends FOSRestController
             $not->setDescription("Pagar nomina del mes ".$month." periodo ".$period);
             $not->setDeadline(new DateTime());
             $not->setStatus(1);
-            $not->setAccion("pagar");
+            $not->setAccion("Pagar");
 
             $em->persist($not);
             $em->persist($purchaseOrder);
+            $em->flush();
+            $not->setRelatedLink($this->generateUrl("payroll", array('idNotif'=>$not->getId())));
+            $em->persist($not);
             $em->flush();
 
 

@@ -14,6 +14,7 @@ use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Notification;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
 use Symfony\Component\Validator\ConstraintViolationList;
 use RocketSeller\TwoPickBundle\Controller\UtilsController;
@@ -44,17 +45,22 @@ class NotificationRestController extends FOSRestController
      */
     public function postChangeStatusAction(ParamFetcher $paramFetcher)
     {
+        /** @var User $user */
         $user = $this->getUser();
         $view = View::create();
         if($user==null){
             $view->setStatusCode(401);
             return $view;
         }
-        /** @var NotificationEmployer $notification */
+        /** @var Notification $notification */
         $notification = $this->getdoctrine()
             ->getRepository('RocketSellerTwoPickBundle:Notification')
             ->find($paramFetcher->get('notificationId'));
         if($notification==null){
+            $view->setStatusCode(404);
+            return $view;
+        }
+        if($notification->getPersonPerson()->getIdPerson()!=$user->getPersonPerson()->getIdPerson()){
             $view->setStatusCode(404);
             return $view;
         }
@@ -64,9 +70,6 @@ class NotificationRestController extends FOSRestController
         $em->flush();
         $view->setStatusCode(200);
         $response=array();
-        $response["url"]="notifications/employer";
-        $serializer = $this->get('jms_serializer');
-        $serializer->serialize($response, "json");
         $view->setData($response);
         return $view;
     }

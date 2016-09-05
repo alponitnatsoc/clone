@@ -222,8 +222,8 @@ contact:
     path: /contact/{subject}
     defaults: { _controller: RocketSellerTwoPickBundle:Default:contact, subject: "default"}
 payroll:
-    path: /payroll
-    defaults: { _controller: RocketSellerTwoPickBundle:Payroll:pay}
+    path: /payroll/{idNotif}
+    defaults: { _controller: RocketSellerTwoPickBundle:Payroll:pay, idNotif: -1}
 payroll_calculate:
     path: /payroll/calculate
     defaults: { _controller: RocketSellerTwoPickBundle:Payroll:calculate}
