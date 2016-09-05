@@ -1,0 +1,90 @@
+{% trans_default_domain 'FOSUserBundle' %}
+{% block subject %}{% autoescape false %}Primer contacto symplifica{% endautoescape %}{% endblock %}
+{% block body_html %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600,600italic,700" rel="stylesheet" type="text/css">
+    <title>Responsive email</title>
+    <style type="text/css">
+      body {margin: 10px 0; padding: 0 10px; background: #F9F2E7; font-size: 13px;}
+      table {border-collapse: collapse;}
+      td {font-family: arial, sans-serif; color: #333333;}
+
+      @media only screen and (max-width: 480px) {
+        body,table,td,p,a,li,blockquote {
+          -webkit-text-size-adjust:none !important;
+        }
+        table {width: 100% !important}
+
+        .responsive-image img {
+          height: auto !important;
+          max-width: 50% !important;
+          width: 50% !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr>
+        <td>
+          <table border="0" cellpadding="0" cellspacing="0" align="center" width="640" bgcolor="#FFFFFF">
+            <tr>
+              <td style="font-size: 0; line-height: 0; padding: 0 10px;" height="80" align="center" class="responsive-image">
+                <img src="https://symplifica.com/img/logo.png" alt="" />
+              </td>
+            </tr>
+            <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr>
+            <tr>
+              <td style="padding: 10px 10px 20px 10px;">
+                <br /><br />
+                <div style="font-family: 'Open Sans', sans-serif; font-weight: 600; color:#5D5D5D; font-size: 20px;width: 80%;margin: 0 auto;">¡Gracias por tu interés en Symplifica!</div>
+                <br /><br />
+                <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#858789; font-size: 17px; width:80%;margin:0 auto">¡Ya estamos aquí para hacer tu vida más sencilla! Somos la herramienta online que busca mejorar y simplificar los procesos de gestión de empleados domésticos.<br><br>
+                  &#8226; Puedes completar tu registro creando una cuenta en el botón <strong>“Obtén un mes gratis”</strong> y siguiendo los pasos.<br>
+                  &#8226; Si quieres resolver tus dudas, comunícate con nosotros al 3508330000.<br>
+                  &#8226; O Agenda una cita para ayudarte con tu registro escribiéndonos a contactanos@symplifica.com.<br><br>
+                  <strong>Recuerda que hasta el 18 de septiembre puedes visitarnos en la feria del hogar o registrarte en nuestra página con el código promocional feria2016 y recibir dos meses gratis del usos de nuestra plataforma.</strong></div><br /><br />
+                <a href="https://symplifica.com/" style="text-decoration:none;width: 80%;display:block;margin: 0 auto;" target="_blank;"><div style="background:#DF9036; height: 35px; font-size:14px; width: 170px; color:#FFFFFF;font-family: 'Open Sans', sans-serif; font-weight: 600; padding: 10px 0 0 0; text-align:center">Ir a symplifica</div></a><br /><br />
+                <div style="font-family: 'Open Sans', sans-serif; font-weight: 300; color:#858789; font-size: 15px;width:80%;margin:0 auto">
+                    <strong>Recuerda que te llevaremos de la mano en:</strong><br>
+                    &#8226; El correcto proceso de contratación de tus empleados.<br>
+                    &#8226; Afiliación y liquidación de aportes de seguridad social y pago de salarios.<br>
+                    &#8226; La gestión del día a día por medio de notificaciones que te recuerdan lo que debes hacer.<br>
+                    &#8226; Llevar un archivo digital de la relación con tu empleado.<br>
+                    &#8226; ¡Todo desde tu casa y con la tranquilidad de hacerlo bien!</div><br /><br />
+
+              </td>
+            </tr>
+            <tr><td style="font-size: 0; line-height: 0;" height="20">&nbsp;</td></tr>
+            <tr>
+              <td bgcolor="#485465">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="text-align:center; font-family: 'Open Sans', sans-serif; font-weight: 300;">
+                  <tr>
+                  	<td style="color: #fff; font-family: 'Open Sans', sans-serif; font-weight: 300;">Siguenos
+                    <a href="https://www.facebook.com/Symplifica-1538503439800792/timeline"><img src="face.png" /></a>
+                    <a href="https://twitter.com/symplifica_?lang=en"><img src="link.png" /></a>
+                    <a href="https://www.linkedin.com/company/symplifica?trk=tyah&trkInfo=clickedVertical%3Acompany%2CclickedEntityId%3A10358058%2Cidx%3A1-1-1%2CtarId%3A1456525736089%2Ctas%3Asymplifica"><img src="twe.png" /></a>
+                    </td>
+                  </tr>
+
+                  <tr>
+                  	<br>
+                    <td style="padding: 0 10px; color: #FFFFFF; font-family: 'Open Sans', sans-serif; font-weight: 300;">
+                      Términos y Condiciones I Copyright © Todos los derechos reservados Sympliﬁca
+                    </td>
+                  </tr>
+                  <tr><td style="font-size: 0; line-height: 0;" height="15">&nbsp;</td></tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+{% endblock %}
