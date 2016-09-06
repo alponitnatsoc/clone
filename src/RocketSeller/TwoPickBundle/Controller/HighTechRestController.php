@@ -308,18 +308,18 @@ class HighTechRestController extends FOSRestController
 
             $context=array(
                 'emailType'=>'failDispersion',
-                'userEmail'=>$pay->getUserIdUser()->getEmail(),
-                'toEmail'=>$pay->getUserIdUser()->getEmail(),
-                'userName'=>$pay->getUserIdUser()->getPersonPerson()->getFullName(),
+                'userEmail'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getEmail(),
+                'toEmail'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getEmail(),
+                'userName'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getPersonPerson()->getFullName(),
             );
             $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
             $contextBack=array(
                 'emailType'=>'regectionDispersion',
-                'userEmail'=>$pay->getUserIdUser()->getEmail(),
-                'userName'=>$pay->getUserIdUser()->getFullName(),
+                'userEmail'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getEmail(),
+                'userName'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getFullName(),
                 'rejectionDate'=>$rejectDate,
                 'toEmail'=> 'backOfficeSymplifica@gmail.com',
-                'phone'=>$pay->getUserIdUser()->getPersonPerson()->getPhones()->first(),
+                'phone'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getPersonPerson()->getPhones()->first(),
                 'rejectedProduct'=>$product,
                 'idPOD'=>$rejectedPurchaseOrderDescription->getIdPurchaseOrdersDescription(),
                 'value'=>$value
