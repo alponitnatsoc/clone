@@ -269,8 +269,8 @@ class HighTechRestController extends FOSRestController
 
             $context=array(
                 'emailType'=>'succesDispersion',
-                'toEmail'=>$pay->getUserIdUser()->getEmail(),
-                'userName'=>$pay->getUserIdUser()->getPersonPerson()->getFullName(),
+                'toEmail'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getEmail(),
+                'userName'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getPersonPerson()->getFullName(),
             );
             if($pay->getPurchaseOrdersDescription()->getProductProduct()->getSimpleName()=="PN"){
                 $params = array(
@@ -284,7 +284,7 @@ class HighTechRestController extends FOSRestController
                 if (!file_exists('uploads/temp/comprobantes')) {
                     mkdir('uploads/temp/comprobantes', 0777, true);
                 }
-                $path = 'uploads/temp/comprobantes/'.$pay->getUserIdUser()->getPersonPerson()->getIdPerson().'_tempFacturaFile.pdf';
+                $path = 'uploads/temp/comprobantes/'.$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getPersonPerson()->getIdPerson().'_tempFacturaFile.pdf';
                 file_put_contents($path, $file);
                 $context['path']=$path;
                 $context['comprobante']=true;
@@ -316,7 +316,7 @@ class HighTechRestController extends FOSRestController
             $contextBack=array(
                 'emailType'=>'regectionDispersion',
                 'userEmail'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getEmail(),
-                'userName'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getFullName(),
+                'userName'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getPersonPerson()->getFullName(),
                 'rejectionDate'=>$rejectDate,
                 'toEmail'=> 'backOfficeSymplifica@gmail.com',
                 'phone'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getPersonPerson()->getPhones()->first(),
