@@ -41,6 +41,8 @@
 							<tr>
 						{% elseif action.status|lower == "error" %}
 							<tr style="background-color: #CB6D6C">
+						{% elseif action.status|lower == "corregido" %}
+							<tr>
 						{% endif %}
 						<td class="{{action.personPerson.idPerson}}">{{ action.ActionTypeActionType.name }}</td>
 						<td>{{ action.personPerson.fullName }}</td>

@@ -102,17 +102,16 @@ class Employer
      */
     private $mandatoryDocument;
 
-    /**
-     * @var integer $toFinish
+    /** @var integer
+     * 0 - new
+     * 1 - started
+     * 2 - error
+     * 3 - corrected
+     * 4 - finished
+     * 5 - contractValidated
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $toFinish=0;
-
-    /**
-     * @var integer $finished
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $finished=0;
+    private $status=0;
 
     /**
      * Set idEmployer
@@ -484,85 +483,6 @@ class Employer
     }
 
     /**
-     * Set toFinish
-     *
-     * @param integer $toFinish
-     *
-     * @return Employer
-     */
-    public function setToFinish($toFinish)
-    {
-        $this->toFinish = $toFinish;
-
-        return $this;
-    }
-
-    /**
-     * Get toFinish
-     *
-     * @return integer
-     */
-    public function getToFinish()
-    {
-        $employees = $this->getEmployerHasEmployees();
-        /** @var EmployerHasEmployee $employee */
-        foreach( $employees as $employee){
-            if ($employee->getState()>2 and $employee->getState()<5){
-                    $this->toFinish += 1;
-            }
-        }
-        return $this->toFinish;
-    }
-
-    /**
-     * Set finished
-     *
-     * @param integer $finished
-     *
-     * @return Employer
-     */
-    public function setFinished($finished)
-    {
-        $this->finished = $finished;
-
-        return $this;
-    }
-
-    /**
-     * Get Employees with Errors
-     *
-     * @return integer
-     */
-    public function getErrors(){
-        $employees = $this->getEmployerHasEmployees();
-        /** @var EmployerHasEmployee $employee */
-        foreach( $employees as $employee){
-            if ($employee->getEmployeeEmployee()->getEmployeeHasUnfinishedActions($this->getIdEmployer())==2){
-                $this->finished+=1;
-            }
-        }
-        return $this->finished;
-    }
-    /**
-     * Get finished
-     *
-     * @return integer
-     */
-    public function getFinished()
-    {
-        $employees = $this->getEmployerHasEmployees();
-        /** @var EmployerHasEmployee $employee */
-        foreach( $employees as $employee){
-            if ($employee->getState()>4){
-                //if ($employee->getEmployeeEmployee()->getEmployeeHasUnfinishedActions($this->getIdEmployer())===0){
-                $this->finished+=1;
-                //}
-            }
-        }
-        return $this->finished;
-    }
-
-    /**
      * Set mandatoryDocument
      *
      * @param \RocketSeller\TwoPickBundle\Entity\Document $mandatoryDocument
@@ -584,5 +504,30 @@ class Employer
     public function getMandatoryDocument()
     {
         return $this->mandatoryDocument;
+    }
+
+
+    /**
+     * Set status
+     *
+     * @param integer $status
+     *
+     * @return Employer
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return integer
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }
