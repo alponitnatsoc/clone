@@ -320,7 +320,7 @@ class HighTechRestController extends FOSRestController
                 'rejectionDate'=>$rejectDate,
                 'toEmail'=> 'backOfficeSymplifica@gmail.com',
                 'phone'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getPersonPerson()->getPhones()->first()->getPhoneNumber(),
-                'rejectedProduct'=>$product,
+                'rejectedProduct'=>$product->getName(),
                 'idPOD'=>$rejectedPurchaseOrderDescription->getIdPurchaseOrdersDescription(),
                 'value'=>$value
             );
