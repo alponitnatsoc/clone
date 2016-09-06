@@ -1,0 +1,172 @@
+{% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
+
+{% block title %}Vista Usuarios{% endblock %}
+
+{% block fos_user_content %}
+    <div id="main" class="col-sm-15">
+        <div class="col-md-12">
+            <div class="panel panel-title">
+                BackOffice Pila
+            </div>
+            <br>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Información de las pilas</h4>
+                </div>
+
+                {% for user in users %}
+                    <div>
+                        {% set empPerson = user.personPerson %}
+                        <table class="table">
+                            <tr>
+                                <th>Empleador: {{ empPerson.fullName }}</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table class="table">
+                                        <tr>
+                                            <th>Id Usuario</th>
+                                            <th>Email</th>
+                                            <th>Estado Usuario</th>
+                                            <th>Estado Data Credito</th>
+                                            <th>SMS Validación</th>
+                                            <th>Token Confirmación</th>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ user.id }}</td>
+                                            <td>{{ user.email }}</td>
+                                            <td>{{ user.status }}</td>
+                                            <td>{{ user.dataCreditStatus }}</td>
+                                            <td>{{ user.smsCode }}</td>
+                                            <td>{% if user.confirmationToken is defined %}
+                                                    {{ user.confirmationToken }}
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table class="table">
+                                        <tr>
+                                            <th>Nombres Empleador</th>
+                                            <th>Apellidos Empleador</th>
+                                            <th>Cédula</th>
+                                            <th>Número Sociedad SQL</th>
+                                            <th>Id HighTech</th>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ empPerson.names }}</td>
+                                            <td>{{ empPerson.lastName1 }} {{ empPerson.lastName2 }}</td>
+                                            <td>{{ empPerson.document }}</td>
+                                            <td>{% if user.personPerson.employer.idSqlSociety is defined %}
+                                                    {{ user.personPerson.employer.idSqlSociety }}
+                                                {% endif %}
+                                            </td>
+                                            <td>{% if user.personPerson.employer.idHighTech is defined %}
+                                                    {{ user.personPerson.employer.idHighTech }}
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            {% if user.personPerson.employer is defined and user.personPerson.employer.employerHasEmployees is defined %}
+
+                                {% for ehe in user.personPerson.employer.employerHasEmployees %}
+                                    <tr>
+                                        <td>
+                                            <table class="table">
+                                                <tr>
+                                                    <th>Id EHE</th>
+                                                    <th>Nombres Empleado</th>
+                                                    <th>Apellidos Empleado</th>
+                                                    <th>Cédula Empleado</th>
+                                                    <th>Estado</th>
+                                                    <th>Existe SQL</th>
+                                                    <th>Existe HighTech</th>
+                                                </tr>
+                                                {% set employeePer = ehe.employeeEmployee.personPerson %}
+
+                                                <tr>
+                                                    <td>{{ ehe.idEmployerHasEmployee }}</td>
+                                                    <td>{{ employeePer.names }}</td>
+                                                    <td>{{ employeePer.lastName1 }} {{ employeePer.lastName2 }}</td>
+                                                    <td>{{ employeePer.document }}</td>
+                                                    <td>{{ ehe.state }}</td>
+                                                    <td>{% if ehe.existentSQL is defined %}
+                                                            {{ ehe.existentSQL }}
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>{% if ehe.existentHightec is defined %}
+                                                            {{ ehe.existentHightec }}
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <table class="table">
+                                                <tr>
+                                                    <th>Id Contrato</th>
+                                                    <th>Frecuencia Pago</th>
+                                                    <th>Payroll Activo</th>
+                                                    <th>Dedicación de tiempo</th>
+                                                    <th>Metodo de pago</th>
+                                                    <th>Salario</th>
+                                                    <th>Fecha de Inicio de contrato</th>
+                                                    <th>Fecha de Finalización de contrato</th>
+                                                    <th>Días laborales al mes</th>
+                                                    <th>Tipo de planilla</th>
+                                                </tr>
+                                                {% for aC in ehe.contracts %}
+                                                    {% if aC.state == 1 %}
+                                                        <tr>
+                                                            <td>{{ aC.idContract }}</td>
+                                                            <td>{% if aC.frequencyFrequency != NULL %}
+                                                                    {{ aC.frequencyFrequency.payrollCode }}
+                                                                {% endif %}
+                                                            </td>
+                                                            <td>{% if aC.activePayroll != NULL %}
+                                                                    {{ aC.activePayroll.period }} - {{ aC.activePayroll.month }} Paid: {{ aC.activePayroll.paid }}
+                                                                {% endif %}
+                                                            </td>
+                                                            <td> {{ aC.timeCommitmentTimeCommitment.code }}</td>
+                                                            <td>{% if aC.payMethodPayMethod != NULL %}
+                                                                    {{ aC.payMethodPayMethod.payTypePayType.simpleName }}
+                                                                {% endif %}
+                                                            </td>
+                                                            <td> {{ aC.salary }} </td>
+                                                            <td> {{ aC.startDate|date("y-m-d") }}</td>
+                                                            <td>{% if aC.endDate != NULL %}
+                                                                    {{ aC.endDate|date("y-m-d") }}
+                                                                {% endif %}
+                                                            </td>
+                                                            <td> {{ aC.workableDaysMonth }} </td>
+                                                            <td>{% if aC.planillaTypePlanillaType != NULL %}
+                                                                    {{ aC.planillaTypePlanillaType.code }}
+                                                                {% endif %}
+                                                            </td>
+                                                        </tr>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </table>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </table>
+                    </div>
+                    <br>
+                    <hr>
+                    <br>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
