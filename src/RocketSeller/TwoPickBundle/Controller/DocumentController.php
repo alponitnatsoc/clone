@@ -174,12 +174,15 @@ use EmployerMethodsTrait;
         $personName = $data['personName'];
         /** @var DocumentType $documentType */
         $documentType = $data['documentType'];
-        $form2 = $this->createFormBuilder()
-            ->add('file','collection',array(
-                'type'=>'file',
-                ''
-            ))
-            ->getForm();
+//        $form2 = $this->createFormBuilder()
+//            ->add('archivo','file')
+//            ->getForm();
+//        $form2 = $this->createFormBuilder()
+//            ->add('archivo','collection',array(
+//                'type'=>'file',
+//                'required'=>false,
+//            ))
+//            ->getForm();
 
         $form = $this->createForm(new DocumentRegistration(), $document);
         $form->handleRequest($request);
@@ -245,7 +248,6 @@ use EmployerMethodsTrait;
                 switch ($docCode){
                     case "CC":
                         if($person->getDocumentDocument()){
-                                dump('corrigiendo cedula');
                             $document = $person->getDocumentDocument();
                             $corrected = true;
                             if($document->getMediaMedia()){
