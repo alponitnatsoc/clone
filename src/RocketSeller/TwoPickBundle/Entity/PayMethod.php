@@ -10,9 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
  * PayMethod
  *
  * @ORM\Table(name="pay_method", indexes={
- *  @ORM\Index(name="fk_pay_method_user1", columns={"user_id_user"}), 
- *  @ORM\Index(name="fk_pay_method_pay_type1", columns={"pay_type_id_pay_type"}), 
- *  @ORM\Index(name="fk_pay_method_account_type1", columns={"account_type_id_account_type"}), 
+ *  @ORM\Index(name="fk_pay_method_user1", columns={"user_id_user"}),
+ *  @ORM\Index(name="fk_pay_method_pay_type1", columns={"pay_type_id_pay_type"}),
+ *  @ORM\Index(name="fk_pay_method_account_type1", columns={"account_type_id_account_type"}),
  *  @ORM\Index(name="fk_pay_method_bank1", columns={"bank_id_bank"})})
  * @ORM\Entity
  */
@@ -68,7 +68,6 @@ class PayMethod
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
-     * @Exclude
      */
     private $accountNumber;
 
