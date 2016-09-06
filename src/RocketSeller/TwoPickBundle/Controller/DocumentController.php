@@ -197,7 +197,7 @@ use EmployerMethodsTrait;
             }
         }
         return $this->render(
-            'RocketSellerTwoPickBundle:Document:addDocumentForm.html.twig', array('form' => $form->createView(),'form2'=>$form2->createView(), "entityType" => $entityType, "entityId" => $entityId, "docCode" => $docCode, "idNotification" => $idNotification, 'personName' => $personName, "documentName" => $documentType->getName()));
+            'RocketSellerTwoPickBundle:Document:addDocumentForm.html.twig', array('form' => $form->createView(), "entityType" => $entityType, "entityId" => $entityId, "docCode" => $docCode, "idNotification" => $idNotification, 'personName' => $personName, "documentName" => $documentType->getName()));
     }
 
     public function persitDocument(Document $document, Notification $notification){
