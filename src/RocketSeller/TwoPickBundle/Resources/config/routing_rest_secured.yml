@@ -1,20 +1,24 @@
 users :
-    type: rest
+    type:         rest
     resource:     "RocketSellerTwoPickBundle:UserRest"
     name_prefix:  api_secured_
 employers :
-    type: rest
+    type:         rest
     resource:     "RocketSellerTwoPickBundle:EmployerRestSecured"
     name_prefix:  api_secured_
 payrolls :
-    type: rest
+    type:         rest
     resource:     "RocketSellerTwoPickBundle:PayrollRestSecured"
     name_prefix:  api_secured_
 device :
-    type: rest
+    type:         rest
     resource:     "RocketSellerTwoPickBundle:DeviceRestSecured"
     name_prefix:  api_secured_
 document :
-    type: rest
+    type:         rest
     resource:     "RocketSellerTwoPickBundle:DocumentRestSecured"
+    name_prefix:  api_secured_
+pay :
+    type:         rest
+    resource:     "RocketSellerTwoPickBundle:PayRestSecured"
     name_prefix:  api_secured_

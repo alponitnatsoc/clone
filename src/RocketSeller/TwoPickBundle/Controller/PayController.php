@@ -18,6 +18,7 @@ use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\Pay;
+use JMS\Serializer\SerializationContext;
 
 use RocketSeller\TwoPickBundle\Traits\EmployerHasEmployeeMethodsTrait;
 use RocketSeller\TwoPickBundle\Traits\PayMethodsTrait;
@@ -57,25 +58,15 @@ class PayController extends Controller
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
         }
-        /** @var User $user */
-        $user = $this->getUser();
-        $purchaseOrders = $user->getPurchaseOrders();
-        $answer= new ArrayCollection();
-        /** @var PurchaseOrders $purchaseOrder */
-        foreach ($purchaseOrders as $purchaseOrder) {
-            $pods = $purchaseOrder->getPurchaseOrderDescriptions();
-            /** @var PurchaseOrdersDescription $pod */
-            foreach ($pods as $pod) {
-                if($pod->getPurchaseOrdersStatus()==null){
-                    continue;
-                }
-                if($pod->getPurchaseOrdersStatus()->getIdNovoPay()=="00"||$pod->getPurchaseOrdersStatus()->getIdNovoPay()=="-2"){
-                    $answer->add($pod);
-                }
-            }
-        }
-        return $this->render('RocketSellerTwoPickBundle:Pay:listPODS.html.twig', array('pods'=>$answer));
 
+        $answer = $this->forward('RocketSellerTwoPickBundle:PayRestSecured:getListPods', array("_format" => 'json'));
+        if($answer->getStatusCode() != 200) {
+            return redirectToRoute("dashboard");
+        }
+        $decodedAnswer = json_decode($answer->getContent(), true);
+        $decodedAnswer = json_decode($decodedAnswer, true);
+
+        return $this->render('RocketSellerTwoPickBundle:Pay:listPODS.html.twig', $decodedAnswer);
     }
 
     public function editPODDescriptionAction(Request $request,$idPOD){
