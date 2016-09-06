@@ -951,7 +951,7 @@ class BackOfficeController extends Controller
         return $this->redirectToRoute("show_dashboard");
     }
 
-    public function clearDataAfterBackupAction($autentication)
+		public function clearDataAfterBackupAction($autentication)
     {
         $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
 
@@ -1287,4 +1287,13 @@ class BackOfficeController extends Controller
         $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
         return $this->redirect($this->generateUrl('back_office'));
     }
+	
+		public function userViewAction(){
+			$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+			
+			$em = $this->getDoctrine()->getManager();
+			$userRepo = $em->getRepository('RocketSellerTwoPickBundle:User')->findAll();
+			
+			return $this->render('RocketSellerTwoPickBundle:BackOffice:userView.html.twig',array('users'=>$userRepo));
+		}
 }
