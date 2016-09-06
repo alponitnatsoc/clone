@@ -12,6 +12,31 @@
                     <div class="col-sm-12 col-xs-12 up-Intro">Subir {{ documentName  }} de {{ personName }}</div>
                 </div>
                 <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
+                    {#<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>#}
+                    {#<script>#}
+                        {#$(document).ready(function(){#}
+                            {#$("#upload_doc_button_hide").click(function(){#}
+                                {#$("#upload_doc_form").hide();#}
+                                {#$("#upload_doc_button_hide").hide();#}
+                                {#$("#upload_doc_button_show").show();#}
+                            {#});#}
+                            {#$("#upload_doc_button_show").click(function(){#}
+                                {#$("#upload_doc_form").show();#}
+                                {#$("#upload_doc_button_hide").show();#}
+                                {#$("#upload_doc_button_show").hide();#}
+                            {#});#}
+                        {#});#}
+                    {#</script>#}
+                    {#<div class="col-sm-12 col-xs-12 text-center" style="margin-bottom: 5px">#}
+                        {#<a id="upload_doc_button_show" class="btn btn-default">Agregar Documento</a>#}
+                        {#<a id="upload_doc_button_hide" class="btn btn-default" style="display: none">Agregar Documento</a>#}
+                    {#</div>#}
+                    {#<div id="upload_doc_form"  style="display: none; background-color: #f1f1f1 ;width: 90%; margin:0 auto; clear: both; padding: 60px 0;">#}
+                        {#{{ form_start(form2) }}#}
+                        {#{% dump form2.archivo %}#}
+                        {#{{ form_row(form2.archivo) }}#}
+                        {#{{ form_end(form2) }}#}
+                    {#</div>#}
                     {{ form_start(form,{'action': path('documentos_employee',{'entityType': entityType , 'entityId':entityId,'docCode':docCode,'idNotification':idNotification}), 'method': 'POST'}) }}
                     {{ form_errors(form) }}
                     <div style="display: none;">
