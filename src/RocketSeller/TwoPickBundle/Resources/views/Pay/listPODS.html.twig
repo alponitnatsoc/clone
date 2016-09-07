@@ -14,7 +14,7 @@
             <ul>
                 <li class="borderBottom">
                   <p class="left borderRight bold">Id</p>
-                  <p class="right">{{ pod.idPurchaseOrdersDescription }}</p>
+                  <p class="right">{{ pod.id_purchase_orders_description }}</p>
                 </li>
                 <li class="borderBottom">
                   <p class="left borderRight bold">Valor</p>
@@ -22,12 +22,12 @@
                 </li>
                 <li class="borderBottom">
                   <p class="left borderRight bold">Estado</p>
-                  <p class="right">{{ pod.purchaseOrdersStatus.name }}</p>
+                  <p class="right">{{ pod.purchase_orders_status.name }}</p>
                 </li>
                 <li style="background: #e0e0e0;">
                   <p class="left borderRight bold">Acción</p>
-                  <a href="{{ path('show_pod_description',{'idPOD':pod.idPurchaseOrdersDescription}) }}" class="notAjax">
-                    <p class="right bold">{% if pod.purchaseOrdersStatus.idNovoPay == "-2" %}&#10095; Resolver{% else %}&#10095; Ver{% endif %}</p>
+                  <a href="{{ path('show_pod_description',{'idPOD':pod.id_purchase_orders_description}) }}" class="notAjax">
+                    <p class="right bold">{% if pod.purchase_orders_status.id_novo_pay == "-2" %}&#10095; Resolver{% else %}&#10095; Ver{% endif %}</p>
                   </a>
                 </li>
             </ul>

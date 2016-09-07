@@ -52,7 +52,6 @@ class PurchaseOrdersDescription
      * @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrders
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrders", inversedBy="purchaseOrderDescriptions", cascade={"persist"})
      * @ORM\JoinColumn(name="purchase_orders_id_purchase_orders", referencedColumnName="id_purchase_orders")
-     * @Exclude
      */
     private $purchaseOrders;
 
@@ -95,7 +94,7 @@ class PurchaseOrdersDescription
      * @ORM\Column(type="datetime", nullable=TRUE)
      */
     private $dateToPay;
-    
+
     /**
      * Get idPurchaseOrdersDescription
      *
