@@ -354,7 +354,7 @@ class PayrollRestSecuredController extends FOSRestController
             $realtoPay->addPurchaseOrderDescription($transactionPOD);
             $total += $transactionPOD->getValue();
 
-
+            //TODO-Gabriel Check this proces might be buggy
             $dateToday = new DateTime();
             $effectiveDate = $user->getLastPayDate();
             $isFreeMonths = $user->getIsFree();
@@ -362,10 +362,9 @@ class PayrollRestSecuredController extends FOSRestController
                 $isFreeMonths -= 1;
             }
             $isFreeMonths += 1;
-            $effectiveDate = new DateTime(date('Y-m-d', strtotime("+$isFreeMonths months", strtotime($effectiveDate->format("Y-m-") . "1"))));
-            $effectiveDate->setDate($effectiveDate->format("Y"), $effectiveDate->format("m"), 25);
+            $effectiveDate = new DateTime(date('Y-m-d', strtotime("+$isFreeMonths months", strtotime($effectiveDate->format("Y-m-") . "25"))));
 
-            if ($dateToday->format("d") >= 16 && $dateToday->format("m") == $effectiveDate->format("m") && $dateToday->format("Y") == $effectiveDate->format("Y")) {
+            if ($dateToday->format("d") >= 16 && $dateToday->format("m") >= $effectiveDate->format("m") && $dateToday->format("Y") >= $effectiveDate->format("Y")) {
                 //this means that the user has to pay the symplifica fee this month
                 $symplificaPOD = new PurchaseOrdersDescription();
                 $symplificaPOD->setDescription("Subscripción Symplifica");
@@ -594,10 +593,10 @@ class PayrollRestSecuredController extends FOSRestController
                 $isFreeMonths -= 1;
             }
             $isFreeMonths += 1;
-            $effectiveDate = new DateTime(date('Y-m-d', strtotime("+$isFreeMonths months", strtotime($effectiveDate->format("Y-m-") . "1"))));
-            $effectiveDate->setDate($effectiveDate->format("Y"), $effectiveDate->format("m"), 25);
 
-            if ($dateToday->format("d") >= 16 && $dateToday->format("m") == $effectiveDate->format("m") && $dateToday->format("Y") == $effectiveDate->format("Y")) {
+            $effectiveDate = new DateTime(date('Y-m-d', strtotime("+$isFreeMonths months", strtotime($effectiveDate->format("Y-m-") . "25"))));
+
+            if ($dateToday->format("d") >= 16 && $dateToday->format("m") >= $effectiveDate->format("m") && $dateToday->format("Y") >= $effectiveDate->format("Y")) {
                 //this means that the user has to pay the symplifica fee this month
                 $symplificaPOD = new PurchaseOrdersDescription();
                 $symplificaPOD->setDescription("Subscripción Symplifica");
@@ -644,7 +643,9 @@ class PayrollRestSecuredController extends FOSRestController
                 $symplificaPOD->setProductProduct($PS3);
                 $realtoPay->addPurchaseOrderDescription($symplificaPOD);
                 $total += $symplificaPOD->getValue();
-
+                $user->setLastPayDate($dateToday);
+                $user->setIsFree(0);
+                $em->persist($user);
             }
         }
         $realtoPay->setIdUser($user);

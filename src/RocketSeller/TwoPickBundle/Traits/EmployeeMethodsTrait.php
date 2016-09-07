@@ -4,6 +4,7 @@ namespace RocketSeller\TwoPickBundle\Traits;
 
 use DateTime;
 use Doctrine\Common\Persistence\ObjectManagerAware;
+use Doctrine\Common\Persistence\ObjectRepository;
 use RocketSeller\TwoPickBundle\Controller\UtilsController;
 use RocketSeller\TwoPickBundle\Entity\Action;
 use RocketSeller\TwoPickBundle\Entity\ActionType;
@@ -420,6 +421,7 @@ trait EmployeeMethodsTrait
                     //if both employer and employee pending docs are equal to 0 state is 2 message docs ready
                     }elseif($pend==0 and $ePend==0){
                         $eHE->setDocumentStatus(2);
+                        $this->checkSubscription($eHE);
                         $eHE->setDateDocumentsUploaded(new DateTime());
                     }
                 //if the antique state is employee documents pending checking if employee documents are still pending
@@ -429,6 +431,7 @@ trait EmployeeMethodsTrait
                     //if amount of pending docs for employee equal to 0 state is 2 message docs ready
                     if($ePend['pending']==0){
                         $eHE->setDocumentStatus(2);
+                        $this->checkSubscription($eHE);
                         $eHE->setDateDocumentsUploaded(new DateTime());
                     //if amount of pending docs for employee is greater than 0 state remains in 0 employee documents pending
                     }else{
@@ -441,6 +444,7 @@ trait EmployeeMethodsTrait
                     //if amount of pending docs for employer equal to 0 state is 2 message docs ready
                     if($pend==0){
                         $eHE->setDocumentStatus(2);
+                        $this->checkSubscription($eHE);
                         $eHE->setDateDocumentsUploaded(new DateTime());
                     //if amount of pending docs for employer is greater than 0 state remains in 1 employer documents pending
                     }else{
@@ -539,8 +543,10 @@ trait EmployeeMethodsTrait
         $employerHasEmployee = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->findOneBy(array(
             'employerEmployer' => $employer,
             'employeeEmployee' => $realEmployee,
-            'state' => 3
         ));
+        if($employerHasEmployee->getState()<2){
+            return false;
+        }
         // obtaining the active contract for the employerHasEmployee
         /** @var Contract $contract */
         $contract = $em->getRepository('RocketSellerTwoPickBundle:Contract')->findOneBy(array(
@@ -684,6 +690,33 @@ trait EmployeeMethodsTrait
         $em = $this->getDoctrine()->getManager();
         $em->persist($notification);
         $em->flush();
+    }
+
+    /**
+     * @param EmployerHasEmployee $eHE
+     */
+    private function checkSubscription(EmployerHasEmployee $eHE){
+        $personEmployer = $eHE->getEmployerEmployer()->getPersonPerson();
+        /** @var ObjectRepository $userRepo */
+        $userRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+        /** @var User $realUser */
+        $realUser = $userRepo->findOneBy(array('personPerson'=>$personEmployer));
+        $dateToday = new DateTime();
+        /** @var User $user */
+        $user = $realUser;
+        $effectiveDate = $user->getLastPayDate();
+        $isFreeMonths = $user->getIsFree();
+        if ($isFreeMonths > 0) {
+            $isFreeMonths -= 1;
+        }
+        $isFreeMonths += 1;
+
+        $effectiveDate = new DateTime(date('Y-m-d', strtotime("+$isFreeMonths months", strtotime($effectiveDate->format("Y-m-") . "25"))));
+
+        if ($dateToday->format("d") >= 16 && $dateToday->format("m") >= $effectiveDate->format("m") && $dateToday->format("Y") >= $effectiveDate->format("Y")) {
+            //a cobrar se dijo
+        }
+
     }
 
 }

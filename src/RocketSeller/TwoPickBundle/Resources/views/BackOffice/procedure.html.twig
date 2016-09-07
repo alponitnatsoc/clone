@@ -115,7 +115,7 @@
 			<div class="panel panel-default">
 				{% set act = 0 %}
 				{% for employerHasEmployee in employerHasEmployees %}
-					{% if employerHasEmployee.state >2 %}
+					{% if employerHasEmployee.state >=2 %}
 						{% if documentos == 2 %}
 							{% set documentos = 1 %}
 						{% endif %}
