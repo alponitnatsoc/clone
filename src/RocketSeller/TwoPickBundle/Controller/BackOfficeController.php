@@ -891,7 +891,7 @@ class BackOfficeController extends Controller
         $landings = $this->getdoctrine()
             ->getRepository('RocketSellerTwoPickBundle:LandingRegistration')
             ->findAll();
-        return $this->render('RocketSellerTwoPickBundle:BackOffice:marketing.html.twig', array('landings'=>$landings));
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:marketing.html.twig', array('landings'=>array_reverse($landings)));
     }
 
     /**
