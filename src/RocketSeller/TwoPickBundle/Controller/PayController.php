@@ -136,23 +136,7 @@ class PayController extends Controller
         return $this->redirectToRoute("show_dashboard");
     }
     public function sendVerificationCode() {
-        $em = $this->getDoctrine()->getManager();
-
-        $user = $this->getUser();
-        $code = rand(10100, 99999);
-        $message = "Tu codigo de confirmacion de Symplifica es: " . $code;
-
-        $user->setSmsCode($code);
-        $em->persist($user);
-        $em->flush();
-
-        /** @var Phone $phone */
-        $phone = $user->getPersonPerson()->getPhones()[0];
-
-        $twilio = $this->get('twilio.api');
-        $cellphone = $phone;
-        $twilio->account->messages->sendMessage(
-            "+19562671001", "+57" . $cellphone->getPhoneNumber(), $message);
+        $this->forward('RocketSellerTwoPickBundle:PayRestSecured:getSendVerificationCode', array("_format" => 'json'));
     }
 
     /**
