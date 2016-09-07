@@ -120,6 +120,9 @@ class RegistrationController extends BaseController
             $person = new Person();
             $person->setNames($form->get("name")->getData());
             $person->setLastName1($form->get("lastName")->getData());
+            $phone= new Phone();
+            $phone->setPhoneNumber($form->get("phone")->getData());
+            $person->addPhone($phone);
             $user->setPersonPerson($person);
             $user->setUsername($user->getEmail());
             $invitationCode=$form->get("creationCode")->getData();
@@ -168,6 +171,7 @@ class RegistrationController extends BaseController
                 $form->get("name")->setData($allreque["nname"]);
                 $form->get("lastName")->setData($allreque["nlast"]);
                 $form->get("email")->setData($allreque["nemail"]);
+                $form->get("phone")->setData($allreque["nphone"]);
             }
         }
 
