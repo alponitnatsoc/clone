@@ -135,6 +135,7 @@ class PayController extends Controller
         }
         return $this->redirectToRoute("show_dashboard");
     }
+
     public function sendVerificationCode() {
         $this->forward('RocketSellerTwoPickBundle:PayRestSecured:getSendVerificationCode', array("_format" => 'json'));
     }

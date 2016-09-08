@@ -16,9 +16,11 @@ use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\SerializationContext;
+use RocketSeller\TwoPickBundle\Traits\SubscriptionMethodsTrait;
 
 class PayRestSecuredController extends FOSRestController
 {
+  use SubscriptionMethodsTrait;
 
   /**
    * get pods currenly in process <br/>
@@ -70,29 +72,93 @@ class PayRestSecuredController extends FOSRestController
   }
 
   /**
-   * edit pod which has been rejected
+   * edit pay method of pod which has been rejected
    *
    * @ApiDoc(
    *   resource = true,
-   *   description = "edit pod which has been rejected",
+   *   description = "edit pay method of pod which has been rejected",
    *   statusCodes = {
    *     200 = "Created successfully",
    *     400 = "Bad Request",
+   *     401 = "Unauthorized",
    *   }
    * )
    *
    * @param paramFetcher $paramFetcher ParamFetcher
    *
-   * @RequestParam(name="idPod", nullable=false, strict=true, description="purhcase order description id")
-   * @RequestParam(name="accountType", nullable=false, strict=true, description="employee account type")
-   * @RequestParam(name="accountNumber", nullable=false, strict=true, description="employee account number")
-   * @RequestParam(name="bankId", nullable=false, strict=true, description="iemployee back id")
+   * @RequestParam(name="accountTypeId", nullable=true, strict=true, description="employee account type")
+   * @RequestParam(name="accountNumber", nullable=true, strict=true, description="employee account number")
+   * @RequestParam(name="bankId", nullable=true, strict=true, description="employee back id")
+   * @RequestParam(name="daviplataPhone", nullable=true, strict=true, description="daviplata phone number")
    * @RequestParam(name="verificationCode", nullable=false, strict=true, description="phone verification code")
+   * @RequestParam(name="idPod", nullable=false, strict=true, description="id purchase order description")
    *
    * @return View
    */
-  public function postEditPodAction(ParamFetcher $paramFetcher) {
+  public function postEditPodPayMethodAction(ParamFetcher $paramFetcher) {
+    $accountTypeId = $paramFetcher->get('accountTypeId');
+    $accountNumber = $paramFetcher->get('accountNumber');
+    $bankId = $paramFetcher->get('bankId');
+    $daviplataPhone = $paramFetcher->get('daviplataPhone');
+    $verificationCode = $paramFetcher->get('verificationCode');
+    $idPod = $paramFetcher->get('idPod');
 
+    $podRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription");
+    /** @var PurchaseOrdersDescription $realPod */
+    $realPod = $podRepo->find($idPod);
+    /** @var User $user */
+    $user = $this->getUser();
+    if( $user->getId() == $realPod->getPurchaseOrders()->getIdUser()->getId() &&
+       $realPod->getPurchaseOrdersStatus()->getIdNovoPay() == "-2" )
+    {
+      $payMethod = $realPod->getPayMethod();
+      $contract = $realPod->getPayrollPayroll()->getContractContract();
+
+      if($user->getSmsCode() == $verificationCode) {
+        $view = View::create();
+        $view->setStatusCode(401);
+        return $view->setData(array('response' => 'Codigo incorrecto'));
+      }
+      if($accountTypeId != null && $accountNumber != null && $bankId != null) {
+        $bank = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Bank")->find($bankId);
+        $accountType = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:AccountType")->find($accountTypeId);
+        $payMethod->setBankBank($bank);
+        $payMethod->setAccountTypeAccountType($accountType);
+        $payMethod->setAccountNumber($accountNumber);
+      } else if($daviplataPhone != null && $payMethod->getPayTypePayType()->getSimpleName()=="DAV") {
+        $payMethod->setCellPhone($daviplataPhone);
+      } else {
+        $view = View::create();
+        $view->setStatusCode(400);
+        return $view->setData(array('response' => 'values not set'));
+      }
+
+      $em=$this->getDoctrine()->getManager();
+      $em->persist($payMethod);
+      $em->flush();
+
+      $params = array(
+        'idEmployerHasEmployee' => $contract->
+        getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()
+      );
+
+      // $adding = $this->forward('RocketSellerTwoPickBundle:Pay:addEmployeeToHighTech', $params);
+      $adding=$this->addEmployeeToHighTech($contract->getEmployerHasEmployeeEmployerHasEmployee());
+      if($adding) {
+        $view = View::create();
+        $view->setStatusCode(200);
+        return $view->setData(array('payMethod' => $payMethod));
+      } else {
+        $view = View::create();
+        $view->setStatusCode(400);
+        return $view->setData(array('response' => 'No se agregó a Hightech'));
+      }
+
+    }
+
+    $view = View::create();
+    $view->setStatusCode(401);
+    return $view->setData(array());
   }
 
   /**
