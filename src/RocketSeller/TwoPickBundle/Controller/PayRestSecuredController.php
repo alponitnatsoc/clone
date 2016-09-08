@@ -113,9 +113,12 @@ class PayRestSecuredController extends FOSRestController
     {
       $payMethod = $realPod->getPayMethod();
       $contract = $realPod->getPayrollPayroll()->getContractContract();
-      echo $accountTypeId;
-      echo $accountNumber;
-      echo $bankId;
+
+      if($user->getSmsCode() == $verificationCode) {
+        $view = View::create();
+        $view->setStatusCode(401);
+        return $view->setData(array('response' => 'Codigo incorrecto'));
+      }
       if($accountTypeId != null && $accountNumber != null && $bankId != null) {
         $bank = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Bank")->find($bankId);
         $accountType = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:AccountType")->find($accountTypeId);
@@ -148,7 +151,7 @@ class PayRestSecuredController extends FOSRestController
       } else {
         $view = View::create();
         $view->setStatusCode(400);
-        return $view->setData(array('data' => 'not added to hightech'));
+        return $view->setData(array('response' => 'No se agregó a Hightech'));
       }
 
     }
