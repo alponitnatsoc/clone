@@ -47,23 +47,14 @@
                 </div><br /><br /><br />
 
                 <div style="font-size: 15px; font-style: italic; font-family: 'Open Sans', sans-serif; font-weight: 100; color: #858688;width:80%;margin:0 auto">
-                	<strong>Gracias por realizar tu pago con Symplifica</strong><br><br>éste se encuentre en proceso y podrá tardar <strong>hasta 3 días</strong> de acuerdo a la entidad bancaria. En cuanto esté completo te enviaremos un comprobante de pago por este medio.
-                <table>
-                    <tr>
-                        <th></th>
-                        <th></th>
-                    </tr>
+                	<strong>Gracias por realizar tu pago con Symplifica</strong><br><br>éste se encuentre en proceso y podrá tardar <strong>hasta 3 días</strong>
+                  de acuerdo a la entidad bancaria. En cuanto esté completo te enviaremos un comprobante de pago por este medio.</br></br>
+
                     {% for pods in po.purchaseOrderDescriptions %}
-                        <tr>
-                            <td>{{ pods.productProduct.name }}</td>
-                            <td>{{ pods.value }}</td>
-                        </tr>
+                            <strong>{{ pods.productProduct.name }}</strong></br>
+                            <strong>{{ pods.value }}</strong>
                     {% endfor %}
-
-                </table>
-
-
-</div><br /><br />
+                </div><br /><br />
                 <br /><br />
                 <div style="font-size: 20px; font-family: 'Open Sans', sans-serif; font-weight: 700; color: #5D5E5E">¡Que tengas un buen día!</div><br /><br />
                 <div style="font-size: 17px; font-family: 'Open Sans', sans-serif; font-weight: 300; color: #858688; width: 70%; margin: 0 auto">
