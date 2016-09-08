@@ -16,9 +16,11 @@ use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\SerializationContext;
+use RocketSeller\TwoPickBundle\Traits\SubscriptionMethodsTrait;
 
 class PayRestSecuredController extends FOSRestController
 {
+  use SubscriptionMethodsTrait;
 
   /**
    * get pods currenly in process <br/>
@@ -137,7 +139,8 @@ class PayRestSecuredController extends FOSRestController
         getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()
       );
 
-      $adding = $this->forward('RocketSellerTwoPickBundle:Pay:addEmployeeToHighTech', $params);
+      // $adding = $this->forward('RocketSellerTwoPickBundle:Pay:addEmployeeToHighTech', $params);
+      $adding=$this->addEmployeeToHighTech($contract->getEmployerHasEmployeeEmployerHasEmployee());
       if($adding) {
         $view = View::create();
         $view->setStatusCode(200);

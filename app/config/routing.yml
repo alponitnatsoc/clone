@@ -104,10 +104,6 @@ documents_verify_persist:
     path:      /document/verify/persist/{entityType}/{entityId}/{docCode}/{idNotification}/{fileName}
     defaults:  { _controller: RocketSellerTwoPickBundle:Document:verifyAndPersitDocument}
 
-highteck_add_employee:
-    path:      /highteck/add/employee/{idEmployerHasEmployee}
-    defaults:  { _controller: RocketSellerTwoPickBundle:Pay:addEmployeeToHighTech}
-
 show_calculator_form:
     path:      /calculator/calculate
     defaults:  { _controller: RocketSellerTwoPickBundle:Calculator:showCalculator}

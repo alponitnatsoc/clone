@@ -140,14 +140,6 @@ class PayController extends Controller
         $this->forward('RocketSellerTwoPickBundle:PayRestSecured:getSendVerificationCode', array("_format" => 'json'));
     }
 
-    public function addEmployeeToHighTechAction($idEmployerHasEmployee) {
-      $employerHasEmployeeRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
-      $employerHasEmployee = $employerHasEmployeeRepo->find($idEmployerHasEmployee);
-
-      $adding = $this->addEmployeeToHighTech($employerHasEmployee);
-      return $adding;
-    }
-
     /**
      * @param Request $request
      * @param integer $id - Id el id de la relación entre empleado y empleador EmployerHasEmployee
