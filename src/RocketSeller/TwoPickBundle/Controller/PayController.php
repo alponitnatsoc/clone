@@ -135,8 +135,17 @@ class PayController extends Controller
         }
         return $this->redirectToRoute("show_dashboard");
     }
+
     public function sendVerificationCode() {
         $this->forward('RocketSellerTwoPickBundle:PayRestSecured:getSendVerificationCode', array("_format" => 'json'));
+    }
+
+    public function addEmployeeToHighTechAction($idEmployerHasEmployee) {
+      $employerHasEmployeeRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
+      $employerHasEmployee = $employerHasEmployeeRepo->find($idEmployerHasEmployee);
+
+      $adding = $this->addEmployeeToHighTech($employerHasEmployee);
+      return $adding;
     }
 
     /**
