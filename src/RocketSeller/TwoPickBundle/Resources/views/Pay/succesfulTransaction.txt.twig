@@ -48,6 +48,19 @@
 
                 <div style="font-size: 15px; font-style: italic; font-family: 'Open Sans', sans-serif; font-weight: 100; color: #858688;width:80%;margin:0 auto">
                 	<strong>Gracias por realizar tu pago con Symplifica</strong><br><br>éste se encuentre en proceso y podrá tardar <strong>hasta 3 días</strong> de acuerdo a la entidad bancaria. En cuanto esté completo te enviaremos un comprobante de pago por este medio.
+                <table>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    {% for pods in po.purchaseOrderDescriptions %}
+                        <tr>
+                            <td>{{ pods.productProduct.name }}</td>
+                            <td>{{ pods.value }}</td>
+                        </tr>
+                    {% endfor %}
+
+                </table>
 
 
 </div><br /><br />

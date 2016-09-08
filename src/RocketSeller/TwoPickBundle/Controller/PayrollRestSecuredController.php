@@ -643,7 +643,7 @@ class PayrollRestSecuredController extends FOSRestController
                 $symplificaPOD->setProductProduct($PS3);
                 $realtoPay->addPurchaseOrderDescription($symplificaPOD);
                 $total += $symplificaPOD->getValue();
-                $user->setLastPayDate($dateToday);
+                $user->setLastPayDate(new DateTime($dateToday->format("Y-m-")."25"));
                 $user->setIsFree(0);
                 $em->persist($user);
             }
@@ -749,7 +749,8 @@ class PayrollRestSecuredController extends FOSRestController
             $context=array(
                 'emailType'=>'transactionAcepted',
                 'toEmail'=>$procesingPurchaseOrder->getIdUser()->getEmail(),
-                'userName'=>$procesingPurchaseOrder->getIdUser()->getPersonPerson()->getFullName()
+                'userName'=>$procesingPurchaseOrder->getIdUser()->getPersonPerson()->getFullName(),
+                'po' => $procesingPurchaseOrder
             );
             $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
             return $view->setStatusCode(200)->setData(array('result' => "s", 'idPO' => $realtoPay->getIdPurchaseOrders()));
