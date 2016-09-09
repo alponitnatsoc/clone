@@ -9,6 +9,9 @@ use RocketSeller\TwoPickBundle\Entity\Employee;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Person;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
+use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
@@ -45,8 +48,13 @@ class PayRestSecuredController extends FOSRestController
     $user = $this->getUser();
     $purchaseOrders = $user->getPurchaseOrders();
     $answer= new ArrayCollection();
+    $answerPo= new ArrayCollection();
     /** @var PurchaseOrders $purchaseOrder */
     foreach ($purchaseOrders as $purchaseOrder) {
+        if($purchaseOrder->getPurchaseOrdersStatus()->getIdNovoPay()=="S2"&&$purchaseOrder->getPurchaseOrderDescriptions()->count()>0){
+            $answerPo->add($purchaseOrder);
+            continue;
+        }
         $pods = $purchaseOrder->getPurchaseOrderDescriptions();
         /** @var PurchaseOrdersDescription $pod */
         foreach ($pods as $pod) {
@@ -67,7 +75,8 @@ class PayRestSecuredController extends FOSRestController
     $context->setSerializeNull(true);
     $serializer = $this->get('jms_serializer');
     $encodedAnswer = $serializer->serialize(array(
-        'pods' => $answer), 'json', $context);
+        'pods' => $answer,
+        'pos' => $answerPo), 'json', $context);
     return $view->setData($encodedAnswer);
   }
 

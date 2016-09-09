@@ -61,11 +61,10 @@ class PayController extends Controller
 
         $answer = $this->forward('RocketSellerTwoPickBundle:PayRestSecured:getListPods', array("_format" => 'json'));
         if($answer->getStatusCode() != 200) {
-            return redirectToRoute("dashboard");
+            return $this->redirectToRoute("dashboard");
         }
         $decodedAnswer = json_decode($answer->getContent(), true);
         $decodedAnswer = json_decode($decodedAnswer, true);
-
         return $this->render('RocketSellerTwoPickBundle:Pay:listPODS.html.twig', $decodedAnswer);
     }
 

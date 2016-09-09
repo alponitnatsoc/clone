@@ -3,7 +3,7 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('css/public/pagospage.css') }}"/>
 <link rel="stylesheet" type="text/css" href="{{ asset('css/public/estadoPago.css') }}"/>
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700' rel='stylesheet' type='text/css'>
-    {% if pods|length >0 %}
+    {% if pods|length >0 or pos|length >0 %}
         <div class="listpod col-sm-12">
           <div class="h1cont">
             <img width="70" src="{{ asset('public/img/landing/benefit3.png') }}" alt="">
@@ -18,17 +18,34 @@
                 </li>
                 <li class="borderBottom">
                   <p class="left borderRight bold">Valor</p>
-                  <p class="right">{{ pod.value }}</p>
+                  <p class="right">${{ pod.value|number_format(0, '.', ',')  }}</p>
                 </li>
                 <li class="borderBottom">
                   <p class="left borderRight bold">Estado</p>
-                  <p class="right">{{ pod.purchase_orders_status.name }}</p>
+                  <p class="right">{% if pod.purchase_orders_status.id_novo_pay == "00" %}Aprobado y procesando{% else %}{{ pod.purchase_orders_status.name }}{% endif %}</p>
                 </li>
                 <li style="background: #e0e0e0;">
                   <p class="left borderRight bold">Acción</p>
                   <a href="{{ path('show_pod_description',{'idPOD':pod.id_purchase_orders_description}) }}" class="notAjax">
                     <p class="right bold">{% if pod.purchase_orders_status.id_novo_pay == "-2" %}&#10095; Resolver{% else %}&#10095; Ver{% endif %}</p>
                   </a>
+                </li>
+            </ul>
+
+        {% endfor %}
+        {% for po in pos %}
+            <ul>
+                <li class="borderBottom">
+                  <p class="left borderRight bold">Id</p>
+                  <p class="right">{{ po.id_purchase_orders }}</p>
+                </li>
+                <li class="borderBottom">
+                  <p class="left borderRight bold">Valor</p>
+                  <p class="right">${{ po.value|number_format(0, '.', ',')  }}</p>
+                </li>
+                <li class="borderBottom">
+                  <p class="left borderRight bold">Estado</p>
+                  <p class="right">{{ po.purchase_orders_status.name }}</p>
                 </li>
             </ul>
 
