@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Traits;
 
 use DateTime;
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectManagerAware;
 use Doctrine\Common\Persistence\ObjectRepository;
 use RocketSeller\TwoPickBundle\Controller\UtilsController;
@@ -15,6 +16,9 @@ use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\Employee;
+use RocketSeller\TwoPickBundle\Entity\Product;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\RealProcedure;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\Notification;
@@ -706,15 +710,43 @@ trait EmployeeMethodsTrait
         $user = $realUser;
         $effectiveDate = $user->getLastPayDate();
         $isFreeMonths = $user->getIsFree();
-        if ($isFreeMonths > 0) {
-            $isFreeMonths -= 1;
-        }
-        $isFreeMonths += 1;
+        if($isFreeMonths==0){
+            //we prorat the subscrition to the end of the month
+            $realToPay=new PurchaseOrders();
+            $days = intval($dateToday->format("t"))-intval($dateToday->format("d"));
+            $contracts = $eHE->getContracts();
+            /** @var Contract $contract */
+            foreach ($contracts as $contract) {
+                if($contract->getState()==1){
+                    $actualDays=$contract->getWorkableDaysMonth();
+                    /** @var ObjectRepository $productRepo */
+                    $productRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
+                    if ($actualDays < 10) {
+                        /** @var Product $PS1 */
+                        $PS = $productRepo->findOneBy(array("simpleName" => "PS1"));
+                    } elseif ($actualDays <= 19) {
+                        /** @var Product $PS2 */
+                        $PS = $productRepo->findOneBy(array("simpleName" => "PS2"));
+                    } else {
+                        /** @var Product $PS3 */
+                        $PS = $productRepo->findOneBy(array("simpleName" => "PS3"));
+                    }
+                    $procesingStatus = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => 'P1'));
 
-        $effectiveDate = new DateTime(date('Y-m-d', strtotime("+$isFreeMonths months", strtotime($effectiveDate->format("Y-m-") . "25"))));
+                    $symplificaPOD = new PurchaseOrdersDescription();
+                    $symplificaPOD->setDescription("Subscripción Symplifica de ".$eHE->getEmployeeEmployee()->getPersonPerson()->getFullName());
+                    $symplificaPOD->setValue(round((($PS->getPrice() * (1 + $PS->getTaxTax()->getValue()) )/30)*$days,0));
+                    $symplificaPOD->setProductProduct($PS);
+                    $symplificaPOD->setPurchaseOrdersStatus($procesingStatus);
 
-        if ($dateToday->format("d") >= 16 && $dateToday->format("m") >= $effectiveDate->format("m") && $dateToday->format("Y") >= $effectiveDate->format("Y")) {
-            //a cobrar se dijo
+                    $realToPay->addPurchaseOrderDescription($symplificaPOD);
+                    $realToPay->setPurchaseOrdersStatus($procesingStatus);
+                    $user->addPurchaseOrder($realToPay);
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($user);
+                    $em->flush();
+                }
+            }
         }
 
     }

@@ -52,7 +52,7 @@
 
                     {% for pods in po.purchaseOrderDescriptions %}
                             <strong>{{ pods.productProduct.name }}</strong></br>
-                            <strong>{{ pods.value }}</strong>
+                            <strong>{{ pods.value|number_format(0, '.', ',') }}</strong>
                     {% endfor %}
                 </div><br /><br />
                 <br /><br />

@@ -1232,7 +1232,7 @@ class EmployeeRestController extends FOSRestController
             $realEmployerHasEmployee = $employerHasEmployeeRepo->find($idEmployerHasEmployee);
             $realEmployeer = $realEmployerHasEmployee->getEmployerEmployer();
             if ($idEmployer == $realEmployeer->getIdEmployer()) {
-                $this->validateDocumentsEmployee($realEmployerHasEmployee->getEmployeeEmployee());
+                $this->validateDocumentsEmployee2($realEmployerHasEmployee->getEmployeeEmployee());
                 $this->validateEntitiesEmployee($realEmployerHasEmployee->getEmployeeEmployee());
             } else {
                 $view = View::create();
@@ -1241,7 +1241,7 @@ class EmployeeRestController extends FOSRestController
             }
         }
 
-        $this->validateDocumentsEmployer($idEmployer);
+        $this->validateDocumentsEmployerr($idEmployer);
 
         $view = View::create();
         $view->setData(array('response' => array('message' => 'added')))->setStatusCode(200);
@@ -1265,11 +1265,11 @@ class EmployeeRestController extends FOSRestController
         //foreach ($entities as $key => $value) {
         $msj = "Subir documentos de " . $personEmployee->getFullName() . " para afiliarlo a las entidades.";
         $url = $this->generateUrl("show_documents", array('id' => $personEmployee->getIdPerson()));
-        $this->createNotification($user->getPersonPerson(), $msj, $url);
+        $this->createNotification2($user->getPersonPerson(), $msj, $url);
         //}
     }
 
-    private function validateDocumentsEmployee($realEmployee)
+    private function validateDocumentsEmployee2($realEmployee)
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -1299,12 +1299,12 @@ class EmployeeRestController extends FOSRestController
                 $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
                 $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
                 //$url = $this->generateUrl("api_public_post_doc_from");
-                $this->createNotification($user->getPersonPerson(), $msj, $url);
+                $this->createNotification2($user->getPersonPerson(), $msj, $url);
             }
         }
     }
 
-    private function validateDocumentsEmployer($idEmployer)
+    private function validateDocumentsEmployerr($idEmployer)
     {
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
@@ -1339,12 +1339,12 @@ class EmployeeRestController extends FOSRestController
                 $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
                 $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
                 //$url = $this->generateUrl("api_public_post_doc_from");
-                $this->createNotification($user->getPersonPerson(), $msj, $url);
+                $this->createNotification2($user->getPersonPerson(), $msj, $url);
             }
         }
     }
 
-    private function createNotification($person, $descripcion, $url, $action = "Subir")
+    private function createNotification2($person, $descripcion, $url, $action = "Subir")
     {
         $notification = new Notification();
         $notification->setPersonPerson($person);

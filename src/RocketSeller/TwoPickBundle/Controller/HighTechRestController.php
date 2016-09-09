@@ -267,12 +267,13 @@ class HighTechRestController extends FOSRestController
             $pay->setPurchaseOrdersStatusPurchaseOrdersStatus($pos);
             $pay->getPurchaseOrdersDescription()->setPurchaseOrdersStatus($pos);
 
-            $context=array(
-                'emailType'=>'succesDispersion',
-                'toEmail'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getEmail(),
-                'userName'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getPersonPerson()->getFullName(),
-            );
+
             if($pay->getPurchaseOrdersDescription()->getProductProduct()->getSimpleName()=="PN"){
+                $context=array(
+                    'emailType'=>'succesDispersion',
+                    'toEmail'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getEmail(),
+                    'userName'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getPersonPerson()->getFullName(),
+                );
                 $params = array(
                     'ref'=> 'comprobante',
                     'id' => $pay->getPurchaseOrdersDescription()->getPayrollPayroll()->getIdPayroll(),
@@ -289,8 +290,9 @@ class HighTechRestController extends FOSRestController
                 $context['path']=$path;
                 $context['comprobante']=true;
                 $context['documentName']='Comprobante '.date_format(new DateTime(),'d-m-y H:i:s').'.pdf';
+                $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
             }
-            $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 
         } else {
             $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => '-2'));
