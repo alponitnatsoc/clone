@@ -11,6 +11,7 @@
                     <th>Cédula</th>
                     <th>Celular</th>
                     <th>Paso actual</th>
+                    <th>Último login</th>
                 </tr>
                 {% for user in users %}
                     <tr>
@@ -33,6 +34,14 @@
                                 No ha empezado el paso 2
                             {% else %}
                                 No ha empezado el paso 3
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if user.lastLogin is defined %}
+                                {{ user.lastLogin|date("d-m-Y H:i") }}
+                            {% else %}
+                                No hay registro
                             {% endif %}
                         </td>
 

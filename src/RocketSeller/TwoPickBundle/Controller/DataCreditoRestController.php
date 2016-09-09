@@ -779,7 +779,7 @@ public function fixArrayLocalizacion($array, &$new_array) {
         // Set all the parameters info.
         $regex['documentNumber'] = '([0-9|-]| )+';
         $mandatory['documentNumber'] = true;
-        $regex['documentType'] = '(cc|CC|nit|NIT|1|2|3|4)';
+        $regex['documentType'] = '(cc|CC|nit|NIT|ce|CE|1|2|3|4)';
         $mandatory['documentType'] = true;
         $regex['idQuestions'] = '[0-9]+';
         $mandatory['idQuestions'] = true;

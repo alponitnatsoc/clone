@@ -41,7 +41,7 @@
                             </tr>
                             {% for phone in person.phones %}
                             <tr>
-                                <td><strong>celular</strong></td>
+                                <td><strong>Celular</strong></td>
                                 <td>{{ phone.phoneNumber }}</td>
                             </tr>
                             {% endfor %}
@@ -59,7 +59,7 @@
                                         {% if person.documentType == 'CC'%}
                                             Cédula de Ciudadanía
                                         {% elseif person.documentType == 'CE'%}
-                                            Cédula de Estranjería
+                                            Cédula de Extranjería
                                         {% elseif person.documentType == 'TI'%}
                                             Tarjeta de Identidad
                                         {% endif %}

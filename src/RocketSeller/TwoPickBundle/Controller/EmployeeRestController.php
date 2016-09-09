@@ -1316,7 +1316,7 @@ class EmployeeRestController extends FOSRestController
         $documentsRepo = $em->getRepository('RocketSellerTwoPickBundle:Document');
         $documents = $documentsRepo->findByPersonPerson($person);
 
-        $docs = array('Cedula' => false, 'RUT' => false, 'Carta autorización Symplifica' => false);
+        $docs = array('Cedula' => false, 'RUT' => false, 'Carta autorización Symplifica' => false, 'Cédula de extranjería' => false);
         foreach ($docs as $type => $status) {
             foreach ($documents as $key => $document) {
                 if ($type == $document->getDocumentTypeDocumentType()->getName()) {
@@ -1335,6 +1335,9 @@ class EmployeeRestController extends FOSRestController
                 } elseif ($type == 'Carta autorización Symplifica') {
                     $msj = "Subir carta de autorización Symplifica de " . $person->getFullName();
                     $documentType = 'Carta autorización Symplifica';
+                } elseif ($type == 'Cédula de extranjería'){
+                	  $msj = "Subir copia del documento de identidad de " . $person->getFullName();
+	                  $documentType = 'Cédula de extranjería';
                 }
                 $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
                 $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));

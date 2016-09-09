@@ -169,7 +169,12 @@ class LoadDocumentTypeData extends AbstractFixture implements OrderedFixtureInte
         $documentTypeSDVD->setDocCode('SDVD');
         $documentTypeSDVD->setRefPdf('vacaciones-dinero');
         $manager->persist($documentTypeSDVD);
-
+	
+		    $documentTypeCE = new DocumentType();
+		    $documentTypeCE->setName('Cédula de extranjería');
+		    $documentTypeCE->setDocCode('CE');
+		    $manager->persist($documentTypeCE);
+	    
         $manager->flush();
 
         $this->addReference('document-type-cedula', $documentTypeCedula);
@@ -201,6 +206,7 @@ class LoadDocumentTypeData extends AbstractFixture implements OrderedFixtureInte
         $this->addReference('document-Registro-civil-nacido-vivo',$documentTypeRegNacVivo);
         $this->addReference('document-formato-rem',$documentTypeRem);
         $this->addReference('document-vacaciones-dinero',$documentTypeSDVD);
+	      $this->addReference('document-CE',$documentTypeCE);
 
     }
     public function getOrder()
