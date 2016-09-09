@@ -89,15 +89,27 @@
                                         </div>
                                         <div class="col-sm-2">
                                             <p>Novedades</p>
-                                            <h2 class="h2">-</h2>
+                                            <h2 class="h2">{{ data.payroll_payroll.novelties|length }}</h2>
                                         </div>
+                                        {% set total = 0 %}
+                                        {% set dev = 0 %}
+                                        {% set ded = 0 %}
+                                        {% for nov in data.payroll_payroll.sql_novelties %}
+                                            {% if nov.novelty_type_novelty_type.naturaleza=="DEV" %}
+                                                {% set total = total + nov.sql_value %}
+                                                {% set dev = dev + nov.sql_value %}
+                                            {% else %}
+                                                {% set total = total + nov.sql_value %}
+                                                {% set ded = ded +  nov.sql_value %}
+                                            {% endif %}
+                                        {% endfor %}
                                         <div class="col-sm-2">
                                             <p>Ingresos</p>
-                                            <h2 class="h2">-</h2>
+                                            <h2 class="h2">${{ dev|number_format(0, '.', ',')  }}</h2>
                                         </div>
                                         <div class="col-sm-2">
                                             <p>Deducciones</p>
-                                            <h2 class="h2">-</h2>
+                                            <h2 class="h2">${{ ded|number_format(0, '.', ',')  }}</h2>
                                         </div>
                                         <div class="col-sm-2">
                                             <p>Total</p>
@@ -225,15 +237,27 @@
                                             </div>
                                             <div class="col-sm-2">
                                                 <p>Novedades</p>
-                                                <h2 class="h2">-</h2>
+                                                <h2 class="h2">{{ data.payroll_payroll.novelties|length }}</h2>
                                             </div>
+                                            {% set total = 0 %}
+                                            {% set dev = 0 %}
+                                            {% set ded = 0 %}
+                                            {% for nov in data.payroll_payroll.sql_novelties %}
+                                                {% if nov.novelty_type_novelty_type.naturaleza=="DEV" %}
+                                                    {% set total = total + nov.sql_value %}
+                                                    {% set dev = dev + nov.sql_value %}
+                                                {% else %}
+                                                    {% set total = total + nov.sql_value %}
+                                                    {% set ded = ded +  nov.sql_value %}
+                                                {% endif %}
+                                            {% endfor %}
                                             <div class="col-sm-2">
                                                 <p>Ingresos</p>
-                                                <h2 class="h2">-</h2>
+                                                <h2 class="h2">${{ dev|number_format(0, '.', ',')  }}</h2>
                                             </div>
                                             <div class="col-sm-2">
                                                 <p>Deducciones</p>
-                                                <h2 class="h2">-</h2>
+                                                <h2 class="h2">${{ ded|number_format(0, '.', ',')  }}</h2>
                                             </div>
                                             <div class="col-sm-2">
                                                 <p>Total</p>
