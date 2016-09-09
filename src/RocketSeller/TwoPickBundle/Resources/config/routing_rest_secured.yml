@@ -22,8 +22,11 @@ pay :
     type:         rest
     resource:     "RocketSellerTwoPickBundle:PayRestSecured"
     name_prefix:  api_secured_
-
 backoffice :
     type:         rest
     resource:     "RocketSellerTwoPickBundle:BackOfficeRestSecured"
+    name_prefix:  api_secured_
+email :
+    type:         rest
+    resource:     "RocketSellerTwoPickBundle:EmailRestSecured"
     name_prefix:  api_secured_
