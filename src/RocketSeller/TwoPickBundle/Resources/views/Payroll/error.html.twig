@@ -130,22 +130,14 @@
                 <p class="light azulmediofont">Hemos recibido tu orden de pago, el recaudo del pago podrá tardarse hasta 3 días hábiles</p>
             </div>
             <div id="payInfo" class="margin borderBott">
-                <div class="clear borderBott">
-                    <h2 class="left light grisclarofont">Mes pagado</h2>
-                    <span class="right bold grisclarofont">Agosto 1ª Quincena</span><!--falta variable periodo pagado-->
-                </div>
+                {% if po != null %}
                 <ul>
-                    <li class="left light">Nómina Juan Moreno</li> <!--falta variable empleado-->
-                    <li class="right light">$687.000</li> <!--falta variable valor nomina pagada-->
-                    <li class="left light">Aportes</li>
-                    <li class="right light">$145.000</li> <!--falta variable valor aportes pagados-->
-                    <li class="left light">4 por mil</li>
-                    <li class="right light">$23.000</li> <!--falta variable valor 4 por mil-->
-                    <li class="left light">Transacción</li>
-                    <li class="right light">$6.000</li> <!--falta variable valor transacción-->
-                    <li class="left bold">Total pagado</li>
-                    <li class="right bold">$687.000</li> <!--falta variable valor total pagado-->
+                    {% for pods in po.purchaseOrderDescriptions %}
+                        <li class="left light">{{ pods.description }}</li> <!--falta variable empleado-->
+                        <li class="right light">${{ pods.value|number_format(0, '.', ',')  }}</li>
+                    {% endfor %}
                 </ul>
+                {% endif %}
             </div>
             <div id="importantInfo" class="margin">
                 <h2 class="bold borderBott azulclarofont">Ten presente lo siguiente</h2>
