@@ -59,13 +59,6 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><strong>Segundo Apellido</strong></td>
-                            <td>{{ person.lastName2 }}</td>
-                            <td>
-                                <button class="cheked"></button>
-                            </td>
-                        </tr>
-                        <tr>
                             <td><strong>Dirección</strong></td>
                             <td>{{ person.mainAddress }}</td>
                             <td></td>
@@ -93,7 +86,7 @@
                                     {% if person.documentType == 'CC' %}
                                         Cédula de Ciudadanía
                                     {% elseif person.documentType == 'CE' %}
-                                        Cédula de Estranjería
+                                        Cédula de Extranjería
                                     {% elseif person.documentType == 'TI' %}
                                         Tarjeta de Identidad
                                     {% endif %}

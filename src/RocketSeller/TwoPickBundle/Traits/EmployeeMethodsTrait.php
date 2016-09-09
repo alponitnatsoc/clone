@@ -640,7 +640,7 @@ trait EmployeeMethodsTrait
             $docs['MAND']=true;
         }
         if($person->getDocumentDocument()){
-            $docs['CC']=true;
+            $docs['CC']=true; //This makes references to any document CC CE or TI, it is just in order to get inside the proper case
         }
         if($person->getRutDocument()){
             $docs['RUT']=true;
@@ -653,7 +653,7 @@ trait EmployeeMethodsTrait
                 $dUrl=null;
                 if ($type == 'CC') {
                     $msj = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
-                    $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$person->getIdPerson(),'docCode'=>'CC'));
+                    $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$person->getIdPerson(),'docCode'=>$person->getDocumentType()));
                 } elseif ($type == 'RUT') {
                     $msj = "Subir copia del RUT de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
                     $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$person->getIdPerson(),'docCode'=>'RUT'));

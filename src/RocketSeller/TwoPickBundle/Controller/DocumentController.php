@@ -336,6 +336,31 @@ use EmployerMethodsTrait;
                             $person->setDocumentDocument($document);
                         }
                         break;
+		                case "CE":
+			                if($person->getDocumentDocument()){
+				                $document = $person->getDocumentDocument();
+				                if($document->getMediaMedia()){
+					                /** @var Media $media */
+					                $media = $document->getMediaMedia();
+					                if($media->getProviderName()){
+						                $provider = $this->get($media->getProviderName());
+						                $provider->removeThumbnails($media);
+					                }
+					                $em->remove($em->getRepository('\Application\Sonata\MediaBundle\Entity\Media')->find($media->getId()));
+					                $em->remove($em->getRepository('ApplicationSonataMediaBundle:Media')->find($media->getId()));
+					                $em->flush();
+				                }
+				                $document->setName($documentType->getName());
+				                $document->setDocumentTypeDocumentType($documentType);
+				                $document->setStatus(0);
+			                }else{
+				                $document = new Document();
+				                $document->setName($documentType->getName());
+				                $document->setDocumentTypeDocumentType($documentType);
+				                $document->setStatus(0);
+				                $person->setDocumentDocument($document);
+			                }
+			                break;
                 }
                 $em->persist($person);
                 break;

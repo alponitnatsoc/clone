@@ -969,7 +969,6 @@ function startEmployee() {
             showModal(13);
             return false;
         }
-        //TOGO
         if (!validateSalary()) {
             return false;
         }
@@ -1111,7 +1110,6 @@ function startEmployee() {
 
     $("#errorWealth").hide();
 
-    //TODO HERE
     var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
     if (selectedVal == " Trabajador por días") {
         $("#wealthBlock").hide();
@@ -1120,7 +1118,8 @@ function startEmployee() {
         $("#wealthBlock").show();
     }
 
-   // $("#")
+    //Since right now we dont support employees from another countrywe disable the another field
+    $("#register_employee_person_documentType option[value*='CE']").hide();
 
 }
 function addPhoneForm($collectionHolderB, $newLinkLi) {

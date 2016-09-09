@@ -181,7 +181,7 @@ class NotificationRestController extends FOSRestController
                             case "Cedula":
                                 $description = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$docPerson->getNames())[0]." ". $docPerson->getLastName1());
                                 $notification->setDescription($description);
-                                $url = $this->generateUrl("documentos_employee", array("entityType"=>'Person',"entityId"=>$docPerson->getIdPerson(),"docCode"=>'CC'));
+                                $url = $this->generateUrl("documentos_employee", array("entityType"=>'Person',"entityId"=>$docPerson->getIdPerson(),"docCode"=>$docPerson->getDocumentType()));
                                 $notification->setDocumentTypeDocumentType($docType);
                                 $notification->setRelatedLink($url);
                                 $em->persist($notification);
