@@ -508,7 +508,7 @@ class PaymentMethodRestController extends FOSRestController
                         $purchaseOrderDesc->setPurchaseOrdersStatus($pos);
                         $em->persist($purchaseOrderDesc);
                         $em->flush();
-                        return $view->setStatusCode($dispersionAnswer['code'])->setData($dispersionAnswer['data']);
+                        return $view->setStatusCode($dispersionAnswer['code'])->setData(isset($dispersionAnswer['data'])?$dispersionAnswer['data']:array());
 
                     }
                 }

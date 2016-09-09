@@ -233,7 +233,7 @@ class PayrollMethodRestController extends FOSRestController
                                 $empHasEmp=$ehe;
                                 $dataNomina = $this->getInfoNominaSQL($ehe);
                                 $salary = $this->totalLiquidation($dataNomina)['total'];
-                                $pila = $this->getTotalPILA($empHasEmp);
+                                $pila = $this->getTotalPILA($empHasEmp, $activePayrrol);
                                 /*$req = new Request();
                                 $req->request->set("employee_id", $ehe->getIdEmployerHasEmployee());
                                 $req->request->set("execution_type", "C");
