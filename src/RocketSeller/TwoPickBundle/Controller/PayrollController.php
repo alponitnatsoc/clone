@@ -148,7 +148,7 @@ class PayrollController extends Controller
         }
     }
 
-    public function payAction()
+    public function payAction($idNotif)
     {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
@@ -156,6 +156,17 @@ class PayrollController extends Controller
         $request = $this->container->get('request');
         /** @var User $user */
         $user=$this->getUser();
+        if($idNotif!=-1){
+            $request->setMethod("POST");
+            $request->request->add(array(
+                "notificationId" => $idNotif,
+                "status" => 0,
+            ));
+            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NotificationRest:postChangeStatus', array("request" => $request), array('_format' => 'json'));
+            if ($insertionAnswer->getStatusCode() != 200) {
+                return false;
+            }
+        }
         $request->setMethod("GET");
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRestSecured:getPay', array("idUser" => $user->getId()), array('_format' => 'json'));
         if ($insertionAnswer->getStatusCode() != 200) {
@@ -248,6 +259,7 @@ class PayrollController extends Controller
             if ($insertionAnswer->getStatusCode() != 200) {
                 return false;
             }
+
             return $this->redirectToRoute("payroll_result",json_decode($insertionAnswer->getContent(), true));
 
         } else {
@@ -460,12 +472,16 @@ class PayrollController extends Controller
     public function payrollErrorAction($result, $idPO)
     {
         $url = "";
+        $po=null;
         if ($idPO != -1) {
             $url = $this->generateUrl("download_documents", array('ref' => 'factura', 'id' => $idPO, 'type' => 'pdf'));
+            /** @var PurchaseOrders $po */
+            $po= $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrders")->find($idPO);
         }
         return $this->render('RocketSellerTwoPickBundle:Payroll:error.html.twig', array(
             'result' => $result,
-            'url' => $url
+            'url' => $url,
+            'po' => $po
         ));
     }
     

@@ -41,6 +41,8 @@
 							<tr>
 						{% elseif action.status|lower == "error" %}
 							<tr style="background-color: #CB6D6C">
+						{% elseif action.status|lower == "corregido" %}
+							<tr>
 						{% endif %}
 						<td class="{{action.personPerson.idPerson}}">{{ action.ActionTypeActionType.name }}</td>
 						<td>{{ action.personPerson.fullName }}</td>
@@ -113,7 +115,7 @@
 			<div class="panel panel-default">
 				{% set act = 0 %}
 				{% for employerHasEmployee in employerHasEmployees %}
-					{% if employerHasEmployee.state >2 %}
+					{% if employerHasEmployee.state >=2 %}
 						{% if documentos == 2 %}
 							{% set documentos = 1 %}
 						{% endif %}

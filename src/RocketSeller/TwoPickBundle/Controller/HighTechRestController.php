@@ -191,7 +191,8 @@ class HighTechRestController extends FOSRestController
                 'userName'=>$dis->getIdUser()->getPersonPerson()->getFullName(),
                 'rejectionDate'=>new DateTime(),
                 'toEmail'=> 'backOfficeSymplifica@gmail.com',
-                'phone'=>$dis->getIdUser()->getPersonPerson()->getPhones()->first()
+                'phone'=>$dis->getIdUser()->getPersonPerson()->getPhones()->first()->getPhoneNumber(),
+	              'value'=>$dis->getValue()
             );
             $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
 
@@ -200,6 +201,7 @@ class HighTechRestController extends FOSRestController
             $dis->setPurchaseOrdersStatus($pos);
             $date = new DateTime('01-01-0001 00:00:00');
             $dis->setDatePaid($date);
+	          $mesange = "not so good man";
         }
         $em->persist($dis);
         $em->flush();
@@ -267,12 +269,13 @@ class HighTechRestController extends FOSRestController
             $pay->setPurchaseOrdersStatusPurchaseOrdersStatus($pos);
             $pay->getPurchaseOrdersDescription()->setPurchaseOrdersStatus($pos);
 
-            $context=array(
-                'emailType'=>'succesDispersion',
-                'toEmail'=>$pay->getUserIdUser()->getEmail(),
-                'userName'=>$pay->getUserIdUser()->getPersonPerson()->getFullName(),
-            );
+
             if($pay->getPurchaseOrdersDescription()->getProductProduct()->getSimpleName()=="PN"){
+                $context=array(
+                    'emailType'=>'succesDispersion',
+                    'toEmail'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getEmail(),
+                    'userName'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getPersonPerson()->getFullName(),
+                );
                 $params = array(
                     'ref'=> 'comprobante',
                     'id' => $pay->getPurchaseOrdersDescription()->getPayrollPayroll()->getIdPayroll(),
@@ -284,13 +287,14 @@ class HighTechRestController extends FOSRestController
                 if (!file_exists('uploads/temp/comprobantes')) {
                     mkdir('uploads/temp/comprobantes', 0777, true);
                 }
-                $path = 'uploads/temp/comprobantes/'.$pay->getUserIdUser()->getPersonPerson()->getIdPerson().'_tempFacturaFile.pdf';
+                $path = 'uploads/temp/comprobantes/'.$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getPersonPerson()->getIdPerson().'_tempFacturaFile.pdf';
                 file_put_contents($path, $file);
                 $context['path']=$path;
                 $context['comprobante']=true;
                 $context['documentName']='Comprobante '.date_format(new DateTime(),'d-m-y H:i:s').'.pdf';
+                $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
             }
-            $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 
         } else {
             $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => '-2'));
@@ -308,19 +312,19 @@ class HighTechRestController extends FOSRestController
 
             $context=array(
                 'emailType'=>'failDispersion',
-                'userEmail'=>$pay->getUserIdUser()->getEmail(),
-                'toEmail'=>$pay->getUserIdUser()->getEmail(),
-                'userName'=>$pay->getUserIdUser()->getPersonPerson()->getFullName(),
+                'userEmail'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getEmail(),
+                'toEmail'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getEmail(),
+                'userName'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getPersonPerson()->getFullName(),
             );
             $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
             $contextBack=array(
                 'emailType'=>'regectionDispersion',
-                'userEmail'=>$pay->getUserIdUser()->getEmail(),
-                'userName'=>$pay->getUserIdUser()->getFullName(),
+                'userEmail'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getEmail(),
+                'userName'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getPersonPerson()->getFullName(),
                 'rejectionDate'=>$rejectDate,
                 'toEmail'=> 'backOfficeSymplifica@gmail.com',
-                'phone'=>$pay->getUserIdUser()->getPersonPerson()->getPhones()->first(),
-                'rejectedProduct'=>$product,
+                'phone'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getPersonPerson()->getPhones()->first()->getPhoneNumber(),
+                'rejectedProduct'=>$product->getName(),
                 'idPOD'=>$rejectedPurchaseOrderDescription->getIdPurchaseOrdersDescription(),
                 'value'=>$value
             );

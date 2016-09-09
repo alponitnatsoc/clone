@@ -4,6 +4,61 @@
 {% block stylesheet %}
     {{ parent() }}
     <style type="text/css">
+    #cont-succesdocs {
+      width: 70%;
+      margin: 75px auto 0 auto;
+    }
+    #infoContent {
+        width: 85%;
+        margin: 0 auto;
+        height: auto;
+        overflow: hidden;
+        }
+        h2, h1 {font-size: 25px;}
+        #headInfo {
+        margin: 0 auto;
+        text-align: center;
+        width: 500px;
+        }
+
+        #payInfo ul {
+        padding: 15px 0 0;
+        height: auto;
+        overflow: hidden;
+        }
+        #payInfo span {
+        font-size: 15px
+        }
+        #payInfo li {
+        list-style-type: none;
+        color: #8e8e8e;
+        padding: 5px 0;
+        }
+        .faqCont {
+        padding: 15px 0 0
+        }
+        .right {
+        width: 50%;
+        float: right;
+        text-align: right;
+        }
+        .left {
+        width: 50%;
+        float: left;
+        }
+        .clear {
+        clear: both;
+        height: auto;
+        overflow: hidden;
+        }
+        .margin {
+        margin-top: 35px;
+        }
+        .borderBott {
+        border-bottom: 1px #CCC solid;
+        padding-bottom: 15px;
+        }
+
         .media{
             padding: 25px;
             background-color: #F7F7F7;
@@ -36,40 +91,67 @@
                 <span class="glyphicon glyphicon-remove-circle fa-2x"></span>
             </div>
             <div class="vertical-align-center">
-                <h4 class="media-heading" style="padding: 5px 0 0 0;color: #435160;font-size:24px">Error de pago</h4>
+                <h4 class="media-heading" style="padding: 5px 0 0 0;color: #435160;font-size:24px">Orden de pago fallida</h4>
             </div>
         {% else %}
             <div class="media-left">
                 <span class="glyphicon glyphicon-ok-circle fa-2x"></span>
             </div>
             <div class="media-body vertical-align-center">
-                <h4 class="media-heading" style="padding: 5px 0 0 0;color: #435160;font-size:24px">Pago exitoso</h4>
+                <h4 class="media-heading" style="padding: 5px 0 0 0;color: #435160;font-size:24px">Orden de pago exitosa</h4>
             </div>
         {% endif %}
     </div>
-    <div class="text-center">
+    <div>
         {% if result== 'e' %}
-
-            <div class="pagoconfirma">
-              <div>
-                  <h4 style="color: #1FCECB;font-size: 20px;"><b>El pago no pudo ser realizado</b></h4>
-              </div>
-                <p style="color: #989898;font-size: 15px;">Hubo un problema en el pago por favor vuelve a intentarlo</p>
+        <div class="text-center">
+            <div id="cont-succesdocs">
+                <div id="texto-succesdocs">
+                    <div id="pagoadelantado">
+                        <div id="contenidopagoadelando">
+                            <img src="{{ asset('/public/img/landing/benefit3.png') }}" width="80px" height="auto">
+                            <h1 class="azulclarofont bold centrar">Algo salio mal</h1>
+                            <p class="light grisclarofont">Parece que hubo un problema con la orden de pago,
+                            por favor da clic en el boton <strong>"intentar de nuevo"</strong> o vuelve a
+                          intentarlo más tarde.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="padding">
                 <input type="button" class="btn btn-orange" value="Intentar de nuevo"  onclick="window.location = '{{ path('payroll') }}'" >
             </div>
+        </div>
         {% else %}
 
-            <div class="pagoconfirma">
-              <div>
-                  <h4 style="color: #1FCECB;font-size: 20px;"><b>El pago se realizó satisfactoriamente</b></h4>
-              </div>
-                <p style="color: #989898;font-size: 15px;">Descarga tu factura y comprobante de pago</p>
+        <div id="infoContent">
+            <div id="headInfo">
+                <h1 class="azulclarofont bold">¡Gracias!</h1>
+                <p class="light azulmediofont">Hemos recibido tu orden de pago, el recaudo del pago podrá tardarse hasta 3 días hábiles</p>
             </div>
-            <div class="padding">
+            <div id="payInfo" class="margin borderBott">
+                {% if po != null %}
+                <ul>
+                    {% for pods in po.purchaseOrderDescriptions %}
+                        <li class="left light">{{ pods.description }}</li> <!--falta variable empleado-->
+                        <li class="right light">${{ pods.value|number_format(0, '.', ',')  }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <div id="importantInfo" class="margin">
+                <h2 class="bold borderBott azulclarofont">Ten presente lo siguiente</h2>
+                <div class="faqCont">
+                    <h2 class="light grisclarofont">¿Cuándo recibirá el pago mi empleado?</h2>
+                    <p class="light grisclarofont">Depende de la entidad bancaria, tu empleado recibirá el pago en un máximo de 3 días hábiles.</p>
+                    <h2 class="light grisclarofont">¿Cuándo recibiré mi factura?</h2>
+                    <p class="light grisclarofont">Recibirás una copia en cuanto la transacción sea aprobada. Tambien podrás revisarla en cualquier momento en el histórico de pagos.</p>
+                </div>
+            </div>
+        </div>
+            <!--<div class="padding text-center">
                 <a href="{{ url }}" class="btn btn-orange notAjax" >Descargar Factura</a>
-            </div>
+            </div>-->
         {% endif %}
 
     </div>

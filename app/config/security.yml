@@ -134,7 +134,7 @@ security:
         # cpsuite.htsoft.co is the hightech server host.
 
         # This are the web services for hightech, they should be before the normal web services.
-        - { path: ^/api/public/v1/notificacion, role: IS_AUTHENTICATED_ANONYMOUSLY, ips: [10.0.0.1, 127.0.0.1, 190.7.130.163, 52.73.123.224, 52.91.121.67, 190.24.91.37, 52.86.183.212] }
+        - { path: ^/api/public/v1/notificacion, role: IS_AUTHENTICATED_ANONYMOUSLY, ips: [10.0.0.1, 127.0.0.1, 190.7.130.163, 52.73.123.224, 52.91.121.67, 190.24.91.37, 52.86.183.212, 172.16.1.11] }
         - { path: ^/api/public/v1/notificacion, role: IS_AUTHENTICATED_ANONYMOUSLY, host: cpsuite\.htsoft\.co$ }
         - { path: ^/api/public/v1/notificacion, role: [ROLE_NO_ACCESS] }
 

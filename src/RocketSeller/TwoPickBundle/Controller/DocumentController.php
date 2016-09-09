@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use RocketSeller\TwoPickBundle\Entity\Action;
 use RocketSeller\TwoPickBundle\Entity\Configuration;
 use RocketSeller\TwoPickBundle\Entity\Document;
 use RocketSeller\TwoPickBundle\Entity\DocumentType;
@@ -173,6 +174,16 @@ use EmployerMethodsTrait;
         $personName = $data['personName'];
         /** @var DocumentType $documentType */
         $documentType = $data['documentType'];
+//        $form2 = $this->createFormBuilder()
+//            ->add('archivo','file')
+//            ->getForm();
+//        $form2 = $this->createFormBuilder()
+//            ->add('archivo','collection',array(
+//                'type'=>'file',
+//                'required'=>false,
+//            ))
+//            ->getForm();
+
         $form = $this->createForm(new DocumentRegistration(), $document);
         $form->handleRequest($request);
 
@@ -225,11 +236,11 @@ use EmployerMethodsTrait;
             ->getRepository('RocketSellerTwoPickBundle:DocumentType')
             ->findOneBy(array("docCode"=>$docCode));
         $exists = false;
-
         /** @var Document $document */
         //switching between entities
         switch ($entityType){
             case "Person":
+                $corrected = false;
                 /** @var Person $person */
                 $person = $em->getRepository("RocketSellerTwoPickBundle:Person")->find($entityId);
                 $name = $person->getFullName();
@@ -238,6 +249,7 @@ use EmployerMethodsTrait;
                     case "CC":
                         if($person->getDocumentDocument()){
                             $document = $person->getDocumentDocument();
+                            $corrected = true;
                             if($document->getMediaMedia()){
                                 /** @var Media $media */
                                 $media = $document->getMediaMedia();
@@ -264,6 +276,7 @@ use EmployerMethodsTrait;
                     case "RUT":
                         if($person->getRutDocument()){
                             $document = $person->getRutDocument();
+                            $corrected = true;
                             if($document->getMediaMedia()){
                                 /** @var Media $media */
                                 $media = $document->getMediaMedia();
@@ -289,6 +302,7 @@ use EmployerMethodsTrait;
                     case "RCDN":
                         if($person->getBirthRegDocument()){
                             $document = $person->getBirthRegDocument();
+                            $corrected = true;
                             if($document->getMediaMedia()){
                                 /** @var Media $media */
                                 $media = $document->getMediaMedia();
@@ -314,6 +328,7 @@ use EmployerMethodsTrait;
                     case "TI":
                         if($person->getDocumentDocument()){
                             $document = $person->getDocumentDocument();
+                            $corrected = true;
                             if($document->getMediaMedia()){
                                 /** @var Media $media */
                                 $media = $document->getMediaMedia();
@@ -362,14 +377,34 @@ use EmployerMethodsTrait;
 			                }
 			                break;
                 }
+                if($corrected){
+                    /** @var User $user */
+                    $user= $this->getUser();
+                    if($user->getPersonPerson()->getIdPerson()==$notification->getPersonPerson()->getIdPerson()){
+                        $actions = $em->getRepository('RocketSellerTwoPickBundle:Action')->findBy(array(
+                            'userUser'=>$user,
+                            'personPerson'=>$person
+                        ));
+                        /** @var Action $action */
+                        foreach ($actions as $action){
+                            if($action->getStatus()=='Error'){
+                                $action->setStatus('Corregido');
+                                $em->persist($action);
+                            }
+                        }
+                    }
+
+                }
                 $em->persist($person);
                 break;
             case "Employer":
+                $corrected = false;
                 /** @var Employer $employer */
                 $employer = $em->getRepository("RocketSellerTwoPickBundle:Employer")->find($entityId);
                 $name = $employer->getPersonPerson()->getFullName();
                 if($employer->getMandatoryDocument()){
                     $document= $employer->getMandatoryDocument();
+                    $corrected = true;
                     if($document->getMediaMedia()){
                         /** @var Media $media */
                         $media = $document->getMediaMedia();
@@ -391,14 +426,34 @@ use EmployerMethodsTrait;
                     $document->setStatus(0);
                     $employer->setMandatoryDocument($document);
                 }
+                if($corrected){
+                    /** @var User $user */
+                    $user= $this->getUser();
+                    if($user->getPersonPerson()->getIdPerson()==$notification->getPersonPerson()->getIdPerson()){
+                        $actions = $em->getRepository('RocketSellerTwoPickBundle:Action')->findBy(array(
+                            'userUser'=>$user,
+                            'personPerson'=>$employer->getPersonPerson()
+                        ));
+                        /** @var Action $action */
+                        foreach ($actions as $action){
+                            if($action->getStatus()=='Error'){
+                                $action->setStatus('Corregido');
+                                $em->persist($action);
+                            }
+                        }
+                    }
+
+                }
                 $em->persist($employer);
                 break;
             case "EmployerHasEmployee":
+                $corrected = false;
                 /** @var EmployerHasEmployee $eHE */
                 $eHE = $em->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")->find($entityId);
                 $name = $eHE->getEmployeeEmployee()->getPersonPerson()->getFullName();
                 if($eHE->getAuthDocument()){
                     $document = $eHE->getAuthDocument();
+                    $corrected = true;
                     if($document->getMediaMedia()){
                         /** @var Media $media */
                         $media = $document->getMediaMedia();
@@ -423,11 +478,13 @@ use EmployerMethodsTrait;
                 $em->persist($eHE);
                 break;
             case "Contract":
+                $corrected = false;
                 /** @var Contract $contract */
                 $contract = $em->getRepository("RocketSellerTwoPickBundle:Contract")->find($entityId);
                 $name = $contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName();
                 if($contract->getDocumentDocument()){
                     $document = $contract->getDocumentDocument();
+                    $corrected = true;
                     if($document->getMediaMedia()){
                         /** @var Media $media */
                         $media = $document->getMediaMedia();
@@ -455,11 +512,13 @@ use EmployerMethodsTrait;
                 $em->persist($contract);
                 break;
             case "Payroll":
+                $corrected = false;
                 /** @var Payroll $payroll */
                 $payroll = $em->getRepository("RocketSellerTwoPickBundle:Payroll")->find($entityId);
                 $name = "pago de ".$payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName();
                 if($payroll->getPayslip()){
                     $document = $payroll->getPayslip();
+                    $corrected = true;
                     if($document->getMediaMedia()){
                         /** @var Media $media */
                         $media = $document->getMediaMedia();
@@ -1043,20 +1102,14 @@ use EmployerMethodsTrait;
                 $productsPrice = 0;
                 /** @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $desc */
                 foreach ($descriptions as $desc) {
-                    if(!($desc->getProductProduct()->getSimpleName()=="PN"||$desc->getProductProduct()->getSimpleName()=="PP")){
 
-                        $unitValue = 0;
-                        if( $desc->getProductProduct()->getSimpleName()=="CT" ){
-                          $ivaTotal+= round($desc->getValue()-($desc->getValue() / 1.16),0);
-                          $unitValue = round(($desc->getValue() / 1.16),0);
-                          $productsPrice += round(($desc->getValue() / 1.16));
-                        }
-                        else {
-                          $ivaTotal+=$desc->getValue()-$desc->getProductProduct()->getPrice();
-                          $unitValue = $desc->getProductProduct()->getPrice();
-                          $productsPrice += $desc->getProductProduct()->getPrice();
-                        }
-
+                    if($desc->getProductProduct()->getTaxTax()!=null)
+                        $taxValue = ($desc->getProductProduct()->getTaxTax()->getValue()+1);
+                    else
+                        $taxValue = 1;
+                    $ivaTotal+= round($desc->getValue()-($desc->getValue() /$taxValue ),0);
+                    $unitValue = round(($desc->getValue() / $taxValue),0);
+                    $productsPrice += round(($desc->getValue() / $taxValue));
                         $items[] = array(
                             'desc' => $desc->getDescription(),
                             'product' => $desc->getProductProduct(),
@@ -1065,8 +1118,6 @@ use EmployerMethodsTrait;
                             'totalValue' => $desc->getValue(),
                             'unitValue' => $unitValue
                         );
-
-                    }
 
                 }
 

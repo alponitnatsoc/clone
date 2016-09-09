@@ -89,20 +89,32 @@
                                         </div>
                                         <div class="col-sm-2">
                                             <p>Novedades</p>
-                                            <h2 class="h2">-</h2>
+                                            <h2 class="h2">{{ data.payroll_payroll.novelties|length }}</h2>
                                         </div>
+                                        {% set total = 0 %}
+                                        {% set dev = 0 %}
+                                        {% set ded = 0 %}
+                                        {% for nov in data.payroll_payroll.sql_novelties %}
+                                            {% if nov.novelty_type_novelty_type.naturaleza=="DEV" %}
+                                                {% set total = total + nov.sql_value %}
+                                                {% set dev = dev + nov.sql_value %}
+                                            {% else %}
+                                                {% set total = total + nov.sql_value %}
+                                                {% set ded = ded +  nov.sql_value %}
+                                            {% endif %}
+                                        {% endfor %}
                                         <div class="col-sm-2">
                                             <p>Ingresos</p>
-                                            <h2 class="h2">-</h2>
+                                            <h2 class="h2">${{ dev|number_format(0, '.', ',')  }}</h2>
                                         </div>
                                         <div class="col-sm-2">
                                             <p>Deducciones</p>
-                                            <h2 class="h2">-</h2>
+                                            <h2 class="h2">${{ ded|number_format(0, '.', ',')  }}</h2>
                                         </div>
                                         <div class="col-sm-2">
                                             <p>Total</p>
                                             <h2 class="h2">${{ data.value|number_format(0, '.', ',') }}</h2>
-                                            <span style="cursor:pointer" style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax showDetails" href="/payroll/show/details/{{ id_payroll }}">&#10093; Detalles</span>
+                                            <span class="detallesPay notAjax showDetails" href="/payroll/show/details/{{ id_payroll }}">&#10093; Detalles</span>
                                         </div>
                                     </div>
                                     <!--<div class="height center col-sm-12">
@@ -170,7 +182,7 @@
                                         <div class="col-sm-2">
                                             <p>Total</p>
                                             <h2 class="h2">${{ dataPila.value|number_format(0, '.', ',') }}</h2>
-                                            <span style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax showDetails" href="#">&#10093; Detalles</span>
+                                            {# <span style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax showDetails" href="#">&#10093; Detalles</span> #}
                                         </div>
                                     </div>
                                     {#<div class="center" style="clear: both;background: #CCC;padding: 10px 0;">#}
@@ -225,20 +237,32 @@
                                             </div>
                                             <div class="col-sm-2">
                                                 <p>Novedades</p>
-                                                <h2 class="h2">-</h2>
+                                                <h2 class="h2">{{ data.payroll_payroll.novelties|length }}</h2>
                                             </div>
+                                            {% set total = 0 %}
+                                            {% set dev = 0 %}
+                                            {% set ded = 0 %}
+                                            {% for nov in data.payroll_payroll.sql_novelties %}
+                                                {% if nov.novelty_type_novelty_type.naturaleza=="DEV" %}
+                                                    {% set total = total + nov.sql_value %}
+                                                    {% set dev = dev + nov.sql_value %}
+                                                {% else %}
+                                                    {% set total = total + nov.sql_value %}
+                                                    {% set ded = ded +  nov.sql_value %}
+                                                {% endif %}
+                                            {% endfor %}
                                             <div class="col-sm-2">
                                                 <p>Ingresos</p>
-                                                <h2 class="h2">-</h2>
+                                                <h2 class="h2">${{ dev|number_format(0, '.', ',')  }}</h2>
                                             </div>
                                             <div class="col-sm-2">
                                                 <p>Deducciones</p>
-                                                <h2 class="h2">-</h2>
+                                                <h2 class="h2">${{ ded|number_format(0, '.', ',')  }}</h2>
                                             </div>
                                             <div class="col-sm-2">
                                                 <p>Total</p>
                                                 <h2 class="h2">${{ data.value|number_format(0, '.', ',') }}</h2>
-                                                <span style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax showDetails" href="">&#10093; Detalles</span>
+                                                {#<span style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax showDetails" href="">&#10093; Detalles</span>#}
                                             </div>
                                         </div>
 
@@ -305,7 +329,7 @@
                                         <div class="col-sm-2">
                                             <p>Total</p>
                                             <h2 class="h2">${{ pilaData.value|number_format(0, '.', ',') }}</h2>
-                                            <span style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax showDetails" href="">&#10093; Detalles</span>
+                                            {#<span style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax showDetails" href="">&#10093; Detalles</span>#}
                                         </div>
                                     </div>
                                     <!--<div class="height">
@@ -373,18 +397,14 @@
             <link rel="stylesheet" type="text/css" href="{{ asset('/../css/pantallas.css') }}"/>
             <div style="clear: both;height: 60px;"></div>
             <div id="cont-succesdocs">
-                <div id="title-siccesdocs">
-                    <img src="/../img/perfecto.png"/>
-                    <h2 class="h2 light grisclarofont">No tienes pagos pendientes</h2>
-                </div>
-
-                <div id="texto-succesdocs">
+              <div id="texto-succesdocs">
                     <div id="pagoadelantado">
                         <div id="contenidopagoadelando">
-                            <img src="{{ asset('/public/img/landing/benefit3.png') }}" width="80px" height="auto">
-                            <h1 class="azulclarofont bold centrar">¿Puedo pagar por adelantado?</h1>
-                            <p class="light grisclarofont">Solo debes dar clic en botón de abajo o dirigirte al menú
-                                seccion de empleados y reportar la novedad de <strong>“adelanto de nómina”</strong></p>
+                            <img src="{{ asset('/public/img/landing/benefit3.png') }}" width="80px" height="auto"><br /><br />
+                            <h2 class="h2 light grisclarofont">No tienes pagos pendientes</h2>
+                            <h1 class="azulclarofont bold centrar">¿Puedo realizar adelantos en efectivo?</h1>
+                            <p class="light grisclarofont">Sí, sólo debes dar clic en botón de abajo o dirigirte al menú
+                                sección de empleados y reportar la novedad de <strong>“Prestamos o anticipos”</strong></p>
                             <a href="/manage/employees">
                                 <div class="light btn-azulnopagos">Reportar novedad</div>
                             </a>

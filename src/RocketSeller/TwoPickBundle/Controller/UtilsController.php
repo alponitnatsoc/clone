@@ -246,19 +246,21 @@ class UtilsController
 	 */
 	private function get_date_from_period($sign, $value, Payroll $payroll){
 		
-		$localTimeCommitment = $payroll->getContractContract()->getTimeCommitmentTimeCommitment()->getCode();
+		//$localTimeCommitment = $payroll->getContractContract()->getTimeCommitmentTimeCommitment()->getCode();
 		
 		$actualPeriod = intval($payroll->getPeriod());
 		$actualMonth = intval($payroll->getMonth());
 		$actualDay = $actualPeriod == 4?20:5;
 		$actualYear = intval($payroll->getYear());
 		
+		$frequency = $payroll->getContractContract()->getFrequencyFrequency()->getPayrollCode();
+		
 		$dateString = $actualYear . "-" . $actualMonth . "-" . $actualDay;
 		$actualPeriodDate = new DateTime($dateString);
 		
 		$targetToReach = $value;
 		while($targetToReach != 0){
-			if($localTimeCommitment == "XD"){
+			if($frequency == "Q"){
 				if($actualPeriodDate->format('d') == 20){
 					$actualPeriodDate->modify("-15 days");
 					if($sign == "+"){
@@ -272,7 +274,7 @@ class UtilsController
 					}
 				}
 			}
-			elseif ($localTimeCommitment == "TC"){
+			elseif ($frequency == "M"){
 					$actualPeriodDate->modify("{$sign}1 month");
 			}
 			$targetToReach--;
@@ -282,16 +284,16 @@ class UtilsController
 		$localY = $actualPeriodDate->format('Y');
 		$localM = $actualPeriodDate->format('m');
 		
-		if($sign == "-" && $actualPeriodDate->format('d') == 20 && $localTimeCommitment == "XD"){
+		if($sign == "-" && $actualPeriodDate->format('d') == 20 && $frequency == "Q"){
 			$actualPeriodDate->setDate($localY,$localM,16);
 		}
-		elseif ($sign == "-" && (($localTimeCommitment == "XD" && $actualPeriodDate->format('d') == 5) || ($localTimeCommitment == "TC") )) {
+		elseif ($sign == "-" && (($frequency == "Q" && $actualPeriodDate->format('d') == 5) || ($frequency == "M") )) {
 			$actualPeriodDate->setDate($localY,$localM,1);
 		}
-		elseif ($sign == "+" && (($localTimeCommitment == "XD" && $actualPeriodDate->format('d') == 20) || ($localTimeCommitment == "TC") )) {
+		elseif ($sign == "+" && (($frequency == "Q" && $actualPeriodDate->format('d') == 20) || ($frequency == "M") )) {
 			$actualPeriodDate->setDate($localY,$localM,25);
 		}
-		elseif ($sign == "+" && $localTimeCommitment == "XD" && $actualPeriodDate->format('d') == 5){
+		elseif ($sign == "+" && $frequency == "Q" && $actualPeriodDate->format('d') == 5){
 			$actualPeriodDate->setDate($localY,$localM,12);
 		}
 		

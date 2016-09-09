@@ -454,7 +454,7 @@ class NoveltyController extends Controller {
 
 	    //si es una novedad de vacaciones
 	    if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode()==145){
-	    	if($novelty->getDateEnd() <= $novelty->getDateStart()){
+	    	if($novelty->getDateEnd() < $novelty->getDateStart()){
 	    		$answerArr[0] = false;
 			    $answerArr[1] = "El rango de fechas para las vacaciones no es valido, la fecha de finalización no puede ser menor que la de inicio";
 			    return $answerArr;
