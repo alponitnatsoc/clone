@@ -47,13 +47,13 @@
                 </div><br /><br /><br />
 
                 <div style="font-size: 15px; font-style: italic; font-family: 'Open Sans', sans-serif; font-weight: 100; color: #858688;width:80%;margin:0 auto">
-                	<strong>¡Tu orden de pago fue recibida!</strong><br><br>Tu pago se encuentra en proceso y podría tardar <strong>hasta 3 días habiles</strong>
-                  de acuerdo a la entidad bancaria. Puedes consultar el estado de la transacción ingresando a Symplifica.com. En cuanto esté completo te
-                  enviaremos un comprobante de pago por este medio.</br></br>
+                	<strong>¡Tu orden de pago fue recibida!</strong><br><br>Acá encontrarás un resumen de tu orden de pago, que podrá tardar <strong>hasta 3 días </strong>
+                  hábiles en reflejarse según la entidad bancaria. Puedes consultar el estado de la transacción ingresando a Symplifica. Cuando el pago haya sido realizado te enviaremos un comprobante por este medio.</br></br>
 
+                <br />
+                <div style="font-size: 20px; font-family: 'Open Sans', sans-serif; font-weight: 700; color: #5D5E5E">Detalles de la Orden</div><br /><br />
                     {% for pods in po.purchaseOrderDescriptions %}
-                            <strong>{{ pods.productProduct.name }}</strong></br>
-                            <strong>{{ pods.value|number_format(0, '.', ',') }}</strong>
+                            <strong>{{ pods.productProduct.name }}</strong>: <strong>{{ pods.value|number_format(0, '.', ',') }}</strong><br />
                     {% endfor %}
                 </div><br /><br />
                 <br /><br />
