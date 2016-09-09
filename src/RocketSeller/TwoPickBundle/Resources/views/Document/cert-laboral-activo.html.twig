@@ -20,7 +20,14 @@ body {
 <p>&nbsp;</p>
 <p style="text-align: center;"><strong>CERTIFICADO LABORAL</strong></p>
 <p>&nbsp;</p>
-<p style="text-align: justify;">Yo, {{ data.employer.name|upper }} identificado con c&eacutedula de ciudadan&iacutea {{ data.employer.docNumber|number_format(0,',','.') }},
+<p style="text-align: justify;">Yo, {{ data.employer.name|upper }} identificado con
+    {% if data.employer.docType == "CC" %}
+        c&eacute&eacutedula de ciudadan&iacutea
+    {% elseif data.employer.docType == "CE" %}
+        c&eacutedula de extranjer&iacutea
+    {% elseif data.employer.docType == "TI" %}
+        tarjeta de identidad
+    {% endif %} {{ data.employer.docNumber|number_format(0,',','.') }},
     CERTIFICO que {{ data.employee.name|upper }} identificado con c&eacutedula de ciudadan&iacutea {{ data.employee.docNumber|number_format(0,',','.') }} de {{ data.employee.docExpPlace }},
     trabaja para mi como {{ data.contract.position|upper }} desde el {{ data.contract.fechaInicio|localizeddate('none', 'none', 'es-CO', null, "dd 'de' MMMM 'de' Y") }}, a trav&eacutes de un contrato a {{ data.contract.type }}
     y devengando un salario de ${{ data.contract.salary|number_format(0,',','.') }} mensuales promedio.</p>
