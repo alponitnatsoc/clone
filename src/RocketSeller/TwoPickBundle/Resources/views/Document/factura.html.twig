@@ -126,10 +126,10 @@ body {
                     <p></p>
                 </div>
                 <div class="cols" style="width:102px;text-align:right;padding: 0 15px 0 0;box-sizing: border-box;">
-                    <p>{{ item.unitValue }}</p>
+                    <p>{{ item.unitValue|number_format(0, '.', ',') }}</p>
                 </div>
                 <div class="cols" style="width:102px;text-align:right;padding: 0 15px 0 0;box-sizing: border-box;">
-                    <p>{{ item.totalValue }}</p>
+                    <p>{{ item.totalValue|number_format(0, '.', ',') }}</p>
                 </div>
             </div>
         {% endfor %}
@@ -143,9 +143,9 @@ body {
                 <p><strong><small>TOTAL</small></strong></p>
             </div>
             <div class="cols" style="width:50%;text-align: right;padding: 0 15px 0 0;box-sizing: border-box;">
-                <p>{{ data.purchaseOrder.subTotal }}</p>
-                <p>{{ data.purchaseOrder.iva }}</p>
-                <p>{{ data.purchaseOrder.total }}</p>
+                <p>{{ data.purchaseOrder.subTotal|number_format(0, '.', ',') }}</p>
+                <p>{{ data.purchaseOrder.iva|number_format(0, '.', ',') }}</p>
+                <p>{{ data.purchaseOrder.total|number_format(0, '.', ',') }}</p>
             </div>
         </div>
     </div>
