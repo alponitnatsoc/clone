@@ -199,7 +199,7 @@ class Payments2RestController extends FOSRestController
           $errorCode = 422;
       
       dump($responseCode);
-
+      die;
       // Set status code of view with http codes.
       $view->setStatusCode($errorCode);
 
