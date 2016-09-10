@@ -185,6 +185,8 @@ class Payments2RestController extends FOSRestController
       $res = json_decode(json_encode($res), True);
 
       $responseCode = $res['codigoRespuesta'];
+      
+      dump($res);
 
       // Remove the status code so we can return the entire object.
       //unset($res['codigoRespuesta']);
@@ -198,7 +200,6 @@ class Payments2RestController extends FOSRestController
       else if($responseCode == 102)
           $errorCode = 422;
       
-      dump($responseCode);
       die;
       // Set status code of view with http codes.
       $view->setStatusCode($errorCode);
