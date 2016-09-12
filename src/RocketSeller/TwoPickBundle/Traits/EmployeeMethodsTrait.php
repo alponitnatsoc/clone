@@ -3,7 +3,9 @@
 namespace RocketSeller\TwoPickBundle\Traits;
 
 use DateTime;
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectManagerAware;
+use Doctrine\Common\Persistence\ObjectRepository;
 use RocketSeller\TwoPickBundle\Controller\UtilsController;
 use RocketSeller\TwoPickBundle\Entity\Action;
 use RocketSeller\TwoPickBundle\Entity\ActionType;
@@ -14,6 +16,9 @@ use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\Employee;
+use RocketSeller\TwoPickBundle\Entity\Product;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\RealProcedure;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\Notification;
@@ -420,6 +425,7 @@ trait EmployeeMethodsTrait
                     //if both employer and employee pending docs are equal to 0 state is 2 message docs ready
                     }elseif($pend==0 and $ePend==0){
                         $eHE->setDocumentStatus(2);
+                        $this->checkSubscription($eHE);
                         $eHE->setDateDocumentsUploaded(new DateTime());
                     }
                 //if the antique state is employee documents pending checking if employee documents are still pending
@@ -429,6 +435,7 @@ trait EmployeeMethodsTrait
                     //if amount of pending docs for employee equal to 0 state is 2 message docs ready
                     if($ePend['pending']==0){
                         $eHE->setDocumentStatus(2);
+                        $this->checkSubscription($eHE);
                         $eHE->setDateDocumentsUploaded(new DateTime());
                     //if amount of pending docs for employee is greater than 0 state remains in 0 employee documents pending
                     }else{
@@ -441,6 +448,7 @@ trait EmployeeMethodsTrait
                     //if amount of pending docs for employer equal to 0 state is 2 message docs ready
                     if($pend==0){
                         $eHE->setDocumentStatus(2);
+                        $this->checkSubscription($eHE);
                         $eHE->setDateDocumentsUploaded(new DateTime());
                     //if amount of pending docs for employer is greater than 0 state remains in 1 employer documents pending
                     }else{
@@ -539,8 +547,10 @@ trait EmployeeMethodsTrait
         $employerHasEmployee = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->findOneBy(array(
             'employerEmployer' => $employer,
             'employeeEmployee' => $realEmployee,
-            'state' => 3
         ));
+        if($employerHasEmployee->getState()<2){
+            return false;
+        }
         // obtaining the active contract for the employerHasEmployee
         /** @var Contract $contract */
         $contract = $em->getRepository('RocketSellerTwoPickBundle:Contract')->findOneBy(array(
@@ -640,7 +650,7 @@ trait EmployeeMethodsTrait
             $docs['MAND']=true;
         }
         if($person->getDocumentDocument()){
-            $docs['CC']=true;
+            $docs['CC']=true; //This makes references to any document CC CE or TI, it is just in order to get inside the proper case
         }
         if($person->getRutDocument()){
             $docs['RUT']=true;
@@ -653,7 +663,7 @@ trait EmployeeMethodsTrait
                 $dUrl=null;
                 if ($type == 'CC') {
                     $msj = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
-                    $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$person->getIdPerson(),'docCode'=>'CC'));
+                    $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$person->getIdPerson(),'docCode'=>$person->getDocumentType()));
                 } elseif ($type == 'RUT') {
                     $msj = "Subir copia del RUT de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
                     $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$person->getIdPerson(),'docCode'=>'RUT'));
@@ -684,6 +694,61 @@ trait EmployeeMethodsTrait
         $em = $this->getDoctrine()->getManager();
         $em->persist($notification);
         $em->flush();
+    }
+
+    /**
+     * @param EmployerHasEmployee $eHE
+     */
+    private function checkSubscription(EmployerHasEmployee $eHE){
+        $personEmployer = $eHE->getEmployerEmployer()->getPersonPerson();
+        /** @var ObjectRepository $userRepo */
+        $userRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+        /** @var User $realUser */
+        $realUser = $userRepo->findOneBy(array('personPerson'=>$personEmployer));
+        $dateToday = new DateTime();
+        /** @var User $user */
+        $user = $realUser;
+        $effectiveDate = $user->getLastPayDate();
+        $isFreeMonths = $user->getIsFree();
+        if($isFreeMonths==0){
+            //we prorat the subscrition to the end of the month
+            $realToPay=new PurchaseOrders();
+            $days = intval($dateToday->format("t"))-intval($dateToday->format("d"));
+            $contracts = $eHE->getContracts();
+            /** @var Contract $contract */
+            foreach ($contracts as $contract) {
+                if($contract->getState()==1){
+                    $actualDays=$contract->getWorkableDaysMonth();
+                    /** @var ObjectRepository $productRepo */
+                    $productRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
+                    if ($actualDays < 10) {
+                        /** @var Product $PS1 */
+                        $PS = $productRepo->findOneBy(array("simpleName" => "PS1"));
+                    } elseif ($actualDays <= 19) {
+                        /** @var Product $PS2 */
+                        $PS = $productRepo->findOneBy(array("simpleName" => "PS2"));
+                    } else {
+                        /** @var Product $PS3 */
+                        $PS = $productRepo->findOneBy(array("simpleName" => "PS3"));
+                    }
+                    $procesingStatus = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => 'P1'));
+
+                    $symplificaPOD = new PurchaseOrdersDescription();
+                    $symplificaPOD->setDescription("Subscripción Symplifica de ".$eHE->getEmployeeEmployee()->getPersonPerson()->getFullName());
+                    $symplificaPOD->setValue(round((($PS->getPrice() * (1 + $PS->getTaxTax()->getValue()) )/30)*$days,0));
+                    $symplificaPOD->setProductProduct($PS);
+                    $symplificaPOD->setPurchaseOrdersStatus($procesingStatus);
+
+                    $realToPay->addPurchaseOrderDescription($symplificaPOD);
+                    $realToPay->setPurchaseOrdersStatus($procesingStatus);
+                    $user->addPurchaseOrder($realToPay);
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($user);
+                    $em->flush();
+                }
+            }
+        }
+
     }
 
 }

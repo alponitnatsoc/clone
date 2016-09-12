@@ -25,8 +25,8 @@ class BasicPersonRegistration extends AbstractType
         $builder
             ->add('documentType', 'choice', array(
 			    'choices' => array(
-			        'CC'   => 'Cédula de ciudadanía'/*,
-			        'CE' => 'Cedula de extranjería',
+			        'CC'   => 'Cédula de ciudadanía',
+			        'CE' => 'Cédula de extranjería'/*,
                     'TI' => 'Tarjeta de identidad'*/
 			    ),
 			    'multiple' => false,

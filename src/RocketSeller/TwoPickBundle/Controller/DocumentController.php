@@ -422,6 +422,31 @@ use EmployerMethodsTrait;
                             $person->setDocumentDocument($document);
                         }
                         break;
+		                case "CE":
+			                if($person->getDocumentDocument()){
+				                $document = $person->getDocumentDocument();
+				                if($document->getMediaMedia()){
+					                /** @var Media $media */
+					                $media = $document->getMediaMedia();
+					                if($media->getProviderName()){
+						                $provider = $this->get($media->getProviderName());
+						                $provider->removeThumbnails($media);
+					                }
+					                $em->remove($em->getRepository('\Application\Sonata\MediaBundle\Entity\Media')->find($media->getId()));
+					                $em->remove($em->getRepository('ApplicationSonataMediaBundle:Media')->find($media->getId()));
+					                $em->flush();
+				                }
+				                $document->setName($documentType->getName());
+				                $document->setDocumentTypeDocumentType($documentType);
+				                $document->setStatus(0);
+			                }else{
+				                $document = new Document();
+				                $document->setName($documentType->getName());
+				                $document->setDocumentTypeDocumentType($documentType);
+				                $document->setStatus(0);
+				                $person->setDocumentDocument($document);
+			                }
+			                break;
                 }
                 if($corrected){
                     /** @var User $user */
@@ -1147,20 +1172,14 @@ use EmployerMethodsTrait;
                 $productsPrice = 0;
                 /** @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $desc */
                 foreach ($descriptions as $desc) {
-                    if(!($desc->getProductProduct()->getSimpleName()=="PN"||$desc->getProductProduct()->getSimpleName()=="PP")){
 
-                        $unitValue = 0;
-                        if( $desc->getProductProduct()->getSimpleName()=="CT" ){
-                          $ivaTotal+= round($desc->getValue()-($desc->getValue() / 1.16),0);
-                          $unitValue = round(($desc->getValue() / 1.16),0);
-                          $productsPrice += round(($desc->getValue() / 1.16));
-                        }
-                        else {
-                          $ivaTotal+=$desc->getValue()-$desc->getProductProduct()->getPrice();
-                          $unitValue = $desc->getProductProduct()->getPrice();
-                          $productsPrice += $desc->getProductProduct()->getPrice();
-                        }
-
+                    if($desc->getProductProduct()->getTaxTax()!=null)
+                        $taxValue = ($desc->getProductProduct()->getTaxTax()->getValue()+1);
+                    else
+                        $taxValue = 1;
+                    $ivaTotal+= round($desc->getValue()-($desc->getValue() /$taxValue ),0);
+                    $unitValue = round(($desc->getValue() / $taxValue),0);
+                    $productsPrice += round(($desc->getValue() / $taxValue));
                         $items[] = array(
                             'desc' => $desc->getDescription(),
                             'product' => $desc->getProductProduct(),
@@ -1169,8 +1188,6 @@ use EmployerMethodsTrait;
                             'totalValue' => $desc->getValue(),
                             'unitValue' => $unitValue
                         );
-
-                    }
 
                 }
 

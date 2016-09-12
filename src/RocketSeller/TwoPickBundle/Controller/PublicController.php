@@ -39,6 +39,7 @@ class PublicController extends Controller
                     "nname"=>$result['firstname'],
                     "nlast"=>$result['lastname'],
                     "nemail"=>$result['email'],
+                    "nphone"=>$result['cellphone'],
                 ));
                 return $this->forward('RocketSellerTwoPickBundle:Registration:register', array('request' => $request), array('_format' => 'json'));
             }

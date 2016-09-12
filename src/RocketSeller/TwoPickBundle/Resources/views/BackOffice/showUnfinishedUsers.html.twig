@@ -5,10 +5,13 @@
         <div class="col-md-12">
             <h3>Los usarios listados a continuación no han terminado el paso 3 de 3</h3>
             <br>
-            <table>
+            <table class="table">
                 <tr>
                     <th>Usuario</th>
                     <th>Cédula</th>
+                    <th>Celular</th>
+                    <th>Paso actual</th>
+                    <th>Último login</th>
                 </tr>
                 {% for user in users %}
                     <tr>
@@ -17,6 +20,29 @@
                         </td>
                         <td>
                             {{ user.personPerson.document }}
+                        </td>
+                        <td>
+                            {% if user.personPerson.phones.count !=0 %}
+                                {{ user.personPerson.phones.get(0).phoneNumber }}
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if user.personPerson.employer == NULL %}
+                                No ha empezado el paso 1
+                            {% elseif user.personPerson.employer.employerHasEmployees.count == 0%}
+                                No ha empezado el paso 2
+                            {% else %}
+                                No ha empezado el paso 3
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if user.lastLogin is defined %}
+                                {{ user.lastLogin|date("d-m-Y H:i") }}
+                            {% else %}
+                                No hay registro
+                            {% endif %}
                         </td>
 
                     </tr>

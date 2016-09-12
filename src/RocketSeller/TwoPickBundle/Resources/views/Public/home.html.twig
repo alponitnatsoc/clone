@@ -5,6 +5,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<!--meta de facebook-->
+<meta property="og:title" content="Symplifica."/>
+<meta property="og:site_name" content="Symplifica."/>
+<meta property="og:url" content="https://symplifica.com">
+<meta property="og:description" content="Somos la solución online para la gestión de tus empleados domésticos."/>
+<meta property="og:image" content="{{ asset('public/img/landing/link-face3.png', absolute=true) }}"/>
+<!--meta de facebook-->
+
 <title>Symplifica</title>
 <link rel="stylesheet" type="text/css" href="{{ asset('public/css/home/home.css') }}"/>
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700' rel='stylesheet' type='text/css'>
@@ -31,13 +39,14 @@
 										{{ form_start(form) }}
 											<input id="formfirstname" class="inputHalf" type="text" name="firstname" placeholder="Nombre" required>
 											<input id="formlastname" class="inputHalf" type="text" name="lastname" placeholder="Apellido" required><br />
-											<input id="formcellphone" class="inputFull" type="number" name="cellphone" placeholder="Celular" required><br />
+											<input id="formcellphone" class="inputFull" type="text" name="cellphone" placeholder="Celular" required><br />
 											<input id="formemail" class="inputFull" type="email" name="email" placeholder="Correo electrónico" required>
 											{{ form_widget(form.save, { 'attr': {'class': 'btn naranja obten'}}) }}
 											<div class="form-group txt-A1-terms">
-											<input type="checkbox" id="chktyc" required />
+											<input type="checkbox" id="chktyc" name="chktyc" required />
 											Al registrarme acepto todos los <a href="{{ path('terminos_condiciones') }}" target="_blank">Términos y Condiciones</a>
 											y las <a href="{{ path('politicas_privacidad') }}" target="_blank">Políticas de Privacidad</a>
+											<div class="errorTxt"></div>
 										{{ form_end(form) }}
 
 								    </div>
@@ -322,6 +331,26 @@ $('#video2').click(function(){
 		else
 				myVideo.pause();
 	}
+$.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
+	validator = $("form[name='form']").validate({
+		rules: {
+			"firstname": "required",
+			"lastname": "required",
+			"cellphone": {required : true, maxlength : 10},
+			"email": {required : true, email : true},
+			"chktyc": "required"
+		},
+		messages: {
+			"firstname": "El nombre no puede estar vacio",
+			"lastname": "Los apellidos no pueden estar vacios",
+			"cellphone": {required : "El celular no puede estar vacio", maxlength : "El celular no es válido"},
+			"email": {required : "El email no puede estar vacio", email : "El email no es válido"},
+			"chktyc": "Acepta los Términos y Condiciones para continuar"
+		},
+		errorElement : 'div',
+		errorLabelContainer: '.errorTxt'
+	});
+});
 
 	$(".ex8").slider({
 		tooltip: 'always'

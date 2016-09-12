@@ -259,6 +259,7 @@ class PayrollController extends Controller
             if ($insertionAnswer->getStatusCode() != 200) {
                 return false;
             }
+
             return $this->redirectToRoute("payroll_result",json_decode($insertionAnswer->getContent(), true));
 
         } else {
@@ -471,12 +472,16 @@ class PayrollController extends Controller
     public function payrollErrorAction($result, $idPO)
     {
         $url = "";
+        $po=null;
         if ($idPO != -1) {
             $url = $this->generateUrl("download_documents", array('ref' => 'factura', 'id' => $idPO, 'type' => 'pdf'));
+            /** @var PurchaseOrders $po */
+            $po= $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrders")->find($idPO);
         }
         return $this->render('RocketSellerTwoPickBundle:Payroll:error.html.twig', array(
             'result' => $result,
-            'url' => $url
+            'url' => $url,
+            'po' => $po
         ));
     }
     

@@ -424,7 +424,7 @@ class ProcedureController extends Controller
 				//se obtienen todos los emleados del empleador
 				/** @var EmployerHasEmployee $employerHasEmployee */
 				foreach ($employerSearch->getEmployerHasEmployees() as $employerHasEmployee) {
-					if ($employerHasEmployee->getState()>2){
+					if ($employerHasEmployee->getState()>=2){
 						//si el empleado no tiene acciones creadas es decir no es empleado de algun otro empleador
 						if ($employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getAction()->isEmpty()){
 							//se crea la accion para validar la informacion del empleado
