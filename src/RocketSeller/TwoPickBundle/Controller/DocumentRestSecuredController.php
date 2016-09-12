@@ -115,8 +115,8 @@ class DocumentRestSecuredController extends FOSRestController
    * @return View
    */
   public function postCreateDocumentFromImgPagesAction(ParamFetcher $paramFetcher) {
-      $em = $this->getDoctrine()->getManager();
 
+      $em = $this->getDoctrine()->getManager();
       $pages = $paramFetcher->get('pages');
       $entityType = $paramFetcher->get('entityType');
       $entityId = $paramFetcher->get('entityId');
@@ -333,57 +333,8 @@ class DocumentRestSecuredController extends FOSRestController
         );
         // dump($params);
         $data = $this->forward('RocketSellerTwoPickBundle:Document:verifyAndPersitDocument', $params);
-        //TODO unlink temp file
         $path = "uploads/tempDocumentPages/$fileName";
         unlink($path);
-        // dump($data);
-        // dump($data->getContent());
-        // $data = $data->getContent();
-        // $data = json_decode($data->getContent());
-        // $document = $data->getContent()['document'];
-        // dump($data->document);
-        // die;
-        // $documentController = $this->get('document_service');
-        // $data = $documentController->verifyDocument($entityType, $entityId, $docCode, $idNotification);
-        // $idDocumentType = $data->documentType->id_document_type;
-        //
-        // $documentType = $this->getDoctrine()
-        //     ->getRepository('RocketSellerTwoPickBundle:DocumentType')
-        //     ->find($idDocumentType);
-        /** @var Document $document */
-
-
-        // $document->setName($data->document->name);
-        // $document->setStatus($data->document->status);
-        // $document->setDocumentTypeDocumentType($documentType);
-
-        /** @var Notification $notification */
-        // $notification = $this->getDoctrine()
-        //     ->getRepository('RocketSellerTwoPickBundle:Notification')
-        //     ->find($idNotification);
-
-        /** @var string $personName */
-        // $personName = $data->personName;
-        /** @var DocumentType $documentType */
-
-
-        // $file_path = "/Users/alfredo-santamaria/Desktop/comprobante.pdf";
-        // $mediaManager = $this->container->get('sonata.media.manager.media');
-        // $media = $mediaManager->create();
-        // $media->setBinaryContent($file_path);
-        // $media->setProviderName('sonata.media.provider.file');
-        // $media->setName($document->getName());
-        // $media->setProviderStatus(Media::STATUS_OK);
-        // $media->setContext('person');
-        // $media->setDocumentDocument($document);
-        //
-        // $document->setMediaMedia($media);
-
-        // $params2 = array(
-        //   'document' => $document,
-        //   'notification' => $notification
-        // );
-        // $this->forward('RocketSellerTwoPickBundle:Document:persitDocument', $params2);
 
         $view = View::create();
         $view->setStatusCode(200);

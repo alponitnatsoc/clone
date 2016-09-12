@@ -2,6 +2,8 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use MongoDB\BSON\Binary;
 use RocketSeller\TwoPickBundle\Entity\Action;
 use RocketSeller\TwoPickBundle\Entity\Configuration;
 use RocketSeller\TwoPickBundle\Entity\Document;
@@ -11,8 +13,12 @@ use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
+use RocketSeller\TwoPickBundle\Entity\TempFile;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Form\DocumentRegistration;
+use RocketSeller\TwoPickBundle\Form\FileForm;
+use RocketSeller\TwoPickBundle\Form\MediaForm;
+use RocketSeller\TwoPickBundle\Form\MultFileForm;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sonata\Bundle\DemoBundle\Model\MediaPreview;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,6 +40,7 @@ use RocketSeller\TwoPickBundle\Traits\EmployeeMethodsTrait;
 use RocketSeller\TwoPickBundle\Traits\EmployerMethodsTrait;
 use RocketSeller\TwoPickBundle\Entity\Novelty;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Validator\Constraints\File;
 use ZipArchive;
 use DateTime;
 use FOS\RestBundle\View\View;
@@ -174,19 +181,14 @@ use EmployerMethodsTrait;
         $personName = $data['personName'];
         /** @var DocumentType $documentType */
         $documentType = $data['documentType'];
-//        $form2 = $this->createFormBuilder()
-//            ->add('archivo','file')
-//            ->getForm();
-//        $form2 = $this->createFormBuilder()
-//            ->add('archivo','collection',array(
-//                'type'=>'file',
-//                'required'=>false,
-//            ))
-//            ->getForm();
-
+        $form2 = $this->createForm(new MultFileForm());
+        $form2->handleRequest($request);
+        if($form2->isValid()) {
+            $this->joinDocument($form2->get('files')->getData(),$document,$notification,$entityType,$entityId);
+            return $this->redirectToRoute('show_dashboard');
+        }
         $form = $this->createForm(new DocumentRegistration(), $document);
         $form->handleRequest($request);
-
         if ($form->isValid()) {
             if (in_array($document->getMediaMedia()->getContentType(), $fileTypePermitted)) {
                 $this->persitDocument($document ,$notification);
@@ -196,8 +198,77 @@ use EmployerMethodsTrait;
                 return $this->redirectToRoute('show_dashboard');
             }
         }
+
         return $this->render(
-            'RocketSellerTwoPickBundle:Document:addDocumentForm.html.twig', array('form' => $form->createView(), "entityType" => $entityType, "entityId" => $entityId, "docCode" => $docCode, "idNotification" => $idNotification, 'personName' => $personName, "documentName" => $documentType->getName()));
+            'RocketSellerTwoPickBundle:Document:addDocumentForm.html.twig', array(
+                'form' => $form->createView(),
+                'form2'=>$form2->createView(),
+                "entityType" => $entityType,
+                "entityId" => $entityId,
+                "docCode" => $docCode,
+                "idNotification" => $idNotification,
+                'personName' => $personName,
+                "documentName" => $documentType->getName(),
+            )
+        );
+    }
+
+    public function joinDocument($files, $document, $notification, $entityType, $entityId) {
+
+        if (!file_exists('uploads/tempDocumentPages/'.$entityType.'/'.$entityId)) {
+            mkdir('uploads/tempDocumentPages/'.$entityType.'/'.$entityId, 0777, true);
+        }
+        $absPath = getcwd();
+        $HashNames = "";
+        $fileNames = array();
+        /** @var TempFile $file */
+        foreach ( $files as $file){
+            /** @var UploadedFile $temp_file */
+            $temp_file = $file->getImage();
+            $fileName = md5(uniqid()).'.'.$temp_file->guessExtension();
+            $fileNames[]=$fileName;
+            $path = 'uploads/tempDocumentPages/'.$entityType.'/'.$entityId;
+            $temp_file->move($path,$fileName);
+            $path = str_replace('/', '_', $absPath) . '_uploads_tempDocumentPages_' . $entityType .
+                '_' . $entityId . '_' . $fileName;
+            $HashNames .= $path . ',';
+
+        }
+        $params = array(
+            'ref'=> 'joiner',
+            'id' => $HashNames,
+            'type' => 'pdf',
+            'attach' => null
+        );
+        $documentResult = $this->forward('RocketSellerTwoPickBundle:Document:downloadDocuments', $params);
+        $temp_file = $documentResult->getContent();
+        $fileName = "tempFile.pdf";
+        $file_path = "uploads/tempDocumentPages/$fileName";
+        file_put_contents($file_path, $temp_file);
+        foreach($fileNames as $hashName) {
+            $path = "uploads/tempDocumentPages/$entityType/$entityId/$hashName";
+            unlink($path);
+        }
+        $dir = "uploads/tempDocumentPages/$entityType/$entityId";
+        foreach(scandir($dir) as $file) {
+            if ('.' === $file || '..' === $file) continue;
+            unlink("$dir/$file");
+        }
+        rmdir($dir);
+
+        $file_path = "$absPath/uploads/tempDocumentPages/$fileName";
+        $mediaManager = $this->container->get('sonata.media.manager.media');
+        $media = $mediaManager->create();
+        $media->setBinaryContent($file_path);
+        $media->setProviderName('sonata.media.provider.file');
+        $media->setName($document->getName());
+        $media->setProviderStatus(Media::STATUS_OK);
+        $media->setContext('person');
+        $media->setDocumentDocument($document);
+        $document->setMediaMedia($media);
+        $this->persitDocument($document ,$notification);
+
+        unlink("uploads/tempDocumentPages/".$fileName);
     }
 
     public function persitDocument(Document $document, Notification $notification){
@@ -547,44 +618,43 @@ use EmployerMethodsTrait;
     }
 
     /**
-     * to be called by the api consumed by the mobile app
-     */
-     /**
-      * to be called by the api consumed by the mobile app
-      */
-     public function verifyAndPersitDocumentAction($entityType, $entityId, $docCode, $idNotification, $fileName) {
-       $data = $this->verifyDocument($entityType, $entityId, $docCode, $idNotification);
+    * to be called by the api consumed by the mobile app
+    */
+    /**
+    * to be called by the api consumed by the mobile app
+    */
+    public function verifyAndPersitDocumentAction($entityType, $entityId, $docCode, $idNotification, $fileName) {
+        $data = $this->verifyDocument($entityType, $entityId, $docCode, $idNotification);
+        /** @var Document $document */
+        $document = $data['document'];
+        /** @var Notification $notification */
+        $notification = $data['notification'];
+        /** @var string $personName */
+        $personName = $data['personName'];
+        /** @var DocumentType $documentType */
+        $documentType = $data['documentType'];
 
-       /** @var Document $document */
-       $document = $data['document'];
-       /** @var Notification $notification */
-       $notification = $data['notification'];
-       /** @var string $personName */
-       $personName = $data['personName'];
-       /** @var DocumentType $documentType */
-       $documentType = $data['documentType'];
+        $absPath = getcwd();
 
-       $absPath = getcwd();
+        $file_path = "$absPath/uploads/tempDocumentPages/$fileName";
+        $mediaManager = $this->container->get('sonata.media.manager.media');
+        $media = $mediaManager->create();
+        $media->setBinaryContent($file_path);
+        $media->setProviderName('sonata.media.provider.file');
+        $media->setName($document->getName());
+        $media->setProviderStatus(Media::STATUS_OK);
+        $media->setContext('person');
+        $media->setDocumentDocument($document);
 
-       $file_path = "$absPath/uploads/tempDocumentPages/$fileName";
-       $mediaManager = $this->container->get('sonata.media.manager.media');
-       $media = $mediaManager->create();
-       $media->setBinaryContent($file_path);
-       $media->setProviderName('sonata.media.provider.file');
-       $media->setName($document->getName());
-       $media->setProviderStatus(Media::STATUS_OK);
-       $media->setContext('person');
-       $media->setDocumentDocument($document);
+        $document->setMediaMedia($media);
 
-       $document->setMediaMedia($media);
+        $this->persitDocument($document ,$notification);
 
-       $this->persitDocument($document ,$notification);
+        $view = View::create();
+        $view->setStatusCode(200);
 
-       $view = View::create();
-       $view->setStatusCode(200);
-
-       return $view->setData(array());
-     }
+        return $view->setData(array());
+    }
 
     public function addDocModalAction($id, $idDocumentType, Request $request)
     {
