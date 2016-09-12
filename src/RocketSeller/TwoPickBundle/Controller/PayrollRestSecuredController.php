@@ -695,30 +695,7 @@ class PayrollRestSecuredController extends FOSRestController
                         $monthsToAdd = 1;
                     }
                     $nowDate = new DateTime(date('Y-m-d', strtotime("+$monthsToAdd months", strtotime($nowDate->format("Y-m-") . "1"))));
-                    //here i create the comprobante
-                    $employeePerson=$actualPayroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson();
-                    $documentType = 'Comprobante';
-                    $msj = "Subir comprobante de " . $utils->mb_capitalize(explode(" ", $employeePerson->getNames())[0] . " " . $employeePerson->getLastName1()) . " " . $utils->period_number_to_name($actualPayroll->getPeriod()) . " " . $utils->month_number_to_name($actualPayroll->getMonth());
-                    $dUrl = $this->generateUrl("download_documents", array('id' => $actualPayroll->getIdPayroll(), 'ref' => "comprobante", 'type' => 'pdf'));
-                    $dAction = "Bajar";
-                    $action = "Subir";
 
-                    $url = $this->generateUrl("documentos_employee", array("entityType"=>'Payroll',"entityId"=>$actualPayroll->getIdPayroll(),"docCode"=>'CPR'));
-                    $documentType = $em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'CPR'));
-                    //$url = $this->generateUrl("api_public_post_doc_from");
-
-                    $notification = new Notification();
-                    $notification->setPersonPerson($person);
-                    $notification->setStatus(1);
-                    $notification->setDocumentTypeDocumentType($documentType);
-                    $notification->setType('alert');
-                    $notification->setDescription($msj);
-                    $notification->setRelatedLink($url);
-                    $notification->setAccion($action);
-                    $notification->setDownloadAction($dAction);
-                    $notification->setDownloadLink($dUrl);
-                    $em = $this->getDoctrine()->getManager();
-                    $em->persist($notification);
 
                     if ($actualPayroll->getIdPayroll() == $actualPayroll->getContractContract()->getActivePayroll()->getIdPayroll()) {
                         //to fix the Pila Pod of disappearing, we pass it to de owe PO if the pila is not getting paid

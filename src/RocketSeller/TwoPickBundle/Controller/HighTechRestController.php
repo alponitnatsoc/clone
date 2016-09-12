@@ -294,6 +294,32 @@ class HighTechRestController extends FOSRestController
                 $context['documentName']='Comprobante '.date_format(new DateTime(),'d-m-y H:i:s').'.pdf';
                 $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 
+                //here i create the comprobante
+                /* This is not longer necesary
+
+                $actualPayroll = $pay->getPurchaseOrdersDescription()->getPayrollPayroll();
+                $person = $pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getPersonPerson();
+                $dUrl = $this->generateUrl("download_documents", array('id' => $actualPayroll->getIdPayroll(), 'ref' => "comprobante", 'type' => 'pdf'));
+                $dAction = "Bajar";
+                $action = "Subir";
+                $employeePerson=$actualPayroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson();
+                $url = $this->generateUrl("documentos_employee", array("entityType"=>'Payroll',"entityId"=>$actualPayroll->getIdPayroll(),"docCode"=>'CPR'));
+                $documentType = $em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'CPR'));
+                $msj = "Subir comprobante de " . $utils->mb_capitalize(explode(" ", $employeePerson->getNames())[0] . " " . $employeePerson->getLastName1()) . " " . $utils->period_number_to_name($actualPayroll->getPeriod()) . " " . $utils->month_number_to_name($actualPayroll->getMonth());
+
+                $notification = new Notification();
+                $notification->setPersonPerson($person);
+                $notification->setStatus(1);
+                $notification->setDocumentTypeDocumentType($documentType);
+                $notification->setType('alert');
+                $notification->setDescription($msj);
+                $notification->setRelatedLink($url);
+                $notification->setAccion($action);
+                $notification->setDownloadAction($dAction);
+                $notification->setDownloadLink($dUrl);
+                $em = $this->getDoctrine()->getManager();
+                //$em->persist($notification);*/
+
             }
 
         } else {
