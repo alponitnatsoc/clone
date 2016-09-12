@@ -191,7 +191,8 @@ class HighTechRestController extends FOSRestController
                 'userName'=>$dis->getIdUser()->getPersonPerson()->getFullName(),
                 'rejectionDate'=>new DateTime(),
                 'toEmail'=> 'backOfficeSymplifica@gmail.com',
-                'phone'=>$dis->getIdUser()->getPersonPerson()->getPhones()->first()
+                'phone'=>$dis->getIdUser()->getPersonPerson()->getPhones()->first()->getPhoneNumber(),
+	              'value'=>$dis->getValue()
             );
             $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
 
@@ -200,6 +201,7 @@ class HighTechRestController extends FOSRestController
             $dis->setPurchaseOrdersStatus($pos);
             $date = new DateTime('01-01-0001 00:00:00');
             $dis->setDatePaid($date);
+	          $mesange = "not so good man";
         }
         $em->persist($dis);
         $em->flush();
