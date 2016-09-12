@@ -11,6 +11,7 @@ use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\PilaConstraints;
 use RocketSeller\TwoPickBundle\Entity\PilaDetail;
 use RocketSeller\TwoPickBundle\Entity\PilaTax;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
@@ -171,7 +172,6 @@ class PayrollRestSecuredController extends FOSRestController
         $pilaOwePo=new PurchaseOrders();
         $pendingStatus = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => 'P1'));
         $pilaOwePo->setPurchaseOrdersStatus($pendingStatus);
-        $pilaOwePo->setIdUser($user);
         if ($pods->count() > 0) {
             /** @var UtilsController $utils */
             $utils = $this->get('app.symplifica_utils');
@@ -250,7 +250,6 @@ class PayrollRestSecuredController extends FOSRestController
         $productRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
         $paysPila=0;
         foreach ($payrollToPay as $key => $value) {
-
             /** @var PurchaseOrdersDescription $tempPOD */
             $tempPOD = $podRepo->find($value);
 
@@ -258,7 +257,7 @@ class PayrollRestSecuredController extends FOSRestController
                 //por seguridad en caso de que no exista el POD
                 return $view->setStatusCode(403)->setData(array('error' => 'no exite pod'));
             }
-            if ($tempPOD->getPayrollPayroll() == null) {
+            if ($tempPOD->getPayrollPayroll() == null && $tempPOD->getProductProduct()->getSimpleName()=="PP") {
                 //paying Pila so we calculate the mora if applies
                 //seeking for the wished date
                 $todayPlus = new DateTime();
@@ -271,8 +270,8 @@ class PayrollRestSecuredController extends FOSRestController
                 }
                 $permittedDate=new DateTime(json_decode($insertionAnswer->getContent(),true)['date']);
                 $tempPOD->setDateToPay($permittedDate);
-	              $em->persist($tempPOD);
-	              $em->flush();
+                //$em->persist($tempPOD);
+                //$em->flush();
 	            
                 //here starts the mora
                 //TODO leer el comentario de abajo
@@ -326,6 +325,7 @@ class PayrollRestSecuredController extends FOSRestController
             // add the 4*1000
             /** @var Product $productCT */
             $productCPM = $productRepo->findOneBy(array("simpleName" => "CPM"));
+
             $fourX1000Cost=round($total*$productCPM->getPrice(), 0, PHP_ROUND_HALF_UP);
             //this is for the payroll to be exclusive with the 4X100 tax, and not include the pila cost
             //$fourX1000Cost=$totalPayroll*$productCPM->getPrice();
@@ -412,6 +412,8 @@ class PayrollRestSecuredController extends FOSRestController
                 $total += $symplificaPOD->getValue();
 
             }
+            //now we search if there is any owe pod
+            $this->checkPendingSubscription($realtoPay,$total);
         }
         $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getClientListPaymentMethods', array('idUser' => $user->getId()), array('_format' => 'json'));
         $responsePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
@@ -490,7 +492,7 @@ class PayrollRestSecuredController extends FOSRestController
                 //por seguridad en caso de que no exista el POD
                 return $view->setStatusCode(403)->setData(array('error' => 'no exite pod'));
             }
-            if ($tempPOD->getPayrollPayroll() == null) {
+            if ($tempPOD->getPayrollPayroll() == null  && $tempPOD->getProductProduct()->getSimpleName()=="PP") {
                 //paying Pila so we calculate the mora if applies
                 //seeking for the wished date
                 $todayPlus = new DateTime();
@@ -523,7 +525,7 @@ class PayrollRestSecuredController extends FOSRestController
                 $flagFrequency = false;
                 $flagNomi=false;
                 $paysPila++;
-            } else {
+            } elseif( $tempPOD->getProductProduct()->getSimpleName()=="PN") {
                 $person = $tempPOD->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                 if ($tempPOD->getPayrollPayroll()->getContractContract()->getPayMethodPayMethod()->getPayTypePayType()->getPayrollCode() == "EFE"){
                     $flagFrequency = true;
@@ -534,6 +536,10 @@ class PayrollRestSecuredController extends FOSRestController
                     $flagFrequency = false;
                     $numberOfTrans++;
                 }
+            }else{
+                $person= $tempPOD->getPurchaseOrders()->getIdUser()->getPersonPerson();
+                $flagFrequency = false;
+                $flagNomi=false;
             }
             if ($person->getIdPerson() != $userPerson->getIdPerson()) {
                 //Por seguridad se verifica que los PODS pertenezcan al usuario loggeado
@@ -647,13 +653,17 @@ class PayrollRestSecuredController extends FOSRestController
                 $user->setIsFree(0);
                 $em->persist($user);
             }
+            //now we search if there is any owe pod
+            //$this->checkPendingSubscription($realtoPay,$total);
         }
         $realtoPay->setIdUser($user);
         $realtoPay->setDatePaid(new DateTime());
-        $realtoPay->setValue($total);
         $realtoPay->setPayMethodId($paymethodid);
+        $realtoPay->setValue($total);
         $em->persist($realtoPay);
         $em->flush();
+
+
         $response = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getPayPurchaseOrder', array(
             "idPurchaseOrder" => $realtoPay->getIdPurchaseOrders()), array('_format' => 'json'));
         if ($response->getStatusCode() == 200) {
@@ -782,6 +792,34 @@ class PayrollRestSecuredController extends FOSRestController
             return $view->setStatusCode(200)->setData(array('result' => "e"));
         }
 
+    }
+
+    private function checkPendingSubscription(PurchaseOrders &$realtoPay,&$total){
+        $purchaseOrderRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrders");
+        $purchaseOrderStatusRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
+        /** @var PurchaseOrdersStatus $pedingStatus */
+        $pedingStatus = $purchaseOrderStatusRepo->findOneBy(array('idNovoPay'=>'P1'));
+        $pendingStuff = $purchaseOrderRepo->findBy(array('purchaseOrdersStatus'=>$pedingStatus,'idUser'=>$this->getUser()));
+        $pendingPODS = new ArrayCollection();
+        if($pendingStuff!=null&&count($pendingStuff)>0){
+            /** @var PurchaseOrders $po */
+            foreach ($pendingStuff as $po) {
+                $pods = $po->getPurchaseOrderDescriptions();
+                /** @var PurchaseOrdersDescription $pod */
+                foreach ($pods as $pod) {
+                    if($pod->getProductProduct()->getSimpleName()=='PS1'||$pod->getProductProduct()->getSimpleName()=='PS2'||$pod->getProductProduct()->getSimpleName()=='PS3'){
+                        $pendingPODS->add($pod);
+                    }
+                }
+            }
+            if($pendingPODS->count()>0){
+                /** @var PurchaseOrdersDescription $pPod */
+                foreach ($pendingPODS as $pPod) {
+                    $realtoPay->addPurchaseOrderDescription($pPod);
+                    $total+= $pPod->getValue();
+                }
+            }
+        }
     }
 
     private function calculateMora(PurchaseOrdersDescription $tempPOD,Person $userPerson){
