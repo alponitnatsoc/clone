@@ -41,6 +41,7 @@ class EmployeeRestSecuredController extends FOSRestController
 
     $user = $this->getUser();
 
+    $em = $this->getDoctrine()->getManager();
     $methodRepo = $em->getRepository("RocketSellerTwoPickBundle:PayMethod");
     /** @var \RocketSeller\TwoPickBundle\Entity\PayMethod $paym */
     $paym = $methodRepo->find($payMethodId);
