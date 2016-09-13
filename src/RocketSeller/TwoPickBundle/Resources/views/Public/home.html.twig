@@ -43,9 +43,10 @@
 											<input id="formemail" class="inputFull" type="email" name="email" placeholder="Correo electrónico" required>
 											{{ form_widget(form.save, { 'attr': {'class': 'btn naranja obten'}}) }}
 											<div class="form-group txt-A1-terms">
-											<input type="checkbox" id="chktyc" required />
+											<input type="checkbox" id="chktyc" name="chktyc" required />
 											Al registrarme acepto todos los <a href="{{ path('terminos_condiciones') }}" target="_blank">Términos y Condiciones</a>
 											y las <a href="{{ path('politicas_privacidad') }}" target="_blank">Políticas de Privacidad</a>
+											<div class="errorTxt"></div>
 										{{ form_end(form) }}
 
 								    </div>
@@ -330,6 +331,26 @@ $('#video2').click(function(){
 		else
 				myVideo.pause();
 	}
+$.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
+	validator = $("form[name='form']").validate({
+		rules: {
+			"firstname": "required",
+			"lastname": "required",
+			"cellphone": {required : true, maxlength : 10},
+			"email": {required : true, email : true},
+			"chktyc": "required"
+		},
+		messages: {
+			"firstname": "El nombre no puede estar vacio",
+			"lastname": "Los apellidos no pueden estar vacios",
+			"cellphone": {required : "El celular no puede estar vacio", maxlength : "El celular no es válido"},
+			"email": {required : "El email no puede estar vacio", email : "El email no es válido"},
+			"chktyc": "Acepta los Términos y Condiciones para continuar"
+		},
+		errorElement : 'div',
+		errorLabelContainer: '.errorTxt'
+	});
+});
 
 	$(".ex8").slider({
 		tooltip: 'always'

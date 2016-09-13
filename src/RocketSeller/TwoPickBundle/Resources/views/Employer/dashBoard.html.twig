@@ -6,8 +6,12 @@
         {% if message_format == 'NVF' %}
             {{ modal(15) }}
         {% endif %}
+        {% if message_format == 'NVF2' %}
+            {{ modal(16) }}
+        {% endif %}
     {% endfor %}
     {{ modal(24) }}
+    {{ modal(17) }}
 {% endblock %}
 {% block fos_user_content %}
     {% block stylesheets %}
@@ -802,23 +806,22 @@
                 event.preventDefault();
                 var uri = $(this).attr("href");
                 var html = '';
-
 //                 alert(uri);
                 $.ajax({
                     //method: "POST",
                     url: uri,
                     //(data: $('form[name="pago_membresia"]').serialize(),
                     beforeSend: function (xhr) {
-
                     }
                 }).done(function (data) {
                     html = data;
+//                    alert(html);
                     $("#modal-body").html('');
 
-                    //$('#modal-body').replaceWith($(html).find('#main'));
                     $('#modal-body').html($(html).find('#cuerpoModal'));
-
+                    $("#myModal").modal();
                     $("#myModal").modal('show');
+
                     var files;
                     // Add events
                     $('input[type=file]').on('change', prepareUpload);
@@ -833,6 +836,7 @@
                     console.log(errorThrown);
 
                 });
+
 
             });
 

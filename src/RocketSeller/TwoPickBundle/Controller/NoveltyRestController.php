@@ -439,6 +439,48 @@ class NoveltyRestController extends FOSRestController
         $holyDays[]=$date;
         $date=new DateTime("2016-"."12"."-"."25");
         $holyDays[]=$date;
+
+
+        $date=new DateTime("2017-"."01"."-"."01");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."01"."-"."09");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."03"."-"."20");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."04"."-"."09");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."04"."-"."13");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."04"."-"."14");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."04"."-"."16");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."05"."-"."01");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."05"."-"."29");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."06"."-"."19");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."06"."-"."26");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."07"."-"."03");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."07"."-"."20");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."08"."-"."07");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."08"."-"."21");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."10"."-"."16");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."11"."-"."06");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."11"."-"."13");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."12"."-"."08");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."12"."-"."25");
+        $holyDays[]=$date;
         /** @var DateTime $hd */
         foreach ($holyDays as $hd) {
             if($dateToCheck->format("Y-m-d")==$hd->format("Y-m-d"))
