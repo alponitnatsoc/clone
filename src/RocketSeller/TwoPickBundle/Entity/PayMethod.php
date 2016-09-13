@@ -73,7 +73,6 @@ class PayMethod
 
     /**
      * @ORM\Column(type="string", length=11, nullable=true)
-     * @Exclude
      */
     private $cellPhone;
 
