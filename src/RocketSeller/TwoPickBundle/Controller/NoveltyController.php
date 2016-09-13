@@ -344,13 +344,13 @@ class NoveltyController extends Controller {
       $novelty->setNoveltyTypeNoveltyType($noveltyType);
       $novelty->setPayrollDetailPayrollDetail(new PayrollDetail());
 
-      if(array_key_exists('name', $noveltyFields))
-        $novelty->setName($noveltyFields['name']);
+      $novelty->setName($noveltyType->getName());
+
       if(array_key_exists('dateStart', $noveltyFields))
-        $novelty->setDateStart(DateTime::createFromFormat('m/d/Y', $noveltyFields['dateStart']));
+        $novelty->setDateStart(DateTime::createFromFormat('d/m/Y', $noveltyFields['dateStart']));
 
       if(array_key_exists('dateEnd', $noveltyFields))
-        $novelty->setDateEnd(DateTime::createFromFormat('m/d/Y', $noveltyFields['dateEnd']));
+        $novelty->setDateEnd(DateTime::createFromFormat('d/m/Y', $noveltyFields['dateEnd']));
 
       if(array_key_exists('units', $noveltyFields))
         $novelty->setUnits($noveltyFields['units']);
@@ -499,7 +499,7 @@ class NoveltyController extends Controller {
 	    }
 
 	    //TODO Update when documents are reworked
-	    
+
 //	    if(!$this->checkNoveltyFulfilment($novelty)){
 //	    	//Crea las notificaciones de los documentos asociados
 //		    /** @var User $user */
