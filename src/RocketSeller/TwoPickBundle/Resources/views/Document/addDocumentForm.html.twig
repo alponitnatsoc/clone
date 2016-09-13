@@ -61,16 +61,16 @@
                     <div class="row-fluid clearfix">
                         <div id="add_document_content" class="col-md-12" style="padding: 10px 15px 10px 15px">
                             <div id="add_document_header" class="col-md-12 text-center">
-                                <h1><strong>Selecciona una opción</strong></h1>
+                                <h1 class="bold azulclarofont" style="font-size:20px">Selecciona una opción</h1>
                             </div>
                             <div id="add_single_file_document" class="col-md-6 text-center" style="padding:20px 20px 20px 20px">
-                                <div class="col-md-12" style="border: solid; border-width: 2px; border-radius: 10px;background-color: #5D6979 ">
-                                    <h4 id="show_add_single_file" style="color: white "><br>Mi documento<br>es un solo<br>archivo<br><br></h4>
+                                <div class="col-md-12 btn-grey" style="cursor:pointer;border-radius: 5px;background-color: #e4e4e4">
+                                    <h4 class="light" id="show_add_single_file" style="color:#5D5D5D;font-size:15px;font-weight:500">Mi documento es un solo archivo</h4>
                                 </div>
                             </div>
                             <div id="add_multiple_file_document" class="col-md-6 text-center" style="padding:20px 20px 20px 20px">
-                                <div class="col-md-12" style="border: solid; border-width: 2px; border-radius: 10px; background-color: #5D6979">
-                                    <h4 id="show_add_multiple_file" style="color: white "><br>Mi documento<br>tiene varias<br>imágenes<br><br></h4>
+                                <div class="col-md-12 btn-grey" style="cursor:pointer;border-radius: 5px; background-color: #e4e4e4">
+                                    <h4 class="light" id="show_add_multiple_file" style="color:#5D5D5D;font-size:15px;font-weight:500">Mi documento tiene varias imágenes</h4>
                                 </div>
                             </div>
                         </div>
@@ -96,9 +96,9 @@
                                 {{ form_row(form.documentTypeDocumentType) }}
                             </div>
                             <div class="row modal-responsive">
-                                <div class="col-md-12">
+                                <div class="col-md-12 text-center">
                                     <div class="col-md-12 subir-archivo" style="margin-top: 20px;">
-                                        <h4><strong>Selecciona un archivo</strong></h4>
+                                        <h4 class="bold azulclarofont">Selecciona un archivo</h4>
                                         <h5 style="font-stretch: expanded">Los formatos aceptados son .pdf .jpg .png .jpeg</h5>
                                     </div>
                                     <div class="col-sm-12 text-center">
@@ -106,18 +106,18 @@
                                             {'attr':
                                                 {'accept':
                                                     "application/pdf,image/jpeg,image/tiff,image/png",
-                                                    'style':"margin-top:10px;margin-bottom:15px"
+                                                    'style':"margin:10px 0 15px;display: initial;"
                                                 }
                                             })
                                         }}
                                     </div>
                                     <div class="col-md-12 text-center" style="margin-bottom: 20px;">
                                         <div class="col-md-6">
-                                            {{ form_row(form.save,{'attr':{'style':'margin:20px 0 0 0'}}) }}
+                                            {{ form_row(form.save,{'attr':{'style':'margin:20px 0 0 0;background:#FD9224'}}) }}
                                             {{ form_end(form) }}
                                         </div>
                                         <div class="col-md-6">
-                                            <a id="add_doc_cancel_button1" class="btn btn-bitbucket" style="margin: 20px 0 0 0">
+                                            <a id="add_doc_cancel_button1" class="btn btn-grey" style="margin: 20px 0 0 0">
                                                 <strong>Cancelar</strong></a>
                                         </div>
                                     </div>
@@ -131,17 +131,17 @@
                                 'docCode':docCode,
                                 'idNotification':idNotification
                             }), 'method': 'POST','attr':{'id':'add_multiple_files_form'}}) }}
-                            <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px; padding-left: 8px">
+                            <div class="col-md-12" style="margin: 20px 0; padding-left: 8px">
                                 <ul id="file-field-list"
                                     class="file_add_prototype" style="list-style-type: none"
-                                    data-prototype='<div class="col-md-6" style="padding:0 0 0 0">{{ form_widget(form2.files.vars.prototype|e('html_attr')) }}</div>'>
+                                    data-prototype='<div class="col-md-12" style="padding:0">{{ form_widget(form2.files.vars.prototype|e('html_attr')) }}</div>'>
                                 </ul>
                                 <div class="col-md-12 text-center">
                                     {% for fileField in form2.files %}
                                             {{ form_row(fileField,{'attr':{'class':'col-md-10','style':'padding-left:20px'}}) }}
                                     {% endfor %}
-                                    <a id="add_file_link" style="color:#00cdcc;text-decoration: none;margin-right: 5px;"><i class="fa fa-plus-circle fa-2x" style="color:#00cdcc;font-size:20px;"></i> <span style="display: inline;font-size:20px">Agregar imagen</span></a>
-                                    <a id="remove_file_link" style="color:#fd5c5c;text-decoration: none;font-size:20px;margin-top: 10px;margin-left: 5px;"><i class="fa fa-minus-circle " style="color:#fd5c5c;font-size:20px"></i> Eliminar imagen</a>
+                                    <a id="add_file_link" style="color:#00cdcc;text-decoration: none;margin-right: 5px;"><span class="btn btn-grey" style="display: inline;"><i class="fa fa-plus-circle fa-2x" style="color:#00cdcc;font-size:20px;"></i> Agregar imagen</span></a>
+                                    <a id="remove_file_link" style="color:#fd5c5c;text-decoration: none;font-size:20px;margin-top: 10px;margin-left: 5px;"><span class="btn btn-grey"><i class="fa fa-minus-circle " style="color:#fd5c5c;font-size:20px"></i> Eliminar imagen</span></a>
                                 </div>
                             </div>
                             <div class="col-md-12 text-center" style="margin-bottom: 20px;">
@@ -149,7 +149,7 @@
                                     {{ form_row(form2.save,{'attr':{'style':'margin: 20px 0 0 0'}}) }}
                                 </div>
                                 <div class="col-md-6">
-                                    <a id="add_doc_cancel_button2" class="btn btn-bitbucket" style="margin: 20px 0 0 0"><strong>Cancelar</strong></a>
+                                    <a id="add_doc_cancel_button2" class="btn btn btn-default" style="margin: 20px 0 0 0"><strong>Cancelar</strong></a>
                                 </div>
                             </div>
                             {{ form_end(form2) }}
@@ -163,7 +163,3 @@
 </div>
 </body>
 </html>
-
-
-
-

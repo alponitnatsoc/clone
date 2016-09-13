@@ -37,8 +37,10 @@
 									</p>
 									<div class="formCont">
 										{{ form_start(form) }}
-											<input id="formfirstname" class="inputHalf" type="text" name="firstname" placeholder="Nombre" required>
-											<input id="formlastname" class="inputHalf" type="text" name="lastname" placeholder="Apellido" required><br />
+											<div>
+												<input id="formfirstname" class="inputHalf" type="text" name="firstname" placeholder="Nombre" required>
+												<input id="formlastname" class="inputHalf" type="text" name="lastname" placeholder="Apellido" required>
+											</div>
 											<input id="formcellphone" class="inputFull" type="text" name="cellphone" placeholder="Celular" required><br />
 											<input id="formemail" class="inputFull" type="email" name="email" placeholder="Correo electrónico" required>
 											{{ form_widget(form.save, { 'attr': {'class': 'btn naranja obten'}}) }}
@@ -46,13 +48,15 @@
 											<input type="checkbox" id="chktyc" name="chktyc" required />
 											Al registrarme acepto todos los <a href="{{ path('terminos_condiciones') }}" target="_blank">Términos y Condiciones</a>
 											y las <a href="{{ path('politicas_privacidad') }}" target="_blank">Políticas de Privacidad</a>
-											<div class="errorTxt"></div>
 										{{ form_end(form) }}
-
 								    </div>
 									</div>
 								</div>
+								<div style="clear:both">
+									<div hidden class="errorTxt light"></div>
+								</div>
 							</div>
+
             	<!--<div id="cont-banner">
                 	<div id="tbanner1">
                     	<h1 class="bold">Somos el área de nómina de los pequeños empleadores</h1>
@@ -313,6 +317,46 @@ de empleados que quieras administrar</h4>
     </main>
 
 </body>
+<script>
+	window.intercomSettings = {
+		app_id: "mydavhzb",
+		name: 'Anónimo', // Full name
+		email: 'ninguno', // Email address
+		created_at: new Date().getTime(), // Signup date as a Unix timestamp
+	};
+</script>
+<script>
+	(function(){
+				var w=window;
+				var ic=w.Intercom;
+				if(typeof ic==="function"){
+					ic('reattach_activator');
+					ic('update',intercomSettings);
+				}else{
+					var d=document;
+					var i=function(){
+						i.c(arguments)
+					};
+					i.q=[];
+					i.c=function(args){i.q.push(args)};
+					w.Intercom=i;
+					function l(){
+						var s=d.createElement('script');
+						s.type='text/javascript';
+						s.async=true;
+						s.src='https://widget.intercom.io/widget/mydavhzb';
+						var x=d.getElementsByTagName('script')[0];
+						x.parentNode.insertBefore(s,x);
+					}
+					if(w.attachEvent){
+						w.attachEvent('onload',l);
+					}else{
+						w.addEventListener('load',l,false);
+					}
+				}
+			}
+	)()
+</script>
 <script type="text/javascript" src="{{ asset('public/js/home/bootstrap-slider.js') }}"></script>
 <script type="text/javascript">
 
@@ -341,16 +385,17 @@ $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.mi
 			"chktyc": "required"
 		},
 		messages: {
-			"firstname": "El nombre no puede estar vacio",
-			"lastname": "Los apellidos no pueden estar vacios",
-			"cellphone": {required : "El celular no puede estar vacio", maxlength : "El celular no es válido"},
-			"email": {required : "El email no puede estar vacio", email : "El email no es válido"},
-			"chktyc": "Acepta los Términos y Condiciones para continuar"
+			"firstname": "&#8227; El nombre no puede estar vacio",
+			"lastname": "&#8227; Los apellidos no pueden estar vacios",
+			"cellphone": {required : "&#8227; El celular no puede estar vacio", maxlength : "&#8227; El celular no es válido"},
+			"email": {required : "&#8227; El email no puede estar vacio", email : "&#8227; El email no es válido"},
+			"chktyc": "&#8227; Acepta los Términos y Condiciones para continuar"
 		},
 		errorElement : 'div',
 		errorLabelContainer: '.errorTxt'
 	});
 });
+
 
 	$(".ex8").slider({
 		tooltip: 'always'
@@ -369,6 +414,41 @@ $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.mi
 
 	$('#chktyc').attr('oninvalid', 'setCustomValidity("Acepta los Términos y Condiciones para continuar")');
 	$('#chktyc').attr('onclick', "setCustomValidity('')");
+
+	$("form[name='form']").on('submit',function (e) {
+
+		if (document.getElementById('formfirstname').value!= null){
+			var nombre = document.getElementById('formfirstname').value;
+		}else{
+			var nombre = "anonymous";
+		}
+		if (document.getElementById('formlastname').value != null){
+			nombre +=' '+document.getElementById('formlastname').value;
+		}
+		if (document.getElementById('formcellphone').value != null){
+			var telefono = document.getElementById('formcellphone').value;
+		}else{
+			var telefono = "null";
+		}
+		if (document.getElementById('formemail').value != null){
+			var email = document.getElementById('formemail').value;
+		}else{
+			var email = "ninguno";
+		}
+		var day= new Date().getDay();
+		var month = new Date().getMonth();
+		var year = new Date().getFullYear();
+		var hour =  new Date().getHours();
+		var min = new Date().getMinutes();
+		var fecha = day+"/"+month+"/"+year+" "+hour+":"+min;
+		window.Intercom("trackEvent", "Intento Registro Landing",{
+			"Fecha del intento": fecha,
+			"Nombre en formulario":nombre,
+			"Celular en formulario":telefono,
+			"Email en formulario":email,
+		});
+
+	});
 
     function numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -476,5 +556,6 @@ $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.mi
 
 
 </script>
+
 </html>
 {% endblock %}
