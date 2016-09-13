@@ -162,7 +162,7 @@ class PayrollMethodRestController extends FOSRestController
         $period =  4 ;
 
         //TODO tengo que buscar las que no están pagas
-        if ($day == 25) {
+        if ($day == 26) {
             $params = array(
                 "month" => $month,
                 "period"=>$period,
@@ -170,7 +170,7 @@ class PayrollMethodRestController extends FOSRestController
                 "paid" => 0
 
             );
-        } else  if ($day == 12) {
+        } else  if ($day == 13) {
             $period = 2;
             $params = array(
                 "month" => $month,
@@ -327,11 +327,13 @@ class PayrollMethodRestController extends FOSRestController
             if($purchaseOrder->getPurchaseOrderDescriptions()->count()==0){
               continue;
             }
+            /** @var UtilsController $utils */
+            $utils = $this->get('app.symplifica_utils');
             $not = new Notification();
             $not->setPersonPerson($employer->getPersonPerson());
             $not->setType("alert");
-            $not->setTitle("Pagar nomina del mes ".$month." periodo ".$period);
-            $not->setDescription("Pagar nomina del mes ".$month." periodo ".$period);
+            $not->setTitle("Pagar ". $utils->period_number_to_name($period) . " " . $utils->month_number_to_name($month));
+            $not->setDescription("Pagar ". $utils->period_number_to_name($period) . " " . $utils->month_number_to_name($month));
             $not->setDeadline(new DateTime());
             $not->setStatus(1);
             $not->setAccion("Pagar");
