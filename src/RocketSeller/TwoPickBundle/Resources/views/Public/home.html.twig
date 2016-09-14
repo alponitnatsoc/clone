@@ -412,7 +412,6 @@ $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.mi
 	$('#chktyc').attr('onclick', "setCustomValidity('')");
 
 	$("form[name='form']").on('submit',function (e) {
-
 		if (document.getElementById('formfirstname').value!= null){
 			var nombre = document.getElementById('formfirstname').value;
 		}else{
@@ -431,12 +430,18 @@ $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.mi
 		}else{
 			var email = "ninguno";
 		}
-		var day= new Date().getDay();
-		var month = new Date().getMonth();
-		var year = new Date().getFullYear();
-		var hour =  new Date().getHours();
-		var min = new Date().getMinutes();
+		var dateNow = new Date();
+		var day = dateNow.getDate();
+		if(day<10)
+			day='0'+day;
+		var month = dateNow.getMonth()+1;
+		if (month<10)
+			month='0'+month;
+		var year = dateNow.getFullYear();
+		var hour = dateNow.getHours();
+		var min = dateNow.getMinutes();
 		var fecha = day+"/"+month+"/"+year+" "+hour+":"+min;
+		console.log(fecha);
 		window.Intercom("trackEvent", "Intento Registro Landing",{
 			"Fecha del intento": fecha,
 			"Nombre en formulario":nombre,
