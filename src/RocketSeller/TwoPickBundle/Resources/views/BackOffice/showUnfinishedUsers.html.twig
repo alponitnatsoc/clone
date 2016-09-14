@@ -12,6 +12,7 @@
                     <th>Celular</th>
                     <th>Paso actual</th>
                     <th>Último login</th>
+                    <th>Confirmar Correo</th>
                 </tr>
                 {% for user in users %}
                     <tr>
@@ -42,6 +43,15 @@
                                 {{ user.lastLogin|date("d-m-Y H:i") }}
                             {% else %}
                                 No hay registro
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if user.confirmationToken != null %}
+                                <a class="notAjax" href="{{ path('fos_user_registration_confirm', {'token':user.confirmationToken}) }}"> Confirmar</a>
+
+                            {% else %}
+                                --
                             {% endif %}
                         </td>
 
