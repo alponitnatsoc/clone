@@ -6,8 +6,12 @@
         {% if message_format == 'NVF' %}
             {{ modal(15) }}
         {% endif %}
+        {% if message_format == 'NVF2' %}
+            {{ modal(16) }}
+        {% endif %}
     {% endfor %}
     {{ modal(24) }}
+    {{ modal(17) }}
 {% endblock %}
 {% block fos_user_content %}
     {% block stylesheets %}
@@ -536,6 +540,49 @@
 
         </style>
     {% endblock %}
+    <script>
+        window.intercomSettings = {
+            app_id: "mydavhzb",
+            name: '{{ app.user.username }}', // Full name
+            email: '{{ app.user.email }}', // Email address
+            created_at: {{ app.user.dateCreated|date("U") }}, // Signup date as a Unix timestamp
+        };
+    </script>
+    <script>
+        (function(){
+                    var w=window;
+                    var ic=w.Intercom;
+                    if(typeof ic==="function"){
+                        ic('reattach_activator');
+                        ic('update',intercomSettings);
+                    }else{
+                        var d=document;
+                        var i=function(){
+                            i.c(arguments)
+                        };
+                        i.q=[];
+                        i.c=function(args){i.q.push(args)};
+                        w.Intercom=i;
+                        function l(){
+                            var s=d.createElement('script');
+                            s.type='text/javascript';
+                            s.async=true;
+                            s.src='https://widget.intercom.io/widget/mydavhzb';
+                            var x=d.getElementsByTagName('script')[0];
+                            x.parentNode.insertBefore(s,x);
+                        }
+                        if(w.attachEvent){
+                            w.attachEvent('onload',l);
+                        }else{
+                            w.addEventListener('load',l,false);
+                        }
+                    }
+                }
+        )()
+    </script>
+    <script>
+        window.Intercom("trackEvent", "show-dashboard");
+    </script>
     <title>{% block title %}Tu tablero de control - Symplifica{% endblock %}</title>
     {% for eHE in user.employer.employerHasEmployees %}
         {% if ready is defined %}
@@ -802,23 +849,22 @@
                 event.preventDefault();
                 var uri = $(this).attr("href");
                 var html = '';
-
 //                 alert(uri);
                 $.ajax({
                     //method: "POST",
                     url: uri,
                     //(data: $('form[name="pago_membresia"]').serialize(),
                     beforeSend: function (xhr) {
-
                     }
                 }).done(function (data) {
                     html = data;
+//                    alert(html);
                     $("#modal-body").html('');
 
-                    //$('#modal-body').replaceWith($(html).find('#main'));
                     $('#modal-body').html($(html).find('#cuerpoModal'));
-
+                    $("#myModal").modal();
                     $("#myModal").modal('show');
+
                     var files;
                     // Add events
                     $('input[type=file]').on('change', prepareUpload);
@@ -833,6 +879,7 @@
                     console.log(errorThrown);
 
                 });
+
 
             });
 

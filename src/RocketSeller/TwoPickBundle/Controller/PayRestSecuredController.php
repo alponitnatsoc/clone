@@ -123,7 +123,7 @@ class PayRestSecuredController extends FOSRestController
       $payMethod = $realPod->getPayMethod();
       $contract = $realPod->getPayrollPayroll()->getContractContract();
 
-      if($user->getSmsCode() == $verificationCode) {
+      if($user->getSmsCode() != $verificationCode) {
         $view = View::create();
         $view->setStatusCode(401);
         return $view->setData(array('response' => 'Codigo incorrecto'));

@@ -30,3 +30,7 @@ email :
     type:         rest
     resource:     "RocketSellerTwoPickBundle:EmailRestSecured"
     name_prefix:  api_secured_
+employee :
+    type:         rest
+    resource:     "RocketSellerTwoPickBundle:EmployeeRestSecured"
+    name_prefix:  api_secured_

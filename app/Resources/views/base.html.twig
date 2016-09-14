@@ -49,6 +49,7 @@
     <iframe src="//www.googletagmanager.com/ns.html?id=GTM-TR6JCJ"
             height="0" width="0" style="display:none;visibility:hidden"></iframe>
 </noscript>
+
 <script>(function (w, d, s, l, i) {
         w[l] = w[l] || [];
         w[l].push({
@@ -63,50 +64,49 @@
     })(window, document, 'script', 'dataLayer', 'GTM-TR6JCJ');
 </script>
 
-
-<!-- End Google Tag Manager -->
-
-<!-- Start Intercom JS -->
 <script>
-    window.intercomSettings = {app_id: "fnfuyjdu"};
+    window.intercomSettings = {
+        app_id: "mydavhzb",
+        name: '{{ app.user.username }}', // Full name
+        email: '{{ app.user.email }}', // Email address
+        created_at: '{{ app.user.dateCreated|date("U") }}', // Signup date as a Unix timestamp
+    };
+</script>
+<script>
+    (function(){
+                var w=window;
+                var ic=w.Intercom;
+                if(typeof ic==="function"){
+                    ic('reattach_activator');
+                    ic('update',intercomSettings);
+                }else{
+                    var d=document;
+                    var i=function(){
+                        i.c(arguments)
+                    };
+                    i.q=[];
+                    i.c=function(args){i.q.push(args)};
+                    w.Intercom=i;
+                    function l(){
+                        var s=d.createElement('script');
+                        s.type='text/javascript';
+                        s.async=true;
+                        s.src='https://widget.intercom.io/widget/mydavhzb';
+                        var x=d.getElementsByTagName('script')[0];
+                        x.parentNode.insertBefore(s,x);
+                    }
+                    if(w.attachEvent){
+                        w.attachEvent('onload',l);
+                    }else{
+                        w.addEventListener('load',l,false);
+                    }
+                }
+            }
+    )()
 </script>
 
-<script>(function () {
-        var w = window;
-        var ic = w.Intercom;
-        if (typeof ic === "function") {
-            ic('reattach_activator');
-            ic('update', intercomSettings);
-        }
-        else {
-            var d = document;
-            var i = function () {
-                i.c(arguments)
-            };
-            i.q = [];
-            i.c = function (args) {
-                i.q.push(args)
-            };
-            w.Intercom = i;
-            function l() {
-                var s = d.createElement('script');
-                s.type = 'text/javascript';
-                s.async = true;
-                s.src = 'https://widget.intercom.io/widget/fnfuyjdu';
-                var x = d.getElementsByTagName('script')[0];
-                x.parentNode.insertBefore(s, x);
-            }
 
-            if (w.attachEvent) {
-                w.attachEvent('onload', l);
-            }
-            else {
-                w.addEventListener('load', l, false);
-            }
-        }
-    })()</script>
-
-<!-- End Intercom JS -->
+<!-- End Google Tag Manager -->
 
 {% if is_granted("IS_AUTHENTICATED_FULLY") %}
     <nav class="navbar navbar-inverse navbar-fixed-top interna" role="navigation">
@@ -629,6 +629,8 @@
                 $("#confirmation_token_modal").modal("show");
             }else if(idModal==15){
                 $("#forbidden_format_modal").modal("show");
+            }else if(idModal==17) {
+                $("#modal_image_Error").modal("show");
             }else if(idModal==21){
                 $("#modalSiben").modal("show");
             }else if(idModal==22){
