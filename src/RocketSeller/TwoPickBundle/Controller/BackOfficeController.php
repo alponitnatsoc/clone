@@ -1265,4 +1265,22 @@ class BackOfficeController extends Controller
 
 			return $this->render('RocketSellerTwoPickBundle:BackOffice:userView.html.twig',array('users'=>$userRepo));
 		}
+	
+	public function addToSQLPendingVacationsAction($idEmployerHasEmployee,$pendingDays){
+		
+		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+		return $this->redirectToRoute("back_office");
+		
+		$request = $this->container->get('request');
+		$request->setMethod("POST");
+		$request->request->add(array(
+			"employee_id" => $idEmployerHasEmployee,
+			"pending_days" => $pendingDays,
+		));
+		
+		$insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddPendingVacationDays', array('_format' => 'json'));
+		dump($insertionAnswer);
+		
+		return $this->redirectToRoute('back_office');
+	}
 }
