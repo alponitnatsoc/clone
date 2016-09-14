@@ -179,7 +179,7 @@ class UtilsController
 			$localDate = get_start_end_from_actual_period("start",$payroll); //This function returns the date for the start or end of the period as requested
 			if($localDate > $valDate){
 				$answer[0] = false;
-				$answer[1] = "La fecha no puede ser menor a " . $localDate->format('Y-m-d');
+				$answer[1] = "La fecha no puede ser menor a " . $localDate->format('d/m/Y');
 				return $answer;
 			}
 		}
@@ -187,7 +187,7 @@ class UtilsController
 			$localDate = get_start_end_from_actual_period("end",$payroll); //This function returns the date for the start or end of the period as requested
 			if($localDate < $valDate) {
 				$answer[0] = false;
-				$answer[1] = "La fecha no puede ser mayor a " . $localDate->format('Y-m-d');
+				$answer[1] = "La fecha no puede ser mayor a " . $localDate->format('d/m/Y');
 				return $answer;
 			}
 		}
@@ -219,13 +219,13 @@ class UtilsController
 				if (strpos($singleConstr, "Min") !== false) {
 					if ($todayDate > $valDate) {
 						$answer[0] = false;
-						$answer[1] = "La fecha no puede ser menor a " . $todayDate->format('Y-m-d');
+						$answer[1] = "La fecha no puede ser menor a " . $todayDate->format('d/m/Y');
 						return $answer;
 					}
 				} elseif (strpos($singleConstr, "Max") !== false) {
 					if ($todayDate < $valDate) {
 						$answer[0] = false;
-						$answer[1] = "La fecha no puede ser mayor a " . $todayDate->format('Y-m-d');
+						$answer[1] = "La fecha no puede ser mayor a " . $todayDate->format('d/m/Y');
 						return $answer;
 					}
 				}
