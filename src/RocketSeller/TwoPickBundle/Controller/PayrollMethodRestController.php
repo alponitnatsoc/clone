@@ -11,6 +11,7 @@ use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Notification;
+use RocketSeller\TwoPickBundle\Entity\Novelty;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -232,8 +233,35 @@ class PayrollMethodRestController extends FOSRestController
                             if($activePayrrol->getPaid()==0){
                                 $empHasEmp=$ehe;
                                 $dataNomina = $this->getInfoNominaSQL($ehe);
-                                $salary = $this->totalLiquidation($dataNomina)['total'];
+                                $totalLiquidation = $this->totalLiquidation($dataNomina);
+                                $salary = $totalLiquidation['total'];
                                 $pila = $this->getTotalPILA($empHasEmp, $activePayrrol);
+                                //checking if any new stuff was added to this payroll
+                                /** @var ArrayCollection $novelties */
+                                $novelties=$totalLiquidation["novelties"];
+                                $sqlNovelties=$activePayrrol->getSqlNovelties();
+                                /** @var Novelty $nowNovelty */
+                                for($z=0;$z<$novelties->count();$z++){
+                                    if($sqlNovelties->count()<=$z){
+                                        //add and end
+                                        $sqlNovelties->add($novelties->get($z));
+                                    }else{
+                                        /** @var Novelty $actNovel */
+                                        $actNovel=$sqlNovelties->get($z);
+                                        $actNovel->setSqlValue($novelties->get($z)->getSqlValue());
+                                        $actNovel->setNoveltyTypeNoveltyType($novelties->get($z)->getNoveltyTypeNoveltyType());
+                                        $actNovel->setName($actNovel->getNoveltyTypeNoveltyType()->getName());
+                                        $actNovel->setSqlNovConsec($novelties->get($z)->getSqlnovConsec());
+                                        $actNovel->setUnits($novelties->get($z)->getUnits());
+                                    }
+                                }
+                                $em=$this->getDoctrine()->getManager();
+                                /** @var Novelty $sqlNovelty */
+                                foreach ($sqlNovelties as $sqlNovelty) {
+                                    $sqlNovelty->setSqlPayrollPayroll($activePayrrol);
+                                    $em->persist($sqlNovelty);
+                                }
+                                $em->flush();
                                 /*$req = new Request();
                                 $req->request->set("employee_id", $ehe->getIdEmployerHasEmployee());
                                 $req->request->set("execution_type", "C");
@@ -261,7 +289,7 @@ class PayrollMethodRestController extends FOSRestController
                                     $pod = new PurchaseOrdersDescription();
                                 }
                                 $pod->setDescription("Pago de nómina mes " . $month);
-                                $pod->setPayrollPayroll($payroll);
+                                $pod->setPayrollPayroll($activePayrrol);
                                 $prodRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
                                 $product = $prodRepo->findOneBy(array("simpleName" => "PN"));
                                 $pod->setProductProduct($product);
