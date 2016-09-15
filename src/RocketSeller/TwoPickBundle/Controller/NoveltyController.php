@@ -347,17 +347,17 @@ class NoveltyController extends Controller {
       $novelty->setName($noveltyType->getName());
 
       if(array_key_exists('dateStart', $noveltyFields))
-        $novelty->setDateStart(DateTime::createFromFormat('d/m/Y', $noveltyFields['dateStart']));
+        $novelty->setDateStart(DateTime::createFromFormat('m/d/Y', $noveltyFields['dateStart']));
 
       if(array_key_exists('dateEnd', $noveltyFields))
-        $novelty->setDateEnd(DateTime::createFromFormat('d/m/Y', $noveltyFields['dateEnd']));
+        $novelty->setDateEnd(DateTime::createFromFormat('m/d/Y', $noveltyFields['dateEnd']));
 
       if(array_key_exists('units', $noveltyFields))
         $novelty->setUnits($noveltyFields['units']);
 
       if(array_key_exists('amount', $noveltyFields))
         $novelty->setAmount($noveltyFields['amount']);
-
+      dump($novelty);
       return $this->validateAndPersistNovelty($novelty, $payroll, $noveltyType);
     }
 
