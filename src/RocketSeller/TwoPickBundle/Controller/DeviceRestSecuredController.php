@@ -28,6 +28,7 @@ class DeviceRestSecuredController extends FOSRestController {
      * @param paramFetcher $paramFetcher ParamFetcher
      *
      * @RequestParam(name="deviceToken", nullable=false, strict=true, description="token of device")
+     * @RequestParam(name="platform", nullable=false, strict=true, description="platform of device (ios | android)")
      *
      * @return View
      */
@@ -37,6 +38,7 @@ class DeviceRestSecuredController extends FOSRestController {
         $em = $this->getDoctrine()->getManager();
 
         $deviceToken = $paramFetcher->get('deviceToken');
+        $platform = $paramFetcher->get('platform');
         $logedUser = $this->getUser();
         $idUser = $logedUser->getId();
 
@@ -46,6 +48,7 @@ class DeviceRestSecuredController extends FOSRestController {
 
         $device = new Device();
         $device->setToken($deviceToken);
+        $device->setPlatform($platform);
         $device->setUserUser($user);
         $device->setLastLoginInDevice(new DateTime());
         $em->persist($device);

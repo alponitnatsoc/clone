@@ -57,40 +57,80 @@ class PushNotificationRestController extends FOSRestController
           return $view->setData(array("status" => "no devices"));
       }
 
-      $deviceTokens = array();
+      $iosDeviceTokens = array();
+      $androidDeviceTokens = array();
 
       /** @var Device $device */
       foreach($devices as $device) {
-          $deviceTokens[] = $device->getToken();
+        if($device->getPlatform() == 'android') {
+          $androidDeviceTokens[] = $device->getToken();
+        } else if($device->getPlatform() == 'ios') {
+          $iosDeviceTokens[] = $device->getToken();
+        }
+      }
+      $resultIos = "";
+      $resultAndroid = "";
+      if(!empty($androidDeviceTokens)) {
+        $post_body = json_encode(array(
+            'registration_ids' => $androidDeviceTokens,
+            "notification" => array(
+                "title" => $title,
+                "body" => $message,
+                "sound" => "default",
+                "click_action" => "FCM_PLUGIN_ACTIVITY",
+            ),
+            "data" => array(
+              "longMessage" => $longMessage
+            ),
+            "priority" => "high"
+        ));
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $firebaseUrl);
+        $apiToken = "AIzaSyBtWoWbLvG2awxkj3slD4a4lonmTKi0o7E";
+        $headers = array("Content-type: application/json",
+                         "Authorization: key=$apiToken" );
+
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_POST,           1);
+        curl_setopt($curl, CURLOPT_HTTPHEADER,     $headers);
+        curl_setopt($curl, CURLOPT_POSTFIELDS,     $post_body);
+
+        $resultAndroid = curl_exec($curl);
+        curl_close($curl);
       }
 
-      $post_body = json_encode(array(
-          'registration_ids' => $deviceTokens,
-          "notification" => array(
-              "title" => $title,
-              "body" => $message
-          ),
-          "data" => array(
-            "longMessage" => $longMessage
-          ),
-      ));
+      if(!empty($iosDeviceTokens)) {
+        $post_body = json_encode(array(
+            'registration_ids' => $iosDeviceTokens,
+            "notification" => array(
+                "title" => $title,
+                "body" => $longMessage,
+                "sound" => "default",
+            ),
+            "data" => array(
+              "longMessage" => $longMessage
+            ),
+            "priority" => "high"
+        ));
 
-      $curl = curl_init();
-      curl_setopt($curl, CURLOPT_URL, $firebaseUrl);
-      $apiToken = "AIzaSyBtWoWbLvG2awxkj3slD4a4lonmTKi0o7E";
-      $headers = array("Content-type: application/json",
-                       "Authorization: key=$apiToken" );
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $firebaseUrl);
+        $apiToken = "AIzaSyBtWoWbLvG2awxkj3slD4a4lonmTKi0o7E";
+        $headers = array("Content-type: application/json",
+                         "Authorization: key=$apiToken" );
 
-      curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-      curl_setopt($curl, CURLOPT_POST,           1);
-      curl_setopt($curl, CURLOPT_HTTPHEADER,     $headers);
-      curl_setopt($curl, CURLOPT_POSTFIELDS,     $post_body);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_POST,           1);
+        curl_setopt($curl, CURLOPT_HTTPHEADER,     $headers);
+        curl_setopt($curl, CURLOPT_POSTFIELDS,     $post_body);
 
-      $result = curl_exec($curl);
-      curl_close($curl);
+        $resultIos = curl_exec($curl);
+        curl_close($curl);
+      }
 
       $view = View::create();
       $view->setStatusCode(200);
-      return $view->setData(array('result'=>$result));
+      return $view->setData(array('resultIos'=>$resultIos, 'resultAndroid'=>$resultAndroid));
     }
 }
