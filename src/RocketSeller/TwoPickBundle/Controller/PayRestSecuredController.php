@@ -99,7 +99,7 @@ class PayRestSecuredController extends FOSRestController
      *
      * @return View
      */
-    public function getPaysHistoricalAction()
+    public function getPaymentHistoryAction()
     {
 
         /** @var User $user */
