@@ -204,6 +204,14 @@ class BackOfficeController extends Controller
         return $this->render('RocketSellerTwoPickBundle:BackOffice:showUnfinishedUsers.html.twig',array('users'=>$users));
 
     }
+    public function showBaseRegisterUsersAction()
+    {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        $usersRepo= $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+        $users= $usersRepo->findAll();
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:showBaseRegisterUsers.html.twig',array('users'=>$users));
+
+    }
     public function showSuccessfulInvoicesAction()
     {
         $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
