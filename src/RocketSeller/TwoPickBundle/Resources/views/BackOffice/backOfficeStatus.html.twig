@@ -1,0 +1,48 @@
+{% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
+
+{% block title %}Vista Usuarios{% endblock %}
+
+{% block fos_user_content %}
+    <div id="main" class="col-sm-15">
+        <div class="col-md-12">
+            <div class="panel panel-title">
+                BackOffice Estado Validación
+            </div>
+            <br>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Información de los clientes</h4>
+                </div>
+                <div>
+                    <table class="table">
+                        <tr>
+                            <th>Email</th>
+                            <th>Cédula</th>
+                            <th>Fecha ingreso a Back Office</th>
+                            <th>¿Faltan acciones en Back Office?</th>
+                        </tr>
+                        {% for procedure in procedures %}
+                        <tr>
+                            <td>{{ procedure.userUser.email }}</td>
+                            <td>{{ procedure.userUser.personPerson.documentType }}: {{ procedure.userUser.personPerson.document }}</td>
+                            <td>{{ procedure.createdAt|date('Y-m-d') }}</td>
+                            <td>{% set notDone = false %}
+                                {% for ehe in procedure.userUser.personPerson.employer.employerHasEmployees %}
+                                    {% if ehe.state > 0 and ehe.state < 4 %}
+                                        {% set notDone = true %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% if notDone == false %}
+                                    Todo al día
+                                {% else %}
+                                    Faltan tramites
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

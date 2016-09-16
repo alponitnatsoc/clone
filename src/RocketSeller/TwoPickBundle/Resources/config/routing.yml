@@ -112,6 +112,9 @@ clear_data_after_backup:
 user_view:
     path:     /backoffice/userView
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:userView}
+employer_state:
+    path:     /backoffice/show/employersState
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:userBackOfficeState}
 
 #tramites
 show_procedure:
