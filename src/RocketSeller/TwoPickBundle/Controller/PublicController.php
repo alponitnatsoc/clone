@@ -50,7 +50,9 @@ class PublicController extends Controller
         }
 
     }
-
+	public function maintenanceAction(Request $request) {
+        return $this->render('RocketSellerTwoPickBundle:Public:mantenimiento.html.twig');
+    }
     public function beneficiosAction() {
         return $this->render('RocketSellerTwoPickBundle:Public:beneficios.html.twig', array(
             "breadcrumbs" => array("Inicio" => "/", "Beneficios" => "")
