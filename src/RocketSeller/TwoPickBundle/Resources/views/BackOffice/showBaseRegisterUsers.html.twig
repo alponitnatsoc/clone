@@ -1,0 +1,59 @@
+{% extends '@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig' %}
+
+{% block fos_user_content %}
+    <div id="main" class="col-sm-10">
+        <div class="col-md-12">
+            <h3>Los usarios listados a continuación no han terminado el paso 3 de 3</h3>
+            <br>
+            <table class="table">
+                <tr>
+                    <th>Usuario</th>
+                    <th>Cédula</th>
+                    <th>Email</th>
+                    <th>Paso actual</th>
+                    <th>Fecha Registro</th>
+                    <th>Fecha Cliente</th>
+                </tr>
+                {% for user in users %}
+                    <tr>
+                        <td>
+                            {{ user.personPerson.fullName }}
+                        </td>
+                        <td>
+                            {{ user.personPerson.document }}
+                        </td>
+                        <td>
+                            {{ user.email }}
+                        </td>
+
+                        <td>
+                            {% if user.personPerson.employer == NULL %}
+                                No ha empezado el paso 1
+                            {% elseif user.personPerson.employer.employerHasEmployees.count == 0%}
+                                No ha empezado el paso 2
+                            {% elseif user.status !=  2 %}
+                                No ha empezado el paso 3
+                            {% else %}
+                                Completado
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {{ user.dateCreated|date("d-m-Y H:i") }}
+                        </td>
+
+                        <td>
+                            {% if user.realProcedure.count >0 %}
+                                {{ user.realProcedure.get(0).createdAt|date("d-m-Y H:i") }}
+                            {% endif %}
+                        </td>
+
+                    </tr>
+                {% endfor %}
+
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+
