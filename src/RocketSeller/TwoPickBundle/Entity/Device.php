@@ -29,6 +29,15 @@ class Device
     private $token;
 
     /**
+     * android
+     * ios
+     *
+     * @var string
+     * @ORM\Column(name="platform", type="text")
+     */
+    private $platform;
+
+    /**
      * @var \RocketSeller\TwoPickBundle\Entity\User
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\User", inversedBy="devices")
      * @ORM\JoinColumns({
@@ -43,7 +52,7 @@ class Device
      * @ORM\Column(name="last_login_in_device", type="datetime")
      */
     private $lastLoginInDevice;
-    
+
 
     /**
      * Get idDevice
@@ -77,6 +86,30 @@ class Device
     public function getToken()
     {
         return $this->token;
+    }
+
+    /**
+     * Set platform
+     *
+     * @param string $platform
+     *
+     * @return Device
+     */
+    public function setPlatform($platform)
+    {
+        $this->platform = $platform;
+
+        return $this;
+    }
+
+    /**
+     * Get platform
+     *
+     * @return string
+     */
+    public function getPlatform()
+    {
+        return $this->platform;
     }
 
     /**

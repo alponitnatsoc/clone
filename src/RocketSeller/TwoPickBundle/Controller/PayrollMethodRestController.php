@@ -289,7 +289,7 @@ class PayrollMethodRestController extends FOSRestController
                                     $pod = new PurchaseOrdersDescription();
                                 }
                                 $pod->setDescription("Pago de nómina mes " . $month);
-                                $pod->setPayrollPayroll($payroll);
+                                $pod->setPayrollPayroll($activePayrrol);
                                 $prodRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
                                 $product = $prodRepo->findOneBy(array("simpleName" => "PN"));
                                 $pod->setProductProduct($product);

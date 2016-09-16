@@ -52,97 +52,6 @@ class NoveltyRestController extends FOSRestController
      return $view->setStatusCode(200)->setData(array('novelties'=>$resultNoveltyTypes));
    }
 
-   /**
-    * update worked days<br/>
-    *
-    * @ApiDoc(
-    *   resource = true,
-    *   description = "update worked days",
-    *   statusCodes = {
-    *     200 = "Returned when successful"
-    *   }
-    * )
-    *
-    * @param paramFetcher $paramFetcher ParamFetcher
-    *
-    * @RequestParam(name="empId", nullable=false, strict=true, description="employee id")
-    * @RequestParam(name="idNovelty", nullable=false, strict=true, description="novelty id")
-    * @RequestParam(name="daysAmount", nullable=false, strict=true, description="daysAmount")
-    * @RequestParam(name="idPerson", nullable=false, strict=true, description="id person of logged user")
-    *
-    * @return View
-    */
-    public function postUpdateWorkedDaysAction(ParamFetcher $paramFetcher) {
-
-      $empId = $paramFetcher->get('empId');
-      $idNovelty = $paramFetcher->get('idNovelty');
-      $daysAmount = $paramFetcher->get('daysAmount');
-      $idPerson = $paramFetcher->get('idPerson');
-      $params = array(
-          'empId' => $empId,
-          'idNovelty' => $idNovelty,
-          'daysAmount' => $daysAmount,
-          'idPerson' => $idPerson
-      );
-      $result = $this->forward('RocketSellerTwoPickBundle:Novelty:updateWorkedDays', $params);
-      // updateWorkedDaysAction($empId, $idNovelty, $daysAmount);
-
-      $view = View::create();
-
-      return $view->setStatusCode(200)->setData(array('result'=>$result));
-    }
-
-   /**
-    * registers a new novelty<br/>
-    *
-    * @ApiDoc(
-    *   resource = true,
-    *   description = "registers a new novelty",
-    *   statusCodes = {
-    *     200 = "Returned when successful"
-    *   }
-    * )
-    *
-    * @param paramFetcher $paramFetcher ParamFetcher
-    *
-    * @RequestParam(array=true, name="noveltyFields", nullable=false, strict=true, description="hash name of document pages")
-    * @RequestParam(name="idNoveltyType", nullable=false, strict=true, description="novelty type")
-    * @RequestParam(name="idContract", nullable=false, strict=true, description="id contract")
-    *
-    * @return View
-    */
-    public function postRegisterNoveltyAction(ParamFetcher $paramFetcher) {
-
-      $noveltyFields = $paramFetcher->get('noveltyFields');
-      $idNoveltyType = $paramFetcher->get('idNoveltyType');
-      $idContract = $paramFetcher->get('idContract');
-      // $idPayroll = $paramFetcher->get('idPayroll');
-      $em=$this->getDoctrine()->getManager();
-      $contractRepo=$em->getRepository("RocketSellerTwoPickBundle:Contract");
-
-      $contract = $contractRepo->find($idContract);
-      $idPayroll = $contract->getActivePayroll()->getIdPayroll();
-      //esperar a daniel
-
-      $params = array(
-          'idPayroll' => $idPayroll,
-          'idNoveltyType' => $idNoveltyType,
-          'noveltyFields' => $noveltyFields,
-      );
-
-      // $novletyService = $this->get('app.novelty_service');
-      $result = "hola";
-      // $result = $novletyService->validateAndPersistNovelty($novelty, $payroll, $noveltyType);
-      // $this->validateAndPersistNovelty($novelty, $payroll, $noveltyType);
-
-      $result = $this->forward('RocketSellerTwoPickBundle:Novelty:validateAndPersistNovelty', $params);
-
-      // validateAndPersistNovelty($novelty, $payroll, $noveltyType);
-      $view = View::create();
-
-      return $view->setStatusCode(200)->setData(array('result'=>$result));
-    }
-
     /**
      * Add the novelty<br/>
      *
@@ -218,7 +127,7 @@ class NoveltyRestController extends FOSRestController
             $request->setMethod("POST");
 
 
-            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:'.$methodToCall, array('_format' => 'json'));
+            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:'.$methodToCall, array('request' => $request), array('_format' => 'json'));
             if($insertionAnswer->getStatusCode()!=200){
                 return $view->setStatusCode($insertionAnswer->getStatusCode())->setData(array("error"=>"No se pudo agregar la novedad"));
             }

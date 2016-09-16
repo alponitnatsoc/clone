@@ -228,7 +228,6 @@
                                 <tr>
                                     <th class="no-border">Fecha de pago</th>
                                     <th class="no-border">Número factura</th>
-                                    <th class="no-border">Concepto</th>
                                     <th class="no-border">Valor</th>
                                     <th class="no-border">PDF</th>
                                 </tr>
@@ -236,13 +235,12 @@
                             <tbody class="table-bordered">
                                 {% for invoice in invoices %}
                                     <tr>
-                                        <td class="vert-align">{{ invoice.purchaseOrders.DateCreated|date('d/m/Y') }}</td>
-                                        <td class="vert-align">{{ invoice.purchaseOrders.invoiceNumber }}</td>
-                                        <td class="vert-align">{{ invoice.description }}</td>
+                                        <td class="vert-align">{{ invoice.DateCreated|date('d/m/Y') }}</td>
+                                        <td class="vert-align">{{ invoice.invoiceNumber }}</td>
                                         <td class="vert-align">$ {{ invoice.value|number_format(0) }}</td>
                                         <td class="vert-align">
-                                            <a class="fa fa-file-pdf-o fa-2x" href="{{ path('download_documents', { 'id': invoice.purchaseOrders.idPurchaseOrders, 'ref': 'factura', 'type': 'pdf' }) }}"></a>
-                                            <a href="{{ path('download_documents', { 'id': invoice.purchaseOrders.idPurchaseOrders, 'ref': 'factura', 'type': 'pdf' }) }}"><i style="margin-left: 5px;">Ver PDF</i></a>
+                                            <a class="fa fa-file-pdf-o fa-2x" href="{{ path('download_documents', { 'id': invoice.idPurchaseOrders, 'ref': 'factura', 'type': 'pdf' }) }}"></a>
+                                            <a href="{{ path('download_documents', { 'id': invoice.idPurchaseOrders, 'ref': 'factura', 'type': 'pdf' }) }}"><i style="margin-left: 5px;">Ver PDF</i></a>
                                         </td>
                                     </tr>
                                 {% endfor %}

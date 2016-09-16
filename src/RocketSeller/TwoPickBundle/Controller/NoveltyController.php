@@ -344,8 +344,8 @@ class NoveltyController extends Controller {
       $novelty->setNoveltyTypeNoveltyType($noveltyType);
       $novelty->setPayrollDetailPayrollDetail(new PayrollDetail());
 
-      if(array_key_exists('name', $noveltyFields))
-        $novelty->setName($noveltyFields['name']);
+      $novelty->setName($noveltyType->getName());
+
       if(array_key_exists('dateStart', $noveltyFields))
         $novelty->setDateStart(DateTime::createFromFormat('m/d/Y', $noveltyFields['dateStart']));
 
@@ -357,6 +357,9 @@ class NoveltyController extends Controller {
 
       if(array_key_exists('amount', $noveltyFields))
         $novelty->setAmount($noveltyFields['amount']);
+
+      if(array_key_exists('description', $noveltyFields))
+        $novelty->setDescription($noveltyFields['description']);
 
       return $this->validateAndPersistNovelty($novelty, $payroll, $noveltyType);
     }
@@ -480,7 +483,7 @@ class NoveltyController extends Controller {
 
 	    $novelty->setName($noveltyType->getName());
 	    $payRol->addNovelty($novelty);
-	    $em = $this->getDoctrine()->getEntityManager();
+	    $em = $this->getDoctrine()->getManager();
 	    $em->persist($payRol);
 	    $em->flush();
 
@@ -499,7 +502,7 @@ class NoveltyController extends Controller {
 	    }
 
 	    //TODO Update when documents are reworked
-	    
+
 //	    if(!$this->checkNoveltyFulfilment($novelty)){
 //	    	//Crea las notificaciones de los documentos asociados
 //		    /** @var User $user */

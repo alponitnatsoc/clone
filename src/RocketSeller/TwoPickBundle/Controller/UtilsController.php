@@ -91,7 +91,7 @@ class UtilsController
         }
         return $stringToReturn;
     }
-	
+
 		/**
 		 * Return the date to be set, after submitting the novelty<br/>
 		 *
@@ -103,13 +103,13 @@ class UtilsController
 		 * @return DateTime
 		 */
     public function novelty_date_constrain_to_date_after($dateConstrain, Novelty $novelty){
-    	 
+
 	    $answer = new DateTime();
 	    /** @var DateTime $today */
 	    $today = new DateTime();
 	    $period = $novelty->getPayrollPayroll()->getPeriod();
 	    $timeCommitment = $novelty->getPayrollPayroll()->getContractContract()->getTimeCommitmentTimeCommitment();
-	    
+
 	    //Start period
 	    if($dateConstrain == "sP"){
 		    if($period == 2 || ($period == 4 && $timeCommitment == "TC") ){
@@ -118,10 +118,10 @@ class UtilsController
 		    elseif ($period == 4 && $timeCommitment == "XD"){
 			    $answer->setDate($today->format('Y'),$today->format('m'), 16);
 		    }
-		    
+
 		    return $answer;
 	    }
-	    
+
 			//End Period
 	    if($dateConstrain == "eP"){
 		    if($period == 2){
@@ -130,18 +130,18 @@ class UtilsController
 		    elseif ($period == 4){
 			    $answer->setDate($today->format('Y'),$today->format('m'), $today->format('t'));
 		    }
-		
+
 		    return $answer;
 	    }
-	
+
 	    //Current Date
 	    if($dateConstrain == "today"){
 				//$answer already has the current date
 		    return $answer;
 	    }
-	    
+
 	    $elementsArr = explode("+", $dateConstrain);
-	
+
 	    foreach ($elementsArr as $singleEle){
 	    	if($singleEle == "date_start"){
 	    		$answer = new DateTime($novelty->getDateStart()->format('Y-m-d'));
@@ -154,11 +154,11 @@ class UtilsController
 			    $answer->modify("+{$day} days");
 		    }
 	    }
-	    
+
 	    return $answer;
-	    
+
     }
-	
+
 	/**
 	 * Validates the date<br/>
 	 *
@@ -174,12 +174,11 @@ class UtilsController
 		$answer = array();
 		array_push($answer, true); //Index 0 - Determines if is false or true the validation
 		array_push($answer, "");// Index 1 - If Index 0 is false, sets a custom error msg to display to the user
-		
 		if($dateConstrain == "sP" ){
 			$localDate = get_start_end_from_actual_period("start",$payroll); //This function returns the date for the start or end of the period as requested
 			if($localDate > $valDate){
 				$answer[0] = false;
-				$answer[1] = "La fecha no puede ser menor a " . $localDate->format('Y-m-d');
+				$answer[1] = "La fecha no puede ser menor a " . $localDate->format('d-m-Y');
 				return $answer;
 			}
 		}
@@ -187,21 +186,21 @@ class UtilsController
 			$localDate = get_start_end_from_actual_period("end",$payroll); //This function returns the date for the start or end of the period as requested
 			if($localDate < $valDate) {
 				$answer[0] = false;
-				$answer[1] = "La fecha no puede ser mayor a " . $localDate->format('Y-m-d');
+				$answer[1] = "La fecha no puede ser mayor a " . $localDate->format('d-m-Y');
 				return $answer;
 			}
 		}
 		else{
 			$constrArr = explode(" ", $dateConstrain);
-			
+
 			foreach ($constrArr as $singleConstr) { //Checks all the validations for the field
-				
+
 				/** @var DateTime $todayDate */
 				$todayDate = new DateTime();
 				$sign = $singleConstr[4]; //Determines if the value should be higher than the constrain (-) or less (+)
 				$dataType = substr($singleConstr, 6, 2); //Gets the type of validation (check multiple ifs)
 				$value = substr($singleConstr, 9); // Number that modifies the dataType
-				
+
 				if ($dataType == "nM") { //Numero de meses
 					$todayDate->modify("{$sign}{$value} months");
 				} elseif ($dataType == "da") { //Fecha exacta
@@ -215,17 +214,17 @@ class UtilsController
 				} elseif ($dataType == "cU") { //Siguiente corte
 					$todayDate = $this->get_date_from_period("+",0, $payroll); //This function returns the date of the next cut
 				}
-				
+
 				if (strpos($singleConstr, "Min") !== false) {
 					if ($todayDate > $valDate) {
 						$answer[0] = false;
-						$answer[1] = "La fecha no puede ser menor a " . $todayDate->format('Y-m-d');
+						$answer[1] = "La fecha no puede ser menor a " . $todayDate->format('d-m-Y');
 						return $answer;
 					}
 				} elseif (strpos($singleConstr, "Max") !== false) {
 					if ($todayDate < $valDate) {
 						$answer[0] = false;
-						$answer[1] = "La fecha no puede ser mayor a " . $todayDate->format('Y-m-d');
+						$answer[1] = "La fecha no puede ser mayor a " . $todayDate->format('d-m-Y');
 						return $answer;
 					}
 				}
@@ -233,7 +232,7 @@ class UtilsController
 		}
 		return $answer;
 	}
-	
+
 	/**
 	 * Get the date to set regarding the period specified on the constrain<br/>
 	 *
@@ -245,19 +244,19 @@ class UtilsController
 	 * @return DateTime
 	 */
 	private function get_date_from_period($sign, $value, Payroll $payroll){
-		
+
 		//$localTimeCommitment = $payroll->getContractContract()->getTimeCommitmentTimeCommitment()->getCode();
-		
+
 		$actualPeriod = intval($payroll->getPeriod());
 		$actualMonth = intval($payroll->getMonth());
 		$actualDay = $actualPeriod == 4?20:5;
 		$actualYear = intval($payroll->getYear());
-		
+
 		$frequency = $payroll->getContractContract()->getFrequencyFrequency()->getPayrollCode();
-		
+
 		$dateString = $actualYear . "-" . $actualMonth . "-" . $actualDay;
 		$actualPeriodDate = new DateTime($dateString);
-		
+
 		$targetToReach = $value;
 		while($targetToReach != 0){
 			if($frequency == "Q"){
@@ -279,11 +278,11 @@ class UtilsController
 			}
 			$targetToReach--;
 		}
-		
+
 		//In this point actualPeriodDate has the target month and year for the desired period, only need to set the correct day
 		$localY = $actualPeriodDate->format('Y');
 		$localM = $actualPeriodDate->format('m');
-		
+
 		if($sign == "-" && $actualPeriodDate->format('d') == 20 && $frequency == "Q"){
 			$actualPeriodDate->setDate($localY,$localM,16);
 		}
@@ -296,10 +295,10 @@ class UtilsController
 		elseif ($sign == "+" && $frequency == "Q" && $actualPeriodDate->format('d') == 5){
 			$actualPeriodDate->setDate($localY,$localM,12);
 		}
-		
+
 		return $actualPeriodDate;
 	}
-	
+
 	/**
 	 * Get the date to set regarding the active period<br/>
 	 *
@@ -311,15 +310,15 @@ class UtilsController
 	 * @return DateTime
 	 */
 	private function get_start_end_from_actual_period($start_or_end ,Payroll $payroll){
-		
+
 		$localTimeCommitment = $payroll->getContractContract()->getTimeCommitmentTimeCommitment()->getCode();
-		
+
 		$actualPeriod = intval($payroll->getPeriod());
 		$actualMonth = intval($payroll->getMonth());
 		$actualYear = intval($payroll->getYear());
-		
+
 		$returnDate = new DateTime($actualYear,$actualMonth,1);
-		
+
 		if($start_or_end == "start"){
 			if($actualPeriod == 4 && $localTimeCommitment == "XD"){
 				$returnDate->setDate($actualYear,$actualMonth,16);
@@ -336,10 +335,10 @@ class UtilsController
 				$returnDate->setDate($actualYear,$actualMonth,12);
 			}
 		}
-		
+
 		return $returnDate;
 	}
-	
+
 	/**
 	 * Validates the amount<br/>
 	 *
@@ -352,19 +351,19 @@ class UtilsController
 	 */
 	public function novelty_amount_constrain_validation($amountConstrain, $valAmount,Contract $contract)
 	{
-		
+
 		$answer = array();
 		array_push($answer, true); //Index 0 - Determines if is false or true the validation
 		array_push($answer, "");// Index 1 - If Index 0 is false, sets a custom error msg to display to the user
-		
+
 		$constrArr = explode(" ", $amountConstrain);
-			
+
 		foreach ($constrArr as $singleConstr) { //Checks all the validations for the field
-			
+
 			$compareTo = 0;
 			$dataType = substr($singleConstr, 4, 2); //Gets the type of validation (check multiple ifs)
 			$value = substr($singleConstr, 7); // Number that modifies the dataType
-			
+
 			if(strpos($value,"_") !== false ){ //if this line exists, means that has to compare a % with certain value
 				$elementsArr = explode("_", substr($singleConstr,4));
 				if($elementsArr[0] == "pe"){ //Percentage
@@ -385,7 +384,7 @@ class UtilsController
 					$compareTo = intval($value);
 				}
 			}
-			
+
 			if (strpos($singleConstr, "Min") !== false) {
 				if ($compareTo > $valAmount) {
 					$answer[0] = false;
@@ -402,7 +401,7 @@ class UtilsController
 		}
 		return $answer;
 	}
-	
+
 	/**
 	 * Validates the units<br/>
 	 *
@@ -415,19 +414,19 @@ class UtilsController
 	 */
 	public function novelty_units_constrain_validation($unitsConstrain, $valUnits)
 	{
-		
+
 		$answer = array();
 		array_push($answer, true); //Index 0 - Determines if is false or true the validation
 		array_push($answer, "");// Index 1 - If Index 0 is false, sets a custom error msg to display to the user
-		
+
 		$constrArr = explode(" ", $unitsConstrain);
-		
+
 		foreach ($constrArr as $singleConstr) { //Checks all the validations for the field
-			
+
 			//Not used for now
 			//$dataType = substr($singleConstr, 4, 2); //Gets the type of validation (check multiple ifs)
 			$value = intval(substr($singleConstr, 7)); // Number that modifies the dataType
-			
+
 			if (strpos($singleConstr, "Min") !== false) {
 				if ($value > $valUnits) {
 					$answer[0] = false;
