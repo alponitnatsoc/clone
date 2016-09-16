@@ -223,7 +223,7 @@ contact:
     defaults: { _controller: RocketSellerTwoPickBundle:Default:contact, subject: "default"}
 payroll:
     path: /payroll/{idNotif}
-    defaults: { _controller: RocketSellerTwoPickBundle:Payroll:pay, idNotif: -1}
+    defaults: { _controller: "%route_payroll%", idNotif: -1}
 payroll_calculate:
     path: /payroll/calculate/pay
     defaults: { _controller: RocketSellerTwoPickBundle:Payroll:calculate}
