@@ -34,3 +34,7 @@ employee :
     type:         rest
     resource:     "RocketSellerTwoPickBundle:EmployeeRestSecured"
     name_prefix:  api_secured_
+novelty :
+    type:         rest
+    resource:     "RocketSellerTwoPickBundle:NoveltyRestSecured"
+    name_prefix:  api_secured_
