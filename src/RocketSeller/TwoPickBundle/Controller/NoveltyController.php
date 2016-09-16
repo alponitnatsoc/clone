@@ -357,7 +357,10 @@ class NoveltyController extends Controller {
 
       if(array_key_exists('amount', $noveltyFields))
         $novelty->setAmount($noveltyFields['amount']);
-      dump($novelty);
+
+      if(array_key_exists('description', $noveltyFields))
+        $novelty->setDescription($noveltyFields['description']);
+
       return $this->validateAndPersistNovelty($novelty, $payroll, $noveltyType);
     }
 
@@ -480,7 +483,7 @@ class NoveltyController extends Controller {
 
 	    $novelty->setName($noveltyType->getName());
 	    $payRol->addNovelty($novelty);
-	    $em = $this->getDoctrine()->getEntityManager();
+	    $em = $this->getDoctrine()->getManager();
 	    $em->persist($payRol);
 	    $em->flush();
 
