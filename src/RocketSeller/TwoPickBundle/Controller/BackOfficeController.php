@@ -1297,7 +1297,6 @@ class BackOfficeController extends Controller
 		));
 
 		$insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddPendingVacationDays', array('_format' => 'json'));
-		dump($insertionAnswer);
 
 		return $this->redirectToRoute('back_office');
 	}
