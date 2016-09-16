@@ -82,7 +82,61 @@ class PayRestSecuredController extends FOSRestController
         return $view->setData($encodedAnswer);
     }
 
+    /**
+     * get pays historical<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "get pays historical",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     *
+     * @return View
+     */
+    public function getPaysHistoricalAction()
+    {
 
+        /** @var User $user */
+        $user = $this->getUser();
+        $result = array();
+
+        $pos = $user->getPurchaseOrders();
+        /** @var PurchaseOrders $po */
+        foreach ($pos as $po) {
+            $pods = $po->getPurchaseOrderDescriptions();
+            /** @var PurchaseOrdersDescription $pod */
+            foreach ($pods as $pod) {
+                if (($pod->getProductProduct()->getSimpleName() == "PP" || $pod->getProductProduct()->getSimpleName() == "PN") && $pod->getPurchaseOrdersStatus()->getIdNovoPay() == "-1") {
+                    if ($pod->getProductProduct()->getSimpleName() == "PP") {
+                        $period = $pod->getPayrollsPila()->get(0)->getPeriod();
+                        $month = $pod->getPayrollsPila()->get(0)->getMonth();
+                        $year = $pod->getPayrollsPila()->get(0)->getYear();
+                    } else {
+                        $period = $pod->getPayrollPayroll()->getPeriod();
+                        $month = $pod->getPayrollPayroll()->getMonth();
+                        $year = $pod->getPayrollPayroll()->getYear();
+                    }
+                    $result[$year][$month][$period]=$pod;
+                }
+            }
+        }
+
+        $view = View::create();
+        $view->setStatusCode(200);
+
+        $context = new SerializationContext();
+        $context->setSerializeNull(true);
+        $serializer = $this->get('jms_serializer');
+        $encodedAnswer = $serializer->serialize(array(
+            'sortedPays' => $result), 'json', $context);
+        return $view->setData($encodedAnswer);
+    }
 
     /**
      * edit pay method of pod which has been rejected
