@@ -1266,4 +1266,13 @@ class BackOfficeController extends Controller
 
 			return $this->render('RocketSellerTwoPickBundle:BackOffice:userView.html.twig',array('users'=>$userRepo));
 		}
+	
+	public function userBackOfficeStateAction(){
+		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+		
+		$em = $this->getDoctrine()->getManager();
+		$procedureRepo = $em->getRepository('RocketSellerTwoPickBundle:RealProcedure')->findAll();
+		
+		return $this->render('RocketSellerTwoPickBundle:BackOffice:backOfficeStatus.html.twig',array('procedures'=>$procedureRepo));
+	}
 }
