@@ -141,6 +141,7 @@
             var hour =  dateNow.getHours();
             var min = dateNow.getMinutes();
             var fecha = day+"/"+month+"/"+year+" "+hour+":"+min;
+            fbq('track', 'completeRegistration', {value: email});
             window.Intercom("trackEvent", "Intento Registro",{
                 "Fecha del intento": fecha,
                 "Nombre en formulario":nombre,
