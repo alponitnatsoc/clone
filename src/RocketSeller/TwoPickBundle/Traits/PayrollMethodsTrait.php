@@ -63,6 +63,8 @@ trait PayrollMethodsTrait
             foreach ($podsPila as $key => $value ) {
                 //calculate the mora and add the date to pay
                 if ($value->getValue() > 0) {
+                    if($value->getPurchaseOrders()!=null&&$value->getPurchaseOrders()->getPurchaseOrdersStatus()!=null&&$value->getPurchaseOrders()->getPurchaseOrdersStatus()->getIdNovoPay()=="P1")
+                        continue;
                     if ($value->getPurchaseOrdersStatus()!=null&&($value->getPurchaseOrdersStatus()->getIdNovoPay() == "-1" || $value->getPurchaseOrdersStatus()->getIdNovoPay() == "S2" || $value->getPurchaseOrdersStatus()->getIdNovoPay() == "00")){
 
                     }else {

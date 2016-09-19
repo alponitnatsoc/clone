@@ -15,7 +15,7 @@ class WsseFactory implements SecurityFactoryInterface {
         $container
             ->setDefinition($providerId, new DefinitionDecorator('wsse.security.authentication.provider'))
             ->replaceArgument(0, new Reference($userProvider))
-            ->replaceArgument(1, $config['lifetime'])
+            ->replaceArgument(2, $config['lifetime'])
         ;
 
         $listenerId = 'security.authentication.listener.wsse.'.$id;
