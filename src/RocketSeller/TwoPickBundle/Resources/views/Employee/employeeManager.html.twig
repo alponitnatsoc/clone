@@ -98,14 +98,9 @@
 
                         </div>
                         <div class="col-xxs-3 col-xs-3 col-sm-2 employeeItems grisoscurofont bLeft bRight">
-                            <span class="bold">Salario</span><br/>
+                            <span class="bold">Salario {%  if employee.timeCommitment == "XD" %}diario{% else %}mensual{%  endif %}</span><br/>
                             {%  if employee.salary is defined %}
                                 <span>$ {{ employee.salary|number_format(0) }}
-                                {%  if employee.timeCommitment == "XD" %}
-                                    diario
-                                {% else %}
-                                    mensual
-                                {%  endif %}
                                 </span>
                             {% else  %}
                                 <span>-</span>

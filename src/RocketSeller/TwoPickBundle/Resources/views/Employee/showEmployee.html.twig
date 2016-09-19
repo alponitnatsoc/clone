@@ -611,7 +611,7 @@
             </div>
             <div id="payHistory" class="tab-pane">
                 <div class="col-sm-12 payment-content">
-                    <div class="col-sm-4 search-box">
+                    <!--div class="col-sm-4 search-box">
                         <h4>Buscar por:</h4>
                         <div class="col-sm-12 form-group form-black input form-dummy">
                             <p class="title"><i><strong>Fecha</strong></i></p>
@@ -624,8 +624,8 @@
                         <div class="col-sm-12 search-button">
                             <a class="btn btn-orange notAjax" href="">Buscar</a>
                         </div>
-                    </div>
-                    <div class="col-sm-8">
+                    </div!-->
+                    <div class="col-sm-12">
                         <div class="col-sm-12">
                             <h3><strong>Pagos efectuados al día de hoy</strong></h3>
                             <div class="col-sm-6">
@@ -646,20 +646,20 @@
                                 <p><strong>Detalle</strong></p>
                             </div>
                         </div>
-                        {% for payroll in payrolls %}
-                            {% if payroll.paid!=0 %}
-                                <div class="col-sm-12 row-payment">
-                                    <div class="element col-sm-4">
-                                        <p>{{payroll.month}}/{{payroll.year}}</p>
-                                    </div>
-                                    <div class="element col-sm-4">
-                                        <p>${{ contract.salary }}</p>
-                                    </div>
-                                    <div class="detail-element col-sm-4">
-                                        <p>Ver detalles</p>
-                                    </div>
-                                </div>
-                            {% endif %}
+                        {% for payroll in payrolls if payroll.paid!=0  %}
+                                {% for pod in payroll.purchaseOrdersDescription if pod.purchaseOrdersStatus != null and pod.purchaseOrdersStatus.idNovoPay == "-1" %}
+                                        <div class="col-sm-12 row-payment">
+                                            <div class="element col-sm-4">
+                                                <p>{{ utils.period_number_to_name(payroll.period) }} {{payroll.month}}/{{payroll.year}}</p>
+                                            </div>
+                                            <div class="element col-sm-4">
+                                                <p>${{ pod.value|number_format(0, '.', ',')  }}</p>
+                                            </div>
+                                            <div class="detail-element col-sm-4">
+                                                <p>Ver detalles</p>
+                                            </div>
+                                        </div>
+                                {% endfor %}
                         {% endfor %}
                     </div>
                 </div>

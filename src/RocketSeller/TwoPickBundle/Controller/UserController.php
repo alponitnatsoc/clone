@@ -51,61 +51,15 @@ class UserController extends Controller
         $user=$this->getUser();
         $person=$user->getPersonPerson();
         $employer=$person->getEmployer();
-        //HightTEc Inscription
-        ////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////
-
-/*
-        if($this->addToHighTech($user)){
-            dump("suscrito o actualizado en HighTech");
-        }else{
-            dump("no se pudo inscribir o actualizar en HighTech");
-
-        }
-        */
-        ////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////
-        //sql Inscription
-        ////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////
-
-/*
-        if($this->procesosLuegoPagoExitoso($user)){
-            dump("suscrito o actualizado en sql");
-        }else{
-            dump("no se pudo inscribir o actualizar en sql");
-        }
-*/
-        ////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////
-
         $invoicesEmited=new ArrayCollection();
         $purchaseOrders=$user->getPurchaseOrders();
         /** @var PurchaseOrders $purchaseOrder */
         foreach ($purchaseOrders as $purchaseOrder) {
+            if($purchaseOrder->getPurchaseOrdersStatus()==null)
+                continue;
             $id=$purchaseOrder->getPurchaseOrdersStatus()->getIdNovoPay();
-            if($id==0||$id==8){//this ids for novo mean aproved
-                $purchaseOrdersDetails=$purchaseOrder->getPurchaseOrderDescriptions();
-                /** @var PurchaseOrdersDescription  $pOD */
-                foreach ($purchaseOrdersDetails as $pOD) {
-                    $simpleName=$pOD->getProductProduct()->getSimpleName();
-                    if($simpleName!="PN"&&$simpleName!="PP"){//PA pago Pila PN pago nomina
-                        $invoicesEmited->add($pOD);
-                    }
-                }
-
+            if(($id==0||$id==8)&&$purchaseOrder->getAlreadyRecived()==1){//this ids for novo mean aproved
+                $invoicesEmited->add($purchaseOrder);
             }
         }
         //Get pay Methods from Novo

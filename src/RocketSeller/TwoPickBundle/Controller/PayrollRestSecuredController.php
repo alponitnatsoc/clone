@@ -217,12 +217,19 @@ class PayrollRestSecuredController extends FOSRestController
                                 $pilaOwePo->addPurchaseOrderDescription($asociatedPila);
                             }
                         }
+                        $nowDate = new DateTime();
                         $nowPeriod = $actualPayroll->getPeriod();
+                        if ($actualPayroll->getContractContract()->getFrequencyFrequency()->getPayrollCode() == "Q" && $nowPeriod == 2) {
+                            $monthsToAdd = 0;
+                        } else {
+                            $monthsToAdd = 1;
+                        }
                         if ($actualPayroll->getContractContract()->getFrequencyFrequency()->getPayrollCode() == "Q" && $nowPeriod == 4) {
                             $newPayroll->setPeriod(2);
                         } else {
                             $newPayroll->setPeriod(4);
                         }
+                        $nowDate = new DateTime(date('Y-m-d', strtotime("+$monthsToAdd months", strtotime($nowDate->format("Y-m-") . "1"))));
                         $newPayroll->setMonth($nowDate->format("m"));
                         $newPayroll->setYear($nowDate->format("Y"));
                         $newPayroll->setContractContract($actualPayroll->getContractContract());
@@ -689,7 +696,7 @@ class PayrollRestSecuredController extends FOSRestController
                     $newPayroll = new Payroll();
                     $nowDate = new DateTime();
                     $nowPeriod = $actualPayroll->getPeriod();
-                    if ($actualPayroll->getContractContract()->getFrequencyFrequency()->getPayrollCode() == "Q" && $nowPeriod == 4) {
+                    if ($actualPayroll->getContractContract()->getFrequencyFrequency()->getPayrollCode() == "Q" && $nowPeriod == 2) {
                         $monthsToAdd = 0;
                     } else {
                         $monthsToAdd = 1;
