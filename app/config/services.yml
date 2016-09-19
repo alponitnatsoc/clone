@@ -80,7 +80,7 @@ services:
                     reminderDaviplata : 'FOSUserBundle:Registration:daviplataRecorder.txt.twig'
                     succesRecollect : 'FOSUserBundle:Pay:exitoRecaudoEmail.txt.twig'
                     failRecollect : 'FOSUserBundle:Pay:falloRecaudoEmail.txt.twig'
-                    regectionCollect : 'RocketSellerTwoPickBundle:Backoffice:rejectionTransactionLog.txt.twig'
+                    regectionCollect : 'FOSUserBundle:Backoffice:rejectionTransactionLog.txt.twig'
                     regectionDispersion : 'FOSUserBundle:Backoffice:rejectionDispersionLog.txt.twig'
                     succesDispersion : 'FOSUserBundle:Pay:exitoDispersionEmail.txt.twig'
                     failDispersion : 'FOSUserBundle:Pay:falloDispersionEmail.txt.twig'
