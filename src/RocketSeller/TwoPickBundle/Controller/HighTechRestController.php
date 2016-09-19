@@ -355,7 +355,7 @@ class HighTechRestController extends FOSRestController
                 'idPOD'=>$rejectedPurchaseOrderDescription->getIdPurchaseOrdersDescription(),
                 'value'=>$value
             );
-            $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
+            //$this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
 
             $notification= new Notification();
             $notification->setAccion("Ver");
