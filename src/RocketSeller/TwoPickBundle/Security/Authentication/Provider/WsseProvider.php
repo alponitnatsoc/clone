@@ -13,11 +13,13 @@ use Symfony\Component\Security\Core\Util\StringUtils;
 class WsseProvider implements AuthenticationProviderInterface {
     private $userProvider;
     private $cacheDir;
+    private $lifetime;
 
-    public function __construct(UserProviderInterface $userProvider, $cacheDir)
+    public function __construct(UserProviderInterface $userProvider, $cacheDir, $lifetime)
     {
         $this->userProvider = $userProvider;
         $this->cacheDir     = $cacheDir;
+        $this->lifetime     = $lifetime;
     }
 
     public function authenticate(TokenInterface $token)
@@ -52,13 +54,14 @@ class WsseProvider implements AuthenticationProviderInterface {
         }
 
         // Expire timestamp after 10 hours
-        if (time() - strtotime($created) > 36000) {
+        if (time() - strtotime($created) > $this->lifetime) {
             return false;
         }
 
         // Validate that the nonce is *not* used in the last 10 hours
         // if it has, this could be a replay attack
-        if (file_exists($this->cacheDir.'/'.$nonce) && file_get_contents($this->cacheDir.'/'.$nonce) + 36000 < time()) {
+        if (file_exists($this->cacheDir.'/'.md5($nonce)) && time() > file_get_contents($this->cacheDir.'/'.md5($nonce)) + $this->lifetime) {
+        // if (file_exists($this->cacheDir.'/'.$nonce) && file_get_contents($this->cacheDir.'/'.$nonce) + 36000 < time()) {
             throw new NonceExpiredException('Previously used nonce detected');
         }
         // If cache directory does not exist we create it
