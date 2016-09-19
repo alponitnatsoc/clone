@@ -102,6 +102,20 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                 return $this->sendMessage($template, $context, 'registro@symplifica.com','contactanos@symplifica.com');
                 break;
             /** tested OK */
+            //$context['emailType']=='help2'
+            case 'help2':
+                /** $context must have:
+                 * string name
+                 * string fromEmail
+                 * string message
+                 * string ip
+                 * string phone
+                 * string subject
+                 */
+                $template = $this->parameters['template']['help'];
+                return $this->sendMessage($template, $context, 'registro@symplifica.com','servicioalcliente@symplifica.com');
+                break;
+            /** tested OK */
             //$context['emailType']=='daviplata'
             case 'daviplata':
                 /** $context must have:
