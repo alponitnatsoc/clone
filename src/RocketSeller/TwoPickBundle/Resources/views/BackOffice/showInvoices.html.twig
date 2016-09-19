@@ -29,6 +29,8 @@
                     {% set lastNames = po.IdUser.personPerson.lastName1 %}
                     {% set email = po.IdUser.email %}
                     {% set address = po.IdUser.personPerson.mainAddress %}
+                    {% set city = po.IdUser.personPerson.city.name %}
+                    {% set dept = po.IdUser.personPerson.department.name %}
                     {% set phone = po.IdUser.personPerson.phones.get(0).phoneNumber %}
                     {% set pods= po.purchaseOrderDescriptions %}
                     {% set totalPila = 0 %}
@@ -73,7 +75,7 @@
                             {{ email }}
                         </td>
                         <td>
-                            {{ address }}
+                            {{ address }} {{ city }} {{ dept }}
                         </td>
                         <td>
                             {{ phone }}
