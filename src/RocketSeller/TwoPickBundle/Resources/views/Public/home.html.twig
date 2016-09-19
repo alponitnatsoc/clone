@@ -446,6 +446,7 @@ $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.mi
 		var min = dateNow.getMinutes();
 		var fecha = day+"/"+month+"/"+year+" "+hour+":"+min;
 		console.log(fecha);
+        fbq('track', 'Lead', {value: email});
 		window.Intercom("trackEvent", "Intento Registro Landing",{
 			"Fecha del intento": fecha,
 			"Nombre en formulario":nombre,
@@ -467,7 +468,7 @@ $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.mi
           min: 0,
           max: 5,
     });
-			slider1.on("change", function() {
+			/*slider1.on("change", function() {
 				conta1 = $('#ex1Slider').val();
 				$("#emp1").text(conta1);
 				funcion();
@@ -475,7 +476,7 @@ $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.mi
 					 $("#palabra-empleados1").text("empleados");
 				else
 							 $("#palabra-empleados1").text("empleado");
-		 });
+		 });*/
 
      /*slider1.on("slide", function(slideEvt) {
          //console.log($('#ex1Slider').val());
@@ -494,7 +495,7 @@ $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.mi
       max: 5,
     });
 
-		slider2.on("change", function() {
+		/*slider2.on("change", function() {
 				conta2 = $('#ex2Slider').val();
 				$("#emp2").text(conta2);
 				funcion();
@@ -502,7 +503,7 @@ $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.mi
 					 $("#palabra-empleados2").text("empleados");
 				else
 					 $("#palabra-empleados2").text("empleado");
-		});
+		});*/
 
     /* slider2.on("slide", function(slideEvt) {
          conta2 = $('#ex2Slider').val();
@@ -520,7 +521,7 @@ $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.mi
           max: 5,
         });
 
-			slider3.on("change", function() {
+			/*slider3.on("change", function() {
 	        conta3 = $('#ex3Slider').val();
 	        $("#emp3").text(conta3);
 	        funcion();
@@ -528,7 +529,7 @@ $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.mi
 	           $("#palabra-empleados3").text("empleados");
 	        else
 	           $("#palabra-empleados3").text("empleado");
-	    });
+	    });*/
 
      /*slider3.on("slide", function(slideEvt) {
          conta3 = $('#ex3Slider').val();
