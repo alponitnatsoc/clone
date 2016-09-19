@@ -204,6 +204,14 @@ class BackOfficeController extends Controller
         return $this->render('RocketSellerTwoPickBundle:BackOffice:showUnfinishedUsers.html.twig',array('users'=>$users));
 
     }
+    public function showBaseRegisterUsersAction()
+    {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        $usersRepo= $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+        $users= $usersRepo->findAll();
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:showBaseRegisterUsers.html.twig',array('users'=>$users));
+
+    }
     public function showSuccessfulInvoicesAction()
     {
         $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
@@ -433,7 +441,7 @@ class BackOfficeController extends Controller
                 $pathCedula = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }else{
-                $pathCedula = 'https://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
+                $pathCedula = '//' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }
         }else{
@@ -542,7 +550,7 @@ class BackOfficeController extends Controller
                 $pathCedula = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }else{
-                $pathCedula = 'https://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
+                $pathCedula = '//' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }
         }else{
@@ -555,7 +563,7 @@ class BackOfficeController extends Controller
                 $pathRut = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
                 $nameRut = $rut->getMediaMedia()->getName();
             }else{
-                $pathRut = 'https://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
+                $pathRut = '//' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
                 $nameRut = $rut->getMediaMedia()->getName();
             }
         }else{
@@ -586,7 +594,7 @@ class BackOfficeController extends Controller
                 $pathMandato = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($mandato->getMediaMedia(), 'reference');
                 $nameMandato = $mandato->getMediaMedia()->getName();
             }else{
-                $pathMandato = 'https://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($mandato->getMediaMedia(), 'reference');
+                $pathMandato = '//' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($mandato->getMediaMedia(), 'reference');
                 $nameMandato = $mandato->getMediaMedia()->getName();
             }
         }else{
@@ -624,7 +632,7 @@ class BackOfficeController extends Controller
                 $pathContrato = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($docContrato->getMediaMedia(), 'reference');
                 $nameContrato = $docContrato->getMediaMedia()->getName();
             }else{
-                $pathContrato = 'https://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($docContrato->getMediaMedia(), 'reference');
+                $pathContrato = '//' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($docContrato->getMediaMedia(), 'reference');
                 $nameContrato = $docContrato->getMediaMedia()->getName();
             }
         }else{
@@ -653,7 +661,7 @@ class BackOfficeController extends Controller
                 $pathCedula = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }else{
-                $pathCedula = 'https://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
+                $pathCedula = '//' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }
         }else{
@@ -666,7 +674,7 @@ class BackOfficeController extends Controller
                 $pathRut = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
                 $nameRut = $rut->getMediaMedia()->getName();
             }else{
-                $pathRut = 'https://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
+                $pathRut = '//' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
                 $nameRut = $rut->getMediaMedia()->getName();
             }
         }else{
@@ -701,7 +709,7 @@ class BackOfficeController extends Controller
                 $pathCedula = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }else{
-                $pathCedula = 'https://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
+                $pathCedula = '//' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }
         }else{
@@ -716,7 +724,7 @@ class BackOfficeController extends Controller
                 $pathCarta = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($carta->getMediaMedia(), 'reference');
                 $nameCarta = $carta->getMediaMedia()->getName();
             }else{
-                $pathCarta = 'https://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($carta->getMediaMedia(), 'reference');
+                $pathCarta = '//' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($carta->getMediaMedia(), 'reference');
                 $nameCarta = $carta->getMediaMedia()->getName();
             }
         }else{
@@ -746,7 +754,7 @@ class BackOfficeController extends Controller
                 $pathCedula = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }else{
-                $pathCedula = 'https://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
+                $pathCedula = '//' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }
         }else{
@@ -758,10 +766,10 @@ class BackOfficeController extends Controller
             $carta = $eHE->getAuthDocument();
         if ($carta) {
             if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
-                $pathCarta = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($carta->getMediaMedia(), 'reference');
+                $pathCarta = '//'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($carta->getMediaMedia(), 'reference');
                 $nameCarta = $carta->getMediaMedia()->getName();
             }else{
-                $pathCarta = 'https://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($carta->getMediaMedia(), 'reference');
+                $pathCarta = '//' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($carta->getMediaMedia(), 'reference');
                 $nameCarta = $carta->getMediaMedia()->getName();
             }
         }else{
@@ -1266,22 +1274,30 @@ class BackOfficeController extends Controller
 
 			return $this->render('RocketSellerTwoPickBundle:BackOffice:userView.html.twig',array('users'=>$userRepo));
 		}
-	
+
+	public function userBackOfficeStateAction(){
+		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+
+		$em = $this->getDoctrine()->getManager();
+		$procedureRepo = $em->getRepository('RocketSellerTwoPickBundle:RealProcedure')->findAll();
+
+		return $this->render('RocketSellerTwoPickBundle:BackOffice:backOfficeStatus.html.twig',array('procedures'=>$procedureRepo));
+	}
+
 	public function addToSQLPendingVacationsAction($idEmployerHasEmployee,$pendingDays){
-		
+
 		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
 		return $this->redirectToRoute("back_office");
-		
+
 		$request = $this->container->get('request');
 		$request->setMethod("POST");
 		$request->request->add(array(
 			"employee_id" => $idEmployerHasEmployee,
 			"pending_days" => $pendingDays,
 		));
-		
+
 		$insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddPendingVacationDays', array('_format' => 'json'));
-		dump($insertionAnswer);
-		
+
 		return $this->redirectToRoute('back_office');
 	}
 }

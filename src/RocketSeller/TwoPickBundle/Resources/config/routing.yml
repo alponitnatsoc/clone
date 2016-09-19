@@ -82,6 +82,9 @@ back_return_pay_pod:
 show_unfinished_users:
     path:     /backoffice/show/unfinished/users
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showUnfinishedUsers}
+show_base_users_register:
+    path:     /backoffice/show/base/users/register
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showBaseRegisterUsers}
 show_successful_invoices:
     path:     /backoffice/show/successful/invoices
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showSuccessfulInvoices}
@@ -112,6 +115,9 @@ clear_data_after_backup:
 user_view:
     path:     /backoffice/userView
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:userView}
+employer_state:
+    path:     /backoffice/show/employersState
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:userBackOfficeState}
 
 #tramites
 show_procedure:
