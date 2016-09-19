@@ -180,7 +180,7 @@ class HighTechRestController extends FOSRestController
             $paymethodId = $dis->getPayMethodId();
             $context=array(
                 'emailType'=>'failRecollect',
-                'userEmail'=>$dis->getIdUser()->getEmail(),
+                'toEmail'=>$dis->getIdUser()->getEmail(),
                 'userName'=>$dis->getIdUser()->getPersonPerson()->getFullName(),
                 'rejectionDate' => new DateTime(),
                 'value'=> $dis->getValue(),
