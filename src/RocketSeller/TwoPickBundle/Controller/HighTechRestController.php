@@ -181,11 +181,9 @@ class HighTechRestController extends FOSRestController
             $context=array(
                 'emailType'=>'failRecollect',
                 'userEmail'=>$dis->getIdUser()->getEmail(),
-                'toEmail'=>$dis->getIdUser()->getEmail(),
                 'userName'=>$dis->getIdUser()->getPersonPerson()->getFullName(),
                 'rejectionDate' => new DateTime(),
                 'value'=> $dis->getValue(),
-                'phone' => $dis->getIdUser()->getPersonPerson()->getPhones()->first()->getPhoneNumber(),
             );
             $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
             $contextBack=array(
