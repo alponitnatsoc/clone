@@ -161,13 +161,10 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                 break;
             case 'failRecollect':
                 /** $context must have:
-                 * string userEmail
                  * string toEmail
-                 * string documentName
                  * string userName
                  * DateTime rejectionDate
                  * float value
-                 * string phone
                  */
                 $template = $this->parameters['template']['failRecollect'];
                 return $this->sendMessage($template,$context,'registro@symplifica.com', $context['toEmail']);

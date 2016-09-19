@@ -28,6 +28,7 @@ services:
         arguments:
             - "" # User Provider
             - "%kernel.cache_dir%/security/nonces"
+            - "" # token lifetime
         public: false
 
     wsse.security.authentication.listener:
