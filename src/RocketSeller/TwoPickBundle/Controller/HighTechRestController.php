@@ -179,10 +179,11 @@ class HighTechRestController extends FOSRestController
             //nicetohave buscar este ID
             $paymethodId = $dis->getPayMethodId();
             $context=array(
-                'emailType'=>'failDispersion',
-                'userEmail'=>$dis->getIdUser()->getEmail(),
+                'emailType'=>'failRecollect',
                 'toEmail'=>$dis->getIdUser()->getEmail(),
-                'userName'=>$dis->getIdUser()->getPersonPerson()->getFullName()
+                'userName'=>$dis->getIdUser()->getPersonPerson()->getFullName(),
+                'rejectionDate' => new DateTime(),
+                'value'=> $dis->getValue(),
             );
             $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
             $contextBack=array(
@@ -194,7 +195,7 @@ class HighTechRestController extends FOSRestController
                 'phone'=>$dis->getIdUser()->getPersonPerson()->getPhones()->first()->getPhoneNumber(),
 	              'value'=>$dis->getValue()
             );
-            $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
+            //$this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
 
             $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => 'P1'));
             //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
