@@ -196,26 +196,29 @@ trait PayrollMethodsTrait
                         $planillaCode=$payroll->getContractContract()->getPlanillaTypePlanillaType()->getCode();
                         $totalPila=$this->getTotalPILA($employerHasEmployee, $payroll );
                         //this is for the first case and when the pila is already set in the pod
-                        if($pila!=null&&(!isset($podsPila[$planillaCode]))){
-                            $podsPila[$planillaCode]=$pila;
-                            $podsPila[$planillaCode]->setValue($totalPila['total']);
-
-                        }else{
-                            if($pila!=null&&isset($podsPila[$planillaCode])){
-                                $podsPila[$planillaCode]->setValue($totalPila['total'] + $podsPila[$planillaCode]->getValue());
-                            }
-                            //this is for the literal first case of the currend pod type
-                            elseif((!isset($podsPila[$planillaCode]))){
-                                $podsPila[$planillaCode] = new PurchaseOrdersDescription();
-                                $podsPila[$planillaCode]->addPayrollsPila($payroll);
+                        if(!($pila!=null&&$pila->getPurchaseOrders()!=null&&
+                            $pila->getPurchaseOrders()->getPurchaseOrdersStatus()!=null&&
+                            $pila->getPurchaseOrders()->getPurchaseOrdersStatus()->getIdNovoPay()=="P1")){
+                            if($pila!=null&&(!isset($podsPila[$planillaCode]))){
+                                $podsPila[$planillaCode]=$pila;
                                 $podsPila[$planillaCode]->setValue($totalPila['total']);
-                            }
-                            elseif($pila==null){
-                                $podsPila[$planillaCode]->addPayrollsPila($payroll);
-                                $podsPila[$planillaCode]->setValue($totalPila['total'] + $podsPila[$planillaCode]->getValue());
+
+                            }else{
+                                if($pila!=null&&isset($podsPila[$planillaCode])){
+                                    $podsPila[$planillaCode]->setValue($totalPila['total'] + $podsPila[$planillaCode]->getValue());
+                                }
+                                //this is for the literal first case of the currend pod type
+                                elseif((!isset($podsPila[$planillaCode]))){
+                                    $podsPila[$planillaCode] = new PurchaseOrdersDescription();
+                                    $podsPila[$planillaCode]->addPayrollsPila($payroll);
+                                    $podsPila[$planillaCode]->setValue($totalPila['total']);
+                                }
+                                elseif($pila==null){
+                                    $podsPila[$planillaCode]->addPayrollsPila($payroll);
+                                    $podsPila[$planillaCode]->setValue($totalPila['total'] + $podsPila[$planillaCode]->getValue());
+                                }
                             }
                         }
-
                     }
                     return $tempPOD;
                 }

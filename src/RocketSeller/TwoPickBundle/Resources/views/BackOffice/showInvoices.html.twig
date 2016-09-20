@@ -3,13 +3,16 @@
 {% block fos_user_content %}
     <div id="main" class="col-sm-10">
         <div class="col-md-12">
-            <h3>Los usarios listados a continuación no han terminado el paso 3 de 3</h3>
+            <h3>Listado de facturas exitosas</h3>
             <br>
-            <table>
+            <table class="table">
                 <tr>
                     <th>Factura</th>
                     <th>Consecutivo</th>
                     <th>Documento</th>
+                    <th>Email</th>
+                    <th>Direccion</th>
+                    <th>Celular</th>
                     <th>Nombres</th>
                     <th>Apellidos</th>
                     <th>RECAUDÓ NÓMINA</th>
@@ -24,6 +27,11 @@
                     {% set document = po.IdUser.personPerson.document %}
                     {% set names = po.IdUser.personPerson.names %}
                     {% set lastNames = po.IdUser.personPerson.lastName1 %}
+                    {% set email = po.IdUser.email %}
+                    {% set address = po.IdUser.personPerson.mainAddress %}
+                    {% set city = po.IdUser.personPerson.city.name %}
+                    {% set dept = po.IdUser.personPerson.department.name %}
+                    {% set phone = po.IdUser.personPerson.phones.get(0).phoneNumber %}
                     {% set pods= po.purchaseOrderDescriptions %}
                     {% set totalPila = 0 %}
                     {% set totalNomnina = 0 %}
@@ -62,6 +70,15 @@
                         </td>
                         <td>
                             {{ document }}
+                        </td>
+                        <td>
+                            {{ email }}
+                        </td>
+                        <td>
+                            {{ address }} {{ city }} {{ dept }}
+                        </td>
+                        <td>
+                            {{ phone }}
                         </td>
                         <td>{{ names }}</td>
                         <td>{{ lastNames }}</td>

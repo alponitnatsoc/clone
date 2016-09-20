@@ -764,7 +764,7 @@ class PaymentMethodRestController extends FOSRestController
                 if($purchaseOrderDescription->getEnlaceOperativoFileName()==null){
                     /** @var TwigSwiftMailer $smailer */
                     $smailer = $this->get('symplifica.mailer.twig_swift');
-                    $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage(array('emailType'=>'backWarning','toEmail'=>'johonson.aguirre@symplifica.com','idPod'=>$purchaseOrderDescription->getIdPurchaseOrdersDescription()));
+                    $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage(array('emailType'=>'backWarning','toEmail'=>'backofficesymplifica@symplifica.com','idPod'=>$purchaseOrderDescription->getIdPurchaseOrdersDescription()));
                     return array('code'=>512,'data'=>array('error' => array('Dispersion' => 'Backoffice no ha subido el número de pila')));
                 }else{
                     $filePila=$purchaseOrderDescription->getEnlaceOperativoFileName();
