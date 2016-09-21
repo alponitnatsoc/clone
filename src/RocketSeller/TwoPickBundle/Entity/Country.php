@@ -3,6 +3,8 @@
 namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Exclude;
 
 /**
  * Country
@@ -44,6 +46,13 @@ class Country
      * @ORM\Column(type="integer", nullable=true)
      */
     private $countryCode;
+
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\Department", mappedBy="countryCountry")
+     * @Exclude
+     */
+    private $departments;
 
     /**
      * Get idCountry
@@ -129,5 +138,46 @@ class Country
     public function getCountryCode()
     {
         return $this->countryCode;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->departments = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add department
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Department $department
+     *
+     * @return Country
+     */
+    public function addDepartment(\RocketSeller\TwoPickBundle\Entity\Department $department)
+    {
+        $this->departments[] = $department;
+
+        return $this;
+    }
+
+    /**
+     * Remove department
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Department $department
+     */
+    public function removeDepartment(\RocketSeller\TwoPickBundle\Entity\Department $department)
+    {
+        $this->departments->removeElement($department);
+    }
+
+    /**
+     * Get departments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDepartments()
+    {
+        return $this->departments;
     }
 }
