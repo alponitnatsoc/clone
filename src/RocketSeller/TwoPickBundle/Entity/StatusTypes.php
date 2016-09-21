@@ -36,15 +36,15 @@ class StatusTypes
      */
     private $code;
 
-//    /**
-//     * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\Action", mappedBy="actionStatus", cascade={"persist"})
-//     */
-//    private $actions;
-//
-//    /**
-//     * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\RealProcedure",mappedBy="procedureStatus", cascade={"persist"})
-//     */
-//    private $procedures;
+    /**
+     * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\Action", mappedBy="actionStatus", cascade={"persist"})
+     */
+    private $actions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\RealProcedure",mappedBy="procedureStatus", cascade={"persist"})
+     */
+    private $procedures;
 
     /**
      * Set idStatusType
@@ -79,8 +79,8 @@ class StatusTypes
     {
         $this->name = $name;
         $this->code = $code;
-//        $this->procedures = new \Doctrine\Common\Collections\ArrayCollection();
-//        $this->actions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->procedures = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->actions = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -141,73 +141,73 @@ class StatusTypes
         return $this->code;
     }
 
-//    /**
-//     * Add procedure
-//     *
-//     * @param \RocketSeller\TwoPickBundle\Entity\RealProcedure $procedure
-//     *
-//     * @return StatusTypes
-//     */
-//    public function addProcedure(\RocketSeller\TwoPickBundle\Entity\RealProcedure $procedure)
-//    {
-//        $this->procedures[] = $procedure;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * Remove procedure
-//     *
-//     * @param \RocketSeller\TwoPickBundle\Entity\RealProcedure $procedure
-//     */
-//    public function removeProcedure(\RocketSeller\TwoPickBundle\Entity\RealProcedure $procedure)
-//    {
-//        $this->procedures->removeElement($procedure);
-//    }
-//
-//    /**
-//     * Get procedures
-//     *
-//     * @return \Doctrine\Common\Collections\Collection
-//     */
-//    public function getProcedures()
-//    {
-//        return $this->procedures;
-//    }
-//
-//
-//
-//    /**
-//     * Add action
-//     *
-//     * @param \RocketSeller\TwoPickBundle\Entity\Action $action
-//     *
-//     * @return StatusTypes
-//     */
-//    public function addAction(\RocketSeller\TwoPickBundle\Entity\Action $action)
-//    {
-//        $this->actions[] = $action;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * Remove action
-//     *
-//     * @param \RocketSeller\TwoPickBundle\Entity\Action $action
-//     */
-//    public function removeAction(\RocketSeller\TwoPickBundle\Entity\Action $action)
-//    {
-//        $this->actions->removeElement($action);
-//    }
-//
-//    /**
-//     * Get actions
-//     *
-//     * @return \Doctrine\Common\Collections\Collection
-//     */
-//    public function getActions()
-//    {
-//        return $this->actions;
-//    }
+    /**
+     * Add procedure
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\RealProcedure $procedure
+     *
+     * @return StatusTypes
+     */
+    public function addProcedure(\RocketSeller\TwoPickBundle\Entity\RealProcedure $procedure)
+    {
+        $this->procedures[] = $procedure;
+
+        return $this;
+    }
+
+    /**
+     * Remove procedure
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\RealProcedure $procedure
+     */
+    public function removeProcedure(\RocketSeller\TwoPickBundle\Entity\RealProcedure $procedure)
+    {
+        $this->procedures->removeElement($procedure);
+    }
+
+    /**
+     * Get procedures
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProcedures()
+    {
+        return $this->procedures;
+    }
+
+
+
+    /**
+     * Add action
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Action $action
+     *
+     * @return StatusTypes
+     */
+    public function addAction(\RocketSeller\TwoPickBundle\Entity\Action $action)
+    {
+        $this->actions[] = $action;
+
+        return $this;
+    }
+
+    /**
+     * Remove action
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Action $action
+     */
+    public function removeAction(\RocketSeller\TwoPickBundle\Entity\Action $action)
+    {
+        $this->actions->removeElement($action);
+    }
+
+    /**
+     * Get actions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActions()
+    {
+        return $this->actions;
+    }
 }
