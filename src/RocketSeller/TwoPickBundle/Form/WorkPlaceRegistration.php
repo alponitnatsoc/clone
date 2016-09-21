@@ -71,9 +71,10 @@ class WorkPlaceRegistration extends AbstractType
             if($data==null){
                 return;
             }else{
+                $dept = $data->getDepartment();
                 $event->getForm()->add('city', 'entity', array(
                     'class' => 'RocketSellerTwoPickBundle:City',
-                    'choices' => $data->getDepartment()->getCitys(),
+                    'choices' => $dept?$dept->getCitys():array(),
                     'property' => 'name',
                     'multiple' => false,
                     'expanded' => false,
