@@ -7,7 +7,11 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Action
  *
- * @ORM\Table(name="action", indexes={@ORM\Index(name="fk_action_procedure1", columns={"real_procedure_id_procedure"}), @ORM\Index(name="fk_action_action_type1", columns={"action_type_id_action_type"}), @ORM\Index(name="fk_action_user1", columns={"user_id_user"})})
+ * @ORM\Table(name="action",
+ *     indexes={@ORM\Index(name="fk_action_procedure1", columns={"real_procedure_id_procedure"}),
+ *              @ORM\Index(name="fk_action_action_type1", columns={"action_type_id_action_type"}),
+ *              @ORM\Index(name="fk_action_user1", columns={"user_id_user"})
+ *      })
  * @ORM\Entity
  */
 class Action
@@ -20,10 +24,11 @@ class Action
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idAction;
+
     /**
      * @var string
      *
-     * @ORM\Column(name="status", type="string")     
+     * @ORM\Column(name="status", type="string",nullable=true)
      */
     private $status;
 
@@ -57,10 +62,7 @@ class Action
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\ActionError
      *
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\ActionError",cascade={"persist", "remove"})
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="action_error_id_action_error", referencedColumnName="id")
-     * })
+     * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\ActionError", mappedBy="action", cascade={"persist"})
      */
     private $actionErrorActionError;
 
@@ -81,6 +83,19 @@ class Action
      * })
      */
     private $entityEntity;
+
+    /**
+     * @ORM\Column(name="updated_at",type="datetime", nullable=true)
+     */
+    private $updatedAt = null;
+
+//    /**
+//     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\StatusTypes", inversedBy="actions" )
+//     * @ORM\JoinColumns({
+//     *      @ORM\JoinColumn(name="status_type_id_action",referencedColumnName="id_status_type",nullable=true)
+//     * })
+//     */
+//    private $actionStatus;
 
     /**
      * Set idAction
@@ -272,5 +287,114 @@ class Action
     public function getActionErrorActionError()
     {
         return $this->actionErrorActionError;
+    }
+
+    /**
+     * @return string
+     */
+    public function getActionTypeCode()
+    {
+        return $this->actionTypeActionType->getCode();
+    }
+
+    /**
+     * get Action employer
+     * @return Employer
+     */
+    public function getEmployer()
+    {
+        return $this->userUser->getPersonPerson()->getEmployer();
+    }
+
+    /**
+     * get Action user person
+     *
+     * @return Person
+     */
+    public function getUserPerson()
+    {
+        return $this->userUser->getPersonPerson();
+    }
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->actionErrorActionError = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add actionErrorActionError
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\ActionError $actionErrorActionError
+     *
+     * @return Action
+     */
+    public function addActionErrorActionError(\RocketSeller\TwoPickBundle\Entity\ActionError $actionErrorActionError)
+    {
+        $this->actionErrorActionError[] = $actionErrorActionError;
+
+        return $this;
+    }
+
+    /**
+     * Remove actionErrorActionError
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\ActionError $actionErrorActionError
+     */
+    public function removeActionErrorActionError(\RocketSeller\TwoPickBundle\Entity\ActionError $actionErrorActionError)
+    {
+        $this->actionErrorActionError->removeElement($actionErrorActionError);
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     *
+     * @return Action
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+
+    /**
+     * Set actionStatus
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\StatusTypes $actionStatus
+     *
+     * @return Action
+     */
+    public function setActionStatus(\RocketSeller\TwoPickBundle\Entity\StatusTypes $actionStatus = null)
+    {
+        $this->actionStatus = $actionStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get actionStatus
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\StatusTypes
+     */
+    public function getActionStatus()
+    {
+        return $this->actionStatus;
     }
 }
