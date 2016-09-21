@@ -339,9 +339,9 @@
                                             <div class="col-sm-2">
                                                 <p>Total</p>
                                                 <h2 class="h2">${{ data.value|number_format(0, '.', ',') }}</h2>
-                                                <span style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax" data-toggle="modal" data-target="#detailModal{{ loop.index }}" >&#10093; Detalles</span>
+                                                <span style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax" data-toggle="modal" data-target="#detailDebtModal{{ loop.parent.loop.index }}{{ loop.index }}" >&#10093; Detalles</span>
                                             </div>
-                                            <div class="modal fade" id="detailModal{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
+                                            <div class="modal fade" id="detailDebtModal{{ loop.parent.loop.index }}{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
