@@ -731,7 +731,7 @@ class LiquidationController extends Controller
 
         $context=array(
             'emailType'=>'liquidation',
-            'toEmail'=>'johonson.aguirre@symplifica.com',
+            'toEmail'=>'backofficesymplifica@gmail.com',
             'userName'=>$employer->getPersonPerson()->getFullName(),
             'employerSociety'=> $employer->getIdSqlSociety(),
             'documentNumber'=>$employer->getPersonPerson()->getDocument(),

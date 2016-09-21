@@ -655,8 +655,40 @@
                                             <div class="element col-sm-4">
                                                 <p>${{ pod.value|number_format(0, '.', ',')  }}</p>
                                             </div>
-                                            <div class="detail-element col-sm-4">
+                                            <div class="detail-element col-sm-4" data-toggle="modal" data-target="#detailModal{{ loop.index }}">
                                                 <p>Ver detalles</p>
+                                            </div>
+                                            {% set deducidos = [] %}
+                                            {% set devengados = [] %}
+                                            {% for detail in payroll.sqlNovelties %}
+                                                {% if detail.noveltyTypeNoveltyType.naturaleza == "DEV" %}
+                                                    {% set devengados = devengados|merge([detail]) %}
+                                                {% else %}
+                                                    {% set deducidos = deducidos|merge([detail]) %}
+                                                {% endif %}
+                                            {% endfor %}
+                                            <div class="modal fade" id="detailModal{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" id="myModalLabel">Detalles</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <h4>Devengados<br/></h4>
+                                                            {% for dev in devengados %}
+                                                                {{ dev.noveltyTypeNoveltyType.name }} ${{ dev.sqlValue|number_format(0, '.', ',')  }} <br/>
+                                                            {% endfor %}
+                                                            <h4>Deducidos<br/></h4>
+                                                            {% for ded in deducidos %}
+                                                                {{ ded.noveltyTypeNoveltyType.name }} ${{ ded.sqlValue|number_format(0, '.', ',')  }} <br/>
+                                                            {% endfor %}
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                 {% endfor %}
