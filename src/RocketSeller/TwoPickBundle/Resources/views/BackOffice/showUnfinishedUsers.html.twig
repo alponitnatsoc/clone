@@ -12,6 +12,7 @@
                     <th>Celular</th>
                     <th>Paso actual</th>
                     <th>Último login</th>
+                    <th>Dirección correo</th>
                     <th>Confirmar Correo</th>
                 </tr>
                 {% for user in users %}
@@ -19,9 +20,11 @@
                         <td>
                             {{ user.personPerson.fullName }}
                         </td>
+
                         <td>
                             {{ user.personPerson.document }}
                         </td>
+
                         <td>
                             {% if user.personPerson.phones.count !=0 %}
                                 {{ user.personPerson.phones.get(0).phoneNumber }}
@@ -44,6 +47,10 @@
                             {% else %}
                                 No hay registro
                             {% endif %}
+                        </td>
+
+                        <td>
+                            {{ user.email }}
                         </td>
 
                         <td>

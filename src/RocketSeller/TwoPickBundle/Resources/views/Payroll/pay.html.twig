@@ -3,6 +3,7 @@
 {% block title %}Pagar Nómina{% endblock %}
 
 {% block fos_user_content %}
+    <!-- INTERCOM SESSION START-->
     <script>
         window.intercomSettings = {
             app_id: "mydavhzb",
@@ -46,6 +47,7 @@
     <script>
         window.Intercom("trackEvent", "payroll");
     </script>
+    <!-- INTERCOM SESSION END-->
     {% if flagAtLeastOne == "true" %}
         {% if dataNomina or debt|length > 0 %}
 
@@ -468,46 +470,6 @@
                             </div>
                         </div>
                     </div>#}
-                    <script>
-                        window.intercomSettings = {
-                            app_id: "mydavhzb",
-                            name: '{{ app.user.username }}', // Full name
-                            email: '{{ app.user.email }}', // Email address
-                            created_at: {{ app.user.dateCreated|date("U") }}, // Signup date as a Unix timestamp
-                        };
-                    </script>
-                    <script>
-                        (function(){
-                                    var w=window;
-                                    var ic=w.Intercom;
-                                    if(typeof ic==="function"){
-                                        ic('reattach_activator');
-                                        ic('update',intercomSettings);
-                                    }else{
-                                        var d=document;
-                                        var i=function(){
-                                            i.c(arguments)
-                                        };
-                                        i.q=[];
-                                        i.c=function(args){i.q.push(args)};
-                                        w.Intercom=i;
-                                        function l(){
-                                            var s=d.createElement('script');
-                                            s.type='text/javascript';
-                                            s.async=true;
-                                            s.src='https://widget.intercom.io/widget/mydavhzb';
-                                            var x=d.getElementsByTagName('script')[0];
-                                            x.parentNode.insertBefore(s,x);
-                                        }
-                                        if(w.attachEvent){
-                                            w.attachEvent('onload',l);
-                                        }else{
-                                            w.addEventListener('load',l,false);
-                                        }
-                                    }
-                                }
-                        )()
-                    </script>
                     <div class="row importante">
                         <div class="media">
                             <div class="media-left">
@@ -528,11 +490,15 @@
                                    value="Cálculo final del pago"/>
                         </div>
                     </div>
+                    <!-- INTERCOM TRACK EVENT PAGO-->
                     <script>
-                        $('#btnCalculate').on("click",function () {
-                            window.Intercom("trackEvent", "Pago");
+                        jQuery(document).ready(function () {
+                            $('#btnCalculate').on("click",function () {
+                                window.Intercom("trackEvent", "Pago");
+                            });
                         });
                     </script>
+                    <!-- IINTERCOM TRACK EVENT END-->
                 </form>
             </div>
 
