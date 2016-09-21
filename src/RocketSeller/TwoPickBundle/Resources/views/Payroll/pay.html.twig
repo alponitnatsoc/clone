@@ -137,15 +137,20 @@
                                         {% set total = 0 %}
                                         {% set dev = 0 %}
                                         {% set ded = 0 %}
+                                        {% set deducidos = [] %}
+                                        {% set devengados = [] %}
                                         {% for nov in data.payroll_payroll.sql_novelties %}
                                             {% if nov.novelty_type_novelty_type.naturaleza=="DEV" %}
                                                 {% set total = total + nov.sql_value %}
                                                 {% set dev = dev + nov.sql_value %}
+                                                {% set devengados = devengados|merge([nov]) %}
                                             {% else %}
                                                 {% set total = total + nov.sql_value %}
                                                 {% set ded = ded +  nov.sql_value %}
+                                                {% set deducidos = deducidos|merge([nov]) %}
                                             {% endif %}
                                         {% endfor %}
+                                        <div class="col-sm-2"
                                         <div class="col-sm-2">
                                             <p>Ingresos</p>
                                             <h2 class="h2">${{ dev|number_format(0, '.', ',')  }}</h2>
@@ -157,7 +162,30 @@
                                         <div class="col-sm-2">
                                             <p>Total</p>
                                             <h2 class="h2">${{ data.value|number_format(0, '.', ',') }}</h2>
-                                            <span class="detallesPay notAjax showDetails" href="/payroll/show/details/{{ id_payroll }}">&#10093; Detalles</span>
+                                            <span style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax" data-toggle="modal" data-target="#detailModal{{ loop.index }}" >&#10093; Detalles</span>
+                                        </div>
+                                        <div class="modal fade" id="detailModal{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title" id="myModalLabel">Detalles</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <h4>Devengados<br/></h4>
+                                                        {% for dev in devengados %}
+                                                            {{ dev.novelty_type_novelty_type.name }} ${{ dev.sql_value|number_format(0, '.', ',')  }} <br/>
+                                                        {% endfor %}
+                                                        <h4>Deducidos<br/></h4>
+                                                        {% for ded in deducidos %}
+                                                            {{ ded.novelty_type_novelty_type.name }} ${{ ded.sql_value|number_format(0, '.', ',')  }} <br/>
+                                                        {% endfor %}
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <!--<div class="height center col-sm-12">
@@ -285,13 +313,17 @@
                                             {% set total = 0 %}
                                             {% set dev = 0 %}
                                             {% set ded = 0 %}
+                                            {% set deducidos = [] %}
+                                            {% set devengados = [] %}
                                             {% for nov in data.payroll_payroll.sql_novelties %}
                                                 {% if nov.novelty_type_novelty_type.naturaleza=="DEV" %}
                                                     {% set total = total + nov.sql_value %}
                                                     {% set dev = dev + nov.sql_value %}
+                                                    {% set devengados = devengados|merge([nov]) %}
                                                 {% else %}
                                                     {% set total = total + nov.sql_value %}
                                                     {% set ded = ded +  nov.sql_value %}
+                                                    {% set deducidos = deducidos|merge([nov]) %}
                                                 {% endif %}
                                             {% endfor %}
                                             <div class="col-sm-2">
@@ -305,7 +337,30 @@
                                             <div class="col-sm-2">
                                                 <p>Total</p>
                                                 <h2 class="h2">${{ data.value|number_format(0, '.', ',') }}</h2>
-                                                {#<span style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax showDetails" href="">&#10093; Detalles</span>#}
+                                                <span style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax" data-toggle="modal" data-target="#detailModal{{ loop.index }}" >&#10093; Detalles</span>
+                                            </div>
+                                            <div class="modal fade" id="detailModal{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" id="myModalLabel">Detalles</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <h4>Devengados<br/></h4>
+                                                            {% for dev in devengados %}
+                                                                {{ dev.novelty_type_novelty_type.name }} ${{ dev.sql_value|number_format(0, '.', ',')  }} <br/>
+                                                            {% endfor %}
+                                                            <h4>Deducidos<br/></h4>
+                                                            {% for ded in deducidos %}
+                                                                {{ ded.novelty_type_novelty_type.name }} ${{ ded.sql_value|number_format(0, '.', ',')  }} <br/>
+                                                            {% endfor %}
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
