@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use JMS\SecurityExtraBundle\Tests\Fixtures\A;
 use RocketSeller\TwoPickBundle\Entity\Beneficiary;
 use RocketSeller\TwoPickBundle\Entity\Contract;
+use RocketSeller\TwoPickBundle\Entity\Country;
 use RocketSeller\TwoPickBundle\Entity\Document;
 use RocketSeller\TwoPickBundle\Entity\Employee;
 use RocketSeller\TwoPickBundle\Entity\EmployeeHasBeneficiary;
@@ -450,7 +451,14 @@ class EmployeeController extends Controller
 
         }
         $timeCommitments = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:ContractType")->findAll();
-        $form = $this->createForm(new PersonEmployeeRegistration($id, $userWorkplaces, $eps, $pensions,$ars,$severances, $timeCommitments,$id==-1?$user->getLegalFlag():$employerHasEmployee->getLegalFF()), $employee, array(
+        /** @var Country $colombia */
+        $colombia = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Country")->findOneBy(array('countryCode'=>'343'));
+        $departments = $colombia->getDepartments();
+        $cities = array();
+        if($employee->getPersonPerson()->getDepartment()!=null){
+            $cities = $employee->getPersonPerson()->getDepartment()->getCitys();
+        }
+        $form = $this->createForm(new PersonEmployeeRegistration($id, $userWorkplaces, $eps, $pensions,$ars,$severances, $timeCommitments,$id==-1?$user->getLegalFlag():$employerHasEmployee->getLegalFF(),$departments,$cities), $employee, array(
             'action' => $this->generateUrl('api_public_post_new_employee_submit'),
             'method' => 'POST',
         ));
