@@ -1342,8 +1342,7 @@ class BackOfficeController extends Controller
 	public function addToSQLPendingVacationsAction($idEmployerHasEmployee,$pendingDays){
 
 		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
-		return $this->redirectToRoute("back_office");
-
+		
 		$request = $this->container->get('request');
 		$request->setMethod("POST");
 		$request->request->add(array(
@@ -1354,5 +1353,19 @@ class BackOfficeController extends Controller
 		$insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddPendingVacationDays', array('_format' => 'json'));
 
 		return $this->redirectToRoute('back_office');
+	}
+	
+	public function eheEntitiesViewAction(){
+		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+		
+		$criteria = new \Doctrine\Common\Collections\Criteria();
+		$criteria->where($criteria->expr()->gt('state', 3));
+		
+		$em = $this->getDoctrine()->getManager();
+		$eheRepo = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
+		$filteredEheRepo = $eheRepo->matching($criteria);
+		
+		return $this->render('RocketSellerTwoPickBundle:BackOffice:entitiesView.html.twig', array('ehes' => $filteredEheRepo));
+		
 	}
 }
