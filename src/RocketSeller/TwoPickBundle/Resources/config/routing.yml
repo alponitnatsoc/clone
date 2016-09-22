@@ -204,3 +204,6 @@ back_test_email:
 back_pending_vacations:
     path:         /backoffice/pending/{idEmployerHasEmployee}/vacations/{pendingDays}
     defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:addToSQLPendingVacations }
+back_entities_view:
+    path:         /backoffice/entidades
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:eheEntitiesView }
