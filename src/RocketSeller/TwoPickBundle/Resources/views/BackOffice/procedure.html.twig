@@ -246,22 +246,24 @@
 					</thead>
 					<tbody>
 					{% for action in procedure.action %}
-						{% for actionE in action.actionErrorActionError %}
-							<tr>
-								<td>{{ actionE.id}}</td>
-								<td>{{ action.personPerson.names}} {{action.personPerson.lastName1}}</td>
-								<td>{{ action.realProcedureRealProcedure.employerEmployer.personPerson.phones[0].phoneNumber}}</td>
-								<td>{{ actionE.description}}</td>
-								<td>{{ actionE.status}}</td>
-								{% if actionE.status|lower == "sin contactar" %}
-									<td><a class="notAjax" href="{{ path('change_action_error_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionError':actionE.id,'status':"Contactado"})}}">Contactado</a></td>
-								{% elseif actionE.status|lower =="contactado" %}
-									<td><a class="notAjax" href="{{ path('change_action_error_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionError':actionE.id,'status':"Corregido"})}}">Corregido</a></td>
-								{% elseif actionE.status|lower == "corregido" %}
-									<td>-</td>
-								{% endif %}
-							</tr>
-						{% endfor %}
+						{% if action.actionErrorActionError|length > 0 %}
+							{% for actionE in action.actionErrorActionError %}
+								<tr>
+									<td>{{ actionE.id}}</td>
+									<td>{{ action.personPerson.names}} {{action.personPerson.lastName1}}</td>
+									<td>{{ action.realProcedureRealProcedure.employerEmployer.personPerson.phones[0].phoneNumber}}</td>
+									<td>{{ actionE.description}}</td>
+									<td>{{ actionE.status}}</td>
+									{% if actionE.status|lower == "sin contactar" %}
+										<td><a class="notAjax" href="{{ path('change_action_error_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionError':actionE.id,'status':"Contactado"})}}">Contactado</a></td>
+									{% elseif actionE.status|lower =="contactado" %}
+										<td><a class="notAjax" href="{{ path('change_action_error_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionError':actionE.id,'status':"Corregido"})}}">Corregido</a></td>
+									{% elseif actionE.status|lower == "corregido" %}
+										<td>-</td>
+									{% endif %}
+								</tr>
+							{% endfor %}
+						{% endif %}
 					{% endfor %}
 					</tbody>
 				</table>
