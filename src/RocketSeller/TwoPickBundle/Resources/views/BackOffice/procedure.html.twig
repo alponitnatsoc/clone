@@ -246,18 +246,18 @@
 					</thead>
 					<tbody>
 					{% for action in procedure.action %}
-						{% if action.actionErrorActionError %}
+						{% for actionE in action.actionErrorActionError %}
 							<tr>
-								<td>{{action.actionErrorActionError.id}}</td>
+								<td>{{ actionE.id}}</td>
 								<td>{{ action.personPerson.names}} {{action.personPerson.lastName1}}</td>
 								<td>{{ action.realProcedureRealProcedure.employerEmployer.personPerson.phones[0].phoneNumber}}</td>
-								<td>{{action.actionErrorActionError.description}}</td>
-								<td>{{action.actionErrorActionError.status}}</td>
-								{% if action.actionErrorActionError.status|lower == "sin contactar" %}
-									<td><a class="notAjax" href="{{ path('change_action_error_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionError':action.actionErrorActionError.id,'status':"Contactado"})}}">Contactado</a></td>
-								{% elseif action.actionErrorActionError.status|lower =="contactado" %}
-									<td><a class="notAjax" href="{{ path('change_action_error_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionError':action.actionErrorActionError.id,'status':"Corregido"})}}">Corregido</a></td>
-								{% elseif action.actionErrorActionError.status|lower == "corregido" %}
+								<td>{{ actionE.description}}</td>
+								<td>{{ actionE.status}}</td>
+								{% if actionE.status|lower == "sin contactar" %}
+									<td><a class="notAjax" href="{{ path('change_action_error_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionError':actionE.id,'status':"Contactado"})}}">Contactado</a></td>
+								{% elseif actionE.status|lower =="contactado" %}
+									<td><a class="notAjax" href="{{ path('change_action_error_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionError':actionE.id,'status':"Corregido"})}}">Corregido</a></td>
+								{% elseif actionE.status|lower == "corregido" %}
 									<td>-</td>
 								{% endif %}
 							</tr>
