@@ -86,6 +86,28 @@ class BackOfficeController extends Controller
 
     }
 
+    public function showHaveToPayUsersAction()
+    {
+        $users = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->findAll();
+        $dateNow= new DateTime();
+        $response= new ArrayCollection();
+        /** @var User $user */
+        foreach ($users as $user) {
+            $isFreeMonths = $user->getIsFree();
+            if($user->getLastPayDate()==null)
+                continue;
+            $effectiveDate = new DateTime(date('Y-m-d', strtotime("+$isFreeMonths months", strtotime($user->getLastPayDate()->format("Y-m-1")))));
+
+            if($effectiveDate<=$dateNow){
+                $response->add($user);
+            }
+
+        }
+
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:haveToPay.html.twig',array('users'=>$response));
+
+    }
+
     public function showRejectedPODAction()
     {
         $codesRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription");
