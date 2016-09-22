@@ -247,7 +247,6 @@
 					<tbody>
 					{% for action in procedure.action %}
 						{% if action is defined %}
-							{% set aError = action.actionErrorActionError %}
 								{#<tr>#}
 								{#<td>{{ actionE.id}}</td>#}
 								{#<td>{{ action.personPerson.names}} {{action.personPerson.lastName1}}</td>#}
@@ -262,7 +261,6 @@
 								{#<td>-</td>#}
 								{#{% endif %}#}
 								{#</tr>#}
-							{#{% endfor %}#}
 						{% endif %}
 					{% endfor %}
 					</tbody>
