@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Form;
 
 use DateTime;
+use RocketSeller\TwoPickBundle\Entity\Person;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -97,6 +98,42 @@ class PersonExtraData extends AbstractType
                 'property_path' => 'email',
                 'required' => false
             ));
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            /** @var Person $data */
+            $data = $event->getData();
+            if($data==null){
+                return;
+            }else{
+                $country = $data->getBirthCountry();
+                $departs = $country?$country->getDepartments():array();
+                $cities = $departs?$departs->getCitys():array();
+                $event->getForm()->add('birthDepartment', 'entity', array(
+                    'label' => 'Departamento de Nacimiento',
+                    'translation_domain' => 'messages',
+                    'class' => 'RocketSellerTwoPickBundle:Department',
+                    'choices' => $departs,
+                    'property' => 'name',
+                    'multiple' => false,
+                    'expanded' => false,
+                    'property_path' => 'birthDepartment',
+                    'placeholder' => 'Seleccionar una opción',
+                    'required' => true
+                ))->add('birthCity', 'entity', array(
+                    'label' => 'Ciudad de Nacimiento',
+                    'translation_domain' => 'messages',
+                    'class' => 'RocketSellerTwoPickBundle:City',
+                    'choices' => $cities,
+                    'property' => 'name',
+                    'multiple' => false,
+                    'expanded' => false,
+                    'property_path' => 'birthCity',
+                    'placeholder' => 'Seleccionar una opción',
+                    'required' => true
+                ));
+                return;
+            }
+
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver)
