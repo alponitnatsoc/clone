@@ -45,9 +45,6 @@
 											<input id="formemail" class="inputFull" type="email" name="email" placeholder="Correo electrónico" required>
 											{{ form_widget(form.save, { 'attr': {'class': 'btn naranja obten'}}) }}
 											<div class="form-group txt-A1-terms">
-											<input type="checkbox" id="chktyc" name="chktyc" required />
-											Al registrarme acepto todos los <a href="{{ path('terminos_condiciones') }}" target="_blank">Términos y Condiciones</a>
-											y las <a href="{{ path('politicas_privacidad') }}" target="_blank">Políticas de Privacidad</a>
 										{{ form_end(form) }}
 								    </div>
 									</div>
@@ -412,8 +409,6 @@ $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.mi
 	$('#formemail').attr('oninvalid', 'setCustomValidity("El correo escrito no es valido")');
 	$('#formemail').attr('oninput', "setCustomValidity('')");
 
-	$('#chktyc').attr('oninvalid', 'setCustomValidity("Acepta los Términos y Condiciones para continuar")');
-	$('#chktyc').attr('onclick', "setCustomValidity('')");
 
 	$("form[name='form']").on('submit',function (e) {
 		if (document.getElementById('formfirstname').value!= null){
