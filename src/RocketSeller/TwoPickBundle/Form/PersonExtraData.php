@@ -106,7 +106,7 @@ class PersonExtraData extends AbstractType
             }else{
                 $country = $data->getBirthCountry();
                 $departs = $country?$country->getDepartments():array();
-                $cities = $departs?$departs->getCitys():array();
+                $cities =  $data->getBirthCity()?$data->getBirthCity()->getDepartmentDepartment()->getCitys():array();
                 $event->getForm()->add('birthDepartment', 'entity', array(
                     'label' => 'Departamento de Nacimiento',
                     'translation_domain' => 'messages',

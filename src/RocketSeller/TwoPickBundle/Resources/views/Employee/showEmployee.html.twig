@@ -626,37 +626,27 @@
                         </div>
                     </div!-->
                     <div class="col-sm-12">
-                        <div class="col-sm-12">
-                            <h3><strong>Pagos efectuados al día de hoy</strong></h3>
-                            <div class="col-sm-6">
-                                <!--<p>Total pagado: $60000000</p>-->
-                            </div>
-                            <div class="col-sm-6">
-                                <!--<p>Total pagos: {{ payrolls|length}}</p>-->
-                            </div>
-                        </div>
-                        <div class="col-sm-12 table-title">
-                            <div class="col-sm-4">
-                                <p><strong>Fecha</strong></p>
-                            </div>
-                            <div class="col-sm-4">
-                                <p><strong>Valor</strong></p>
-                            </div>
-                            <div class="col-sm-4">
-                                <p><strong>Detalle</strong></p>
-                            </div>
-                        </div>
+                          <div class="col-sm-12 center emploInfo">
+                              <div class="col-sm-12" style="color:#00858c;">
+                                  <h3>{{utils.mb_capitalize(employee.personPerson.names)}} {{utils.mb_capitalize(employee.personPerson.lastName1)}} {{utils.mb_capitalize(employee.personPerson.lastName2)}}</h3>
+                                  <p class="document-text" style="font-weight: 100;color: #888686;padding-top: 5px;"><i>{{employee.personPerson.documentType}}: {{employee.personPerson.document}} {% if employee.personPerson.documentExpeditionPlace %}de {{employee.personPerson.documentExpeditionPlace}}{% endif %}</i>
+                                  </p>
+                              </div>
+                          </div>
+                          <div class="col-sm-12 center" style="margin-bottom: 20px;">
+                              <h4 style="font-weight: 100;color: #808080;font-size: 21px;margin: 20px 0 10px 0;">Pagos efectuados al día de hoy</h4>
+                          </div>
                         {% for payroll in payrolls if payroll.paid!=0  %}
                                 {% for pod in payroll.purchaseOrdersDescription if pod.purchaseOrdersStatus != null and pod.purchaseOrdersStatus.idNovoPay == "-1" %}
                                         <div class="col-sm-12 row-payment">
                                             <div class="element col-sm-4">
-                                                <p>{{ utils.period_number_to_name(payroll.period) }} {{payroll.month}}/{{payroll.year}}</p>
+                                                <p style="font-style:normal;" class="light grisclarofont">{{ utils.period_number_to_name(payroll.period) }} {{payroll.month}}/{{payroll.year}}</p>
                                             </div>
                                             <div class="element col-sm-4">
-                                                <p>${{ pod.value|number_format(0, '.', ',')  }}</p>
+                                                <p style="font-style:normal;" class="light grisclarofont">${{ pod.value|number_format(0, '.', ',')  }}</p>
                                             </div>
                                             <div class="detail-element col-sm-4" data-toggle="modal" data-target="#detailModal{{ loop.index }}">
-                                                <p>Ver detalles</p>
+                                                <p style="font-style:normal;cursor:pointer" class="bold grisclarofont">&#10095; Ver detalles</p>
                                             </div>
                                             {% set deducidos = [] %}
                                             {% set devengados = [] %}
