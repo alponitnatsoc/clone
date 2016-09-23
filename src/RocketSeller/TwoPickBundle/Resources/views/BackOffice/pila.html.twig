@@ -18,6 +18,7 @@
                     <tr>
                         <th style="vertical-align: middle" rowspan="2">Empleador</th>
                         <th style="vertical-align: middle" rowspan="2">Cedula</th>
+                        <th style="..." rowspan="3">Mes Pila</th>
                         <th style="vertical-align: middle" rowspan="2">Tipo de Pila</th>
                         <th style="..." rowspan="2">Valor de la Pila</th>
                         <th style="vertical-align: middle" rowspan="2">Número de planilla</th>
@@ -33,6 +34,7 @@
                         <tr>
                           <td style="vertical-align: middle">{{ pila.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.fullName }}</td>
                           <td style="vertical-align: middle">{{ pila.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.document }}</td>
+                          <td style="vertical-align: middle">{{ utils.month_number_to_name(pila.payrollsPila[0].month) }}</td>
                           <td style="vertical-align: middle">Id: {{ pila.idPurchaseOrdersDescription }} - Planilla de pila tipo: {{ fileType }}</td>
                           <td style="vertical-align: middle">$ {{ pila.value|number_format(0) }} </td>
                           <td style="vertical-align: middle"> <input id= {{idFileName}} value= "{{ fileStoredName }}" size="10"></input> <button id= {{idFileNameButton}} class="saveId">Guardar</button></td>
