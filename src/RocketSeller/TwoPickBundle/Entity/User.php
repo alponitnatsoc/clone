@@ -255,6 +255,11 @@ class User extends BaseUser
     private $promotionCodes;
 
     /**
+     * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\Log", mappedBy="userUser",cascade={"persist"})
+     */
+    private $logs;
+
+    /**
      * Set personPerson
      *
      * @param \RocketSeller\TwoPickBundle\Entity\Person $personPerson
@@ -431,6 +436,7 @@ class User extends BaseUser
      */
     public function addAction(\RocketSeller\TwoPickBundle\Entity\Action $action)
     {
+        $action->setUserUser($this);
         $this->action[] = $action;
 
         return $this;
@@ -490,6 +496,27 @@ class User extends BaseUser
         return $this->realProcedure;
     }
 
+    /**
+     * @param $procedureType
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProceduresNotMatching($procedureType)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->neq('procedureTypeProcedureType',$procedureType));
+        return $this->realProcedure->matching($criteria);
+    }
+
+    /**
+     * @param $procedureType
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProceduresByType($procedureType)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('procedureTypeProcedureType',$procedureType));
+        return $this->realProcedure->matching($criteria);
+    }
 
     /**
      * Set status
@@ -998,5 +1025,39 @@ class User extends BaseUser
     public function getDevices()
     {
         return $this->devices;
+    }
+
+    /**
+     * Add log
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Log $log
+     *
+     * @return User
+     */
+    public function addLog(\RocketSeller\TwoPickBundle\Entity\Log $log)
+    {
+        $this->logs[] = $log;
+
+        return $this;
+    }
+
+    /**
+     * Remove log
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Log $log
+     */
+    public function removeLog(\RocketSeller\TwoPickBundle\Entity\Log $log)
+    {
+        $this->logs->removeElement($log);
+    }
+
+    /**
+     * Get logs
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLogs()
+    {
+        return $this->logs;
     }
 }

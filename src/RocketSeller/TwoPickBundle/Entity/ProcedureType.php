@@ -3,11 +3,14 @@
 namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 
 /**
  * ProcedureType
  *
- * @ORM\Table(name="procedure_type")
+ * @ORM\Table(name="procedure_type",
+ *      uniqueConstraints={@UniqueConstraint(name="action_code_unique", columns={"code"})}
+ * )
  * @ORM\Entity
  */
 class ProcedureType
@@ -32,6 +35,20 @@ class ProcedureType
      * @ORM\Column(type="string", length=4)
      */
     private $code;
+
+    /**
+     * Set idProcedureType
+     *
+     * @param integer $id
+     *
+     * @return ProcedureType
+     */
+    public function setIdProcedureType($id)
+    {
+        $this->idProcedureType =$id;
+
+        return $this;
+    }
 
     /**
      * Get idProcedureType
@@ -89,5 +106,25 @@ class ProcedureType
     public function getCode()
     {
         return $this->code;
+    }
+
+    /**
+     * ProcedureType constructor.
+     * @param string $name
+     * @param string $code
+     */
+    public function __construct($name=null, $code=null)
+    {
+        $this->name = $name;
+        $this->code = $code;
+    }
+
+    /**
+     * ProcedureType toString.
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->name;
     }
 }

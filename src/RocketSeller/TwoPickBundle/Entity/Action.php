@@ -76,26 +76,29 @@ class Action
     private $personPerson;
 
     /**
-     * @var \RocketSeller\TwoPickBundle\Entity\Entity
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Entity", inversedBy="action")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="entity_id_entity", referencedColumnName="id_entity")
-     * })
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EmployerHasEntity")
+     * @ORM\JoinColumn(name="employer_has_entity",referencedColumnName="id_employer_has_entity", nullable=true)
      */
-    private $entityEntity;
+    private $employerEntity;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity")
+     * @ORM\JoinColumn(name="employee_has_entity",referencedColumnName="id_employee_has_entity",nullable=true)
+     */
+    private $employeeEntity;
 
     /**
      * @ORM\Column(name="updated_at",type="datetime", nullable=true)
      */
     private $updatedAt = null;
 
-//    /**
-//     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\StatusTypes", inversedBy="actions" )
-//     * @ORM\JoinColumns({
-//     *      @ORM\JoinColumn(name="status_type_id_action",referencedColumnName="id_status_type",nullable=true)
-//     * })
-//     */
-//    private $actionStatus;
+    /**
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\StatusTypes", inversedBy="actions" )
+     * @ORM\JoinColumns({
+     *      @ORM\JoinColumn(name="status_type_id_action",referencedColumnName="id_status_type",nullable=true)
+     * })
+     */
+    private $actionStatus;
 
     /**
      * Set idAction
@@ -215,30 +218,6 @@ class Action
     public function getRealProcedureRealProcedure()
     {
         return $this->realProcedureRealProcedure;
-    }
-
-    /**
-     * Set entityEntity
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\Entity $entityEntity
-     *
-     * @return Action
-     */
-    public function setEntityEntity(\RocketSeller\TwoPickBundle\Entity\Entity $entityEntity = null)
-    {
-        $this->entityEntity = $entityEntity;
-
-        return $this;
-    }
-
-    /**
-     * Get entityEntity
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\Entity
-     */
-    public function getEntityEntity()
-    {
-        return $this->entityEntity;
     }
 
     /**
@@ -373,7 +352,6 @@ class Action
         return $this->updatedAt;
     }
 
-
     /**
      * Set actionStatus
      *
@@ -396,5 +374,54 @@ class Action
     public function getActionStatus()
     {
         return $this->actionStatus;
+    }
+
+
+    /**
+     * Set employerEntity
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\EmployerHasEntity $employerEntity
+     *
+     * @return Action
+     */
+    public function setEmployerEntity(\RocketSeller\TwoPickBundle\Entity\EmployerHasEntity $employerEntity = null)
+    {
+        $this->employerEntity = $employerEntity;
+
+        return $this;
+    }
+
+    /**
+     * Get employerEntity
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\EmployerHasEntity
+     */
+    public function getEmployerEntity()
+    {
+        return $this->employerEntity;
+    }
+
+    /**
+     * Set employeeEntity
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity $employeeEntity
+     *
+     * @return Action
+     */
+    public function setEmployeeEntity(\RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity $employeeEntity = null)
+    {
+        $this->employeeEntity = $employeeEntity;
+
+        return $this;
+    }
+
+    /**
+     * Get employeeEntity
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity
+     */
+    public function getEmployeeEntity()
+    {
+        return $this->employeeEntity;
     }
 }

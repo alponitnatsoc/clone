@@ -14,7 +14,8 @@ use JMS\Serializer\Annotation\Exclude;
  *
  * @ORM\Table(name="employer_has_employee",
  *     indexes={@ORM\Index(name="fk_employer_has_employee_employer1",columns={"employer_id_employer"}),
- *              @ORM\Index(name="fk_employer_has_employee_employee1",columns={"employee_id_employee"})},
+ *              @ORM\Index(name="fk_employer_has_employee_employee1",columns={"employee_id_employee"}),
+ *              @ORM\Index(name="fk_document_status_type1",columns={"document_status_type_id_document_status_type"})},
  *     uniqueConstraints={@UniqueConstraint(name="cartaUnique", columns={"auth_id_document", "id_employer_has_employee"})}
  * )
  * @ORM\Entity
@@ -104,6 +105,15 @@ class EmployerHasEmployee
     private $legalFF = -1;
 
     /**
+     * @var DocumentStatusType
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\DocumentStatusType")
+     * @ORM\JoinColumns({
+     *     @ORM\JoinColumn(name="document_status_type_id_document_status_type", referencedColumnName="id_document_status_type")
+     * })
+     */
+    private $documentStatusType;
+
+    /**
      * Columna para los mensajes que se muestran al usuario en dashboard
      * -2 - employee is not payed
      * -1 - all docs are pending
@@ -130,6 +140,7 @@ class EmployerHasEmployee
      * @ORM\Column(type="datetime", nullable=TRUE)
      */
     private $dateDocumentsUploaded;
+
     /**
      * @ORM\Column(type="datetime", nullable=TRUE)
      */
@@ -247,6 +258,16 @@ class EmployerHasEmployee
     public function getContracts()
     {
         return $this->contracts;
+    }
+
+    /**
+     * Get active contract
+     * @return Contract
+     */
+    public function getActiveContract(){
+        $criteria = Criteria::create()
+        ->where(Criteria::expr()->eq("state",1));
+        return $this->contracts->matching($criteria)->first();
     }
 
     /**
@@ -507,5 +528,29 @@ class EmployerHasEmployee
     public function getDateFinished()
     {
         return $this->dateFinished;
+    }
+
+    /**
+     * Set documentStatusType
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\DocumentStatusType $documentStatusType
+     *
+     * @return EmployerHasEmployee
+     */
+    public function setDocumentStatusType(\RocketSeller\TwoPickBundle\Entity\DocumentStatusType $documentStatusType = null)
+    {
+        $this->documentStatusType = $documentStatusType;
+
+        return $this;
+    }
+
+    /**
+     * Get documentStatusType
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\DocumentStatusType
+     */
+    public function getDocumentStatusType()
+    {
+        return $this->documentStatusType;
     }
 }
