@@ -126,8 +126,11 @@
         <div class="{% if app.request.get('_route') == 'register_express' %}activeMenu{% endif %} well well-lg">
             <a class="notAjax" href="{{ path('register_express') }}">Registro Express</a>
         </div>
-        <div class="{% if app.request.get('_route') == 'show_pilas' %}activeMenu{% endif %} well well-lg separador">
+        <div class="{% if app.request.get('_route') == 'show_pilas' %}activeMenu{% endif %} well well-lg">
             <a class="notAjax" href="{{ path('show_pilas') }}" >Pila</a>
+        </div>
+        <div class="{% if app.request.get('_route') == 'back_entities_view' %}activeMenu{% endif %} well well-lg separador">
+            <a class="notAjax" href="{{ path('back_entities_view') }}" >Entidades Empleados Activos</a>
         </div>
         <div class="{% if app.request.get('_route') == 'show_rejected_pods' %}activeMenu{% endif %} well well-lg separador">
             <a class="notAjax" href="{{ path('show_rejected_pods') }}" >Manejo de devoluciones</a>

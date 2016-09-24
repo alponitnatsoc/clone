@@ -170,16 +170,16 @@
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title" id="myModalLabel">Detalles</h4>
+                                                        <h4 class="modal-title bold azulmediofont" id="myModalLabel">Detalles</h4>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <h4>Devengados<br/></h4>
+                                                        <h4 class="bold azulmediofont">Devengados</h4>
                                                         {% for dev in devengados %}
-                                                            {{ dev.novelty_type_novelty_type.name }} ${{ dev.sql_value|number_format(0, '.', ',')  }} <br/>
+                                                            <p><strong>{{ dev.novelty_type_novelty_type.name }}</strong> ${{ dev.sql_value|number_format(0, '.', ',')  }}</p>
                                                         {% endfor %}
-                                                        <h4>Deducidos<br/></h4>
+                                                        <h4 class="bold azulmediofont">Deducidos</h4>
                                                         {% for ded in deducidos %}
-                                                            {{ ded.novelty_type_novelty_type.name }} ${{ ded.sql_value|number_format(0, '.', ',')  }} <br/>
+                                                            <p><strong>{{ ded.novelty_type_novelty_type.name }}</strong> ${{ ded.sql_value|number_format(0, '.', ',')  }}</p>
                                                         {% endfor %}
 
                                                     </div>

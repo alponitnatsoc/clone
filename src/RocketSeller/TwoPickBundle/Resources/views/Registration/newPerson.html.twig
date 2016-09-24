@@ -260,11 +260,11 @@
                                 {% for phone in form.person.phones %}
                                     <li id="phone_{{loop.index}}" class="phoneLi">
                                         {{ form_row(phone.id) }}
-                                        <div class="col-sm-6 label-group">
+                                        <div class="col-sm-5 col-md-6 label-group">
                                             {{ form_label(phone.phoneNumber)}}
                                             <br><span style="font-size:12px;position:relative;bottom:10px; color:#1fcecb">Enviaremos un código de seguridad a este número</span>
                                         </div>
-                                        <div class="col-sm-6 form-group input">
+                                        <div class="col-sm-7 col-md-6 form-group input">
                                             {{ form_widget(phone.phoneNumber)}}
                                         </div>
                                     </li>
@@ -334,26 +334,26 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-12 col-xs-12">
-                                            <div class="col-sm-6 label-group">
+                                            <div class="col-sm-5 col-md-6 label-group">
                                                 {{ form_label(workplace.mainAddress) }}
                                             </div>
-                                            <div class="col-sm-6 form-group input">
+                                            <div class="col-sm-7 col-md-6 form-group input">
                                                 {{ form_widget(workplace.mainAddress) }}
                                             </div>
                                         </div>
                                         <div class="col-xs-12 col-sm-12">
-                                            <div class="col-sm-6 label-group">
+                                            <div class="col-sm-5 col-md-6 label-group">
                                                 {{ form_label(workplace.department)}}
                                             </div>
-                                            <div class="col-sm-6 form-group">
+                                            <div class="col-sm-7 col-md-6 form-group">
                                                 {{ form_widget(workplace.department)}}
                                             </div>
                                         </div>
                                         <div class="col-xs-12 col-sm-12">
-                                            <div class="col-sm-6 label-group">
+                                            <div class="col-sm-5 col-md-6 label-group">
                                                 {{ form_label(workplace.city) }}
                                             </div>
-                                            <div class="col-sm-6 form-group">
+                                            <div class="col-sm-7 col-md-6 form-group">
                                                 {{ form_widget(workplace.city) }}
                                             </div>
                                         </div>

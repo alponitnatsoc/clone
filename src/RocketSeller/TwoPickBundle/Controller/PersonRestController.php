@@ -503,7 +503,54 @@ class PersonRestController extends FOSRestController
             $view->setData($respuesta)->setStatusCode(200);
             return $view;
         } else {
-            $view->setStatusCode(404)->setHeader("error", "Department does't exist");
+            $view->setStatusCode(404)->setHeader("error", "Department doesn't exist");
+            return $view;
+        }
+    }
+    
+    /**
+     * Get the departments of a country.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Finds the departments of a country.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Bad Request",
+     *     404 = "Returned when the country id doesn't exists "
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     * @RequestParam(name="country", nullable=false,  requirements="\d+", strict=true, description="the desired country departments.")
+     * @return View
+     */
+    public function postDepartmentsAction(ParamFetcher $paramFetcher)
+    {
+        $idCountry = $paramFetcher->get('country');
+        $countryRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Country');
+        
+        $respuesta = array();
+        
+        $countries = $countryRepo->find($idCountry);
+        $departments = $countries->getDepartments();
+    
+        /** @var Department $i */
+        foreach($departments as $i) {
+            $temp = array();
+            $temp['id_city'] = $i->getIdDepartment();
+            $temp['name'] = $i->getName();
+            $respuesta[] = $temp;
+        }
+        
+        $view = View::create();
+        
+        if (count($respuesta) != 0) {
+            $view->setData($respuesta)->setStatusCode(200);
+            return $view;
+        } else {
+            $view->setStatusCode(404)->setHeader("error", "Country doesn't exist");
             return $view;
         }
     }

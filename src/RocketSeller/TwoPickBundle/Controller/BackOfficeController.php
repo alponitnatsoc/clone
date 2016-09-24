@@ -86,6 +86,28 @@ class BackOfficeController extends Controller
 
     }
 
+    public function showHaveToPayUsersAction()
+    {
+        $users = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->findAll();
+        $dateNow= new DateTime();
+        $response= new ArrayCollection();
+        /** @var User $user */
+        foreach ($users as $user) {
+            $isFreeMonths = $user->getIsFree();
+            if($user->getLastPayDate()==null)
+                continue;
+            $effectiveDate = new DateTime(date('Y-m-d', strtotime("+$isFreeMonths months", strtotime($user->getLastPayDate()->format("Y-m-1")))));
+
+            if($effectiveDate<=$dateNow){
+                $response->add($user);
+            }
+
+        }
+
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:haveToPay.html.twig',array('users'=>$response));
+
+    }
+
     public function showRejectedPODAction()
     {
         $codesRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription");
@@ -1342,8 +1364,7 @@ class BackOfficeController extends Controller
 	public function addToSQLPendingVacationsAction($idEmployerHasEmployee,$pendingDays){
 
 		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
-		return $this->redirectToRoute("back_office");
-
+		
 		$request = $this->container->get('request');
 		$request->setMethod("POST");
 		$request->request->add(array(
@@ -1354,5 +1375,19 @@ class BackOfficeController extends Controller
 		$insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddPendingVacationDays', array('_format' => 'json'));
 
 		return $this->redirectToRoute('back_office');
+	}
+	
+	public function eheEntitiesViewAction(){
+		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+		
+		$criteria = new \Doctrine\Common\Collections\Criteria();
+		$criteria->where($criteria->expr()->gt('state', 3));
+		
+		$em = $this->getDoctrine()->getManager();
+		$eheRepo = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
+		$filteredEheRepo = $eheRepo->matching($criteria);
+		
+		return $this->render('RocketSellerTwoPickBundle:BackOffice:entitiesView.html.twig', array('ehes' => $filteredEheRepo));
+		
 	}
 }

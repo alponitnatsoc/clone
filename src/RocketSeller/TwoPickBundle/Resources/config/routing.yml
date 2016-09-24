@@ -88,6 +88,9 @@ show_base_users_register:
 show_successful_invoices:
     path:     /backoffice/show/successful/invoices
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showSuccessfulInvoices}
+show_have_to_pay_users:
+    path:     /backoffice/show/havetopay/users
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showHaveToPayUsers}
 add_to_sql_and_hightec_back:
     path:     /backoffice/addtoback/{user}/{autentication}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:addToSQLandHighTecBack}
@@ -204,3 +207,6 @@ back_test_email:
 back_pending_vacations:
     path:         /backoffice/pending/{idEmployerHasEmployee}/vacations/{pendingDays}
     defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:addToSQLPendingVacations }
+back_entities_view:
+    path:         /backoffice/entidades
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:eheEntitiesView }

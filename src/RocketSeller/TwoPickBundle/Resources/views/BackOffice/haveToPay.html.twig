@@ -1,0 +1,27 @@
+{% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
+
+{% block fos_user_content %}
+    <div id="main" class="col-sm-10">
+        <div class="col-md-12">
+            <h2>Usuarios que tienen que pagar membresía este més</h2>
+            <br>
+            <table class="table">
+                <tr>
+                    <th>Número</th>
+                    <th>Usuario</th>
+                </tr>
+                {% for user in users %}
+                    <tr>
+                        <td>
+                            {{ user.id }}
+                        </td>
+                        <td>
+                            {{ user.personPerson.fullName }}
+                        </td>
+                    </tr>
+                {% endfor %}
+
+            </table>
+        </div>
+    </div>
+{% endblock %}
