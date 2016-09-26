@@ -815,13 +815,14 @@ class BackOfficeController extends Controller
 
     public function reportErrorAction($idAction,Request $request)
     {
+        /** @var Action $action */
     	$action = $this->loadClassById($idAction,"Action");
     	if ($request->getMethod() == 'POST') {
     		$description = $request->request->get('description');
     		$actionError = new ActionError();
     		$actionError->setDescription($description);
             $actionError->setStatus('Sin contactar');
-    		$action->setActionErrorActionError($actionError);
+    		$action->addActionErrorActionError($actionError);
     		$action->setStatus("Error");
 		   	$em = $this->getDoctrine()->getManager();
 		    $em->persist($actionError);
