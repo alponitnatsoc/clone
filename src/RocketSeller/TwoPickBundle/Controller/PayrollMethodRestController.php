@@ -343,7 +343,7 @@ class PayrollMethodRestController extends FOSRestController
                 }
 
             }
-            if(count($podPila->getPayrollsPila())!=0){
+            if(count($podPila->getPayrollsPila())!=0&&$podPila->getPurchaseOrdersStatus()!=null&&$podPila->getPurchaseOrdersStatus()->getIdNovoPay()=="P1"){
                 $podPila->setDescription("Pago de PILA mes " . $month);
                 $prodRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
                 $product = $prodRepo->findOneBy(array("simpleName" => "PP"));
