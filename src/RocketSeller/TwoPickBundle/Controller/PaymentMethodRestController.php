@@ -940,6 +940,7 @@ class PaymentMethodRestController extends FOSRestController
 
         $pOS = $pOSRepo->findOneBy(array("idNovoPay" => "00"));
         $purchaseOrder->setPurchaseOrdersStatus($pOS);
+        $purchaseOrder->setDatePaid(new DateTime());
         $em->persist($purchaseOrder);
         $em->flush();
         return array('code'=>200);
