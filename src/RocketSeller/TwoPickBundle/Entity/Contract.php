@@ -9,7 +9,11 @@ use JMS\Serializer\Annotation\Exclude;
 /**
  * Contract
  *
- * @ORM\Table(name="contract", indexes={@ORM\Index(name="fk_contract_employer_has_employee1", columns={"employer_has_employee_id_employer_has_employee"}), @ORM\Index(name="fk_contract_contract_type1", columns={"contract_type_id_contract_type"}), @ORM\Index(name="fk_contract_document1", columns={"document_id_document"})})
+ * @ORM\Table(name="contract",
+ *     indexes={@ORM\Index(name="fk_contract_employer_has_employee1", columns={"employer_has_employee_id_employer_has_employee"}),
+ *              @ORM\Index(name="fk_contract_contract_type1", columns={"contract_type_id_contract_type"}),
+ *              @ORM\Index(name="fk_contract_document1", columns={"document_id_document"}),
+ *              @ORM\Index(name="fk_contract_document_status_type1", columns={"contract_document_status_type_id_contract_document_status_type"})})
  * @ORM\Entity
  */
 class Contract
@@ -115,6 +119,15 @@ class Contract
      * @ORM\OneToMany(targetEntity="WeekWorkableDays", mappedBy="contractContract", cascade={"persist"})
      */
     private $weekWorkableDays;
+
+    /**
+     * @var ContractDocumentStatusType
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\ContractDocumentStatusType")
+     * @ORM\JoinColumns({
+     *     @ORM\JoinColumn(name="contract_document_status_type_id_contract_document_status_type", referencedColumnName="id_contract_document_status_type")
+     * })
+     */
+    private $contractDocumentStatusType;
 
     /**
      * 0 Pending
@@ -956,5 +969,29 @@ class Contract
     public function getBackStatus()
     {
         return $this->backStatus;
+    }
+
+    /**
+     * Set contractDocumentStatusType
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\ContractDocumentStatusType $contractDocumentStatusType
+     *
+     * @return Contract
+     */
+    public function setContractDocumentStatusType(\RocketSeller\TwoPickBundle\Entity\ContractDocumentStatusType $contractDocumentStatusType = null)
+    {
+        $this->contractDocumentStatusType = $contractDocumentStatusType;
+
+        return $this;
+    }
+
+    /**
+     * Get contractDocumentStatusType
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\ContractDocumentStatusType
+     */
+    public function getContractDocumentStatusType()
+    {
+        return $this->contractDocumentStatusType;
     }
 }

@@ -141,3 +141,7 @@ push_notification :
     type: rest
     resource: "RocketSellerTwoPickBundle:PushNotificationRest"
     name_prefix: api_public_
+actions :
+    type: rest
+    resource : "RocketSellerTwoPickBundle:ActionsRest"
+    name_prefix: api_public_

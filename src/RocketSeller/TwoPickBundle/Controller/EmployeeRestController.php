@@ -9,15 +9,22 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use GuzzleHttp\Psr7\Response;
 use RocketSeller\TwoPickBundle\Admin\ContractHasBenefitsAdmin;
 use RocketSeller\TwoPickBundle\Entity\AccountType;
+use RocketSeller\TwoPickBundle\Entity\Action;
+use RocketSeller\TwoPickBundle\Entity\ActionType;
 use RocketSeller\TwoPickBundle\Entity\Bank;
 use RocketSeller\TwoPickBundle\Entity\Benefits;
 use RocketSeller\TwoPickBundle\Entity\Contract;
+use RocketSeller\TwoPickBundle\Entity\ContractDocumentStatusType;
 use RocketSeller\TwoPickBundle\Entity\ContractHasBenefits;
 use RocketSeller\TwoPickBundle\Entity\ContractHasWorkplace;
 use RocketSeller\TwoPickBundle\Entity\ContractType;
+use RocketSeller\TwoPickBundle\Entity\Document;
+use RocketSeller\TwoPickBundle\Entity\DocumentStatusType;
 use RocketSeller\TwoPickBundle\Entity\Employee;
 use FOS\RestBundle\Controller\FOSRestController;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -39,10 +46,14 @@ use RocketSeller\TwoPickBundle\Entity\PayType;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\Phone;
+use RocketSeller\TwoPickBundle\Entity\ProcedureType;
+use RocketSeller\TwoPickBundle\Entity\RealProcedure;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\WeekWorkableDays;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
+use RocketSeller\TwoPickBundle\Traits\EmployeeMethodsTrait;
 use RocketSeller\TwoPickBundle\Traits\SubscriptionMethodsTrait;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Validator\ConstraintViolationList;
 use RocketSeller\TwoPickBundle\Entity\Notification;
 use DateTime;
@@ -428,6 +439,7 @@ class EmployeeRestController extends FOSRestController
                 $employerEmployee->setEmployeeEmployee($employee);
                 $employerEmployee->setEmployerEmployer($user->getPersonPerson()->getEmployer());
                 $employee->addEmployeeHasEmployer($employerEmployee);
+
             } elseif ($id == -2) {
                 $employee = new Employee();
                 $person = $people;
@@ -1233,7 +1245,7 @@ class EmployeeRestController extends FOSRestController
             $realEmployeer = $realEmployerHasEmployee->getEmployerEmployer();
             if ($idEmployer == $realEmployeer->getIdEmployer()) {
                 $this->validateDocumentsEmployee2($realEmployerHasEmployee->getEmployeeEmployee());
-                $this->validateEntitiesEmployee($realEmployerHasEmployee->getEmployeeEmployee());
+                $this->validateEntitiesEmployee2($realEmployerHasEmployee->getEmployeeEmployee());
             } else {
                 $view = View::create();
                 $view->setData(array('error' => array('employee' => 'do not contain')))->setStatusCode(401);
@@ -1248,10 +1260,8 @@ class EmployeeRestController extends FOSRestController
         return $view;
     }
 
-    private function validateEntitiesEmployee($realEmployee)
+    private function validateEntitiesEmployee2($realEmployee)
     {
-
-
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $personEmployee = $realEmployee->getPersonPerson();
@@ -2166,6 +2176,5 @@ class EmployeeRestController extends FOSRestController
 
         return $view;
     }
-
 
 }

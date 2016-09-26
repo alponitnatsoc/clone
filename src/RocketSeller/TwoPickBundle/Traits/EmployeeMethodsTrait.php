@@ -31,7 +31,6 @@ trait EmployeeMethodsTrait
     {
         $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee');
         $employee = $repository->find($id);
-
         return $employee;
     }
 
@@ -401,7 +400,7 @@ trait EmployeeMethodsTrait
         /** @var EmployerHasEmployee $eHE */
         foreach($eHEs as $eHE){
             //if the employee is payed
-            if($eHE->getState()>=3){
+            if($eHE->getState()>=2){
                 //if employee state is not payed or all documents pending changing the document state to all documents pending
                 if($eHE->getDocumentStatus()==-2 or $eHE->getDocumentStatus()==-1)
                     $eHE->setDocumentStatus(-1);

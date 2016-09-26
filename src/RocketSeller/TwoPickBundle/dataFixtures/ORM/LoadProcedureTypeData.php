@@ -17,6 +17,11 @@ class LoadProcedureTypeData extends AbstractFixture implements OrderedFixtureInt
         $procedureTypeInscription->setCode('REE');
         $manager->persist($procedureTypeInscription);
 
+        $procedureTypeValidarContrato = new ProcedureType();
+        $procedureTypeValidarContrato->setName('Validar Contrato');
+        $procedureTypeValidarContrato->setCode('VAC');
+        $manager->persist($procedureTypeValidarContrato);
+
         $procedureTypePagoPila = new ProcedureType();
         $procedureTypePagoPila->setName('Pago de pila');
         $procedureTypePagoPila->setCode('PPL');

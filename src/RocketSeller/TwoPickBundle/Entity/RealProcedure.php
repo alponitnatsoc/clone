@@ -213,6 +213,7 @@ class RealProcedure
      */
     public function addAction(\RocketSeller\TwoPickBundle\Entity\Action $action)
     {
+        $action->setRealProcedureRealProcedure($this);
         $this->action[] = $action;
 
         return $this;
@@ -355,6 +356,17 @@ class RealProcedure
         return $this->action->matching($criteria);
     }
 
+    /**
+     * @param $actionType
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActionsNotMatching($actionType)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->neq('actionTypeActionType',$actionType));
+        return $this->action->matching($criteria);
+    }
+
 
     /**
      * Set backOfficeDate
@@ -428,5 +440,15 @@ class RealProcedure
     public function getProcedureStatus()
     {
         return $this->procedureStatus;
+    }
+
+    /**
+     * Get procedureTypeName
+     *
+     * @return string
+     */
+    public function getProcedureTypeName()
+    {
+        return $this->procedureTypeProcedureType->getName();
     }
 }

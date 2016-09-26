@@ -247,7 +247,7 @@
                             <div class="col-sm-5 col-md-6 label-group">
                                 {{ form_label(form.personExtra.civilStatus) }}
                             </div>
-                            <div class="col-sm-5 col-md-6 form-group">
+                            <div class="col-sm-7 col-md-6 form-group">
                                 {{ form_widget(form.personExtra.civilStatus) }}
                             </div>
                             <!--<img src="/img/typePerson.png">-->
@@ -342,26 +342,26 @@
                     <div class="col-sm-11 col-xs-12 content-input blockUpData">
 
                         <div class="col-sm-12">
-                            <div class="col-sm-6 label-group">
+                            <div class="col-sm-5 col-md-6 label-group">
                                 <label>Dirección donde vive el empleado</label>
                             </div>
-                            <div class="col-sm-6 form-group input">
+                            <div class="col-sm-7 col-md-6 form-group input">
                                 {{ form_widget(form.person.mainAddress) }}
                             </div>
                         </div>
                         <div class="col-sm-12">
-                            <div class="col-sm-6 label-group">
+                            <div class="col-sm-5 col-md-6 label-group">
                                 {{ form_label(form.person.department)}}
                             </div>
-                            <div class="col-sm-6 form-group">
+                            <div class="col-sm-7 col-md-6 form-group">
                                 {{ form_widget(form.person.department) }}
                             </div>
                         </div>
                         <div class="col-sm-12">
-                            <div class="col-sm-6 label-group">
+                            <div class="col-sm-5 col-md-6 label-group">
                                 {{ form_label(form.person.city)}}
                             </div>
-                            <div class="col-sm-6 form-group">
+                            <div class="col-sm-7 col-md-6 form-group">
                                 {{ form_widget(form.person.city) }}
                             </div>
                         </div>
@@ -370,19 +370,19 @@
                                 {% for phone in form.person.phones %}
                                     <li id="phone_{{loop.index}}" class="phoneLi">
                                         {{ form_row(phone.id) }}
-                                        <div class="col-sm-6 label-group">
+                                        <div class="col-sm-5 col-md-6 label-group">
                                             {{ form_label(phone.phoneNumber)}}
-                                          <p style="font-size:12px"><i>Preferiblemente el celular para enviar notificaciones a tu empleado</i></p>
                                         </div>
-                                        <div class="col-sm-6 form-group input">
+                                        <div class="col-sm-7 col-md-6 form-group input">
                                             {{ form_widget(phone.phoneNumber)}}
                                         </div>
+                                        <p style="font-size: 12px;clear: both;text-align: center;"><i>Preferiblemente el celular para enviar notificaciones a tu empleado</i></p>
                                     </li>
                                 {% endfor %}
                             </ul>
                         </div>
                         <div class="col-sm-12">
-                            <div class="col-sm-6 label-group">
+                            <div class="col-sm-5 col-md-6 label-group">
                                 {{ form_label(form.personExtra.email, null,{
                                     'label' : 'Email (Opcional)',
                                     'label_attr': {
@@ -391,7 +391,7 @@
                                     },
                                 })}}
                             </div>
-                            <div class="col-sm-6 form-group">
+                            <div class="col-sm-7 col-md-6 form-group">
                                 {{ form_widget(form.personExtra.email) }}
                             </div>
                         </div>
@@ -486,53 +486,6 @@
 
                                     </div>
                                 </div>
-                                <!--<div class="row contractOptionsBox">
-                                    <div class="col-xs-6">
-                                        <h2>Término indefinido</h2>
-                                        <div class="contractFirstList">
-                                            <h4 class="text-center">Características</h4>
-                                            <ul class="">
-                                                <li>No tiene una fecha determinada de terminación</li>
-                                                <li>El periodo de prueba máximo es de 2 meses</li>
-                                                <li>Recomendado para empleadores que quieran contratar a un empleado por un largo periodo de tiempo</li>
-
-                                            </ul>
-                                        </div>
-
-                                        <div class="contractSecondList">
-                                            <h4 class="text-center">A tener en cuenta</h4>
-                                            Si el contrato se termina unilateralmente por el empleador después del periodo de prueba y sin justa causa, la indeminzación es de 30 días por el primer año y 20 por cada año subsiguiente usando como base el salario actual.
-                                        </div>
-                                        <div class="buttonContainer">
-                                            <button type="button" id="btnToggleIndefinido" class="btn-contrato btn active">Seleccionar</button>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-6">
-                                        <h2 class="margin-responsive">Término fijo</h2>
-                                        <div class="contractFirstList height-responsive">
-                                            <h4 class="text-center">Características</h4>
-                                            <ul class="">
-                                                <li>El periodo de prueba es la quinta parte de la duración del contrato no obstante no puede superar los dos meses.</li>
-                                                <li>Se renueva automáticamente si no se notifica su terminación 30 días antes de la fecha de terminación.</li>
-                                                <li>Recomendado para empleadores que quieran contratar a un empleado por un tiempo determinado menor o igual a un año.</li>
-                                                <li>Si el contrato es por menos de un año sólo se puede renovar por periodos más cortos o iguales al inicialmente pactado.</li>
-                                                <li>Si el término fijo es inferior a un (1) año, únicamente podrá prorrogarse sucesivamente el contrato hasta por tres (3) períodos iguales o inferiores, al cabo de los cuales el término de renovación no podrá ser inferior a un (1) año.</li>
-                                            </ul>
-                                        </div>
-
-                                        <div class="contractSecondList">
-                                            <h4 class="text-center">A tener en cuenta</h4>
-                                            Si el contrato se termina unilateralmente por el empleador después del periodo de prueba y sin justa causa, se debe indemnizar al empleado por el valor remanente del contrato.
-                                            <br /><br />
-                                            Además, este tipo de contrato debe cancelarse 30 días antes que finalice.
-                                        </div>
-                                        <div class="buttonContainer">
-                                            <button type="button" id="btnToggleFijo" class="btn-contrato btn ">Seleccionar</button>
-                                        </div>
-                                    </div>
-                                </div>-->
-
-
                                 <br/><br/>
                                 <div class="row">
                                     <div class="col-sm-12 form-group text-center">
@@ -593,20 +546,20 @@
                             <div id="employeeContractTypeTab" class="tab-pane fade in">
                                 <div class="formulario col-xs-12">
                                     <div class="col-sm-12 col-xs-12 blockUpData">
-                                        <div class="col-sm-6 label-group">
+                                        <div class="col-sm-5 col-md-6 label-group">
                                             {{ form_label(form.employeeHasEmployers.position) }}
                                         </div>
-                                        <div class="col-sm-6 form-group">
+                                        <div class="col-sm-7 col-md-6 form-group">
                                             {{ form_widget(form.employeeHasEmployers.position) }}
                                         </div>
                                     </div>
 
                                     <div class="col-sm-12 col-xs-12">
-                                        <div class="col-sm-6 label-group">
+                                        <div class="col-sm-5 col-md-6 label-group">
 
                                             {{ form_label(form.employeeHasEmployers.timeCommitment) }}
                                         </div>
-                                        <div class="col-sm-6 form-group">
+                                        <div class="col-sm-7 col-md-6 form-group">
                                             {#{ form_widget(form.employeeHasEmployers.timeCommitment, { 'attr': {'data-error': '#error_time_commitment'} }) }#}
 
                                             {% for key, item in form.employeeHasEmployers.timeCommitment.children %}
@@ -634,7 +587,7 @@
                                     </div>
                                     #}
                                     <div id="hidePensOpt" class="col-sm-12 col-xs-12">
-                                        <div class="col-sm-6 label-group">
+                                        <div class="col-sm-5 col-md-6 label-group">
                                           <div style="float:left" id="pensionTooltip" class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="top" data-container = "body" data-delay="{ show: 1, hide: 1}"
                                           title="No requiere aportar a pensión cuando:
                                                 Ya está pensionado,
@@ -645,20 +598,19 @@
                                             'label_attr': {
                                             'style': "width:90%",}})}}
                                         </div>
-                                        <div class="col-sm-6 form-group">
+                                        <div class="col-sm-7 col-md-6 form-group">
                                             {{ form_widget(form.employeeHasEmployers.paysPens) }}
                                         </div>
                                     </div>
 
                                     <div class="col-sm-12 col-xs-12">
-                                        <div class="col-sm-6 label-group">
+                                        <div class="col-sm-5 col-md-6 label-group">
                                             {{ form_label(form.employeeHasEmployers.workplaces) }}
                                         </div>
-                                        <div class="col-sm-6 form-group">
+                                        <div class="col-sm-7 col-md-6 form-group">
                                             {{ form_widget(form.employeeHasEmployers.workplaces) }}
                                             <a id="addWorplace" class="add_phone_link" style="padding-top:2px !important;color:#00cdcc;text-decoration: none;"><i class="fa fa-plus-circle fa-2x" style="vertical-align: middle; color:#00cdcc;font-size:18px;"></i> <span style="display: inline;font-size:13px;cursor:pointer">Agregar lugar de trabajo</span></a>
                                         </div>
-
                                     </div>
 
                                 </div>
@@ -725,7 +677,7 @@
                                 </div>-->
                                 <div class="col-sm-12 complete">
                                     <div class="col-xs-12 col-sm-6 padding-container text-center form-group">
-                                        <p class="p">¿Cuánto será el salario mensual?</p>
+                                        <p class="p">¿Cuánto será el salario mensual del empleado?</p>
                                         {{ form_widget(form.employeeHasEmployers.salary) }}
                                     </div>
                                     <div class="padding-container col-xs-12 col-sm-6 priceContainer">
@@ -1555,57 +1507,57 @@ $(document).ready(function(){
                                 {% set wname = "" %}
                             {% endif %}
 
-                            <div class="col-sm-10 col-xs-12 blockUpData">
+                            <div class="col-sm-11 col-xs-12 blockUpData">
                                 <div id="wealthBlock" class="col-sm-12 col-xs-12 complete">
                                     <div class="hidden">
                                         {{ form_row(form.entities.wealth) }}
                                     </div>
-                                    <div class="col-sm-6 label-group">
+                                    <div class="col-sm-5 col-md-6 label-group">
                                         {{ form_label(form.entities.wealthAC) }}
                                     </div>
-                                    <div class="col-sm-6 form-group">
+                                    <div class="col-sm-7 col-md-6 form-group">
                                         {{ form_widget(form.entities.wealthAC, { 'value' : wname}) }}
                                     </div>
                                     <p id="errorWealth" style="color:red;">Entidad no encontrada en la base de datos, por favor revisa lo escrito</p>
                                     {#                             {{ form_row(form.entities.wealthAC,{'value' : wname}) }}#}
                                     <div class="col-sm-12 col-xs-12">
-                                        <div class="col-sm-6 label-group">
+                                        <div class="col-sm-5 col-md-6 label-group">
                                             {{ form_label(form.entities.wealthExists) }}
                                         </div>
-                                        <div class="col-sm-6 form-group">
+                                        <div class="col-sm-7 col-md-6 form-group">
                                             {{ form_widget(form.entities.wealthExists) }}
                                         </div>
                                     </div>
                                 </div>
                                 <div  class="col-sm-12 col-xs-12">
-                                    <div class="col-sm-6 label-group">
+                                    <div class="col-sm-5 col-md-6 label-group">
                                         {{ form_label(form.entities.severances) }}
                                     </div>
-                                    <div class="col-sm-6 form-group">
+                                    <div class="col-sm-7 col-md-6 form-group">
                                         {{ form_widget(form.entities.severances) }}
                                     </div>
                                     <div class="col-sm-12 col-xs-12 hidden">
-                                        <div class="col-sm-6 label-group">
+                                        <div class="col-sm-5 col-md-6 label-group">
                                             {{ form_label(form.entities.severancesExists) }}
                                         </div>
-                                        <div class="col-sm-6 form-group">
+                                        <div class="col-sm-7 col-md-6 form-group">
                                             {{ form_widget(form.entities.severancesExists) }}
                                         </div>
                                     </div>
                                 </div>
 
                                 <div id="pensionHide"  class="col-sm-12 col-xs-12">
-                                    <div class="col-sm-6 label-group">
+                                    <div class="col-sm-5 col-md-6 label-group">
                                         {{ form_label(form.entities.pension) }}
                                     </div>
-                                    <div class="col-sm-6 form-group">
+                                    <div class="col-sm-7 col-md-6 form-group">
                                         {{ form_widget(form.entities.pension) }}
                                     </div>
                                     <div class="col-sm-12 col-xs-12">
-                                        <div class="col-sm-6 label-group">
+                                        <div class="col-sm-5 col-md-6 label-group">
                                             {{ form_label(form.entities.pensionExists) }}
                                         </div>
-                                        <div class="col-sm-6 form-group">
+                                        <div class="col-sm-7 col-md-6 form-group">
                                             {{ form_widget(form.entities.pensionExists) }}
                                         </div>
                                     </div>

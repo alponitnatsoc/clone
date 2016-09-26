@@ -43,6 +43,7 @@ class EmployeeHasEntity
     private $employeeEmployee;
 
     /**
+     * -1 - sisben
      * 0 - validar
      * 1 - inscribir
      * 2 - error
