@@ -346,47 +346,37 @@ class ProcedureController extends Controller
         $procedure = new RealProcedure();
         $procedure->setCreatedAt(new \DateTime());
         $procedure->setProcedureTypeProcedureType($procedureType);
-        $procedure->setEmployerEmployer($employerSearch);
-        $procedure->setUserUser($userSearch);//se asigna el usuario de backoffice
+        $employerSearch->addRealProcedure($procedure);
+        $userSearch->addRealProcedure($procedure);
         $em2->persist($procedure);
-        
         switch($idProcedureType){
 			// registro empleador y empleados
             case 1:
 				// se crea la accion para validar la informacion registrada por el empleador
 				$action = new Action();
 				$action->setStatus('Nuevo');
-				$action->setRealProcedureRealProcedure($procedure);
 				$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VER'),"ActionType"));
-				$action->setPersonPerson($employerSearch->getPersonPerson());
-				$action->setUserUser($userSearch);
+                $procedure->addAction($action);
+                $employerSearch->getPersonPerson()->addAction($action);
+                $userSearch->addAction($action);
 				$em->persist($action);
-				$em->flush();
-				//se agrega la accion al procedimiento
-				$procedure->addAction($action);
 
 				// se crea la accion para validar documentos del empleador
 				$action = new Action();
 				$action->setStatus('Nuevo');
-				$action->setRealProcedureRealProcedure($procedure);
 				$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VDC'),"ActionType"));
-				$action->setPersonPerson($employerSearch->getPersonPerson());
-				$action->setUserUser($userSearch);
+                $procedure->addAction($action);
+                $employerSearch->getPersonPerson()->addAction($action);
+                $userSearch->addAction($action);
 				$em->persist($action);
-				$em->flush();
-				//se agrega la accion al procedimiento
-				$procedure->addAction($action);
 
 				$action = new Action();
 				$action->setStatus('Nuevo');
-				$action->setRealProcedureRealProcedure($procedure);
 				$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VM'),"ActionType"));
-				$action->setPersonPerson($employerSearch->getPersonPerson());
-				$action->setUserUser($userSearch);
+                $procedure->addAction($action);
+                $employerSearch->getPersonPerson()->addAction($action);
+                $userSearch->addAction($action);
 				$em->persist($action);
-				$em->flush();
-				//se agrega la accion al procedimiento
-				$procedure->addAction($action);
 
 				// se obtienen las entidades del empleador
 				/** @var EmployerHasEntity $entities */
@@ -395,28 +385,22 @@ class ProcedureController extends Controller
 						//se crea la accion para la entidad del empleador
 						$action = new Action();
 						$action->setStatus('Nuevo');
-						$action->setRealProcedureRealProcedure($procedure);
-						$action->setEntityEntity($entities->getEntityEntity());
-					}
-					//si el usuario ya pertenece a la entidad se asigna el tipo de accion de validar la entidad
-					if ($entities->getState()===0){
-						$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VEN'),"ActionType"));
-						$action->setPersonPerson($employerSearch->getPersonPerson());
-						$action->setUserUser($userSearch);
-						$em->persist($action);
-						$em->flush();
-						//si el usuario desea inscribirse se asigna el tipo de accion para inscribir entidad
-					}elseif($entities->getState()===1){
-						$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'IN'),"ActionType"));
-						$action->setPersonPerson($employerSearch->getPersonPerson());
-						$action->setUserUser($userSearch);
-						$em->persist($action);
-						$em->flush();
-					}
-					//se agrega la accion al procedimiento
-					$procedure->addAction($action);
-				}
+                        $procedure->addAction($action);
+                        $userSearch->addAction($action);
+                        $employerSearch->getPersonPerson()->addAction($action);
+						$action->setEmployerEntity($entities);
+                        //si el usuario ya pertenece a la entidad se asigna el tipo de accion de validar la entidad
+                        if ($entities->getState()===0){
+                            $action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VEN'),"ActionType"));
+                            $em->persist($action);
+                            //si el usuario desea inscribirse se asigna el tipo de accion para inscribir entidad
+                        }elseif($entities->getState()===1){
+                            $action->setActionTypeActionType($this->loadClassByArray(array('code'=>'IN'),"ActionType"));
+                            $em->persist($action);
+                        }
+                    }
 
+				}
 				//se obtienen todos los emleados del empleador
 				/** @var EmployerHasEmployee $employerHasEmployee */
 				foreach ($employerSearch->getEmployerHasEmployees() as $employerHasEmployee) {
@@ -426,26 +410,20 @@ class ProcedureController extends Controller
 							//se crea la accion para validar la informacion del empleado
 							$action = new Action();
 							$action->setStatus('Nuevo');
-							$action->setRealProcedureRealProcedure($procedure);
-							$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VEE'),"ActionType"));
-							$action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
-							$action->setUserUser($userSearch);
-							$em->persist($action);
-							$em->flush();
-							//se agrega la accion al procedimiento
 							$procedure->addAction($action);
+                            $userSearch->addAction($action);
+                            $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($action);
+							$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VEE'),"ActionType"));
+							$em->persist($action);
 
 							//se crea la accion para validar documentos y generar contrato
 							$action = new Action();
 							$action->setStatus('Nuevo');
-							$action->setRealProcedureRealProcedure($procedure);
+                            $procedure->addAction($action);
+                            $userSearch->addAction($action);
+                            $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($action);
 							$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VDC'),"ActionType"));
-							$action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
-							$action->setUserUser($userSearch);
 							$em->persist($action);
-							$em->flush();
-							//se agrega la accion al procedimiento
-							$procedure->addAction($action);
 
 							//se obtienen las entidades del empleado
 							/** @var EmployeeHasEntity $employeeHasEntity */
@@ -454,38 +432,31 @@ class ProcedureController extends Controller
 									//se crea a accion para las entidades del empleado
 									$action = new Action();
 									$action->setStatus('Nuevo');
-									$action->setRealProcedureRealProcedure($procedure);
-									$action->setEntityEntity($employeeHasEntity->getEntityEntity());
+                                    $procedure->addAction($action);
+                                    $userSearch->addAction($action);
+                                    $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($action);
+									$action->setEmployeeEntity($employeeHasEntity);
 
 									//si el usuario ya pertenece a la entidad se asigna el tipo de accion de validar la entidad
 									if ($employeeHasEntity->getState()===0){
 										$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VEN'),"ActionType"));
-										$action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
-										$action->setUserUser($userSearch);
 										$em->persist($action);
-										$em->flush();
 										//si el usuario desea inscribirse se asigna el tipo de accion para inscribir entidad
 									}elseif($employeeHasEntity->getState()===1){
 										$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'IN'),"ActionType"));
-										$action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
-										$action->setUserUser($userSearch);
 										$em->persist($action);
-										$em->flush();
 									}
-									//se agrega la accion al procedimiento
-									$procedure->addAction($action);
 								}
 							}
 							//si el empleado es antiguo (ya inicio labores) se crea el tramite de validar contrato
 							if($employerHasEmployee->getLegalFF()==1){
 								$actionV = new Action();
 								$actionV->setStatus('Nuevo');
-								$actionV->setRealProcedureRealProcedure($procedure);
+                                $procedure->addAction($action);
+                                $userSearch->addAction($action);
+                                $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($action);
 								$actionV->setActionTypeActionType($this->loadClassByArray(array('code'=>'VC'),"ActionType"));
-								$actionV->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
-								$actionV->setUserUser($userSearch);
 								$em->persist($actionV);
-								$em->flush();
 								//se agrega la accion al procedimiento
 								$action->getRealProcedureRealProcedure()->addAction($actionV);
 							}
@@ -494,49 +465,40 @@ class ProcedureController extends Controller
 							//se crea la accion de informacion del empleado validada
 							$action = new Action();
 							$action->setStatus('Completado');
-							$action->setRealProcedureRealProcedure($procedure);
+                            $procedure->addAction($action);
+                            $userSearch->addAction($action);
+                            $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($action);
 							$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VEE'),"ActionType"));
-							$action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
-							$action->setUserUser($userSearch);
 							$em->persist($action);
-							$em->flush();
-							//se agrega la accion al procedimiento
-							$procedure->addAction($action);
 
 							//se crea la accion para validar documentos y generar contrato
 							$action = new Action();
 							$action->setStatus('Nuevo');
-							$action->setRealProcedureRealProcedure($procedure);
+                            $procedure->addAction($action);
+                            $userSearch->addAction($action);
+                            $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($action);
 							$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VDC'),"ActionType"));
-							$action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
-							$action->setUserUser($userSearch);
 							$em->persist($action);
-							$em->flush();
-							//se agrega la accion al procedimiento
-							$procedure->addAction($action);
+
                             //si el empleado ya es empleado de alguien se crean los tramites ya completados
 							foreach ($employerHasEmployee->getEmployeeEmployee()->getEntities() as $employeeHasEntity) {
 								if ($employeeHasEntity->getState()>=0) {
 									//se crea a accion para las entidades del empleado
 									$action = new Action();
 									$action->setStatus('Completado');
-									$action->setRealProcedureRealProcedure($procedure);
-									$action->setEntityEntity($employeeHasEntity->getEntityEntity());
+                                    $procedure->addAction($action);
+                                    $userSearch->addAction($action);
+                                    $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($action);
+									$action->setEmployeeEntity($employeeHasEntity);
 
 									//si el usuario ya pertenece a la entidad se asigna el tipo de accion de validar la entidad
 									if ($employeeHasEntity->getState()===0){
 										$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VEN'),"ActionType"));
-										$action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
-										$action->setUserUser($userSearch);
 										$em->persist($action);
-										$em->flush();
 										//si el usuario desea inscribirse se asigna el tipo de accion para inscribir entidad
 									}elseif($employeeHasEntity->getState()===1){
 										$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'IN'),"ActionType"));
-										$action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
-										$action->setUserUser($userSearch);
 										$em->persist($action);
-										$em->flush();
 									}
 									//se agrega la accion al procedimiento
 									$procedure->addAction($action);
@@ -546,21 +508,16 @@ class ProcedureController extends Controller
 							if($employerHasEmployee->getLegalFF()==1){
 								$actionV = new Action();
 								$actionV->setStatus('Nuevo');
-								$actionV->setRealProcedureRealProcedure($procedure);
+                                $procedure->addAction($action);
+                                $userSearch->addAction($action);
+                                $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($action);
 								$actionV->setActionTypeActionType($this->loadClassByArray(array('code'=>'VC'),"ActionType"));
-								$actionV->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
-								$actionV->setUserUser($userSearch);
 								$em->persist($actionV);
-								$em->flush();
-								//se agrega la accion al procedimiento
-								$action->getRealProcedureRealProcedure()->addAction($actionV);
 							}
-
 						}
-						
 					}
-
 				}
+                $em->flush();
 				$em2->flush();
                 break;
             case 2:
