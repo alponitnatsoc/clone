@@ -814,8 +814,8 @@ class PilaPlainTextRestController extends FOSRestController
         else
             $subtipoCotizante = '04';
 
-        $deparmentCode = $employee->getPersonPerson()->getDepartment()->getDepartmentCode();
-        $municipioCode = $employee->getPersonPerson()->getCity()->getCityCode();
+        $deparmentCode = $pila->getContractContract()->getWorkplaceWorkplace()->getDepartment()->getDepartmentCode();
+        $municipioCode = $pila->getContractContract()->getWorkplaceWorkplace()->getCity()->getCityCode();
         $municipioCode = substr($municipioCode, -3);
         $firstLastName = $employee->getPersonPerson()->getLastName1();
         $secondLastName = $employee->getPersonPerson()->getLastName2() ?: '';
