@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Entity;
 
+use Doctrine\Common\Collections\Criteria;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -62,6 +63,16 @@ class User extends BaseUser
      */
     protected $linkedin_access_token;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Action", mappedBy="userUser", cascade={"persist"})
+     */
+    private $actions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="RealProcedure", mappedBy="userUser", cascade={"persist"})
+     */
+    private $realProcedures;
+
     public function __construct()
     {
         parent::__construct();
@@ -70,8 +81,8 @@ class User extends BaseUser
         $this->code = substr(md5(uniqid(rand(), true)), 0, 8);
         $this->purchaseOrders = new \Doctrine\Common\Collections\ArrayCollection();
         $this->promotionCodes = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->realProcedure = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->action = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->realProcedures = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->actions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->devices = new \Doctrine\Common\Collections\ArrayCollection();
         $this->payments = new \Doctrine\Common\Collections\ArrayCollection();
         $this->invitations = new \Doctrine\Common\Collections\ArrayCollection();
@@ -90,19 +101,9 @@ class User extends BaseUser
     private $personPerson;
 
     /**
-     * @ORM\OneToMany(targetEntity="Action", mappedBy="userUser", cascade={"persist"})
-     */
-    private $action;
-
-    /**
      * @ORM\OneToMany(targetEntity="Device", mappedBy="userUser", cascade={"persist"})
      */
     private $devices;
-
-    /**
-     * @ORM\OneToMany(targetEntity="RealProcedure", mappedBy="userUser", cascade={"persist"})
-     */
-    private $realProcedure;
 
     /**
      * @ORM\OneToMany(targetEntity="PurchaseOrders", mappedBy="idUser", cascade={"persist"})
@@ -425,97 +426,6 @@ class User extends BaseUser
     public function getLinkedinAccessToken()
     {
         return $this->linkedin_access_token;
-    }
-
-    /**
-     * Add action
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\Action $action
-     *
-     * @return User
-     */
-    public function addAction(\RocketSeller\TwoPickBundle\Entity\Action $action)
-    {
-        $action->setUserUser($this);
-        $this->action[] = $action;
-
-        return $this;
-    }
-
-    /**
-     * Remove action
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\Action $action
-     */
-    public function removeAction(\RocketSeller\TwoPickBundle\Entity\Action $action)
-    {
-        $this->action->removeElement($action);
-    }
-
-    /**
-     * Get action
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getAction()
-    {
-        return $this->action;
-    }
-
-    /**
-     * Add realProcedure
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\RealProcedure $realProcedure
-     *
-     * @return User
-     */
-    public function addRealProcedure(\RocketSeller\TwoPickBundle\Entity\RealProcedure $realProcedure)
-    {
-        $this->realProcedure[] = $realProcedure;
-
-        return $this;
-    }
-
-    /**
-     * Remove realProcedure
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\RealProcedure $realProcedure
-     */
-    public function removeRealProcedure(\RocketSeller\TwoPickBundle\Entity\RealProcedure $realProcedure)
-    {
-        $this->realProcedure->removeElement($realProcedure);
-    }
-
-    /**
-     * Get realProcedure
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getRealProcedure()
-    {
-        return $this->realProcedure;
-    }
-
-    /**
-     * @param $procedureType
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getProceduresNotMatching($procedureType)
-    {
-        $criteria = Criteria::create()
-            ->where(Criteria::expr()->neq('procedureTypeProcedureType',$procedureType));
-        return $this->realProcedure->matching($criteria);
-    }
-
-    /**
-     * @param $procedureType
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getProceduresByType($procedureType)
-    {
-        $criteria = Criteria::create()
-            ->where(Criteria::expr()->eq('procedureTypeProcedureType',$procedureType));
-        return $this->realProcedure->matching($criteria);
     }
 
     /**
@@ -1059,5 +969,119 @@ class User extends BaseUser
     public function getLogs()
     {
         return $this->logs;
+    }
+
+    /**
+     * @param $procedureType
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProceduresNotMatching($procedureType)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->neq('procedureTypeProcedureType',$procedureType));
+        return $this->realProcedures->matching($criteria);
+    }
+
+    /**
+     * @param $procedureType
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProceduresByType($procedureType)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('procedureTypeProcedureType',$procedureType));
+        return $this->realProcedures->matching($criteria);
+    }
+
+    /**
+     * @param $actionType
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActionsNotMatching($actionType)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->neq('actionTypeActionType',$actionType));
+        return $this->actions->matching($criteria);
+    }
+
+    /**
+     * @param $actionType
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActionsByType($actionType)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('actionTypeActionType',$actionType));
+        return $this->actions->matching($criteria);
+    }
+
+    /**
+     * Add action
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Action $action
+     *
+     * @return User
+     */
+    public function addAction(\RocketSeller\TwoPickBundle\Entity\Action $action)
+    {
+        $action->setUserUser($this);
+        $this->actions[] = $action;
+
+        return $this;
+    }
+
+    /**
+     * Remove action
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Action $action
+     */
+    public function removeAction(\RocketSeller\TwoPickBundle\Entity\Action $action)
+    {
+        $this->actions->removeElement($action);
+    }
+
+    /**
+     * Get actions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActions()
+    {
+        return $this->actions;
+    }
+
+    /**
+     * Add realProcedure
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\RealProcedure $realProcedure
+     *
+     * @return User
+     */
+    public function addRealProcedure(\RocketSeller\TwoPickBundle\Entity\RealProcedure $realProcedure)
+    {
+        $realProcedure->setUserUser($this);
+        $this->realProcedures[] = $realProcedure;
+
+        return $this;
+    }
+
+    /**
+     * Remove realProcedure
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\RealProcedure $realProcedure
+     */
+    public function removeRealProcedure(\RocketSeller\TwoPickBundle\Entity\RealProcedure $realProcedure)
+    {
+        $this->realProcedures->removeElement($realProcedure);
+    }
+
+    /**
+     * Get realProcedures
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRealProcedures()
+    {
+        return $this->realProcedures;
     }
 }
