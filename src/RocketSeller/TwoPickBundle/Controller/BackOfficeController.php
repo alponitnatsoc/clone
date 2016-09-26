@@ -96,8 +96,11 @@ class BackOfficeController extends Controller
             $isFreeMonths = $user->getIsFree();
             if($user->getLastPayDate()==null)
                 continue;
+            if ($isFreeMonths > 0) {
+                $isFreeMonths -= 1;
+            }
+            $isFreeMonths += 1;
             $effectiveDate = new DateTime(date('Y-m-d', strtotime("+$isFreeMonths months", strtotime($user->getLastPayDate()->format("Y-m-1")))));
-
             if($effectiveDate<=$dateNow){
                 $response->add($user);
             }
