@@ -1045,7 +1045,7 @@ class User extends BaseUser
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getActions()
+    public function getAction()
     {
         return $this->actions;
     }
@@ -1080,7 +1080,7 @@ class User extends BaseUser
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getRealProcedures()
+    public function getRealProcedure()
     {
         return $this->realProcedures;
     }

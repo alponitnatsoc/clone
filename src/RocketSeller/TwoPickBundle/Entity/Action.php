@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -34,7 +35,7 @@ class Action
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\User
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\User", inversedBy="actions")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\User", inversedBy="actions", cascade={"persist"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id_user", referencedColumnName="id")
      * })
@@ -43,7 +44,7 @@ class Action
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\RealProcedure
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\RealProcedure", inversedBy="action")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\RealProcedure", inversedBy="action", cascade={"persist"} )
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="real_procedure_id_procedure", referencedColumnName="id_procedure")
      * })
@@ -58,6 +59,11 @@ class Action
      * })
      */
     private $actionTypeActionType;
+
+    /** @var string
+     * @ORM\Column(name="action_type_name",type="string",length=50)
+     */
+    private $actionTypeName='';
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\ActionError
@@ -76,13 +82,13 @@ class Action
     private $personPerson;
 
     /**
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EmployerHasEntity")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EmployerHasEntity", cascade={"persist"})
      * @ORM\JoinColumn(name="employer_has_entity",referencedColumnName="id_employer_has_entity", nullable=true)
      */
     private $employerEntity;
 
     /**
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity", cascade={"persist"})
      * @ORM\JoinColumn(name="employee_has_entity",referencedColumnName="id_employee_has_entity",nullable=true)
      */
     private $employeeEntity;
@@ -91,6 +97,16 @@ class Action
      * @ORM\Column(name="updated_at",type="datetime", nullable=true)
      */
     private $updatedAt = null;
+
+    /**
+     * @ORM\Column(name="created_at",type="datetime", nullable=true)
+     */
+    private $createdAt=null;
+
+    /**
+     * @ORM\Column(name="finished_at",type="datetime", nullable=true)
+     */
+    private $finishedAt=null;
 
     /**
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\StatusTypes", inversedBy="actions" )
@@ -110,7 +126,6 @@ class Action
     public function setIdAction($idAction)
     {
         $this->idAction = $idAction;
-
         return $this;
     }
 
@@ -134,7 +149,6 @@ class Action
     public function setUserUser(\RocketSeller\TwoPickBundle\Entity\User $userUser)
     {
         $this->userUser = $userUser;
-
         return $this;
     }
 
@@ -157,8 +171,8 @@ class Action
      */
     public function setActionTypeActionType(\RocketSeller\TwoPickBundle\Entity\ActionType $actionTypeActionType)
     {
+        $this->actionTypeName = $actionTypeActionType->getName();
         $this->actionTypeActionType = $actionTypeActionType;
-
         return $this;
     }
 
@@ -182,7 +196,6 @@ class Action
     public function setPersonPerson(\RocketSeller\TwoPickBundle\Entity\Person $personPerson = null)
     {
         $this->personPerson = $personPerson;
-
         return $this;
     }
 
@@ -206,7 +219,6 @@ class Action
     public function setRealProcedureRealProcedure(\RocketSeller\TwoPickBundle\Entity\RealProcedure $realProcedureRealProcedure = null)
     {
         $this->realProcedureRealProcedure = $realProcedureRealProcedure;
-
         return $this;
     }
 
@@ -230,7 +242,6 @@ class Action
     public function setStatus($status)
     {
         $this->status = $status;
-
         return $this;
     }
 
@@ -244,29 +255,6 @@ class Action
         return $this->status;
     }
 
-    /**
-     * Set actionErrorActionError
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\ActionError $actionErrorActionError
-     *
-     * @return Action
-     */
-    public function setActionErrorActionError(\RocketSeller\TwoPickBundle\Entity\ActionError $actionErrorActionError = null)
-    {
-        $this->actionErrorActionError = $actionErrorActionError;
-
-        return $this;
-    }
-
-    /**
-     * Get actionErrorActionError
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\ActionError
-     */
-    public function getActionErrorActionError()
-    {
-        return $this->actionErrorActionError;
-    }
 
     /**
      * @return string
@@ -301,6 +289,7 @@ class Action
      */
     public function __construct()
     {
+        $this->createdAt= new DateTime();
         $this->actionErrorActionError = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -313,6 +302,7 @@ class Action
      */
     public function addActionErrorActionError(\RocketSeller\TwoPickBundle\Entity\ActionError $actionErrorActionError)
     {
+        $actionErrorActionError->setAction($this);
         $this->actionErrorActionError[] = $actionErrorActionError;
 
         return $this;
@@ -335,10 +325,9 @@ class Action
      *
      * @return Action
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt()
     {
-        $this->updatedAt = $updatedAt;
-
+        $this->updatedAt = new DateTime();
         return $this;
     }
 
@@ -361,8 +350,11 @@ class Action
      */
     public function setActionStatus(\RocketSeller\TwoPickBundle\Entity\StatusTypes $actionStatus = null)
     {
+        $this->status = $actionStatus->getName();
+        $this->getRealProcedureRealProcedure()->setActionChangedAt(new DateTime());
+        if($actionStatus->getCode()=='FIN')
+            $this->finishedAt = new DateTime();
         $this->actionStatus = $actionStatus;
-
         return $this;
     }
 
@@ -423,5 +415,85 @@ class Action
     public function getEmployeeEntity()
     {
         return $this->employeeEntity;
+    }
+
+    /**
+     * Set actionTypeName
+     *
+     * @param string $actionTypeName
+     *
+     * @return Action
+     */
+    public function setActionTypeName($actionTypeName)
+    {
+        $this->actionTypeName = $actionTypeName;
+        return $this;
+    }
+
+    /**
+     * Get actionTypeName
+     *
+     * @return string
+     */
+    public function getActionTypeName()
+    {
+        return $this->actionTypeName;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     *
+     * @return Action
+     */
+    public function setCreatedAt()
+    {
+        $this->createdAt = new DateTime();
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set finishedAt
+     *
+     * @param \DateTime $finishedAt
+     *
+     * @return Action
+     */
+    public function setFinishedAt()
+    {
+        $this->finishedAt = new DateTime();
+        return $this;
+    }
+
+    /**
+     * Get finishedAt
+     *
+     * @return \DateTime
+     */
+    public function getFinishedAt()
+    {
+        return $this->finishedAt;
+    }
+
+    /**
+     * Get actionErrorActionError
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActionErrorActionError()
+    {
+        return $this->actionErrorActionError;
     }
 }

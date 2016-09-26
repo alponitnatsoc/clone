@@ -29,7 +29,7 @@ class RealProcedure
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\User
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\User", inversedBy="realProcedures")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\User", inversedBy="realProcedures", cascade={"persist"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id_user", referencedColumnName="id")
      * })
@@ -72,7 +72,7 @@ class RealProcedure
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Employer
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employer", inversedBy="realProcedure")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employer", inversedBy="realProcedure",  cascade={"persist"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="employer_id_employer", referencedColumnName="id_employer")
      * })
@@ -364,6 +364,17 @@ class RealProcedure
     {
         $criteria = Criteria::create()
             ->where(Criteria::expr()->neq('actionTypeActionType',$actionType));
+        return $this->action->matching($criteria);
+    }
+
+    /**
+     * @param $actionStatus
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActionsByActionStatus($actionStatus)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('actionStatus',$actionStatus));
         return $this->action->matching($criteria);
     }
 
