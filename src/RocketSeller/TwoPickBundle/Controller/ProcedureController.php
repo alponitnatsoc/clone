@@ -506,13 +506,13 @@ class ProcedureController extends Controller
 							}
 							//si el empleado es antiguo (ya inicio labores) se crea el tramite de validar contrato
 							if($employerHasEmployee->getLegalFF()==1){
-								$actionV = new Action();
-								$actionV->setStatus('Nuevo');
+								$action = new Action();
+								$action->setStatus('Nuevo');
                                 $procedure->addAction($action);
                                 $userSearch->addAction($action);
                                 $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($action);
-								$actionV->setActionTypeActionType($this->loadClassByArray(array('code'=>'VC'),"ActionType"));
-								$em->persist($actionV);
+								$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VC'),"ActionType"));
+								$em->persist($action);
 							}
 						}
 					}
