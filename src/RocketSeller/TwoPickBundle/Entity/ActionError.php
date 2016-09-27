@@ -27,12 +27,22 @@ class ActionError
      * @ORM\Column(name="description", type="string", length=500)
      */
     private $description;
+
     /**
      * @var string
      *
      * @ORM\Column(name="status", type="string", length=100)
      */
     private $status;
+
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Action
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Action", inversedBy="actionErrorActionError")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="action_id_action", referencedColumnName="id_action")
+     * })
+     */
+    private $action;
 
 
     /**
@@ -91,5 +101,29 @@ class ActionError
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Set action
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Action $action
+     *
+     * @return ActionError
+     */
+    public function setAction(\RocketSeller\TwoPickBundle\Entity\Action $action = null)
+    {
+        $this->action = $action;
+
+        return $this;
+    }
+
+    /**
+     * Get action
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Action
+     */
+    public function getAction()
+    {
+        return $this->action;
     }
 }

@@ -96,8 +96,11 @@ class BackOfficeController extends Controller
             $isFreeMonths = $user->getIsFree();
             if($user->getLastPayDate()==null)
                 continue;
+            if ($isFreeMonths > 0) {
+                $isFreeMonths -= 1;
+            }
+            $isFreeMonths += 1;
             $effectiveDate = new DateTime(date('Y-m-d', strtotime("+$isFreeMonths months", strtotime($user->getLastPayDate()->format("Y-m-1")))));
-
             if($effectiveDate<=$dateNow){
                 $response->add($user);
             }
@@ -812,13 +815,14 @@ class BackOfficeController extends Controller
 
     public function reportErrorAction($idAction,Request $request)
     {
+        /** @var Action $action */
     	$action = $this->loadClassById($idAction,"Action");
     	if ($request->getMethod() == 'POST') {
     		$description = $request->request->get('description');
     		$actionError = new ActionError();
     		$actionError->setDescription($description);
             $actionError->setStatus('Sin contactar');
-    		$action->setActionErrorActionError($actionError);
+    		$action->addActionErrorActionError($actionError);
     		$action->setStatus("Error");
 		   	$em = $this->getDoctrine()->getManager();
 		    $em->persist($actionError);
@@ -1119,7 +1123,7 @@ class BackOfficeController extends Controller
 
     public function testEmailAction(){
 
-        $toEmail = "andres.ramirez@symplifica.com";
+        $toEmail = "esteban.palma@symplifica.com";
 
 //        /** test welcome Email*/
 //        $context = array(
@@ -1228,43 +1232,43 @@ class BackOfficeController extends Controller
 //        );
 //        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 
-//        /** test failRecollect Email */
-//        $context=array(
-//            'emailType'=>'failRecollect',
-//            'userEmail'=>'algo@alg.com',
-//            'toEmail'=>$toEmail,
-//            'userName'=>'Andrés Felipe',
-//            'rejectionDate'=>new DateTime(),
-//            'value' => 230750.23,
-//            'phone'=>'3183941645'
-//        );
-//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+        /** test failRecollect Email */
+        $context=array(
+            'emailType'=>'failRecollect',
+            'userEmail'=>'algo@alg.com',
+            'toEmail'=>$toEmail,
+            'userName'=>'Andrés Felipe',
+            'rejectionDate'=>new DateTime(),
+            'value' => 230750.23,
+            'phone'=>'3183941645'
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 
-//        /** test regectionCollect Email */
-//        $context=array(
-//            'emailType'=>'regectionCollect',
-//            'userEmail'=>$this->getUser()->getEmail(),
-//            'userName'=>$this->getUser()->getPersonPerson()->getFullName(),
-//            'rejectionDate'=>new DateTime(),
-//            'toEmail'=> $toEmail,
-//            'phone'=>'3183941645',
-//            'value'=>'350400'
-//        );
-//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+        /** test regectionCollect Email */
+        $context=array(
+            'emailType'=>'regectionCollect',
+            'userEmail'=>$this->getUser()->getEmail(),
+            'userName'=>$this->getUser()->getPersonPerson()->getFullName(),
+            'rejectionDate'=>new DateTime(),
+            'toEmail'=> $toEmail,
+            'phone'=>'3183941645',
+            'value'=>'350400'
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 
-//        /** test regectionDispersion Email */
-//        $context=array(
-//            'emailType'=>'regectionDispersion',
-//            'userEmail'=>'algo@algo.com',
-//            'toEmail'=>$toEmail,
-//            'userName'=>'Andrés Felipe',
-//            'rejectionDate'=>new DateTime(),
-//            'phone'=>'3183941645',
-//            'rejectedProduct'=>'Nombre del producto',
-//            'idPOD'=>4,
-//            'value'=>483909,23
-//        );
-//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+        /** test regectionDispersion Email */
+        $context=array(
+            'emailType'=>'regectionDispersion',
+            'userEmail'=>'algo@algo.com',
+            'toEmail'=>$toEmail,
+            'userName'=>'Andrés Felipe',
+            'rejectionDate'=>new DateTime(),
+            'phone'=>'3183941645',
+            'rejectedProduct'=>'Nombre del producto',
+            'idPOD'=>4,
+            'value'=>483909,23
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 
 //        /** test succesfulDispersion Eamil */
 //        $context=array(
@@ -1290,24 +1294,24 @@ class BackOfficeController extends Controller
 //        $context['documentName']='Comprobante '.date_format(new DateTime(),'d-m-y H:i:s').'.pdf';
 //        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 
-//        /** test failDispersion Eamil */
-//        $context=array(
-//            'emailType'=>'failDispersion',
-//            'userEmail'=>'algo@algo.com',
-//            'toEmail'=>$toEmail,
-//            'userName'=>'Andrés Felipe'
-//        );
-//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+        /** test failDispersion Eamil */
+        $context=array(
+            'emailType'=>'failDispersion',
+            'userEmail'=>'algo@algo.com',
+            'toEmail'=>$toEmail,
+            'userName'=>'Andrés Felipe'
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 
-//        /** test addPayMethod */
-//        $context = array(
-//            'emailType'=>'validatePayMethod',
-//            'toEmail'=>$toEmail,
-//            'userName'=>'Andrés Felipe Ramírez',
-//            'starDate'=>new DateTime(),
-//            'payMethod'=>'Tarjeta de Credito'
-//        );
-//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+        /** test addPayMethod */
+        $context = array(
+            'emailType'=>'validatePayMethod',
+            'toEmail'=>$toEmail,
+            'userName'=>'Andrés Felipe Ramírez',
+            'starDate'=>new DateTime(),
+            'payMethod'=>'Tarjeta de Credito'
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 
 //        /** test backWarning Email */
 //        $context = array(

@@ -104,6 +104,11 @@ pila_csv_services:
     resource: "RocketSellerTwoPickBundle:PilaPlainTextRest"
     name_prefix: api_public_secured_
     prefix: /secured
+chron_auto_controller:
+    type: rest
+    resource: "RocketSellerTwoPickBundle:ChronServerRest"
+    name_prefix: api_public_secured_
+    prefix: /secured
 payroll_services_test:
     type: rest
     resource: "RocketSellerTwoPickBundle:PayrollRestTest"
@@ -135,4 +140,8 @@ subscription_services:
 push_notification :
     type: rest
     resource: "RocketSellerTwoPickBundle:PushNotificationRest"
+    name_prefix: api_public_
+actions :
+    type: rest
+    resource : "RocketSellerTwoPickBundle:ActionsRest"
     name_prefix: api_public_

@@ -12,7 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="real_procedure", indexes={
  *     @ORM\Index(name="fk_procedure_procedure_type1", columns={"procedure_type_id_procedure_type"}),
  *     @ORM\Index(name="fk_procedure_user1", columns={"user_id_user"}),
- *     @ORM\Index(name="fk_procedure_employer1", columns={"employer_id_employer"})
+ *     @ORM\Index(name="fk_procedure_employer1", columns={"employer_id_employer"}),
+ *     @ORM\Index(name="procedure_status_index", columns={"status_id_procedure"}),
+ *     @ORM\Index(name="procedure_type_index", columns={"procedure_type_id_procedure_type"}),
+ *     @ORM\Index(name="procedure_action_change_at_index", columns={"action_changed_at"})
  * })
  * @ORM\Entity
  */
@@ -29,7 +32,7 @@ class RealProcedure
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\User
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\User", inversedBy="realProcedure")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\User", inversedBy="realProcedures", cascade={"persist"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id_user", referencedColumnName="id")
      * })
@@ -72,7 +75,7 @@ class RealProcedure
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Employer
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employer", inversedBy="realProcedure")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employer", inversedBy="realProcedure",  cascade={"persist"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="employer_id_employer", referencedColumnName="id_employer")
      * })
@@ -213,6 +216,7 @@ class RealProcedure
      */
     public function addAction(\RocketSeller\TwoPickBundle\Entity\Action $action)
     {
+        $action->setRealProcedureRealProcedure($this);
         $this->action[] = $action;
 
         return $this;
@@ -355,6 +359,62 @@ class RealProcedure
         return $this->action->matching($criteria);
     }
 
+    /**
+     * @param $actionType
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActionsNotMatching($actionType)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->neq('actionTypeActionType',$actionType));
+        return $this->action->matching($criteria);
+    }
+
+    /**
+     * @param $actionStatus
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActionsByActionStatus($actionStatus)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('actionStatus',$actionStatus));
+        return $this->action->matching($criteria);
+    }
+
+    /**
+     * @param $actionStatus
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActionsNotMatchingActionStatus($actionStatus)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->neq('actionStatus',$actionStatus));
+        return $this->action->matching($criteria);
+    }
+
+    /**
+     * @param $person
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActionsByPerson($person)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('personPerson',$person));
+        return $this->action->matching($criteria);
+    }
+
+    /**
+     * @param $employerHasEmployee
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActionsByEmployerHasEmployee(EmployerHasEmployee $employerHasEmployee)
+    {
+        $person = $employerHasEmployee->getEmployeeEmployee()->getPersonPerson();
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('personPerson',$person));
+        return $this->action->matching($criteria);
+    }
+
 
     /**
      * Set backOfficeDate
@@ -428,5 +488,15 @@ class RealProcedure
     public function getProcedureStatus()
     {
         return $this->procedureStatus;
+    }
+
+    /**
+     * Get procedureTypeName
+     *
+     * @return string
+     */
+    public function getProcedureTypeName()
+    {
+        return $this->procedureTypeProcedureType->getName();
     }
 }

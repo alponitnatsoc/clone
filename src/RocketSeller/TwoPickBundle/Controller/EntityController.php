@@ -32,5 +32,8 @@ class EntityController extends Controller
         return $this->render('RocketSellerTwoPickBundle:Registration:entityForm.html.twig',
             array('form' => $form->createView()));
     }
+
+
+
 }
  ?>
