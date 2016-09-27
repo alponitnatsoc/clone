@@ -3,9 +3,9 @@
 {% block title %}Tramite No {{ procedure.idProcedure }}{% endblock %}
 
 {% block fos_user_content %}
-	<div id="main" class="col-sm-15">
+	<div id="main" class="col-sm-12">
 		<div class="col-md-12">
-			<div class="panel panel-title">
+			<div class="back-panel-title">
 				<p>Tramite No: {{ procedure.idProcedure }}</p>
 			</div>
 			<br>
@@ -26,13 +26,7 @@
 					<tbody>
 					{% set documentos = 0 %}
 					{% for action in procedure.action if action.personPerson == employerHasEmployees[0].employerEmployer.personPerson %}
-						{% if action.actionErrorActionError %}
-							{% if action.status|lower == "completado" %}
-								<tr style="background-color:#A2E383;">
-							{% else %}
-								<tr style="background-color:#FF5555;">
-							{% endif %}
-						{% elseif  action.status|lower == "nuevo" %}
+						{% if  action.status|lower == "nuevo" %}
 							<tr>
 						{% elseif  action.status|lower == "completado" %}
 							<tr style="background-color:#A2E383;">
@@ -46,21 +40,14 @@
 						<td class="{{action.personPerson.idPerson}}">{{ action.ActionTypeActionType.name }}</td>
 						<td>{{ action.personPerson.fullName }}</td>
 						<td>
-							{#{% if action.entityEntity %}#}
-								{#{{ action.entityEntity.name }}#}
-							{#{% else %}#}
-								{#-#}
-							{#{% endif %}#}
-						</td>
-						<td>{% if action.actionErrorActionError %}
-								{% if action.status|lower == "completado" %}
-									{{ action.status }}
-								{% else %}
-									Error
-								{% endif %}
+							{% if action.employerEntity %}
+								{{ action.employerEntity.entityEntity.name }}
 							{% else %}
-								{{ action.status}}
+								-
 							{% endif %}
+						</td>
+						<td>
+							{{ action.status}}
 						</td>
 						{% if action.status|lower != "completado" %}
 							{% if action.ActionTypeActionType.name|lower == "validar informacion del empleador" %}
@@ -143,13 +130,7 @@
 								<tbody>
 								{% for action in employerHasEmployee.employeeEmployee.personPerson.action %}
 									{% if action.realProcedureRealProcedure.idProcedure == procedure.idProcedure %}
-										{% if action.actionErrorActionError %}
-											{% if action.status|lower == "completado" %}
-												<tr style="background-color:#A2E383;">
-											{% else %}
-												<tr style="background-color:#FF5555;">
-											{% endif %}
-										{% elseif  action.status|lower == "nuevo" %}
+										{% if  action.status|lower == "nuevo" %}
 											<tr>
 										{% elseif  action.status|lower == "completado" %}
 											<tr style="background-color:#A2E383;">
@@ -161,25 +142,19 @@
 										<td class="{{action.personPerson.idPerson}}">{{ action.ActionTypeActionType.name }}</td>
 										<td>{{ action.personPerson.fullName }}</td>
 										<td>
-											{#{% if action.entityEntity %}#}
-												{#{{ action.entityEntity.name }}#}
-											{#{% else %}#}
-												{#-#}
-											{#{% endif %}#}
-										</td>
-										<td>{% if action.actionErrorActionError %}
-												{% if action.status|lower == "completado" %}
-													{{ action.status }}
-												{% else %}
-													Error
-												{% endif %}
+											{% if action.employeeEntity %}
+												{{ action.employeeEntity.entityEntity.name }}
 											{% else %}
-												{{ action.status}}
+												-
 											{% endif %}
+										</td>
+										<td>
+											{{ action.status}}
 										</td>
 										{% if action.status|lower != "completado" %}
 											{% if action.ActionTypeActionType.name|lower == "validar informacion del empleado" %}
 												<td><a class="notAjax" href="{{ path('check_employee',{'idAction':action.idAction})}}">Validar Datos del Empleado</a></td>
+
 											{% elseif action.ActionTypeActionType.name|lower == "validar documentos" %}
 												<td><a class="notAjax" href="{{ path('validate_employee_documents',{'idAction':action.idAction})}}">Validar Documentos</a></td>
 												{% set act = action %}

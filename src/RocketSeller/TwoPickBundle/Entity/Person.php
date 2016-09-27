@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Entity;
 
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use Doctrine\ORM\Mapping as ORM;
@@ -1089,5 +1090,61 @@ class Person
     public function getBirthRegDocument()
     {
         return $this->birthRegDocument;
+    }
+
+    /**
+     * @param $actionType
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActionsByActionType($actionType)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('actionTypeActionType',$actionType));
+        return $this->action->matching($criteria);
+    }
+
+    /**
+     * @param $actionType
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActionsNotMatching($actionType)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->neq('actionTypeActionType',$actionType));
+        return $this->action->matching($criteria);
+    }
+
+    /**
+     * @param $actionStatus
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActionsByActionStatus($actionStatus)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('actionStatus',$actionStatus));
+        return $this->action->matching($criteria);
+    }
+
+    /**
+     * @param $actionStatus
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActionsNotMatchingActionStatus($actionStatus)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->neq('actionStatus',$actionStatus));
+        return $this->action->matching($criteria);
+    }
+
+
+    /**
+     * Get NotificationByDocumentType
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNotificationByDocumentType($documentType)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq("documentTypeDocumentType",$documentType));
+        return $this->notifications->matching($criteria);
     }
 }

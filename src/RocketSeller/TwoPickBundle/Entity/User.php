@@ -1045,7 +1045,7 @@ class User extends BaseUser
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getActions()
+    public function getAction()
     {
         return $this->actions;
     }
@@ -1073,6 +1073,26 @@ class User extends BaseUser
     public function removeRealProcedure(\RocketSeller\TwoPickBundle\Entity\RealProcedure $realProcedure)
     {
         $this->realProcedures->removeElement($realProcedure);
+    }
+
+    /**
+     * Get realProcedures
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRealProcedure()
+    {
+        return $this->realProcedures;
+    }
+
+    /**
+     * Get actions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActions()
+    {
+        return $this->actions;
     }
 
     /**

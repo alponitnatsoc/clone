@@ -72,6 +72,8 @@ class EmployerHasEmployee
     private $liquidations;
 
     /**
+     * -2 - error
+     * -1 - contractEnd
      * 0 - unActivated
      * 1 - active
      * 2 - Twilio Verification

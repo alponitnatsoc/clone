@@ -170,14 +170,18 @@
         {{ form_errors(form) }}
         {{ form_start(form) }}
 
-        <ul id="formNav" class="nav-4-tabs nav-justified">
-            <li {%   if tab==1 %} class="active" {% endif %}><a data-toggle="tab" data-target="#basicData">Datos básicos</a></li>
-            <li {%   if tab==2 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contactData">Datos de contacto</a></li>
-            <li {%   if tab==3 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contractData">Información del contrato</a></li>
-            <li {%   if tab==4 %} class="active" {% endif %}><a data-toggle="tab" data-target="#employeeEntities">Seguridad social</a></li>
+          <div class="noResponsive4tabs">
+            <ul id="formNav" class="nav-4-tabs nav-justified">
+                <li {%   if tab==1 %} class="active" {% endif %}><a data-toggle="tab" data-target="#basicData">Datos básicos</a></li>
+                <li {%   if tab==2 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contactData">Datos de contacto</a></li>
+                <li {%   if tab==3 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contractData">Información del contrato</a></li>
+                <li {%   if tab==4 %} class="active" {% endif %}><a data-toggle="tab" data-target="#employeeEntities">Seguridad social</a></li>
+            </ul>
+          </div>
 
-        </ul>
-
+        <div style="background: #eaeaea;padding: 8px 0;" class="responsive4tabs title-center bold grisoscurofont">
+          Datos básicos
+        </div>
         <div class="tab-content">
 
             <div id="basicData" class="tab-pane fade in  {%   if tab==1 %} active {% endif %}">
@@ -1585,7 +1589,7 @@ $(document).ready(function(){
                             <br/>
                         </div>
 
-                            <div style="opacity: 0.7;" class="col-sm-12 remember text-center">
+                            <div style="opacity: 0.7;clear:both;" class="col-sm-12 remember text-center">
                                 <h4 onclick="$(this).next().slideToggle()" style="font-size: 14px;cursor: pointer"><i class="glyphicon glyphicon-exclamation-sign"></i> ¿Por qué le estamos preguntando esto?</h4>
                                 <span id="textPorque">Porque los empleados tienen el derecho de seleccionar las entidades de<br>salud y pensión a las cuales quieren estar afiliados. Si ya están afiliados deben continuar<br>con la entidad actual porque Symplifica no gestiona cambios de entidad.
 </span>
