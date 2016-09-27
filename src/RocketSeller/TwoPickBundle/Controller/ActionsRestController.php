@@ -461,7 +461,6 @@ class ActionsRestController extends FOSRestController
                 foreach ($actions as $action) {
                     $em->remove($action);
                 }
-                $em->flush();
             }
             $actions = $user->getActionsByType($this->getActionByType('IN'));
             $response .= "ACTIONS ENCONTRADAS: ".$actions->count()."<br>";
@@ -471,7 +470,6 @@ class ActionsRestController extends FOSRestController
                 foreach ($actions as $action) {
                     $em->remove($action);
                 }
-                $em->flush();
             }
             if($procedure!= null){
                 $response .= "EXISTE.<br>";
@@ -493,7 +491,6 @@ class ActionsRestController extends FOSRestController
                                 $em->persist($action);
                             }
                         }
-                        $em->flush();
                         /** @var EmployerHasEmployee $employerHasEmployee */
                         foreach ($user->getPersonPerson()->getEmployer()->getEmployerHasEmployees() as $employerHasEmployee) {
                             if($employerHasEmployee->getEmployeeEmployee()->getEntities()->count()>0 and $employerHasEmployee->getState()>2){
@@ -513,7 +510,6 @@ class ActionsRestController extends FOSRestController
                                         $em->persist($action);
                                     }
                                 }
-                                $em->flush();
                             }
                         }
                     }
@@ -521,6 +517,7 @@ class ActionsRestController extends FOSRestController
 
             }
         }
+        $em->flush();
         $view = View::create();
         $view->setData($response)->setStatusCode(200);
         return $view;
@@ -1582,6 +1579,37 @@ class ActionsRestController extends FOSRestController
             } else {//if media not found changing action status to error
                 $action->setActionStatus($this->getStatusByType('ERRO'));//if media not found setting action status to error
                 $response .= "- - - - - ERROR: DOCUMENTO DE IDENTIDAD NO ENCONTRADO - - - - - <br>";
+                $docType = $this->getDocumentTypeByCode($employee->getPersonPerson()->getDocumentType());
+                $notifications = $employee->getPersonPerson()->getNotificationByDocumentType($docType);
+                if($notifications->isEmpty()){
+                    $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
+                    $utils = $this->get('app.symplifica_utils');
+                    $dAction=null;
+                    $dUrl=null;
+                    $msj = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$employee->getPersonPerson()->getNames())[0]." ". $employee->getPersonPerson()->getLastName1());
+                    $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$employee->getPersonPerson()->getIdPerson(),'docCode'=>$docType->getDocCode()));
+                    $this->createNotification($employerHasEmployee->getEmployerEmployer()->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                }else{
+                    $equal = false;
+                    /** @var Notification $notification */
+                    foreach ($notifications as $notification){
+                        $exUrl = explode('/',$notification->getRelatedLink());
+                        if($employee->getPersonPerson()->getIdPerson()==$exUrl[4] and !$equal){
+                            $equal = true;
+                            $response .= "- - - - ACTIVANDO NOTIFICACION - - - - <br>";
+                            $notification->activate();
+                        }
+                    }
+                    if(!$equal){
+                        $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
+                        $utils = $this->get('app.symplifica_utils');
+                        $dAction=null;
+                        $dUrl=null;
+                        $msj = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$employee->getPersonPerson()->getNames())[0]." ". $employee->getPersonPerson()->getLastName1());
+                        $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$employee->getPersonPerson()->getIdPerson(),'docCode'=>$docType->getDocCode()));
+                        $this->createNotification($employerHasEmployee->getEmployerEmployer()->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                    }
+                }
             }
         } else {//if document not found means document is pending
             $action->setActionStatus($this->getStatusByType('DCPE'));//changing the action status to document pending
