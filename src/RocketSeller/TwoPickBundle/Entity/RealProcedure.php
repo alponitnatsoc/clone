@@ -12,7 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="real_procedure", indexes={
  *     @ORM\Index(name="fk_procedure_procedure_type1", columns={"procedure_type_id_procedure_type"}),
  *     @ORM\Index(name="fk_procedure_user1", columns={"user_id_user"}),
- *     @ORM\Index(name="fk_procedure_employer1", columns={"employer_id_employer"})
+ *     @ORM\Index(name="fk_procedure_employer1", columns={"employer_id_employer"}),
+ *     @ORM\Index(name="procedure_status_index", columns={"status_id_procedure"}),
+ *     @ORM\Index(name="procedure_type_index", columns={"procedure_type_id_procedure_type"}),
+ *     @ORM\Index(name="procedure_action_change_at_index", columns={"action_changed_at"})
  * })
  * @ORM\Entity
  */
@@ -375,6 +378,40 @@ class RealProcedure
     {
         $criteria = Criteria::create()
             ->where(Criteria::expr()->eq('actionStatus',$actionStatus));
+        return $this->action->matching($criteria);
+    }
+
+    /**
+     * @param $actionStatus
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActionsNotMatchingActionStatus($actionStatus)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->neq('actionStatus',$actionStatus));
+        return $this->action->matching($criteria);
+    }
+
+    /**
+     * @param $person
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActionsByPerson($person)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('personPerson',$person));
+        return $this->action->matching($criteria);
+    }
+
+    /**
+     * @param $employerHasEmployee
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActionsByEmployerHasEmployee(EmployerHasEmployee $employerHasEmployee)
+    {
+        $person = $employerHasEmployee->getEmployeeEmployee()->getPersonPerson();
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('personPerson',$person));
         return $this->action->matching($criteria);
     }
 

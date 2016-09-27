@@ -37,6 +37,9 @@ class LoadStatusTypeData extends AbstractFixture implements OrderedFixtureInterf
 
         $statusContractFinished = new StatusTypes( "Contrato Validado" , "CTVA" );
         $manager->persist($statusContractFinished);
+
+        $statusView = new StatusTypes( "Consultar" , "CON" );
+        $manager->persist($statusView);
 	    
         $manager->flush();
     }

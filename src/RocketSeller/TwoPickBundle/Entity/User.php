@@ -1084,4 +1084,24 @@ class User extends BaseUser
     {
         return $this->realProcedures;
     }
+
+    /**
+     * Get actions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActions()
+    {
+        return $this->actions;
+    }
+
+    /**
+     * Get realProcedures
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRealProcedures()
+    {
+        return $this->realProcedures;
+    }
 }

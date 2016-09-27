@@ -11,7 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="action",
  *     indexes={@ORM\Index(name="fk_action_procedure1", columns={"real_procedure_id_procedure"}),
  *              @ORM\Index(name="fk_action_action_type1", columns={"action_type_id_action_type"}),
- *              @ORM\Index(name="fk_action_user1", columns={"user_id_user"})
+ *              @ORM\Index(name="fk_action_user1", columns={"user_id_user"}),
+ *              @ORM\Index(name="action_type_index", columns={"action_type_id_action_type"}),
+ *              @ORM\Index(name="action_status_index", columns={"status_type_id_action"}),
+ *              @ORM\Index(name="updated_at_index", columns={"updated_at"})
  *      })
  * @ORM\Entity
  */
@@ -25,13 +28,6 @@ class Action
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idAction;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="status", type="string",nullable=true)
-     */
-    private $status;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\User
@@ -52,6 +48,15 @@ class Action
     private $realProcedureRealProcedure;
 
     /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Person
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Person", inversedBy="action")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="person_id_person", referencedColumnName="id_person")
+     * })
+     */
+    private $personPerson;
+
+    /**
      * @var \RocketSeller\TwoPickBundle\Entity\ActionType
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\ActionType")
      * @ORM\JoinColumns({
@@ -66,20 +71,20 @@ class Action
     private $actionTypeName='';
 
     /**
-     * @var \RocketSeller\TwoPickBundle\Entity\ActionError
-     *
-     * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\ActionError", mappedBy="action", cascade={"persist"})
-     */
-    private $actionErrorActionError;
-
-    /**
-     * @var \RocketSeller\TwoPickBundle\Entity\Person
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Person", inversedBy="action")
+     * @var StatusTypes
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\StatusTypes", inversedBy="actions" )
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="person_id_person", referencedColumnName="id_person")
+     *      @ORM\JoinColumn(name="status_type_id_action",referencedColumnName="id_status_type",nullable=true)
      * })
      */
-    private $personPerson;
+    private $actionStatus;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="status", type="string",nullable=true)
+     */
+    private $status;
 
     /**
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EmployerHasEntity", cascade={"persist"})
@@ -94,14 +99,14 @@ class Action
     private $employeeEntity;
 
     /**
-     * @ORM\Column(name="updated_at",type="datetime", nullable=true)
-     */
-    private $updatedAt = null;
-
-    /**
      * @ORM\Column(name="created_at",type="datetime", nullable=true)
      */
     private $createdAt=null;
+
+    /**
+     * @ORM\Column(name="updated_at",type="datetime", nullable=true)
+     */
+    private $updatedAt = null;
 
     /**
      * @ORM\Column(name="finished_at",type="datetime", nullable=true)
@@ -109,13 +114,12 @@ class Action
     private $finishedAt=null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\StatusTypes", inversedBy="actions" )
-     * @ORM\JoinColumns({
-     *      @ORM\JoinColumn(name="status_type_id_action",referencedColumnName="id_status_type",nullable=true)
-     * })
+     * @var \RocketSeller\TwoPickBundle\Entity\ActionError
+     *
+     * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\ActionError", mappedBy="action", cascade={"persist"})
      */
-    private $actionStatus;
-
+    private $actionErrorActionError;
+    
     /**
      * Set idAction
      *
@@ -253,6 +257,16 @@ class Action
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Get actionStatusCode
+     *
+     * @return string
+     */
+    public function getActionStatusCode()
+    {
+        return $this->actionStatus->getCode();
     }
 
 
@@ -447,9 +461,9 @@ class Action
      *
      * @return Action
      */
-    public function setCreatedAt()
+    public function setCreatedAt($createdAt)
     {
-        $this->createdAt = new DateTime();
+        $this->createdAt = $createdAt;
 
         return $this;
     }
@@ -471,9 +485,9 @@ class Action
      *
      * @return Action
      */
-    public function setFinishedAt()
+    public function setFinishedAt($finishedAt)
     {
-        $this->finishedAt = new DateTime();
+        $this->finishedAt = $finishedAt;
         return $this;
     }
 
