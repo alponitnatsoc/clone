@@ -80,25 +80,29 @@
                     <div class="row employeeListItem ajusteListEmpl"
                     style="{% if employeeStatus != 1 %}border-left: 5px solid #41D0CB !important; {% endif %}">
 
-                        <div class="col-xxs-5 col-xs-5 col-sm-4 employeeItems bRight">
+                        <div class="col-xs-6 col-sm-6 col-md-4 employeeItemsResp employeeItems bRight">
                             <b>{{ utils.mb_capitalize(employee.fullName) }}</b>
                             {% if employeeStatus > 3 and status >= 2 %}
                                 <br />
                                 <a class="notAjax addNovelty btn-xs azulclaro" href="/novelty/select/{{ employee.idPayroll }}">Agregar novedad</a>
                             {% endif %}
                         </div>
-                        <div class="col-xxs-3 col-xs-3 col-sm-2 employeeItems center azulmediofont" style="padding-top: 29px;">
+                        <div class="col-xs-6 col-sm-6 col-md-2 employeeItems azulmediofont employeeItemsResp" style="padding-top: 29px;">
                             {% if employeeStatus < 1 %}
-                              <p style="text-align:center;margin:0">
+                              <p style="margin:0">
                                 <span class="Empleados"><i class="glyphicon glyphicon-remove-circle"></i> Inactivo</span></p>
                             {% else %}
-                                <p style="text-align:center;margin:0">
+                                <p style="margin:0">
                                   <span class="Empleados"><i class="glyphicon glyphicon-ok-sign"></i>Activo</span></p>
                             {% endif %}
 
                         </div>
-                        <div class="col-xxs-3 col-xs-3 col-sm-2 employeeItems grisoscurofont bLeft bRight">
-                            <span class="bold">Salario {%  if employee.timeCommitment == "XD" %}diario{% else %}mensual{%  endif %}</span><br/>
+                        <div class="col-xs-6 col-sm-4 col-md-2 employeeItems employeeItemsResp grisoscurofont bLeft bRight">
+                            {% if employee.timeCommitment is defined %}
+                                <span class="bold">Salario {%  if employee.timeCommitment == "XD" %}diario{% else %}mensual{%  endif %}</span><br/>
+                            {% else %}
+                                <span class="bold">Salario </span><br/>
+                            {% endif %}
                             {%  if employee.salary is defined %}
                                 <span>$ {{ employee.salary|number_format(0) }}
                                 </span>
@@ -106,7 +110,7 @@
                                 <span>-</span>
                             {%  endif %}
                         </div>
-                        <div class="col-xxs-3 col-xs-3 col-sm-2 employeeItems grisoscurofont bRight">
+                        <div class="col-xs-6 col-sm-4 col-md-2 employeeItems employeeItemsResp grisoscurofont bRight">
                             <span class="bold">Tipo de contrato</span><br/>
                             {%  if employee.contractType is defined %}
                                 <span>{{ employee.contractType }}</span>
@@ -114,7 +118,7 @@
                                 <span>-</span>
                             {%  endif %}
                         </div>
-                        <div class="col-xxs-4 col-xs-4 col-sm-2 actionButton">
+                        <div class="col-xs-12 col-sm-4 col-md-2 actionButton">
                             {% if employeeStatus <= 2 %}
                                 {%  if employee.percentage is defined  and employee.percentage == 100  and employeeStatus == 0 %}
                                     <a href="/manage/employee/{{employee.idEmployee}}">&#10095; Ver detalles</a>

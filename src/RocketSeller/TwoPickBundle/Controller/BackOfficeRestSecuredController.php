@@ -148,6 +148,7 @@ class BackOfficeRestSecuredController extends FOSRestController
         $em->flush();
     }
 
+    $view = View::create();
     if($userFl){
       $view->setStatusCode(200);
       return $view->setData(array('response' => $message, 'role' => "ROLE_USER"));

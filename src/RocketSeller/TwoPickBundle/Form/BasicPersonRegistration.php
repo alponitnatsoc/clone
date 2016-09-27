@@ -17,8 +17,12 @@ class BasicPersonRegistration extends AbstractType
 {
 
     private $dateToday;
-    function __construct(){
+    private $departments;
+    private $cities;
+    function __construct($departments = array(), $cities = array()){
         $this->dateToday= new DateTime();
+        $this->departments = $departments;
+        $this->cities = $cities;
     }
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -84,6 +88,7 @@ class BasicPersonRegistration extends AbstractType
             ))
             ->add('department', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Department',
+                'choices' => $this->departments,
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
@@ -94,6 +99,7 @@ class BasicPersonRegistration extends AbstractType
             ))
             ->add('city', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:City',
+                'choices' => $this->cities,
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,

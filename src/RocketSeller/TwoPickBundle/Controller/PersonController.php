@@ -1,5 +1,6 @@
 <?php
 namespace RocketSeller\TwoPickBundle\Controller;
+use RocketSeller\TwoPickBundle\Entity\Country;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
 use RocketSeller\TwoPickBundle\Entity\EntityType;
 use RocketSeller\TwoPickBundle\Entity\LandingRegistration;
@@ -80,7 +81,14 @@ class PersonController extends Controller
             $ehEtities= new EmployerHasEntity();
             $employer->addEntity($ehEtities);
         }
-        $form = $this->createForm(new EmployerRegistration($severances,$arls), $employer, array(
+        /** @var Country $colombia */
+        $colombia = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Country")->findOneBy(array('countryCode'=>'343'));
+        $departments = $colombia->getDepartments();
+        $cities = array();
+        if($employer->getPersonPerson()->getDepartment()!=null){
+            $cities = $employer->getPersonPerson()->getDepartment()->getCitys();
+        }
+        $form = $this->createForm(new EmployerRegistration($severances,$arls,$departments,$cities), $employer, array(
             'action' => $this->generateUrl('api_public_post_edit_person_submit_step3', array('format'=>'json')),
             'method' => 'POST',
         ));
@@ -103,6 +111,7 @@ class PersonController extends Controller
             }
         }
         $form->get('severances')->setData($actualSeverances);
+
 
         return $this->render(
             'RocketSellerTwoPickBundle:Registration:newPerson.html.twig',

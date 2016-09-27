@@ -1117,10 +1117,6 @@ function startEmployee() {
     else {
         $("#wealthBlock").show();
     }
-
-    //Since right now we dont support employees from another countrywe disable the another field
-    $("#register_employee_person_documentType option[value*='CE']").hide();
-
 }
 function addPhoneForm($collectionHolderB, $newLinkLi) {
     var prototype = $collectionHolderB.data('prototype');
@@ -1557,6 +1553,22 @@ function addListeners() {
             data: {department: $department.val()}
         }).done(function (data) {
             $('#' + citySelectId).html(
+                // ... with the returned one from the AJAX response.
+                jsonToHTML(data)
+            );
+        });
+    });
+
+    $('#register_employee_personExtra_birthCountry').on('change', function () {
+        var $country = $(this);
+        $("#register_employee_personExtra_birthDepartment").html("<option value =''>Cargando Departamentos...</option>");
+
+        $.ajax({
+            method: "POST",
+            url: "/api/public/v1/departments",
+            data: {country: $country.val()}
+        }).done(function (data) {
+            $("#register_employee_personExtra_birthDepartment").html(
                 // ... with the returned one from the AJAX response.
                 jsonToHTML(data)
             );

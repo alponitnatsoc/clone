@@ -16,9 +16,13 @@ class EmployerRegistration extends AbstractType
 {
     private $severancesEntities;
     private $arlEntities;
-    function __construct($severancesEntities,$arlEntities){
+    private $departments;
+    private $cities;
+    function __construct($severancesEntities,$arlEntities,$departments = array(), $cities = array()){
         $this->severancesEntities=$severancesEntities;
         $this->arlEntities=$arlEntities;
+        $this->departments = $departments;
+        $this->cities = $cities;
     }
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -38,7 +42,7 @@ class EmployerRegistration extends AbstractType
                 },
                 'label' => 'Soy',
                 'property_path' => 'employerType'))
-            ->add('person', new BasicPersonRegistration(), array(
+            ->add('person', new BasicPersonRegistration($this->departments,$this->cities), array(
                 'property_path' => 'personPerson'))
 
             ->add('documentExpeditionDate', 'date', array(
@@ -66,7 +70,7 @@ class EmployerRegistration extends AbstractType
                 )
             ))
             ->add('workplaces', 'collection', array(
-                'type' => new WorkPlaceRegistration(),
+                'type' => new WorkPlaceRegistration($this->departments),
                 'allow_add'    => true,
                 'allow_delete' => true,
                 'by_reference' => false

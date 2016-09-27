@@ -25,7 +25,9 @@ class PersonEmployeeRegistration extends AbstractType
     private $user;
     private $arsEntities;
     private $severancesEntities;
-    function __construct($idEmployee,$workplaces,$wealthEntities,$pensionEntities,$arsEntities,$severancesEntities,$timeCommitments,$user){
+    private $departments;
+    private $cities;
+    function __construct($idEmployee,$workplaces,$wealthEntities,$pensionEntities,$arsEntities,$severancesEntities,$timeCommitments,$user,$departments = array(), $cities = array()){
         $this->severancesEntities=$severancesEntities;
         $this->timeCommitments=$timeCommitments;
         $this->user=$user;
@@ -34,6 +36,8 @@ class PersonEmployeeRegistration extends AbstractType
         $this->pensionEntities=$pensionEntities;
         $this->idEmployee=$idEmployee;
         $this->workplaces=$workplaces;
+        $this->departments = $departments;
+        $this->cities = $cities;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -48,7 +52,7 @@ class PersonEmployeeRegistration extends AbstractType
             ->add('idContract', 'hidden', array(
                 'mapped' => false
             ))
-            ->add('person', new BasicPersonRegistration(), array(
+            ->add('person', new BasicPersonRegistration($this->departments,$this->cities), array(
                 'property_path' => 'personPerson'))
             ->add('personExtra', new PersonExtraData(), array(
                 'property_path' => 'personPerson'))

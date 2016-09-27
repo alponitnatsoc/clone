@@ -28,6 +28,7 @@ services:
         arguments:
             - "" # User Provider
             - "%kernel.cache_dir%/security/nonces"
+            - "" # token lifetime
         public: false
 
     wsse.security.authentication.listener:
@@ -94,5 +95,6 @@ services:
                   resetting: '%fos_user.resetting.email.from_email%'
     app.symplifica_utils:
         class: RocketSeller\TwoPickBundle\Controller\UtilsController
-    app.symplifica_payroll:
-        class: RocketSeller\TwoPickBundle\Controller\PayrollMethodRestController
+    app.symplifica_chrons:
+        class: RocketSeller\TwoPickBundle\Controller\ChronServerRestController
+        arguments: ["@service_container"]

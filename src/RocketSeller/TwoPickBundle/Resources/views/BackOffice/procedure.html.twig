@@ -3,17 +3,17 @@
 {% block title %}Tramite No {{ procedure.idProcedure }}{% endblock %}
 
 {% block fos_user_content %}
-	<div id="main" class="col-sm-15">
-		<div class="col-md-11">
-			<div class="panel panel-title">
+	<div id="main" class="col-sm-12">
+		<div class="col-md-12">
+			<div class="back-panel-title">
 				<p>Tramite No: {{ procedure.idProcedure }}</p>
 			</div>
 			<br>
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h4>Empleador: {{ procedure.userUser.personPerson.fullName }}</h4>
+			<div class="back-panel" id="employer_section">
+				<div class="backoffice-headding">
+					<h7>Empleador: {{ procedure.userUser.personPerson.fullName }}</h7>
 				</div>
-				<table class="table">
+				<table class="col-md-12 back-table ">
 					<thead>
 					<tr>
 						<th>Vuelta</th>
@@ -26,14 +26,7 @@
 					<tbody>
 					{% set documentos = 0 %}
 					{% for action in procedure.action if action.personPerson == employerHasEmployees[0].employerEmployer.personPerson %}
-
-						{% if action.actionErrorActionError %}
-							{% if action.status|lower == "completado" %}
-								<tr style="background-color:#A2E383;">
-							{% else %}
-								<tr style="background-color:#FF5555;">
-							{% endif %}
-						{% elseif  action.status|lower == "nuevo" %}
+						{% if  action.status|lower == "nuevo" %}
 							<tr>
 						{% elseif  action.status|lower == "completado" %}
 							<tr style="background-color:#A2E383;">
@@ -47,21 +40,14 @@
 						<td class="{{action.personPerson.idPerson}}">{{ action.ActionTypeActionType.name }}</td>
 						<td>{{ action.personPerson.fullName }}</td>
 						<td>
-							{% if action.entityEntity %}
-								{{ action.entityEntity.name }}
+							{% if action.employerEntity %}
+								{{ action.employerEntity.entityEntity.name }}
 							{% else %}
 								-
 							{% endif %}
 						</td>
-						<td>{% if action.actionErrorActionError %}
-								{% if action.status|lower == "completado" %}
-									{{ action.status }}
-								{% else %}
-									Error
-								{% endif %}
-							{% else %}
-								{{ action.status}}
-							{% endif %}
+						<td>
+							{{ action.status}}
 						</td>
 						{% if action.status|lower != "completado" %}
 							{% if action.ActionTypeActionType.name|lower == "validar informacion del empleador" %}
@@ -72,9 +58,9 @@
 								<td><a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Inscrito</a></td>
 							{% elseif action.ActionTypeActionType.name|lower == "validar entidad" %}
 								<td><a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Validado</a></td>
-                            {% elseif action.ActionTypeActionType.name|lower == "validar mandato" %}
-                                <td><a class="notAjax" href="{{ path('validate_mandatory',{'idAction':action.idAction})}}">Validar Mandato</a></td>
-                            {% endif %}
+							{% elseif action.ActionTypeActionType.name|lower == "validar mandato" %}
+								<td><a class="notAjax" href="{{ path('validate_mandatory',{'idAction':action.idAction})}}">Validar Mandato</a></td>
+							{% endif %}
 						{% else %}
 							{% if action.ActionTypeActionType.name|lower == "validar informacion del empleador" %}
 								<td><a class="notAjax" href="{{ path('show_info',{'idAction':action.idAction})}}">Consultar Información</a></td>
@@ -87,9 +73,9 @@
 								<td>Inscrito</td>
 							{% elseif action.ActionTypeActionType.name|lower == "validar entidad" %}
 								<td>Validado</td>
-                            {% elseif action.ActionTypeActionType.name|lower == "validar mandato" %}
-                                <td>Validado</td>
-                            {% else %}
+							{% elseif action.ActionTypeActionType.name|lower == "validar mandato" %}
+								<td>Validado</td>
+							{% else %}
 								<td>Terminado</td>
 							{% endif %}
 						{% endif %}
@@ -112,121 +98,119 @@
 					{% endfor %}
 				</div>
 			</div>
-			<div class="panel panel-default">
-				{% set act = 0 %}
+			<div id="employees_section" style="border: 0px solid lightgrey; border-top-right-radius: 5px; border-top-left-radius: 5px; margin: 5px 0px" >
+				<div class="back-panel">
+					<div class="backoffice-headding">
+						<h7>Empleados</h7>
+					</div>
+				</div>
+			{% set act = 0 %}
+
 				{% for employerHasEmployee in employerHasEmployees %}
 					{% if employerHasEmployee.state >=2 %}
 						{% if documentos == 2 %}
 							{% set documentos = 1 %}
 						{% endif %}
-						<div class="panel-heading">
-							<h4>Empleado: {{ employerHasEmployee.employeeEmployee.personPerson.fullName}}</h4>
+						<div class="back-panel" id="employe_section">
+							<div class="back-employee-headding">
+								<h9> {{ employerHasEmployee.employeeEmployee.personPerson.fullName}}</h9>
+							</div>
 						</div>
-						<table class="table">
-							<thead>
-							<tr>
-								<th>Vuelta</th>
-								<th>persona</th>
-								<th>entidad</th>
-								<th>Estado</th>
-								<th>Acción</th>
-							</tr>
-							</thead>
-							<tbody>
-							{% for action in employerHasEmployee.employeeEmployee.personPerson.action %}
-								{% if action.realProcedureRealProcedure.idProcedure == procedure.idProcedure %}
-									{% if action.actionErrorActionError %}
-										{% if action.status|lower == "completado" %}
-											<tr style="background-color:#A2E383;">
-										{% else %}
-											<tr style="background-color:#FF5555;">
-										{% endif %}
-									{% elseif  action.status|lower == "nuevo" %}
-										<tr>
-									{% elseif  action.status|lower == "completado" %}
-										<tr style="background-color:#A2E383;">
-									{% elseif action.status|lower == "iniciado" %}
-										<tr>
-									{% elseif action.status|lower == "error" %}
-										<tr style="background-color: #CB6D6C">
-									{% endif %}
-									<td class="{{action.personPerson.idPerson}}">{{ action.ActionTypeActionType.name }}</td>
-									<td>{{ action.personPerson.fullName }}</td>
-									<td>
-										{% if action.entityEntity %}
-											{{ action.entityEntity.name }}
-										{% else %}
-											-
-										{% endif %}
-									</td>
-									<td>{% if action.actionErrorActionError %}
-											{% if action.status|lower == "completado" %}
-												{{ action.status }}
-											{% else %}
-												Error
-											{% endif %}
-										{% else %}
-											{{ action.status}}
-										{% endif %}
-									</td>
-									{% if action.status|lower != "completado" %}
-										{% if action.ActionTypeActionType.name|lower == "validar informacion del empleado" %}
-											<td><a class="notAjax" href="{{ path('check_employee',{'idAction':action.idAction})}}">Validar Datos del Empleado</a></td>
-										{% elseif action.ActionTypeActionType.name|lower == "validar documentos" %}
-											<td><a class="notAjax" href="{{ path('validate_employee_documents',{'idAction':action.idAction})}}">Validar Documentos</a></td>
-											{% set act = action %}
-										{% elseif action.ActionTypeActionType.name|lower == "inscripcion" %}
-											<td><a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Inscrito</a></td>
-										{% elseif action.ActionTypeActionType.name|lower == "validar entidad" %}
-											<td><a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Validado</a></td>
-										{% elseif action.ActionTypeActionType.name|lower == "validar contrato" %}
-											<td><a class="notAjax" href="{{ path('validate_contract',{'idAction':action.idAction})}}">Validar Contrato</a></td>
-										{% endif %}
-									{% else %}
-										{% if action.ActionTypeActionType.name|lower == "validar informacion del empleado" %}
-											<td><a class="notAjax" href="{{ path('show_info_employee',{'idAction':action.idAction})}}">Consultar Información</a></td>
-										{% elseif action.ActionTypeActionType.name|lower == "validar documentos" %}
-											<td><a class="notAjax" href="{{ path('view_employee_documents',{'idAction':action.idAction})}}">Ver Documentos</a></td>
-											{% set act = action %}
-											{% if documentos == 1 %}
-												{% set documentos = 2 %}
-											{% endif %}
-										{% elseif action.ActionTypeActionType.name|lower == "inscripcion" %}
-											<td>Inscrito</td>
-										{% elseif action.ActionTypeActionType.name|lower == "validar entidad" %}
-											<td>Validado</td>
-										{% elseif action.ActionTypeActionType.name|lower == "validar contrato" %}
-											<td>Validado</td>
-										{% else %}
-											<td>Terminado</td>
-										{% endif %}
-									{% endif %}
-								{% endif %}
+
+							<table class="col-md-12 back-table">
+								<thead>
+								<tr>
+									<th>Vuelta</th>
+									<th>persona</th>
+									<th>entidad</th>
+									<th>Estado</th>
+									<th>Acción</th>
 								</tr>
-							{% endfor %}
-							</tbody>
-						</table>
-					<div style="margin-top:10px; margin-bottom:20px; text-align:center;">
-						{% if employerHasEmployee.state == 4 %}
-							<a class="btn btn-bitbucket notAjax" style="margin-bottom: 20px" href="{{path('export_all_documents',{'idAction':act.idAction})}}">Descargar Documentos</a>
-							<p> proceso de: {{ employerHasEmployee.employeeEmployee.personPerson.names}} terminado</p>
-						{% elseif employerHasEmployee.state == 3 and employerHasEmployee.existentSQL == 1 %}
-							<a class="btn btn-orange notAjax" href="{{ path('complete_employee',{'idEmployerHasEmployee':employerHasEmployee.idEmployerHasEmployee,'procedureId':procedure.idProcedure })}}"> Terminar proceso </a>
-						{% else %}
-							<a class="btn btn-bitbucket notAjax" style="margin-bottom: 20px" href="{{path('export_all_documents',{'idAction':act.idAction})}}">Descargar Documentos</a>
-							<br>
-							<p> <strong>Aun no se puede terminar el proceso de este empleado</strong></p>
-						{% endif %}
-						{% if documentos == 2 %}
-							{% if employerHasEmployee and (act.personPerson.employee) %}
-								{% if employerHasEmployee.existentSQL == 0 %}
-									<a class="btn btn-orange notAjax" style="background-color: #8c8c8c; border-color: #8c8c8c" href="{{ path('back_add_sql',{'idEmployerHasEmployee':employerHasEmployee.idEmployerHasEmployee,'procedureId':procedure.idProcedure})}}">Agregar a SQL</a>
-								{% elseif employerHasEmployee.existentSQL == 1 %}
-									<p>ya esta inscrio en SQL </p>
+								</thead>
+								<tbody>
+								{% for action in employerHasEmployee.employeeEmployee.personPerson.action %}
+									{% if action.realProcedureRealProcedure.idProcedure == procedure.idProcedure %}
+										{% if  action.status|lower == "nuevo" %}
+											<tr>
+										{% elseif  action.status|lower == "completado" %}
+											<tr style="background-color:#A2E383;">
+										{% elseif action.status|lower == "iniciado" %}
+											<tr>
+										{% elseif action.status|lower == "error" %}
+											<tr style="background-color: #CB6D6C">
+										{% endif %}
+										<td class="{{action.personPerson.idPerson}}">{{ action.ActionTypeActionType.name }}</td>
+										<td>{{ action.personPerson.fullName }}</td>
+										<td>
+											{% if action.employeeEntity %}
+												{{ action.employeeEntity.entityEntity.name }}
+											{% else %}
+												-
+											{% endif %}
+										</td>
+										<td>
+											{{ action.status}}
+										</td>
+										{% if action.status|lower != "completado" %}
+											{% if action.ActionTypeActionType.name|lower == "validar informacion del empleado" %}
+												<td><a class="notAjax" href="{{ path('check_employee',{'idAction':action.idAction})}}">Validar Datos del Empleado</a></td>
+
+											{% elseif action.ActionTypeActionType.name|lower == "validar documentos" %}
+												<td><a class="notAjax" href="{{ path('validate_employee_documents',{'idAction':action.idAction})}}">Validar Documentos</a></td>
+												{% set act = action %}
+											{% elseif action.ActionTypeActionType.name|lower == "inscripcion" %}
+												<td><a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Inscrito</a></td>
+											{% elseif action.ActionTypeActionType.name|lower == "validar entidad" %}
+												<td><a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Validado</a></td>
+											{% elseif action.ActionTypeActionType.name|lower == "validar contrato" %}
+												<td><a class="notAjax" href="{{ path('validate_contract',{'idAction':action.idAction})}}">Validar Contrato</a></td>
+											{% endif %}
+										{% else %}
+											{% if action.ActionTypeActionType.name|lower == "validar informacion del empleado" %}
+												<td><a class="notAjax" href="{{ path('show_info_employee',{'idAction':action.idAction})}}">Consultar Información</a></td>
+											{% elseif action.ActionTypeActionType.name|lower == "validar documentos" %}
+												<td><a class="notAjax" href="{{ path('view_employee_documents',{'idAction':action.idAction})}}">Ver Documentos</a></td>
+												{% set act = action %}
+												{% if documentos == 1 %}
+													{% set documentos = 2 %}
+												{% endif %}
+											{% elseif action.ActionTypeActionType.name|lower == "inscripcion" %}
+												<td>Inscrito</td>
+											{% elseif action.ActionTypeActionType.name|lower == "validar entidad" %}
+												<td>Validado</td>
+											{% elseif action.ActionTypeActionType.name|lower == "validar contrato" %}
+												<td>Validado</td>
+											{% else %}
+												<td>Terminado</td>
+											{% endif %}
+										{% endif %}
+									{% endif %}
+									</tr>
+								{% endfor %}
+								</tbody>
+							</table>
+							<div style="margin-top:10px; margin-bottom:20px; text-align:center;">
+								{% if employerHasEmployee.state == 4 %}
+									<a class="btn btn-bitbucket notAjax" style="margin-bottom: 20px" href="{{path('export_all_documents',{'idAction':act.idAction})}}">Descargar Documentos</a>
+									<p> proceso de: {{ employerHasEmployee.employeeEmployee.personPerson.names}} terminado</p>
+								{% elseif employerHasEmployee.state == 3 and employerHasEmployee.existentSQL == 1 %}
+									<a class="btn btn-orange notAjax" href="{{ path('complete_employee',{'idEmployerHasEmployee':employerHasEmployee.idEmployerHasEmployee,'procedureId':procedure.idProcedure })}}"> Terminar proceso </a>
+								{% else %}
+									<a class="btn btn-bitbucket notAjax" style="margin-bottom: 20px" href="{{path('export_all_documents',{'idAction':act.idAction})}}">Descargar Documentos</a>
+									<br>
+									<p> <strong>Aun no se puede terminar el proceso de este empleado</strong></p>
 								{% endif %}
-							{% endif %}
-						{% endif %}
-					</div>
+								{% if documentos == 2 %}
+									{% if employerHasEmployee and (act.personPerson.employee) %}
+										{% if employerHasEmployee.existentSQL == 0 %}
+											<a class="btn btn-orange notAjax" style="background-color: #8c8c8c; border-color: #8c8c8c" href="{{ path('back_add_sql',{'idEmployerHasEmployee':employerHasEmployee.idEmployerHasEmployee,'procedureId':procedure.idProcedure})}}">Agregar a SQL</a>
+										{% elseif employerHasEmployee.existentSQL == 1 %}
+											<p>ya esta inscrio en SQL </p>
+										{% endif %}
+									{% endif %}
+								{% endif %}
+							</div>
+
 					{% endif %}
 				{% endfor %}
 			</div>
@@ -246,21 +230,21 @@
 					</thead>
 					<tbody>
 					{% for action in procedure.action %}
-						{% if action.actionErrorActionError %}
-							<tr>
-								<td>{{action.actionErrorActionError.id}}</td>
-								<td>{{ action.personPerson.names}} {{action.personPerson.lastName1}}</td>
-								<td>{{ action.realProcedureRealProcedure.employerEmployer.personPerson.phones[0].phoneNumber}}</td>
-								<td>{{action.actionErrorActionError.description}}</td>
-								<td>{{action.actionErrorActionError.status}}</td>
-								{% if action.actionErrorActionError.status|lower == "sin contactar" %}
-									<td><a class="notAjax" href="{{ path('change_action_error_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionError':action.actionErrorActionError.id,'status':"Contactado"})}}">Contactado</a></td>
-								{% elseif action.actionErrorActionError.status|lower =="contactado" %}
-									<td><a class="notAjax" href="{{ path('change_action_error_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionError':action.actionErrorActionError.id,'status':"Corregido"})}}">Corregido</a></td>
-								{% elseif action.actionErrorActionError.status|lower == "corregido" %}
-									<td>-</td>
-								{% endif %}
-							</tr>
+						{% if action is defined %}
+								{#<tr>#}
+								{#<td>{{ actionE.id}}</td>#}
+								{#<td>{{ action.personPerson.names}} {{action.personPerson.lastName1}}</td>#}
+								{#<td>{{ action.realProcedureRealProcedure.employerEmployer.personPerson.phones[0].phoneNumber}}</td>#}
+								{#<td>{{ actionE.description}}</td>#}
+								{#<td>{{ actionE.status}}</td>#}
+								{#{% if actionE.status|lower == "sin contactar" %}#}
+								{#<td><a class="notAjax" href="{{ path('change_action_error_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionError':actionE.id,'status':"Contactado"})}}">Contactado</a></td>#}
+								{#{% elseif actionE.status|lower =="contactado" %}#}
+								{#<td><a class="notAjax" href="{{ path('change_action_error_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionError':actionE.id,'status':"Corregido"})}}">Corregido</a></td>#}
+								{#{% elseif actionE.status|lower == "corregido" %}#}
+								{#<td>-</td>#}
+								{#{% endif %}#}
+								{#</tr>#}
 						{% endif %}
 					{% endfor %}
 					</tbody>
@@ -280,7 +264,10 @@
 					{% endfor %}
 				</div>
 			</div>
-			<a class="btn btn-bitbucket notAjax" href="{{ path('show_procedures') }}">Volver a los tramites</a>
+
+			<div class="col-md-12 text center" style="margin-top: 20px">
+				<a class="btn btn-bitbucket notAjax" href="{{ path('show_procedures') }}">Volver a los tramites</a>
+			</div>
 		</div>
 	</div>
 {% endblock %}

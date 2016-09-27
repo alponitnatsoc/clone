@@ -12,7 +12,7 @@ class LoadCronTaskData extends AbstractFixture implements OrderedFixtureInterfac
 
     public function load(ObjectManager $manager)
     {
-//         Servicio que cierra nominas automaticamente Corre los días 25 a las 22:00
+/*//         Servicio que cierra nominas automaticamente Corre los días 25 a las 22:00
         $cronTask = new CronTask();
         $cronTask->setName('Cerrar nominas dia 25');
         $cronTask->setLastRun(new \DateTime());
@@ -21,9 +21,20 @@ class LoadCronTaskData extends AbstractFixture implements OrderedFixtureInterfac
         //$cronTask->setCommands('symplifica:subscription:pay'); //ambos comandos son validos
         $manager->persist($cronTask);
 
+        $manager->flush();*/
+
+//         Servicio que cobra automáticamente la membresía de symplifica
+        $cronTask = new CronTask();
+        $cronTask->setName('Cargar membresía');
+        $cronTask->setLastRun(new \DateTime());
+        $cronTask->setInterval(86400); //1 day =  24 hour * 60 min * 60 sec = 86400 seconds
+        $cronTask->setCommands(array('symplifica:autoCharge'));
+        //$cronTask->setCommands('symplifica:subscription:pay'); //ambos comandos son validos
+        $manager->persist($cronTask);
+
         $manager->flush();
 
-        $cronTask = new CronTask();
+        /*$cronTask = new CronTask();
         $cronTask->setName('Recordatorio');
         $cronTask->setLastRun(new \DateTime());
         $cronTask->setInterval(86400); //1 day =  24 hour * 60 min * 60 sec = 86400 seconds
@@ -48,7 +59,7 @@ class LoadCronTaskData extends AbstractFixture implements OrderedFixtureInterfac
         $cronTask->setCommands(array('symplifica:daviReminder'));
         $manager->persist($cronTask);
 
-        $manager->flush();
+        $manager->flush();*/
     }
 
     public function getOrder()

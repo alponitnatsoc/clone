@@ -26,7 +26,7 @@ class Department
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Country
      *
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Country")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Country", inversedBy="departments")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="country_id_country", referencedColumnName="id_country")
      * })

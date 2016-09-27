@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Entity;
 
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use JMS\Serializer\Annotation\ExclusionPolicy;
@@ -207,8 +208,8 @@ class Employer
      */
     public function addRealProcedure(\RocketSeller\TwoPickBundle\Entity\RealProcedure $realProcedure)
     {
+        $realProcedure->setEmployerEmployer($this);
         $this->realProcedure[] = $realProcedure;
-
         return $this;
     }
 
@@ -529,5 +530,16 @@ class Employer
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Get ActiveEmployerHasEmployees
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActiveEmployerHasEmployees()
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->gte("state",2));
+        return $this->employerHasEmployees->matching($criteria);
     }
 }

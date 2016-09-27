@@ -63,6 +63,8 @@ trait PayrollMethodsTrait
             foreach ($podsPila as $key => $value ) {
                 //calculate the mora and add the date to pay
                 if ($value->getValue() > 0) {
+                    if($value->getPurchaseOrders()!=null&&$value->getPurchaseOrders()->getPurchaseOrdersStatus()!=null&&$value->getPurchaseOrders()->getPurchaseOrdersStatus()->getIdNovoPay()=="P1")
+                        continue;
                     if ($value->getPurchaseOrdersStatus()!=null&&($value->getPurchaseOrdersStatus()->getIdNovoPay() == "-1" || $value->getPurchaseOrdersStatus()->getIdNovoPay() == "S2" || $value->getPurchaseOrdersStatus()->getIdNovoPay() == "00")){
 
                     }else {
@@ -194,26 +196,29 @@ trait PayrollMethodsTrait
                         $planillaCode=$payroll->getContractContract()->getPlanillaTypePlanillaType()->getCode();
                         $totalPila=$this->getTotalPILA($employerHasEmployee, $payroll );
                         //this is for the first case and when the pila is already set in the pod
-                        if($pila!=null&&(!isset($podsPila[$planillaCode]))){
-                            $podsPila[$planillaCode]=$pila;
-                            $podsPila[$planillaCode]->setValue($totalPila['total']);
-
-                        }else{
-                            if($pila!=null&&isset($podsPila[$planillaCode])){
-                                $podsPila[$planillaCode]->setValue($totalPila['total'] + $podsPila[$planillaCode]->getValue());
-                            }
-                            //this is for the literal first case of the currend pod type
-                            elseif((!isset($podsPila[$planillaCode]))){
-                                $podsPila[$planillaCode] = new PurchaseOrdersDescription();
-                                $podsPila[$planillaCode]->addPayrollsPila($payroll);
+                        if(!($pila!=null&&$pila->getPurchaseOrders()!=null&&
+                            $pila->getPurchaseOrders()->getPurchaseOrdersStatus()!=null&&
+                            $pila->getPurchaseOrders()->getPurchaseOrdersStatus()->getIdNovoPay()=="P1")){
+                            if($pila!=null&&(!isset($podsPila[$planillaCode]))){
+                                $podsPila[$planillaCode]=$pila;
                                 $podsPila[$planillaCode]->setValue($totalPila['total']);
-                            }
-                            elseif($pila==null){
-                                $podsPila[$planillaCode]->addPayrollsPila($payroll);
-                                $podsPila[$planillaCode]->setValue($totalPila['total'] + $podsPila[$planillaCode]->getValue());
+
+                            }else{
+                                if($pila!=null&&isset($podsPila[$planillaCode])){
+                                    $podsPila[$planillaCode]->setValue($totalPila['total'] + $podsPila[$planillaCode]->getValue());
+                                }
+                                //this is for the literal first case of the currend pod type
+                                elseif((!isset($podsPila[$planillaCode]))){
+                                    $podsPila[$planillaCode] = new PurchaseOrdersDescription();
+                                    $podsPila[$planillaCode]->addPayrollsPila($payroll);
+                                    $podsPila[$planillaCode]->setValue($totalPila['total']);
+                                }
+                                elseif($pila==null){
+                                    $podsPila[$planillaCode]->addPayrollsPila($payroll);
+                                    $podsPila[$planillaCode]->setValue($totalPila['total'] + $podsPila[$planillaCode]->getValue());
+                                }
                             }
                         }
-
                     }
                     return $tempPOD;
                 }
@@ -291,39 +296,59 @@ trait PayrollMethodsTrait
                     $total += isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
                     $total += isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
                     if ($value['TENT_CODIGO'] == 'AFP') {
-                        $pension = new PilaDetail();
+                        $valueCia=$valueEmp=0;
+                        if($pension==null){
+                            $pension = new PilaDetail();
+                            $valueCia = $pension->getSqlValueCia();
+                            $valueEmp = $pension->getSqlValueEmp();
+                        }
                         $entity=$entityRepo->findOneBy(array("payroll_code"=>$value["ENT_CODIGO"]));
                         $pension->setEntityEntity($entity);
                         $pension->setPayrollPayroll($payroll);
-                        $pension->setSqlValueCia(isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0);
-                        $pension->setSqlValueEmp(isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0);
+                        $pension->setSqlValueCia(isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] + $valueCia: 0);
+                        $pension->setSqlValueEmp(isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] + $valueEmp: 0);
                         $pensionCia += isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
                         $pensionEmp += isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
                     } elseif ($value['TENT_CODIGO'] == 'ARP') {
-                        $arl = new PilaDetail();
+                        $valueCia=$valueEmp=0;
+                        if($arl==null){
+                            $arl = new PilaDetail();
+                            $valueCia = $arl->getSqlValueCia();
+                            $valueEmp = $arl->getSqlValueEmp();
+                        }
                         $entity=$entityRepo->findOneBy(array("payroll_code"=>$value["ENT_CODIGO"]));
                         $arl->setEntityEntity($entity);
                         $arl->setPayrollPayroll($payroll);
-                        $arl->setSqlValueCia(isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0);
-                        $arl->setSqlValueEmp(isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0);
+                        $arl->setSqlValueCia(isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] + $valueCia: 0);
+                        $arl->setSqlValueEmp(isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] + $valueEmp: 0);
                         $arlEmp += isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
                         $arlCia += isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
                     } elseif ($value['TENT_CODIGO'] == 'EPS' || $value['TENT_CODIGO'] == 'ARS') {
-                        $salud = new PilaDetail();
+                        $valueCia=$valueEmp=0;
+                        if($salud==null){
+                            $salud = new PilaDetail();
+                            $valueCia = $salud->getSqlValueCia();
+                            $valueEmp = $salud->getSqlValueEmp();
+                        }
                         $entity=$entityRepo->findOneBy(array("payroll_code"=>$value["ENT_CODIGO"]));
                         $salud->setEntityEntity($entity);
                         $salud->setPayrollPayroll($payroll);
-                        $salud->setSqlValueCia(isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0);
-                        $salud->setSqlValueEmp(isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0);
+                        $salud->setSqlValueCia(isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] + $valueCia: 0);
+                        $salud->setSqlValueEmp(isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] + $valueEmp: 0);
                         $saludEmp += isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
                         $saludCia += isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
                     } elseif ($value['TENT_CODIGO'] == 'PARAFISCAL') {
-                        $parafiscal = new PilaDetail();
+                        $valueCia=$valueEmp=0;
+                        if($parafiscal==null){
+                            $parafiscal = new PilaDetail();
+                            $valueCia = $parafiscal->getSqlValueCia();
+                            $valueEmp = $parafiscal->getSqlValueEmp();
+                        }
                         $entity=$entityRepo->findOneBy(array("payroll_code"=>$value["ENT_CODIGO"]));
                         $parafiscal->setEntityEntity($entity);
                         $parafiscal->setPayrollPayroll($payroll);
-                        $parafiscal->setSqlValueCia(isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0);
-                        $parafiscal->setSqlValueEmp(isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0);
+                        $parafiscal->setSqlValueCia(isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] + $valueCia: 0);
+                        $parafiscal->setSqlValueEmp(isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] + $valueEmp: 0);
                         $parafEmp += isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
                         $parafCia += isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
                     }

@@ -3,6 +3,7 @@
 {% block title %}Pagar Nómina{% endblock %}
 
 {% block fos_user_content %}
+    <!-- INTERCOM SESSION START-->
     <script>
         window.intercomSettings = {
             app_id: "mydavhzb",
@@ -46,6 +47,7 @@
     <script>
         window.Intercom("trackEvent", "payroll");
     </script>
+    <!-- INTERCOM SESSION END-->
     {% if flagAtLeastOne == "true" %}
         {% if dataNomina or debt|length > 0 %}
 
@@ -137,15 +139,20 @@
                                         {% set total = 0 %}
                                         {% set dev = 0 %}
                                         {% set ded = 0 %}
+                                        {% set deducidos = [] %}
+                                        {% set devengados = [] %}
                                         {% for nov in data.payroll_payroll.sql_novelties %}
                                             {% if nov.novelty_type_novelty_type.naturaleza=="DEV" %}
                                                 {% set total = total + nov.sql_value %}
                                                 {% set dev = dev + nov.sql_value %}
+                                                {% set devengados = devengados|merge([nov]) %}
                                             {% else %}
                                                 {% set total = total + nov.sql_value %}
                                                 {% set ded = ded +  nov.sql_value %}
+                                                {% set deducidos = deducidos|merge([nov]) %}
                                             {% endif %}
                                         {% endfor %}
+                                        <div class="col-sm-2"
                                         <div class="col-sm-2">
                                             <p>Ingresos</p>
                                             <h2 class="h2">${{ dev|number_format(0, '.', ',')  }}</h2>
@@ -157,7 +164,30 @@
                                         <div class="col-sm-2">
                                             <p>Total</p>
                                             <h2 class="h2">${{ data.value|number_format(0, '.', ',') }}</h2>
-                                            <span class="detallesPay notAjax showDetails" href="/payroll/show/details/{{ id_payroll }}">&#10093; Detalles</span>
+                                            <span style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax" data-toggle="modal" data-target="#detailModal{{ loop.index }}" >&#10093; Detalles</span>
+                                        </div>
+                                        <div class="modal fade" id="detailModal{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title bold azulmediofont" id="myModalLabel">Detalles</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <h4 class="bold azulmediofont">Devengados</h4>
+                                                        {% for dev in devengados %}
+                                                            <p><strong>{{ dev.novelty_type_novelty_type.name }}</strong> ${{ dev.sql_value|number_format(0, '.', ',')  }}</p>
+                                                        {% endfor %}
+                                                        <h4 class="bold azulmediofont">Deducidos</h4>
+                                                        {% for ded in deducidos %}
+                                                            <p><strong>{{ ded.novelty_type_novelty_type.name }}</strong> ${{ ded.sql_value|number_format(0, '.', ',')  }}</p>
+                                                        {% endfor %}
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <!--<div class="height center col-sm-12">
@@ -285,13 +315,17 @@
                                             {% set total = 0 %}
                                             {% set dev = 0 %}
                                             {% set ded = 0 %}
+                                            {% set deducidos = [] %}
+                                            {% set devengados = [] %}
                                             {% for nov in data.payroll_payroll.sql_novelties %}
                                                 {% if nov.novelty_type_novelty_type.naturaleza=="DEV" %}
                                                     {% set total = total + nov.sql_value %}
                                                     {% set dev = dev + nov.sql_value %}
+                                                    {% set devengados = devengados|merge([nov]) %}
                                                 {% else %}
                                                     {% set total = total + nov.sql_value %}
                                                     {% set ded = ded +  nov.sql_value %}
+                                                    {% set deducidos = deducidos|merge([nov]) %}
                                                 {% endif %}
                                             {% endfor %}
                                             <div class="col-sm-2">
@@ -305,7 +339,30 @@
                                             <div class="col-sm-2">
                                                 <p>Total</p>
                                                 <h2 class="h2">${{ data.value|number_format(0, '.', ',') }}</h2>
-                                                {#<span style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax showDetails" href="">&#10093; Detalles</span>#}
+                                                <span style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax" data-toggle="modal" data-target="#detailDebtModal{{ loop.parent.loop.index }}{{ loop.index }}" >&#10093; Detalles</span>
+                                            </div>
+                                            <div class="modal fade" id="detailDebtModal{{ loop.parent.loop.index }}{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" id="myModalLabel">Detalles</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <h4>Devengados<br/></h4>
+                                                            {% for dev in devengados %}
+                                                                {{ dev.novelty_type_novelty_type.name }} ${{ dev.sql_value|number_format(0, '.', ',')  }} <br/>
+                                                            {% endfor %}
+                                                            <h4>Deducidos<br/></h4>
+                                                            {% for ded in deducidos %}
+                                                                {{ ded.novelty_type_novelty_type.name }} ${{ ded.sql_value|number_format(0, '.', ',')  }} <br/>
+                                                            {% endfor %}
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -413,46 +470,6 @@
                             </div>
                         </div>
                     </div>#}
-                    <script>
-                        window.intercomSettings = {
-                            app_id: "mydavhzb",
-                            name: '{{ app.user.username }}', // Full name
-                            email: '{{ app.user.email }}', // Email address
-                            created_at: {{ app.user.dateCreated|date("U") }}, // Signup date as a Unix timestamp
-                        };
-                    </script>
-                    <script>
-                        (function(){
-                                    var w=window;
-                                    var ic=w.Intercom;
-                                    if(typeof ic==="function"){
-                                        ic('reattach_activator');
-                                        ic('update',intercomSettings);
-                                    }else{
-                                        var d=document;
-                                        var i=function(){
-                                            i.c(arguments)
-                                        };
-                                        i.q=[];
-                                        i.c=function(args){i.q.push(args)};
-                                        w.Intercom=i;
-                                        function l(){
-                                            var s=d.createElement('script');
-                                            s.type='text/javascript';
-                                            s.async=true;
-                                            s.src='https://widget.intercom.io/widget/mydavhzb';
-                                            var x=d.getElementsByTagName('script')[0];
-                                            x.parentNode.insertBefore(s,x);
-                                        }
-                                        if(w.attachEvent){
-                                            w.attachEvent('onload',l);
-                                        }else{
-                                            w.addEventListener('load',l,false);
-                                        }
-                                    }
-                                }
-                        )()
-                    </script>
                     <div class="row importante">
                         <div class="media">
                             <div class="media-left">
@@ -473,11 +490,15 @@
                                    value="Cálculo final del pago"/>
                         </div>
                     </div>
+                    <!-- INTERCOM TRACK EVENT PAGO-->
                     <script>
-                        $('#btnCalculate').on("click",function () {
-                            window.Intercom("trackEvent", "Pago");
+                        jQuery(document).ready(function () {
+                            $('#btnCalculate').on("click",function () {
+                                window.Intercom("trackEvent", "Pago");
+                            });
                         });
                     </script>
+                    <!-- IINTERCOM TRACK EVENT END-->
                 </form>
             </div>
 

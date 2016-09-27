@@ -462,4 +462,25 @@ class Notification {
     {
         return $this->downloadAction;
     }
+
+    /**
+     * activate
+     * @return Notification
+     */
+    public function activate()
+    {
+        $this->status = 1;
+        return $this;
+    }
+
+    /**
+     * disable
+     * @return Notification
+     */
+    public function disable()
+    {
+        $this->status = 0;
+        return $this;
+    }
+
 }

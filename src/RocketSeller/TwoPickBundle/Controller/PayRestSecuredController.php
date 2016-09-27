@@ -184,7 +184,7 @@ class PayRestSecuredController extends FOSRestController
 
             if ($user->getSmsCode() != $verificationCode) {
                 $view = View::create();
-                $view->setStatusCode(401);
+                $view->setStatusCode(400);
                 return $view->setData(array('response' => 'Codigo incorrecto'));
             }
             if ($accountTypeId != null && $accountNumber != null && $bankId != null) {

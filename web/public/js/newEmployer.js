@@ -379,6 +379,8 @@ function startEmployer() {
                 $("#register_employer_workplaces_0_name").val("Dirección Principal");
                 $("#register_employer_workplaces_0_mainAddress").val($("#register_employer_person_mainAddress").val());
                 $("#register_employer_workplaces_0_department").val($("#register_employer_person_department").val());
+                var $options = $("#register_employer_person_city").find("> option").clone();
+                $("#register_employer_workplaces_0_city").append($options);
                 $("#register_employer_workplaces_0_city").val($("#register_employer_person_city").val());
 
             }
@@ -391,7 +393,6 @@ function startEmployer() {
     });
     //funcion que agrega un listener a cada department
     addListeners();
-
     //colocar el select en el valor del tamaño del arreglo
     var dropDownWork = $collectionHolder.data('index');
     if (dropDownWork == 1 && $("input[name='register_employer[sameWorkHouse]']:checked").val() != '0') {

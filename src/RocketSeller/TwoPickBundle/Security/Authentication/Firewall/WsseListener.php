@@ -50,6 +50,9 @@ class WsseListener implements ListenerInterface {
             if ($token instanceof WsseUserToken && $this->providerKey === $token->getProviderKey()) {
                 $this->tokenStorage->setToken(null);
             }
+            $response = new Response();
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $event->setResponse($response);
             return;
         }
 

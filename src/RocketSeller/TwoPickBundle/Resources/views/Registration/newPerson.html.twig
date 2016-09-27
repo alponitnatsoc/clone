@@ -141,14 +141,17 @@
     <div class="row"></div>
     <div class="row-fluid" id='registrationFormContainer'>
         {{ form_start(form) }}
-
-        <ul id="formNav" class="nav-justified nav-4-tabs">
-            <li {%   if tab==1 %} class="active" {% endif %}><a data-toggle="tab" data-target="#basicData">Datos básicos</a></li>
-            <li {%   if tab==2 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contactData">Datos de contacto</a></li>
-            <li {%   if tab==3 %} class="active" {% endif %}><a data-toggle="tab" data-target="#workplacesData">Lugares de trabajo</a></li>
-            <li {%   if tab==4 %} class="active" {% endif %}><a data-toggle="tab" data-target="#employerEntities">Tus entidades</a></li>
-        </ul>
-
+        <div class="noResponsive4tabs">
+          <ul id="formNav" class="nav-justified nav-4-tabs">
+              <li {%   if tab==1 %} class="active" {% endif %}><a data-toggle="tab" data-target="#basicData">Datos básicos</a></li>
+              <li {%   if tab==2 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contactData">Datos de contacto</a></li>
+              <li {%   if tab==3 %} class="active" {% endif %}><a data-toggle="tab" data-target="#workplacesData">Lugares de trabajo</a></li>
+              <li {%   if tab==4 %} class="active" {% endif %}><a data-toggle="tab" data-target="#employerEntities">Tus entidades</a></li>
+          </ul>
+        </div>
+        <div style="background: #eaeaea;padding: 8px 0;" class="responsive4tabs title-center bold grisoscurofont">
+          Datos básicos
+        </div>
         <div class="tab-content">
             <div id="basicData" class="tab-pane fade in {%   if tab==1 %} active {% endif %}">
                 {# render the task's only field: description #}
@@ -260,11 +263,11 @@
                                 {% for phone in form.person.phones %}
                                     <li id="phone_{{loop.index}}" class="phoneLi">
                                         {{ form_row(phone.id) }}
-                                        <div class="col-sm-6 label-group">
+                                        <div class="col-sm-5 col-md-6 label-group">
                                             {{ form_label(phone.phoneNumber)}}
                                             <br><span style="font-size:12px;position:relative;bottom:10px; color:#1fcecb">Enviaremos un código de seguridad a este número</span>
                                         </div>
-                                        <div class="col-sm-6 form-group input">
+                                        <div class="col-sm-7 col-md-6 form-group input">
                                             {{ form_widget(phone.phoneNumber)}}
                                         </div>
                                     </li>
@@ -334,26 +337,26 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-12 col-xs-12">
-                                            <div class="col-sm-6 label-group">
+                                            <div class="col-sm-5 col-md-6 label-group">
                                                 {{ form_label(workplace.mainAddress) }}
                                             </div>
-                                            <div class="col-sm-6 form-group input">
+                                            <div class="col-sm-7 col-md-6 form-group input">
                                                 {{ form_widget(workplace.mainAddress) }}
                                             </div>
                                         </div>
                                         <div class="col-xs-12 col-sm-12">
-                                            <div class="col-sm-6 label-group">
+                                            <div class="col-sm-5 col-md-6 label-group">
                                                 {{ form_label(workplace.department)}}
                                             </div>
-                                            <div class="col-sm-6 form-group">
+                                            <div class="col-sm-7 col-md-6 form-group">
                                                 {{ form_widget(workplace.department)}}
                                             </div>
                                         </div>
                                         <div class="col-xs-12 col-sm-12">
-                                            <div class="col-sm-6 label-group">
+                                            <div class="col-sm-5 col-md-6 label-group">
                                                 {{ form_label(workplace.city) }}
                                             </div>
-                                            <div class="col-sm-6 form-group">
+                                            <div class="col-sm-7 col-md-6 form-group">
                                                 {{ form_widget(workplace.city) }}
                                             </div>
                                         </div>

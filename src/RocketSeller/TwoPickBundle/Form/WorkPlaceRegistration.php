@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Form;
 
+use RocketSeller\TwoPickBundle\Entity\Workplace;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -15,6 +16,10 @@ use RocketSeller\TwoPickBundle\Entity\Department;
 class WorkPlaceRegistration extends AbstractType
 {
 
+    private $departments;
+    function __construct($departments = array()){
+        $this->departments = $departments;
+    }
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -40,6 +45,7 @@ class WorkPlaceRegistration extends AbstractType
             ))
             ->add('department', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Department',
+                'choices' => $this->departments,
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
@@ -58,6 +64,29 @@ class WorkPlaceRegistration extends AbstractType
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ));
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            /** @var Workplace $data */
+            $data = $event->getData();
+            if($data==null){
+                return;
+            }else{
+                $dept = $data->getDepartment();
+                $event->getForm()->add('city', 'entity', array(
+                    'class' => 'RocketSellerTwoPickBundle:City',
+                    'choices' => $dept?$dept->getCitys():array(),
+                    'property' => 'name',
+                    'multiple' => false,
+                    'expanded' => false,
+                    'property_path' => 'city',
+                    "label" => "Ciudad",
+                    'placeholder' => 'Seleccionar una opción',
+                    'required' => true
+                ));
+                return;
+            }
+
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver)
