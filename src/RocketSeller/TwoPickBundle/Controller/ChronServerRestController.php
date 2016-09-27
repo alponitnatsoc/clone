@@ -8,19 +8,24 @@ use FOS\RestBundle\View\View;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Product;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus;
 use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints\Date;
 
 class ChronServerRestController extends FOSRestController
 {
 
-    public function __construct( $container)
+    public function __construct( $container=null)
     {
-        $this->setContainer($container);
+        if($container)
+            $this->setContainer($container);
     }
     /**
      *  Charge Symplifica membership<br/>
@@ -50,6 +55,10 @@ class ChronServerRestController extends FOSRestController
         $PS3 = $productRepo->findOneBy(array("simpleName" => "PS3"));
         /** @var User $user */
         foreach ($users as $user) {
+            $realtoPay= new PurchaseOrders();
+            $realtoPay->setIdUser($user);
+            $total=0;
+            $em=$this->getDoctrine()->getEntityManager();
             $isFreeMonths = $user->getIsFree();
             if($user->getLastPayDate()==null)
                 continue;
@@ -88,15 +97,64 @@ class ChronServerRestController extends FOSRestController
                         }
                     }
                 }
-                if($atLeastOne)
+                if($atLeastOne){
+                    $dateToday=new DateTime();
                     $response[]=$user->getPersonPerson()->getFullName();
+                    $symplificaPOD = new PurchaseOrdersDescription();
+                    $symplificaPOD->setDescription("Subscripción Symplifica");
+                    $symplificaPOD->setValue(round(($PS1->getPrice() * (1 + $PS1->getTaxTax()->getValue()) * $ps1Count) +
+                        ($PS2->getPrice() * (1 + $PS2->getTaxTax()->getValue()) * $ps2Count) +
+                        ($PS3->getPrice() * (1 + $PS3->getTaxTax()->getValue()) * $ps3Count), 0));
+                    $realtoPay->addPurchaseOrderDescription($symplificaPOD);
+                    $total += $symplificaPOD->getValue();
+                    $symplificaPOD->setProductProduct($PS3);
+                    $realtoPay->addPurchaseOrderDescription($symplificaPOD);
+                    $total += $symplificaPOD->getValue();
+                    $user->setLastPayDate(new DateTime($dateToday->format("Y-m-")."25"));
+                    $user->setIsFree(0);
+                    $em->persist($user);
+                }
 
             }
+            //now we search if there is any owe pod
+            $this->checkPendingSubscription($realtoPay,$total);
 
         }
         $view = View::create();
         $view->setStatusCode(200);
         return $view->setData(array('response' => $response));
 
+    }
+
+    /**
+     * @param PurchaseOrders $realtoPay
+     * @param $total
+     */
+    private function checkPendingSubscription(PurchaseOrders &$realtoPay, &$total){
+        $purchaseOrderRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrders");
+        $purchaseOrderStatusRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
+        /** @var PurchaseOrdersStatus $pedingStatus */
+        $pedingStatus = $purchaseOrderStatusRepo->findOneBy(array('idNovoPay'=>'P1'));
+        $pendingStuff = $purchaseOrderRepo->findBy(array('purchaseOrdersStatus'=>$pedingStatus,'idUser'=>$realtoPay->getIdUser()));
+        $pendingPODS = new ArrayCollection();
+        if($pendingStuff!=null&&count($pendingStuff)>0){
+            /** @var PurchaseOrders $po */
+            foreach ($pendingStuff as $po) {
+                $pods = $po->getPurchaseOrderDescriptions();
+                /** @var PurchaseOrdersDescription $pod */
+                foreach ($pods as $pod) {
+                    if($pod->getProductProduct()->getSimpleName()=='PS1'||$pod->getProductProduct()->getSimpleName()=='PS2'||$pod->getProductProduct()->getSimpleName()=='PS3'){
+                        $pendingPODS->add($pod);
+                    }
+                }
+            }
+            if($pendingPODS->count()>0){
+                /** @var PurchaseOrdersDescription $pPod */
+                foreach ($pendingPODS as $pPod) {
+                    $realtoPay->addPurchaseOrderDescription($pPod);
+                    $total+= $pPod->getValue();
+                }
+            }
+        }
     }
 }
