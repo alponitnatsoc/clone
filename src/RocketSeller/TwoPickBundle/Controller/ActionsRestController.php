@@ -497,7 +497,7 @@ class ActionsRestController extends FOSRestController
                                 foreach ($employerHasEmployee->getEmployeeEmployee()->getEntities() as $entity) {
                                     if ($entity->getState() >= 0) {
                                         $action = new Action();
-                                        $action->setStatus('Completado');
+                                        $action->setStatus('Nuevo');
                                         $procedure->addAction($action);
                                         $user->addAction($action);
                                         $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($action);
