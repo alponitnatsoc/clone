@@ -669,7 +669,11 @@ class PilaPlainTextRestController extends FOSRestController
       elseif ( $contractType == "TC"){
         
         // Campo 36.
-        $this->add(184, 185, $diasSinDescuento);
+        if($codigoAFP == "0"){
+          $this->add(184, 185, '00');
+        }else{
+          $this->add(184, 185, $diasSinDescuento);
+        }
         // Campo 37. - Si la persona no cotiza salud, entonces se envia 0 dias
         if ( strlen($codigoEPS) != 0 ){
           $this->add(186, 187, $diasSinDescuento);
@@ -705,7 +709,11 @@ class PilaPlainTextRestController extends FOSRestController
       }
       elseif ( $contractType == "TC"){
         // Campo 42.
-        $this->add(202, 210, $ibc_pension);
+        if($codigoAFP == "0"){
+          $this->add(202, 210, "000000000");
+        }else{
+          $this->add(202, 210, $ibc_pension);
+        }
         // Campo 43.
         $this->add(211, 219, $ibc_salud);
         // Campo 44.
@@ -815,6 +823,9 @@ class PilaPlainTextRestController extends FOSRestController
             $subtipoCotizante = '04';
 
         $deparmentCode = $pila->getContractContract()->getWorkplaceWorkplace()->getDepartment()->getDepartmentCode();
+        if($deparmentCode < 10){
+          $deparmentCode = "0" . $deparmentCode;
+        }
         $municipioCode = $pila->getContractContract()->getWorkplaceWorkplace()->getCity()->getCityCode();
         $municipioCode = substr($municipioCode, -3);
         $firstLastName = $employee->getPersonPerson()->getLastName1();
