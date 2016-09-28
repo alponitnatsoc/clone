@@ -452,9 +452,9 @@ class ProcedureController extends Controller
 							if($employerHasEmployee->getLegalFF()==1){
 								$actionV = new Action();
 								$actionV->setStatus('Nuevo');
-                                $procedure->addAction($action);
-                                $userSearch->addAction($action);
-                                $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($action);
+                                $procedure->addAction($actionV);
+                                $userSearch->addAction($actionV);
+                                $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($actionV);
 								$actionV->setActionTypeActionType($this->loadClassByArray(array('code'=>'VC'),"ActionType"));
 								$em->persist($actionV);
 								//se agrega la accion al procedimiento
