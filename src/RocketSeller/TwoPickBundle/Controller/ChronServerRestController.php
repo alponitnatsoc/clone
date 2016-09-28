@@ -193,7 +193,7 @@ class ChronServerRestController extends FOSRestController
             $difference = $today->diff($dateCreated);
 
             //day 1, 3 or 7 after finished step 3
-            if($difference->d == 1 || $difference->d == 3 || $difference->d == 7 || $difference->d == 28 || $difference->d == 12) {
+            if($difference->d == 1 || $difference->d == 3 || $difference->d == 7) {
                 $person = $user->getPersonPerson();
                 $employer = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Employer")
                                 ->findOneBy(array("personPerson" => $person));
