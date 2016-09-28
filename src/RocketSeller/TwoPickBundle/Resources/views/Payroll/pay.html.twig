@@ -48,7 +48,7 @@
         window.Intercom("trackEvent", "payroll");
     </script>
     <!-- INTERCOM SESSION END-->
-    {% if flagAtLeastOne == "true"  and (dataNomina or debt|length > 0 ) %}
+    {% if flagAtLeastOne == "true" or dataNomina!=null or debt|length != 0  %}
         {% if dataNomina or debt|length > 0 %}
 
             <div class="col-sm-12 col-xs-12 align-Resp">
