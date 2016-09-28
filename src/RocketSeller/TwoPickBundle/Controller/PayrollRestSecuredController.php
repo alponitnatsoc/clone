@@ -68,7 +68,7 @@ class PayrollRestSecuredController extends FOSRestController
             $owePurchaseOrders = new ArrayCollection();
             /** @var PurchaseOrders $po */
             foreach ($purchaseOrders as $po) {
-                if ($po->getPurchaseOrdersStatus()->getIdNovoPay() == 'P1' && $po->getPurchaseOrderDescriptions()->count() > 0) {
+                if ($po->getPurchaseOrdersStatus()!=null&&$po->getPurchaseOrdersStatus()->getIdNovoPay() == 'P1' && $po->getPurchaseOrderDescriptions()->count() > 0) {
                     $owePurchaseOrders->add($po);
                 }
             }
