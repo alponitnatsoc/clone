@@ -1104,7 +1104,7 @@ class Payments2RestController extends FOSRestController
      * @param Request $request.
      * Rest Parameters:
      *
-     * (name="source", nullable=true, requirements="101|100", description="showing the source of the account 100 for hightech and 101 for novopayment, the default will be 100.)
+     * (name="source", nullable=true, requirements="101|100", description="showing the source of the account 100 for hightech and 101 for novopayment, the default will be 100.")
      * (name="accountNumber", nullable=false, requirements="[0-9]+")
      * (name="accountId", nullable=false, requirements="[0-9]+")
      * (name="value", nullable=false, requirements="[0-9]+(\.[0-9]+)?")
