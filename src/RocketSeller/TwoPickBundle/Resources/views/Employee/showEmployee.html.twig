@@ -18,7 +18,7 @@
             </div>
         </div>
 
-        <div class="col-sm-12 col-xs-12 ">
+        <div class="col-sm-12 col-xs-12 noResponsive4tabs">
             <ul class="nav-justified nav-6-tabs">
                 <li class="active"><a class="notAjax" data-toggle="tab" data-target="#basicData">Datos básicos</a></li>
                 <li><a class="notAjax tabsEnabled" data-toggle="tab" data-target="#contactData">Información de contrato</a></li>
@@ -28,12 +28,36 @@
                 <li><a  class="notAjax tabsEnabled" data-toggle="tab" data-target="#documents">Documentos</a></li>
             </ul>
         </div>
+        <div class="col-sm-12 col-xs-12 responsive4tabs">
+          <div class="titularEmployee bold">
+            Datos Básicos
+          </div>
+          <nav class="navbar navbar-inverse">
+            <div style="border: 1px solid #e4e4e4;padding: 0 10px;">
+              <div class="navbar-header">
+                <button type="button" class="navbar-toggle btnRes">
+                  <div class="light azulmediofont" style="font-size: 15px;text-align: left;"><span class="glyphicon glyphicon-chevron-down"></span> Ver más opciones</div>
+                </button>
+              </div>
+              <div class="collapse navbar-collapse" id="myNavbar" style="padding:0;border-color:white">
+                <ul class="nav-justified nav-6-tabs">
+                  <li class="active"><a class="prueba notAjax" data-toggle="tab" data-target="#basicData">Datos básicos</a></li>
+                  <li><a class="prueba notAjax tabsEnabled" data-toggle="tab" data-target="#contactData">Información de contrato</a></li>
+                  <li><a class="prueba notAjax tabsEnabled" data-toggle="tab" data-target="#workplacesData">Seguridad Social</a></li>
+                  <li><a class="prueba notAjax tabsEnabled" data-toggle="tab" data-target="#noveltiesData">Novedades</a></li>
+                  <li><a class="prueba notAjax tabsEnabled" data-toggle="tab" data-target="#payHistory">Histórico de pagos</a></li>
+                  <li><a class="prueba notAjax tabsEnabled" data-toggle="tab" data-target="#documents">Documentos</a></li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </div>
         <div class="tab-content">
             <div id="basicData" class="tab-pane fade in active">
                 <div class="col-sm-12 col-sm-offset-4"></div>
                 <div class="col-sm-12 top-box-employee">
-                  <div class="col-sm-12 center emploInfo">
-                      <div class="col-sm-12" style="color:#00858c;">
+                  <div class="center emploInfo">
+                      <div style="color:#00858c;">
                           <h3>{{utils.mb_capitalize(employee.personPerson.names)}} {{utils.mb_capitalize(employee.personPerson.lastName1)}} {{utils.mb_capitalize(employee.personPerson.lastName2)}}</h3>
                           <p class="document-text" style="font-weight: 100;color: #888686;padding-top: 5px;"><i>{{employee.personPerson.documentType}}: {{employee.personPerson.document}} {% if employee.personPerson.documentExpeditionPlace %}de {{employee.personPerson.documentExpeditionPlace}}{% endif %}</i>
                           </p>
@@ -861,6 +885,13 @@
                             if("{{ employerHasEmployee.state }}" <=2 ){
                                 $("#special-buttons").hide();
                             }
+                        });
+
+                        $( ".prueba" ).click(function() {
+                          $( "#myNavbar" ).slideToggle();
+                        });
+                        $( ".navbar-header" ).click(function() {
+                          $( "#myNavbar" ).slideToggle();
                         });
     </script>
 
