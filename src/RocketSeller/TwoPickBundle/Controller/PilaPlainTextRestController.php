@@ -851,9 +851,8 @@ class PilaPlainTextRestController extends FOSRestController
         $codigoAFP = $this->codigoEntidad($employee->getIdEmployee(), 3); //3 is afp.
         $codigoEPS = $this->codigoEntidad($employee->getIdEmployee(), 1); //1 is eps.
         $codigoCCF = $this->codigoEntidadEmployer($idEmployer, 4); // 4 is ccf.
-
-        $eheRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
-        $ehe = $eheRepo->findOneBy(array('employeeEmployee' => $employee->getIdEmployee()));
+  
+        $ehe = $pila->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee();
         $idEmployerHasEmployee = $ehe->getIdEmployerHasEmployee();
         // Call SQL for the next information.
         // General payroll, getting the employee information.
