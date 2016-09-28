@@ -182,6 +182,11 @@ class ChronServerRestController extends FOSRestController
             //status 2 -> completed step 3
             if($user->getStatus() != 2) continue;
 
+            if($user->getDevices()->count() == 0) continue;
+
+            if($user->getRealProcedures() == null || $user->getRealProcedures()->count() == 0) {
+                continue;
+            }
             $procedure = $user->getRealProcedures()->first();
             $dateCreated = $procedure->getCreatedAt();
             $today = new DateTime();
