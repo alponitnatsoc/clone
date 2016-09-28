@@ -92,6 +92,7 @@ class EmployeeBeneficiaryRegistration extends AbstractType
             ))
             ->add('department', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Department',
+                'choices' => array(),
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
@@ -102,6 +103,7 @@ class EmployeeBeneficiaryRegistration extends AbstractType
             ))
             ->add('city', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:City',
+                'choices' => array(),
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
