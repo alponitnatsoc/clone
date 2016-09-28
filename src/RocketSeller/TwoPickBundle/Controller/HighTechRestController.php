@@ -485,6 +485,7 @@ class HighTechRestController extends FOSRestController
 		 *     200 = "OK",
 		 *     400 = "Bad Request",
 		 *     401 = "Unauthorized"
+		 *     422 = "Parameter format invalid"
 		 *   }
 		 * )
 		 *
@@ -535,6 +536,7 @@ class HighTechRestController extends FOSRestController
 	 *     200 = "OK",
 	 *     400 = "Bad Request",
 	 *     401 = "Unauthorized"
+	 *     422 = "Parameter format invalid"
 	 *   }
 	 * )
 	 *
