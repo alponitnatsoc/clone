@@ -98,3 +98,6 @@ services:
     app.symplifica_chrons:
         class: RocketSeller\TwoPickBundle\Controller\ChronServerRestController
         arguments: ["@service_container"]
+    app.symplifica_push_notification:
+        class: RocketSeller\TwoPickBundle\Controller\PushNotificationRestController
+        arguments: ["@service_container"]

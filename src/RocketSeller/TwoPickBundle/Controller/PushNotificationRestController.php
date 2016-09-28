@@ -12,6 +12,11 @@ use FOS\RestBundle\Request\ParamFetcher;
 
 class PushNotificationRestController extends FOSRestController
 {
+    public function __construct( $container=null)
+    {
+        if($container)
+            $this->setContainer($container);
+    }
     /**
      * send push notification to devices of a user
      *
@@ -23,25 +28,19 @@ class PushNotificationRestController extends FOSRestController
      *   }
      * )
      *
-     * @param paramFetcher $paramFetcher ParamFetcher
-     *
-     * @RequestParam(name="idUser", nullable=false, strict=true, description="id user")
-     * @RequestParam(name="title", nullable=false, strict=true, description="notification title")
-     * @RequestParam(name="message", nullable=false, strict=true, description="notification short message")
-     * @RequestParam(name="longMessage", nullable=true, strict=true, description="notification long message")
      *
      * @return View
      */
-    public function postPushNotificationAction(ParamFetcher $paramFetcher)
+    public function postPushNotificationAction(Request $request)
     {
       // $ionicIoUrl = "https://api.ionic.io/push/notifications";
 
       //firebase Cloud Messaging api end point
       $firebaseUrl = "https://fcm.googleapis.com/fcm/send";
-      $idUser = $paramFetcher->get('idUser');
-      $title = $paramFetcher->get('title');
-      $message = $paramFetcher->get('message');
-      $longMessage = $paramFetcher->get('longMessage');
+      $idUser = $request->request->get('idUser');
+      $title = $request->request->get('title');
+      $message = $request->request->get('message');
+      $longMessage = $request->request->get('longMessage');
 
       $user = $this->getDoctrine()
           ->getRepository('RocketSellerTwoPickBundle:User')
@@ -68,6 +67,7 @@ class PushNotificationRestController extends FOSRestController
           $iosDeviceTokens[] = $device->getToken();
         }
       }
+      $numDevices = count($devices);
       $resultIos = "";
       $resultAndroid = "";
       if(!empty($androidDeviceTokens)) {
@@ -97,6 +97,7 @@ class PushNotificationRestController extends FOSRestController
         curl_setopt($curl, CURLOPT_POSTFIELDS,     $post_body);
 
         $resultAndroid = curl_exec($curl);
+        $resultAndroid = json_decode($resultAndroid, true);
         curl_close($curl);
       }
 
@@ -126,11 +127,15 @@ class PushNotificationRestController extends FOSRestController
         curl_setopt($curl, CURLOPT_POSTFIELDS,     $post_body);
 
         $resultIos = curl_exec($curl);
+        $resultIos = json_decode($resultIos, true);
         curl_close($curl);
       }
 
       $view = View::create();
       $view->setStatusCode(200);
-      return $view->setData(array('resultIos'=>$resultIos, 'resultAndroid'=>$resultAndroid));
+      return $view->setData(array('status' => "$numDevices devices",
+                                  'resultIos'=> $resultIos,
+                                  'resultAndroid'=> $resultAndroid
+                                 ));
     }
 }
