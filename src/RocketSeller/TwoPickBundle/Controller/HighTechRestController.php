@@ -473,7 +473,7 @@ class HighTechRestController extends FOSRestController
         return $view;
 
     }
-	
+
 		/**
 		 * @POST("notificacion/pila/registro/empleador")
 		 * Get a notification of the register state of an employer, to update in our system.<br/>
@@ -484,7 +484,7 @@ class HighTechRestController extends FOSRestController
 		 *   statusCodes = {
 		 *     200 = "OK",
 		 *     400 = "Bad Request",
-		 *     401 = "Unauthorized"
+		 *     401 = "Unauthorized",
 		 *     422 = "Parameter format invalid"
 		 *   }
 		 * )
@@ -513,18 +513,18 @@ class HighTechRestController extends FOSRestController
 			$mandatory['errorLog'] = false;
 			$regex['errorMessage'] = '(.)*';
 			$mandatory['errorMessage'] = false;
-			
+
 			$this->validateParamters($parameters, $regex, $mandatory);
-			
+
 			//TODO Logic
-			
+
 			// Succesfull operation.
 			$view = View::create();
 			$view->setStatusCode(200);
 			$view->setData(array("returnCode" => 0 , "returnDescription" => "Message received"));
 			return $view;
 		}
-	
+
 	/**
 	 * @POST("notificacion/pila/carga/planilla")
 	 * Get a notification of the upload state of a pila payroll, to update in our system.<br/>
@@ -535,7 +535,7 @@ class HighTechRestController extends FOSRestController
 	 *   statusCodes = {
 	 *     200 = "OK",
 	 *     400 = "Bad Request",
-	 *     401 = "Unauthorized"
+	 *     401 = "Unauthorized",
 	 *     422 = "Parameter format invalid"
 	 *   }
 	 * )
@@ -567,11 +567,11 @@ class HighTechRestController extends FOSRestController
 		$mandatory['errorLog'] = false;
 		$regex['errorMessage'] = '(.)*';
 		$mandatory['errorMessage'] = false;
-		
+
 		$this->validateParamters($parameters, $regex, $mandatory);
-		
+
 		//TODO Logic
-		
+
 		// Succesfull operation.
 		$view = View::create();
 		$view->setStatusCode(200);
