@@ -16,6 +16,7 @@
                 <div>
                     <table class="table">
                         <tr>
+                            <th>ID</th>
                             <th>Cédula Empleador</th>
                             <th>Nombre Empleador</th>
                             <th>Cédula Empleado</th>
@@ -28,6 +29,7 @@
                         {% for pod in podsN %}
                         <tr>
                             {% if pod.payrollPayroll.contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.document != NULL %}
+                                <td>{{ pod.idPurchaseOrdersDescription }}</td>
                                 <td>{{ pod.payrollPayroll.contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.document }}</td>
                                 <td>{{ pod.payrollPayroll.contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.fullName }}</td>
                                 <td>{{ pod.payrollPayroll.contractContract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson.document }}</td>
@@ -80,6 +82,7 @@
             <div>
                 <table class="table">
                     <tr>
+                        <th>ID</th>
                         <th>Cédula Empleador</th>
                         <th>Nombre Empleador</th>
                         <th>Periodo al que corresponde el pago</th>
@@ -88,8 +91,9 @@
                     </tr>
                     {% for podP in podsP %}
                         <tr>
-                            {% if podP.payrollsPila|length > 0 %}
+                            {% if podP.payrollsPila|length > 0 %} 
                                 {% if podP.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.document != NULL %}
+                                    <td>{{ podP.idPurchaseOrdersDescription }}</td>
                                     <td>{{ podP.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.document }}</td>
                                     <td>{{ podP.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.fullName }}</td>
                                     <td>{{ utils.month_number_to_name(podP.payrollsPila[0].month) }}</td>
@@ -98,6 +102,7 @@
                                 {% endif %}
                             {% else %}
                                 {% if podP.purchaseOrders.idUser.personPerson.document != NULL %}
+                                    <td>{{ podP.idPurchaseOrdersDescription }}</td>
                                     <td>{{ podP.purchaseOrders.idUser.personPerson.document }}</td>
                                     <td>{{ podP.purchaseOrders.idUser.personPerson.fullName }}</td>
                                     <td>{{ podP.description }}</td>
