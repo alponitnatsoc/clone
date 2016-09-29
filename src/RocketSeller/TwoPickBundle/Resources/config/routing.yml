@@ -210,3 +210,6 @@ back_pending_vacations:
 back_entities_view:
     path:         /backoffice/entidades
     defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:eheEntitiesView }
+back_pay_state_view:
+    path:         /backoffice/estado/pagos
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:notPaidView }
