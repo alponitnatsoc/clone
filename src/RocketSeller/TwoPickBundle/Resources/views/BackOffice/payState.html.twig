@@ -11,7 +11,7 @@
             <br>
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h4>Información de los pagos de nómina</h4>
+                    <h4>Información de los pagos de nómina - Los colores por días son basados en días calendario</h4>
                 </div>
                 <div>
                     <table class="table">
@@ -25,50 +25,68 @@
                             <th>Metodo de pago</th>
                             <th>Valor</th>
                             <th>Estado</th>
+                            <th>Fecha en que solicitó el recaudo</th>
                         </tr>
                         {% for pod in podsN %}
-                        <tr>
-                            {% if pod.payrollPayroll.contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.document != NULL %}
-                                <td>{{ pod.idPurchaseOrdersDescription }}</td>
-                                <td>{{ pod.payrollPayroll.contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.document }}</td>
-                                <td>{{ pod.payrollPayroll.contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.fullName }}</td>
-                                <td>{{ pod.payrollPayroll.contractContract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson.document }}</td>
-                                <td>{{ pod.payrollPayroll.contractContract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson.fullName }}</td>
-                                <td>
-                                    {{ utils.month_number_to_name(pod.payrollPayroll.month) }} -
-                                    {% if pod.payrollPayroll.period == 2 %}
-                                        1ra Quincena
-                                    {% elseif pod.payrollPayroll.period == 4 %}
-                                        {% if pod.payrollPayroll.contractContract.frequencyFrequency.payrollCode == "Q" %}
-                                            2da Quincena
-                                        {% else %}
-                                            Mensual
-                                        {% endif %}
-                                    {% endif %}
-                                </td>
-                                <td>{{ pod.payrollPayroll.contractContract.payMethodPayMethod.payTypePayType.simpleName }}</td>
-                                <td>$ {{ pod.value|number_format(0, '.', ',') }}</td>
-                                <td>
-                                    {% if pod.purchaseOrdersStatus != NULL %}
-                                        {% if pod.payrollPayroll.contractContract.payMethodPayMethod.payTypePayType.simpleName == "EFE" %}
-                                            {% if pod.purchaseOrdersStatus.idNovoPay == -1 %}
-                                                Empleador confirmó el pago
+                            {% if pod.purchaseOrders != NULL and (pod.purchaseOrdersStatus.idNovoPay == "S2" or pod.purchaseOrdersStatus.idNovoPay == "00") %}
+                                {% if "now"|date('Y-m-d') == pod.purchaseOrders.dateCreated|date_modify("+3 days")|date('Y-m-d')  %}
+                                    <tr bgcolor="#FFFF00">
+                                {% elseif "now"|date('Y-m-d') > pod.purchaseOrders.dateCreated|date_modify("+3 days")|date('Y-m-d') %}
+                                    <tr bgcolor="#FF0000">>
+                                {% endif %}
+                            {% else %}
+                                <tr>
+                            {% endif %}
+                                {% if pod.payrollPayroll.contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.document != NULL %}
+                                    <td>{{ pod.idPurchaseOrdersDescription }}</td>
+                                    <td>{{ pod.payrollPayroll.contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.document }}</td>
+                                    <td>{{ pod.payrollPayroll.contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.fullName }}</td>
+                                    <td>{{ pod.payrollPayroll.contractContract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson.document }}</td>
+                                    <td>{{ pod.payrollPayroll.contractContract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson.fullName }}</td>
+                                    <td>
+                                        {{ utils.month_number_to_name(pod.payrollPayroll.month) }} - {{ pod.payrollPayroll.year }} -
+                                        {% if pod.payrollPayroll.period == 2 %}
+                                            1ra Quincena
+                                        {% elseif pod.payrollPayroll.period == 4 %}
+                                            {% if pod.payrollPayroll.contractContract.frequencyFrequency.payrollCode == "Q" %}
+                                                2da Quincena
                                             {% else %}
-                                                Empleador aún no confirma el pago
+                                                Mensual
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ pod.payrollPayroll.contractContract.payMethodPayMethod.payTypePayType.simpleName }}</td>
+                                    <td>$ {{ pod.value|number_format(0, '.', ',') }}</td>
+                                    <td>
+                                        {% if pod.purchaseOrdersStatus != NULL %}
+                                            {% if pod.purchaseOrdersStatus.idNovoPay == "S2" %}
+                                                El recaudo del dinero está en proceso
+                                            {% elseif pod.purchaseOrdersStatus.idNovoPay == "P1" %}
+                                                El usuario no ha autorizado el pago
+                                            {% elseif pod.purchaseOrdersStatus.idNovoPay == "00" %}
+                                                El recaudo se aprobó y el pago de nómina está en proceso
+                                            {% elseif pod.purchaseOrdersStatus.idNovoPay == "-1" %}
+                                                Dispersión aprobada, el empleado ya recibió el dinero
+                                            {% elseif pod.purchaseOrdersStatus.idNovoPay == "-2" %}
+                                                Dispersión rechazada, el dinero está en la cuenta de Symplifica
+                                            {% elseif pod.purchaseOrdersStatus.idNovoPay == "-3" %}
+                                                Se devolvió el dinero a la cuenta del empleador
+                                            {% else %}
+                                                {{ pod.purchaseOrdersStatus.description }}
                                             {% endif %}
                                         {% else %}
-                                            {{ pod.purchaseOrdersStatus.name }}
-                                        {%  endif %}
-                                    {% else %}
-                                        {% if pod.payrollPayroll.contractContract.payMethodPayMethod.payTypePayType.simpleName == "EFE" %}
-                                            Empleador aún no confirma el pago
+                                            El usuario no ha autorizado el pago
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if pod.purchaseOrders != NULL and pod.purchaseOrdersStatus.idNovoPay != "P1" %}
+                                            {{ pod.purchaseOrders.dateCreated|localizeddate('long', 'none', 'es-CO') }}
                                         {% else %}
-                                            Pendiente de pago
-                                        {%  endif %}
-                                    {% endif %}
-                                </td>
-                            {% endif %}
-                        </tr>
+                                            -
+                                        {% endif %}
+                                    </td>
+                                {% endif %}
+                            </tr>
                         {% endfor %}
                     </table>
                 </div>
@@ -77,7 +95,7 @@
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h4>Información de los pagos de pila</h4>
+                <h4>Información de los pagos de pila - Los colores por días son basados en días calendario</h4>
             </div>
             <div>
                 <table class="table">
@@ -88,17 +106,49 @@
                         <th>Periodo al que corresponde el pago</th>
                         <th>Valor</th>
                         <th>Estado</th>
+                        <th>Fecha en que solicitó el recaudo</th>
                     </tr>
                     {% for podP in podsP %}
-                        <tr>
-                            {% if podP.payrollsPila|length > 0 %} 
+                        {% if podP.purchaseOrders != NULL and (podP.purchaseOrdersStatus.idNovoPay == "S2" or podP.purchaseOrdersStatus.idNovoPay == "00") %}
+                            {% if "now"|date('Y-m-d') == podP.purchaseOrders.dateCreated|date_modify("+3 days")|date('Y-m-d')  %}
+                                <tr bgcolor="#FFFF00">
+                            {% elseif "now"|date('Y-m-d') > podP.purchaseOrders.dateCreated|date_modify("+3 days")|date('Y-m-d') %}
+                                <tr bgcolor="#FF0000">>
+                            {% endif %}
+                        {% else %}
+                            <tr>
+                        {% endif %}
+                            {% if podP.payrollsPila|length > 0 %}
                                 {% if podP.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.document != NULL %}
                                     <td>{{ podP.idPurchaseOrdersDescription }}</td>
                                     <td>{{ podP.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.document }}</td>
                                     <td>{{ podP.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.fullName }}</td>
-                                    <td>{{ utils.month_number_to_name(podP.payrollsPila[0].month) }}</td>
+                                    <td>{{ utils.month_number_to_name(podP.payrollsPila[0].month) }} - {{ podP.payrollsPila[0].year }}</td>
                                     <td>$ {{ podP.value|number_format(0, '.', ',') }}</td>
-                                    <td>{{ podP.purchaseOrdersStatus.name }}</td>
+                                    <td>
+                                        {% if podP.purchaseOrdersStatus.idNovoPay == "S2" %}
+                                            El recaudo del dinero está en proceso
+                                        {% elseif podP.purchaseOrdersStatus.idNovoPay == "P1" %}
+                                            El usuario no ha autorizado el pago
+                                        {% elseif podP.purchaseOrdersStatus.idNovoPay == "00" %}
+                                            El recaudo se aprobó y el pago de la planilla está en proceso
+                                        {% elseif podP.purchaseOrdersStatus.idNovoPay == "-1" %}
+                                            Dispersión aprobada, planilla paga
+                                        {% elseif podP.purchaseOrdersStatus.idNovoPay == "-2" %}
+                                            Dispersión rechazada, la planilla no pudo ser pagada
+                                        {% elseif podP.purchaseOrdersStatus.idNovoPay == "-3" %}
+                                            Se devolvió el dinero a la cuenta del empleador
+                                        {% else %}
+                                            {{ podP.purchaseOrdersStatus.description }}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if podP.purchaseOrders != NULL and podP.purchaseOrdersStatus.idNovoPay != "P1" %}
+                                            {{ podP.purchaseOrders.dateCreated|localizeddate('long', 'none', 'es-CO') }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
                                 {% endif %}
                             {% else %}
                                 {% if podP.purchaseOrders.idUser.personPerson.document != NULL %}
@@ -107,7 +157,30 @@
                                     <td>{{ podP.purchaseOrders.idUser.personPerson.fullName }}</td>
                                     <td>{{ podP.description }}</td>
                                     <td>$ {{ podP.value|number_format(0, '.', ',') }}</td>
-                                    <td>{{ podP.purchaseOrdersStatus.name }}</td>
+                                    <td>
+                                        {% if podP.purchaseOrdersStatus.idNovoPay == "S2" %}
+                                            El recaudo del dinero está en proceso
+                                        {% elseif podP.purchaseOrdersStatus.idNovoPay == "P1" %}
+                                            El usuario no ha autorizado el pago
+                                        {% elseif podP.purchaseOrdersStatus.idNovoPay == "00" %}
+                                            El recaudo se aprobó y el pago de la planilla está en proceso
+                                        {% elseif podP.purchaseOrdersStatus.idNovoPay == "-1" %}
+                                            Dispersión aprobada, planilla paga
+                                        {% elseif podP.purchaseOrdersStatus.idNovoPay == "-2" %}
+                                            Dispersión rechazada, la planilla no pudo ser pagada
+                                        {% elseif podP.purchaseOrdersStatus.idNovoPay == "-3" %}
+                                            Se devolvió el dinero a la cuenta del empleador
+                                        {% else %}
+                                            {{ podP.purchaseOrdersStatus.description }}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if podP.purchaseOrders != NULL and podP.purchaseOrdersStatus.idNovoPay != "P1" %}
+                                            {{ podP.purchaseOrders.dateCreated|localizeddate('long', 'none', 'es-CO') }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
                                 {% endif %}
                             {% endif %}
                         </tr>
