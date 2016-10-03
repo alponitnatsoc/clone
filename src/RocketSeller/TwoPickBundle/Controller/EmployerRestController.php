@@ -521,6 +521,51 @@ class EmployerRestController extends FOSRestController
 
     }
 
+    /**
+     * generate referred promotional codes
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Generate referred promotional codes.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors"
+     *   }
+     * )
+     *
+     *
+     * @return View
+     *
+     */
+    public function postGenerateReferredPromotionalCodesAction()
+    {
+        $details = "Creando codigos<br>";
+        $em=$this->getDoctrine()->getManager();
+        $code = new PromotionCodeType();
+        $code->setDescription("Referidos");
+        $code->setDuration(2);
+        $code->setShortName("AC");
+        $em->persist($code);
+        $em->flush();
+        $users = $em->getRepository("RocketSellerTwoPickBundle:User")->findAll();
+        /** @var User $user */
+        foreach ($users as $user) {
+            if($user->getStatus()>=2){
+                $strEx = explode(' ',$user->getPersonPerson()->getNames());
+                $promoCode = new PromotionCode();
+                $promoCode->setCode($strEx[0].$user->getPersonPerson()->getLastName1());
+                $promoCode->setPromotionCodeTypePromotionCodeType($code);
+                $em->persist($promoCode);
+            }
+        }
+        $em->flush();
+        $details = "Terminado<br>";
+        $view = View::create();
+        $view->setData($details)->setStatusCode(200);
+
+        return $view;
+    }
+
 
 
 
