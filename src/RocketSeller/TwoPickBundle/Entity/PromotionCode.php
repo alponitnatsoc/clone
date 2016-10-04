@@ -59,6 +59,14 @@ class PromotionCode
      * })
      */
     private $userUser;
+    /**
+     * @ORM\ManyToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\User", inversedBy="promoCodes", cascade={"persist"})
+     * @ORM\JoinTable(name="user_has_promo_codes",
+     *      joinColumns={ @ORM\JoinColumn(name="promotion_code_id_promotion_code", referencedColumnName="id_promotion_code")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="user_id_user", referencedColumnName="id")}
+     *      )
+     */
+    private $users;
 
 
 
@@ -190,5 +198,46 @@ class PromotionCode
     public function getUserUser()
     {
         return $this->userUser;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add user
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\User $user
+     *
+     * @return PromotionCode
+     */
+    public function addUser(\RocketSeller\TwoPickBundle\Entity\User $user)
+    {
+        $this->users[] = $user;
+
+        return $this;
+    }
+
+    /**
+     * Remove user
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\User $user
+     */
+    public function removeUser(\RocketSeller\TwoPickBundle\Entity\User $user)
+    {
+        $this->users->removeElement($user);
+    }
+
+    /**
+     * Get users
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUsers()
+    {
+        return $this->users;
     }
 }
