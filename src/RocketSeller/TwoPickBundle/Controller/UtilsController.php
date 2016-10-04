@@ -443,4 +443,22 @@ class UtilsController
 		}
 		return $answer;
 	}
+	
+	public function mb_normalize($stringToNormalize)
+	{
+		mb_internal_encoding('UTF-8');
+		if(!mb_check_encoding($stringToNormalize, 'UTF-8') OR !($stringToNormalize === mb_convert_encoding(mb_convert_encoding($stringToNormalize, 'UTF-32', 'UTF-8' ), 'UTF-8', 'UTF-32'))) {
+			$stringToNormalize = mb_convert_encoding($stringToNormalize, 'UTF-8');
+		}
+		
+		$lclArr = [];
+		$strArray = explode(" ", trim(mb_convert_case($stringToNormalize, MB_CASE_LOWER, "UTF-8")));
+		foreach ($strArray as $key => $singleWord){
+			$lclArr[$key] =  $singleWord;
+		}
+		
+		$stringToReturn = implode(" ", $lclArr);
+		
+		return $stringToReturn;
+	}
 }
