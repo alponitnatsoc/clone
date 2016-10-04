@@ -546,6 +546,8 @@ class PaymentMethodRestController extends FOSRestController
         /** @var User $user */
         $user = $purchaseOrder->getIdUser();
         $person = $user->getPersonPerson();
+        $failFlag=true;
+        $codes=array();
         /** @var PurchaseOrdersDescription $desc */
         foreach ($descriptions as $desc) {
             $pays=$desc->getPayPay();
@@ -587,8 +589,10 @@ class PaymentMethodRestController extends FOSRestController
                     $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'-2'));
                     $desc->setPurchaseOrdersStatus($pos);
                     $em->persist($purchaseOrder);
+                    $em->persist($desc);
                     $em->flush();
-                    return $view->setStatusCode($dispersionAnswer['code'])->setData($dispersionAnswer['data']);
+                    $codes[$desc->getIdPurchaseOrdersDescription()]=$dispersionAnswer['code'];
+                    $failFlag=false;
                 }else{
                     $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'00'));
                     $desc->setPurchaseOrdersStatus($pos);
@@ -612,6 +616,7 @@ class PaymentMethodRestController extends FOSRestController
                         $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'-2'));
                         $desc->setPurchaseOrdersStatus($pos);
                         $em->persist($purchaseOrder);
+                        $em->persist($desc);
                         $em->flush();
 
                         $fechaRechazo = new DateTime();
@@ -639,7 +644,8 @@ class PaymentMethodRestController extends FOSRestController
                             'value'=>$valor
                         );
                         $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
-                        return $view->setStatusCode($dispersionAnswer['code'])->setData($dispersionAnswer['data']);
+                        $codes[$desc->getIdPurchaseOrdersDescription()]=$dispersionAnswer['code'];
+                        $failFlag=false;
                     }else{
                         $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'00'));
                         $desc->setPurchaseOrdersStatus($pos);
@@ -649,7 +655,11 @@ class PaymentMethodRestController extends FOSRestController
         }
         $em->persist($purchaseOrder);
         $em->flush();
-        $view->setStatusCode(200)->setData(array());
+        if($failFlag)
+            $view->setStatusCode(200)->setData(array());
+        else{
+            $view->setStatusCode(400)->setData($codes);
+        }
         return $view;
     }
     /**
