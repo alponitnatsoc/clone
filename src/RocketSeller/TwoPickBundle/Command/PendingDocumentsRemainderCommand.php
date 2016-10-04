@@ -24,7 +24,7 @@ class PendingDocumentsRemainderCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('<comment>Running Cron Task PendingDocumentsRemainder ' . date("Y/m/d h:i") . '</comment>');
+        $output->writeln('<comment>Running Cron Task PendingDocumentsRemainder ' . date("Y/m/d h:i") . ' time_zone: ' . date_default_timezone_get() . '</comment>');
         $this->output = $output;
 
         $cronService = $this->getContainer()->get('app.symplifica_chrons');
