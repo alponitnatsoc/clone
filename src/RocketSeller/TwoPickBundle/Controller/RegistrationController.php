@@ -127,7 +127,11 @@ class RegistrationController extends BaseController
             $person->addPhone($phone);
             $user->setPersonPerson($person);
             $user->setUsername($user->getEmail());
+	        
             $invitationCode=$form->get("creationCode")->getData();
+	          $utils = $this->get('app.symplifica_utils');
+	          $invitationCode = $utils->mb_normalize($invitationCode);
+	          
             $promoCodeRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCode");
             /** @var PromotionCode $realCode */
             $realCode=$promoCodeRepo->findOneBy(array("code"=>$invitationCode));
