@@ -347,9 +347,9 @@ sonata_admin:
 
 vresh_twilio:
     #(Required) Your Account SID from www.twilio.com/user/account
-    sid: 'AC1cbb80c722300b240bce151c107f927a'
+    sid: "%twilio_id%"
     #(Required) Your Auth Token from www.twilio.com/user/account
-    authToken: '35539b53c1cdbd4f1cfccfa1bc558e34'
+    authToken: "%twilio_token%"
     #(Optional, default: '2010-04-01') Twilio API version
     version: '2010-04-01'
     #(Optional, default: 1) Number of times to retry failed requests
