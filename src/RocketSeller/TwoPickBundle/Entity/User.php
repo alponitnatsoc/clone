@@ -3,6 +3,8 @@
 namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\Common\Collections\Criteria;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Exclude;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -81,6 +83,7 @@ class User extends BaseUser
         $this->code = substr(md5(uniqid(rand(), true)), 0, 8);
         $this->purchaseOrders = new \Doctrine\Common\Collections\ArrayCollection();
         $this->promotionCodes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->promoCodes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->realProcedures = new \Doctrine\Common\Collections\ArrayCollection();
         $this->actions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->devices = new \Doctrine\Common\Collections\ArrayCollection();
@@ -254,6 +257,13 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\PromotionCode", mappedBy="userUser", cascade={"persist"})
      */
     private $promotionCodes;
+    /**
+     * @ORM\ManyToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\PromotionCode", mappedBy="users")
+     * @Exclude
+     */
+    private $promoCodes;
+
+
 
     /**
      * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\Log", mappedBy="userUser",cascade={"persist"})
@@ -1103,5 +1113,39 @@ class User extends BaseUser
     public function getRealProcedures()
     {
         return $this->realProcedures;
+    }
+
+    /**
+     * Add promoCode
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PromotionCode $promoCode
+     *
+     * @return User
+     */
+    public function addPromoCode(\RocketSeller\TwoPickBundle\Entity\PromotionCode $promoCode)
+    {
+        $this->promoCodes[] = $promoCode;
+
+        return $this;
+    }
+
+    /**
+     * Remove promoCode
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PromotionCode $promoCode
+     */
+    public function removePromoCode(\RocketSeller\TwoPickBundle\Entity\PromotionCode $promoCode)
+    {
+        $this->promoCodes->removeElement($promoCode);
+    }
+
+    /**
+     * Get promoCodes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPromoCodes()
+    {
+        return $this->promoCodes;
     }
 }

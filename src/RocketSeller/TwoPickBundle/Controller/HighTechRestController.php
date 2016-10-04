@@ -13,6 +13,7 @@ use RocketSeller\TwoPickBundle\Entity\Pay;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\HttpFoundation\Request;
@@ -200,6 +201,10 @@ class HighTechRestController extends FOSRestController
             $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => 'P1'));
             //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
             $dis->setPurchaseOrdersStatus($pos);
+            /** @var PurchaseOrdersDescription $purchaseOrderDescription */
+            foreach ($dis->getPurchaseOrderDescriptions() as $purchaseOrderDescription) {
+                $purchaseOrderDescription->setPurchaseOrdersStatus($pos);
+            }
             $date = new DateTime('01-01-0001 00:00:00');
             $dis->setDatePaid($date);
 	          $mesange = "not so good man";

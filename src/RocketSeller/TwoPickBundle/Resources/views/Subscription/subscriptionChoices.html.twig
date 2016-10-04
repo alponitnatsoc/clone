@@ -323,36 +323,7 @@
                           {% set producto = employeeData['product'] %}
 
                           {% if contrato.employerHasEmployeeEmployerHasEmployee.state >= 0 %}
-
-                            <div class="row clearfix paddingbottom">
-                                <div class="col-xs-6 col-md-4 employee {{ employee.state>0 ?'activo':'inactivo' }}">
-                                    <div class="azulmediofont nopadding {{ employee.employeeEmployee.personPerson.gender!='MAS'?'female':'male' }} ">
-                                        <div>
-                                            <b class="employee_name nombrecont"
-                                               style="font-size:large;">{{ utils.mb_capitalize(employee.employeeEmployee.personPerson.names)}}</b><br/>
-                                            <span style="font-weight:80;">{{ utils.mb_capitalize(employee.employeeEmployee.personPerson.lastname1 ~" "~ employee.employeeEmployee.personPerson.lastname2)}}</span>
-                                        </div>
-                                        {% set tipo_tiempo_contrato = contrato.workableDaysMonth %}
-                                        <div style="font-style:italic; font-weight:100; font-size: small;"
-                                             class="{{ ((contrato.workableDaysMonth) >= 20)? 'tiempo_completo':(((contrato.workableDaysMonth) >= 11)? 'medio_tiempo':'trabajo_por_dias' ) }}  "
-                                             data-employeeId="{{ employee.idEmployerHasEmployee }}">
-                                            {# Trabaja {{ ((contrato.workableDaysMonth / 4) * 4.34523810)|number_format(2, '.', ',') }} días #}
-                                            Trabaja {{ contrato.workableDaysMonth }} días
-                                            <!--en promedio--> al mes
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="col-xs-6 col-md-4">
-                                    <div class="btn btn-change-state-contract {{ employee.state>0 ?'on btn-grey':'off btn-orange ' }}"
-                                         data-id="{{ employee.idEmployerHasEmployee }}"
-                                         data-href="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}">{{ employee.state >0?'Inactivar':'Activar' }}</div>
-                                </div>
-                                <div class="col-xs-12 col-md-4 numberpay suscriptionInd"
-                                  data-id="{{ employee.idEmployerHasEmployee }}"> {{ isFreeUntil }}
-                                </div>
-
-                            </div>
+                              
                             <div class="row clearfix paddingbottom">
                                 <div class="col-xs-6 col-md-4 employee {{ employee.state>0 ?'activo':'inactivo' }}">
                                     <div class="azulmediofont nopadding {{ employee.employeeEmployee.personPerson.gender!='MAS'?'female':'male' }} ">
