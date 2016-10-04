@@ -56,6 +56,7 @@ class WorkPlaceRegistration extends AbstractType
             ))
             ->add('city', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:City',
+                'choices' => array(),
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,

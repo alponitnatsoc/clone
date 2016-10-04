@@ -25,18 +25,21 @@ class ContractRegistration extends AbstractType
     private $today;
     private $todayOneYear;
     private $legalFlag;
+    private $departments;
 
     /**
      * @param $workplaces
      * @param $timeCommitments
      * @param $legalFlag
+     * @param array $departments
      */
-    function __construct($workplaces,$timeCommitments,$legalFlag){
+    function __construct($workplaces,$timeCommitments,$legalFlag,$departments=array()){
         $this->legalFlag=$legalFlag;
         $this->timeCommitments=$timeCommitments;
         $this->today= new DateTime();
         $this->todayOneYear= new DateTime((intval($this->today->format("Y"))+1)."-".$this->today->format("m")."-".$this->today->format("d"));
         $this->workplaces=$workplaces;
+        $this->departments = $departments;
     }
     private function getChoicesContractType()
     {
@@ -236,7 +239,7 @@ class ContractRegistration extends AbstractType
                 'required' => true,
                 'mapped' => false
             ))
-            ->add('workplace', new WorkPlaceRegistration(), array(
+            ->add('workplace', new WorkPlaceRegistration($this->departments), array(
                 'mapped' => false));
         if($this->legalFlag=='1'){
             $builder
