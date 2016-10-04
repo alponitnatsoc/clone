@@ -56,7 +56,7 @@ class PersonEmployeeRegistration extends AbstractType
                 'property_path' => 'personPerson'))
             ->add('personExtra', new PersonExtraData(), array(
                 'property_path' => 'personPerson'))
-            ->add('employeeHasEmployers', new ContractRegistration($this->workplaces,$this->timeCommitments,$this->user), array(
+            ->add('employeeHasEmployers', new ContractRegistration($this->workplaces,$this->timeCommitments,$this->user,$this->departments), array(
                 'mapped' => false))
             ->add('entities',  new EntitiesPick($this->wealthEntities,$this->pensionEntities,$this->arsEntities,$this->severancesEntities), array(
                 'mapped' => false))
