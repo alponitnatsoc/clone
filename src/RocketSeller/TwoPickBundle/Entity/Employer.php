@@ -91,7 +91,6 @@ class Employer
 
     /**
      * @ORM\OneToMany(targetEntity="EmployerHasEntity", mappedBy="employerEmployer", cascade={"persist"})
-     * @Exclude
      */
     private $entities;
 
