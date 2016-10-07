@@ -111,10 +111,22 @@ trait PayrollMethodsTrait
         $dateToday = new \DateTime();
         if($payroll->getContractContract()->getFrequencyFrequency()->getPayrollCode()=="M"){
             $todayPeriod=4;
+            $dayToPay=25;
         }else{
             $todayPeriod = $dateToday->format("d") >= 16 ? 4 : 2;
+            $dayToPay= $dateToday->format("d") >= 16 ? 25 : 12;
         }
         if ($dateToday->format("Y") == $payroll->getYear() && $dateToday->format("m") == $payroll->getMonth() && $payroll->getPeriod() == $todayPeriod) {
+            $request = $this->container->get('request');
+            $request->setMethod("GET");
+            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$dateToday->format("Y-m-d"),'dateEnd'=>$dateToday->format("Y-m-").$dayToPay), array('_format' => 'json'));
+            if ($insertionAnswer->getStatusCode() != 200) {
+                return true;
+            }
+            $insertionAnswer = json_decode($insertionAnswer->getContent(), true);
+            if($insertionAnswer["days"]>4){
+                return false;
+            }
             return true;
         }
         return false;
