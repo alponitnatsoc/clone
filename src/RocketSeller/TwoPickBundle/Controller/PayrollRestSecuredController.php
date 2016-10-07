@@ -60,7 +60,7 @@ class PayrollRestSecuredController extends FOSRestController
         $view = View::create();
 
         if ($user != null) {
-            //obtener la informacion de la nomina actial
+            //obtener la informacion de la nomina actual
             $pods = $this->getInfoPayroll($user->getPersonPerson()->getEmployer());
             //obtener los meses de mora
             /** @var User $user */
