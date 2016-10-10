@@ -1,6 +1,5 @@
-{% block subject %}
-    {% autoescape false %}Documentos necesarios para registro{% endautoescape %}
-{% endblock %}
+{% trans_default_domain 'FOSUserBundle' %}
+{% block subject %}{% autoescape false %}Documentos necesarios para registro{% endautoescape %}{% endblock %}
 {% block body_html %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -10,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600,600italic,700" rel="stylesheet" type="text/css">
     <title>Responsive email</title>
     <style type="text/css">
-      body {margin: 10px 0; padding: 0 10px; background: #F9F2E7; font-size: 13px;}
+      body {margin: 10px 0; padding: 0 10px; background: #FFF; font-size: 13px;}
       table {border-collapse: collapse;}
       td {font-family: arial, sans-serif; color: #333333;}
 
@@ -34,131 +33,80 @@
         <td>
           <table border="0" cellpadding="0" cellspacing="0" align="center" width="640" bgcolor="#FFFFFF">
             <tr>
-              <td bgcolor="#424C59" style="font-size: 0; line-height: 0; padding: 0 10px;" height="80" align="center" class="responsive-image">
-                <img src="https://symplifica.com/public/img/mail/logo.png" alt="" />
-              </td>
+                {% include "RocketSellerTwoPickBundle:EmailTemplates:header.txt.twig" %}
             </tr>
-            <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr>
+
             <tr>
-              <td style="padding: 10px 10px 20px 10px; text-align: center">
-                <div style="color:#5D5D5D;font-size: 35px; font-family: 'Open Sans', sans-serif; font-weight: 700;">¡Hola!</div>
-                <br /><br />
-                <div style="font-size: 20px; font-family: 'Open Sans', sans-serif; font-weight: 300; color: #858688; width: 70%; margin: 0 auto">
-                  Te estamos enviando este correo electrónico para recordarte la información y documentos que necesitas para completar tu registro en Symplifica,<br><br><strong> ¡No olvides tenerlos a la mano!</strong>
-                </div>
-                <br /><br />
-
-              </td>
+                <td bgcolor="#FFFFFF">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                      <tr>
+                          <td>
+                            <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#40c1c3; font-size: 20px;width: 90%;margin: 0 auto;">¡Hola!
+                              </div>
+                          </td>
+                      </tr>
+                        <tr>
+                            <td>
+                                <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#909090; font-size: 15px; width:90%;margin:0 auto">
+                      Te estamos enviando este email para recordarte la información y documentos que necesitas para completar tu registro en Symplifica.<br>
+                                    <span style="color:#13878e;font-weight:600">¡No olvides tenerlos a la mano!</span><br><br>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
             </tr>
 
-
-            <tr style="background: #F7F7F7">
-
-              <td style="padding: 30px 10px">
-
-                <table border="1" bordercolor="#D7D8D9" cellpadding="0" cellspacing="0" align="left" width="100%">
-                  <tr>
-                    <td class="responsive-image img" style="font-size: 15px; font-family: 'Open Sans', sans-serif; font-weight: 700; padding: 0 10px 0 10px; background: #DF9136; height: 35px; color: #FFF" align="center">Para empleador</td>
-                  </tr>
-
-                  <tr>
-                    <td style="padding: 10px 10px;text-align: center">
-                      <div style="color: #808183;font-style: italic; font-size: 16px; font-family: 'Open Sans', sans-serif; font-weight: 300;">Copia del documento de identidad</div>
-                    </td>
-                  </tr>
-
-                  <tr>
-                   <td style="padding: 10px 10px;text-align: center">
-                      <div style="color: #808183;font-style: italic; font-size: 16px; font-family: 'Open Sans', sans-serif; font-weight: 300;">Copia del RUT</div>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td style="padding: 10px 10px;text-align: center">
-                      <div style="color: #808183;font-style: italic; font-size: 16px; font-family: 'Open Sans', sans-serif; font-weight: 300;">Datos de contacto</div>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td style="padding: 10px 10px;text-align: center">
-                      <div style="color: #808183;font-style: italic; font-size: 16px; font-family: 'Open Sans', sans-serif; font-weight: 300;">Entidades de seguridad social seleccionadas (ARL y caja de compesación)</div>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td style="padding: 10px 10px;text-align: center">
-                      <div style="color: #808183;font-style: italic; font-size: 16px; font-family: 'Open Sans', sans-serif; font-weight: 300;">Datos de cuenta bancaria para pago de nómina y aportes (banco, tipo de cuenta, número de cuenta)</div>
-                    </td>
-                  </tr>
-
-
-                </table>
-
-                <table border="1" bordercolor="#D7D8D9" cellpadding="0" cellspacing="0" align="right" width="100%">
-                  <tr>
-                    <td class="responsive-image img" style="font-size: 15px;font-family: 'Open Sans', sans-serif; font-weight: 700; padding: 0 10px 0 10px; background: #DF9136; height: 35px; color: #FFF" align="center">Para empleados</td>
-                  </tr>
-
-                  <tr>
-                    <td style="padding: 10px 10px;text-align: center">
-                      <div style="color: #808183; font-style: italic; font-size: 16px; font-family: 'Open Sans', sans-serif; font-weight: 300;">Copia del documento de identidad</div>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td style="padding: 10px 10px;text-align: center">
-                      <div style="color: #808183;font-style: italic; font-size: 16px; font-family: 'Open Sans', sans-serif; font-weight: 300;">Datos de contacto</div>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td style="padding: 10px 10px;text-align: center">
-                      <div style="color: #808183;font-style: italic; font-size: 16px; font-family: 'Open Sans', sans-serif; font-weight: 300;">Datos del contrato (sueldo, fecha de ingreso, tipo de empleado, días que labora)</div>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td style="padding: 10px 10px;text-align: center">
-                      <div style="color: #808183;font-style: italic; font-size: 16px; font-family: 'Open Sans', sans-serif; font-weight:300;">Entidades de seguridad social seleccionadas (EPS y fondo de pensiones)</div>
-                    </td>
-                  </tr>
-
-
-                </table>
-
-              </td>
-
-            </tr>
-
-            <!--<tr>
-            	<td><br/><br/><div style="margin: 0 auto;font-size: 20px;font-family: 'Open Sans', sans-serif; font-weight: 700; color: #74BEC0; text-align: center; width: 85%">Symplifica te obsequia desde hoy UN MES de servicio completo, terminando el día 13 de abril de 2016.</div><br /><br/></td>
-            </tr>
             <tr>
-                <td><div style="font-size: 20px;font-family: 'Open Sans', sans-serif; font-weight: 300; margin: 0 auto; color: #74BEC0; text-align: center; width: 85%">Podrás recibir OTRO MES por cada persona que refieras y adquiera nuestro servicio usando el siguiente código:</div><br /><br/></td>
-            </tr>-->
+                <td bgcolor="#F7F7F8">
+                    <table  border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tr>
+                            <td>
+                                <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#909090; font-size: 15px; width:90%;margin:0 auto"><br>
+                                    <span style="color:#13878e;font-weight:600">Iniciar regístro</span><br>
+                                    <span>Antes de empezar te recomendamos tener a la mano estos documentos e información:</span>
+                                </div>
+                            </td>
+                        </tr>
+                         <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr><!--espacios-->
+                        <tr>
+                            <td height="30">
+                                <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#909090; font-size: 15px; width:90%;margin:0 auto">
+                                    <span style="color:#13878e;font-weight:600">Para el empleador</span><br>
+                                    &#8226; Copia del documento de identidad.<br>
+                                    &#8226; Copia del RUT.<br>
+                                    &#8226; Datos de contacto.<br>
+                                    &#8226; Entidades de seguridad social seleccionadas (ARL y CAJA DE COMPENSACIÓN).<br>
+                                    &#8226; Datos de cuenta bancaria para pago de nómina y aportes (banco, tipo de cuenta, número de cuenta).<br>
+                                </div><br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td height="30">
+                                <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#909090; font-size: 15px; width:90%;margin:0 auto">
+                                    <span style="color:#13878e;font-weight:600">Para el empleador</span><br>
+                                    &#8226; Copia del documento de identidad.<br>
+                                    &#8226; Datos básicos (Nombre, Teléfono, dirección, Estado civil).<br>
+                                    &#8226; Datos del contrato (sueldo, fecha de ingreso, tipo de empleado, días que labora).<br>
+                                    &#8226; Entidades de seguridad social seleccionadas (ARL y CAJA DE COMPENSACIÓN).<br>
+                                </div><br>
+                            </td>
+                        </tr>
+
+                    </table>
+                </td>
+            </tr>
+            <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr><!--espacios-->
+            <tr>
+              <td style="font-family: 'Open Sans', sans-serif; font-weight: 500; font-style:italic; font-size: 15px; color:#858789">
+                  <a href="{{ url('show_dashboard')}}" style="text-decoration:none;width: 90%;display:block;margin: 0 auto;" target="_blank;"><div style="background:#13878e;border-radius:25px; height: 25px; font-size:14px; width: 170px; color:#FFFFFF;font-family: 'Open Sans', sans-serif; font-weight: 600; padding: 5px 0 0 0; text-align:center">¡Completar registro!</div></a><br /><br />
+              </td>
+            </tr>
 
 
             <tr><td style="font-size: 0; line-height: 0;" height="20">&nbsp;</td></tr>
             <tr>
-              <td bgcolor="#485465">
-                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="text-align:center; font-family: 'Open Sans', sans-serif; font-weight: 300;">
-                  <tr>
-                  	<td style="color: #fff; font-family: 'Open Sans', sans-serif; font-weight: 300;">Siguenos
-                    <a href="https://www.facebook.com/Symplifica-1538503439800792/timeline"><img src="https://symplifica.com/img/face.png" /></a>
-                    <a href="https://twitter.com/symplifica_?lang=en"><img src="https://symplifica.com/img/link.png" /></a>
-                    <a href="https://www.linkedin.com/company/symplifica?trk=tyah&trkInfo=clickedVertical%3Acompany%2CclickedEntityId%3A10358058%2Cidx%3A1-1-1%2CtarId%3A1456525736089%2Ctas%3Asymplifica"><img src="https://symplifica.com/img/tweet.png" /></a>
-                    </td>
-                  </tr>
-
-                  <tr>
-                  	<br>
-                    <td style="padding: 0 10px; color: #FFFFFF; font-family: 'Open Sans', sans-serif; font-weight: 300;">
-                      Términos y Condiciones I Copyright © Todos los derechos reservados Sympliﬁca
-                    </td>
-                  </tr>
-                  <tr><td style="font-size: 0; line-height: 0;" height="15">&nbsp;</td></tr>
-                </table>
-              </td>
+                {% include "RocketSellerTwoPickBundle:EmailTemplates:footer.txt.twig" %}
             </tr>
           </table>
         </td>
