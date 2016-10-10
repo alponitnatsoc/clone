@@ -135,7 +135,7 @@ class RegistrationController extends BaseController
             $promoCodeRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCode");
             /** @var PromotionCode $realCode */
             $realCode=$promoCodeRepo->findOneBy(array("code"=>$invitationCode));
-            if($realCode!=null){
+            if($realCode!=null&&$realCode->getPromotionCodeTypePromotionCodeType()->getStatus()!=-1){
                 /** @var User $user */
                 $realCode->addUser($user);
                 $user->setIsFree($realCode->getPromotionCodeTypePromotionCodeType()->getDuration());
