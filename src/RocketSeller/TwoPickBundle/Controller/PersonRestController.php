@@ -636,55 +636,57 @@ class PersonRestController extends FOSRestController
             ))->setStatusCode(200);
             return $view;
         } else {
-            //consume DataCredito
-            $request = $this->container->get('request');
-            $request->setMethod("GET");
-            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:DataCreditoRest:getClientLocationService',
-                array(
-                    'documentNumber' => $document,
-                    'identificationType' => $documentType,
-                    'surname' => $paramFetcher->get("lastName1")
-                ), array('_format' => 'json'));
-            if ($insertionAnswer->getStatusCode() != 200) {
-                $view->setStatusCode(404)->setHeader("error", "The person does not exist in data Credit");
-                return $view;
-            }
-            /** @var UtilsController $utils */
-            $utils = $this->get('app.symplifica_utils');
-
-            $answer = json_decode($insertionAnswer->getContent(), true);
-
-            $view->setData(array(
-                'names' => isset($answer['nombres']) ? $utils->mb_capitalize($answer['nombres']) : "",
-                'lastName2' => isset($answer['segundoApellido']) ? $utils->mb_capitalize($answer['segundoApellido']) : "",
-                'civilStatus' => "",
-                'gender' => $answer['genero']=='F' ? "FEM" : "MAS",
-                'documentExpeditionDate' => isset($answer['fechaExpedicionAno']) ? array(
-                    'year' => intval($answer['fechaExpedicionAno']),
-                    'month' => intval($answer['fechaExpedicionMes']),
-                    'day' => intval($answer['fechaExpedicionDia'])) : array(
-                    'year' => "",
-                    'month' => "",
-                    'day' => "",
-                ),
-                'birthDate' => array(
-                    'year' => "",
-                    'month' => "",
-                    'day' => "",
-                ),
-                'documentExpeditionPlace' => isset($answer['ciudadExpedicion']) ? $answer['ciudadExpedicion'] : "",
-                'birthCountry' => "",
-                'birthDepartment' => "",
-                'birthCity' => "",
-                'mainAddress' => isset($answer['direccion']) ? $answer['direccion'] : "",
-                'department' =>"",
-                'city' => "",
-                'email' => isset($answer['mail']) ? $answer['mail'] : "",
-                'phones' => isset($answer['telefono']) ? $answer['telefono'] : "",
-                'idEmployee' => "-1",
-                'idEmployer' => "-1",
-            ))->setStatusCode(200);
+            $view->setStatusCode(403)->setHeader("error", "You are not allowed to get information");
             return $view;
+            //consume DataCredito
+//            $request = $this->container->get('request');
+//            $request->setMethod("GET");
+//            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:DataCreditoRest:getClientLocationService',
+//                array(
+//                    'documentNumber' => $document,
+//                    'identificationType' => $documentType,
+//                    'surname' => $paramFetcher->get("lastName1")
+//                ), array('_format' => 'json'));
+//            if ($insertionAnswer->getStatusCode() != 200) {
+//                $view->setStatusCode(404)->setHeader("error", "The person does not exist in data Credit");
+//                return $view;
+//            }
+//            /** @var UtilsController $utils */
+//            $utils = $this->get('app.symplifica_utils');
+//
+//            $answer = json_decode($insertionAnswer->getContent(), true);
+//
+//            $view->setData(array(
+//                'names' => isset($answer['nombres']) ? $utils->mb_capitalize($answer['nombres']) : "",
+//                'lastName2' => isset($answer['segundoApellido']) ? $utils->mb_capitalize($answer['segundoApellido']) : "",
+//                'civilStatus' => "",
+//                'gender' => $answer['genero']=='F' ? "FEM" : "MAS",
+//                'documentExpeditionDate' => isset($answer['fechaExpedicionAno']) ? array(
+//                    'year' => intval($answer['fechaExpedicionAno']),
+//                    'month' => intval($answer['fechaExpedicionMes']),
+//                    'day' => intval($answer['fechaExpedicionDia'])) : array(
+//                    'year' => "",
+//                    'month' => "",
+//                    'day' => "",
+//                ),
+//                'birthDate' => array(
+//                    'year' => "",
+//                    'month' => "",
+//                    'day' => "",
+//                ),
+//                'documentExpeditionPlace' => isset($answer['ciudadExpedicion']) ? $answer['ciudadExpedicion'] : "",
+//                'birthCountry' => "",
+//                'birthDepartment' => "",
+//                'birthCity' => "",
+//                'mainAddress' => isset($answer['direccion']) ? $answer['direccion'] : "",
+//                'department' =>"",
+//                'city' => "",
+//                'email' => isset($answer['mail']) ? $answer['mail'] : "",
+//                'phones' => isset($answer['telefono']) ? $answer['telefono'] : "",
+//                'idEmployee' => "-1",
+//                'idEmployer' => "-1",
+//            ))->setStatusCode(200);
+//            return $view;
         }
     }
 
