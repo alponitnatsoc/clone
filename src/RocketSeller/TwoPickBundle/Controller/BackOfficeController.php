@@ -1407,4 +1407,31 @@ class BackOfficeController extends Controller
 		//Now Pod has all the products nomina on the database.
 		return $this->render('RocketSellerTwoPickBundle:BackOffice:payState.html.twig', array('podsN' => $podNomina, 'podsP' => $podPila));
 	}
+	
+	public function payTypeInfoViewAction(){
+		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+		
+		$criteria = new \Doctrine\Common\Collections\Criteria();
+		$criteria->where($criteria->expr()->gt('state', 3));
+		
+		$em = $this->getDoctrine()->getManager();
+		$eheRepo = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
+		$filteredEheRepo = $eheRepo->matching($criteria);
+		
+		$userRepo = $em->getRepository('RocketSellerTwoPickBundle:User');
+		$personRepo = $em->getRepository('RocketSellerTwoPickBundle:Person');
+		
+		$userArray = array();
+		
+		/** @var EmployerHasEmployee $ehe */
+		foreach ($filteredEheRepo as $ehe){
+			$personId = $ehe->getEmployerEmployer()->getPersonPerson()->getIdPerson();
+			$personFound = $personRepo->find($personId);
+			/** @var User $userFound */
+			$userFound = $userRepo->findOneBy(array('personPerson' => $personFound));
+			array_push($userArray, $userFound->getEmail());
+		}
+		
+		return $this->render('RocketSellerTwoPickBundle:BackOffice:payTypeInfoView.html.twig', array('ehes' => $filteredEheRepo, 'usersEmail' => $userArray));
+	}
 }
