@@ -213,3 +213,6 @@ back_entities_view:
 back_pay_state_view:
     path:         /backoffice/estado/pagos
     defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:notPaidView }
+back_frequency_state_view:
+    path:         /backoffice/frecuencia/pagos
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:payTypeInfoView }
