@@ -715,7 +715,7 @@ trait SubscriptionMethodsTrait
         if ($employer->getIdSqlSociety() == null) {
             $request->setMethod("POST");
             $request->request->add(array(
-                "society_nit" => $person->getDocument(),
+                "society_nit" => $person->getDocumentType().$person->getDocument(),
                 "society_name" => $person->getNames(),
                 "society_start_date" => $dateToday->format("d-m-Y"),
                 "society_mail" => $user->getEmail(),
@@ -727,7 +727,7 @@ trait SubscriptionMethodsTrait
         }
 
         $request->setMethod("GET");
-        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getSociety', array("societyNit" => $person->getDocument()), array('_format' => 'json'));
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getSociety', array("societyNit" => $person->getDocumentType().$person->getDocument()), array('_format' => 'json'));
         if ($insertionAnswer->getStatusCode() != 200) {
             return false;
         }
