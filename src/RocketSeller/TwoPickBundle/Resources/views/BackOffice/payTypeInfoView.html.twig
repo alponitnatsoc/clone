@@ -24,12 +24,13 @@
                         <th>Tipo de pago</th>
                     </tr>
                     {% for ehe in ehes %}
+                        {% set locIndex = loop.index - 1 %}
                         {% for contract in ehe.contracts %}
                             {% if contract.state == 1 and contract.frequencyFrequency.payrollCode == "Q" %}
                                 <tr>
                                     <td> {{ ehe.employerEmployer.personPerson.names }} {{ ehe.employerEmployer.personPerson.lastName1 }}</td>
                                     <td> {{ ehe.employerEmployer.personPerson.document }} </td>
-                                    <td> {{ usersEmail[loop.index - 1] }} </td>
+                                    <td> {{ usersEmail[locIndex] }} </td>
                                     <td> {{ ehe.employeeEmployee.personPerson.names }} {{ ehe.employeeEmployee.personPerson.lastName1 }}</td>
                                     <td> {{ ehe.employeeEmployee.personPerson.document }} </td>
                                     <td> {{ contract.payMethodpayMethod.payTypePayType.simpleName }}</td>
@@ -54,12 +55,13 @@
                         <th>Tipo de pago</th>
                     </tr>
                     {% for ehe in ehes %}
+                        {% set locIndex = loop.index - 1 %}
                         {% for contract in ehe.contracts %}
                             {% if contract.state == 1 and contract.frequencyFrequency.payrollCode == "M" %}
                                 <tr>
                                     <td> {{ ehe.employerEmployer.personPerson.names }} {{ ehe.employerEmployer.personPerson.lastName1 }}</td>
                                     <td> {{ ehe.employerEmployer.personPerson.document }} </td>
-                                    <td> {{ usersEmail[loop.index - 1] }} </td>
+                                    <td> {{ usersEmail[locIndex] }} </td>
                                     <td> {{ ehe.employeeEmployee.personPerson.names }} {{ ehe.employeeEmployee.personPerson.lastName1 }}</td>
                                     <td> {{ ehe.employeeEmployee.personPerson.document }} </td>
                                     <td> {{ contract.payMethodpayMethod.payTypePayType.simpleName }}</td>
