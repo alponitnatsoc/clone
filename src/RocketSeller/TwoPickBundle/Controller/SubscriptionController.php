@@ -443,6 +443,9 @@ class SubscriptionController extends Controller
                             return $this->redirectToRoute("subscription_error");
                         }
                     } elseif ($typeMethod == 'debito') {
+                        if($user->getPersonPerson()->getDocumentType()!="PASAPORTE"){
+                            $user->setDataCreditStatus(2);
+                        }
                         if ($user->getDataCreditStatus() == 0) {
                             return $this->forward('RocketSellerTwoPickBundle:Subscription:askDataCreditQuestions', array('userId' => $user->getId(), 'request' => $requestIn));
                         } elseif ($user->getDataCreditStatus() == 2) {//this is for bypass purposes

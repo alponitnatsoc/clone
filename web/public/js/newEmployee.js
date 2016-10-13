@@ -168,6 +168,7 @@ function startEmployee() {
             location.reload();
         });
     });
+    $("#register_employee_person_documentType").find("option[value='PASAPORTE']").remove();
     $('.btnPrevious-form').click(function () {
         $('#formNav > .active').prev('li').find('a').trigger('click');
     });
