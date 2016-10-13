@@ -60,6 +60,15 @@ class PromotionCodeType
      */
     private $status = 1;
 
+    /**
+     * Estado para verificar si el descuento por el referido ya fue aplicado al usuario que refiere.
+     * -1 - unique
+     * 1 - multiple
+     *
+     * @ORM\Column(type="smallint")
+     */
+    private $uniqueness = 1;
+
 
     /**
      * Constructor
@@ -242,5 +251,29 @@ class PromotionCodeType
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Set uniqueness
+     *
+     * @param integer $uniqueness
+     *
+     * @return PromotionCodeType
+     */
+    public function setUniqueness($uniqueness)
+    {
+        $this->uniqueness = $uniqueness;
+
+        return $this;
+    }
+
+    /**
+     * Get uniqueness
+     *
+     * @return integer
+     */
+    public function getUniqueness()
+    {
+        return $this->uniqueness;
     }
 }
