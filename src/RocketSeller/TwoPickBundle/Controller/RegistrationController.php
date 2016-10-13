@@ -145,7 +145,7 @@ class RegistrationController extends BaseController
                 $em->persist($realCode);
                 $userManager->updateUser($user);
             }else{
-                if($realCode->getPromotionCodeTypePromotionCodeType()->getUniqueness()=="-1"&&$realCode->getUsers()->count()==0){
+                if($realCode!=null&&$realCode->getPromotionCodeTypePromotionCodeType()->getUniqueness()=="-1"&&$realCode->getUsers()->count()==0){
                     /** @var User $user */
                     $realCode->addUser($user);
                     $user->setIsFree($realCode->getPromotionCodeTypePromotionCodeType()->getDuration());
