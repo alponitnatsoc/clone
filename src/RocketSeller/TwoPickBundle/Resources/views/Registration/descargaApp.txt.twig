@@ -1,0 +1,89 @@
+{% trans_default_domain 'FOSUserBundle' %}
+{% block subject %}{% autoescape false %}Descarga nuestra App{% endautoescape %}{% endblock %}
+{% block body_html %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600,600italic,700" rel="stylesheet" type="text/css">
+    <title>Responsive email</title>
+
+  <style type="text/css">
+        body{
+            margin:10px 0;
+            padding:0 10px;
+            background:#F9F2E7;
+            font-size:13px;
+        }
+        table{
+            border-collapse:collapse;
+        }
+        td{
+            font-family:arial, sans-serif;
+            color:#333333;
+        }
+    @media only screen and (max-width: 580px){
+        body,table,td,p,a,li,blockquote{
+            -webkit-text-size-adjust:none !important;
+        }
+}   @media only screen and (max-width: 580px){
+        table{
+            width:100% !important;
+        }
+}   @media only screen and (max-width: 580px){
+        .responsive-image img{
+            height:auto !important;
+            max-width:50% !important;
+            width:50% !important;
+        }
+}</style></head>
+  <body>
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr>
+        <td>
+          <table border="0" cellpadding="0" cellspacing="0" align="center" width="640" bgcolor="#FFFFFF">
+          <tr>
+              {% include "RocketSellerTwoPickBundle:EmailTemplates:header.txt.twig" %}
+          </tr>
+            <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr>
+            <tr>
+              <td style="padding: 10px 10px 20px 10px;">
+                <div style="text-align: left;width:80%;margin:0 auto;color:#75BEC1;font-size: 22px; font-family: 'Open Sans', sans-serif; font-weight: 700;">¡Queremos que te sientas tranquilo y formalices tu relación laboral!</div>
+                <br>
+                <div style="font-size: 15px; font-style: normal; font-family: 'Open Sans', sans-serif; font-weight: 100; color: #858688;width:80%;margin:0 auto;text-align:left">
+                    Solo sube los documentos faltantes y nos encargaremos del resto. Descarga nuestra APP móvil y realiza este proceso en pocos clics.<br><br>
+<strong>¡Disfruta de la tranquilidad de hacer las cosas bien!</strong>
+</div><br>
+                </td>
+              </tr>
+              <tr>
+                  <td>
+                      <img src="https://gallery.mailchimp.com/e15926228d81ba02e96cae9bc/images/eff6f763-7ac0-4264-be0d-ecbdb902c66e.png" width="100%">
+                  </td>
+              </tr>
+              <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr>
+              <tr>
+                  <td style="text-align: center;">
+                      <a href="http://apple.co/2dF6XTA "><img src="https://gallery.mailchimp.com/e15926228d81ba02e96cae9bc/images/db851f02-3f4b-46c8-b002-7c8207029436.png"></a>
+                      <a href="http://bit.ly/2dwLfRn"><img src="https://gallery.mailchimp.com/e15926228d81ba02e96cae9bc/images/d804a166-dacc-423e-b0a6-d2018e7b7ab0.png"></a>
+                  </td>
+              </tr>
+              <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr>
+              <tr style="text-align:center;">
+                  <td>
+                    <div style="font-size: 17px; font-family: 'Open Sans', sans-serif; font-weight: 300; color: #858688; width: 70%; margin: 0 auto">
+                      Atentamente,<br>
+                      Diana de Symplifica
+                    </div>
+                    <br>
+                  </td>
+            </tr>
+
+                </table>
+              </td>
+            </tr>
+          </table>
+  </body>
+</html>
+{% endblock %}

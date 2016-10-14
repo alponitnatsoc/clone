@@ -1328,6 +1328,11 @@ trait SubscriptionMethodsTrait
             $smailer=$this->get('symplifica.mailer.twig_swift');
             $smailer->sendEmailByTypeMessage(array('emailType'=>'daviplata','user'=>$user,'subject'=>'Información Daviplata','toEmail'=>$user->getEmail()));
         }
+	
+        //Email with info regarding the app
+		    $smailer=$this->get('symplifica.mailer.twig_swift');
+		    $smailer->sendEmailByTypeMessage(array('emailType'=>'appDownload','user'=>$user,'subject'=>'App Symplifica','toEmail'=>$user->getEmail()));
+        
         $em->persist($user);
         $em->flush();
         return true;

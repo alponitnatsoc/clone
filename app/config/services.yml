@@ -89,6 +89,7 @@ services:
                     transactionRejected : 'FOSUserBundle:Pay:payRejectedEmail.txt.twig'
                     transactionAcepted : 'FOSUserBundle:Pay:succesfulTransaction.txt.twig'
                     liquidation: 'FOSUserBundle:BackOffice:liquidationProcess.txt.twig'
+                    appDownload: 'FOSUserBundle:Registration:descargaApp.txt.twig'
 
                 from_email:
                   confirmation: '%fos_user.registration.confirmation.from_email%'
