@@ -237,19 +237,23 @@ class BackOfficeController extends Controller
         return $this->render('RocketSellerTwoPickBundle:BackOffice:showBaseRegisterUsers.html.twig',array('users'=>$users));
 
     }
-    public function showSuccessfulInvoicesAction()
+    public function showSuccessfulInvoicesAction($year,$month)
     {
         $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
         $usersRepo= $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
         $users= $usersRepo->findAll();
         $efectivePurchaseOrders=new ArrayCollection();
+        $dateToday=new DateTime($year."-".$month."-"."15");
         /** @var User $user */
         foreach ($users as $user) {
             $pos=$user->getPurchaseOrders();
             /** @var PurchaseOrders $po */
             foreach ($pos as $po) {
                 if($po->getAlreadyRecived()==1&&$po->getPurchaseOrdersStatus()->getIdNovoPay()=="00"){
-                    $efectivePurchaseOrders->add($po);
+                    $datemin= new DateTime($po->getDateCreated()->format("Y-m-1"));
+                    $datemax= new DateTime($po->getDateCreated()->format("Y-m-t"));
+                    if($dateToday>$datemin&&$dateToday<$datemax)
+                        $efectivePurchaseOrders->add($po);
                 }
             }
         }

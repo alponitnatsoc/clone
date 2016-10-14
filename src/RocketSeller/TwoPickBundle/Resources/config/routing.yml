@@ -86,7 +86,7 @@ show_base_users_register:
     path:     /backoffice/show/base/users/register
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showBaseRegisterUsers}
 show_successful_invoices:
-    path:     /backoffice/show/successful/invoices
+    path:     /backoffice/show/successful/invoices/{year}/{month}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showSuccessfulInvoices}
 show_have_to_pay_users:
     path:     /backoffice/show/havetopay/users
