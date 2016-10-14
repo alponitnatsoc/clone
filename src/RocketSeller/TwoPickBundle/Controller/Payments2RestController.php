@@ -252,7 +252,7 @@ class Payments2RestController extends FOSRestController
         $mandatory['secondLastName'] = false;
         $regex['name'] = '(.)*';
         $mandatory['name'] = true;
-        $regex['documentType'] = '(CC|cc|nit|NIT|ce|CE)';
+        $regex['documentType'] = '(CC|cc|nit|NIT|ce|CE|PASAPORTE)';
         $mandatory['documentType'] = true;
         $regex['documentNumber'] = '\d+';
         $mandatory['documentNumber'] = true;
@@ -672,7 +672,7 @@ class Payments2RestController extends FOSRestController
         $mandatory['accountNumber'] = true;
         $regex['documentEmployer'] = '([0-9|-]| )+';
         $mandatory['documentEmployer'] = true;
-        $regex['documentTypeEmployer'] = '(CC|cc|nit|NIT|ce|CE)';
+        $regex['documentTypeEmployer'] = '(CC|cc|nit|NIT|ce|CE|PASAPORTE)';
         $mandatory['documentTypeEmployer'] = true;
         $regex['documentEmployee'] = '([0-9|-]| )+';
         $mandatory['documentEmployee'] = true;
