@@ -302,6 +302,8 @@ class TwigSwiftMailer extends Controller implements MailerInterface
             case 'reminderDaviplata':
                 /** $context must have:
                  * string toEmail
+                 * string userName
+                 * string employeeName
                  */
                 $template = $this->parameters['template']['reminderDaviplata'];
                 return $this->sendMessage($template,$context,$teamFromEmail, $context['toEmail']);
