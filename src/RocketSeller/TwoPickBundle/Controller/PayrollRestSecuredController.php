@@ -19,6 +19,7 @@ use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\Product;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\Transaction;
 use RocketSeller\TwoPickBundle\Entity\PayMethod;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
@@ -470,10 +471,48 @@ class PayrollRestSecuredController extends FOSRestController
 
                 }
 
+                /** @var Person $person */
                 $person = $tempPOD->getPayrollsPila()->get(0)->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                 $flagFrequency = false;
                 $flagNomi=false;
                 $paysPila++;
+	            
+	              if($tempPOD->getEnlaceOperativoFileName() == NULL && $tempPOD->getUploadedFile() == NULL){
+		              //Here we get the file of the pila and we send it to HighTech
+		              $request->setMethod("GET");
+		              $insertionAnswerTextFile = $this->forward('RocketSellerTwoPickBundle:PilaPlainTextRest:getMonthlyPlainText', array('podId'=>$tempPOD->getIdPurchaseOrdersDescription() ,'download'=>'generate'), array('_format' => 'json'));
+		
+		              $transactionType = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:TransactionType')->findOneBy(array('code' => 'CPla'));
+		
+		              $transaction = new Transaction();
+		              $transaction->setTransactionType($transactionType);
+		
+		              $request->setMethod("POST");
+		              $request->request->add(array(
+			              "GSCAccount"=>$person->getEmployer()->getIdHighTech(),
+			              "FileToUpload"=>json_decode($insertionAnswerTextFile->getContent(),true)['fileToSend']
+		              ));
+		              $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postUploadFileToPilaOperator', array('_format' => 'json'));
+		              if ($insertionAnswer->getStatusCode() == 200) {
+			              //Received succesfully
+		              	$radicatedNumber = json_decode($insertionAnswer->getContent(), true)["numeroRadicado"];
+			              $transaction->setRadicatedNumber($radicatedNumber);
+			              $purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-PlaEnv'));
+		              }
+		              else{
+			              //If some kind of error
+			              $purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-ErrSer'));
+		              }
+		
+		              $em = $this->getDoctrine()->getManager();
+		              $transaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
+		              $em->persist($transaction);
+		              $em->flush();
+		              $tempPOD->setUploadedFile($transaction->getIdTransaction());
+		              $tempPOD->addTransaction($transaction);
+		              $em->persist($tempPOD);
+		              $em->flush();
+	              }
             } elseif( $tempPOD->getProductProduct()->getSimpleName()=="PN") {
                 $person = $tempPOD->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                 if ($tempPOD->getPayrollPayroll()->getContractContract()->getPayMethodPayMethod()->getPayTypePayType()->getPayrollCode() == "EFE"){

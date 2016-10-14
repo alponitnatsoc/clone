@@ -94,6 +94,22 @@ class PurchaseOrdersDescription
      * @ORM\Column(type="datetime", nullable=TRUE)
      */
     private $dateToPay;
+	
+		/**
+		 * -1 - Success
+		 * Anything else, active transaction id
+		 * @ORM\Column(type="integer", nullable=TRUE)
+		 */
+		private $uploadedFile;
+	
+		/**
+		 * @ORM\ManyToMany(targetEntity="Transaction", cascade={"persist"})
+		 * @ORM\JoinTable(name="purchase_orders_description_has_transactions",
+		 *      joinColumns={ @ORM\JoinColumn(name="purchase_orders_description_id_purchase_orders_description", referencedColumnName="id_purchase_orders_description")},
+		 *      inverseJoinColumns={@ORM\JoinColumn(name="transaction_id_transaction", referencedColumnName="id_transaction")}
+		 *      )
+		 */
+		private $transactions;
 
     /**
      * Get idPurchaseOrdersDescription
@@ -395,5 +411,63 @@ class PurchaseOrdersDescription
             return $this->getPurchaseOrdersStatus()->getIdNovoPay();
         }
         return null;
+    }
+
+    /**
+     * Add transaction
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Transaction $transaction
+     *
+     * @return PurchaseOrdersDescription
+     */
+    public function addTransaction(\RocketSeller\TwoPickBundle\Entity\Transaction $transaction)
+    {
+        $this->transactions[] = $transaction;
+
+        return $this;
+    }
+
+    /**
+     * Remove transaction
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Transaction $transaction
+     */
+    public function removeTransaction(\RocketSeller\TwoPickBundle\Entity\Transaction $transaction)
+    {
+        $this->transactions->removeElement($transaction);
+    }
+
+    /**
+     * Get transactions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTransactions()
+    {
+        return $this->transactions;
+    }
+
+    /**
+     * Set uploadedFile
+     *
+     * @param integer $uploadedFile
+     *
+     * @return PurchaseOrdersDescription
+     */
+    public function setUploadedFile($uploadedFile)
+    {
+        $this->uploadedFile = $uploadedFile;
+
+        return $this;
+    }
+
+    /**
+     * Get uploadedFile
+     *
+     * @return integer
+     */
+    public function getUploadedFile()
+    {
+        return $this->uploadedFile;
     }
 }

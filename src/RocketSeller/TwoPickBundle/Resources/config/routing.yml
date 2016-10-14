@@ -216,3 +216,9 @@ back_pay_state_view:
 back_frequency_state_view:
     path:         /backoffice/frecuencia/pagos
     defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:payTypeInfoView }
+back_pila_operator_state_view:
+    path:         /backoffice/estado/afiliacion/pila
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:checkPilaOperatorState}
+back_pila_state_register_update:
+    path:         /backoffice/actualizar/afiliacion/pila/{idEmployer}
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:updateStateRegistrationPilaOperator}

@@ -351,6 +351,43 @@ class PayrollMethodRestController extends FOSRestController
                 $podPila->setValue($totalPilaToPay);
                 $podPila->setPurchaseOrdersStatus($pos);
                 $purchaseOrder->addPurchaseOrderDescription($podPila);
+	
+		            if($podPila->getEnlaceOperativoFileName() == NULL && $podPila->getUploadedFile() == NULL){
+			            //Here we get the file of the pila and we send it to HighTech
+			            $request->setMethod("GET");
+			            $insertionAnswerTextFile = $this->forward('RocketSellerTwoPickBundle:PilaPlainTextRest:getMonthlyPlainText', array('podId'=>$podPila->getIdPurchaseOrdersDescription() ,'download'=>'generate'), array('_format' => 'json'));
+			
+			            $transactionType = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:TransactionType')->findOneBy(array('code' => 'CPla'));
+			
+			            $transaction = new Transaction();
+			            $transaction->setTransactionType($transactionType);
+			
+			            $request->setMethod("POST");
+			            $request->request->add(array(
+				            "GSCAccount"=>$employer->getIdHighTech(),
+				            "FileToUpload"=>json_decode($insertionAnswerTextFile->getContent(),true)['fileToSend']
+			            ));
+			            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postUploadFileToPilaOperator', array('_format' => 'json'));
+			            if ($insertionAnswer->getStatusCode() == 200) {
+				            //Received succesfully
+				            $radicatedNumber = json_decode($insertionAnswer->getContent(), true)["numeroRadicado"];
+				            $transaction->setRadicatedNumber($radicatedNumber);
+				            $purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-PlaEnv'));
+			            }
+			            else{
+				            //If some kind of error
+				            $purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-ErrSer'));
+			            }
+			
+			            $em = $this->getDoctrine()->getManager();
+			            $transaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
+			            $em->persist($transaction);
+			            $em->flush();
+			            $podPila->setUploadedFile($transaction->getIdTransaction());
+			            $podPila->addTransaction($transaction);
+			            $em->persist($podPila);
+			            $em->flush();
+		            }
             }
             if($purchaseOrder->getPurchaseOrderDescriptions()->count()==0){
               continue;

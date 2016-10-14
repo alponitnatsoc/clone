@@ -38,7 +38,7 @@
                           <td style="vertical-align: middle">Id: {{ pila.idPurchaseOrdersDescription }} - Planilla de pila tipo: {{ fileType }}</td>
                           <td style="vertical-align: middle">$ {{ pila.value|number_format(0) }} </td>
                           <td style="vertical-align: middle"> <input id= {{idFileName}} value= "{{ fileStoredName }}" size="10"></input> <button id= {{idFileNameButton}} class="saveId">Guardar</button></td>
-                          <td style="vertical-align: middle"> <button type"button" onclick="location.href = '/api/public/v1/secured/monthlies/{{pila.idPurchaseOrdersDescription}}/plain/text';">Generar Archivo</button></td>
+                          <td style="vertical-align: middle"> <button type"button" onclick="location.href = '/api/public/v1/secured/monthlies/{{pila.idPurchaseOrdersDescription}}/plains/download/text';">Generar Archivo</button></td>
                         </tr>
                     {% endfor %}
                     </tbody>
