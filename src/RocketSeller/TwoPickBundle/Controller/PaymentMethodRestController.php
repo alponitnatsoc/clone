@@ -723,26 +723,26 @@ class PaymentMethodRestController extends FOSRestController
         $request = $this->container->get('request');
         $request->setMethod("POST");
         $purchaseOrder=$purchaseOrderDescription->getPurchaseOrders();
-        if($purchaseOrder->getProviderId()==0){
-            $payRoll = $purchaseOrderDescription->getPayrollPayroll();
-            if ($purchaseOrderDescription->getProductProduct()->getSimpleName() == "PP") {
-                $type = 2;
-            } elseif ($purchaseOrderDescription->getProductProduct()->getSimpleName() == "PN") {
-                $type = 1;
-            } else {
-                return array('code'=>200);
-            }
-
-            $request->setMethod("POST");
-            $request->request->add(array(
-                "documentNumber" => $person->getDocument(),
-                "beneficiaryId" => $payRoll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getDocument(),
-                "beneficiaryAmount" => $purchaseOrderDescription->getValue(),
-                "dispersionType" => $type,
-                "chargeId" => $purchaseOrder->getIdPurchaseOrders(),
-            ));
-            $methodToCall='RocketSellerTwoPickBundle:PaymentsRest:postClientPayment';
-        }else{
+//        if($purchaseOrder->getProviderId()==0){
+//            $payRoll = $purchaseOrderDescription->getPayrollPayroll();
+//            if ($purchaseOrderDescription->getProductProduct()->getSimpleName() == "PP") {
+//                $type = 2;
+//            } elseif ($purchaseOrderDescription->getProductProduct()->getSimpleName() == "PN") {
+//                $type = 1;
+//            } else {
+//                return array('code'=>200);
+//            }
+//
+//            $request->setMethod("POST");
+//            $request->request->add(array(
+//                "documentNumber" => $person->getDocument(),
+//                "beneficiaryId" => $payRoll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getDocument(),
+//                "beneficiaryAmount" => $purchaseOrderDescription->getValue(),
+//                "dispersionType" => $type,
+//                "chargeId" => $purchaseOrder->getIdPurchaseOrders(),
+//            ));
+//            $methodToCall='RocketSellerTwoPickBundle:PaymentsRest:postClientPayment';
+//        }else{
             $payRoll = $purchaseOrderDescription->getPayrollPayroll();
             if($payRoll==null){
                 $employeePerson=$purchaseOrder->getIdUser()->getPersonPerson();
@@ -832,26 +832,26 @@ class PaymentMethodRestController extends FOSRestController
             }
 
             $methodToCall='RocketSellerTwoPickBundle:Payments2Rest:postRegisterDispersion';
-        }
+        //}
 
         $insertionAnswer = $this->forward($methodToCall,array('request'=>$request), array('_format' => 'json'));
 
-        if($purchaseOrder->getProviderId()==0) {
-            if ($insertionAnswer->getStatusCode() == 200) {
-                $transferId = json_decode($insertionAnswer->getContent(), true)["transfer-id"];
-                $pay = new Pay();
-                $pay->setUserIdUser($purchaseOrderDescription->getPurchaseOrders()->getIdUser());
-                $pay->setIdDispercionNovo($transferId);
-                $pay->setPurchaseOrdersDescription($purchaseOrderDescription);
-                $em->persist($pay);
-                $em->flush();
-                return array('code'=>200);
-
-            } else {
-                //TODO TIMEOUT
-                return array('code'=>$insertionAnswer->getStatusCode(),'data'=>array('error' => array('Dispersion' => 'se exedio el tiempo de espera pero el dinero se sacó')));
-            }
-        }else{
+//        if($purchaseOrder->getProviderId()==0) {
+//            if ($insertionAnswer->getStatusCode() == 200) {
+//                $transferId = json_decode($insertionAnswer->getContent(), true)["transfer-id"];
+//                $pay = new Pay();
+//                $pay->setUserIdUser($purchaseOrderDescription->getPurchaseOrders()->getIdUser());
+//                $pay->setIdDispercionNovo($transferId);
+//                $pay->setPurchaseOrdersDescription($purchaseOrderDescription);
+//                $em->persist($pay);
+//                $em->flush();
+//                return array('code'=>200);
+//
+//            } else {
+//                //TODO TIMEOUT
+//                return array('code'=>$insertionAnswer->getStatusCode(),'data'=>array('error' => array('Dispersion' => 'se exedio el tiempo de espera pero el dinero se sacó')));
+//            }
+//        }else{
             if ($insertionAnswer->getStatusCode() == 200) {
                 $transferId = json_decode($insertionAnswer->getContent(), true)["numeroRadicado"];
                 $pay = new Pay();
@@ -867,7 +867,7 @@ class PaymentMethodRestController extends FOSRestController
                 return array('code'=>$insertionAnswer->getStatusCode(),'data'=>array('error' => $insertionAnswer->getContent()));
             }
 
-        }
+        //}
     }
     /**
      * @param PurchaseOrders $purchaseOrder
@@ -882,27 +882,28 @@ class PaymentMethodRestController extends FOSRestController
         $pOSRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
         $flag=false;
         if($purchaseOrder->getProviderId()==0){
-            $simpleName=$purchaseOrder->getPurchaseOrderDescriptions()->get(0)->getProductProduct()->getSimpleName();
-            if(!($simpleName=='PN'||$simpleName=='PP')){
-                $tax = $purchaseOrder->getPurchaseOrderDescriptions()->get(0)->getProductProduct()->getTaxTax();
-                $taxAmount=$purchaseOrder->getValue() - ($purchaseOrder->getValue() / ($tax->getValue() + 1));
-                $taxBase=$purchaseOrder->getValue() / ($tax->getValue() + 1);
-                $chargeMode=3;
-                $flag=true;
-            }else{
-                $chargeMode=2;
-                $taxAmount=0;
-                $taxBase=0;
-            }
+//            $simpleName=$purchaseOrder->getPurchaseOrderDescriptions()->get(0)->getProductProduct()->getSimpleName();
+//            if(!($simpleName=='PN'||$simpleName=='PP')){
+//                $tax = $purchaseOrder->getPurchaseOrderDescriptions()->get(0)->getProductProduct()->getTaxTax();
+//                $taxAmount=$purchaseOrder->getValue() - ($purchaseOrder->getValue() / ($tax->getValue() + 1));
+//                $taxBase=$purchaseOrder->getValue() / ($tax->getValue() + 1);
+//                $chargeMode=3;
+//                $flag=true;
+//            }else{
+//                $chargeMode=2;
+//                $taxAmount=0;
+//                $taxBase=0;
+//            }
+
             $request->request->add(array(
                 "documentNumber" => $person->getDocument(),
-                "MethodId" => $purchaseOrder->getPayMethodId(),
+                "methodId" => $purchaseOrder->getPayMethodId(),
                 "totalAmount" => $purchaseOrder->getValue(),
-                "taxAmount" => $taxAmount,
-                "taxBase" => $taxBase,
+                "taxAmount" => 0,
+                "taxBase" => 0,
                 "commissionAmount" => 0,
                 "commissionBase" => 0,
-                "chargeMode" => $chargeMode,
+                "chargeMode" => 2, //this is for transfers so wont change
                 "chargeId" => $purchaseOrder->getIdPurchaseOrders(),
             ));
             $methodToCall='RocketSellerTwoPickBundle:PaymentsRest:postPaymentAproval';
@@ -926,7 +927,41 @@ class PaymentMethodRestController extends FOSRestController
                 $em->persist($purchaseOrder);
                 $em->flush();
                 return array('code'=>400,'data'=>array('error' => array("Credit Card" => "No se pudo hacer el cobro a la tarjeta de Credito", "charge-rc" => $chargeRC)));
+            }else{
+                //we inmidiatly disperse it to symplifica account
+
+                $request->setMethod("POST");
+                $request->request->add(array(
+                    "documentNumber" => $person->getDocument(),
+                    "beneficiaryId" => "900862831",
+                    "beneficiaryAmount" => $purchaseOrder->getValue(),
+                    "dispersionType" => "1",//this is for normal tranfer like its a payroll
+                    "chargeId" => $purchaseOrder->getIdPurchaseOrders(),
+                ));
+
+                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClientPayment',array("request"=>$request), array('_format' => 'json'));
+                if($insertionAnswer->getStatusCode()==200||$insertionAnswer->getStatusCode()==201){
+                    $radicatedNumber=substr(md5($purchaseOrder->getIdPurchaseOrders()),0,18);
+                    $purchaseOrder->setRadicatedNumber($radicatedNumber);
+                    $pOS = $pOSRepo->findOneBy(array("idNovoPay" => "00"));
+                    $purchaseOrder->setPurchaseOrdersStatus($pOS);
+                    $purchaseOrder->setDatePaid(new DateTime());
+                    $em->persist($purchaseOrder);
+                    $em->flush();
+                    //TODO if correct we should simulate the 3rd party confirmation
+                    $request->request->add(array(
+                        "numeroRadicado" => $radicatedNumber,
+                        "estado" => "0"
+                    ));
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postCollectionNotification',array("request"=>$request), array('_format' => 'json'));
+                    return array('code'=>$insertionAnswer->getStatusCode(),'data'=> $insertionAnswer->getContent());
+
+                }else{
+                    //TODO error dispersing something really bad happended mabe
+                }
+
             }
+
             if($flag){
                 $pay = new Pay();
                 $pay->setUserIdUser($purchaseOrder->getIdUser());
