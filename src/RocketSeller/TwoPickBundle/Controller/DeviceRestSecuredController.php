@@ -45,6 +45,17 @@ class DeviceRestSecuredController extends FOSRestController {
         $user = $this->getDoctrine()
             ->getRepository('RocketSellerTwoPickBundle:User')
             ->find($idUser);
+        
+        $deviceSearch = $this->getDoctrine()
+            ->getRepository('RocketSellerTwoPickBundle:Device')
+            ->findOneBy(array("userUser" => $user, "token" => $deviceToken));
+        
+        if($deviceSearch) {
+            $deviceSearch->setLastLoginInDevice(new DateTime());
+            $em->persist($deviceSearch);
+            $em->flush();
+            return $view->setData(array());
+        }
 
         $device = new Device();
         $device->setToken($deviceToken);

@@ -233,4 +233,61 @@ class ChronServerRestController extends FOSRestController
         $view->setStatusCode(200);
         return $view->setData($resultUsers);
     }
+
+    /**
+     *  Send reminder of payments and register novelties<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Send reminder tu upload pending documents",
+     *   statusCodes = {
+     *     200 = "OK"
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function putPaymentRemainderAction($message, $longMessage, $period) {
+        $payrollRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
+        $now = new \DateTime('now');
+        $currMonth = $now->format('m');
+        $currYear = $now->format('Y');
+        $payrolls = $payrollRepo->findBy(array('period' => $period,
+                                               'year' => $currYear,
+                                               'month' => $currMonth,
+                                               'paid' => 0));
+        $people = array();
+        foreach ($payrolls as $payroll) {
+            if($payroll->getPaid() == 0) {
+                $person = $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()
+                                    ->getEmployerEmployer()->getPersonPerson();
+                $people[] = $person;
+            }
+        }
+        $userRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+        $users = $userRepo->findBy(array('personPerson' => $people));
+        $resultUsers = array();
+        foreach ($users as $user) {
+            $title = "Symplifica";
+
+            $request = new Request();
+            $request->setMethod("POST");
+            $request->request->add(array(
+                "idUser" => $user->getId(),
+                "title" => $title,
+                "message" => $message,
+                "longMessage" => $longMessage,
+                "page" => 'PaymentsPage'
+            ));
+            $pushNotificationService = $this->get('app.symplifica_push_notification');
+            $result = $pushNotificationService->postPushNotificationAction($request);
+            $collect = $result->getData();
+            $resultUsers[] = array('userId' => $user->getId(), 'result' => $collect);
+        }
+
+        $view = View::create();
+        $view->setStatusCode(200);
+        return $view->setData($resultUsers);
+    }
+
 }

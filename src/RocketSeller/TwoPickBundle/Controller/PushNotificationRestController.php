@@ -41,6 +41,10 @@ class PushNotificationRestController extends FOSRestController
       $title = $request->request->get('title');
       $message = $request->request->get('message');
       $longMessage = $request->request->get('longMessage');
+      $page = $request->request->get('page');
+      if(!$page) {
+          $page = '';
+      }
 
       $user = $this->getDoctrine()
           ->getRepository('RocketSellerTwoPickBundle:User')
@@ -80,7 +84,8 @@ class PushNotificationRestController extends FOSRestController
                 "click_action" => "FCM_PLUGIN_ACTIVITY",
             ),
             "data" => array(
-              "longMessage" => $longMessage
+              "longMessage" => $longMessage,
+              "page" => $page
             ),
             "priority" => "high"
         ));
