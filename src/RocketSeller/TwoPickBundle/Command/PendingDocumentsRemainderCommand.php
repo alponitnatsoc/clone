@@ -33,11 +33,11 @@ class PendingDocumentsRemainderCommand extends ContainerAwareCommand
             $output->writeln('<error>Error calling service</error>');
         } else {
             foreach ($response->getData() as $userResponse) {
-                $output->writeln("<info>Sent to userId: " .$userResponse['userId'] . "</info>");
-                $output->writeln("--status: " .$userResponse['result']['status']);
+                $output->write("<info>Sent to userId: " .$userResponse['userId'] . "</info>");
+                $output->writeln(" -- status: " .$userResponse['result']['status']);
                 if(isset($userResponse['result']['resultAndroid'])) {
-                    $output->writeln("----Android success:" . $userResponse['result']['resultAndroid']['success']);
-                    $output->writeln("----Android failure:" . $userResponse['result']['resultAndroid']['failure']);
+                    $output->write("----Android success:" . $userResponse['result']['resultAndroid']['success']);
+                    $output->writeln(" -- failure:" . $userResponse['result']['resultAndroid']['failure']);
                     // $output->writeln("----multicast_id = " . $userResponse['result']['resultAndroid']['multicast_id']);
                     // $output->writeln("----success = " . $userResponse['result']['resultAndroid']['success']);
                     // $output->writeln("----failure = " . $userResponse['result']['resultAndroid']['failure']);
@@ -52,8 +52,8 @@ class PendingDocumentsRemainderCommand extends ContainerAwareCommand
                 }
                 if(isset($userResponse['result']['resultIos'])) {
                     // $output->writeln("----Ios----");
-                    $output->writeln("----Ios success:" . $userResponse['result']['resultIos']['success']);
-                    $output->writeln("----Ios failure:" . $userResponse['result']['resultIos']['failure']);
+                    $output->write("----Ios     success:" . $userResponse['result']['resultIos']['success']);
+                    $output->writeln(" -- failure:" . $userResponse['result']['resultIos']['failure']);
                     // $output->writeln("----multicast_id = " . $userResponse['result']['resultIos']['multicast_id']);
                     // $output->writeln("----success = " . $userResponse['result']['resultIos']['success']);
                     // $output->writeln("----failure = " . $userResponse['result']['resultIos']['failure']);
@@ -70,7 +70,7 @@ class PendingDocumentsRemainderCommand extends ContainerAwareCommand
 
 
         }
-        $output->writeln('<comment>Done!</comment>');
+        $output->writeln('<comment>Done PendingDocumentsRemainder!</comment>');
     }
 
 }
