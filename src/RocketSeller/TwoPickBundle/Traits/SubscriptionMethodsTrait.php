@@ -908,22 +908,22 @@ trait SubscriptionMethodsTrait
                 $em->flush();
 
             }
-            
+
             //add employer to pila operator only if is already registered on Hightech
             if($employer->getExistentPila() == NULL && $employer->getIdHighTech() != NULL){
-	
+
 	            $request->setMethod("POST");
 	            $request->request->add(array(
 		            "GSCAccount" => $employer->getIdHighTech()
 	            ));
-	
+
 	            $transactionType = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:TransactionType')->findOneBy(array('code' => 'IPil'));
-	            
+
 	            $transaction = new Transaction();
 	            $transaction->setTransactionType($transactionType);
-	            
+
 	            $pilaRegistrationAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postRegisterEmployerToPilaOperator', array('_format' => 'json'));
-	            
+
 	            if($pilaRegistrationAnswer->getStatusCode() == 200){
 		            //Received succesfully
 		            $radicatedNumber = json_decode($pilaRegistrationAnswer->getContent(), true)["numeroRadicado"];
@@ -934,16 +934,16 @@ trait SubscriptionMethodsTrait
 	            	//If some kind of error
 		            $purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'InsPil-ErrSer'));
 	            }
-	
+
 	            $transaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
 	            $em->persist($transaction);
 	            $em->flush();
 	            $employer->setExistentPila($transaction->getIdTransaction());
 	            $employer->addTransaction($transaction);
-	            
+
 	            $em->persist($employer);
 	            $em->flush();
-	            
+
             }
             $eHEes = $employer->getEmployerHasEmployees();
             //dump($eHEes);
