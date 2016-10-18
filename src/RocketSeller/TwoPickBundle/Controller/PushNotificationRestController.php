@@ -115,7 +115,8 @@ class PushNotificationRestController extends FOSRestController
                 "sound" => "default",
             ),
             "data" => array(
-              "longMessage" => $longMessage
+              "longMessage" => $longMessage,
+              "page" => $page
             ),
             "priority" => "high"
         ));

@@ -54,6 +54,7 @@ class DeviceRestSecuredController extends FOSRestController {
             $deviceSearch->setLastLoginInDevice(new DateTime());
             $em->persist($deviceSearch);
             $em->flush();
+            $view = View::create();
             return $view->setData(array());
         }
 
