@@ -110,6 +110,14 @@ class PurchaseOrdersDescription
 		 *      )
 		 */
 		private $transactions;
+	
+		/** @var Document
+		 * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Document", cascade={"persist"})
+		 * @ORM\JoinColumns({
+		 *     @ORM\JoinColumn(name="purchase_orders_description_id_document",referencedColumnName="id_document")
+		 * })
+		 */
+		private $document;
 
     /**
      * Get idPurchaseOrdersDescription
@@ -469,5 +477,29 @@ class PurchaseOrdersDescription
     public function getUploadedFile()
     {
         return $this->uploadedFile;
+    }
+
+    /**
+     * Set document
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Document $document
+     *
+     * @return PurchaseOrdersDescription
+     */
+    public function setDocument(\RocketSeller\TwoPickBundle\Entity\Document $document = null)
+    {
+        $this->document = $document;
+
+        return $this;
+    }
+
+    /**
+     * Get document
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Document
+     */
+    public function getDocument()
+    {
+        return $this->document;
     }
 }

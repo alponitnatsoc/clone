@@ -1362,7 +1362,7 @@ class Payments2RestController extends FOSRestController
 
     return $this->forward('RocketSellerTwoPickBundle:HighTechRest:putProcessUploadFilePilaOperator', array('_format' => 'json'));
   }
-
+  
   /**
    * Gets the payslip of the pila payment<br/>
    *
@@ -1384,18 +1384,18 @@ class Payments2RestController extends FOSRestController
    */
   public function getPayslipPilaPaymentAction($GSCAccount, $payslipNumber){
     $path = "DescargarComprobantePagoPila";
-
+    
     $parameters_fixed = array();
     $parameters_fixed['cuentaGSC'] = $GSCAccount;
     $parameters_fixed['numeroPlanilla'] = $payslipNumber;
-
+    
     /** @var View $res */
     $responseView = $this->callApi($parameters_fixed, $path, "DescargarComprobantePagoPila");
-
+    
     $temp = $this->handleView($responseView);
     $data = json_decode($temp->getContent(), true);
     $code = json_decode($temp->getStatusCode(), true);
-
+    
     $view = View::create();
     $view->setStatusCode($code);
     $view->setData($data);

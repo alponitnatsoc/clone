@@ -331,6 +331,62 @@ class HighTechRestController extends FOSRestController
                 //$em->persist($notification);*/
 
             }
+	
+		        if($pay->getPurchaseOrdersDescription()->getProductProduct()->getSimpleName()=="PP"){
+			
+			        $request->setMethod("GET");
+			        $info = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:getPayslipPilaPaymentAction',array(
+				        "GSCAccount" => $pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getPersonPerson()->getEmployer()->getIdHighTech(),
+				        "payslipNumber" => $pay->getPurchaseOrdersDescription()->getEnlaceOperativoFileName()
+			        ), array('_format' => 'json'));
+			
+			        $info = json_decode($info->getContent(),true);
+			
+			        if ( $info['comprobanteBase64'] != null ){
+				        $documentType = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:DocumentType')->findOneBy(array('docCode' => 'EOCP'));
+				        
+				        /** @var Document $document */
+				        $document = new Document();
+				        $document->setName("Comprobante pago pila" . $pay->getPurchaseOrdersDescription()->getIdPurchaseOrdersDescription());
+				        $document->setStatus(1);
+				        $document->setDocumentTypeDocumentType($documentType);
+				
+				        $filename = "tempComprobantePlanilla" . $pay->getPurchaseOrdersDescription()->getIdPurchaseOrdersDescription() . ".pdf";
+				        $file = "uploads/temp/$filename";
+				
+				        file_put_contents($file, base64_decode($info['comprobanteBase64']));
+				
+				        $mediaManager = $this->container->get('sonata.media.manager.media');
+				        $media = $mediaManager->create();
+				        $media->setBinaryContent($file);
+				        $media->setProviderName('sonata.media.provider.file');
+				        $media->setName($document->getName());
+				        $media->setProviderStatus(Media::STATUS_OK);
+				        $media->setContext('person');
+				        $media->setDocumentDocument($document);
+				
+				        $document->setMediaMedia($media);
+				        
+				        $pay->getPurchaseOrdersDescription()->setDocument($document);
+				        $em->persist($pay);
+				
+				        $em->flush();
+				
+				        $context=array(
+					        'emailType'=>'succesDispersion',
+					        'toEmail'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getEmail(),
+					        'userName'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getPersonPerson()->getFullName(),
+				        );
+				
+				        $context['path']=$file;
+				        $context['comprobante']=true;
+				        $context['pagoPila'] = true;
+				        $context['documentName']='Comprobante pago aportes '.date_format(new DateTime(),'d-m-y H:i:s').'.pdf';
+				        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+				
+				        unlink($file);
+			        }
+		        }
 
         } else {
             $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => '-2'));
@@ -641,6 +697,7 @@ class HighTechRestController extends FOSRestController
 		}
 		else if( $parameters['registerState'] != NULL ){
 			$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'InsPil-InsRec'));
+			$documentType = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:DocumentType')->findOneBy(array('docCode' => 'EOCP'));
 			$singleTransaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
 			
 			$employer = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer')->findOneBy(array('existentPila' => $singleTransaction->getIdTransaction()));
@@ -651,7 +708,8 @@ class HighTechRestController extends FOSRestController
 			$document = new Document();
 			$document->setName("Enlace operativo employer creation error " . $employer->getIdEmployer());
 			$document->setStatus(1);
-			
+			$document->setDocumentTypeDocumentType($documentType);
+				
 			$filename = "tempErrorImg.zip";
 			$file = "uploads/temp/$filename";
 			
@@ -745,8 +803,8 @@ class HighTechRestController extends FOSRestController
 			
 		}
 		else if( $parameters['planillaState'] != NULL ){
-			//TODO Other states...
 			$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-PlaErr'));
+			$documentType = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:DocumentType')->findOneBy(array('docCode' => 'EOIE'));
 			$singleTransaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
 			
 			$purchaseOrderDescription = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')->findOneBy(array('uploadedFile' => $singleTransaction->getIdTransaction()));
@@ -757,6 +815,7 @@ class HighTechRestController extends FOSRestController
 			$document = new Document();
 			$document->setName("Enlace operativo upload file error " . $purchaseOrderDescription->getIdPurchaseOrdersDescription());
 			$document->setStatus(1);
+			$document->setDocumentTypeDocumentType($documentType);
 			
 			$filename = "tempErrorImg.zip";
 			$file = "uploads/temp/$filename";
