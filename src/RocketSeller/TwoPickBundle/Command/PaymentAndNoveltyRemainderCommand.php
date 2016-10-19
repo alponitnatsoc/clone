@@ -93,12 +93,16 @@ class PaymentAndNoveltyRemainderCommand extends ContainerAwareCommand
                 $output->write("<info>Sent to userId: " .$userResponse['userId'] . "</info>");
                 $output->writeln(" -- status: " .$userResponse['result']['status']);
                 if(isset($userResponse['result']['resultAndroid'])) {
-                    $output->write("----Android success:" . $userResponse['result']['resultAndroid']['success']);
-                    $output->writeln(" -- failure:" . $userResponse['result']['resultAndroid']['failure']);
+                    if(isset($userResponse['result']['resultAndroid']['success']))
+                        $output->write("----Android success:" . $userResponse['result']['resultAndroid']['success']);
+                    if(isset($userResponse['result']['resultAndroid']['failure']))
+                        $output->writeln(" -- failure:" . $userResponse['result']['resultAndroid']['failure']);
                 }
                 if(isset($userResponse['result']['resultIos'])) {
-                    $output->write("----Ios     success:" . $userResponse['result']['resultIos']['success']);
-                    $output->writeln(" -- failure:" . $userResponse['result']['resultIos']['failure']);
+                    if(isset($userResponse['result']['resultIos']['success']))
+                        $output->write("----Ios     success:" . $userResponse['result']['resultIos']['success']);
+                    if(isset($userResponse['result']['resultIos']['failure']))
+                        $output->writeln(" -- failure:" . $userResponse['result']['resultIos']['failure']);
                 }
             }
         }
