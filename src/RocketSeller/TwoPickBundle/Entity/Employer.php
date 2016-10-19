@@ -42,6 +42,13 @@ class Employer
     private $idHighTech;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $existentNovo;
+
+    /**
      * @ORM\Column(type="string", length=20)
      */
     private $employerType;
@@ -541,5 +548,29 @@ class Employer
         $criteria = Criteria::create()
             ->where(Criteria::expr()->gte("state",2));
         return $this->employerHasEmployees->matching($criteria);
+    }
+
+    /**
+     * Set existentNovo
+     *
+     * @param integer $existentNovo
+     *
+     * @return Employer
+     */
+    public function setExistentNovo($existentNovo)
+    {
+        $this->existentNovo = $existentNovo;
+
+        return $this;
+    }
+
+    /**
+     * Get existentNovo
+     *
+     * @return integer
+     */
+    public function getExistentNovo()
+    {
+        return $this->existentNovo;
     }
 }
