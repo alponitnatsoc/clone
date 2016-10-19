@@ -396,7 +396,7 @@ class PaymentsRestController extends FOSRestController
      *
      * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
      *
-     * (name="MethodId", nullable=false, requirements="([0-9])+", strict=true, description="Method id, it is returned when a payment method is created.")
+     * (name="methodId", nullable=false, requirements="([0-9])+", strict=true, description="Method id, it is returned when a payment method is created.")
      * (name="totalAmount", nullable=false, requirements="[0-9]+(\.)?[0-9]*,?([0-9]+)?", strict=true, description="Total amount.")
      * (name="taxAmount", nullable=false, requirements="[0-9]+(\.)?[0-9]*,?([0-9]+)?", strict=true, description="Tax amount.")
      * (name="taxBase", nullable=false, requirements="[0-9]+(\.)?[0-9]*,?([0-9]+)?", strict=true, description="Tax base.")
@@ -417,8 +417,8 @@ class PaymentsRestController extends FOSRestController
         // Set all the parameters info.
         $regex['documentNumber'] = '([0-9])+';
         $mandatory['documentNumber'] = true;
-        $regex['MethodId'] = '([0-9])+';
-        $mandatory['MethodId'] = true;
+        $regex['methodId'] = '([0-9])+';
+        $mandatory['methodId'] = true;
         $regex['totalAmount'] = '[0-9]+(\.)?[0-9]*,?([0-9]+)?';
         $mandatory['totalAmount'] = true;
         $regex['taxAmount'] = '[0-9]+(\.)?[0-9]*,?([0-9]+)?';
@@ -448,7 +448,7 @@ class PaymentsRestController extends FOSRestController
         $header = $this->setHeaders($parameters);
 
         $parameters_fixed = array();
-        $parameters_fixed['method-id'] = $parameters['MethodId'];
+        $parameters_fixed['method-id'] = $parameters['methodId'];
         $parameters_fixed['total-amount'] = $parameters['totalAmount'];
         $parameters_fixed['tax-amount'] = $parameters['taxAmount'];
         $parameters_fixed['tax-base'] = $parameters['taxBase'];
@@ -973,9 +973,9 @@ class PaymentsRestController extends FOSRestController
      * (name="companyBranch", nullable=false, description="Company branch id, 0 by default.")
      * (name="paymentMethodId", nullable=true, requirements="([0-9])+", description="payment method id
      *                                                                     (1-cash, 4 savings account, 5 checking ccount, 6-SVA)")
-     * (name="PaymentAccountNumber", nullable=true, requirements="([0-9])+", description="Number of the payment account")
-     * (name="PaymentBankNumber", nullable=true, requirements="([0-9])+", description="Id of the bank")
-     * (name="PaymentType", nullable=true, description="Ahorros or Corriente")
+     * (name="paymentAccountNumber", nullable=true, requirements="([0-9])+", description="Number of the payment account")
+     * (name="paymentBankNumber", nullable=true, requirements="([0-9])+", description="Id of the bank")
+     * (name="paymentType", nullable=true, description="Ahorros or Corriente")
      *
      * @return View
      */
@@ -1009,11 +1009,11 @@ class PaymentsRestController extends FOSRestController
         $mandatory['companyBranch'] = true;
         //$regex['paymentMethodId'] = '([0-9])+';
         $mandatory['paymentMethodId'] = false;
-        $regex['PaymentAccountNumber'] = '([0-9])+';
-        $mandatory['PaymentAccountNumber'] = false;
-        $regex['PaymentBankNumber'] = '([0-9])+';
-        $mandatory['PaymentBankNumber'] = false;
-        $mandatory['PaymentType'] = false;
+        $regex['paymentAccountNumber'] = '([0-9])+';
+        $mandatory['paymentAccountNumber'] = false;
+        $regex['paymentBankNumber'] = '([0-9])+';
+        $mandatory['paymentBankNumber'] = false;
+        $mandatory['paymentType'] = false;
 
         $this->validateParamters($parameters, $regex, $mandatory);
 
@@ -1039,12 +1039,12 @@ class PaymentsRestController extends FOSRestController
         $parameters_fixed['company-id'] = $parameters['companyId'];
         $parameters_fixed['company-branch'] = $parameters['companyBranch'];
         $parameters_fixed['payment-type'] = $parameters['paymentMethodId'];
-        if (isset($parameters['PaymentAccountNumber']))
-            $parameters_fixed['payment-mode-account'] = $parameters['PaymentAccountNumber'];
-        if (isset($parameters['PaymentBankNumber']))
-            $parameters_fixed['payment-mode-bank'] = $parameters['PaymentBankNumber'];
-        if (isset($parameters['PaymentType']))
-            $parameters_fixed['payment-mode-type'] = $parameters['PaymentType'];
+        if (isset($parameters['paymentAccountNumber']))
+            $parameters_fixed['payment-mode-account'] = $parameters['paymentAccountNumber'];
+        if (isset($parameters['paymentBankNumber']))
+            $parameters_fixed['payment-mode-bank'] = $parameters['paymentBankNumber'];
+        if (isset($parameters['paymentType']))
+            $parameters_fixed['payment-mode-type'] = $parameters['paymentType'];
         //die(print_r($parameters_fixed, true));
 
         /** @var View $responseView */
