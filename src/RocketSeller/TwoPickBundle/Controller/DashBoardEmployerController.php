@@ -16,7 +16,7 @@ class DashBoardEmployerController extends Controller {
 
     use EmployeeMethodsTrait;
     /**
-     * Maneja el registro de una nueva persona con los datos básicos, 
+     * Maneja el registro de una nueva persona con los datos básicos,
      * TODO agregar todos los campos de los wireframes
      * @param el Request que manjea el form que se imprime
      * @return La vista de el formulario de la nueva persona
@@ -67,6 +67,8 @@ class DashBoardEmployerController extends Controller {
                     $eHE = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->find($docStat['idEHE']);
                     $smailer = $this->get('symplifica.mailer.twig_swift');
                     $smailer->sendOneDayMessage($this->getUser(),$eHE);
+                    $pushNotificationService = $this->get('app.symplifica_push_notification');
+                    $pushNotificationService->sendMessageValidatingDocuments($this->getUser()->getId());
                 }elseif(!$tareas and ($docStat['docStatus']==2)){
                     $cleanDash =true;
                 }elseif(!$tareas and $docStat['docStatus']==3){
@@ -104,7 +106,7 @@ class DashBoardEmployerController extends Controller {
                     'user' => $user->getPersonPerson(),
                     'ready'=>$ready,
             ));
-            
+
         } catch (Exception $ex) {
             return $this->render('RocketSellerTwoPickBundle:Employer:dashBoard.html.twig', array(
                         'notifications' => false,

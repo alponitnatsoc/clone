@@ -81,7 +81,7 @@ class PushNotificationRestController extends FOSRestController
                 "title" => $title,
                 "body" => $message,
                 "sound" => "default",
-                "click_action" => "FCM_PLUGIN_ACTIVITY",
+                "click_action" => "FCM_PLUGIN_ACTIVITY"
             ),
             "data" => array(
               "longMessage" => $longMessage,
@@ -143,5 +143,26 @@ class PushNotificationRestController extends FOSRestController
                                   'resultIos'=> $resultIos,
                                   'resultAndroid'=> $resultAndroid
                                  ));
+    }
+
+    public function sendMessageValidatingDocuments($idUser) {
+        $message = "Estamos revisando tus documentos. Espéranos";
+        $title = "Symplifica";
+        $longMessage = "¡Hola! Estamos revisando tu documentación y pronto iniciaremos las afiliaciones a seguridad social si es necesario.";
+
+        $request = new Request();
+        $request->setMethod("POST");
+        $request->request->add(array(
+            "idUser" => $idUser,
+            "title" => $title,
+            "message" => $message,
+            "longMessage" => $longMessage
+        ));
+
+        $result = $this->postPushNotificationAction($request);
+
+        $collect = $result->getData();
+        $resultUsers[] = array('userId' => $idUser, 'result' => $collect);
+        // echo $resultUsers;
     }
 }
