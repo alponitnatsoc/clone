@@ -335,14 +335,14 @@ class HighTechRestController extends FOSRestController
 		        if($pay->getPurchaseOrdersDescription()->getProductProduct()->getSimpleName()=="PP"){
 			
 			        $request->setMethod("GET");
-			        $info = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:getPayslipPilaPaymentAction',array(
+			        $info = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:getPayslipPilaPayment',array(
 				        "GSCAccount" => $pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getPersonPerson()->getEmployer()->getIdHighTech(),
 				        "payslipNumber" => $pay->getPurchaseOrdersDescription()->getEnlaceOperativoFileName()
 			        ), array('_format' => 'json'));
 			
 			        $info = json_decode($info->getContent(),true);
-			
-			        if ( $info['comprobanteBase64'] != null ){
+			        
+			        if ( $info['codigoRespuesta'] == "OK" ){
 				        $documentType = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:DocumentType')->findOneBy(array('docCode' => 'EOCP'));
 				        
 				        /** @var Document $document */
@@ -352,7 +352,7 @@ class HighTechRestController extends FOSRestController
 				        $document->setDocumentTypeDocumentType($documentType);
 				
 				        $filename = "tempComprobantePlanilla" . $pay->getPurchaseOrdersDescription()->getIdPurchaseOrdersDescription() . ".pdf";
-				        $file = "uploads/temp/$filename";
+				        $file = "uploads/temp/comprobantes/$filename";
 				
 				        file_put_contents($file, base64_decode($info['comprobanteBase64']));
 				
@@ -381,10 +381,9 @@ class HighTechRestController extends FOSRestController
 				        $context['path']=$file;
 				        $context['comprobante']=true;
 				        $context['pagoPila'] = true;
-				        $context['documentName']='Comprobante pago aportes '.date_format(new DateTime(),'d-m-y H:i:s').'.pdf';
+				        $context['documentName']= 'Comprobante pago aportes '.date_format(new DateTime(),'d-m-y H:i:s').'.pdf';
 				        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
-				
-				        unlink($file);
+				        
 			        }
 		        }
 
