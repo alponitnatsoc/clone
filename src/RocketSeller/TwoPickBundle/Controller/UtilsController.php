@@ -4,12 +4,30 @@ namespace RocketSeller\TwoPickBundle\Controller;
 
 use DateTime;
 use RocketSeller\TwoPickBundle\Entity\Contract;
+use RocketSeller\TwoPickBundle\Entity\Document;
 use RocketSeller\TwoPickBundle\Entity\Novelty;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
+use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\Validator\Constraints\Date;
 
-class UtilsController
+class UtilsController extends ContainerAware
 {
+    public function __construct( $container=null)
+    {
+        if($container)
+            $this->setContainer($container);
+    }
+    public function getDocumentPath(Document $document)
+    {
+
+        $service = $this->container->get('sonata.media.twig.extension');
+        $response = '';
+        if($document->getMediaMedia()){
+            $response.= '//' . $_SERVER['HTTP_HOST'] . $service->path($document->getMediaMedia(), 'reference');
+        }
+
+        return $response;
+    }
     public function mb_capitalize($stringToCapitalize)
     {
         mb_internal_encoding('UTF-8');
