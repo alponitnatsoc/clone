@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use DateTime;
+use Doctrine\Common\Persistence\ObjectManager;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use FOS\UserBundle\Controller\RegistrationController as BaseController;
@@ -74,6 +75,8 @@ class RegistrationController extends BaseController
         $form->handleRequest($request);
         $exists=$userManager->findUserByEmail($user->getEmail());
         $errorss="";
+        /** @var ObjectManager $em */
+        $em = $this->getDoctrine()->getManager();
         if ($form->isValid()&&$exists==null) {
             $event = new FormEvent($form, $request);
             $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
@@ -84,7 +87,6 @@ class RegistrationController extends BaseController
             if ($form->has("invitation")) {
                 $code = $form->get("invitation")->getData();
                 if ($code) {
-                    $em = $this->getDoctrine()->getManager();
                     /** @var \RocketSeller\TwoPickBundle\Entity\User $userR */
                     $userR = $userManager->findUserBy(array("code" => $code)); // $userR usuario que refiere al nuevo usuario
                     $userEmail = $user->getEmail();
@@ -125,29 +127,33 @@ class RegistrationController extends BaseController
             $person->addPhone($phone);
             $user->setPersonPerson($person);
             $user->setUsername($user->getEmail());
+	        
             $invitationCode=$form->get("creationCode")->getData();
+	          $utils = $this->get('app.symplifica_utils');
+	          $invitationCode = $utils->mb_normalize($invitationCode);
+	          
             $promoCodeRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCode");
             /** @var PromotionCode $realCode */
             $realCode=$promoCodeRepo->findOneBy(array("code"=>$invitationCode));
-            if($realCode!=null){
-                if($realCode->getUserUser()==null){
-                    if($realCode->getPromotionCodeTypePromotionCodeType()->getShortName()!="AC"){
-                        $realCode->setUserUser($user);
-                        /** @var User $user */
-                        $user->setIsFree($realCode->getPromotionCodeTypePromotionCodeType()->getDuration());
-                        $realCode->setStartDate(new \DateTime());
-                        $endDate= new DateTime(date("Y-m-d", strtotime("+".$user->getIsFree()." month", strtotime($realCode->getStartDate()->format("Y-m-d")))));
-                        $realCode->setEndDate($endDate);
-                    }else{
-                        //we dont burn the code when the shortname is AC
-                        $user->setIsFree($realCode->getPromotionCodeTypePromotionCodeType()->getDuration());
-                    }
-                    $userManager->updateUser($user);
-                }else{
-                    //two users can't have the same code
-                    return $this->redirect("https://symplifica.com/");
-                }
+            if($realCode!=null&&$realCode->getPromotionCodeTypePromotionCodeType()->getStatus()!=-1&&$realCode->getPromotionCodeTypePromotionCodeType()->getUniqueness()==1){
+                /** @var User $user */
+                $realCode->addUser($user);
+                $user->setIsFree($realCode->getPromotionCodeTypePromotionCodeType()->getDuration());
+                $realCode->setStartDate(new \DateTime());
+                $endDate= new DateTime(date("Y-m-d", strtotime("+".$user->getIsFree()." month", strtotime($realCode->getStartDate()->format("Y-m-d")))));
+                $realCode->setEndDate($endDate);
+                $em->persist($realCode);
+                $userManager->updateUser($user);
             }else{
+                if($realCode!=null&&$realCode->getPromotionCodeTypePromotionCodeType()->getUniqueness()=="-1"&&$realCode->getUsers()->count()==0){
+                    /** @var User $user */
+                    $realCode->addUser($user);
+                    $user->setIsFree($realCode->getPromotionCodeTypePromotionCodeType()->getDuration());
+                    $realCode->setStartDate(new \DateTime());
+                    $endDate= new DateTime(date("Y-m-d", strtotime("+".$user->getIsFree()." month", strtotime($realCode->getStartDate()->format("Y-m-d")))));
+                    $realCode->setEndDate($endDate);
+                    $em->persist($realCode);
+                }
                 $userManager->updateUser($user);
             }
 

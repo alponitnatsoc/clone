@@ -89,6 +89,7 @@ services:
                     transactionRejected : 'FOSUserBundle:Pay:payRejectedEmail.txt.twig'
                     transactionAcepted : 'FOSUserBundle:Pay:succesfulTransaction.txt.twig'
                     liquidation: 'FOSUserBundle:BackOffice:liquidationProcess.txt.twig'
+                    appDownload: 'FOSUserBundle:Registration:descargaApp.txt.twig'
 
                 from_email:
                   confirmation: '%fos_user.registration.confirmation.from_email%'
@@ -97,4 +98,7 @@ services:
         class: RocketSeller\TwoPickBundle\Controller\UtilsController
     app.symplifica_chrons:
         class: RocketSeller\TwoPickBundle\Controller\ChronServerRestController
+        arguments: ["@service_container"]
+    app.symplifica_push_notification:
+        class: RocketSeller\TwoPickBundle\Controller\PushNotificationRestController
         arguments: ["@service_container"]

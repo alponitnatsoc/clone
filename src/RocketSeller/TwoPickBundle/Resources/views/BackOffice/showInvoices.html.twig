@@ -1,99 +1,158 @@
-{% extends '@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig' %}
+ID Factura en Symplifica, Consecutivo Factura, Documento Cliente, Nombres, Apellidos, direccion, Celular, correo, RECAUDÓ NÓMINA, RECAUDÓ PILA, FEE SYMPLIFICA (ANTES DE IVA), IVA DEL FEE SYMPLIFICA, FEE SYMPLIFICA COBRADO, FEE TX, FEE TX COBRADO, FEE TX COBRADO, GMF RECAUDADO (Por PILA y NOMINA), TOTAL RECAUDO
+{% for po in pos %}
+    {% set document = po.IdUser.personPerson.document %}
+    {% set names = po.IdUser.personPerson.names %}
+    {% set lastNames = po.IdUser.personPerson.lastName1 %}
+    {% set email = po.IdUser.email %}
+    {% set address = po.IdUser.personPerson.mainAddress %}
+    {% set address = address|replace({ (","): "." }) %}
 
-{% block fos_user_content %}
-    <div id="main" class="col-sm-10">
-        <div class="col-md-12">
-            <h3>Listado de facturas exitosas</h3>
-            <br>
-            <table class="table">
-                <tr>
-                    <th>Factura</th>
-                    <th>Consecutivo</th>
-                    <th>Documento</th>
-                    <th>Email</th>
-                    <th>Direccion</th>
-                    <th>Celular</th>
-                    <th>Nombres</th>
-                    <th>Apellidos</th>
-                    <th>RECAUDÓ NÓMINA</th>
-                    <th>RECAUDÓ PILA</th>
-                    <th>FEE SYMPLIFICA COBRADO</th>
-                    <th>FEE TX COBRADO</th>
-                    <th>IVA TOTAL</th>
-                    <th>4 por mil</th>
-                </tr>
-                {% for po in pos %}
+    {% if po.IdUser.personPerson.city!=null %}
+        {% set city = po.IdUser.personPerson.city.name %}
+    {% else %}
+        {% set city = "---" %}
+    {% endif %}
+    {% if po.IdUser.personPerson.department!=null %}
+        {% set dept = po.IdUser.personPerson.department.name %}
+    {% else %}
+        {% set dept = "---" %}
+    {% endif %}
+    {% set phone = po.IdUser.personPerson.phones.get(0).phoneNumber %}
+    {% set pods= po.purchaseOrderDescriptions %}
+    {% set totalPila = 0 %}
+    {% set totalNomnina = 0 %}
+    {% set totalFee = 0 %}
+    {% set totalTransac = 0 %}
+    {% set total4mill = 0 %}
+    {% for pod in pods %}
+        {% set flag = 'f' %}
+        {% if pod.productProduct.simpleName == 'PP' %}
+            {% set totalPila = totalPila + pod.value %}
+            {% set flag = 't' %}
+        {% endif %}
+        {% if pod.productProduct.simpleName == 'PN' %}
+            {% set totalNomnina = totalNomnina + pod.value %}
+            {% set flag = 't' %}
+        {% endif %}
+        {% if pod.productProduct.simpleName == 'CT' %}
+            {% set totalTransac = totalTransac + pod.value %}
+            {% set flag = 't' %}
+        {% endif %}
+        {% if pod.productProduct.simpleName == 'CPM' %}
+            {% set total4mill = total4mill + pod.value %}
+            {% set flag = 't' %}
+        {% endif %}
+        {% if flag == 'f' %}
+            {% set totalFee = totalFee + pod.value %}
+        {% endif %}
+    {% endfor %}
 
-                    {% set document = po.IdUser.personPerson.document %}
-                    {% set names = po.IdUser.personPerson.names %}
-                    {% set lastNames = po.IdUser.personPerson.lastName1 %}
-                    {% set email = po.IdUser.email %}
-                    {% set address = po.IdUser.personPerson.mainAddress %}
-                    {% set city = po.IdUser.personPerson.city.name %}
-                    {% set dept = po.IdUser.personPerson.department.name %}
-                    {% set phone = po.IdUser.personPerson.phones.get(0).phoneNumber %}
-                    {% set pods= po.purchaseOrderDescriptions %}
-                    {% set totalPila = 0 %}
-                    {% set totalNomnina = 0 %}
-                    {% set totalFee = 0 %}
-                    {% set totalTransac = 0 %}
-                    {% set total4mill = 0 %}
-                    {% for pod in pods %}
-                        {% set flag = 'f' %}
-                        {% if pod.productProduct.simpleName == 'PP' %}
-                            {% set totalPila = totalPila + pod.value %}
-                            {% set flag = 't' %}
-                        {% endif %}
-                        {% if pod.productProduct.simpleName == 'PN' %}
-                            {% set totalNomnina = totalNomnina + pod.value %}
-                            {% set flag = 't' %}
-                        {% endif %}
-                        {% if pod.productProduct.simpleName == 'CT' %}
-                            {% set totalTransac = totalTransac + pod.value %}
-                            {% set flag = 't' %}
-                        {% endif %}
-                        {% if pod.productProduct.simpleName == 'CPM' %}
-                            {% set total4mill = total4mill + pod.value %}
-                            {% set flag = 't' %}
-                        {% endif %}
-                        {% if flag == 'f' %}
-                            {% set totalFee = totalFee + pod.value  %}
-                        {% endif %}
+    {% set totalFeeWOTX = totalFee/1.16 %}
+    {% set totalFeeWTX = totalFeeWOTX*0.16 %}
+    {% set totalTransacWOTX = totalTransac/1.16 %}
+    {% set totalTransacWTX = totalTransacWOTX*0.16 %}
+    {% set grandTotal = totalNomnina+totalPila+totalFee+totalTransac+total4mill %}
+<br>{{ po.idPurchaseOrders }}, {{ po.InvoiceNumber }}, {{ document }}, {{ names }}, {{ lastNames }}, {{ address }} {{ city }} {{ dept }}, {{ phone }}, ---, {{ totalNomnina }}, {{ totalPila }}, {{ totalFeeWOTX }}, {{ totalFeeWTX }}, {{ totalFee }}, {{ totalTransacWOTX }}, {{ totalTransacWTX }}, {{ totalTransac }},  {{ total4mill }}, {{ grandTotal }}
+    {% endfor %}
+    {#
+
+    {% extends '@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig' %}
+
+    {% block fos_user_content %}
+        <div id="main" class="col-sm-10">
+            <div class="col-md-12">
+                <h3>Listado de facturas exitosas</h3>
+                <br>
+                <table class="table">
+                    <tr>
+                        <th>Factura</th>
+                        <th>Consecutivo</th>
+                        <th>Documento</th>
+                        <th>Email</th>
+                        <th>Direccion</th>
+                        <th>Celular</th>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th>RECAUDÓ NÓMINA</th>
+                        <th>RECAUDÓ PILA</th>
+                        <th>FEE SYMPLIFICA COBRADO</th>
+                        <th>FEE TX COBRADO</th>
+                        <th>IVA TOTAL</th>
+                        <th>4 por mil</th>
+                    </tr>
+                    {% for po in pos %}
+
+                        {% set document = po.IdUser.personPerson.document %}
+                        {% set names = po.IdUser.personPerson.names %}
+                        {% set lastNames = po.IdUser.personPerson.lastName1 %}
+                        {% set email = po.IdUser.email %}
+                        {% set address = po.IdUser.personPerson.mainAddress %}
+                        {% set city = po.IdUser.personPerson.city.name %}
+                        {% set dept = po.IdUser.personPerson.department.name %}
+                        {% set phone = po.IdUser.personPerson.phones.get(0).phoneNumber %}
+                        {% set pods= po.purchaseOrderDescriptions %}
+                        {% set totalPila = 0 %}
+                        {% set totalNomnina = 0 %}
+                        {% set totalFee = 0 %}
+                        {% set totalTransac = 0 %}
+                        {% set total4mill = 0 %}
+                        {% for pod in pods %}
+                            {% set flag = 'f' %}
+                            {% if pod.productProduct.simpleName == 'PP' %}
+                                {% set totalPila = totalPila + pod.value %}
+                                {% set flag = 't' %}
+                            {% endif %}
+                            {% if pod.productProduct.simpleName == 'PN' %}
+                                {% set totalNomnina = totalNomnina + pod.value %}
+                                {% set flag = 't' %}
+                            {% endif %}
+                            {% if pod.productProduct.simpleName == 'CT' %}
+                                {% set totalTransac = totalTransac + pod.value %}
+                                {% set flag = 't' %}
+                            {% endif %}
+                            {% if pod.productProduct.simpleName == 'CPM' %}
+                                {% set total4mill = total4mill + pod.value %}
+                                {% set flag = 't' %}
+                            {% endif %}
+                            {% if flag == 'f' %}
+                                {% set totalFee = totalFee + pod.value  %}
+                            {% endif %}
+                        {% endfor %}
+
+                        <tr>
+                            <td>
+                                {{ po.idPurchaseOrders }}
+                            </td>
+                            <td>
+                                {{ po.InvoiceNumber }}
+                            </td>
+                            <td>
+                                {{ document }}
+                            </td>
+                            <td>
+                                {{ email }}
+                            </td>
+                            <td>
+                                {{ address }} {{ city }} {{ dept }}
+                            </td>
+                            <td>
+                                {{ phone }}
+                            </td>
+                            <td>{{ names }}</td>
+                            <td>{{ lastNames }}</td>
+                            <td>{{ totalNomnina }}</td>
+                            <td>{{ totalPila }}</td>
+                            <td>{{ totalFee }}</td>
+                            <td>{{ totalTransac }}</td>
+                            <td>IVA TOTAL</td>
+                            <td>{{ total4mill }}</td>
+                        </tr>
                     {% endfor %}
 
-                    <tr>
-                        <td>
-                            {{ po.idPurchaseOrders }}
-                        </td>
-                        <td>
-                            {{ po.InvoiceNumber }}
-                        </td>
-                        <td>
-                            {{ document }}
-                        </td>
-                        <td>
-                            {{ email }}
-                        </td>
-                        <td>
-                            {{ address }} {{ city }} {{ dept }}
-                        </td>
-                        <td>
-                            {{ phone }}
-                        </td>
-                        <td>{{ names }}</td>
-                        <td>{{ lastNames }}</td>
-                        <td>{{ totalNomnina }}</td>
-                        <td>{{ totalPila }}</td>
-                        <td>{{ totalFee }}</td>
-                        <td>{{ totalTransac }}</td>
-                        <td>IVA TOTAL</td>
-                        <td>{{ total4mill }}</td>
-                    </tr>
-                {% endfor %}
-
-            </table>
+                </table>
+            </div>
         </div>
-    </div>
-{% endblock %}
+    {% endblock %}
+    #}
 
 

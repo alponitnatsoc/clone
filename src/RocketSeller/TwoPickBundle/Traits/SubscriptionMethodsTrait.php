@@ -12,10 +12,13 @@ use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\PayMethod;
 use RocketSeller\TwoPickBundle\Entity\PayType;
 use RocketSeller\TwoPickBundle\Entity\Referred;
+use RocketSeller\TwoPickBundle\Entity\Transaction;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\ProcedureType;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus;
+use RocketSeller\TwoPickBundle\Entity\TransactionType;
 use Symfony\Component\HttpFoundation\Response;
 use RocketSeller\TwoPickBundle\Traits\EmployeeMethodsTrait;
 use Doctrine\ORM\EntityManager;
@@ -715,7 +718,7 @@ trait SubscriptionMethodsTrait
         if ($employer->getIdSqlSociety() == null) {
             $request->setMethod("POST");
             $request->request->add(array(
-                "society_nit" => $person->getDocument(),
+                "society_nit" => $person->getDocumentType().$person->getDocument(),
                 "society_name" => $person->getNames(),
                 "society_start_date" => $dateToday->format("d-m-Y"),
                 "society_mail" => $user->getEmail(),
@@ -727,7 +730,7 @@ trait SubscriptionMethodsTrait
         }
 
         $request->setMethod("GET");
-        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getSociety', array("societyNit" => $person->getDocument()), array('_format' => 'json'));
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getSociety', array("societyNit" => $person->getDocumentType().$person->getDocument()), array('_format' => 'json'));
         if ($insertionAnswer->getStatusCode() != 200) {
             return false;
         }
@@ -763,75 +766,103 @@ trait SubscriptionMethodsTrait
             "email" => $user->getEmail()
         ));
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClient', array('_format' => 'json'));
+        if ($insertionAnswer->getStatusCode() == 406 || $insertionAnswer->getStatusCode() == 201) {
+            $request->setMethod("POST");
+            $request->request->add(array(
+                "documentType" => "NIT",
+                "beneficiaryId" => "900862831",
+                "documentNumber" => $person->getDocument(),
+                "name" => "Symplifica Account",
+                "lastName" => "NovoPayment" ,
+                "yearBirth" => "1970",
+                "monthBirth" => "01",
+                "dayBirth" => "01",
+                "phone" => "3508330000",
+                "email" => "backofficesymplifica@gmail.com",
+                "companyId" => $person->getDocument(), //TODO ESTO CAMBIA CUANDO TENGAMOS EMPRESAS
+                "companyBranch" => "0", //TODO ESTO CAMBIA CUANDO TENGAMOS EMPRESAS
+                "paymentMethodId" => 5,//this is corriente for symplifica account
+                "paymentAccountNumber" => "0560006269993173",//symplifica novo account number
+                "paymentBankNumber" => "39",//davivienda bank code
+                "paymentType" => "Corriente",
+            ));
+            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postBeneficiary', array('_format' => 'json'));
+            if (!($insertionAnswer->getStatusCode() == 201 || $insertionAnswer->getStatusCode() == 406)) {
+                return false;
+            }
+        }
+        return $this->addToHighTech($user);
+
+
         //dump($insertionAnswer);
         //echo "Status Code Employer: " . $person->getNames() . " -> " . $insertionAnswer->getStatusCode();
 
-        if ($insertionAnswer->getStatusCode() == 406 || $insertionAnswer->getStatusCode() == 201) {
-            $eHEes = $employer->getEmployerHasEmployees();
-            //dump($eHEes);
-            /** @var EmployerHasEmployee $employeeC */
-            foreach ($eHEes as $employeeC) {
-                //dump($employeeC);
-                if ($employeeC->getState() > 0) {
-                    //check if it exist
-
-                    $contracts = $employeeC->getContracts();
-                    /** @var Contract $cont */
-                    $contract = null;
-                    foreach ($contracts as $cont) {
-                        if ($cont->getState() == 1) {
-                            $contract = $cont;
-                        }
-                    }
-
-                    /* @var $payMC PayMethod */
-                    $payMC = $contract->getPayMethodPayMethod();
-
-                    /* @var $payType PayType */
-                    $payType = $payMC->getPayTypePayType();
-
-                    if ($payType->getPayrollCode() != 'EFE') {
-                        $paymentMethodId = $payMC->getAccountTypeAccountType();
-                        if ($paymentMethodId) {
-                            $paymentMethodId = $payMC->getAccountTypeAccountType()->getName() == "Ahorros" ? 4 :
-                                $payMC->getAccountTypeAccountType()->getName() == "Corriente" ? 5 : 6;
-                        }
-                        $paymentMethodAN = $payMC->getAccountNumber() == null ? $payMC->getCellPhone() : $payMC->getAccountNumber();
-                        $employeePerson = $employeeC->getEmployeeEmployee()->getPersonPerson();
-                        $request->setMethod("POST");
-                        $request->request->add(array(
-                            "documentType" => $employeePerson->getDocumentType(),
-                            "beneficiaryId" => $employeePerson->getDocument(),
-                            "documentNumber" => $person->getDocument(),
-                            "name" => $employeePerson->getNames(),
-                            "lastName" => $employeePerson->getLastName1() . " " . $employeePerson->getLastName2(),
-                            "yearBirth" => $employeePerson->getBirthDate()->format("Y"),
-                            "monthBirth" => $employeePerson->getBirthDate()->format("m"),
-                            "dayBirth" => $employeePerson->getBirthDate()->format("d"),
-                            "phone" => $employeePerson->getPhones()->get(0)->getPhoneNumber(),
-                            "email" => $employeePerson->getEmail() == null ? $employeePerson->getDocumentType() . $person->getDocument() .
-                                "@" . $employeePerson->getNames() . ".com" : $employeePerson->getEmail(),
-                            "companyId" => $person->getDocument(), //TODO ESTO CAMBIA CUANDO TENGAMOS EMPRESAS
-                            "companyBranch" => "0", //TODO ESTO CAMBIA CUANDO TENGAMOS EMPRESAS
-                            "paymentMethodId" => $paymentMethodId,
-                            "paymentAccountNumber" => $paymentMethodAN,
-                            "paymentBankNumber" => $payMC->getBankBank()->getNovopaymentCode(),
-                            "paymentType" => $payMC->getAccountTypeAccountType() ? $payMC->getAccountTypeAccountType()->getName() : null,
-                        ));
-                        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postBeneficiary', array('_format' => 'json'));
-                        if (!($insertionAnswer->getStatusCode() == 201 || $insertionAnswer->getStatusCode() == 406)) {
-                            $this->addFlash('error', $insertionAnswer->getContent());
-                            return false;
-                        }
-                        //dump($insertionAnswer);
-                        //echo "Status Code Employee: " . $employeePerson->getNames() . " -> " . $insertionAnswer->getStatusCode() . " content" . $insertionAnswer->getContent();
-                    }
-                }
-            }
-        } else {
-            $this->addFlash('error', $insertionAnswer->getContent());
-            return false;
-        }
+//        if ($insertionAnswer->getStatusCode() == 406 || $insertionAnswer->getStatusCode() == 201) {
+//            $eHEes = $employer->getEmployerHasEmployees();
+//            //dump($eHEes);
+//            /** @var EmployerHasEmployee $employeeC */
+//            foreach ($eHEes as $employeeC) {
+//                //dump($employeeC);
+//                if ($employeeC->getState() > 0) {
+//                    //check if it exist
+//
+//                    $contracts = $employeeC->getContracts();
+//                    /** @var Contract $cont */
+//                    $contract = null;
+//                    foreach ($contracts as $cont) {
+//                        if ($cont->getState() == 1) {
+//                            $contract = $cont;
+//                        }
+//                    }
+//
+//                    /* @var $payMC PayMethod */
+//                    $payMC = $contract->getPayMethodPayMethod();
+//
+//                    /* @var $payType PayType */
+//                    $payType = $payMC->getPayTypePayType();
+//
+//                    if ($payType->getPayrollCode() != 'EFE') {
+//                        $paymentMethodId = $payMC->getAccountTypeAccountType();
+//                        if ($paymentMethodId) {
+//                            $paymentMethodId = $payMC->getAccountTypeAccountType()->getName() == "Ahorros" ? 4 :
+//                                $payMC->getAccountTypeAccountType()->getName() == "Corriente" ? 5 : 6;
+//                        }
+//                        $paymentMethodAN = $payMC->getAccountNumber() == null ? $payMC->getCellPhone() : $payMC->getAccountNumber();
+//                        $employeePerson = $employeeC->getEmployeeEmployee()->getPersonPerson();
+//                        $request->setMethod("POST");
+//                        $request->request->add(array(
+//                            "documentType" => $employeePerson->getDocumentType(),
+//                            "beneficiaryId" => $employeePerson->getDocument(),
+//                            "documentNumber" => $person->getDocument(),
+//                            "name" => $employeePerson->getNames(),
+//                            "lastName" => $employeePerson->getLastName1() . " " . $employeePerson->getLastName2(),
+//                            "yearBirth" => $employeePerson->getBirthDate()->format("Y"),
+//                            "monthBirth" => $employeePerson->getBirthDate()->format("m"),
+//                            "dayBirth" => $employeePerson->getBirthDate()->format("d"),
+//                            "phone" => $employeePerson->getPhones()->get(0)->getPhoneNumber(),
+//                            "email" => $employeePerson->getEmail() == null ? $employeePerson->getDocumentType() . $person->getDocument() .
+//                                "@" . $employeePerson->getNames() . ".com" : $employeePerson->getEmail(),
+//                            "companyId" => $person->getDocument(), //TODO ESTO CAMBIA CUANDO TENGAMOS EMPRESAS
+//                            "companyBranch" => "0", //TODO ESTO CAMBIA CUANDO TENGAMOS EMPRESAS
+//                            "paymentMethodId" => $paymentMethodId,
+//                            "paymentAccountNumber" => $paymentMethodAN,
+//                            "paymentBankNumber" => $payMC->getBankBank()->getNovopaymentCode(),
+//                            "paymentType" => $payMC->getAccountTypeAccountType() ? $payMC->getAccountTypeAccountType()->getName() : null,
+//                        ));
+//                        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postBeneficiary', array('_format' => 'json'));
+//                        if (!($insertionAnswer->getStatusCode() == 201 || $insertionAnswer->getStatusCode() == 406)) {
+//                            $this->addFlash('error', $insertionAnswer->getContent());
+//                            return false;
+//                        }
+//                        //dump($insertionAnswer);
+//                        //echo "Status Code Employee: " . $employeePerson->getNames() . " -> " . $insertionAnswer->getStatusCode() . " content" . $insertionAnswer->getContent();
+//                    }
+//                }
+//            }
+//        } else {
+//            $this->addFlash('error', $insertionAnswer->getContent());
+//            return false;
+//        }
         return true;
     }
 
@@ -875,6 +906,43 @@ trait SubscriptionMethodsTrait
                 $employer->setIdHighTech($idHighTech);
                 $em->persist($employer);
                 $em->flush();
+
+            }
+
+            //add employer to pila operator only if is already registered on Hightech
+            if($employer->getExistentPila() == NULL && $employer->getIdHighTech() != NULL){
+
+	            $request->setMethod("POST");
+	            $request->request->add(array(
+		            "GSCAccount" => $employer->getIdHighTech()
+	            ));
+
+	            $transactionType = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:TransactionType')->findOneBy(array('code' => 'IPil'));
+
+	            $transaction = new Transaction();
+	            $transaction->setTransactionType($transactionType);
+
+	            $pilaRegistrationAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postRegisterEmployerToPilaOperator', array('_format' => 'json'));
+
+	            if($pilaRegistrationAnswer->getStatusCode() == 200){
+		            //Received succesfully
+		            $radicatedNumber = json_decode($pilaRegistrationAnswer->getContent(), true)["numeroRadicado"];
+		            $transaction->setRadicatedNumber($radicatedNumber);
+		            $purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'InsPil-InsEnv'));
+	            }
+	            else{
+	            	//If some kind of error
+		            $purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'InsPil-ErrSer'));
+	            }
+
+	            $transaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
+	            $em->persist($transaction);
+	            $em->flush();
+	            $employer->setExistentPila($transaction->getIdTransaction());
+	            $employer->addTransaction($transaction);
+
+	            $em->persist($employer);
+	            $em->flush();
 
             }
             $eHEes = $employer->getEmployerHasEmployees();
@@ -928,12 +996,9 @@ trait SubscriptionMethodsTrait
                             "employeeBankCode" => $payMC->getBankBank()->getHightechCode() ?: 23,
                         ));
                         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postRegisterBeneficiary', array('_format' => 'json'));
-                        if (!($insertionAnswer->getStatusCode() == 200)) {
-                            $this->addFlash('error', $insertionAnswer->getContent());
-
-                            return false;
+                        if ($insertionAnswer->getStatusCode() == 200) {
+	                        $employeeC->setExistentHighTec(1);
                         }
-                        $employeeC->setExistentHighTec(1);
                         $em->persist($employeeC);
                         $em->flush();
                     }
@@ -1328,6 +1393,11 @@ trait SubscriptionMethodsTrait
             $smailer=$this->get('symplifica.mailer.twig_swift');
             $smailer->sendEmailByTypeMessage(array('emailType'=>'daviplata','user'=>$user,'subject'=>'Información Daviplata','toEmail'=>$user->getEmail()));
         }
+	
+        //Email with info regarding the app
+		    $smailer=$this->get('symplifica.mailer.twig_swift');
+		    $smailer->sendEmailByTypeMessage(array('emailType'=>'appDownload','user'=>$user,'subject'=>'App Symplifica','toEmail'=>$user->getEmail()));
+        
         $em->persist($user);
         $em->flush();
         return true;

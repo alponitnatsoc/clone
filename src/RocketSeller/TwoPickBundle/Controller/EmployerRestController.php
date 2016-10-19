@@ -10,6 +10,8 @@ use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\Person;
+use RocketSeller\TwoPickBundle\Entity\PromotionCode;
+use RocketSeller\TwoPickBundle\Entity\PromotionCodeType;
 use RocketSeller\TwoPickBundle\Traits\EmployeeMethodsTrait;
 use Symfony\Component\Validator\ConstraintViolationList;
 use RocketSeller\TwoPickBundle\Entity\User;
@@ -519,6 +521,51 @@ class EmployerRestController extends FOSRestController
             return $view->setStatusCode(500);
         }
 
+    }
+
+    /**
+     * generate referred promotional codes
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Generate referred promotional codes.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors"
+     *   }
+     * )
+     *
+     *
+     * @return View
+     *
+     */
+    public function postGenerateReferredPromotionalCodesAction()
+    {
+        $details = "Creando codigos<br>";
+        $em=$this->getDoctrine()->getManager();
+        $code = new PromotionCodeType();
+        $code->setDescription("Referidos");
+        $code->setDuration(2);
+        $code->setShortName("AC");
+        $em->persist($code);
+        $em->flush();
+        $users = $em->getRepository("RocketSellerTwoPickBundle:User")->findAll();
+        /** @var User $user */
+        foreach ($users as $user) {
+            if($user->getStatus()>=2){
+                $strEx = explode(' ',$user->getPersonPerson()->getNames());
+                $promoCode = new PromotionCode();
+                $promoCode->setCode($strEx[0].$user->getPersonPerson()->getLastName1());
+                $promoCode->setPromotionCodeTypePromotionCodeType($code);
+                $em->persist($promoCode);
+            }
+        }
+        $em->flush();
+        $details = "Terminado<br>";
+        $view = View::create();
+        $view->setData($details)->setStatusCode(200);
+
+        return $view;
     }
 
 

@@ -21,11 +21,11 @@ class LoadBankData extends AbstractFixture implements OrderedFixtureInterface
     {
 
 
-        $banco = new Bank();
+        /*$banco = new Bank();
         $banco->setName("BANCO DE LA REPÚBLICA");
         $banco->setNovopaymentCode("00");
         $banco->setHightechCode("00");
-        $manager->persist($banco);
+        $manager->persist($banco);*/
 
         $banco = new Bank();
         $banco->setName("BANCO DE BOGOTÁ");
@@ -63,11 +63,11 @@ class LoadBankData extends AbstractFixture implements OrderedFixtureInterface
         $banco->setHightechCode("12");
         $manager->persist($banco);
 
-        $banco = new Bank();
+        /*$banco = new Bank();
         $banco->setName("BBVA COLOMBIA");
         $banco->setNovopaymentCode("13");
         $banco->setHightechCode("13");
-        $manager->persist($banco);
+        $manager->persist($banco);*/
 
         $banco = new Bank();
         $banco->setName("HELM BANK");
@@ -129,11 +129,11 @@ class LoadBankData extends AbstractFixture implements OrderedFixtureInterface
         $banco->setHightechCode("58");
         $manager->persist($banco);
 
-        $banco = new Bank();
+        /*$banco = new Bank();
         $banco->setName("BANCAMIA");
         $banco->setNovopaymentCode("52");
         $banco->setHightechCode("59");
-        $manager->persist($banco);
+        $manager->persist($banco);*/
 
         $banco = new Bank();
         $banco->setName("BANCO PICHINCHA S.A.");
@@ -147,11 +147,11 @@ class LoadBankData extends AbstractFixture implements OrderedFixtureInterface
         $banco->setHightechCode("61");
         $manager->persist($banco);
 
-        $banco = new Bank();
+        /*$banco = new Bank();
         $banco->setName("BANCO FALABELLA S.A.");
         $banco->setNovopaymentCode("56");
         $banco->setHightechCode("62");
-        $manager->persist($banco);
+        $manager->persist($banco);*/
 
         $banco = new Bank();
         $banco->setName("BANCO FINANDINA S.A.");

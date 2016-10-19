@@ -657,7 +657,12 @@ class EmployeeController extends Controller
         }
         $person = new Person();
         $form = $this->createForm(new EmployeeBeneficiaryRegistration(), $person);
-
+        $bCity = $employee->getPersonPerson()->getBirthCity();
+        $bDep = $bCity->getDepartmentDepartment();
+        $nDep = $employee->getPersonPerson()->getDepartment();
+        $bCountry = $bDep->getCountryCountry();
+        /** @var Country $colombiaCountry */
+        $colombiaCountry= $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Country")->findOneBy(array('countryCode'=>343));
         $form2 = $this->createFormBuilder($person)
             ->add('civilStatus','choice', array(
                 'choices' => array(
@@ -695,6 +700,7 @@ class EmployeeController extends Controller
                 'label' => 'Departamento de Nacimiento*',
                 'translation_domain' => 'messages',
                 'class' => 'RocketSellerTwoPickBundle:Department',
+                'choices' => $bCountry->getDepartments(),
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
@@ -706,6 +712,7 @@ class EmployeeController extends Controller
                 'label' => 'Ciudad de Nacimiento*',
                 'translation_domain' => 'messages',
                 'class' => 'RocketSellerTwoPickBundle:City',
+                'choices' => $bDep->getCitys(),
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
@@ -728,6 +735,7 @@ class EmployeeController extends Controller
             ))
             ->add('department', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Department',
+                'choices' => $colombiaCountry->getDepartments(),
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
@@ -738,6 +746,7 @@ class EmployeeController extends Controller
             ))
             ->add('city', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:City',
+                'choices' => $nDep->getCitys(),
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,

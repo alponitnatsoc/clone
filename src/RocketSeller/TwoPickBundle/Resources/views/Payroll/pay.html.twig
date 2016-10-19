@@ -53,10 +53,10 @@
 
             <div class="col-sm-12 col-xs-12 align-Resp">
                 <a id="" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" href="/register/edit">
-                    <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+                    <div id="" class="col-md-2 col-xs-2 txt-AD0" style="text-align: left;">
                         <img src="/img/block-inline.png" class="center-block">
                     </div>
-                    <div id="" class="col-md-10 col-xs-12 txt-AD1">
+                    <div id="" class="col-md-10 col-xs-10 txt-AD1">
                         <div id="" class="text-left">
                             Pago a empleados
                             {% if "now"|date('j') <= 15%}
@@ -128,11 +128,11 @@
 
                                     </div>
                                     <div class="datadesc nominaBorder col-sm-12">
-                                        <div class="col-sm-4">
+                                        <div class="col-md-4 col-sm-12 col-xs-12">
                                             <h2 class="h2">{{ employeeName }}</h2>
                                             <span><a class="notAjax addNovelty btn-xs btn-lightBlue" href="/novelty/select/{{ id_payroll }}">Agregar novedad</a></span>
                                         </div>
-                                        <div class="col-sm-2">
+                                        <div class="col-md-2 col-sm-3 col-xs-6 col3">
                                             <p>Novedades</p>
                                             <h2 class="h2">{{ data.payroll_payroll.novelties|length }}</h2>
                                         </div>
@@ -152,19 +152,18 @@
                                                 {% set deducidos = deducidos|merge([nov]) %}
                                             {% endif %}
                                         {% endfor %}
-                                        <div class="col-sm-2"
-                                        <div class="col-sm-2">
+                                        <div class="col-md-2 col-sm-3 col-xs-6 col3">
                                             <p>Ingresos</p>
                                             <h2 class="h2">${{ dev|number_format(0, '.', ',')  }}</h2>
                                         </div>
-                                        <div class="col-sm-2">
+                                        <div class="col-md-2 col-sm-3 col-xs-6 col3">
                                             <p>Deducciones</p>
                                             <h2 class="h2">${{ ded|number_format(0, '.', ',')  }}</h2>
                                         </div>
-                                        <div class="col-sm-2">
+                                        <div class="col-md-2 col-sm-3 col-xs-6 col3">
                                             <p>Total</p>
                                             <h2 class="h2">${{ data.value|number_format(0, '.', ',') }}</h2>
-                                            <span style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax" data-toggle="modal" data-target="#detailModal{{ loop.index }}" >&#10093; Detalles</span>
+                                            <span style="color:#5D5D5D;font-weight: 600;font-size:13px" class="notAjax" data-toggle="modal" data-target="#detailModal{{ loop.index }}" >&#10093; Detalles</span>
                                         </div>
                                         <div class="modal fade" id="detailModal{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
                                             <div class="modal-dialog" role="document">
@@ -173,17 +172,20 @@
                                                         <h4 class="modal-title bold azulmediofont" id="myModalLabel">Detalles</h4>
                                                     </div>
                                                     <div class="modal-body">
+                                                      <div class="left">
                                                         <h4 class="bold azulmediofont">Devengados</h4>
                                                         {% for dev in devengados %}
                                                             <p><strong>{{ dev.novelty_type_novelty_type.name }}</strong> ${{ dev.sql_value|number_format(0, '.', ',')  }}</p>
                                                         {% endfor %}
+                                                      </div>
+                                                      <div class="right">
                                                         <h4 class="bold azulmediofont">Deducidos</h4>
                                                         {% for ded in deducidos %}
                                                             <p><strong>{{ ded.novelty_type_novelty_type.name }}</strong> ${{ ded.sql_value|number_format(0, '.', ',')  }}</p>
                                                         {% endfor %}
-
+                                                      </div>
                                                     </div>
-                                                    <div class="modal-footer">
+                                                    <div class="modal-footer" style="clear:both">
                                                         <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                                                     </div>
                                                 </div>
@@ -236,15 +238,15 @@
                                                                                   name="{{ dataPila.id_purchase_orders_description }}"
                                                                                   value="p-{{ dataPila.id_purchase_orders_description }}">
                                                 Pagar </label>
-                                            <label style="font-weight:100;margin-left: 15px;"><input type="radio"
+                                            {#<label style="font-weight:100;margin-left: 15px;"><input type="radio"
                                                                                                      class="alreadyPaid"
                                                                                                      name="{{ dataPila.id_purchase_orders_description }}"
                                                                                                      value="ap-{{ dataPila.id_purchase_orders_description }}">
-                                                Pagaré fuera de la plataforma </label>
+                                                Pagaré fuera de la plataforma </label>#}
                                         </div>
                                     </div>
                                     <div class="datadesc aportesBorder col-sm-12">
-                                        <div class="col-sm-10 title-span pila-empl azulmediofont bold">
+                                        <div class="col-sm-6 title-span pila-empl azulmediofont bold">
                                             <ul>
                                                 {% for payroll in payrolls %}
                                                     {% set employeePP = payroll.contract_contract.employer_has_employee_employer_has_employee.employee_employee.person_person %}
@@ -252,7 +254,7 @@
                                                 {% endfor %}
                                             </ul>
                                         </div>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-6">
                                             <p>Total</p>
                                             <h2 class="h2">${{ dataPila.value|number_format(0, '.', ',') }}</h2>
                                             {# <span style="color:#5D5D5D;font-weight: 600;font-size:14px" class="notAjax showDetails" href="#">&#10093; Detalles</span> #}
@@ -406,11 +408,11 @@
                                                                                   name="{{ pilaData.id_purchase_orders_description }}"
                                                                                   value="p-{{ pilaData.id_purchase_orders_description }}">
                                                 Pagar </label>
-                                            <label style="font-weight:100;margin-left: 15px;"><input type="radio"
+                                            {#<label style="font-weight:100;margin-left: 15px;"><input type="radio"
                                                                                                      class="alreadyPaid"
                                                                                                      name="{{ pilaData.id_purchase_orders_description }}"
                                                                                                      value="ap-{{ pilaData.id_purchase_orders_description }}">
-                                                Pagaré fuera de la plataforma </label>
+                                                Pagaré fuera de la plataforma </label>#}
                                         </div>
                                     </div>
                                     <div class="aportesFecha light">

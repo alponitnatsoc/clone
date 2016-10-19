@@ -461,4 +461,161 @@ class UtilsController extends ContainerAware
 		}
 		return $answer;
 	}
+	
+	public function mb_normalize($stringToNormalize)
+	{
+		mb_internal_encoding('UTF-8');
+		if(!mb_check_encoding($stringToNormalize, 'UTF-8') OR !($stringToNormalize === mb_convert_encoding(mb_convert_encoding($stringToNormalize, 'UTF-32', 'UTF-8' ), 'UTF-8', 'UTF-32'))) {
+			$stringToNormalize = mb_convert_encoding($stringToNormalize, 'UTF-8');
+		}
+		
+		$lclArr = [];
+		$strArray = explode(" ", trim(mb_convert_case($stringToNormalize, MB_CASE_LOWER, "UTF-8")));
+		foreach ($strArray as $key => $singleWord){
+			$lclArr[$key] =  $singleWord;
+		}
+		
+		$stringToReturn = implode(" ", $lclArr);
+		
+		return $stringToReturn;
+	}
+
+	/**
+     * get date from dateStart to number of workable (business) specified (can be negative)
+     *
+     *
+     * @param string $dateStart format YYYY-MM-DD
+     * @param int $days
+     * @return data date YYYY-MM-DD
+     *
+     */
+    public function getWorkableDaysToDateAction($dateStart, $days)
+    {
+        $wkd=array();
+        $wkd[5]=true;
+        $wkd[4]=true;
+        $wkd[3]=true;
+        $wkd[2]=true;
+        $wkd[1]=true;
+        $dateRStart= new DateTime($dateStart);
+        $numberDays=intval($days);
+        $days=[];
+        $dateToCheck=new DateTime();
+        $i=$j=0;
+        if($numberDays > 0) {
+            while($j<$numberDays){
+                $dateToCheck->setDate($dateRStart->format("Y"),$dateRStart->format("m"),intval($dateRStart->format("d"))+$i);
+                if($this->workable($dateToCheck)&&isset($wkd[$dateToCheck->format("w")])){
+                    $days[]=$dateToCheck->format("Y-m-d");
+                    $j++;
+                }
+                $i++;
+
+            }
+        } else if($numberDays < 0){
+             while($j>$numberDays){
+                $dateToCheck->setDate($dateRStart->format("Y"),$dateRStart->format("m"),intval($dateRStart->format("d"))-$i);
+                if($this->workable($dateToCheck)&&isset($wkd[$dateToCheck->format("w")])){
+                    $days[]=$dateToCheck->format("Y-m-d");
+                    $j--;
+                }
+                $i++;
+
+            }
+        }
+        return $dateToCheck->format("Y-m-d");
+    }
+
+	/**
+     * @param DateTime $dateToCheck
+     * @return bool
+     */
+    private function workable ($dateToCheck){
+        $holyDays=array();
+        $date=new DateTime("2016-"."01"."-"."01");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."01"."-"."11");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."03"."-"."21");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."03"."-"."24");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."03"."-"."25");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."05"."-"."01");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."05"."-"."09");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."05"."-"."30");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."06"."-"."06");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."07"."-"."04");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."07"."-"."20");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."08"."-"."07");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."08"."-"."15");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."10"."-"."17");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."11"."-"."07");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."11"."-"."14");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."12"."-"."08");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."12"."-"."25");
+        $holyDays[]=$date;
+
+
+        $date=new DateTime("2017-"."01"."-"."01");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."01"."-"."09");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."03"."-"."20");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."04"."-"."09");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."04"."-"."13");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."04"."-"."14");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."04"."-"."16");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."05"."-"."01");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."05"."-"."29");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."06"."-"."19");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."06"."-"."26");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."07"."-"."03");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."07"."-"."20");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."08"."-"."07");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."08"."-"."21");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."10"."-"."16");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."11"."-"."06");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."11"."-"."13");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."12"."-"."08");
+        $holyDays[]=$date;
+        $date=new DateTime("2017-"."12"."-"."25");
+        $holyDays[]=$date;
+        /** @var DateTime $hd */
+        foreach ($holyDays as $hd) {
+            if($dateToCheck->format("Y-m-d")==$hd->format("Y-m-d"))
+                return false;
+        }
+
+        return true;
+    }
 }

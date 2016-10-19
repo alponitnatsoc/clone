@@ -162,8 +162,58 @@ class LoadPurchaseOrdersStatusData extends AbstractFixture implements OrderedFix
         $PurchaseOrdersStatusDispersion3->setDescription('El monto a pagar fue devuelto en su totalidad');
         $PurchaseOrdersStatusDispersion3->setIdNovoPay('-3');
         $manager->persist($PurchaseOrdersStatusDispersion3);
-
-        $manager->flush();
+		
+	      //Estados para inscripción del empleador en el operador de pila
+		    $PurchaseOrdersStatusInscribirOperador1 = new PurchaseOrdersStatus();
+		    $PurchaseOrdersStatusInscribirOperador1->setName('Inscripción no enviada');
+		    $PurchaseOrdersStatusInscribirOperador1->setDescription('El servicio generó error al momento de intentar llamar el proceso de inscripción');
+		    $PurchaseOrdersStatusInscribirOperador1->setIdNovoPay('InsPil-ErrSer');
+	      $manager->persist($PurchaseOrdersStatusInscribirOperador1);
+	
+		    $PurchaseOrdersStatusInscribirOperador2 = new PurchaseOrdersStatus();
+		    $PurchaseOrdersStatusInscribirOperador2->setName('Inscripción enviada');
+		    $PurchaseOrdersStatusInscribirOperador2->setDescription('Ya se solicitó la creación del empleador en el operador');
+		    $PurchaseOrdersStatusInscribirOperador2->setIdNovoPay('InsPil-InsEnv');
+		    $manager->persist($PurchaseOrdersStatusInscribirOperador2);
+	
+		    $PurchaseOrdersStatusInscribirOperador3 = new PurchaseOrdersStatus();
+		    $PurchaseOrdersStatusInscribirOperador3->setName('Inscripción rechazada');
+		    $PurchaseOrdersStatusInscribirOperador3->setDescription('Falló la inscripción en el operador de pila');
+		    $PurchaseOrdersStatusInscribirOperador3->setIdNovoPay('InsPil-InsRec');
+		    $manager->persist($PurchaseOrdersStatusInscribirOperador3);
+	
+		    $PurchaseOrdersStatusInscribirOperador4 = new PurchaseOrdersStatus();
+		    $PurchaseOrdersStatusInscribirOperador4->setName('Inscripción aprobada');
+		    $PurchaseOrdersStatusInscribirOperador4->setDescription('El operador ya está inscrito en el operador');
+		    $PurchaseOrdersStatusInscribirOperador4->setIdNovoPay('InsPil-InsOk');
+		    $manager->persist($PurchaseOrdersStatusInscribirOperador4);
+	
+		    //Estados para carga de planilla en el operador de pila
+		    $PurchaseOrdersStatusCargaPlanilla1 = new PurchaseOrdersStatus();
+		    $PurchaseOrdersStatusCargaPlanilla1->setName('Planilla no enviada');
+		    $PurchaseOrdersStatusCargaPlanilla1->setDescription('El servicio generó error al momento de intentar llamar el proceso de carga');
+		    $PurchaseOrdersStatusCargaPlanilla1->setIdNovoPay('CarPla-ErrSer');
+		    $manager->persist($PurchaseOrdersStatusCargaPlanilla1);
+	
+		    $PurchaseOrdersStatusCargaPlanilla2 = new PurchaseOrdersStatus();
+		    $PurchaseOrdersStatusCargaPlanilla2->setName('Planilla enviada');
+		    $PurchaseOrdersStatusCargaPlanilla2->setDescription('Ya se solicitó la carga de la planilla para el empleador');
+		    $PurchaseOrdersStatusCargaPlanilla2->setIdNovoPay('CarPla-PlaEnv');
+		    $manager->persist($PurchaseOrdersStatusCargaPlanilla2);
+	
+		    $PurchaseOrdersStatusCargaPlanilla3 = new PurchaseOrdersStatus();
+		    $PurchaseOrdersStatusCargaPlanilla3->setName('Planilla errores');
+		    $PurchaseOrdersStatusCargaPlanilla3->setDescription('La planilla presentó errores al subirla al operador');
+		    $PurchaseOrdersStatusCargaPlanilla3->setIdNovoPay('CarPla-PlaErr');
+		    $manager->persist($PurchaseOrdersStatusCargaPlanilla3);
+	    
+		    $PurchaseOrdersStatusCargaPlanilla6 = new PurchaseOrdersStatus();
+		    $PurchaseOrdersStatusCargaPlanilla6->setName('Planilla cargada');
+		    $PurchaseOrdersStatusCargaPlanilla6->setDescription('La planilla se cargó correctamente');
+		    $PurchaseOrdersStatusCargaPlanilla6->setIdNovoPay('CarPla-PlaOK');
+		    $manager->persist($PurchaseOrdersStatusCargaPlanilla6);
+	    
+	      $manager->flush();
     }
 
     public function getOrder()

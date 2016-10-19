@@ -20,6 +20,7 @@
                         <th>Cédula</th>
                         <th>Empleado</th>
                         <th>Cédula</th>
+                        <th>Fecha inicio contrato</th>
                         <th>Entidades</th>
                     </tr>
                     {% for ehe in ehes %}
@@ -28,6 +29,13 @@
                             <td> {{ ehe.employerEmployer.personPerson.document }} </td>
                             <td> {{ ehe.employeeEmployee.personPerson.names }} {{ ehe.employeeEmployee.personPerson.lastName1 }}</td>
                             <td> {{ ehe.employeeEmployee.personPerson.document }} </td>
+                            <td>
+                                {% for contract in ehe.contracts %}
+                                    {% if contract.state == 1 %}
+                                        {{ contract.startDate|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
                             {% for se in ehe.employerEmployer.entities %}
                                 <td>
                                     {{ se.entityEntity.name }} -

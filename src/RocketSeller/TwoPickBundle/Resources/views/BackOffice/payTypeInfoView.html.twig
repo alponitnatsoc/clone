@@ -1,0 +1,76 @@
+{% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
+
+{% block title %}Vista Frecuencias de Pago{% endblock %}
+
+{% block fos_user_content %}
+    <div id="main" class="col-sm-15">
+        <div class="col-md-12">
+            <div class="panel panel-title">
+                BackOffice Frecuencias de pago
+            </div>
+            <br>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Empleados Activos Quincenales</h4>
+                </div>
+
+                <table class="table">
+                    <tr>
+                        <th>Empleador</th>
+                        <th>Cédula</th>
+                        <th>Correo Empleador</th>
+                        <th>Empleado</th>
+                        <th>Cédula</th>
+                        <th>Tipo de pago</th>
+                    </tr>
+                    {% for ehe in ehes %}
+                        {% set locIndex = loop.index - 1 %}
+                        {% for contract in ehe.contracts %}
+                            {% if contract.state == 1 and contract.frequencyFrequency.payrollCode == "Q" %}
+                                <tr>
+                                    <td> {{ ehe.employerEmployer.personPerson.names }} {{ ehe.employerEmployer.personPerson.lastName1 }}</td>
+                                    <td> {{ ehe.employerEmployer.personPerson.document }} </td>
+                                    <td> {{ usersEmail[locIndex] }} </td>
+                                    <td> {{ ehe.employeeEmployee.personPerson.names }} {{ ehe.employeeEmployee.personPerson.lastName1 }}</td>
+                                    <td> {{ ehe.employeeEmployee.personPerson.document }} </td>
+                                    <td> {{ contract.payMethodpayMethod.payTypePayType.simpleName }}</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Empleados Activos Mensuales</h4>
+                </div>
+
+                <table class="table">
+                    <tr>
+                        <th>Empleador</th>
+                        <th>Cédula</th>
+                        <th>Correo Empleador</th>
+                        <th>Empleado</th>
+                        <th>Cédula</th>
+                        <th>Tipo de pago</th>
+                    </tr>
+                    {% for ehe in ehes %}
+                        {% set locIndex = loop.index - 1 %}
+                        {% for contract in ehe.contracts %}
+                            {% if contract.state == 1 and contract.frequencyFrequency.payrollCode == "M" %}
+                                <tr>
+                                    <td> {{ ehe.employerEmployer.personPerson.names }} {{ ehe.employerEmployer.personPerson.lastName1 }}</td>
+                                    <td> {{ ehe.employerEmployer.personPerson.document }} </td>
+                                    <td> {{ usersEmail[locIndex] }} </td>
+                                    <td> {{ ehe.employeeEmployee.personPerson.names }} {{ ehe.employeeEmployee.personPerson.lastName1 }}</td>
+                                    <td> {{ ehe.employeeEmployee.personPerson.document }} </td>
+                                    <td> {{ contract.payMethodpayMethod.payTypePayType.simpleName }}</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

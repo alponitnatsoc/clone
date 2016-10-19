@@ -1,0 +1,71 @@
+{% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
+
+{% block title %}Vista Usuarios{% endblock %}
+
+{% block fos_user_content %}
+    <div id="main" class="col-sm-15">
+        <div class="col-md-12">
+            <div class="panel panel-title">
+                BackOffice Estado Operador Pila
+            </div>
+            <br>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Información de la afiliación de los diferentes operadores a Enlace Operativo</h4>
+                </div>
+                <div>
+                    <table class="table">
+                        <tr>
+                            <th>ID</th>
+                            <th>Cédula Empleador</th>
+                            <th>Nombre Empleador</th>
+                            <th>Estado Inscripción</th>
+                            <th>Imagen del error</th>
+                            <th>Descripción del error</th>
+                            <th>Número Radicado</th>
+                            <th>Actualizar estado</th>
+                        </tr>
+                        {% for employer in employers %}
+                            <tr>
+                                <td>{{ employer.idEmployer }}</td>
+                                <td>{{ employer.personPerson.document }}</td>
+                                <td>{{ employer.personPerson.fullName }}</td>
+                                <td>
+                                    {% if employer.existentPila == NULL and employer.radicatedNumberPila == NULL %}
+                                        El empleador no se ha enviado para inscripción
+                                    {% elseif employer.existentPila == 2 %}
+                                        El empleador ya está inscrito en el operador
+                                    {% elseif employer.existentPila == 1 %}
+                                        La inscripción del empleador falló
+                                    {% elseif employer.radicatedNumberPila != NULL %}
+                                        Ya se solicitó la inscripción del empleador pero no se sabe como finalizó
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if employer.existentPila == 1 %}
+                                        Mostrar imagen
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if employer.existentPila == 1 %}
+                                        Mostrar info del error
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if employer.radicatedNumberPila != NULL %}
+                                        {{ employer.radicatedNumberPila }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if employer.radicatedNumberPila != NULL and employer.existentPila != 2 %}
+                                        <a class ='notAjax' href="{{ path('back_pila_state_register_update',{'idEmployer': employer.idEmployer }) }}">Actualizar Información</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

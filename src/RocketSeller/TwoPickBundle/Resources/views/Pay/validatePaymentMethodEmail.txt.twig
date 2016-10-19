@@ -37,55 +37,59 @@
                 <img src="https://symplifica.com/public/img/mail/logo.png" alt="" />
               </td>
             </tr>
-            <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr>
+
             <tr>
-              <td style="padding: 10px 10px 20px 10px; text-align: center">
-                <div style="color:#75BEC1;font-size: 35px; font-family: 'Open Sans', sans-serif; font-weight: 700;">¡Hola!</div>
-                <br />
-                <div style="font-size: 30px; font-family: 'Open Sans', sans-serif; font-weight: 300; color: #858688; width: 70%; margin: 0 auto">
-                  {{ userName }}
-                </div><br /><br /><br />
-
-                <div style="font-size: 15px; font-style: italic; font-family: 'Open Sans', sans-serif; font-weight: 100; color: #858688;width:80%;margin:0 auto">
-                	<strong>Estamos validando tu método de pago</strong><br><br>En los próximos <strong>3 días hábiles</strong> te notificaremos el resultado.<br /><br />
-                    <strong>Método de pago:</strong> {{ payMethod }}<br>
-                    <strong>Fecha de inicio de la validación:</strong> {{ starDate|localizeddate('long', 'none', 'es-CO') }}
-
-
-</div><br /><br />
-                <br /><br />
-                <div style="font-size: 20px; font-family: 'Open Sans', sans-serif; font-weight: 700; color: #5D5E5E">¡Despreocúpate estás haciendo las cosas bien!</div><br /><br />
-                <div style="font-size: 17px; font-family: 'Open Sans', sans-serif; font-weight: 300; color: #858688; width: 70%; margin: 0 auto">
-                  Atentamente,<br />
-                  Equipo Symplifica
-                </div>
-                <br />
-
-
-              </td>
+                <td style="padding: 10px 10px 20px 10px;">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                      <tr>
+                          <td>
+                            <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#40c1c3; font-size: 20px;width: 90%;margin: 0 auto;">¡Hola {{ userName }}!
+                              </div><br />
+                          </td>
+                      </tr>
+                        <tr>
+                            <td>
+                                <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#909090; font-size: 15px; width:90%;margin:0 auto"><span style="color:#13878e;font-weight:600">¡Estamos validando tu método de pago!</span><br>
+                    En los próximos 3 días hábiles te notificaremos el resultado.<br>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
             </tr>
 
-            <tr><td style="font-size: 0; line-height: 0;" height="20">&nbsp;</td></tr>
             <tr>
-              <td bgcolor="#485465">
-                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="text-align:center; font-family: 'Open Sans', sans-serif; font-weight: 300;">
-                  <tr>
-                  	<td style="color: #fff; font-family: 'Open Sans', sans-serif; font-weight: 300;">Siguenos
-                    <a href="https://www.facebook.com/Symplifica-1538503439800792/timeline"><img src="https://symplifica.com/img/face.png" /></a>
-                    <a href="https://twitter.com/symplifica_?lang=en"><img src="https://symplifica.com/img/link.png" /></a>
-                    <a href="https://www.linkedin.com/company/symplifica?trk=tyah&trkInfo=clickedVertical%3Acompany%2CclickedEntityId%3A10358058%2Cidx%3A1-1-1%2CtarId%3A1456525736089%2Ctas%3Asymplifica"><img src="https://symplifica.com/img/tweet.png" /></a>
-                    </td>
-                  </tr>
+                <td bgcolor="#F7F7F8">
+                    <table  border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tr>
+                            <td>
+                                <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#909090; font-size: 15px; width:90%;margin:0 auto"><br>
+                                    <span style="color:#13878e;font-weight:600">Método de pago: </span> {{ payMethod }}<br>
+                                    <span style="color:#13878e;font-weight:600">Fecha de inicio de la validación </span> {{ starDate|localizeddate('long', 'none', 'es-CO') }}<br>
 
-                  <tr>
-                  	<br>
-                    <td style="padding: 0 10px; color: #FFFFFF; font-family: 'Open Sans', sans-serif; font-weight: 300;">
-                      Términos y Condiciones I Copyright © Todos los derechos reservados Sympliﬁca
-                    </td>
-                  </tr>
-                  <tr><td style="font-size: 0; line-height: 0;" height="15">&nbsp;</td></tr>
-                </table>
-              </td>
+                                </div>
+                            </td>
+                        </tr>
+                         <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr><!--espacios-->
+
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#909090; font-size: 15px; width:90%;margin:0 auto"><br>
+                                    <span style="color:#13878e;font-weight:600">¡Despreocúpate estás haciendo las cosas bien!</span><br><br>
+                                    <span style="color:#13878e;font-weight:600">¡Que tengas un buen día!</span><br>
+                                    Equipo Symplifica<br>
+
+                                </div>
+                </td>
+            </tr>
+
+            <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr>
+            <tr>
+                {% include "RocketSellerTwoPickBundle:EmailTemplates:footer.txt.twig" %}
             </tr>
           </table>
         </td>

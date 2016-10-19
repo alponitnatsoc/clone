@@ -211,6 +211,9 @@ class PayrollRestController extends FOSRestController
 
         str_replace("%20", "", $test);
         $test = trim(preg_replace('/\s\s+/', '', $test));
+        //dump ($url_request . '?' . str_replace( "%20", "",urldecode($test)));
+        //die();
+
         $response = $client->request('GET', $url_request . '?' . str_replace("%20", "", urldecode($test))); //, ['query' => urldecode($test)]);
         // die ($url_request . '?' . str_replace( "%20", "",urldecode($test)));
         // We parse the xml recieved into an xml object, that we will transform.
@@ -314,7 +317,7 @@ class PayrollRestController extends FOSRestController
         $regex = array();
         $mandatory = array();
         // Set all the parameters info.
-        $regex['society_nit'] = '[0-9]+';
+        $regex['society_nit'] = '(.)*';
         $mandatory['society_nit'] = true;
         $regex['society_name'] = '(.)*';
         $mandatory['society_name'] = true;
@@ -685,6 +688,7 @@ class PayrollRestController extends FOSRestController
         $unico['RECIBE_AUX_TRA'] = isset($parameters['transport_aux']) ? $parameters['transport_aux'] : $info['RECIBE_AUX_TRA'];
         $unico['EMP_SOCIEDAD'] = isset($parameters['society']) ? $parameters['society'] : $info['EMP_SOCIEDAD'];
         $unico['EMP_TIPO_NOMINA'] = isset($parameters['payroll_type']) ? $parameters['payroll_type'] : $info['EMP_TIPO_NOMINA'];
+	      $unico['EMP_JORNADA'] = 1; //Is a must
 
         if (isset($info['EMP_TIPO_CONTRATO']))
             $unico['EMP_TIPO_CONTRATO'] = isset($parameters['contract_type']) ? $parameters['contract_type'] : $info['EMP_TIPO_CONTRATO'];
@@ -828,7 +832,7 @@ class PayrollRestController extends FOSRestController
         $mandatory['employee_id'] = true;
         $regex['value'] = '([0-9])+(.[0-9]+)?';
         $mandatory['value'] = false;
-        $regex['date_change'] = '([0-9])+(.[0-9]+)?';
+        $regex['date_change'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
         $mandatory['date_change'] = false;
 
         $this->validateParamters($parameters, $regex, $mandatory);
@@ -840,6 +844,7 @@ class PayrollRestController extends FOSRestController
         $unico['TIPOCON'] = 1;
         $unico['EMP_CODIGO'] = isset($parameters['employee_id']) ? $parameters['employee_id'] : $info['EMP_CODIGO'];
         $unico['COF_VALOR'] = isset($parameters['value']) ? $parameters['value'] : $info['COF_VALOR'];
+	      $unico['CON_CODIGO'] = 1;
         $unico['COF_FECHA_CAMBIO'] = isset($parameters['date_change']) ? $parameters['date_change'] : $info['COF_FECHA_CAMBIO'];
 
         $content[] = $unico;
@@ -1432,6 +1437,8 @@ class PayrollRestController extends FOSRestController
         $unico['NOVF_VALOR'] = isset($parameters['novelty_value']) ? $parameters['novelty_value'] : "";
         $unico['NOVF_FECHA_INICIAL'] = $parameters['novelty_start_date'];
         $unico['NOVF_FECHA_FINAL'] = isset($parameters['novelty_end_date']) ? $parameters['novelty_end_date'] : "";
+	      $unico['COD_PROC'] = '1';
+	      $unico['USUARIO'] = 'SRHADMIN';
 
         $content[] = $unico;
         $parameters = array();

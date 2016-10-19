@@ -2,6 +2,8 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 
+use Application\Sonata\MediaBundle\Entity\Media;
+use RocketSeller\TwoPickBundle\Entity\Document;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use FOS\RestBundle\Controller\FOSRestController;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -13,6 +15,9 @@ use RocketSeller\TwoPickBundle\Entity\Pay;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
+use RocketSeller\TwoPickBundle\Entity\Transaction;
+use RocketSeller\TwoPickBundle\Entity\TransactionState;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\HttpFoundation\Request;
@@ -200,6 +205,10 @@ class HighTechRestController extends FOSRestController
             $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => 'P1'));
             //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
             $dis->setPurchaseOrdersStatus($pos);
+            /** @var PurchaseOrdersDescription $purchaseOrderDescription */
+            foreach ($dis->getPurchaseOrderDescriptions() as $purchaseOrderDescription) {
+                $purchaseOrderDescription->setPurchaseOrdersStatus($pos);
+            }
             $date = new DateTime('01-01-0001 00:00:00');
             $dis->setDatePaid($date);
 	          $mesange = "not so good man";
@@ -322,6 +331,61 @@ class HighTechRestController extends FOSRestController
                 //$em->persist($notification);*/
 
             }
+	
+		        if($pay->getPurchaseOrdersDescription()->getProductProduct()->getSimpleName()=="PP"){
+			
+			        $request->setMethod("GET");
+			        $info = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:getPayslipPilaPayment',array(
+				        "GSCAccount" => $pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getPersonPerson()->getEmployer()->getIdHighTech(),
+				        "payslipNumber" => $pay->getPurchaseOrdersDescription()->getEnlaceOperativoFileName()
+			        ), array('_format' => 'json'));
+			
+			        $info = json_decode($info->getContent(),true);
+			        
+			        if ( $info['codigoRespuesta'] == "OK" ){
+				        $documentType = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:DocumentType')->findOneBy(array('docCode' => 'EOCP'));
+				        
+				        /** @var Document $document */
+				        $document = new Document();
+				        $document->setName("Comprobante pago pila" . $pay->getPurchaseOrdersDescription()->getIdPurchaseOrdersDescription());
+				        $document->setStatus(1);
+				        $document->setDocumentTypeDocumentType($documentType);
+				
+				        $filename = "tempComprobantePlanilla" . $pay->getPurchaseOrdersDescription()->getIdPurchaseOrdersDescription() . ".pdf";
+				        $file = "uploads/temp/comprobantes/$filename";
+				
+				        file_put_contents($file, base64_decode($info['comprobanteBase64']));
+				
+				        $mediaManager = $this->container->get('sonata.media.manager.media');
+				        $media = $mediaManager->create();
+				        $media->setBinaryContent($file);
+				        $media->setProviderName('sonata.media.provider.file');
+				        $media->setName($document->getName());
+				        $media->setProviderStatus(Media::STATUS_OK);
+				        $media->setContext('person');
+				        $media->setDocumentDocument($document);
+				
+				        $document->setMediaMedia($media);
+				        
+				        $pay->getPurchaseOrdersDescription()->setDocument($document);
+				        $em->persist($pay);
+				
+				        $em->flush();
+				
+				        $context=array(
+					        'emailType'=>'succesDispersion',
+					        'toEmail'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getEmail(),
+					        'userName'=>$pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getPersonPerson()->getFullName(),
+				        );
+				
+				        $context['path']=$file;
+				        $context['comprobante']=true;
+				        $context['pagoPila'] = true;
+				        $context['documentName']= 'Comprobante pago aportes '.date_format(new DateTime(),'d-m-y H:i:s').'.pdf';
+				        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+				        
+			        }
+		        }
 
         } else {
             $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => '-2'));
@@ -473,7 +537,7 @@ class HighTechRestController extends FOSRestController
         return $view;
 
     }
-	
+
 		/**
 		 * @POST("notificacion/pila/registro/empleador")
 		 * Get a notification of the register state of an employer, to update in our system.<br/>
@@ -484,7 +548,7 @@ class HighTechRestController extends FOSRestController
 		 *   statusCodes = {
 		 *     200 = "OK",
 		 *     400 = "Bad Request",
-		 *     401 = "Unauthorized"
+		 *     401 = "Unauthorized",
 		 *     422 = "Parameter format invalid"
 		 *   }
 		 * )
@@ -494,8 +558,8 @@ class HighTechRestController extends FOSRestController
 		 *
 		 * (name="radicatedNumber", nullable=false, requirements="[0-9]+", description="Radicated number, generated by hightech on the service postRegisterEmployerPilaOperatorAction")
 		 * (name="registerState", nullable=false, requirements="(.)*")
-		 * (name="errorLog", nullable=true, requirements="(.)*")
-		 * (name="errorMessage", nullable=true, requirements="(.)*")
+		 * (name="errorLog", nullable=true)
+		 * (name="errorMessage", nullable=true)
 		 *
 		 * @return View
 		 */
@@ -509,22 +573,20 @@ class HighTechRestController extends FOSRestController
 			$mandatory['radicatedNumber'] = true;
 			$regex['registerState'] = '(.)*';
 			$mandatory['registerState'] = true;
-			$regex['errorLog'] = '(.)*';
-			$mandatory['errorLog'] = false;
-			$regex['errorMessage'] = '(.)*';
-			$mandatory['errorMessage'] = false;
 			
 			$this->validateParamters($parameters, $regex, $mandatory);
 			
-			//TODO Logic
+			$request->setMethod("PUT");
+			$request->request->add(array(
+				"RadicatedNumber"=> $parameters['radicatedNumber'],
+				"RegisterState"=> $parameters['registerState'],
+				"errorLog" => array_key_exists('errorLog', $parameters)?$parameters['errorLog']:"",
+				"errorMessage" => array_key_exists('errorMessage', $parameters)?$parameters['errorMessage']:""
+			));
 			
-			// Succesfull operation.
-			$view = View::create();
-			$view->setStatusCode(200);
-			$view->setData(array("returnCode" => 0 , "returnDescription" => "Message received"));
-			return $view;
+			return $this->forward('RocketSellerTwoPickBundle:HighTechRest:putProcessRegisterEmployerPilaOperator', array('_format' => 'json'));
 		}
-	
+
 	/**
 	 * @POST("notificacion/pila/carga/planilla")
 	 * Get a notification of the upload state of a pila payroll, to update in our system.<br/>
@@ -535,7 +597,7 @@ class HighTechRestController extends FOSRestController
 	 *   statusCodes = {
 	 *     200 = "OK",
 	 *     400 = "Bad Request",
-	 *     401 = "Unauthorized"
+	 *     401 = "Unauthorized",
 	 *     422 = "Parameter format invalid"
 	 *   }
 	 * )
@@ -563,19 +625,232 @@ class HighTechRestController extends FOSRestController
 		$mandatory['payrollState'] = true;
 		$regex['payrollNumber'] = '[0-9]+';
 		$mandatory['payrollNumber'] = false;
-		$regex['errorLog'] = '(.)*';
-		$mandatory['errorLog'] = false;
-		$regex['errorMessage'] = '(.)*';
-		$mandatory['errorMessage'] = false;
 		
 		$this->validateParamters($parameters, $regex, $mandatory);
 		
-		//TODO Logic
+		$request->setMethod("PUT");
+		$request->request->add(array(
+			"radicatedNumber"=> $parameters['radicatedNumber'],
+			"planillaState"=> $parameters['payrollState'],
+			"errorLog" => array_key_exists('errorLog', $parameters)?$parameters['errorLog']:"",
+			"planillaNumber" => array_key_exists('payrollNumber', $parameters)?$parameters['payrollNumber']:"",
+			"errorMessage" => array_key_exists('errorMessage', $parameters)?$parameters['errorMessage']:""
+		));
 		
+		return $this->forward('RocketSellerTwoPickBundle:HighTechRest:putProcessUploadFilePilaOperator', array('_format' => 'json'));
+	}
+	
+	/**
+	 * @PUT("notificacion/pila/registro/empleador/procesar")
+	 * Updates the proper data based on the received info.<br/>
+	 *
+	 * @ApiDoc(
+	 *   resource = true,
+	 *   description = "Updates the proper data based on the received info.",
+	 *   statusCodes = {
+	 *     200 = "OK",
+	 *     400 = "Bad Request",
+	 *     401 = "Unauthorized",
+	 *     422 = "Parameter format invalid"
+	 *   }
+	 * )
+	 *
+	 * @param Request $request .
+	 * Rest Parameters:
+	 *
+	 * (name="radicatedNumber", nullable=false, requirements="[0-9]+", description="Radicated number, generated by hightech on the service postRegisterEmployerPilaOperatorAction")
+	 * (name="registerState", nullable=false, requirements="(.)*")
+	 * (name="errorLog", nullable=true)
+	 * (name="errorMessage", nullable=true)
+	 *
+	 * @return View
+	 */
+	public function putProcessRegisterEmployerPilaOperatorAction(Request $request)
+	{
+		$parameters = $request->request->all();
+		$view = View::create();
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		$transactionRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Transaction");
+		/** @var Transaction $singleTransaction */
+		$singleTransaction = $transactionRepo->findOneBy(array('radicatedNumber' => $parameters['radicatedNumber']));
+		
+		if($singleTransaction == NULL){
+			$view->setStatusCode(404);
+			$view->setData(array("returnCode" => 404 , "returnDescription" => "Radicated number not found"));
+			return $view;
+		}
+		
+		//This means the user was created succesfully
+		if( $parameters['registerState'] == 0){
+			$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'InsPil-InsOk'));
+			$singleTransaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
+			
+			$employer = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer')->findOneBy(array('existentPila' => $singleTransaction->getIdTransaction()));
+			$employer->setExistentPila(-1);
+			
+			$em->persist($employer);
+			$em->flush();
+			
+		}
+		else if( $parameters['registerState'] != NULL ){
+			$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'InsPil-InsRec'));
+			$documentType = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:DocumentType')->findOneBy(array('docCode' => 'EOCP'));
+			$singleTransaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
+			
+			$employer = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer')->findOneBy(array('existentPila' => $singleTransaction->getIdTransaction()));
+			
+			/** @var TransactionState $transactionState */
+			$transactionState = new TransactionState();
+			/** @var Document $document */
+			$document = new Document();
+			$document->setName("Enlace operativo employer creation error " . $employer->getIdEmployer());
+			$document->setStatus(1);
+			$document->setDocumentTypeDocumentType($documentType);
+				
+			$filename = "tempErrorImg.zip";
+			$file = "uploads/temp/$filename";
+			
+			file_put_contents($file, base64_decode($parameters['errorLog']));
+			
+			$mediaManager = $this->container->get('sonata.media.manager.media');
+      $media = $mediaManager->create();
+      $media->setBinaryContent($file);
+      $media->setProviderName('sonata.media.provider.file');
+      $media->setName($document->getName());
+      $media->setProviderStatus(Media::STATUS_OK);
+      $media->setContext('person');
+      $media->setDocumentDocument($document);
+			
+			$document->setMediaMedia($media);
+			
+			$em->persist($document);
+			
+			$transactionState->setDocument($document);
+			$transactionState->setLog($parameters['errorMessage']);
+			$transactionState->setOriginTransaction($singleTransaction);
+			$em->persist($transactionState);
+			
+			$singleTransaction->setTransactionState($transactionState);
+			$em->persist($singleTransaction);
+			$em->flush();
+			
+			unlink($file);
+		}
 		// Succesfull operation.
 		$view = View::create();
 		$view->setStatusCode(200);
 		$view->setData(array("returnCode" => 0 , "returnDescription" => "Message received"));
 		return $view;
 	}
+	
+	/**
+	 * @PUT("notificacion/pila/carga/archivo/procesar")
+	 * Updates the proper data based on the received info.<br/>
+	 *
+	 * @ApiDoc(
+	 *   resource = true,
+	 *   description = "Updates the proper data based on the received info.",
+	 *   statusCodes = {
+	 *     200 = "OK",
+	 *     400 = "Bad Request",
+	 *     401 = "Unauthorized",
+	 *     422 = "Parameter format invalid"
+	 *   }
+	 * )
+	 *
+	 * @param Request $request .
+	 * Rest Parameters:
+	 *
+	 * (name="radicatedNumber", nullable=false, requirements="[0-9]+", description="Radicated number, generated by hightech on the service postRegisterEmployerPilaOperatorAction")
+	 * (name="planillaState", nullable=false, requirements="(.)*")
+	 * (name="errorLog", nullable=true)
+	 * (name="errorMessage", nullable=true)
+	 * (name="planillaNumber", nullable=true)
+	 *
+	 * @return View
+	 */
+	public function putProcessUploadFilePilaOperatorAction(Request $request)
+	{
+		$parameters = $request->request->all();
+		$view = View::create();
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		$transactionRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Transaction");
+		/** @var Transaction $singleTransaction */
+		$singleTransaction = $transactionRepo->findOneBy(array('radicatedNumber' => $parameters['radicatedNumber']));
+		
+		if($singleTransaction == NULL){
+			$view->setStatusCode(404);
+			$view->setData(array("returnCode" => 404 , "returnDescription" => "Radicated number not found"));
+			return $view;
+		}
+		
+		//This means the user was created succesfully
+		if( $parameters['planillaState'] == 0){
+			$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-PlaOK'));
+			$singleTransaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
+			
+			$purchaseOrderDescription = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')->findOneBy(array('uploadedFile' => $singleTransaction->getIdTransaction()));
+			$purchaseOrderDescription->setUploadedFile(-1);
+			$purchaseOrderDescription->setEnlaceOperativoFileName($parameters['planillaNumber']);
+			
+			$em->persist($purchaseOrderDescription);
+			$em->flush();
+			
+		}
+		else if( $parameters['planillaState'] != NULL ){
+			$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-PlaErr'));
+			$documentType = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:DocumentType')->findOneBy(array('docCode' => 'EOIE'));
+			$singleTransaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
+			
+			$purchaseOrderDescription = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')->findOneBy(array('uploadedFile' => $singleTransaction->getIdTransaction()));
+			
+			/** @var TransactionState $transactionState */
+			$transactionState = new TransactionState();
+			/** @var Document $document */
+			$document = new Document();
+			$document->setName("Enlace operativo upload file error " . $purchaseOrderDescription->getIdPurchaseOrdersDescription());
+			$document->setStatus(1);
+			$document->setDocumentTypeDocumentType($documentType);
+			
+			$filename = "tempErrorImg.zip";
+			$file = "uploads/temp/$filename";
+			
+			file_put_contents($file, base64_decode($parameters['errorLog']));
+			
+			$mediaManager = $this->container->get('sonata.media.manager.media');
+			$media = $mediaManager->create();
+			$media->setBinaryContent($file);
+			$media->setProviderName('sonata.media.provider.file');
+			$media->setName($document->getName());
+			$media->setProviderStatus(Media::STATUS_OK);
+			$media->setContext('person');
+			$media->setDocumentDocument($document);
+			
+			$document->setMediaMedia($media);
+			
+			$em->persist($document);
+			
+			$transactionState->setDocument($document);
+			$transactionState->setLog($parameters['errorMessage']);
+			$transactionState->setOriginTransaction($singleTransaction);
+			$em->persist($transactionState);
+			
+			$singleTransaction->setTransactionState($transactionState);
+			$em->persist($singleTransaction);
+			$em->flush();
+			
+			unlink($file);
+		}
+		// Succesfull operation.
+		$view = View::create();
+		$view->setStatusCode(200);
+		$view->setData(array("returnCode" => 0 , "returnDescription" => "Message received"));
+		return $view;
+	}
+
+
 }

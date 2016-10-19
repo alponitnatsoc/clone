@@ -19,6 +19,7 @@ use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\Product;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\Transaction;
 use RocketSeller\TwoPickBundle\Entity\PayMethod;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
@@ -60,7 +61,7 @@ class PayrollRestSecuredController extends FOSRestController
         $view = View::create();
 
         if ($user != null) {
-            //obtener la informacion de la nomina actial
+            //obtener la informacion de la nomina actual
             $pods = $this->getInfoPayroll($user->getPersonPerson()->getEmployer());
             //obtener los meses de mora
             /** @var User $user */
@@ -362,7 +363,66 @@ class PayrollRestSecuredController extends FOSRestController
             $total += $transactionPOD->getValue();
 
 
+            //TODO-Gabriel Check this proces might be buggy
+            $dateToday = new DateTime();
+            $effectiveDate = $user->getLastPayDate();
+            $isFreeMonths = $user->getIsFree();
+            if ($isFreeMonths > 0) {
+                $isFreeMonths -= 1;
+            }
+            $isFreeMonths += 1;
+            $effectiveDate = new DateTime(date('Y-m-d', strtotime("+$isFreeMonths months", strtotime($effectiveDate->format("Y-m-") . "25"))));
 
+            if ($dateToday->format("d") >= 16 && $dateToday->format("m") >= $effectiveDate->format("m") && $dateToday->format("Y") >= $effectiveDate->format("Y")) {
+                //this means that the user has to pay the symplifica fee this month
+                $symplificaPOD = new PurchaseOrdersDescription();
+                $symplificaPOD->setDescription("Subscripción Symplifica");
+                $ehes = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+                /** @var Product $PS1 */
+                $PS1 = $productRepo->findOneBy(array("simpleName" => "PS1"));
+                /** @var Product $PS2 */
+                $PS2 = $productRepo->findOneBy(array("simpleName" => "PS2"));
+                /** @var Product $PS3 */
+                $PS3 = $productRepo->findOneBy(array("simpleName" => "PS3"));
+                $ps1Count = 0;
+                $ps2Count = 0;
+                $ps3Count = 0;
+                /** @var EmployerHasEmployee $ehe */
+                foreach ($ehes as $ehe) {
+                    if ($ehe->getState() < 3) {
+                        continue;
+                    }
+                    $contracts = $ehe->getContracts();
+                    $actualContract = null;
+                    /** @var Contract $contract */
+                    foreach ($contracts as $contract) {
+                        if ($contract->getState() == 1) {
+                            $actualContract = $contract;
+                            break;
+                        }
+                    }
+                    if ($actualContract == null) {
+                        continue;
+                    }
+                    $actualDays = $actualContract->getWorkableDaysMonth();
+                    if ($actualDays < 10) {
+                        $ps1Count++;
+                    } elseif ($actualDays <= 19) {
+                        $ps2Count++;
+                    } else {
+                        $ps3Count++;
+                    }
+
+                }
+                $symplificaPOD->setValue(round(($PS1->getPrice() * (1 + $PS1->getTaxTax()->getValue()) * $ps1Count) +
+                    ($PS2->getPrice() * (1 + $PS2->getTaxTax()->getValue()) * $ps2Count) +
+                    ($PS3->getPrice() * (1 + $PS3->getTaxTax()->getValue()) * $ps3Count), 0));
+                $realtoPay->addPurchaseOrderDescription($symplificaPOD);
+                $total += $symplificaPOD->getValue();
+
+            }
+            //now we search if there is any owe pod
+            $this->checkPendingSubscription($realtoPay,$total);
         }
         $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getClientListPaymentMethods', array('idUser' => $user->getId()), array('_format' => 'json'));
         $responsePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
@@ -470,10 +530,48 @@ class PayrollRestSecuredController extends FOSRestController
 
                 }
 
+                /** @var Person $person */
                 $person = $tempPOD->getPayrollsPila()->get(0)->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                 $flagFrequency = false;
                 $flagNomi=false;
                 $paysPila++;
+	            
+	              if($tempPOD->getEnlaceOperativoFileName() == NULL && $tempPOD->getUploadedFile() == NULL){
+		              //Here we get the file of the pila and we send it to HighTech
+		              $request->setMethod("GET");
+		              $insertionAnswerTextFile = $this->forward('RocketSellerTwoPickBundle:PilaPlainTextRest:getMonthlyPlainText', array('podId'=>$tempPOD->getIdPurchaseOrdersDescription() ,'download'=>'generate'), array('_format' => 'json'));
+		
+		              $transactionType = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:TransactionType')->findOneBy(array('code' => 'CPla'));
+		
+		              $transaction = new Transaction();
+		              $transaction->setTransactionType($transactionType);
+		
+		              $request->setMethod("POST");
+		              $request->request->add(array(
+			              "GSCAccount"=>$person->getEmployer()->getIdHighTech(),
+			              "FileToUpload"=>json_decode($insertionAnswerTextFile->getContent(),true)['fileToSend']
+		              ));
+		              $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postUploadFileToPilaOperator', array('_format' => 'json'));
+		              if ($insertionAnswer->getStatusCode() == 200) {
+			              //Received succesfully
+		              	$radicatedNumber = json_decode($insertionAnswer->getContent(), true)["numeroRadicado"];
+			              $transaction->setRadicatedNumber($radicatedNumber);
+			              $purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-PlaEnv'));
+		              }
+		              else{
+			              //If some kind of error
+			              $purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-ErrSer'));
+		              }
+		
+		              $em = $this->getDoctrine()->getManager();
+		              $transaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
+		              $em->persist($transaction);
+		              $em->flush();
+		              $tempPOD->setUploadedFile($transaction->getIdTransaction());
+		              $tempPOD->addTransaction($transaction);
+		              $em->persist($tempPOD);
+		              $em->flush();
+	              }
             } elseif( $tempPOD->getProductProduct()->getSimpleName()=="PN") {
                 $person = $tempPOD->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                 if ($tempPOD->getPayrollPayroll()->getContractContract()->getPayMethodPayMethod()->getPayTypePayType()->getPayrollCode() == "EFE"){
@@ -720,7 +818,33 @@ class PayrollRestSecuredController extends FOSRestController
 
     }
 
-
+    private function checkPendingSubscription(PurchaseOrders &$realtoPay,&$total){
+        $purchaseOrderRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrders");
+        $purchaseOrderStatusRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
+        /** @var PurchaseOrdersStatus $pedingStatus */
+        $pedingStatus = $purchaseOrderStatusRepo->findOneBy(array('idNovoPay'=>'P1'));
+        $pendingStuff = $purchaseOrderRepo->findBy(array('purchaseOrdersStatus'=>$pedingStatus,'idUser'=>$this->getUser()));
+        $pendingPODS = new ArrayCollection();
+        if($pendingStuff!=null&&count($pendingStuff)>0){
+            /** @var PurchaseOrders $po */
+            foreach ($pendingStuff as $po) {
+                $pods = $po->getPurchaseOrderDescriptions();
+                /** @var PurchaseOrdersDescription $pod */
+                foreach ($pods as $pod) {
+                    if($pod->getProductProduct()->getSimpleName()=='PS1'||$pod->getProductProduct()->getSimpleName()=='PS2'||$pod->getProductProduct()->getSimpleName()=='PS3'){
+                        $pendingPODS->add($pod);
+                    }
+                }
+            }
+            if($pendingPODS->count()>0){
+                /** @var PurchaseOrdersDescription $pPod */
+                foreach ($pendingPODS as $pPod) {
+                    $realtoPay->addPurchaseOrderDescription($pPod);
+                    $total+= $pPod->getValue();
+                }
+            }
+        }
+    }
 
     private function calculateMora(PurchaseOrdersDescription $tempPOD,Person $userPerson){
 
