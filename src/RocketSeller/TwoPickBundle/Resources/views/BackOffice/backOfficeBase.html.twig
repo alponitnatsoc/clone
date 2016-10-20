@@ -7,16 +7,20 @@
               integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
               crossorigin="anonymous">
         <link rel="stylesheet"
-              href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/4.10.1/bootstrap-social.css"/>
-        <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet' type='text/css'>
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
-        <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
-        <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet'
+              href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-social/4.10.1/bootstrap-social.css"/>
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet"
+              integrity="sha256-k2/8zcNbxVIh5mnQ52A0r3a6jAgMGxFJFE2707UxGCk= sha512-ZV9KawG2Legkwp3nAlxLIVFudTauWuBpC10uEafMHYL0Sarrz5A7G79kXh5+5+woxQ5HM559XX2UZjMJ36Wplg=="
+              crossorigin="anonymous"/>
+        <link href='//fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet' type='text/css'>
+        <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700' rel='stylesheet' type='text/css'>
+        <link href='//fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
+        <link href='//fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet'
               type='text/css'>
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700' rel='stylesheet'
+        <link href='//fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700' rel='stylesheet'
               type='text/css'>
-        <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:700' rel='stylesheet' type='text/css'>
-        <link href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/6.0.16/css/bootstrap-slider.min.css'
+        <link href='//fonts.googleapis.com/css?family=Roboto+Slab:700' rel='stylesheet' type='text/css'>
+        <link href='//cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/6.0.16/css/bootstrap-slider.min.css'
               rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="{{ asset('css/bootstrap-theme.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/main.css') }}">
@@ -35,42 +39,103 @@
 
     {% block menuInicio %}
         <style>
+            .back-panel-title {
+                margin: 0px 0px 10px 5px;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.28);
+                border-radius: 0px 0px 40px 40px;
+                clear: both;
+                padding: 3px 0px 13px 25px;
+                font-weight: bold;
+            }
+
             .backoffice-headding {
-                color: #333;
-                background-color: #ddd;
-                padding: 5px 5px;
-                border: 1px solid lightgrey;
-                border-top-left-radius: 5px;
-                border-top-right-radius: 5px;
-                margin-right: -2px;
+                color: #fff;
+                background-color: rgb(14, 65, 68);
+                border: 1px solid #0d3031;
+                border-radius: 15px 15px 0px 0px;
+                margin: 15px 0px 0px 0px;
+                padding: 3px 21px;
+                font-size: 16px;
+                font-weight: 500;
+                clear: both;
+            }
+            .backoffice-headding-hide {
+                color: #fff;
+                background-color: rgb(14, 65, 68);
+                border: 1px solid #0d3031;
+                border-radius: 15px 15px 0px 0px;
+                margin: 15px 0px 0px 0px;
+                padding: 3px 21px;
+                font-size: 16px;
+                font-weight: 500;
+                clear: both;
+            }
+            .backoffice-headding-show {
+                color: #fff;
+                background-color: rgb(14, 65, 68);
+                border: 1px solid #0d3031;
+                border-radius: 15px;
+                margin: 15px 0px 0px 0px;
+                padding: 3px 21px;
+                font-size: 16px;
+                font-weight: 500;
+                clear: both;
             }
             .back-table {
-                box-sizing: border-box;
-                font-size: 14px;
-                line-height: 1.42857143;
-                color: #333;
-                margin: 1px 1px;
-                padding: 1px 1px;
-                background-color: white;
+                margin: -1px 0px -1px 0px;
+                border: 1px solid #0e4144;
             }
+            .a-back {
+                color: #ffffff;
+                text-decoration: none;
+            }
+
+            a:focus, a:hover {
+                color: rgb(98, 212, 0);
+                text-decoration: underline;
+                font-weight: 400;
+            }
+
+            .back-link {
+                color: #2b7375;
+                text-decoration: none;
+                font-weight: bolder;
+            }
+
+            .btn-back {
+                text-transform: none;
+                background-color: #FD9224;
+                border-bottom: 0px solid #DA7D1F;
+                outline: 0;
+                color: #fff;
+                font-weight: 700;
+                letter-spacing: 1px;
+                font-family: "Open Sans",Helvetica,Arial;
+                margin: 6% 40% 7% 0%;
+            }
+
             th {
                 vertical-align: middle;
-                padding: 1px 5px;
-                border: 1px solid lightgrey;
-                font-size: 10px;
-                background-color: #f1f1f1;
+                padding: 0px 5px;
+                border: 1px solid rgb(16, 52, 53);
+                font-size: 11px;
+                background-color: rgb(44, 142, 146);
+                color: #f8fffa;
+                font-weight: inherit;
             }
 
             tr {
                 vertical-align: middle;
-                padding: 1px 5px;
             }
 
             td {
-                vertical-align: baseline;
-                padding: 1px 5px;
-                border: 1px solid lightgrey;
-                font-size: 10px;
+                vertical-align: middle;
+                border: 1px solid rgb(79, 127, 128);
+                font-size: 9px;
+                color: #0d3031;
+                padding: 1px 0px 1px 3px;
+                background-color: white;
+                font-weight: bold;
             }
 
             .form-group input {
@@ -81,6 +146,7 @@
             label {
                 font-size: 12px;
                 font-weight: 700;
+                padding: 0px 0px 0px 5px;
             }
 
             .form-group select {
@@ -88,27 +154,314 @@
                 height: 30px;
             }
             .back-panel {
-                box-shadow: 0 1px 2px rgba(0,0,0,.05);
-                border-color: #ddd;
-                margin-bottom: 0px;
                 background-color: #fff;
                 border: 1px solid transparent;
-                border-radius: 4px;
-                box-sizing: border-box;
+                clear: both;
+                margin: 0px;
             }
 
-            .back-employee-headding{
-                color: #333;
-                background-color: #f7f7f7;
+            .back-employee-headding {
+                color: rgb(255, 255, 255);
+                background-color: rgb(28, 98, 101);
                 padding: 0px 5px;
-                border: 1px solid lightgrey;
-                border-top-left-radius: 5px;
-                border-top-right-radius: 5px;
+                margin: -1px 0px 0px 0px;
+                border: 1px solid #0e4144;
+                clear: both;
+                font-size: 12px;
             }
+            .back-employee-headding {
+                color: rgb(234, 234, 234);
+                background-color: rgb(14, 65, 68);
+                padding: 0px 19px;
+                margin: -1px 0px 0px 0px;
+                border: 1px solid #0e4144;
+                clear: both;
+                font-size: 13px;
+            }
+            .td-row {
+                vertical-align: middle;
+                border: 1px solid rgb(79, 127, 128);
+                font-size: 9px;
+                color: #0d3031;
+                padding: 1px 0px 1px 3px;
+                background-color: white;
+                font-weight: bold;
+            }
+            .td-title {
+                vertical-align: middle;
+                border: 1px solid rgb(79, 127, 128);
+                font-size: 11px;
+                padding: 1px 0px 1px 12px;
+                font-weight: bold;
+                -webkit-user-select: none;
+            }
+            .th-title {
+                vertical-align: middle;
+                padding: 0px 5px 0px 15px;
+                border: 1px solid rgb(16, 52, 53);
+                font-size: 14px;
+                background-color: rgb(0, 95, 99);
+                color: #f8fffa;
+                font-weight: inherit;
+            }
+            .backoffice-headding {
+                color: #fff;
+                background-color: rgb(0, 33, 35);
+                border: 1px solid #0d3031;
+                border-radius: 15px 15px 0px 0px;
+                margin: 15px 0px 0px 0px;
+                padding: 3px 21px;
+                font-size: 16px;
+                font-weight: 500;
+                clear: both;
+            }
+
+            .content-title {
+                border: 1px solid black;
+                margin: 0px 0px;
+                padding: 5px 5px;
+                background-color: #0e4144;
+                width: 98.7%;
+                color: white;
+                font-size: 14px;
+                border-radius: 15px 15px 0px 0px;
+            }
+
+            .back-section {
+                padding: 0px 15px 0px 15px;
+                margin: 15px 0px 15px 0px;
+            }
+            .value-title {
+                border: 1px solid #002123;
+                background-color: #005f63;
+                color: #f8fffa;
+                margin: 10px 0px 10px 15px;
+                padding: 0px 5px;
+                font-size: 13px;
+                display: inline-block;
+                border-collapse: inherit;
+                border-radius: 3px;
+                width: 90%;
+            }
+            .value-content{
+                display: inline-block;
+                width: auto;
+                height: inherit;
+                font-size: 13px;
+                margin: 10px 0px 10px 0px;
+                padding: 0px 5px;
+                line-height: 1.428571;
+                color: #555;
+                background-color: #fff;
+                background-image: none;
+                border: 1px solid #ccc;
+                border-radius: 3px;
+                width: 90%;
+            }
+
+            .form-button{
+                border: 2px solid #07aab3;
+                background: #0db5b2;
+                color: #fff;
+                font-family: "Open Sans",Helvetica,Arial;
+                padding: 1px 25px;
+                margin: 13px 0px;
+                text-transform: none;
+                font-weight: 700;
+                font-size: 14px;
+                text-shadow: none;
+                box-shadow: none;
+                border-radius: 3px;
+            }
+
+            #form_expeditionDate_day{
+                height: 20px;
+                font-size: 12px;
+                border: 0px;
+                margin: 0px 6px 0px 2px;
+            }
+            #form_expeditionDate_month{
+                height: 20px;
+                font-size: 12px;
+                border: 0px;
+                margin: 0px 6px 0px 2px;
+            }
+            #form_expeditionDate_year{
+                height: 20px;
+                font-size: 12px;
+                border: 0px;
+                margin: 0px 6px 0px 2px;
+            }
+            #form_birthDate_day{
+                height: 20px;
+                font-size: 12px;
+                border: 0px;
+                margin: 0px 6px 0px 2px;
+            }
+            #form_birthDate_month{
+                height: 20px;
+                font-size: 12px;
+                border: 0px;
+                margin: 0px 6px 0px 2px;
+            }
+            #form_birthDate_year{
+                height: 20px;
+                font-size: 12px;
+                border: 0px;
+                margin: 0px 6px 0px 2px;
+            }
+            .no-padding {
+                padding:0;
+            }
+            .btn-backoffice {
+                border: 2px solid #085d61;
+                background: #03575a;
+                color: #fff;
+                font-family: "Open Sans",Helvetica,Arial;
+                padding: 5px 10px;
+                text-transform: none;
+                font-weight: 700;
+                text-shadow: none;
+                box-shadow: none;
+                border-radius: 5px;
+                display: inline-block;
+                font-size: 15px;
+                line-height: 1.428571;
+                text-align: center;
+                white-space: nowrap;
+                vertical-align: middle;
+                touch-action: manipulation;
+                cursor: pointer;
+                -webkit-user-select: none;
+            }
+            .btn-backoffice-error {
+                border: 2px solid #611c1a;
+                background: #5a200f;
+                color: #fff;
+                font-family: "Open Sans",Helvetica,Arial;
+                padding: 5px 10px;
+                text-transform: none;
+                font-weight: 700;
+                text-shadow: none;
+                box-shadow: none;
+                border-radius: 5px;
+                display: inline-block;
+                font-size: 15px;
+                line-height: 1.428571;
+                text-align: center;
+                white-space: nowrap;
+                vertical-align: middle;
+                touch-action: manipulation;
+                cursor: pointer;
+                -webkit-user-select: none;
+            }
+            .btn-backoffice-error.focus, .btn-backoffice-error:focus, .btn-backoffice-error:hover {
+                color: rgba(255,255,255,1);
+                text-decoration: none;
+                background-color: #3a0000;
+                border-color: #2a0000;
+            }
+            .btn-backoffice-upload {
+                border: 2px solid #162f61;
+                background: #051c61;
+                color: #fff;
+                font-family: "Open Sans",Helvetica,Arial;
+                padding: 5px 10px;
+                text-transform: none;
+                font-weight: 700;
+                text-shadow: none;
+                box-shadow: none;
+                border-radius: 5px;
+                display: inline-block;
+                font-size: 15px;
+                line-height: 1.428571;
+                text-align: center;
+                white-space: nowrap;
+                vertical-align: middle;
+                touch-action: manipulation;
+                cursor: pointer;
+                -webkit-user-select: none;
+            }
+            .btn-backoffice-download {
+                border: 2px solid #078588;
+                background: #0e8b94;
+                color: #fff;
+                font-family: "Open Sans",Helvetica,Arial;
+                padding: 5px 10px;
+                text-transform: none;
+                font-weight: 700;
+                text-shadow: none;
+                box-shadow: none;
+                border-radius: 5px;
+                display: inline-block;
+                font-size: 15px;
+                line-height: 1.428571;
+                text-align: center;
+                white-space: nowrap;
+                vertical-align: middle;
+                touch-action: manipulation;
+                cursor: pointer;
+                -webkit-user-select: none;
+            }
+            .btn-backoffice-download.focus, .btn-backoffice-download:focus, .btn-backoffice-download:hover {
+                color: rgba(255,255,255,1);
+                text-decoration: none;
+                background-color: #051442;
+                border-color: #050f2c;
+            }
+            .btn-backoffice-upload.focus, .btn-backoffice-upload:focus, .btn-backoffice-upload:hover {
+                color: rgba(255,255,255,1);
+                text-decoration: none;
+                background-color: #051442;
+                border-color: #050f2c;
+            }
+            .btn-backoffice.focus, .btn-backoffice:focus, .btn-backoffice:hover {
+                color: rgba(255,255,255,1);
+                text-decoration: none;
+                background-color: #012123;
+                border-color: #012123;
+            }
+
+            .btn.focus, .btn:focus, .btn:hover {
+                color: rgba(255,255,255,1);
+                text-decoration: none;
+                background-color: #012123;
+                border-color: #012123;
+            }
+            #modal-body {
+                position: absolute;
+                top: 0;
+                width: 100%;
+            }
+            .additional-info-title {
+                border: 1px solid #000000;
+                overflow: hidden;
+                margin: -1px 1.3% -1px 0px;
+                font-size: 13px;
+                background-color: #005f63;
+                color: white;
+            }
+            .workplaceEdit{
+                border: 1px solid black;
+                margin-right: 0;
+                overflow: hidden;
+                color: white;
+                background-color: #0d3031;
+                font-size: 14px;
+                touch-action: manipulation;
+                cursor: pointer;
+                -webkit-user-select: none;
+            }
+            #validate-info-employer,#validate-doc-employer,#validate-rut-employer,#validate-mand-employer,#aditional-info{
+                touch-action: manipulation;
+                cursor: pointer;
+                -webkit-user-select: none;
+            }
+
 
         </style>
         <div class="{% if app.request.get('_route') == 'back_office' %}activeMenu{% endif %} well well-lg"
-             style="margin-top: 40px;">
+             style="margin-top: 30px;">
             <a class="notAjax" href="{{ path('back_office') }}">Back Office</a>
         </div>
     {% endblock %}
@@ -154,11 +507,20 @@
             <a class="notAjax" href="{{ path('show_base_users_register') }}" >Base Usuarios Registros </a>
         </div>
 
+
     {% endblock %}
-    {% block content_style %} style="width: 95%"{% endblock %}
+    {% block content_style %} style="width: 98%"{% endblock %}
     {% block classSideBarBase %}class="col-sm-2"{% endblock %}
     {% block classMainBase %}class="col-sm-10 clearfix"{% endblock %}
     {% block usrName %}BACK OFFICE{% endblock %}
+    {% block footer %}
+    {% endblock %}
+    {% block javascripts %}
+    {% endblock %}
+    {% block UserLogin %}
+    {% endblock %}
+    {% block intercom %}
+    {% endblock %}
 
     {% block logout %}
         <span id="logout" style="display: inline">
@@ -170,5 +532,4 @@
         <div></div>
     {% endblock %}
 
-    {% block footer %}
-    {% endblock %}
+
