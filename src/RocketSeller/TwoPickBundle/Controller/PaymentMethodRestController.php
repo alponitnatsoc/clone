@@ -771,7 +771,7 @@ class PaymentMethodRestController extends FOSRestController
                         $dateToSend=$purchaseOrderDescription->getDateToPay();
                     }
                 }
-                if($purchaseOrderDescription->getEnlaceOperativoFileName()==null){
+                if($purchaseOrderDescription->getEnlaceOperativoFileName()==null || $purchaseOrderDescription->getUploadedFile() != -1){
                     /** @var TwigSwiftMailer $smailer */
                     $smailer = $this->get('symplifica.mailer.twig_swift');
                     $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage(array('emailType'=>'backWarning','toEmail'=>'backofficesymplifica@symplifica.com','idPod'=>$purchaseOrderDescription->getIdPurchaseOrdersDescription()));

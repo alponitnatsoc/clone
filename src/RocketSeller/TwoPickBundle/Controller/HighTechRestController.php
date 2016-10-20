@@ -578,10 +578,10 @@ class HighTechRestController extends FOSRestController
 			
 			$request->setMethod("PUT");
 			$request->request->add(array(
-				"RadicatedNumber"=> $parameters['radicatedNumber'],
-				"RegisterState"=> $parameters['registerState'],
-				"errorLog" => array_key_exists('errorLog', $parameters)?$parameters['errorLog']:"",
-				"errorMessage" => array_key_exists('errorMessage', $parameters)?$parameters['errorMessage']:""
+				"radicatedNumber"=> $parameters['radicatedNumber'],
+				"registerState"=> isset($parameters['registerState']) && $parameters['registerState'] != NULL ? $parameters['registerState'] : "",
+				"errorLog" => isset($oarameters['errorLog']) &&  $oarameters['errorLog'] != NULL ? $parameters['errorLog'] : "",
+				"errorMessage" => isset($parameters['errorMessage']) && $parameters['errorMessage'] ? $parameters['errorMessage'] : ""
 			));
 			
 			return $this->forward('RocketSellerTwoPickBundle:HighTechRest:putProcessRegisterEmployerPilaOperator', array('_format' => 'json'));
@@ -631,10 +631,10 @@ class HighTechRestController extends FOSRestController
 		$request->setMethod("PUT");
 		$request->request->add(array(
 			"radicatedNumber"=> $parameters['radicatedNumber'],
-			"planillaState"=> $parameters['payrollState'],
-			"errorLog" => array_key_exists('errorLog', $parameters)?$parameters['errorLog']:"",
-			"planillaNumber" => array_key_exists('payrollNumber', $parameters)?$parameters['payrollNumber']:"",
-			"errorMessage" => array_key_exists('errorMessage', $parameters)?$parameters['errorMessage']:""
+			"planillaState"=> isset($parameters['payrollState']) && $parameters['payrollState'] != NULL ? $parameters['payrollState'] : "",
+			"errorLog" => isset($parameters['errorLog']) && $parameters['errorLog'] != NULL ? $parameters['errorLog'] : "",
+			"planillaNumber" => isset($parameters['payrollNumber']) && $parameters['payrollNumber'] != NULL ? $parameters['payrollNumber'] : "",
+			"errorMessage" => isset($parameters['errorMessage']) && $parameters['errorMessage'] != NULL ? $parameters['errorMessage'] : ""
 		));
 		
 		return $this->forward('RocketSellerTwoPickBundle:HighTechRest:putProcessUploadFilePilaOperator', array('_format' => 'json'));
@@ -683,7 +683,7 @@ class HighTechRestController extends FOSRestController
 		}
 		
 		//This means the user was created succesfully
-		if( $parameters['registerState'] == 0){
+		if( $parameters['registerState'] == 0 && $parameters['errorLog'] == "" && $parameters['errorMessage'] == "" ){
 			$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'InsPil-InsOk'));
 			$singleTransaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
 			
@@ -694,7 +694,7 @@ class HighTechRestController extends FOSRestController
 			$em->flush();
 			
 		}
-		else if( $parameters['registerState'] != NULL ){
+		else if( $parameters['registerState'] != NULL && $parameters['errorLog'] != "" && $parameters['errorMessage'] != "" ){
 			$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'InsPil-InsRec'));
 			$documentType = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:DocumentType')->findOneBy(array('docCode' => 'EOCP'));
 			$singleTransaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
@@ -788,8 +788,8 @@ class HighTechRestController extends FOSRestController
 			return $view;
 		}
 		
-		//This means the user was created succesfully
-		if( $parameters['planillaState'] == 0){
+		//This means the planilla was created succesfully
+		if( $parameters['planillaState'] == 0 && $parameters['errorLog'] == "" && $parameters['errorMessage'] == "" ){
 			$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-PlaOK'));
 			$singleTransaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
 			
@@ -801,7 +801,7 @@ class HighTechRestController extends FOSRestController
 			$em->flush();
 			
 		}
-		else if( $parameters['planillaState'] != NULL ){
+		else if( $parameters['planillaState'] != NULL && $parameters['errorLog'] != "" && $parameters['errorMessage'] != "" ){
 			$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-PlaErr'));
 			$documentType = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:DocumentType')->findOneBy(array('docCode' => 'EOIE'));
 			$singleTransaction->setPurchaseOrdersStatus($purchaseOrdersStatus);

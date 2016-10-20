@@ -26,38 +26,46 @@
                             <th>Actualizar estado</th>
                         </tr>
                         {% for employer in employers %}
+                            {% set localTran = NULL %}
+                            {% if employer.existentPila != -1 %}
+                                {% for transaction in employer.transactions %}
+                                    {% if transaction.idTransaction == employer.existentPila %}
+                                        {% set localTran = transaction %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
                             <tr>
                                 <td>{{ employer.idEmployer }}</td>
                                 <td>{{ employer.personPerson.document }}</td>
                                 <td>{{ employer.personPerson.fullName }}</td>
                                 <td>
-                                    {% if employer.existentPila == NULL and employer.radicatedNumberPila == NULL %}
-                                        El empleador no se ha enviado para inscripción
-                                    {% elseif employer.existentPila == 2 %}
-                                        El empleador ya está inscrito en el operador
-                                    {% elseif employer.existentPila == 1 %}
-                                        La inscripción del empleador falló
-                                    {% elseif employer.radicatedNumberPila != NULL %}
-                                        Ya se solicitó la inscripción del empleador pero no se sabe como finalizó
+                                    {% if employer.existentPila == NULL %}
+                                        No hay información acerca de la afiliación
+                                    {% elseif employer.existentPila == -1 %}
+                                        El empleador ya está inscrito en Enlace Operativo
+                                    {% elseif employer.existentPila == -2 %}
+                                        El empleador terminó su registro antes de la implementación de PilaBot
+                                    {% else %}
+                                        {{ localTran.purchaseOrdersStatus.name }}
                                     {% endif %}
                                 </td>
                                 <td>
-                                    {% if employer.existentPila == 1 %}
-                                        Mostrar imagen
+                                    {% if employer.existentPila != -1 and employer.existentPila != NULL and employer.existentPila != -2 %}
+                                        <a class="btn btn-bitbucket notAjax" style="margin-bottom: 20px" href="{{path('export_error_pila_afiliation',{'idTransaction':localTran.idTransaction})}}">Descargar Imagenes</a>
                                     {% endif %}
                                 </td>
                                 <td>
-                                    {% if employer.existentPila == 1 %}
-                                        Mostrar info del error
+                                    {% if employer.existentPila != -1 and employer.existentPila != NULL and employer.existentPila != -2 %}
+                                        {{ localTran.transactionState.log }}
                                     {% endif %}
                                 </td>
                                 <td>
-                                    {% if employer.radicatedNumberPila != NULL %}
-                                        {{ employer.radicatedNumberPila }}
+                                    {% if employer.existentPila != -1 and employer.existentPila != NULL and employer.existentPila != -2 %}
+                                        {{ localTran.radicatedNumber }}
                                     {% endif %}
                                 </td>
                                 <td>
-                                    {% if employer.radicatedNumberPila != NULL and employer.existentPila != 2 %}
+                                    {% if employer.existentPila != -1 and employer.existentPila != NULL and employer.existentPila != -2 %}
                                         <a class ='notAjax' href="{{ path('back_pila_state_register_update',{'idEmployer': employer.idEmployer }) }}">Actualizar Información</a>
                                     {% endif %}
                                 </td>

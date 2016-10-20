@@ -115,6 +115,7 @@ class Employer
 	
 		/**
 		 * -1 - Success
+		 * -2 - Employer was registered before PilaBot
 		 * Anything else, active transaction id
 		 * @ORM\Column(type="integer", nullable=TRUE)
 		 */
@@ -472,6 +473,7 @@ class Employer
         $this->realProcedure = new \Doctrine\Common\Collections\ArrayCollection();
         $this->employerHasEmployees = new \Doctrine\Common\Collections\ArrayCollection();
         $this->entities = new \Doctrine\Common\Collections\ArrayCollection();
+	      $this->transactions = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
