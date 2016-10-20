@@ -787,6 +787,8 @@ trait SubscriptionMethodsTrait
             if (!($insertionAnswer->getStatusCode() == 201 || $insertionAnswer->getStatusCode() == 406)) {
                 return false;
             }
+        }else{
+            return false;
         }
         $employer->setExistentNovo(1);
         /** @var EntityManager $em */
