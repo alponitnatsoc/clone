@@ -7,16 +7,20 @@
               integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
               crossorigin="anonymous">
         <link rel="stylesheet"
-              href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/4.10.1/bootstrap-social.css"/>
-        <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet' type='text/css'>
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
-        <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
-        <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet'
+              href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-social/4.10.1/bootstrap-social.css"/>
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet"
+              integrity="sha256-k2/8zcNbxVIh5mnQ52A0r3a6jAgMGxFJFE2707UxGCk= sha512-ZV9KawG2Legkwp3nAlxLIVFudTauWuBpC10uEafMHYL0Sarrz5A7G79kXh5+5+woxQ5HM559XX2UZjMJ36Wplg=="
+              crossorigin="anonymous"/>
+        <link href='//fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet' type='text/css'>
+        <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700' rel='stylesheet' type='text/css'>
+        <link href='//fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
+        <link href='//fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet'
               type='text/css'>
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700' rel='stylesheet'
+        <link href='//fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700' rel='stylesheet'
               type='text/css'>
-        <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:700' rel='stylesheet' type='text/css'>
-        <link href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/6.0.16/css/bootstrap-slider.min.css'
+        <link href='//fonts.googleapis.com/css?family=Roboto+Slab:700' rel='stylesheet' type='text/css'>
+        <link href='//cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/6.0.16/css/bootstrap-slider.min.css'
               rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="{{ asset('css/bootstrap-theme.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/main.css') }}">
@@ -35,42 +39,103 @@
 
     {% block menuInicio %}
         <style>
+            .back-panel-title {
+                margin: 0px 0px 10px 5px;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.28);
+                border-radius: 0px 0px 40px 40px;
+                clear: both;
+                padding: 3px 0px 13px 25px;
+                font-weight: bold;
+            }
+
             .backoffice-headding {
-                color: #333;
-                background-color: #ddd;
-                padding: 5px 5px;
-                border: 1px solid lightgrey;
-                border-top-left-radius: 5px;
-                border-top-right-radius: 5px;
-                margin-right: -2px;
+                color: #fff;
+                background-color: rgb(14, 65, 68);
+                border: 1px solid #0d3031;
+                border-radius: 15px 15px 0px 0px;
+                margin: 15px 0px 0px 0px;
+                padding: 3px 21px;
+                font-size: 16px;
+                font-weight: 500;
+                clear: both;
+            }
+            .backoffice-headding-hide {
+                color: #fff;
+                background-color: rgb(14, 65, 68);
+                border: 1px solid #0d3031;
+                border-radius: 15px 15px 0px 0px;
+                margin: 15px 0px 0px 0px;
+                padding: 3px 21px;
+                font-size: 16px;
+                font-weight: 500;
+                clear: both;
+            }
+            .backoffice-headding-show {
+                color: #fff;
+                background-color: rgb(14, 65, 68);
+                border: 1px solid #0d3031;
+                border-radius: 15px;
+                margin: 15px 0px 0px 0px;
+                padding: 3px 21px;
+                font-size: 16px;
+                font-weight: 500;
+                clear: both;
             }
             .back-table {
-                box-sizing: border-box;
-                font-size: 14px;
-                line-height: 1.42857143;
-                color: #333;
-                margin: 1px 1px;
-                padding: 1px 1px;
-                background-color: white;
+                margin: -1px 0px -1px 0px;
+                border: 1px solid #0e4144;
             }
+            .a-back {
+                color: #ffffff;
+                text-decoration: none;
+            }
+
+            a:focus, a:hover {
+                color: rgb(98, 212, 0);
+                text-decoration: underline;
+                font-weight: 4000;
+            }
+
+            .back-link {
+                color: #2b7375;
+                text-decoration: none;
+                font-weight: bolder;
+            }
+
+            .btn-back {
+                text-transform: none;
+                background-color: #FD9224;
+                border-bottom: 0px solid #DA7D1F;
+                outline: 0;
+                color: #fff;
+                font-weight: 700;
+                letter-spacing: 1px;
+                font-family: "Open Sans",Helvetica,Arial;
+                margin: 6% 40% 7% 0%;
+            }
+
             th {
                 vertical-align: middle;
-                padding: 1px 5px;
-                border: 1px solid lightgrey;
-                font-size: 10px;
-                background-color: #f1f1f1;
+                padding: 0px 5px;
+                border: 1px solid rgb(16, 52, 53);
+                font-size: 11px;
+                background-color: rgb(44, 142, 146);
+                color: #f8fffa;
+                font-weight: inherit;
             }
 
             tr {
                 vertical-align: middle;
-                padding: 1px 5px;
             }
 
             td {
-                vertical-align: baseline;
-                padding: 1px 5px;
-                border: 1px solid lightgrey;
-                font-size: 10px;
+                vertical-align: middle;
+                border: 1px solid rgb(79, 127, 128);
+                font-size: 9px;
+                color: #0d3031;
+                padding: 1px 0px 1px 3px;
+                background-color: white;
+                font-weight: bold;
             }
 
             .form-group input {
@@ -81,6 +146,7 @@
             label {
                 font-size: 12px;
                 font-weight: 700;
+                padding: 0px 0px 0px 5px;
             }
 
             .form-group select {
@@ -88,27 +154,24 @@
                 height: 30px;
             }
             .back-panel {
-                box-shadow: 0 1px 2px rgba(0,0,0,.05);
-                border-color: #ddd;
-                margin-bottom: 0px;
                 background-color: #fff;
                 border: 1px solid transparent;
-                border-radius: 4px;
-                box-sizing: border-box;
+                clear: both;
+                margin: 0px;
             }
 
-            .back-employee-headding{
-                color: #333;
-                background-color: #f7f7f7;
+            .back-employee-headding {
+                color: rgb(255, 255, 255);
+                background-color: rgb(28, 98, 101);
                 padding: 0px 5px;
-                border: 1px solid lightgrey;
-                border-top-left-radius: 5px;
-                border-top-right-radius: 5px;
+                margin: -1px 0px 0px 0px;
+                border: 1px solid #0e4144;
+                clear: both;
+                font-size: 12px;
             }
-
         </style>
         <div class="{% if app.request.get('_route') == 'back_office' %}activeMenu{% endif %} well well-lg"
-             style="margin-top: 40px;">
+             style="margin-top: 30px;">
             <a class="notAjax" href="{{ path('back_office') }}">Back Office</a>
         </div>
     {% endblock %}
@@ -157,11 +220,20 @@
             <a class="notAjax" href="{{ path('show_base_users_register') }}" >Base Usuarios Registros </a>
         </div>
 
+
     {% endblock %}
-    {% block content_style %} style="width: 95%"{% endblock %}
+    {% block content_style %} style="width: 98%"{% endblock %}
     {% block classSideBarBase %}class="col-sm-2"{% endblock %}
     {% block classMainBase %}class="col-sm-10 clearfix"{% endblock %}
     {% block usrName %}BACK OFFICE{% endblock %}
+    {% block footer %}
+    {% endblock %}
+    {% block javascripts %}
+    {% endblock %}
+    {% block UserLogin %}
+    {% endblock %}
+    {% block intercom %}
+    {% endblock %}
 
     {% block logout %}
         <span id="logout" style="display: inline">
@@ -173,5 +245,4 @@
         <div></div>
     {% endblock %}
 
-    {% block footer %}
-    {% endblock %}
+

@@ -7,6 +7,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use RocketSeller\TwoPickBundle\Entity\Action;
 use RocketSeller\TwoPickBundle\Entity\ActionType;
+use RocketSeller\TwoPickBundle\Entity\Configuration;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\ContractDocumentStatusType;
 use RocketSeller\TwoPickBundle\Entity\Document;
@@ -14,9 +15,11 @@ use RocketSeller\TwoPickBundle\Entity\DocumentStatusType;
 use RocketSeller\TwoPickBundle\Entity\DocumentType;
 use RocketSeller\TwoPickBundle\Entity\Employee;
 use FOS\RestBundle\View\View;
+use RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
+use RocketSeller\TwoPickBundle\Entity\Log;
 use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -172,7 +175,7 @@ class ActionsRestController extends FOSRestController
         $procedureType = new ProcedureType("Pago de pila",'PPL');
         $procedureType->setIdProcedureType(2);
         $em->persist($procedureType);
-        $procedureType = new ProcedureType("Validar Contrato",'VAC');
+        $procedureType = new ProcedureType("Acciones de Validación",'VAC');
         $procedureType->setIdProcedureType(3);
         $em->persist($procedureType);
         $procedureType = new ProcedureType("Subir Planillas",'SPL');
@@ -227,7 +230,7 @@ class ActionsRestController extends FOSRestController
          */
         $response .= "Creando StatusTypes<br>";
 
-        $statusType = new StatusTypes( "Desabilitado" , "DIS" );
+        $statusType = new StatusTypes( "Deshabilitado" , "DIS" );
         $statusType->setIdStatusType(1);
         $em->persist($statusType);
 
@@ -495,6 +498,7 @@ class ActionsRestController extends FOSRestController
                         foreach ($user->getPersonPerson()->getEmployer()->getEmployerHasEmployees() as $employerHasEmployee) {
                             if($employerHasEmployee->getEmployeeEmployee()->getEntities()->count()>0 and $employerHasEmployee->getState()>2){
                                 foreach ($employerHasEmployee->getEmployeeEmployee()->getEntities() as $entity) {
+                                    $response.= "EMPLOYEE ACTION ENCONTRADA<br>";
                                     if ($entity->getState() >= 0) {
                                         $action = new Action();
                                         $action->setStatus('Nuevo');
@@ -518,6 +522,7 @@ class ActionsRestController extends FOSRestController
             }
         }
         $em->flush();
+
         $view = View::create();
         $view->setData($response)->setStatusCode(200);
         return $view;
@@ -539,7 +544,6 @@ class ActionsRestController extends FOSRestController
      */
     public function postRecreateProceduresAction(){
         $response = "<br>".'- - - COMIENZA LA FUNCION - - -'."<br>";
-        $em = $this->getDoctrine()->getManager();
         /**
          * ╔══════════════════════════════════════════════════╗
          * ║ Deleting previous Actions                        ║
@@ -569,6 +573,53 @@ class ActionsRestController extends FOSRestController
             $em->remove($errors);
         }
         $em->flush();
+        foreach ($em->getRepository("RocketSellerTwoPickBundle:Notification")->findAll() as $notification){
+            if($notification->getDocumentTypeDocumentType()==$this->getDocumentTypeByCode('CC'))
+                $em->remove($notification);
+            if($notification->getDocumentTypeDocumentType()==$this->getDocumentTypeByCode('CE'))
+                $em->remove($notification);
+            if($notification->getDocumentTypeDocumentType()==$this->getDocumentTypeByCode('TI'))
+                $em->remove($notification);
+            if($notification->getDocumentTypeDocumentType()==$this->getDocumentTypeByCode('RUT'))
+                $em->remove($notification);
+            if($notification->getDocumentTypeDocumentType()==$this->getDocumentTypeByCode('MAND'))
+                $em->remove($notification);
+            if($notification->getDocumentTypeDocumentType()==$this->getDocumentTypeByCode('CAS'))
+                $em->remove($notification);
+            if($notification->getDocumentTypeDocumentType()==$this->getDocumentTypeByCode('FIRM'))
+                $em->remove($notification);
+            if($notification->getDocumentTypeDocumentType()==$this->getDocumentTypeByCode('CTR'))
+                $em->remove($notification);
+            if($notification->getRelatedLink()!=null){
+                $exstr = explode("/",$notification->getRelatedLink());
+                if($exstr[1]=='manage')
+                    $em->remove($notification);
+                if($exstr[1]=='old')
+                    $em->remove($notification);
+                if($exstr[1]=='documents')
+                    $em->remove($notification);
+            }
+        }
+        $em->flush();
+
+        if(!$this->getDocumentTypeByCode('RAD')){
+            $response.="- - - RAD CREADO - - -<br>";
+            $documentTypeRad = new DocumentType();
+            $documentTypeRad->setName('Radicado');
+            $documentTypeRad->setDocCode('RAD');
+            $em->persist($documentTypeRad);
+        }
+
+        $nCount=1;
+        foreach ($em->getRepository("RocketSellerTwoPickBundle:Notification")->findAll() as $notification){
+            $notification->setId($nCount);//setting the id
+            $em->persist($notification);//persisting the notification
+            $metadata = $em->getClassMetadata(get_class($notification));//line of code necessary to force an id
+            $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);//line of code necessary to force an id
+            $nCount++;//increment notificationId Count
+        }
+        $em->flush();
+
         $response.= "- - - ELEMENTOS ELIMINADOS - - -<br><br>";
 
         $users = $em->getRepository("RocketSellerTwoPickBundle:User")->findAll();
@@ -588,10 +639,11 @@ class ActionsRestController extends FOSRestController
                     $response .= "- - - CREANDO TRAMITES - - -<br>";
                     $count++;
                     if ($user->getRealProcedure()->isEmpty()) {
-                        $result = $this->createProcedure($user, $pCount, $aCount);
+                        $result = $this->createProcedure($user, $pCount, $aCount, $nCount);
                         $response .= $result['response'];
                         $pCount = $result['pCount'];
                         $aCount = $result['aCount'];
+                        $nCount = $result['nCount'];
                     } else {
                         $response .= "- - - YA EXISTEN TRAMITES - - -<br><br>";
                     }
@@ -603,6 +655,41 @@ class ActionsRestController extends FOSRestController
                     . "<br><strong>Error: </strong>" . $e->getCode() . " " . $e->getMessage() . "<br>";
             }
         }
+        $em->flush();
+
+        foreach ($em->getRepository("RocketSellerTwoPickBundle:Log")->findAll() as $log) {
+            $em->remove($log);
+        }
+        $em->flush();
+        $view = View::create();
+        $view->setData($response)->setStatusCode(200);
+        return $view;
+    }
+
+    /**
+     * saves some important data from the procedures before other actions
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "saves info from the procedures before other rest actions",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors",
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function postSaveProceduresDataAction(){
+        $em =$this->getDoctrine()->getManager();
+        $procedures = $em->getRepository("RocketSellerTwoPickBundle:RealProcedure")->findAll();
+        /** @var RealProcedure $procedure */
+        foreach ($procedures as $procedure) {
+            $log = new Log($procedure->getUserUser(),"RealProcedure","createdAt",$procedure->getIdProcedure(),$procedure->getCreatedAt()->format("Y-m-d H:i:s"),"",null);
+            $em->persist($log);
+        }
+        $em->flush();
+        $response = "termino<br>";
         $view = View::create();
         $view->setData($response)->setStatusCode(200);
         return $view;
@@ -617,11 +704,12 @@ class ActionsRestController extends FOSRestController
      * ║  @param User $user                                    ║
      * ║  @param integer $pCount optional                      ║
      * ║  @param integer $aCount optional                      ║
+     * ║  @param integer $nCount optional                      ║
      * ╠═══════════════════════════════════════════════════════╣
      * ║  @return array                                        ║
      * ╚═══════════════════════════════════════════════════════╝
      */
-    protected function createProcedure(User $user,$pCount=null,$aCount=null){
+    protected function createProcedure(User $user,$pCount=null,$aCount=null, $nCount= null){
         $response = '';
         if($user->getPersonPerson()->getEmployer()) {
             $employer = $user->getPersonPerson()->getEmployer();
@@ -635,9 +723,10 @@ class ActionsRestController extends FOSRestController
                 $procedure = new RealProcedure();
                 $procedure->setProcedureTypeProcedureType($this->getProcedureByType('REE'));//setting the procedure type
                 $employer->addRealProcedure($procedure);//adding the realProcedure to the employer
-                $procedure->setCreatedAt($user->getLastPayDate());//setting the createAt Date
-                $procedure->setProcedureStatus($this->getStatusByType('DIS'));//setting the initial status Disable
-                $procedure->setBackOfficeDate($user->getLastPayDate());//setting the backofice start Date
+                $procedure->setCreatedAt($this->getDateCreatedInLog($user));//setting the createAt Date
+                $procedure->setProcedureStatus($this->getStatusByType('NEW'));//setting the initial status Disable
+                $procedure->setBackOfficeDate($this->getDateCreatedInLog($user));//setting the backofice start Date
+                $procedure->setFinishedAt(null);
                 $procedure->setPriority(0);//setting the default priority
                 $user->addRealProcedure($procedure);//adding the realProcedure to the user
                 if ($pCount != null) {//if theres an id parameter for the procedure
@@ -656,13 +745,15 @@ class ActionsRestController extends FOSRestController
                  * ╚══════════════════════════════════════════════════╝
                  */
                 if ($user->getPersonPerson()->getEmployee()) {//if user is also a employee
-                    $result = $this->createActionsEmployerEmployee($user, $procedure, $aCount);//creating actions with function for employer also employee
+                    $result = $this->createActionsEmployerEmployee($user, $procedure, $aCount, $nCount);//creating actions with function for employer also employee
                     $response .= $result['response'];
                     $aCount = $result['aCount'];
+                    $nCount = $result['nCount'];
                 } else {
-                    $result = $this->createActionsEmployer($user, $procedure, $aCount);//creating actions with function for employer only
+                    $result = $this->createActionsEmployer($user, $procedure, $aCount, $nCount);//creating actions with function for employer only
                     $response .= $result['response'];
                     $aCount = $result['aCount'];
+                    $nCount = $result['nCount'];
                 }
 
                 /**
@@ -690,20 +781,63 @@ class ActionsRestController extends FOSRestController
                             }
                             if ($eePerson->getEmployer() and $isEmployeeOf == 1) {//employee is also a employer
                                 $response .= "- - - - EMPLEADO QUE TAMBIEN ES EMPLEADOR - - - -<br>";
+                                $result = $this->createActionsEmployeeEmployer($user, $procedure,$employerHasEmployee, $atLeastOneFinished, $aCount ,$nCount);//creating actions with function for employer also employee
+                                $response .= $result['response'];
+                                $aCount = $result['aCount'];
+                                $atLeastOneFinished = $result['atLeast'];
+                                $nCount = $result['nCount'];
                             }elseif($eePerson->getEmployer() and $isEmployeeOf >1){//employee is also a employer and is employee of more than one employer
                                 $response .= "- - - - EMPLEADO EMPLEADOR CON VARIOS EMPLEADORES - - - -<br>";
                             }elseif($isEmployeeOf > 1){//employee has more employers
                                 $response .= "- - - - EMPLEADO QUE YA ES EMPLEADO - - - -<br>";
+                                $result = $this->createActionsEmployeeEmployee($user, $procedure,$employerHasEmployee, $atLeastOneFinished, $aCount, $nCount);//creating actions with function for employer also employee
+                                $response .= $result['response'];
+                                $aCount = $result['aCount'];
+                                $atLeastOneFinished = $result['atLeast'];
+                                $nCount = $result['nCount'];
                             }
                         } else {
-                            $result = $this->createActionsEmployee($user, $procedure,$employerHasEmployee, $atLeastOneFinished, $aCount);//creating actions with function for employer also employee
+                            $result = $this->createActionsEmployee($user, $procedure,$employerHasEmployee, $atLeastOneFinished, $aCount, $nCount);//creating actions with function for employer also employee
                             $response .= $result['response'];
                             $aCount = $result['aCount'];
                             $atLeastOneFinished = $result['atLeast'];
+                            $nCount = $result['nCount'];
                         }
                     }
                 }
-                $em->flush();
+                /**
+                 * ╔══════════════════════════════════════════════════╗
+                 * ║ Procedure Validate Actions                       ║
+                 * ╚══════════════════════════════════════════════════╝
+                 */
+                $procedure2 = new RealProcedure();
+                $procedure2->setProcedureTypeProcedureType($this->getProcedureByType('VAC'));//setting the procedure type
+                $employer->addRealProcedure($procedure2);//adding the realProcedure to the employer
+                $procedure2->setCreatedAt($this->getDateCreatedInLog($user));//setting the createAt Date
+                $procedure2->setProcedureStatus($this->getStatusByType('NEW'));//setting the initial status Disable
+                $procedure2->setBackOfficeDate($this->getDateCreatedInLog($user));//setting the backofice start Date
+                $procedure2->setPriority(0);//setting the default priority
+                $procedure2->setFinishedAt(null);
+                $user->addRealProcedure($procedure2);//adding the realProcedure to the user
+                if ($pCount != null) {//if theres an id parameter for the procedure
+                    $procedure2->setIdProcedure($pCount);//setting the id to the realProcedure
+                    $em->persist($procedure2);//persisting the procedure
+                    $metadata = $em->getClassMetadata(get_class($procedure));//line of code necessaryy to force an id
+                    $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);//line of code necessaryy to force an id
+                    $pCount++;//increment id realProcedure count
+                } else {
+                    $em->persist($procedure2);//persisting the procedure
+                }
+                $response .= "- - - PROCEDURE ACCIONES VALIDACION CREADO - - -<br>";
+                /**
+                 * ╔══════════════════════════════════════════════════╗
+                 * ║ Employer post subscribe action begin             ║
+                 * ╚══════════════════════════════════════════════════╝
+                 */
+                $result = $this->createPostValidateActionsEmployerEmployee($user, $procedure2, $aCount, $nCount);//creating actions with function for employer also employee
+                $response .= $result['response'];
+                $aCount = $result['aCount'];
+                $nCount = $result['nCount'];
                 $response .= "- - - TRAMITES CREADOS - - -<br><br>";
             }else{
                 $response .= "ERROR: EL EMPLEADOR NO TIENE ENTIDADES . . .<br><br>";
@@ -711,7 +845,383 @@ class ActionsRestController extends FOSRestController
         }else{
             $response .="ERROR: NO SE ENCONTRO EL EMPELADOR<br><br>";
         }
-        return array('pCount'=>$pCount,'aCount'=>$aCount,'response'=>$response);
+        return array('pCount'=>$pCount,'aCount'=>$aCount,'response'=>$response, 'nCount'=>$nCount);
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════╗
+     * ║ Function createPostValidateActionsEmployerEmployee    ║
+     * ║ this function creates the post subscription actions   ║
+     * ║ such as validate contract and upload RAD documents    ║
+     * ╠═══════════════════════════════════════════════════════╣
+     * ║  @param User $user                                    ║
+     * ║  @param RealProcedure $procedure                      ║
+     * ║  @param integer $aCount optional                      ║
+     * ║  @param integer $nCount optional                      ║
+     * ╠═══════════════════════════════════════════════════════╣
+     * ║  @return array                                        ║
+     * ╚═══════════════════════════════════════════════════════╝
+     */
+    public function createPostValidateActionsEmployerEmployee($user, $procedure, $aCount, $nCount){
+        $response = '';
+        $person = $user->getPersonPerson();
+        $employer = $person->getEmployer();//getting the employer
+        $em = $this->getDoctrine()->getManager();
+        /** @var EmployerHasEntity $employerHasEntity */
+        foreach ($employer->getEntities() as $employerHasEntity){
+            if($employerHasEntity->getState()==1){
+                /**
+                 * ╔══════════════════════════════════════════════════╗
+                 * ║ Action Upload Document RAD                       ║
+                 * ╚══════════════════════════════════════════════════╝
+                 */
+                $action = new Action();
+                $procedure->addAction($action);//adding the action to the procedure
+                $employer->getPersonPerson()->addAction($action);//adding the action to the employerPerson
+                $user->addAction($action);//adding the action to the user
+                $action->setActionTypeActionType($this->getActionByType('SDE'));//setting the actionType
+                $action->setActionStatus($this->getStatusByType('NEW'));
+                $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
+                $action->setEmployerEntity($employerHasEntity);
+                $action->setUpdatedAt();
+                if ($aCount != null) {//if there is a parameter for the id
+                    $action->setIdAction($aCount);//setting the action id
+                    $em->persist($action);//persisting the action
+                    $metadata = $em->getClassMetadata(get_class($action));//line of code necessaryy to force an id
+                    $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);//line of code necessary to force an id
+                    $aCount++;//increment actionId Count
+                } else {
+                    $em->persist($action);//persisting the action
+                }
+            }
+        }
+        $response .= "- - - - RADS CREADOS - - - -<br>";
+        /** @var EmployerHasEmployee $employerHasEmployee */
+        foreach ($employer->getEmployerHasEmployees() as $employerHasEmployee) {
+            if($employerHasEmployee->getState()>2){
+                if($employerHasEmployee->getExistentSQL()==1){
+                    $response .= "- - - - EXISTE SQL - - - -<br>";
+                    /**
+                     * ╔══════════════════════════════════════════════════╗
+                     * ║ Action validate contract                         ║
+                     * ╚══════════════════════════════════════════════════╝
+                     */
+                    $action = new Action();
+                    $procedure->addAction($action);//adding the action to the procedure
+                    $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($action);//adding the action to the employerPerson
+                    $user->addAction($action);//adding the action to the user
+                    $action->setActionTypeActionType($this->getActionByType('VC'));//setting the actionType validate contract
+                    $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createdAt Date
+                    $action->setUpdatedAt();
+                    if($employerHasEmployee->getActiveContract()->getDocumentDocument()){//if document exist
+                        if($employerHasEmployee->getActiveContract()->getDocumentDocument()->getMediaMedia()){//searching for media
+                            $action->setActionStatus($this->getStatusByType('NEW'));//if contract document exist in DB
+                        }else{//if not media found error
+                            $action->setActionStatus($this->getStatusByType('ERRO'));
+                            $response .= "- - - - ERROR: DOCUMENTO CONTRATO NO ENCONTRADO - - - - <br>";
+                            $docType = $this->getDocumentTypeByCode('CTR');
+                            $notifications = $person->getNotificationByDocumentType($docType);//finding contract notifications for the person
+                            if($notifications->isEmpty()){//if notification not found
+                                if($employerHasEmployee->getLegalFF()==1){//its ancient
+                                    $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
+                                    $utils = $this->get('app.symplifica_utils');
+                                    $dAction=null;
+                                    $dUrl=null;
+                                    $configurations=$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getConfigurations();
+                                    $flag=false;
+                                    /** @var Configuration $config */
+                                    foreach ($configurations as $config) {//searching if user need to generate a new contract
+                                        if($config->getValue()=="PreLegal-SignedContract"){
+                                            $flag=true;
+                                            break;
+                                        }
+                                    }
+                                    if(!$flag){//generating url to download contract
+                                        $dAction="Bajar";
+                                        $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getActiveContract()->getIdContract(), 'ref' => "contrato", 'type' => 'pdf'));
+                                    }
+                                    $msj = "Subir copia del contrato de ". $utils->mb_capitalize(explode(" ",$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getNames())[0]." ". $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getLastName1());
+                                    $url = $this->generateUrl("documentos_employee", array('entityType'=>'Contract','entityId'=>$employerHasEmployee->getActiveContract()->getIdContract(),'docCode'=>'CTR'));
+                                    $this->createNotification($employer->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl,$nCount);
+                                    $nCount++;//notification created
+                                }elseif($employerHasEmployee->getLegalFF()==0){//its new
+                                    $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
+                                    $utils = $this->get('app.symplifica_utils');
+                                    $dAction="Bajar";
+                                    $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getActiveContract()->getIdContract(), 'ref' => "contrato", 'type' => 'pdf'));
+                                    $msj = "Subir copia del contrato de ". $utils->mb_capitalize(explode(" ",$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getNames())[0]." ". $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getLastName1());
+                                    $url = $this->generateUrl("documentos_employee", array('entityType'=>'Contract','entityId'=>$employerHasEmployee->getActiveContract()->getIdContract(),'docCode'=>'CTR'));
+                                    $this->createNotification($employer->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl,$nCount);
+                                    $nCount++;//notification created
+                                }else{
+                                    $response.= "- - - - ERROR: LEGAL FLAG - - - - <br>";
+                                }
+                            }else{
+                                $equal = false;
+                                /** @var Notification $notification */
+                                foreach ($notifications as $notification){
+                                    $exUrl = explode('/',$notification->getRelatedLink());
+                                    if($employer->getPersonPerson()->getIdPerson()==$exUrl[4] and !$equal){
+                                        $equal = true;
+                                        $response .= "- - - - ACTIVANDO NOTIFICACION - - - - <br>";
+                                        $notification->activate();
+                                    }
+                                }
+                                if(!$equal){
+                                    if($employerHasEmployee->getLegalFF()==1){//its ancient
+                                        $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
+                                        $utils = $this->get('app.symplifica_utils');
+                                        $dAction=null;
+                                        $dUrl=null;
+                                        $configurations=$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getConfigurations();
+                                        $flag=false;
+                                        /** @var Configuration $config */
+                                        foreach ($configurations as $config) {//searching if user need to generate a new contract
+                                            if($config->getValue()=="PreLegal-SignedContract"){
+                                                $flag=true;
+                                                break;
+                                            }
+                                        }
+                                        if(!$flag){//generating url to download contract
+                                            $dAction="Bajar";
+                                            $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getActiveContract()->getIdContract(), 'ref' => "contrato", 'type' => 'pdf'));
+                                        }
+                                        $msj = "Subir copia del contrato de ". $utils->mb_capitalize(explode(" ",$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getNames())[0]." ". $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getLastName1());
+                                        $url = $this->generateUrl("documentos_employee", array('entityType'=>'Contract','entityId'=>$employerHasEmployee->getActiveContract()->getIdContract(),'docCode'=>'CTR'));
+                                        $this->createNotification($employer->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl,$nCount);
+                                        $nCount++;//notification created
+                                    }elseif($employerHasEmployee->getLegalFF()==0){//its new
+                                        $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
+                                        $utils = $this->get('app.symplifica_utils');
+                                        $dAction="Bajar";
+                                        $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getActiveContract()->getIdContract(), 'ref' => "contrato", 'type' => 'pdf'));
+                                        $msj = "Subir copia del contrato de ". $utils->mb_capitalize(explode(" ",$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getNames())[0]." ". $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getLastName1());
+                                        $url = $this->generateUrl("documentos_employee", array('entityType'=>'Contract','entityId'=>$employerHasEmployee->getActiveContract()->getIdContract(),'docCode'=>'CTR'));
+                                        $this->createNotification($employer->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl,$nCount);
+                                        $nCount++;//notification created
+                                    }else{
+                                        $response.= "- - - - ERROR: LEGAL FLAG - - - - <br>";
+                                    }
+                                }
+                            }
+                        }
+                    }else{
+                        $action->setActionStatus($this->getStatusByType('CTPE'));
+                        $response .= "- - - - ERROR: DOCUMENTO CONTRATO NO ENCONTRADO - - - - <br>";
+                        $docType = $this->getDocumentTypeByCode('CTR');
+                        $notifications = $employer->getPersonPerson()->getNotificationByDocumentType($docType);
+                        if($notifications->isEmpty()){
+                            if($employerHasEmployee->getLegalFF()==1){//its ancient
+                                $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
+                                $utils = $this->get('app.symplifica_utils');
+                                $dAction=null;
+                                $dUrl=null;
+                                $configurations=$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getConfigurations();
+                                $flag=false;
+                                /** @var Configuration $config */
+                                foreach ($configurations as $config) {//searching if user need to generate a new contract
+                                    if($config->getValue()=="PreLegal-SignedContract"){
+                                        $flag=true;
+                                        break;
+                                    }
+                                }
+                                if(!$flag){//generating url to download contract
+                                    $dAction="Bajar";
+                                    $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getActiveContract()->getIdContract(), 'ref' => "contrato", 'type' => 'pdf'));
+                                }
+                                $msj = "Subir copia del contrato de ". $utils->mb_capitalize(explode(" ",$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getNames())[0]." ". $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getLastName1());
+                                $url = $this->generateUrl("documentos_employee", array('entityType'=>'Contract','entityId'=>$employerHasEmployee->getActiveContract()->getIdContract(),'docCode'=>'CTR'));
+                                $this->createNotification($employer->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl,$nCount);
+                                $nCount++;//notification created
+                            }elseif($employerHasEmployee->getLegalFF()==0){//its new
+                                $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
+                                $utils = $this->get('app.symplifica_utils');
+                                $dAction="Bajar";
+                                $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getActiveContract()->getIdContract(), 'ref' => "contrato", 'type' => 'pdf'));
+                                $msj = "Subir copia del contrato de ". $utils->mb_capitalize(explode(" ",$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getNames())[0]." ". $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getLastName1());
+                                $url = $this->generateUrl("documentos_employee", array('entityType'=>'Contract','entityId'=>$employerHasEmployee->getActiveContract()->getIdContract(),'docCode'=>'CTR'));
+                                $this->createNotification($employer->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl,$nCount);
+                                $nCount++;//notification created
+                            }else{
+                                $response.= "- - - - ERROR: LEGAL FLAG - - - - <br>";
+                            }
+                        }else{
+                            $equal = false;
+                            /** @var Notification $notification */
+                            foreach ($notifications as $notification){
+                                $exUrl = explode('/',$notification->getRelatedLink());
+                                if($employer->getPersonPerson()->getIdPerson()==$exUrl[4] and !$equal){
+                                    $equal = true;
+                                    $response .= "- - - - ACTIVANDO NOTIFICACION - - - - <br>";
+                                    $notification->activate();
+                                }
+                            }
+                            if(!$equal){
+                                if($employerHasEmployee->getLegalFF()==1){//its ancient
+                                    $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
+                                    $utils = $this->get('app.symplifica_utils');
+                                    $dAction=null;
+                                    $dUrl=null;
+                                    $configurations=$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getConfigurations();
+                                    $flag=false;
+                                    /** @var Configuration $config */
+                                    foreach ($configurations as $config) {//searching if user need to generate a new contract
+                                        if($config->getValue()=="PreLegal-SignedContract"){
+                                            $flag=true;
+                                            break;
+                                        }
+                                    }
+                                    if(!$flag){//generating url to download contract
+                                        $dAction="Bajar";
+                                        $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getActiveContract()->getIdContract(), 'ref' => "contrato", 'type' => 'pdf'));
+                                    }
+                                    $msj = "Subir copia del contrato de ". $utils->mb_capitalize(explode(" ",$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getNames())[0]." ". $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getLastName1());
+                                    $url = $this->generateUrl("documentos_employee", array('entityType'=>'Contract','entityId'=>$employerHasEmployee->getActiveContract()->getIdContract(),'docCode'=>'CTR'));
+                                    $this->createNotification($employer->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl,$nCount);
+                                    $nCount++;//notification created
+                                }elseif($employerHasEmployee->getLegalFF()==0){//its new
+                                    $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
+                                    $utils = $this->get('app.symplifica_utils');
+                                    $dAction="Bajar";
+                                    $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getActiveContract()->getIdContract(), 'ref' => "contrato", 'type' => 'pdf'));
+                                    $msj = "Subir copia del contrato de ". $utils->mb_capitalize(explode(" ",$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getNames())[0]." ". $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getLastName1());
+                                    $url = $this->generateUrl("documentos_employee", array('entityType'=>'Contract','entityId'=>$employerHasEmployee->getActiveContract()->getIdContract(),'docCode'=>'CTR'));
+                                    $this->createNotification($employer->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl,$nCount);
+                                    $nCount++;//notification created
+                                }else{
+                                    $response.= "- - - - ERROR: LEGAL FLAG - - - - <br>";
+                                }
+                            }
+                        }
+                    }
+                    if ($aCount != null) {//if there is a parameter for the id
+                        $action->setIdAction($aCount);//setting the action id
+                        $em->persist($action);//persisting the action
+                        $metadata = $em->getClassMetadata(get_class($action));//line of code necessaryy to force an id
+                        $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);//line of code necessary to force an id
+                        $aCount++;//increment actionId Count
+                    } else {
+                        $em->persist($action);//persisting the action
+                    }
+                }else{//employerHasEmployee doesn't exist in SQL
+                    $response .= "- - - - NO EXISTE SQL - - - -<br>";
+                    $docType = $this->getDocumentTypeByCode('CTR');
+                    $notifications = $employer->getPersonPerson()->getNotificationByDocumentType($docType);
+                    if($notifications->isEmpty()){
+                        $response .= "- - - - ERROR: DOCUMENTO CONTRATO NO ENCONTRADO - - - - <br>";
+                        if($employerHasEmployee->getLegalFF()==1){//its ancient
+                            $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
+                            $utils = $this->get('app.symplifica_utils');
+                            $dAction=null;
+                            $dUrl=null;
+                            $configurations=$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getConfigurations();
+                            $flag=false;
+                            /** @var Configuration $config */
+                            foreach ($configurations as $config) {//searching if user need to generate a new contract
+                                if($config->getValue()=="PreLegal-SignedContract"){
+                                    $flag=true;
+                                    break;
+                                }
+                            }
+                            if(!$flag){//generating url to download contract
+                                $dAction="Bajar";
+                                $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getActiveContract()->getIdContract(), 'ref' => "contrato", 'type' => 'pdf'));
+                            }
+                            $msj = "Subir copia del contrato de ". $utils->mb_capitalize(explode(" ",$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getNames())[0]." ". $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getLastName1());
+                            $url = $this->generateUrl("documentos_employee", array('entityType'=>'Contract','entityId'=>$employerHasEmployee->getActiveContract()->getIdContract(),'docCode'=>'CTR'));
+                            $this->createNotification($employer->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl,$nCount);
+                            $nCount++;//notification created
+                        }elseif($employerHasEmployee->getLegalFF()==0){//its new
+                            $utils = $this->get('app.symplifica_utils');
+                            $dAction=null;
+                            $dUrl=null;
+                            $msj = "Aviso sobre el contrato de ". $utils->mb_capitalize(explode(" ",$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getNames())[0]." ". $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getLastName1());
+                            $url = $this->generateUrl("view_document_contract_state", array("idEHE"=>$employerHasEmployee->getIdEmployerHasEmployee()));
+                            $this->createNotification($employer->getPersonPerson(), $msj, $url, $docType,"Ver",$dAction,$dUrl, $nCount);
+                            $nCount++;
+                        }else{
+                            $response.= "- - - - ERROR: LEGAL FLAG - - - - <br>";
+                        }
+                    }else{
+                        $equal = false;
+                        /** @var Notification $notification */
+                        foreach ($notifications as $notification){
+                            $exUrl = explode('/',$notification->getRelatedLink());
+                            if($employer->getPersonPerson()->getIdPerson()==$exUrl[4] and !$equal){
+                                $equal = true;
+                                $response .= "- - - - ACTIVANDO NOTIFICACION - - - - <br>";
+                                $notification->activate();
+                            }
+                        }
+                        if(!$equal){
+                            $response .= "- - - - ERROR: DOCUMENTO CONTRATO NO ENCONTRADO - - - - <br>";
+                            if($employerHasEmployee->getLegalFF()==1){//its ancient
+                                $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
+                                $utils = $this->get('app.symplifica_utils');
+                                $dAction=null;
+                                $dUrl=null;
+                                $configurations=$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getConfigurations();
+                                $flag=false;
+                                /** @var Configuration $config */
+                                foreach ($configurations as $config) {//searching if user need to generate a new contract
+                                    if($config->getValue()=="PreLegal-SignedContract"){
+                                        $flag=true;
+                                        break;
+                                    }
+                                }
+                                if(!$flag){//generating url to download contract
+                                    $dAction="Bajar";
+                                    $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getActiveContract()->getIdContract(), 'ref' => "contrato", 'type' => 'pdf'));
+                                }
+                                $msj = "Subir copia del contrato de ". $utils->mb_capitalize(explode(" ",$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getNames())[0]." ". $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getLastName1());
+                                $url = $this->generateUrl("documentos_employee", array('entityType'=>'Contract','entityId'=>$employerHasEmployee->getActiveContract()->getIdContract(),'docCode'=>'CTR'));
+                                $this->createNotification($employer->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl,$nCount);
+                                $nCount++;//notification created
+                            }elseif($employerHasEmployee->getLegalFF()==0){//its new
+                                $utils = $this->get('app.symplifica_utils');
+                                $dAction=null;
+                                $dUrl=null;
+                                $msj = "Aviso sobre el contrato de ". $utils->mb_capitalize(explode(" ",$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getNames())[0]." ". $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getLastName1());
+                                $url = $this->generateUrl("view_document_contract_state", array("idEHE"=>$employerHasEmployee->getIdEmployerHasEmployee()));
+                                $this->createNotification($employer->getPersonPerson(), $msj, $url, $docType,"Ver",$dAction,$dUrl, $nCount);
+                                $nCount++;
+                            }else{
+                                $response.= "- - - - ERROR: LEGAL FLAG - - - - <br>";
+                            }
+                        }
+                    }
+                }
+                /** @var EmployeeHasEntity $employeeHasEntity */
+                foreach ($employerHasEmployee->getEmployeeEmployee()->getEntities() as $employeeHasEntity) {
+                    if($employeeHasEntity->getState()==1){
+                        /**
+                         * ╔══════════════════════════════════════════════════╗
+                         * ║ Action Upload Document RAD                       ║
+                         * ╚══════════════════════════════════════════════════╝
+                         */
+                        $action = new Action();
+                        $procedure->addAction($action);//adding the action to the procedure
+                        $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($action);//adding the action to the employerPerson
+                        $user->addAction($action);//adding the action to the user
+                        $action->setActionTypeActionType($this->getActionByType('SDE'));//setting the actionType
+                        $action->setActionStatus($this->getStatusByType('NEW'));
+                        $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
+                        $action->setEmployeeEntity($employeeHasEntity);
+                        $action->setUpdatedAt();
+                        if ($aCount != null) {//if there is a parameter for the id
+                            $action->setIdAction($aCount);//setting the action id
+                            $em->persist($action);//persisting the action
+                            $metadata = $em->getClassMetadata(get_class($action));//line of code necessaryy to force an id
+                            $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);//line of code necessary to force an id
+                            $aCount++;//increment actionId Count
+                        } else {
+                            $em->persist($action);//persisting the action
+                        }
+                    }
+                }
+            }
+        }
+        return array('aCount'=>$aCount,'response'=>$response, 'nCount'=>$nCount);
     }
 
     /**
@@ -723,11 +1233,12 @@ class ActionsRestController extends FOSRestController
      * ║  @param User $user                                    ║
      * ║  @param RealProcedure $procedure                      ║
      * ║  @param integer $aCount optional                      ║
+     * ║  @param integer $nCount optional                      ║
      * ╠═══════════════════════════════════════════════════════╣
      * ║  @return array                                        ║
      * ╚═══════════════════════════════════════════════════════╝
      */
-    protected function createActionsEmployerEmployee(User $user,RealProcedure $procedure,$aCount=null){
+    protected function createActionsEmployerEmployee(User $user, RealProcedure $procedure, $aCount=null, $nCount=null){
         $response = '- - - EMPLEADOR QUE ES EMPLEADO - - -<br>';
         $response .= '- - - CREANDO ACCIONES EMPLEADOR - - - <br>';
         /** @var Person $person */
@@ -755,8 +1266,7 @@ class ActionsRestController extends FOSRestController
             }
         }
         $action->setUpdatedAt();//setting the action updatedAt Date
-        $action->setCreatedAt($user->getLastPayDate());//setting the Action createrAt Date
-        $action->setFinishedAt($user->getLastPayDate());
+        $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
         if ($aCount != null) {//if there is a parameter for the id
             $action->setIdAction($aCount);//setting the action id
             $em->persist($action);//persisting the action
@@ -795,7 +1305,8 @@ class ActionsRestController extends FOSRestController
                         $dUrl=null;
                         $msj = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$employer->getPersonPerson()->getNames())[0]." ". $employer->getPersonPerson()->getLastName1());
                         $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$employer->getPersonPerson()->getIdPerson(),'docCode'=>$docType->getDocCode()));
-                        $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                        $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                        $nCount++;
                     }else{
                         $equal = false;
                         /** @var Notification $notification */
@@ -814,7 +1325,8 @@ class ActionsRestController extends FOSRestController
                             $dUrl=null;
                             $msj = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$employer->getPersonPerson()->getNames())[0]." ". $employer->getPersonPerson()->getLastName1());
                             $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$employer->getPersonPerson()->getIdPerson(),'docCode'=>$docType->getDocCode()));
-                            $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                            $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl,$nCount);
+                            $nCount++;
                         }
                     }
                 }
@@ -831,7 +1343,8 @@ class ActionsRestController extends FOSRestController
                     $dUrl=null;
                     $msj = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$employer->getPersonPerson()->getNames())[0]." ". $employer->getPersonPerson()->getLastName1());
                     $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$employer->getPersonPerson()->getIdPerson(),'docCode'=>$docType->getDocCode()));
-                    $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                    $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl,$nCount);
+                    $nCount++;
                 }else{
                     $equal = false;
                     /** @var Notification $notification */
@@ -850,14 +1363,15 @@ class ActionsRestController extends FOSRestController
                         $dUrl=null;
                         $msj = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$employer->getPersonPerson()->getNames())[0]." ". $employer->getPersonPerson()->getLastName1());
                         $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$employer->getPersonPerson()->getIdPerson(),'docCode'=>$docType->getDocCode()));
-                        $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                        $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl,$nCount);
+                        $nCount++;
                     }
                 }
             }
         }
         $action->setUpdatedAt();//setting the action updatedAt Date
-        $action->setCreatedAt($user->getLastPayDate());//setting the Action createrAt Date
-        $action->setFinishedAt($user->getLastPayDate());
+        $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
+        $action->setFinishedAt(null);
         if ($aCount != null) {//if there is a parameter for the id
             $action->setIdAction($aCount);//setting the action id
             $em->persist($action);//persisting the action
@@ -879,7 +1393,7 @@ class ActionsRestController extends FOSRestController
         $action->setActionTypeActionType($this->getActionByType('VRTE'));//setting the actionType validate employer rut
         $action->setActionStatus($this->getStatusByType('DIS'));//setting the initial state disable
         $action->setUpdatedAt();//setting the action updatedAt Date
-        $action->setCreatedAt($user->getLastPayDate());//setting the Action createrAt Date
+        $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
         if($person->getActionsByActionType($this->getActionByType('VRT'))->first()){
             $action->setActionStatus($this->getStatusByType('CON'));
         }else{
@@ -898,7 +1412,8 @@ class ActionsRestController extends FOSRestController
                         $dUrl=null;
                         $msj = "Subir copia del RUT de " .$utils->mb_capitalize(explode(" ",$employer->getPersonPerson()->getNames())[0]." ". $employer->getPersonPerson()->getLastName1());
                         $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$employer->getPersonPerson()->getIdPerson(),'docCode'=>'RUT'));
-                        $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                        $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl,$nCount);
+                        $nCount++;
                     }else{
                         $equal = false;
                         /** @var Notification $notification */
@@ -917,7 +1432,8 @@ class ActionsRestController extends FOSRestController
                             $dUrl=null;
                             $msj = "Subir copia del RUT de " .$utils->mb_capitalize(explode(" ",$employer->getPersonPerson()->getNames())[0]." ". $employer->getPersonPerson()->getLastName1());
                             $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$employer->getPersonPerson()->getIdPerson(),'docCode'=>'RUT'));
-                            $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                            $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl,$nCount);
+                            $nCount++;
                         }
                     }
                 }
@@ -933,7 +1449,8 @@ class ActionsRestController extends FOSRestController
                     $dUrl=null;
                     $msj = "Subir copia del RUT de " .$utils->mb_capitalize(explode(" ",$employer->getPersonPerson()->getNames())[0]." ". $employer->getPersonPerson()->getLastName1());
                     $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$employer->getPersonPerson()->getIdPerson(),'docCode'=>'RUT'));
-                    $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                    $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl,$nCount);
+                    $nCount++;
                 }else{
                     $equal = false;
                     /** @var Notification $notification */
@@ -952,7 +1469,8 @@ class ActionsRestController extends FOSRestController
                         $dUrl=null;
                         $msj = "Subir copia del RUT de " .$utils->mb_capitalize(explode(" ",$employer->getPersonPerson()->getNames())[0]." ". $employer->getPersonPerson()->getLastName1());
                         $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$employer->getPersonPerson()->getIdPerson(),'docCode'=>'RUT'));
-                        $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                        $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl,$nCount);
+                        $nCount++;
                     }
                 }
             }
@@ -978,7 +1496,7 @@ class ActionsRestController extends FOSRestController
         $action->setActionTypeActionType($this->getActionByType('VM'));//setting the actionType validate employer mandatory
         $action->setActionStatus($this->getStatusByType('DIS'));//setting the initial state disable
         $action->setUpdatedAt();//setting the action updatedAt Date
-        $action->setCreatedAt($user->getLastPayDate());//setting the Action createrAt Date
+        $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
         if ($employer->getMandatoryDocument()) {//if employer has mandatoryDocument checking for existing media
             if ($employer->getMandatoryDocument()->getMediaMedia()) {
                 $action->setActionStatus($this->getStatusByType('NEW'));//if media found setting the action status to new
@@ -996,7 +1514,8 @@ class ActionsRestController extends FOSRestController
                     $url = $this->generateUrl("documentos_employee", array('entityType'=>'Employer','entityId'=>$employer->getIdEmployer(),'docCode'=>'MAND'));
                     $dUrl = $this->generateUrl("download_documents", array('id' => $employer->getPersonPerson()->getIdPerson(), 'ref' => "mandato", 'type' => 'pdf'));
                     $dAction="Bajar";
-                    $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                    $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl,$nCount);
+                    $nCount++;
                 }else{
                     $equal = false;
                     /** @var Notification $notification */
@@ -1015,7 +1534,8 @@ class ActionsRestController extends FOSRestController
                         $url = $this->generateUrl("documentos_employee", array('entityType'=>'Employer','entityId'=>$employer->getIdEmployer(),'docCode'=>'MAND'));
                         $dUrl = $this->generateUrl("download_documents", array('id' => $employer->getPersonPerson()->getIdPerson(), 'ref' => "mandato", 'type' => 'pdf'));
                         $dAction="Bajar";
-                        $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                        $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl,$nCount);
+                        $nCount++;
                     }
                 }
             }
@@ -1032,7 +1552,8 @@ class ActionsRestController extends FOSRestController
                 $url = $this->generateUrl("documentos_employee", array('entityType'=>'Employer','entityId'=>$employer->getIdEmployer(),'docCode'=>'MAND'));
                 $dUrl = $this->generateUrl("download_documents", array('id' => $employer->getPersonPerson()->getIdPerson(), 'ref' => "mandato", 'type' => 'pdf'));
                 $dAction="Bajar";
-                $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl,$nCount);
+                $nCount++;
             }else{
                 $equal = false;
                 /** @var Notification $notification */
@@ -1051,7 +1572,8 @@ class ActionsRestController extends FOSRestController
                     $url = $this->generateUrl("documentos_employee", array('entityType'=>'Employer','entityId'=>$employer->getIdEmployer(),'docCode'=>'MAND'));
                     $dUrl = $this->generateUrl("download_documents", array('id' => $employer->getPersonPerson()->getIdPerson(), 'ref' => "mandato", 'type' => 'pdf'));
                     $dAction="Bajar";
-                    $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                    $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl,$nCount);
+                    $nCount++;
                 }
             }
         }
@@ -1083,7 +1605,7 @@ class ActionsRestController extends FOSRestController
             $action->setEmployerEntity($employerHasEntity);
             $action->setActionStatus($this->getStatusByType('NEW'));//setting the action status to new
             $action->setUpdatedAt();//setting the action updatedAt Date
-            $action->setCreatedAt($user->getLastPayDate());//setting the Action createrAt Date
+            $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
             if ($aCount != null) {//if there is a parameter for the id
                 $action->setIdAction($aCount);//setting the action id
                 $em->persist($action);//persisting the action
@@ -1095,7 +1617,7 @@ class ActionsRestController extends FOSRestController
             }
         }
         $em->persist($procedure);//persisting procedure
-        return array('aCount'=>$aCount,'response'=>$response);
+        return array('aCount'=>$aCount,'response'=>$response, 'nCount'=>$nCount);
     }
 
     /**
@@ -1107,11 +1629,12 @@ class ActionsRestController extends FOSRestController
      * ║  @param User $user                                    ║
      * ║  @param RealProcedure $procedure                      ║
      * ║  @param integer $aCount optional                      ║
+     * ║  @param integer $nCount optional                      ║
      * ╠═══════════════════════════════════════════════════════╣
      * ║  @return array                                        ║
      * ╚═══════════════════════════════════════════════════════╝
      */
-    protected function createActionsEmployer(User $user,RealProcedure $procedure,$aCount=null){
+    protected function createActionsEmployer(User $user,RealProcedure $procedure,$aCount=null, $nCount=null){
         $response='- - - CREANDO ACCIONES EMPLEADOR - - -<br>';
         $em = $this->getDoctrine()->getManager();
         $employer = $user->getPersonPerson()->getEmployer();
@@ -1130,7 +1653,7 @@ class ActionsRestController extends FOSRestController
             $action->setActionTypeActionType($this->getActionByType('VER'));//setting the actionType validate employer info
             $action->setActionStatus($this->getStatusByType('DIS'));//setting the initial state disable
             $action->setUpdatedAt();//setting the action updatedAt Date
-            $action->setCreatedAt($user->getLastPayDate());//setting the Action createrAt Date
+            $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
             if ($employer->getIdSqlSociety()) {//if the employer exist in SQL info must be correct
                 $action->setActionStatus($this->getStatusByType('NEW'));//setting the Action Status to NEW
             } else {//else info need to be checked by backoffice
@@ -1157,7 +1680,7 @@ class ActionsRestController extends FOSRestController
             $action->setActionTypeActionType($this->getActionByType('VDDE'));//setting the actionType validate employer document
             $action->setActionStatus($this->getStatusByType('DIS'));//setting the initial state disable
             $action->setUpdatedAt();//setting the action updatedAt Date
-            $action->setCreatedAt($user->getLastPayDate());//setting the Action createrAt Date
+            $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
             if ($employer->getPersonPerson()->getDocumentDocument()) {//if employer has documentDocument checking for existing media
                 if ($employer->getPersonPerson()->getDocumentDocument()->getMediaMedia()) {
                     $action->setActionStatus($this->getStatusByType('NEW'));//if media found setting the action status to new
@@ -1174,7 +1697,8 @@ class ActionsRestController extends FOSRestController
                         $dUrl=null;
                         $msj = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$employer->getPersonPerson()->getNames())[0]." ". $employer->getPersonPerson()->getLastName1());
                         $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$employer->getPersonPerson()->getIdPerson(),'docCode'=>$docType->getDocCode()));
-                        $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                        $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                        $nCount++;
                     }else{
                         $equal = false;
                         /** @var Notification $notification */
@@ -1193,7 +1717,8 @@ class ActionsRestController extends FOSRestController
                             $dUrl=null;
                             $msj = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$employer->getPersonPerson()->getNames())[0]." ". $employer->getPersonPerson()->getLastName1());
                             $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$employer->getPersonPerson()->getIdPerson(),'docCode'=>$docType->getDocCode()));
-                            $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                            $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                            $nCount++;
                         }
                     }
                 }
@@ -1210,7 +1735,8 @@ class ActionsRestController extends FOSRestController
                     $dUrl=null;
                     $msj = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$employer->getPersonPerson()->getNames())[0]." ". $employer->getPersonPerson()->getLastName1());
                     $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$employer->getPersonPerson()->getIdPerson(),'docCode'=>$docType->getDocCode()));
-                    $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                    $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                    $nCount++;
                 }else{
                     $equal = false;
                     /** @var Notification $notification */
@@ -1229,7 +1755,8 @@ class ActionsRestController extends FOSRestController
                         $dUrl=null;
                         $msj = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$employer->getPersonPerson()->getNames())[0]." ". $employer->getPersonPerson()->getLastName1());
                         $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$employer->getPersonPerson()->getIdPerson(),'docCode'=>$docType->getDocCode()));
-                        $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                        $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                        $nCount++;
                     }
                 }
             }
@@ -1254,7 +1781,7 @@ class ActionsRestController extends FOSRestController
             $action->setActionTypeActionType($this->getActionByType('VRTE'));//setting the actionType validate employer rut
             $action->setActionStatus($this->getStatusByType('DIS'));//setting the initial state disable
             $action->setUpdatedAt();//setting the action updatedAt Date
-            $action->setCreatedAt($user->getLastPayDate());//setting the Action createrAt Date
+            $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
             if ($employer->getPersonPerson()->getRutDocument()) {//if employer has RutDocument checking for existing media
                 if ($employer->getPersonPerson()->getRutDocument()->getMediaMedia()) {
                     $action->setActionStatus($this->getStatusByType('NEW'));//if media found setting the action status to new
@@ -1271,7 +1798,8 @@ class ActionsRestController extends FOSRestController
                         $dUrl=null;
                         $msj = "Subir copia del RUT de " .$utils->mb_capitalize(explode(" ",$employer->getPersonPerson()->getNames())[0]." ". $employer->getPersonPerson()->getLastName1());
                         $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$employer->getPersonPerson()->getIdPerson(),'docCode'=>'RUT'));
-                        $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                        $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                        $nCount++;
                     }else{
                         $equal = false;
                         /** @var Notification $notification */
@@ -1290,7 +1818,8 @@ class ActionsRestController extends FOSRestController
                             $dUrl=null;
                             $msj = "Subir copia del RUT de " .$utils->mb_capitalize(explode(" ",$employer->getPersonPerson()->getNames())[0]." ". $employer->getPersonPerson()->getLastName1());
                             $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$employer->getPersonPerson()->getIdPerson(),'docCode'=>'RUT'));
-                            $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                            $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                            $nCount++;
                         }
                     }
                 }
@@ -1307,7 +1836,8 @@ class ActionsRestController extends FOSRestController
                     $dUrl=null;
                     $msj = "Subir copia del RUT de " .$utils->mb_capitalize(explode(" ",$employer->getPersonPerson()->getNames())[0]." ". $employer->getPersonPerson()->getLastName1());
                     $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$employer->getPersonPerson()->getIdPerson(),'docCode'=>'RUT'));
-                    $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                    $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                    $nCount++;
                 }else{
                     $equal = false;
                     /** @var Notification $notification */
@@ -1326,7 +1856,8 @@ class ActionsRestController extends FOSRestController
                         $dUrl=null;
                         $msj = "Subir copia del RUT de " .$utils->mb_capitalize(explode(" ",$employer->getPersonPerson()->getNames())[0]." ". $employer->getPersonPerson()->getLastName1());
                         $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$employer->getPersonPerson()->getIdPerson(),'docCode'=>'RUT'));
-                        $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                        $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                        $nCount++;
                     }
                 }
             }
@@ -1351,7 +1882,7 @@ class ActionsRestController extends FOSRestController
             $action->setActionTypeActionType($this->getActionByType('VM'));//setting the actionType validate employer mandatory
             $action->setActionStatus($this->getStatusByType('DIS'));//setting the initial state disable
             $action->setUpdatedAt();//setting the action updatedAt Date
-            $action->setCreatedAt($user->getLastPayDate());//setting the Action createrAt Date
+            $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
             if ($employer->getMandatoryDocument()) {//if employer has mandatoryDocument checking for existing media
                 if ($employer->getMandatoryDocument()->getMediaMedia()) {
                     $action->setActionStatus($this->getStatusByType('NEW'));//if media found setting the action status to new
@@ -1368,7 +1899,8 @@ class ActionsRestController extends FOSRestController
                         $url = $this->generateUrl("documentos_employee", array('entityType'=>'Employer','entityId'=>$employer->getIdEmployer(),'docCode'=>'MAND'));
                         $dUrl = $this->generateUrl("download_documents", array('id' => $employer->getPersonPerson()->getIdPerson(), 'ref' => "mandato", 'type' => 'pdf'));
                         $dAction="Bajar";
-                        $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                        $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                        $nCount++;
                     }else{
                         $equal = false;
                         /** @var Notification $notification */
@@ -1387,7 +1919,8 @@ class ActionsRestController extends FOSRestController
                             $url = $this->generateUrl("documentos_employee", array('entityType'=>'Employer','entityId'=>$employer->getIdEmployer(),'docCode'=>'MAND'));
                             $dUrl = $this->generateUrl("download_documents", array('id' => $employer->getPersonPerson()->getIdPerson(), 'ref' => "mandato", 'type' => 'pdf'));
                             $dAction="Bajar";
-                            $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                            $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                            $nCount++;
                         }
                     }
                 }
@@ -1404,7 +1937,8 @@ class ActionsRestController extends FOSRestController
                     $url = $this->generateUrl("documentos_employee", array('entityType'=>'Employer','entityId'=>$employer->getIdEmployer(),'docCode'=>'MAND'));
                     $dUrl = $this->generateUrl("download_documents", array('id' => $employer->getPersonPerson()->getIdPerson(), 'ref' => "mandato", 'type' => 'pdf'));
                     $dAction="Bajar";
-                    $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                    $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                    $nCount++;
                 }else{
                     $equal = false;
                     /** @var Notification $notification */
@@ -1423,7 +1957,8 @@ class ActionsRestController extends FOSRestController
                         $url = $this->generateUrl("documentos_employee", array('entityType'=>'Employer','entityId'=>$employer->getIdEmployer(),'docCode'=>'MAND'));
                         $dUrl = $this->generateUrl("download_documents", array('id' => $employer->getPersonPerson()->getIdPerson(), 'ref' => "mandato", 'type' => 'pdf'));
                         $dAction="Bajar";
-                        $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                        $this->createNotification($person, $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                        $nCount++;
                     }
                 }
             }
@@ -1455,7 +1990,7 @@ class ActionsRestController extends FOSRestController
                 $action->setEmployerEntity($employerHasEntity);
                 $action->setActionStatus($this->getStatusByType('NEW'));//setting the action status to new
                 $action->setUpdatedAt();//setting the action updatedAt Date
-                $action->setCreatedAt($user->getLastPayDate());//setting the Action createrAt Date
+                $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
                 if ($aCount != null) {//if there is a parameter for the id
                     $action->setIdAction($aCount);//setting the action id
                     $em->persist($action);//persisting the action
@@ -1470,7 +2005,7 @@ class ActionsRestController extends FOSRestController
         } else {
             $response .= "ERROR: el usuario " . $employer->getPersonPerson()->getFullName() . " ya tiene acciones creadas<br>";
         }
-        return array('aCount'=>$aCount,'response'=>$response);
+        return array('aCount'=>$aCount,'response'=>$response,'nCount'=>$nCount);
     }
 
     /**
@@ -1483,11 +2018,12 @@ class ActionsRestController extends FOSRestController
      * ║  @param EmployerHasEmployee $employerHasEmployee      ║
      * ║  @param bool $atLeastOneFinished                      ║
      * ║  @param integer $aCount optional                      ║
+     * ║  @param integer $nCount optional                      ║
      * ╠═══════════════════════════════════════════════════════╣
      * ║  @return array                                        ║
      * ╚═══════════════════════════════════════════════════════╝
      */
-    protected function createActionsEmployee(User $user,RealProcedure $procedure,EmployerHasEmployee $employerHasEmployee,$atLeastOneFinished,$aCount=null){
+    protected function createActionsEmployee(User $user,RealProcedure $procedure,EmployerHasEmployee $employerHasEmployee,$atLeastOneFinished,$aCount=null, $nCount=null){
         $response='- - - - - CREANDO ACCIONES EMPLEADO - - - - -<br>';
         $employee = $employerHasEmployee->getEmployeeEmployee();
         $em = $this->getDoctrine()->getManager();
@@ -1503,7 +2039,7 @@ class ActionsRestController extends FOSRestController
         $action->setActionTypeActionType($this->getActionByType('VEE'));//setting the actionType validate employer info
         $action->setActionStatus($this->getStatusByType('DIS'));//setting the initial state disable
         $action->setUpdatedAt();//setting the action updatedAt Date
-        $action->setCreatedAt($user->getLastPayDate());//setting the Action createrAt Date
+        $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
         if ($employerHasEmployee->getExistentSQL()) {//if the employee exist in SQL info must be correct
             $action->setActionStatus($this->getStatusByType('FIN'));//setting the Action Status to Finished
             if ($employerHasEmployee->getState() > 3 and !$atLeastOneFinished) {
@@ -1567,7 +2103,7 @@ class ActionsRestController extends FOSRestController
         $employee->getPersonPerson()->addAction($action);//adding the action to the employeePerson
         $user->addAction($action);//adding the action to the user
         $action->setUpdatedAt();//setting the action updatedAt Date
-        $action->setCreatedAt($user->getLastPayDate());//setting the Action createrAt Date
+        $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
         $action->setActionTypeActionType($this->getActionByType('VDD'));
         if ($employee->getPersonPerson()->getDocumentDocument()) {//if employee has documentDocument checking for existing media
             if ($employee->getPersonPerson()->getDocumentDocument()->getMediaMedia()) {
@@ -1588,7 +2124,8 @@ class ActionsRestController extends FOSRestController
                     $dUrl=null;
                     $msj = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$employee->getPersonPerson()->getNames())[0]." ". $employee->getPersonPerson()->getLastName1());
                     $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$employee->getPersonPerson()->getIdPerson(),'docCode'=>$docType->getDocCode()));
-                    $this->createNotification($employerHasEmployee->getEmployerEmployer()->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                    $this->createNotification($employerHasEmployee->getEmployerEmployer()->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                    $nCount++;
                 }else{
                     $equal = false;
                     /** @var Notification $notification */
@@ -1607,13 +2144,47 @@ class ActionsRestController extends FOSRestController
                         $dUrl=null;
                         $msj = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$employee->getPersonPerson()->getNames())[0]." ". $employee->getPersonPerson()->getLastName1());
                         $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$employee->getPersonPerson()->getIdPerson(),'docCode'=>$docType->getDocCode()));
-                        $this->createNotification($employerHasEmployee->getEmployerEmployer()->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl);
+                        $this->createNotification($employerHasEmployee->getEmployerEmployer()->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                        $nCount++;
                     }
                 }
             }
         } else {//if document not found means document is pending
             $action->setActionStatus($this->getStatusByType('DCPE'));//changing the action status to document pending
             $response .= "- - - - - ERROR: DOCUMENTO DE IDENTIDAD NO ENCONTRADO - - - - - <br>";
+            $docType = $this->getDocumentTypeByCode($employee->getPersonPerson()->getDocumentType());
+            $notifications = $employee->getPersonPerson()->getNotificationByDocumentType($docType);
+            if($notifications->isEmpty()){
+                $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
+                $utils = $this->get('app.symplifica_utils');
+                $dAction=null;
+                $dUrl=null;
+                $msj = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$employee->getPersonPerson()->getNames())[0]." ". $employee->getPersonPerson()->getLastName1());
+                $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$employee->getPersonPerson()->getIdPerson(),'docCode'=>$docType->getDocCode()));
+                $this->createNotification($employerHasEmployee->getEmployerEmployer()->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                $nCount++;
+            }else{
+                $equal = false;
+                /** @var Notification $notification */
+                foreach ($notifications as $notification){
+                    $exUrl = explode('/',$notification->getRelatedLink());
+                    if($employee->getPersonPerson()->getIdPerson()==$exUrl[4] and !$equal){
+                        $equal = true;
+                        $response .= "- - - - ACTIVANDO NOTIFICACION - - - - <br>";
+                        $notification->activate();
+                    }
+                }
+                if(!$equal){
+                    $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
+                    $utils = $this->get('app.symplifica_utils');
+                    $dAction=null;
+                    $dUrl=null;
+                    $msj = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$employee->getPersonPerson()->getNames())[0]." ". $employee->getPersonPerson()->getLastName1());
+                    $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$employee->getPersonPerson()->getIdPerson(),'docCode'=>$docType->getDocCode()));
+                    $this->createNotification($employerHasEmployee->getEmployerEmployer()->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                    $nCount++;
+                }
+            }
         }
         if ($aCount != null) {//if there is a parameter for the id
             $action->setIdAction($aCount);//setting the action id
@@ -1634,7 +2205,7 @@ class ActionsRestController extends FOSRestController
         $employee->getPersonPerson()->addAction($action);//adding the action to the employeePerson
         $user->addAction($action);//adding the action to the user
         $action->setUpdatedAt();//setting the action updatedAt Date
-        $action->setCreatedAt($user->getLastPayDate());//setting the Action createrAt Date
+        $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
         $action->setActionTypeActionType($this->getActionByType('VCAT'));
         if ($employerHasEmployee->getAuthDocument()) {//if employerHasEmployee has authLetter checking for existing media
             if ($employerHasEmployee->getAuthDocument()->getMediaMedia()) {
@@ -1646,10 +2217,76 @@ class ActionsRestController extends FOSRestController
             } else {//if media not found changing action status to error
                 $action->setActionStatus($this->getStatusByType('ERRO'));//if media not found setting action status to error
                 $response .= "- - - - - ERROR: CARTA DE AUTORIZACION NO ENCONTRADA - - - - - <br>";
+                $docType = $this->getDocumentTypeByCode('CAS');
+                $notifications = $employee->getPersonPerson()->getNotificationByDocumentType($docType);
+                if($notifications->isEmpty()){
+                    $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
+                    $utils = $this->get('app.symplifica_utils');
+                    $msj = "Subir autorización firmada de manejo de datos y afiliación de " .$utils->mb_capitalize(explode(" ",$employee->getPersonPerson()->getNames())[0]." ". $employee->getPersonPerson()->getLastName1());
+                    $url = $this->generateUrl("documentos_employee", array('entityType'=>'EmployerHasEmployee','entityId'=>$employerHasEmployee->getIdEmployerHasEmployee(),'docCode'=>'CAS'));
+                    $dAction="Bajar";
+                    $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getIdEmployerHasEmployee(), 'ref' => "aut-afiliacion-ss", 'type' => 'pdf'));
+                    $this->createNotification($employerHasEmployee->getEmployerEmployer()->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                    $nCount++;
+                }else{
+                    $equal = false;
+                    /** @var Notification $notification */
+                    foreach ($notifications as $notification){
+                        $exUrl = explode('/',$notification->getRelatedLink());
+                        if($employee->getPersonPerson()->getIdPerson()==$exUrl[4] and !$equal){
+                            $equal = true;
+                            $response .= "- - - - ACTIVANDO NOTIFICACION - - - - <br>";
+                            $notification->activate();
+                        }
+                    }
+                    if(!$equal){
+                        $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
+                        $utils = $this->get('app.symplifica_utils');
+                        $dAction="Bajar";
+                        $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getIdEmployerHasEmployee(), 'ref' => "aut-afiliacion-ss", 'type' => 'pdf'));
+                        $msj = "Subir autorización firmada de manejo de datos y afiliación de " .$utils->mb_capitalize(explode(" ",$employee->getPersonPerson()->getNames())[0]." ". $employee->getPersonPerson()->getLastName1());
+                        $url = $this->generateUrl("documentos_employee", array('entityType'=>'EmployerHasEmployee','entityId'=>$employerHasEmployee->getIdEmployerHasEmployee(),'docCode'=>'CAS'));
+                        $this->createNotification($employerHasEmployee->getEmployerEmployer()->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                        $nCount++;
+                    }
+                }
             }
         } else {//if document not found means document is pending
             $action->setActionStatus($this->getStatusByType('DCPE'));//changing the action status to document pending
             $response .= "- - - - - ERROR: CARTA DE AUTORIZACION NO ENCONTRADA - - - - - <br>";
+            $docType = $this->getDocumentTypeByCode('CAS');
+            $notifications = $employee->getPersonPerson()->getNotificationByDocumentType($docType);
+            if($notifications->isEmpty()){
+                $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
+                $utils = $this->get('app.symplifica_utils');
+                $dAction="Bajar";
+                $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getIdEmployerHasEmployee(), 'ref' => "aut-afiliacion-ss", 'type' => 'pdf'));
+                $msj = "Subir autorización firmada de manejo de datos y afiliación de " .$utils->mb_capitalize(explode(" ",$employee->getPersonPerson()->getNames())[0]." ". $employee->getPersonPerson()->getLastName1());
+                $url = $this->generateUrl("documentos_employee", array('entityType'=>'EmployerHasEmployee','entityId'=>$employerHasEmployee->getIdEmployerHasEmployee(),'docCode'=>'CAS'));
+                $this->createNotification($employerHasEmployee->getEmployerEmployer()->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                $nCount++;
+            }else{
+                $equal = false;
+                /** @var Notification $notification */
+                foreach ($notifications as $notification){
+                    $exUrl = explode('/',$notification->getRelatedLink());
+                    if($employee->getPersonPerson()->getIdPerson()==$exUrl[4] and !$equal){
+                        $equal = true;
+                        $response .= "- - - - ACTIVANDO NOTIFICACION - - - - <br>";
+                        $notification->activate();
+                    }
+                }
+                if(!$equal){
+                    $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
+                    $utils = $this->get('app.symplifica_utils');
+                    $dAction="Bajar";
+                    $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getIdEmployerHasEmployee(), 'ref' => "aut-afiliacion-ss", 'type' => 'pdf'));
+                    $msj = "Subir autorización firmada de manejo de datos y afiliación de " .$utils->mb_capitalize(explode(" ",$employee->getPersonPerson()->getNames())[0]." ". $employee->getPersonPerson()->getLastName1());
+                    $url = $this->generateUrl("documentos_employee", array('entityType'=>'EmployerHasEmployee','entityId'=>$employerHasEmployee->getIdEmployerHasEmployee(),'docCode'=>'CAS'));
+                    $this->createNotification($employerHasEmployee->getEmployerEmployer()->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                    $nCount++;
+                }
+            }
         }
         if ($aCount != null) {//if there is a parameter for the id
             $action->setIdAction($aCount);//setting the action id
@@ -1660,12 +2297,496 @@ class ActionsRestController extends FOSRestController
         } else {
             $em->persist($action);//persisting the action
         }
-        return array('aCount'=>$aCount,'response'=>$response, 'atLeast'=>$atLeastOneFinished);
+        /** @var EmployeeHasEntity $employeeHasEntity */
+        foreach ($employee->getEntities() as $employeeHasEntity){
+            if($employeeHasEntity->getState()!=-1){
+                /**
+                 * ╔══════════════════════════════════════════════════╗
+                 * ║ Employee entities begin                          ║
+                 * ╚══════════════════════════════════════════════════╝
+                 */
+                $action = new Action();
+                $procedure->addAction($action);//adding the action to the procedure
+                $employee->getPersonPerson()->addAction($action);//adding the action to the employeePerson
+                $user->addAction($action);//adding the action to the user
+                $action->setUpdatedAt();//setting the action updatedAt Date
+                $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
+                $action->setEmployeeEntity($employeeHasEntity);
+                if($employeeHasEntity->getState()==0){
+                    $action->setActionTypeActionType($this->getActionByType('VEN'));
+                }elseif($employeeHasEntity->getState() == 1){
+                    $action->setActionTypeActionType($this->getActionByType('IN'));
+                }
+                if($employerHasEmployee->getExistentSQL()){
+                    if($employerHasEmployee->getState()>4){
+                        $action->setActionStatus($this->getStatusByType('FIN'));
+                    }else{
+                        $action->setActionStatus($this->getStatusByType('NEW'));
+                    }
+                }else{
+                    if($employerHasEmployee->getState()>4){
+                        $action->setActionStatus($this->getStatusByType('ERRO'));
+                        $response .= "- - - - - ERROR: EMPLEADO QUE NO EXISTE EN SQL Y ESTA TERMINADO - - - - - <br>";
+                    }else{
+                        $action->setActionStatus($this->getStatusByType('NEW'));
+                    }
+                }
+                if ($aCount != null) {//if there is a parameter for the id
+                    $action->setIdAction($aCount);//setting the action id
+                    $em->persist($action);//persisting the action
+                    $metadata = $em->getClassMetadata(get_class($action));//line of code necessaryy to force an id
+                    $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);//line of code necessaryy to force an id
+                    $aCount++;//increment actionId Count
+                } else {
+                    $em->persist($action);//persisting the action
+                }
+
+            }
+
+        }
+        return array('aCount'=>$aCount,'response'=>$response, 'atLeast'=>$atLeastOneFinished ,'nCount'=>$nCount);
     }
 
     /**
-     * @param $code
-     * @return ProcedureType
+     * ╔═══════════════════════════════════════════════════════╗
+     * ║ Function createActionsEmployeeEmployee                ║
+     * ║ Function that creates the actions for the employee    ║
+     * ║ that has more than one employer                       ║
+     * ╠═══════════════════════════════════════════════════════╣
+     * ║  @param User $user                                    ║
+     * ║  @param RealProcedure $procedure                      ║
+     * ║  @param EmployerHasEmployee $employerHasEmployee      ║
+     * ║  @param bool $atLeastOneFinished                      ║
+     * ║  @param integer $aCount optional                      ║
+     * ║  @param integer $nCount optional                      ║
+     * ╠═══════════════════════════════════════════════════════╣
+     * ║  @return array                                        ║
+     * ╚═══════════════════════════════════════════════════════╝
+     */
+    protected function createActionsEmployeeEmployee(User $user,RealProcedure $procedure,EmployerHasEmployee $employerHasEmployee,$atLeastOneFinished,$aCount=null, $nCount=null){
+        $response='- - - - - CREANDO ACCIONES EMPLEADO - - - - -<br>';
+        $employee = $employerHasEmployee->getEmployeeEmployee();
+        $em = $this->getDoctrine()->getManager();
+        //Validate info must exist for this employee
+        if($employee->getPersonPerson()->getActionsByActionType($this->getActionByType('VEE'))->isEmpty()){
+            $response .= "- - - - - ERROR: EMPLEADO QUE YA ES EMPLEADO NO TIENE ACCION VALIDAR INFORMACION - - - - - <br>";
+        }
+
+        if($employerHasEmployee->getExistentSQL()){
+            if ($employerHasEmployee->getState() > 3 and !$atLeastOneFinished) {
+                $atLeastOneFinished = true;
+                $response .= '- - - - - UN EMPLEADO FINALIZADO - - - - -<br>';
+                /** @var Action $tempAction */
+                $tempAction = $procedure->getActionsByActionType($this->getActionByType('VER'))->first();
+                if ($tempAction and $tempAction->getActionStatus()->getCode() == 'NEW') {
+                    $tempAction->setActionStatus($this->getStatusByType('FIN'));
+                    $em->persist($tempAction);
+                }
+                $tempAction = $procedure->getActionsByActionType($this->getActionByType('VDDE'))->first();
+                if($tempAction and $tempAction->getActionStatus()->getCode()=='NEW'){
+                    $tempAction->setActionStatus($this->getStatusByType('FIN'));
+                    $em->persist($tempAction);
+                }
+                $tempAction = $procedure->getActionsByActionType($this->getActionByType('VRTE'))->first();
+                if($tempAction and $tempAction->getActionStatus()->getCode()=='NEW'){
+                    $tempAction->setActionStatus($this->getStatusByType('FIN'));
+                    $em->persist($tempAction);
+                }
+                $tempAction = $procedure->getActionsByActionType($this->getActionByType('VM'))->first();
+                if($tempAction and $tempAction->getActionStatus()->getCode()=='NEW'){
+                    $tempAction->setActionStatus($this->getStatusByType('FIN'));
+                    $em->persist($tempAction);
+                }
+                foreach ($procedure->getActionsByActionType($this->getActionByType('VENE')) as $tempAction){
+                    if($tempAction){
+                        $tempAction->setActionStatus($this->getStatusByType('FIN'));
+                        $em->persist($tempAction);
+                    }
+                }
+                foreach ($procedure->getActionsByActionType($this->getActionByType('INE')) as $tempAction){
+                    if($tempAction) {
+                        $tempAction->setActionStatus($this->getStatusByType('FIN'));
+                        $em->persist($tempAction);
+                    }
+                }
+            }
+        }
+        //Validate document must exist for this employee
+        if($employee->getPersonPerson()->getActionsByActionType($this->getActionByType('VDD'))->isEmpty()){
+            $response .= "- - - - - ERROR: EMPLEADO QUE YA ES EMPLEADO NO TIENE ACCION VALIDAR DOCUMENTO - - - - - <br>";
+        }
+        //Creating action validate authletter for this employerHasEmployee relation
+        /**
+         * ╔══════════════════════════════════════════════════╗
+         * ║ Action validate employee AuthLetter              ║
+         * ╚══════════════════════════════════════════════════╝
+         */
+        $action = new Action();
+        $procedure->addAction($action);//adding the action to the procedure
+        $employee->getPersonPerson()->addAction($action);//adding the action to the employeePerson
+        $user->addAction($action);//adding the action to the user
+        $action->setUpdatedAt();//setting the action updatedAt Date
+        $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
+        $action->setActionTypeActionType($this->getActionByType('VCAT'));
+        if ($employerHasEmployee->getAuthDocument()) {//if employerHasEmployee has authLetter checking for existing media
+            if ($employerHasEmployee->getAuthDocument()->getMediaMedia()) {
+                if ($employerHasEmployee->getState() > 3) {
+                    $action->setActionStatus($this->getStatusByType('FIN'));//if media found and state >3 employerHasEmployee finished set status to finish
+                } else {
+                    $action->setActionStatus($this->getStatusByType('NEW'));//if media found setting the action status to new
+                }
+            } else {//if media not found changing action status to error
+                $action->setActionStatus($this->getStatusByType('ERRO'));//if media not found setting action status to error
+                $response .= "- - - - - ERROR: CARTA DE AUTORIZACION NO ENCONTRADA - - - - - <br>";
+                $docType = $this->getDocumentTypeByCode('CAS');
+                $notifications = $employee->getPersonPerson()->getNotificationByDocumentType($docType);
+                if($notifications->isEmpty()){
+                    $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
+                    $utils = $this->get('app.symplifica_utils');
+                    $dAction="Bajar";
+                    $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getIdEmployerHasEmployee(), 'ref' => "aut-afiliacion-ss", 'type' => 'pdf'));
+                    $msj = "Subir autorización firmada de manejo de datos y afiliación de " .$utils->mb_capitalize(explode(" ",$employee->getPersonPerson()->getNames())[0]." ". $employee->getPersonPerson()->getLastName1());
+                    $url = $this->generateUrl("documentos_employee", array('entityType'=>'EmployerHasEmployee','entityId'=>$employerHasEmployee->getIdEmployerHasEmployee(),'docCode'=>'CAS'));
+                    $this->createNotification($employerHasEmployee->getEmployerEmployer()->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                    $nCount++;
+                }else{
+                    $equal = false;
+                    /** @var Notification $notification */
+                    foreach ($notifications as $notification){
+                        $exUrl = explode('/',$notification->getRelatedLink());
+                        if($employee->getPersonPerson()->getIdPerson()==$exUrl[4] and !$equal){
+                            $equal = true;
+                            $response .= "- - - - ACTIVANDO NOTIFICACION - - - - <br>";
+                            $notification->activate();
+                        }
+                    }
+                    if(!$equal){
+                        $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
+                        $utils = $this->get('app.symplifica_utils');
+                        $dAction="Bajar";
+                        $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getIdEmployerHasEmployee(), 'ref' => "aut-afiliacion-ss", 'type' => 'pdf'));
+                        $msj = "Subir autorización firmada de manejo de datos y afiliación de " .$utils->mb_capitalize(explode(" ",$employee->getPersonPerson()->getNames())[0]." ". $employee->getPersonPerson()->getLastName1());
+                        $url = $this->generateUrl("documentos_employee", array('entityType'=>'EmployerHasEmployee','entityId'=>$employerHasEmployee->getIdEmployerHasEmployee(),'docCode'=>'CAS'));
+                        $this->createNotification($employerHasEmployee->getEmployerEmployer()->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                        $nCount++;
+                    }
+                }
+            }
+        } else {//if document not found means document is pending
+            $action->setActionStatus($this->getStatusByType('DCPE'));//changing the action status to document pending
+            $response .= "- - - - - ERROR: CARTA DE AUTORIZACION NO ENCONTRADA - - - - - <br>";
+            $docType = $this->getDocumentTypeByCode('CAS');
+            $notifications = $employee->getPersonPerson()->getNotificationByDocumentType($docType);
+            if($notifications->isEmpty()){
+                $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
+                $utils = $this->get('app.symplifica_utils');
+                $dAction="Bajar";
+                $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getIdEmployerHasEmployee(), 'ref' => "aut-afiliacion-ss", 'type' => 'pdf'));
+                $msj = "Subir autorización firmada de manejo de datos y afiliación de " .$utils->mb_capitalize(explode(" ",$employee->getPersonPerson()->getNames())[0]." ". $employee->getPersonPerson()->getLastName1());
+                $url = $this->generateUrl("documentos_employee", array('entityType'=>'EmployerHasEmployee','entityId'=>$employerHasEmployee->getIdEmployerHasEmployee(),'docCode'=>'CAS'));
+                $this->createNotification($employerHasEmployee->getEmployerEmployer()->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                $nCount++;
+            }else{
+                $equal = false;
+                /** @var Notification $notification */
+                foreach ($notifications as $notification){
+                    $exUrl = explode('/',$notification->getRelatedLink());
+                    if($employee->getPersonPerson()->getIdPerson()==$exUrl[4] and !$equal){
+                        $equal = true;
+                        $response .= "- - - - ACTIVANDO NOTIFICACION - - - - <br>";
+                        $notification->activate();
+                    }
+                }
+                if(!$equal){
+                    $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
+                    $utils = $this->get('app.symplifica_utils');
+                    $dAction="Bajar";
+                    $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getIdEmployerHasEmployee(), 'ref' => "aut-afiliacion-ss", 'type' => 'pdf'));
+                    $msj = "Subir autorización firmada de manejo de datos y afiliación de " .$utils->mb_capitalize(explode(" ",$employee->getPersonPerson()->getNames())[0]." ". $employee->getPersonPerson()->getLastName1());
+                    $url = $this->generateUrl("documentos_employee", array('entityType'=>'EmployerHasEmployee','entityId'=>$employerHasEmployee->getIdEmployerHasEmployee(),'docCode'=>'CAS'));
+                    $this->createNotification($employerHasEmployee->getEmployerEmployer()->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                    $nCount++;
+                }
+            }
+        }
+        if ($aCount != null) {//if there is a parameter for the id
+            $action->setIdAction($aCount);//setting the action id
+            $em->persist($action);//persisting the action
+            $metadata = $em->getClassMetadata(get_class($action));//line of code necessaryy to force an id
+            $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);//line of code necessaryy to force an id
+            $aCount++;//increment actionId Count
+        } else {
+            $em->persist($action);//persisting the action
+        }
+        //validate and suscribe entities must exist for this employee
+        if($employee->getEntities()->count() != $employee->getPersonPerson()->getActionsByActionType($this->getActionByType('VEN'))->count()+$employee->getPersonPerson()->getActionsByActionType($this->getActionByType('IN'))->count()){
+            $response .= "- - - - - ERROR: EMPLEADO QUE YA ES EMPLEADO NO TIENE ACCIONES VALIDAR E INSCRIVIR ENTIDADES COMPLETAS - - - - - <br>";
+        }
+        return array('aCount'=>$aCount,'response'=>$response, 'atLeast'=>$atLeastOneFinished , 'nCount'=>$nCount);
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════╗
+     * ║ Function createActionsEmployeeEmployer                ║
+     * ║ Function that creates the actions for the employee    ║
+     * ║ that is also a employer                               ║
+     * ╠═══════════════════════════════════════════════════════╣
+     * ║  @param User $user                                    ║
+     * ║  @param RealProcedure $procedure                      ║
+     * ║  @param EmployerHasEmployee $employerHasEmployee      ║
+     * ║  @param bool $atLeastOneFinished                      ║
+     * ║  @param integer $aCount optional                      ║
+     * ║  @param integer $nCount optional                      ║
+     * ╠═══════════════════════════════════════════════════════╣
+     * ║  @return array                                        ║
+     * ╚═══════════════════════════════════════════════════════╝
+     */
+    protected function createActionsEmployeeEmployer(User $user,RealProcedure $procedure,EmployerHasEmployee $employerHasEmployee,$atLeastOneFinished,$aCount=null, $nCount=null){
+        $response='- - - - - CREANDO ACCIONES EMPLEADO QUE ES EMPLEADOR - - - - -<br>';
+        $employee = $employerHasEmployee->getEmployeeEmployee();
+        $em = $this->getDoctrine()->getManager();
+        /**
+         * ╔══════════════════════════════════════════════════╗
+         * ║ Action validate employee info                    ║
+         * ╚══════════════════════════════════════════════════╝
+         */
+        $action = new Action();
+        $procedure->addAction($action);//adding the action to the procedure
+        $employee->getPersonPerson()->addAction($action);//adding the action to the employerPerson
+        $user->addAction($action);//adding the action to the user
+        $action->setActionTypeActionType($this->getActionByType('VEE'));//setting the actionType validate employer info
+        $action->setActionStatus($this->getStatusByType('CON'));//setting the initial state consulting
+        $action->setUpdatedAt();//setting the action updatedAt Date
+        $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
+        if ($employerHasEmployee->getExistentSQL()) {//if the employee exist in SQL info must be correct
+            if ($employerHasEmployee->getState() > 3 and !$atLeastOneFinished) {
+                $atLeastOneFinished = true;
+                $response .= '- - - - - UN EMPLEADO FINALIZADO - - - - -<br>';
+                /** @var Action $tempAction */
+                $tempAction = $procedure->getActionsByActionType($this->getActionByType('VER'))->first();
+                if ($tempAction and $tempAction->getActionStatus()->getCode() == 'NEW') {
+                    $tempAction->setActionStatus($this->getStatusByType('FIN'));
+                    $em->persist($tempAction);
+                }
+                $tempAction = $procedure->getActionsByActionType($this->getActionByType('VDDE'))->first();
+                if($tempAction and $tempAction->getActionStatus()->getCode()=='NEW'){
+                    $tempAction->setActionStatus($this->getStatusByType('FIN'));
+                    $em->persist($tempAction);
+                }
+                $tempAction = $procedure->getActionsByActionType($this->getActionByType('VRTE'))->first();
+                if($tempAction and $tempAction->getActionStatus()->getCode()=='NEW'){
+                    $tempAction->setActionStatus($this->getStatusByType('FIN'));
+                    $em->persist($tempAction);
+                }
+                $tempAction = $procedure->getActionsByActionType($this->getActionByType('VM'))->first();
+                if($tempAction and $tempAction->getActionStatus()->getCode()=='NEW'){
+                    $tempAction->setActionStatus($this->getStatusByType('FIN'));
+                    $em->persist($tempAction);
+                }
+                foreach ($procedure->getActionsByActionType($this->getActionByType('VENE')) as $tempAction){
+                    if($tempAction){
+                        $tempAction->setActionStatus($this->getStatusByType('FIN'));
+                        $em->persist($tempAction);
+                    }
+                }
+                foreach ($procedure->getActionsByActionType($this->getActionByType('INE')) as $tempAction){
+                    if($tempAction) {
+                        $tempAction->setActionStatus($this->getStatusByType('FIN'));
+                        $em->persist($tempAction);
+                    }
+                }
+            }
+        }
+        if ($aCount != null) {//if there is a parameter for the id
+            $action->setIdAction($aCount);//setting the action id
+            $em->persist($action);//persisting the action
+            $metadata = $em->getClassMetadata(get_class($action));//line of code necessaryy to force an id
+            $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);//line of code necessaryy to force an id
+            $aCount++;//increment actionId Count
+        } else {
+            $em->persist($action);//persisting the action
+        }
+        /**
+         * ╔══════════════════════════════════════════════════╗
+         * ║ Action validate employee Document                ║
+         * ╚══════════════════════════════════════════════════╝
+         */
+        $action = new Action();
+        $procedure->addAction($action);//adding the action to the procedure
+        $employee->getPersonPerson()->addAction($action);//adding the action to the employeePerson
+        $user->addAction($action);//adding the action to the user
+        $action->setUpdatedAt();//setting the action updatedAt Date
+        $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
+        $action->setActionTypeActionType($this->getActionByType('VDD'));
+        $action->setActionStatus($this->getStatusByType('CON'));//setting the initial state consulting
+        if ($aCount != null) {//if there is a parameter for the id
+            $action->setIdAction($aCount);//setting the action id
+            $em->persist($action);//persisting the action
+            $metadata = $em->getClassMetadata(get_class($action));//line of code necessaryy to force an id
+            $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);//line of code necessaryy to force an id
+            $aCount++;//increment actionId Count
+        } else {
+            $em->persist($action);//persisting the action
+        }
+        /**
+         * ╔══════════════════════════════════════════════════╗
+         * ║ Action validate employee AuthLetter              ║
+         * ╚══════════════════════════════════════════════════╝
+         */
+        $action = new Action();
+        $procedure->addAction($action);//adding the action to the procedure
+        $employee->getPersonPerson()->addAction($action);//adding the action to the employeePerson
+        $user->addAction($action);//adding the action to the user
+        $action->setUpdatedAt();//setting the action updatedAt Date
+        $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
+        $action->setActionTypeActionType($this->getActionByType('VCAT'));
+        if ($employerHasEmployee->getAuthDocument()) {//if employerHasEmployee has authLetter checking for existing media
+            if ($employerHasEmployee->getAuthDocument()->getMediaMedia()) {
+                if ($employerHasEmployee->getState() > 3) {
+                    $action->setActionStatus($this->getStatusByType('FIN'));//if media found and state >3 employerHasEmployee finished set status to finish
+                } else {
+                    $action->setActionStatus($this->getStatusByType('NEW'));//if media found setting the action status to new
+                }
+            } else {//if media not found changing action status to error
+                $action->setActionStatus($this->getStatusByType('ERRO'));//if media not found setting action status to error
+                $response .= "- - - - - ERROR: CARTA DE AUTORIZACION NO ENCONTRADA - - - - - <br>";
+                $docType = $this->getDocumentTypeByCode('CAS');
+                $notifications = $employee->getPersonPerson()->getNotificationByDocumentType($docType);
+                if($notifications->isEmpty()){
+                    $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
+                    $utils = $this->get('app.symplifica_utils');
+                    $dAction="Bajar";
+                    $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getIdEmployerHasEmployee(), 'ref' => "aut-afiliacion-ss", 'type' => 'pdf'));
+                    $msj = "Subir autorización firmada de manejo de datos y afiliación de " .$utils->mb_capitalize(explode(" ",$employee->getPersonPerson()->getNames())[0]." ". $employee->getPersonPerson()->getLastName1());
+                    $url = $this->generateUrl("documentos_employee", array('entityType'=>'EmployerHasEmployee','entityId'=>$employerHasEmployee->getIdEmployerHasEmployee(),'docCode'=>'CAS'));
+                    $this->createNotification($employerHasEmployee->getEmployerEmployer()->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                    $nCount++;
+                }else{
+                    $equal = false;
+                    /** @var Notification $notification */
+                    foreach ($notifications as $notification){
+                        $exUrl = explode('/',$notification->getRelatedLink());
+                        if($employee->getPersonPerson()->getIdPerson()==$exUrl[4] and !$equal){
+                            $equal = true;
+                            $response .= "- - - - ACTIVANDO NOTIFICACION - - - - <br>";
+                            $notification->activate();
+                        }
+                    }
+                    if(!$equal){
+                        $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
+                        $utils = $this->get('app.symplifica_utils');
+                        $dAction="Bajar";
+                        $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getIdEmployerHasEmployee(), 'ref' => "aut-afiliacion-ss", 'type' => 'pdf'));
+                        $msj = "Subir autorización firmada de manejo de datos y afiliación de " .$utils->mb_capitalize(explode(" ",$employee->getPersonPerson()->getNames())[0]." ". $employee->getPersonPerson()->getLastName1());
+                        $url = $this->generateUrl("documentos_employee", array('entityType'=>'EmployerHasEmployee','entityId'=>$employerHasEmployee->getIdEmployerHasEmployee(),'docCode'=>'CAS'));
+                        $this->createNotification($employerHasEmployee->getEmployerEmployer()->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                        $nCount++;
+                    }
+                }
+            }
+        } else {//if document not found means document is pending
+            $action->setActionStatus($this->getStatusByType('DCPE'));//changing the action status to document pending
+            $response .= "- - - - - ERROR: CARTA DE AUTORIZACION NO ENCONTRADA - - - - - <br>";
+            $docType = $this->getDocumentTypeByCode('CAS');
+            $notifications = $employee->getPersonPerson()->getNotificationByDocumentType($docType);
+            if($notifications->isEmpty()){
+                $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
+                $utils = $this->get('app.symplifica_utils');
+                $dAction="Bajar";
+                $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getIdEmployerHasEmployee(), 'ref' => "aut-afiliacion-ss", 'type' => 'pdf'));
+                $msj = "Subir autorización firmada de manejo de datos y afiliación de " .$utils->mb_capitalize(explode(" ",$employee->getPersonPerson()->getNames())[0]." ". $employee->getPersonPerson()->getLastName1());
+                $url = $this->generateUrl("documentos_employee", array('entityType'=>'EmployerHasEmployee','entityId'=>$employerHasEmployee->getIdEmployerHasEmployee(),'docCode'=>'CAS'));
+                $this->createNotification($employerHasEmployee->getEmployerEmployer()->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                $nCount++;
+            }else{
+                $equal = false;
+                /** @var Notification $notification */
+                foreach ($notifications as $notification){
+                    $exUrl = explode('/',$notification->getRelatedLink());
+                    if($employee->getPersonPerson()->getIdPerson()==$exUrl[4] and !$equal){
+                        $equal = true;
+                        $response .= "- - - - ACTIVANDO NOTIFICACION - - - - <br>";
+                        $notification->activate();
+                    }
+                }
+                if(!$equal){
+                    $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
+                    $utils = $this->get('app.symplifica_utils');
+                    $dAction="Bajar";
+                    $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getIdEmployerHasEmployee(), 'ref' => "aut-afiliacion-ss", 'type' => 'pdf'));
+                    $msj = "Subir autorización firmada de manejo de datos y afiliación de " .$utils->mb_capitalize(explode(" ",$employee->getPersonPerson()->getNames())[0]." ". $employee->getPersonPerson()->getLastName1());
+                    $url = $this->generateUrl("documentos_employee", array('entityType'=>'EmployerHasEmployee','entityId'=>$employerHasEmployee->getIdEmployerHasEmployee(),'docCode'=>'CAS'));
+                    $this->createNotification($employerHasEmployee->getEmployerEmployer()->getPersonPerson(), $msj, $url, $docType,"Subir",$dAction,$dUrl, $nCount);
+                    $nCount++;
+                }
+            }
+        }
+        if ($aCount != null) {//if there is a parameter for the id
+            $action->setIdAction($aCount);//setting the action id
+            $em->persist($action);//persisting the action
+            $metadata = $em->getClassMetadata(get_class($action));//line of code necessaryy to force an id
+            $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);//line of code necessaryy to force an id
+            $aCount++;//increment actionId Count
+        } else {
+            $em->persist($action);//persisting the action
+        }
+        /** @var EmployeeHasEntity $employeeHasEntity */
+        foreach ($employee->getEntities() as $employeeHasEntity){
+            if($employeeHasEntity->getState()!=-1){
+                /**
+                 * ╔══════════════════════════════════════════════════╗
+                 * ║ Employee entities begin                          ║
+                 * ╚══════════════════════════════════════════════════╝
+                 */
+                $action = new Action();
+                $procedure->addAction($action);//adding the action to the procedure
+                $employee->getPersonPerson()->addAction($action);//adding the action to the employeePerson
+                $user->addAction($action);//adding the action to the user
+                $action->setUpdatedAt();//setting the action updatedAt Date
+                $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
+                if($employeeHasEntity->getState()==0){
+                    $action->setActionTypeActionType($this->getActionByType('VEN'));
+                }elseif($employeeHasEntity->getState() == 1){
+                    $action->setActionTypeActionType($this->getActionByType('IN'));
+                }
+                if($employerHasEmployee->getExistentSQL()){
+                    if($employerHasEmployee->setState()>4){
+                        $action->setActionStatus($this->getStatusByType('FIN'));
+                    }else{
+                        $action->setActionStatus($this->getStatusByType('NEW'));
+                    }
+                }else{
+                    if($employerHasEmployee->getState()>4){
+                        $action->setActionStatus($this->getStatusByType('ERRO'));
+                        $response .= "- - - - - ERROR: EMPLEADO QUE NO EXISTE EN SQL Y ESTA TERMINADO - - - - - <br>";
+                    }else{
+                        $action->setActionStatus($this->getStatusByType('NEW'));
+                    }
+                }
+                if ($aCount != null) {//if there is a parameter for the id
+                    $action->setIdAction($aCount);//setting the action id
+                    $em->persist($action);//persisting the action
+                    $metadata = $em->getClassMetadata(get_class($action));//line of code necessaryy to force an id
+                    $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);//line of code necessaryy to force an id
+                    $aCount++;//increment actionId Count
+                } else {
+                    $em->persist($action);//persisting the action
+                }
+
+            }
+
+        }
+        return array('aCount'=>$aCount,'response'=>$response, 'atLeast'=>$atLeastOneFinished ,'nCount'=>$nCount);
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════╗
+     * ║ Function getProcedureByType                           ║
+     * ╠═══════════════════════════════════════════════════════╣
+     * ║  @param string $code of the ProcedureType to find     ║
+     * ╠═══════════════════════════════════════════════════════╣
+     * ║  @return ProcedureType                                ║
+     * ╚═══════════════════════════════════════════════════════╝
      */
     protected function getProcedureByType($code){
         return $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:ProcedureType")->findOneBy(array('code'=> $code));
@@ -1695,7 +2816,42 @@ class ActionsRestController extends FOSRestController
         return $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=> $code));
     }
 
-    protected function createNotification($person, $descripcion, $url, $documentType = null, $action = "Subir",$dAction=null,$dUrl=null)
+
+    /**
+     * @param User $user
+     * @return DateTime
+     */
+    protected function getDateCreatedInLog(User $user){
+        $em = $this->getDoctrine()->getManager();
+        /** @var Log $log */
+        $log = $em->getRepository("RocketSellerTwoPickBundle:Log")->findOneBy(array("userUser"=>$user));
+        if($log){
+            $strDate = $log->getPreviousData();
+            $date = DateTime::createFromFormat("Y-m-d H:i:s",$strDate);
+        }else{
+            $date = new DateTime();
+        }
+        return $date;
+    }
+
+
+    /**
+     * ╔═══════════════════════════════════════════════════════╗
+     * ║ Function createNotification                           ║
+     * ╠═══════════════════════════════════════════════════════╣
+     * ║  @param Person $person notification owner             ║
+     * ║  @param string $descripcion text to display           ║
+     * ║  @param string $url related link string               ║
+     * ║  @param DocumentType $documentType                    ║
+     * ║  @param string $action                                ║
+     * ║  @param string $dAction                               ║
+     * ║  @param string $dUrl related download link            ║
+     * ║  @param integer $nCount notification id to force it   ║
+     * ╠═══════════════════════════════════════════════════════╣
+     * ║  @return ProcedureType                                ║
+     * ╚═══════════════════════════════════════════════════════╝
+     */
+    protected function createNotification($person, $descripcion, $url, $documentType = null, $action = "Subir", $dAction=null, $dUrl=null, $nCount=null)
     {
         $notification = new Notification();
         $notification->setPersonPerson($person);
@@ -1708,8 +2864,14 @@ class ActionsRestController extends FOSRestController
         $notification->setDownloadAction($dAction);
         $notification->setDownloadLink($dUrl);
         $em = $this->getDoctrine()->getManager();
-        $em->persist($notification);
-        $em->flush();
+        if ($nCount != null) {//if theres an id parameter for the procedure
+            $notification->setId($nCount);//setting the id to the realProcedure
+            $em->persist($notification);;//persisting the procedure
+            $metadata = $em->getClassMetadata(get_class($notification));//line of code necessaryy to force an id
+            $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);//line of code necessaryy to force an id
+        } else {
+            $em->persist($notification);;//persisting the procedure
+        }
     }
 
     /**

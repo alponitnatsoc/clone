@@ -94,6 +94,9 @@ show_have_to_pay_users:
 add_to_sql_and_hightec_back:
     path:     /backoffice/addtoback/{user}/{autentication}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:addToSQLandHighTecBack}
+add_to_novo_back:
+    path:     /backoffice/addtoback/{user}/{autentication}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:addToNovoBack}
 add_to_sql_entities_back:
     path:     /backoffice/entities/addtoback/{user}/{autentication}/{idEhe}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:addToSQLEntitiesBack}

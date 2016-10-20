@@ -200,7 +200,7 @@ class HighTechRestController extends FOSRestController
                 'phone'=>$dis->getIdUser()->getPersonPerson()->getPhones()->first()->getPhoneNumber(),
 	              'value'=>$dis->getValue()
             );
-            //$this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
+            $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
 
             $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => 'P1'));
             //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
@@ -419,7 +419,7 @@ class HighTechRestController extends FOSRestController
                 'idPOD'=>$rejectedPurchaseOrderDescription->getIdPurchaseOrdersDescription(),
                 'value'=>$value
             );
-            //$this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
+            $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
 
             $notification= new Notification();
             $notification->setAccion("Ver");
