@@ -261,6 +261,24 @@ class BackOfficeController extends Controller
         return $this->render('RocketSellerTwoPickBundle:BackOffice:showInvoices.html.twig',array('pos'=>$efectivePurchaseOrders));
 
     }
+    public function addToNovoBackAction($user,$autentication)
+    {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+
+        $dm = $this->getDoctrine();
+        $repo = $dm->getRepository('RocketSellerTwoPickBundle:User');
+        /** @var User $user */
+        $user = $repo->find($user);
+        if (!$user) {
+            throw $this->createNotFoundException('No demouser found!');
+        }
+        if($autentication==$user->getSalt()) {
+            $this->addToNovo($user);
+        }
+        return $this->redirectToRoute("show_dashboard");
+
+
+    }
     public function addToSQLEntitiesBackAction($user,$autentication, $idEhe)
     {
         $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
