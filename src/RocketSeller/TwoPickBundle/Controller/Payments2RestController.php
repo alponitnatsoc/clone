@@ -227,7 +227,7 @@ class Payments2RestController extends FOSRestController
      * (name="firstLastName", nullable=false, requirements="(.)*", strict=true, description="Code of the bank, can be found int he table Bank.")
      * (name="secondLastName", nullable=true, requirements="(.)*", strict=true, description="Checking or saving account.")
      * (name="name", nullable=false, requirements="(.)*", strict=true, description="Name of the person.")
-     * (name="documentType", nullable=false, requirements="(CC|cc|nit|NIT|ce|CE)", strict=true, description="File of the letter authorizing symplifica, in base 64.")
+     * (name="documentType", nullable=false, requirements="(CC|cc|nit|NIT|ce|CE|PASAPORTE)", strict=true, description="File of the letter authorizing symplifica, in base 64.")
      * (name="documentNumber", nullable=false, requirements="\d+", strict=true, description="File of the letter authorizing symplifica, in base 64.")
      * (name="documentExpeditionDate", nullable=true, requirements="[0-9]{4}-[0-9]{2}-[0-9]{2}", strict=true, description="YYYY-MM-DD")
      * (name="civilState", nullable=true, requirements="(SOLTERO|CASADO|UNION LIBRE|VIUDO|DIVORCIADO)", strict=true, description="")
@@ -253,7 +253,7 @@ class Payments2RestController extends FOSRestController
         $mandatory['secondLastName'] = false;
         $regex['name'] = '(.)*';
         $mandatory['name'] = true;
-        $regex['documentType'] = '(CC|cc|nit|NIT|ce|CE)';
+        $regex['documentType'] = '(CC|cc|nit|NIT|ce|CE|PASAPORTE)';
         $mandatory['documentType'] = true;
         $regex['documentNumber'] = '\d+';
         $mandatory['documentNumber'] = true;
@@ -371,7 +371,7 @@ class Payments2RestController extends FOSRestController
      * (name="firstLastName", nullable=false, requirements="(.)*", strict=true, description="Code of the bank, can be found int he table Bank.")
      * (name="secondLastName", nullable=true, requirements="(.)*", strict=true, description="Checking or saving account.")
      * (name="name", nullable=false, requirements="(.)*", strict=true, description="Name of the person.")
-     * (name="documentType", nullable=false, requirements="(CC|cc|nit|NIT|ce|CE)", strict=true, description="File of the letter authorizing symplifica, in base 64.")
+     * (name="documentType", nullable=false, requirements="(CC|cc|nit|NIT|ce|CE||PASAPORTE)", strict=true, description="File of the letter authorizing symplifica, in base 64.")
      * (name="documentNumber", nullable=false, requirements="\d+", strict=true, description="File of the letter authorizing symplifica, in base 64.")
      * (name="documentExpeditionDate", nullable=true, requirements="[0-9]{4}-[0-9]{2}-[0-9]{2}", strict=true, description="YYYY-MM-DD")
      * (name="civilState", nullable=true, requirements="(SOLTERO|CASADO|UNION LIBRE|VIUDO|DIVORCIADO)", strict=true, description="")
@@ -399,7 +399,7 @@ class Payments2RestController extends FOSRestController
         $mandatory['secondLastName'] = false;
         $regex['name'] = '(.)*';
         $mandatory['name'] = true;
-        $regex['documentType'] = '(CC|cc|nit|NIT|ce|CE)';
+        $regex['documentType'] = '(CC|cc|nit|NIT|ce|CE|PASAPORTE)';
         $mandatory['documentType'] = true;
         $regex['documentNumber'] = '\d+';
         $mandatory['documentNumber'] = true;
