@@ -1,5 +1,5 @@
 {% trans_default_domain 'FOSUserBundle' %}
-{% block subject %}{% autoescape false %}Reporte de novedades oportuno{% endautoescape %}{% endblock %}
+{% block subject %}{% autoescape false %}Dotación a tu empleada{% endautoescape %}{% endblock %}
 {% block body_html %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -38,18 +38,17 @@
 
             <tr>
               <td style="padding: 10px 10px 20px 10px;">
-                <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#40c1c3; font-size: 20px;width: 90%;margin: 0 auto;">¡Hola {{ userName }}!</div>
+                  <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#40c1c3; font-size: 20px;width: 90%;margin: 0 auto;">¡Hola {{ userName }}!</div>
                 <br />
-                <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#909090; font-size: 15px; width:90%;margin:0 auto"><span style="color:#13878e;font-weight:600">La fecha del pago de nómina esta próxima</span><br>
-                    Realiza el pago de tus empleados {% if days == 2 %}quincenales{% endif %} antes del día <strong>{% if  days == 3%}22{% else %}12{% endif %}</strong> de este mes para que llegue a tiempo.<br>
-                    Para hacerlo, simplemente debes entrar a Symplifica, reportar novedades (si las tienes) e ir a “pagar ahora”.<br>
-                  <span style="color:#13878e;font-weight:600">También podrás hacerlo fácilmente desde nuestra APP móvil</span><br><br>
-
-                <a href="https://symplifica.com/" style="text-decoration:none;width: 90%;margin: 0 auto;" target="_blank;"><div style="background:#13878e;border-radius:25px; height: 25px; font-size:14px; width: 170px; color:#FFFFFF;font-family: 'Open Sans', sans-serif; font-weight: 600; padding: 5px 0 0 0; text-align:center">Ir a Symplifica</div></a><br />
-
-
+                  <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#909090; font-size: 15px; width:90%;margin:0 auto"><span style="color:#13878e;font-weight:600">¡Es momento de renovar la dotación de tu empleada!</span><br>
+                  Recuerda que esto debes hacerlo cada 4 meses y debes entregarle vestido y calzado.</div><br>
+                <div style="font-family: 'Open Sans', sans-serif; font-weight: 300; color:#858789; font-size: 15px;width:90%;margin:0 auto">
+                    <span style="color:#13878e;font-weight:600">Con Symplifica no olvidarás nada,</span><br>
+                    Equipo Symplifica<br>
+                    </div>
               </td>
             </tr>
+
 
             <tr><td style="font-size: 0; line-height: 0;" height="20">&nbsp;</td></tr>
             <tr>
@@ -61,3 +60,4 @@
     </table>
   </body>
 </html>
+{% endblock %}
