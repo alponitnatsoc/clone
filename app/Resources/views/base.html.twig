@@ -63,7 +63,7 @@
         f.parentNode.insertBefore(j, f);
     })(window, document, 'script', 'dataLayer', 'GTM-TR6JCJ');
 </script>
-
+{% block intercom %}
 <script>
     window.intercomSettings = {
         app_id: "mydavhzb",
@@ -105,7 +105,7 @@
     )()
 </script>
 
-
+{% endblock %}
 <!-- End Google Tag Manager -->
 
 {% if is_granted("IS_AUTHENTICATED_FULLY") %}
