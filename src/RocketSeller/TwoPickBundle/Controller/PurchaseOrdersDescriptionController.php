@@ -43,8 +43,9 @@ class PurchaseOrdersDescriptionController extends Controller
             '@RocketSellerTwoPick/BackOffice/pila.html.twig',array('pilas'=>$cPod, 'tipoPlanilla' =>$cPodFileType));
     }
 
-		public function persistPilaEnlaceOperativoCodeAction($id,$idPod){
+		public function persistPilaEnlaceOperativoCodeAction($id,$idPod, $payFile){
 			if($id != ""){
+				/** @var PurchaseOrdersDescription $pod */
 				$pod = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')->findOneBy(array("idPurchaseOrdersDescription" => $idPod));
 				$oldFileName = $pod->getEnlaceOperativoFileName();
 				$pod->setEnlaceOperativoFileName($id);
@@ -62,7 +63,8 @@ class PurchaseOrdersDescriptionController extends Controller
 				if( !is_null($po)
 							&& $po->getAlreadyRecived() == 1
 								&& $po->getPurchaseOrdersStatus()->getIdNovoPay() == "00"
-									&& is_null($oldFileName)) {
+									&& $payFile == "ok"
+										&& $pod->getPayPay() != null ) {
 					$answerHighTech = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getDispersePurchaseOrder', array('idPurchaseOrder' => $po->getIdPurchaseOrders()), array('_format' => 'json'));
 				}
 

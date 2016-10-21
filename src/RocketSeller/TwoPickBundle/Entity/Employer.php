@@ -42,6 +42,13 @@ class Employer
     private $idHighTech;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $existentNovo;
+
+    /**
      * @ORM\Column(type="string", length=20)
      */
     private $employerType;
@@ -112,15 +119,16 @@ class Employer
      * @ORM\Column(type="integer", nullable=true)
      */
     private $status=0;
-	
+
 		/**
 		 * -1 - Success
+		 * -2 - Employer was registered before PilaBot
 		 * Anything else, active transaction id
 		 * @ORM\Column(type="integer", nullable=TRUE)
 		 */
 		private $existentPila;
-	
-	
+
+
 		/**
 		 * @ORM\ManyToMany(targetEntity="Transaction", cascade={"persist"})
 		 * @ORM\JoinTable(name="employer_has_transactions",
@@ -472,6 +480,7 @@ class Employer
         $this->realProcedure = new \Doctrine\Common\Collections\ArrayCollection();
         $this->employerHasEmployees = new \Doctrine\Common\Collections\ArrayCollection();
         $this->entities = new \Doctrine\Common\Collections\ArrayCollection();
+	      $this->transactions = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -558,7 +567,7 @@ class Employer
             ->where(Criteria::expr()->gte("state",2));
         return $this->employerHasEmployees->matching($criteria);
     }
-	
+
     /**
      * Set existentPila
      *
@@ -615,5 +624,29 @@ class Employer
     public function getTransactions()
     {
         return $this->transactions;
+    }
+
+    /**
+     * Set existentNovo
+     *
+     * @param integer $existentNovo
+     *
+     * @return Employer
+     */
+    public function setExistentNovo($existentNovo)
+    {
+        $this->existentNovo = $existentNovo;
+
+        return $this;
+    }
+
+    /**
+     * Get existentNovo
+     *
+     * @return integer
+     */
+    public function getExistentNovo()
+    {
+        return $this->existentNovo;
     }
 }

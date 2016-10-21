@@ -771,7 +771,7 @@ class PaymentMethodRestController extends FOSRestController
                         $dateToSend=$purchaseOrderDescription->getDateToPay();
                     }
                 }
-                if($purchaseOrderDescription->getEnlaceOperativoFileName()==null){
+                if($purchaseOrderDescription->getEnlaceOperativoFileName()==null || $purchaseOrderDescription->getUploadedFile() != -1){
                     /** @var TwigSwiftMailer $smailer */
                     $smailer = $this->get('symplifica.mailer.twig_swift');
                     $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage(array('emailType'=>'backWarning','toEmail'=>'backofficesymplifica@symplifica.com','idPod'=>$purchaseOrderDescription->getIdPurchaseOrdersDescription()));
@@ -948,7 +948,6 @@ class PaymentMethodRestController extends FOSRestController
                     $purchaseOrder->setDatePaid(new DateTime());
                     $em->persist($purchaseOrder);
                     $em->flush();
-                    //TODO if correct we should simulate the 3rd party confirmation
                     $request->request->add(array(
                         "numeroRadicado" => $radicatedNumber,
                         "estado" => "0"
@@ -957,7 +956,7 @@ class PaymentMethodRestController extends FOSRestController
                     return array('code'=>$insertionAnswer->getStatusCode(),'data'=> $insertionAnswer->getContent());
 
                 }else{
-                    //TODO error dispersing something really bad happended mabe
+                    //TODO-Gabriel error dispersing something really bad happended mabe
                 }
 
             }

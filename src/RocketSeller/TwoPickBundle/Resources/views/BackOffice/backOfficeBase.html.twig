@@ -198,9 +198,12 @@
         <div class="{% if app.request.get('_route') == 'back_pay_state_view' %}activeMenu{% endif %} well well-lg">
             <a class="notAjax" href="{{ path('back_pay_state_view') }}" >Estado pagos</a>
         </div>
-        <div class="{% if app.request.get('_route') == 'back_pay_state_view' %}activeMenu{% endif %} well well-lg separador">
+        <div class="{% if app.request.get('_route') == 'back_pay_state_view' %}activeMenu{% endif %} well well-lg">
             <a class="notAjax" href="{{ path('back_frequency_state_view') }}" >Frecuencia pagos</a>
         </div>
+        {#<div class="{% if app.request.get('_route') == 'back_pila_operator_state_view' %}activeMenu{% endif %} well well-lg separador">
+            <a class="notAjax" href="{{ path('back_pila_operator_state_view') }}" >Afiliaciones Pila</a>
+        </div>#}
         <div class="{% if app.request.get('_route') == 'show_rejected_pods' %}activeMenu{% endif %} well well-lg separador">
             <a class="notAjax" href="{{ path('show_rejected_pods') }}" >Manejo de devoluciones</a>
         </div>

@@ -325,6 +325,7 @@ class PurchaseOrdersDescription
     {
         $this->payrollsPila = new \Doctrine\Common\Collections\ArrayCollection();
         $this->payPay = new \Doctrine\Common\Collections\ArrayCollection();
+	      $this->transactions = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

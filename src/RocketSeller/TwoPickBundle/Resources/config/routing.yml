@@ -94,6 +94,9 @@ show_have_to_pay_users:
 add_to_sql_and_hightec_back:
     path:     /backoffice/addtoback/{user}/{autentication}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:addToSQLandHighTecBack}
+add_to_novo_back:
+    path:     /backoffice/addtoback/{user}/{autentication}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:addToNovoBack}
 add_to_sql_entities_back:
     path:     /backoffice/entities/addtoback/{user}/{autentication}/{idEhe}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:addToSQLEntitiesBack}
@@ -107,7 +110,7 @@ show_pilas:
     path:     /backoffice/show/pilas
     defaults: { _controller: RocketSellerTwoPickBundle:PurchaseOrdersDescription:index}
 persist_planilla_id:
-    path:     /backoffice/planilla/persista/{id}/{idPod}
+    path:     /backoffice/planilla/persista/{id}/{idPod}/{payFile}
     defaults: { _controller: RocketSellerTwoPickBundle:PurchaseOrdersDescription:persistPilaEnlaceOperativoCode}
 add_planilla_type_to_contracts:
     path:     /backoffice/planillaType/addtoback/{autentication}
@@ -222,3 +225,6 @@ back_pila_operator_state_view:
 back_pila_state_register_update:
     path:         /backoffice/actualizar/afiliacion/pila/{idEmployer}
     defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:updateStateRegistrationPilaOperator}
+export_error_pila_afiliation:
+    path:         /backoffice/export/error/pila/inscription/{idTransaction}
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:exportPilaOperatorAfiliationError }
