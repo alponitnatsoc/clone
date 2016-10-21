@@ -290,4 +290,61 @@ class ChronServerRestController extends FOSRestController
         return $view->setData($resultUsers);
     }
 
+    /**
+     *  Sends push notification saying that the affiliation is in progress<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Sends push notification saying that the affiliation is in progress",
+     *   statusCodes = {
+     *     200 = "OK"
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function putSocialSecurityAffiliationInProgressAction() {
+        $userRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+        $users = $userRepo->findAll();
+        $EmployerRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Employer");
+        $resultUsers = array();
+        foreach($users as $user) {
+            $employer = $EmployerRepo->findOneBy(array("personPerson" => $user->getPersonPerson()));
+            if(!$employer) continue;
+            foreach ( $employer->getEmployerHasEmployees() as $eHE) {
+
+                $dateFilesUploaded = $eHE->getDateDocumentsUploaded();
+                if(!$dateFilesUploaded) continue;
+                $today = new DateTime();
+                $utils = $this->get('app.symplifica_utils');
+                $oneBusinessDayAfter = $utils->getWorkableDaysToDateAction($dateFilesUploaded->format("Y-m-d"), 1);
+                //1 business day after
+                if($oneBusinessDayAfter == $today->format("Y-m-d")) {
+
+                    $message = "¡Estamos afiliando a tu empleada a S. social!";
+                    $title = "Symplifica";
+                    $longMessage = "¡Nos encontramos afiliando a tu empleada a seguridad social! Te informaremos pronto en cuento esté todo listo. Buen día";
+
+                    $request = new Request();
+                    $request->setMethod("POST");
+                    $request->request->add(array(
+                        "idUser" => $user->getId(),
+                        "title" => $title,
+                        "message" => $message,
+                        "longMessage" => $longMessage
+                    ));
+                    $pushNotificationService = $this->get('app.symplifica_push_notification');
+                    $result = $pushNotificationService->postPushNotificationAction($request);
+                    $collect = $result->getData();
+                    $resultUsers[] = array('userId' => $user->getId(), 'result' => $collect);
+
+                    break;
+                }
+            }
+        }
+        $view = View::create();
+        $view->setStatusCode(200);
+        return $view->setData($resultUsers);
+    }
+
 }
