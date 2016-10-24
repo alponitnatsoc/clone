@@ -94,7 +94,7 @@ class PaymentsRestController extends FOSRestController
           $ambiente = 'desarrollo';
 
         if($ambiente == 'produccion') {
-          $url_request = "https://72.46.255.110:8003/3_payment/1.0" . $path;
+          $url_request = "https://72.46.255.108:4848/3_payment/1.0" . $path;
           $options['cert'] = ['/home/ubuntu/myKeystore.pem', 'N0v0payment'];
         }
 
