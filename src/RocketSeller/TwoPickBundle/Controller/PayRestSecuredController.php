@@ -122,7 +122,7 @@ class PayRestSecuredController extends FOSRestController
                         $month = $pod->getPayrollPayroll()->getMonth();
                         $year = $pod->getPayrollPayroll()->getYear();
                     }
-                    $result[$year][$month][$period][]=$pod;
+                    $result[intval($year)][intval($month)][$period][]=$pod;
                 }
             }
         }
