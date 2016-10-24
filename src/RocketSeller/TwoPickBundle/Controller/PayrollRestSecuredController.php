@@ -19,6 +19,7 @@ use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\Product;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\Transaction;
 use RocketSeller\TwoPickBundle\Entity\PayMethod;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
@@ -339,6 +340,7 @@ class PayrollRestSecuredController extends FOSRestController
             $fourx1000POD = new PurchaseOrdersDescription();
             $fourx1000POD->setDescription("Cuatro por Mil");
             $fourx1000POD->setValue($fourX1000Cost);
+            $fourx1000POD->setProductProduct($productCPM);
             $realtoPay->addPurchaseOrderDescription($fourx1000POD);
 
             $total += $fourx1000POD->getValue();
@@ -358,8 +360,10 @@ class PayrollRestSecuredController extends FOSRestController
             $transactionPOD = new PurchaseOrdersDescription();
             $transactionPOD->setDescription("Costo transaccional");
             $transactionPOD->setValue($transactionCost);
+            $transactionPOD->setProductProduct($productCT);
             $realtoPay->addPurchaseOrderDescription($transactionPOD);
             $total += $transactionPOD->getValue();
+
 
             //TODO-Gabriel Check this proces might be buggy
             $dateToday = new DateTime();
@@ -415,6 +419,7 @@ class PayrollRestSecuredController extends FOSRestController
                 $symplificaPOD->setValue(round(($PS1->getPrice() * (1 + $PS1->getTaxTax()->getValue()) * $ps1Count) +
                     ($PS2->getPrice() * (1 + $PS2->getTaxTax()->getValue()) * $ps2Count) +
                     ($PS3->getPrice() * (1 + $PS3->getTaxTax()->getValue()) * $ps3Count), 0));
+                $symplificaPOD->setProductProduct($PS3);
                 $realtoPay->addPurchaseOrderDescription($symplificaPOD);
                 $total += $symplificaPOD->getValue();
 
@@ -528,10 +533,78 @@ class PayrollRestSecuredController extends FOSRestController
 
                 }
 
+                /** @var Person $person */
                 $person = $tempPOD->getPayrollsPila()->get(0)->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                 $flagFrequency = false;
                 $flagNomi=false;
                 $paysPila++;
+	            
+	              if($tempPOD->getEnlaceOperativoFileName() == NULL && $tempPOD->getUploadedFile() == NULL){
+		              //Here we get the file of the pila and we send it to HighTech
+		
+		              //TODO DanielRico Remove this as soon the final liquidation works and the novelty support is complete
+		              $payrollsPila = $tempPOD->getPayrollsPila();
+		              $haveNovelties = false;
+		
+		              $payrollRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
+		
+		              /** @var Payroll $payrollPila */
+		              foreach ( $payrollsPila as $payrollPila ){
+			              if( count($payrollPila->getNovelties()) > 0){
+				              $haveNovelties = true;
+				              break;
+			              }
+			              //If is Quincenal we need to check the first payroll of the month to see If we have novelties
+			              if($payrollPila->getContractContract()->getFrequencyFrequency()->getPayrollCode() == "Q"){
+				              $singlePayroll = $payrollRepo->findOneBy(array('contractContract' => $payrollPila->getContractContract() , 'period' => 2 , 'year' => $payrollPila->getYear() , 'month' => $payrollPila->getMonth()) );
+				              if($singlePayroll != NULL){
+					              if( count($singlePayroll->getNovelties()) > 0){
+						              $haveNovelties = true;
+						              break;
+					              }
+				              }
+			              }
+		              }
+		              //End of segment
+		
+		              $transactionType = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:TransactionType')->findOneBy(array('code' => 'CPla'));
+		
+		              $transaction = new Transaction();
+		              $transaction->setTransactionType($transactionType);
+		
+		              if($haveNovelties == false) {
+			              $request->setMethod("GET");
+			              $insertionAnswerTextFile = $this->forward('RocketSellerTwoPickBundle:PilaPlainTextRest:getMonthlyPlainText', array('podId' => $tempPOD->getIdPurchaseOrdersDescription(), 'download' => 'generate'), array('_format' => 'json'));
+			
+			              $request->setMethod("POST");
+			              $request->request->add(array(
+				              "GSCAccount" => $person->getEmployer()->getIdHighTech(),
+				              "FileToUpload" => json_decode($insertionAnswerTextFile->getContent(), true)['fileToSend']
+			              ));
+			              $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postUploadFileToPilaOperator', array('_format' => 'json'));
+			              if ($insertionAnswer->getStatusCode() == 200) {
+				              //Received succesfully
+				              $radicatedNumber = json_decode($insertionAnswer->getContent(), true)["numeroRadicado"];
+				              $transaction->setRadicatedNumber($radicatedNumber);
+				              $purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-PlaEnv'));
+			              } else {
+				              //If some kind of error
+				              $purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-ErrSer'));
+			              }
+		              }
+		              else {
+			              $purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-ErrSer'));
+		              }
+		
+		              $em = $this->getDoctrine()->getManager();
+		              $transaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
+		              $em->persist($transaction);
+		              $em->flush();
+		              $tempPOD->setUploadedFile($transaction->getIdTransaction());
+		              $tempPOD->addTransaction($transaction);
+		              $em->persist($tempPOD);
+		              $em->flush();
+	              }
             } elseif( $tempPOD->getProductProduct()->getSimpleName()=="PN") {
                 $person = $tempPOD->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                 if ($tempPOD->getPayrollPayroll()->getContractContract()->getPayMethodPayMethod()->getPayTypePayType()->getPayrollCode() == "EFE"){

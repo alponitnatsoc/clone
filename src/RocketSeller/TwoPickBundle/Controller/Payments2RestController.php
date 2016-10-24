@@ -185,7 +185,6 @@ class Payments2RestController extends FOSRestController
       $res = json_decode(json_encode($res), True);
 
       $responseCode = $res['codigoRespuesta'];
-
       // Remove the status code so we can return the entire object.
       //unset($res['codigoRespuesta']);
 
@@ -673,7 +672,7 @@ class Payments2RestController extends FOSRestController
         $mandatory['accountNumber'] = true;
         $regex['documentEmployer'] = '([0-9|-]| )+';
         $mandatory['documentEmployer'] = true;
-        $regex['documentTypeEmployer'] = '(CC|cc|nit|NIT|ce|CE)';
+        $regex['documentTypeEmployer'] = '(CC|cc|nit|NIT|ce|CE|PASAPORTE)';
         $mandatory['documentTypeEmployer'] = true;
         $regex['documentEmployee'] = '([0-9|-]| )+';
         $mandatory['documentEmployee'] = true;
@@ -1076,13 +1075,13 @@ class Payments2RestController extends FOSRestController
      */
     public function getDispersionStateAction($radicatedNumber)
     {
-        $path = "ConsultarEstadoPago";
+        $path = "ConsultarEstado";
 
         $parameters_fixed = array();
         $parameters_fixed['numeroRadicado'] = $radicatedNumber;
 
         /** @var View $res */
-        $responseView = $this->callApi($parameters_fixed, $path, "ConsultarEstadoPago");
+        $responseView = $this->callApi($parameters_fixed, $path, "ConsultarEstado");
 
         return $responseView;
     }
@@ -1104,7 +1103,7 @@ class Payments2RestController extends FOSRestController
      * @param Request $request.
      * Rest Parameters:
      *
-     * (name="source", nullable=true, requirements="101|100", description="showing the source of the account 100 for hightech and 101 for novopayment, the default will be 100.)
+     * (name="source", nullable=true, requirements="101|100", description="showing the source of the account 100 for hightech and 101 for novopayment, the default will be 100.")
      * (name="accountNumber", nullable=false, requirements="[0-9]+")
      * (name="accountId", nullable=false, requirements="[0-9]+")
      * (name="value", nullable=false, requirements="[0-9]+(\.[0-9]+)?")
@@ -1143,6 +1142,226 @@ class Payments2RestController extends FOSRestController
 
         return $responseView;
     }
+
+    /**
+     * Registers an employer to Enlace Operativo<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Register employee to Enlace Operativo",
+     *   statusCodes = {
+     *     200 = "Created",
+     *     400 = "Bad Request",
+     *     404 = "Not found",
+     *     422 = "Bad parameters"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     * (name="GSCAccount", nullable=false, requirements="[0-9]+", description="Id used by Hightech to store employers")
+     *
+     * @return View
+     */
+     public function postRegisterEmployerToPilaOperatorAction(Request $request){
+       $path = "RegistrarEmpleadorPila";
+       $parameters = $request->request->all();
+       $regex = array();
+       $mandatory = array();
+       // Set all the parameters info.
+       $regex['GSCAccount'] = '[0-9]+';
+       $mandatory['GSCAccount'] = true;
+
+       $this->validateParamters($parameters, $regex, $mandatory);
+
+       $parameters_fixed = array();
+       $parameters_fixed['cuentaGSC'] = $parameters['GSCAccount'];
+
+       /** @var View $res */
+       $responseView = $this->callApi($parameters_fixed, $path, "RegistrarEmpleadorPila");
+
+       $temp = $this->handleView($responseView);
+       $data = json_decode($temp->getContent(), true);
+       $code = json_decode($temp->getStatusCode(), true);
+
+       $view = View::create();
+       $view->setStatusCode($code);
+       $view->setData($data);
+       return $view;
+     }
+
+  /**
+   * Check state of the employer registration on the pila operator<br/>
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = "Check state of the employer registration on Enlace Operativo",
+   *   statusCodes = {
+   *     200 = "Created",
+   *     400 = "Bad Request",
+   *     404 = "Not found",
+   *     422 = "Bad parameters"
+   *   }
+   * )
+   *
+   * @param Request $request.
+   * Rest Parameters:
+   *
+   * (name="radicatedNumber", nullable=false, requirements="[0-9]+", description="number given by Hightech when the request is send")
+   *
+   * @return View
+   */
+  public function postCheckStateRegisterEmployerPilaOperatorAction(Request $request){
+    $path = "ConsultarEstadoRegistroEmpleadorPila";
+    $parameters = $request->request->all();
+    $regex = array();
+    $mandatory = array();
+    // Set all the parameters info.
+    $regex['radicatedNumber'] = '[0-9]+';
+    $mandatory['radicatedNumber'] = true;
+
+    $this->validateParamters($parameters, $regex, $mandatory);
+
+    $parameters_fixed = array();
+    $parameters_fixed['numeroRadicado'] = $parameters['radicatedNumber'];
+
+    /** @var View $res */
+    $responseView = $this->callApi($parameters_fixed, $path, "ConsultarEstadoRegistroEmpleadorPila");
+
+    $temp = $this->handleView($responseView);
+    $data = json_decode($temp->getContent(), true);
+    $code = json_decode($temp->getStatusCode(), true);
+
+    if($code != 200){
+      $view = View::create();
+      $view->setStatusCode($code);
+      $view->setData($data);
+      return $view;
+    }
+    
+    $request->setMethod("PUT");
+    $request->request->add(array(
+      "radicatedNumber"=> $parameters['radicatedNumber'],
+      "registerState"=> isset($data['estadoEmpleador']) && $data['estadoEmpleador'] != NULL ? $data['estadoEmpleador'] : "",
+      "errorLog" => isset($data['logBase64']) && $data['logBase64'] != NULL ? $data['logBase64'] : "",
+      "errorMessage" => isset($data['mensajesError']) && $data['mensajesError'] != NULL ? $data['mensajesError']: ""
+    ));
+
+    return $this->forward('RocketSellerTwoPickBundle:HighTechRest:putProcessRegisterEmployerPilaOperator', array('_format' => 'json'));
+  }
+
+
+  /**
+   * Uploads a pila file to Enlace Operativo<br/>
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = "Uploads a pila file to Enlace Operativo",
+   *   statusCodes = {
+   *     200 = "Created",
+   *     400 = "Bad Request",
+   *     404 = "Not found",
+   *     422 = "Bad parameters"
+   *   }
+   * )
+   *
+   * @param Request $request.
+   * Rest Parameters:
+   *
+   * (name="GSCAccount", nullable=false, requirements="[0-9]+", description="Id used by Hightech to store employers")
+   * (name="FileToUpload", nullable=false, requirements="(.)*", description="File that will be upload")
+   *
+   * @return View
+   */
+  public function postUploadFileToPilaOperatorAction(Request $request){
+    $path = "CargarPlanillaPila";
+    $parameters = $request->request->all();
+    $regex = array();
+    $mandatory = array();
+    // Set all the parameters info.
+    $regex['GSCAccount'] = '[0-9]+';
+    $mandatory['GSCAccount'] = true;
+
+    $this->validateParamters($parameters, $regex, $mandatory);
+
+    $parameters_fixed = array();
+    $parameters_fixed['cuentaGSC'] = $parameters['GSCAccount'];
+    $parameters_fixed['planillaBase64'] = $parameters['FileToUpload'];
+
+    /** @var View $res */
+    $responseView = $this->callApi($parameters_fixed, $path, "CargarPlanillaPila");
+
+    $temp = $this->handleView($responseView);
+    $data = json_decode($temp->getContent(), true);
+    $code = json_decode($temp->getStatusCode(), true);
+
+    $view = View::create();
+    $view->setStatusCode($code);
+    $view->setData($data);
+    return $view;
+  }
+
+  /**
+   * Check state of the pila file upload process on pila operator<br/>
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = "Check state of the pila file upload process on pila operator",
+   *   statusCodes = {
+   *     200 = "Created",
+   *     400 = "Bad Request",
+   *     404 = "Not found",
+   *     422 = "Bad parameters"
+   *   }
+   * )
+   *
+   * @param Request $request.
+   * Rest Parameters:
+   *
+   * (name="radicatedNumber", nullable=false, requirements="[0-9]+", description="number given by Hightech when the request is send")
+   *
+   * @return View
+   */
+  public function postCheckStateUploadFilePilaOperatorAction(Request $request){
+    $path = "ConsultarEstadoCargaPlanillaPila";
+    $parameters = $request->request->all();
+    $regex = array();
+    $mandatory = array();
+    // Set all the parameters info.
+    $regex['radicatedNumber'] = '[0-9]+';
+    $mandatory['radicatedNumber'] = true;
+
+    $this->validateParamters($parameters, $regex, $mandatory);
+
+    $parameters_fixed = array();
+    $parameters_fixed['numeroRadicado'] = $parameters['radicatedNumber'];
+
+    /** @var View $res */
+    $responseView = $this->callApi($parameters_fixed, $path, "ConsultarEstadoCargaPlanillaPila");
+
+    $temp = $this->handleView($responseView);
+    $data = json_decode($temp->getContent(), true);
+    $code = json_decode($temp->getStatusCode(), true);
+
+    if($code != 200){
+      $view = View::create();
+      $view->setStatusCode($code);
+      $view->setData($data);
+      return $view;
+    }
+
+    $request->setMethod("PUT");
+    $request->request->add(array(
+      "radicatedNumber"=> $parameters['radicatedNumber'],
+      "planillaState"=> isset($data['estadoPlanilla']) && $data['estadoPlanilla'] != NULL ? $data['estadoPlanilla'] : "",
+      "errorLog" => isset($data['logBase64']) && $data['logBase64'] != NULL ? $data['logBase64'] : "",
+      "planillaNumber" => isset($data['numeroPlanilla']) && $data['numeroPlanilla'] != NULL ? $data['numeroPlanilla'] : "",
+      "errorMessage" => isset($data['mensajesError']) && $data['mensajesError'] != NULL ? $data['mensajesError']: ""
+    ));
+
+    return $this->forward('RocketSellerTwoPickBundle:HighTechRest:putProcessUploadFilePilaOperator', array('_format' => 'json'));
+  }
   
   /**
    * Gets the payslip of the pila payment<br/>

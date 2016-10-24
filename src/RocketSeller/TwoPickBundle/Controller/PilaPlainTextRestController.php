@@ -1291,9 +1291,10 @@ class PilaPlainTextRestController extends FOSRestController
      * )
      *
      * @param Int $podId id of the purchase order description.
+     * @param String $download if can be download or generate
      * @return String
      */
-    public function getMonthlyPlainTextAction($podId) {
+    public function getMonthlyPlainTextAction($podId, $download) {
       $podRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription");
       $pod = $podRepo->findOneBy(array("idPurchaseOrdersDescription" => $podId));
 
@@ -1326,16 +1327,28 @@ class PilaPlainTextRestController extends FOSRestController
 
       //S es tiempo completo (Convencional)
       //E es tiempo parcial sin Sisben (Domestico)
-
       $line = $this->createEncabezado($employer, $type, $numberEmployees, $pilaMonth);
       $line .= "\n";
       $this->elementos = array();
       $line .= $this->createLineaEmpleado($pilaArr, $exonerated, $employer->getIdEmployer(), $pilaEmp);
       $filename = 'PILA_' . $type . $employer->getPersonPerson()->getLastName1() .$employer->getIdEmployer() . '.txt';
-      header("Content-type: text/plain; charset=utf-8");
-      header("Content-Disposition: attachment; filename=$filename");
-
-      die($line);
+      
+      if($download == "download"){
+        header("Content-type: text/plain; charset=utf-8");
+        header("Content-Disposition: attachment; filename=$filename");
+        die($line);
+      }
+      else if ($download == "generate"){
+        $file = "uploads/temp/$filename";
+        file_put_contents($file, $line);
+  
+        $fileToSend = base64_encode(file_get_contents($file));
+        unlink($file);
+  
+        $view = View::create();
+        $view->setStatusCode(200)->setData(array("fileToSend"=>$fileToSend));
+        return $view;
+      }
     }
 }
 

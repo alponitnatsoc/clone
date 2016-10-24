@@ -1,0 +1,97 @@
+{% trans_default_domain 'FOSUserBundle' %}
+{% block subject %}{% autoescape false %}Recuerda pagar oportunamente los pagos a seguridad social de tu empelada{% endautoescape %}{% endblock %}
+{% block body_html %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600,600italic,700" rel="stylesheet" type="text/css">
+    <title>Responsive email</title>
+    <style type="text/css">
+      body {margin: 10px 0; padding: 0 10px; background: #FFF; font-size: 13px;}
+      table {border-collapse: collapse;}
+      td {font-family: arial, sans-serif; color: #333333;}
+
+      @media only screen and (max-width: 480px) {
+        body,table,td,p,a,li,blockquote {
+          -webkit-text-size-adjust:none !important;
+        }
+        table {width: 100% !important}
+
+        .responsive-image img {
+          height: auto !important;
+          max-width: 50% !important;
+          width: 50% !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr>
+        <td>
+          <table border="0" cellpadding="0" cellspacing="0" align="center" width="640" bgcolor="#FFFFFF">
+            <tr>
+                {% include "RocketSellerTwoPickBundle:EmailTemplates:header.txt.twig" %}
+            </tr>
+
+            <tr>
+                <td style="padding: 10px 10px 20px 10px;">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                      <tr>
+                          <td>
+                            <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#40c1c3; font-size: 20px;width: 90%;margin: 0 auto;">Evita riesgos para ti y tu empleada
+                              </div><br />
+                          </td>
+                      </tr>
+                        <tr>
+                            <td>
+                                <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#909090; font-size: 15px; width:90%;margin:0 auto">No pagar oportunamente la seguridad social puede traer riesgos para ti, pero principalmente para tu empleada doméstica. En Symplifica te mantenemos al tanto de tus pagos y aportes, recuerda siempre hacerlos con antelación.<br><br>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                <td bgcolor="#F7F7F8">
+                    <table  border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tr>
+                            <td>
+                                <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#909090; font-size: 15px; width:90%;margin:0 auto"><br>
+                                    <span style="color:#13878e;font-weight:600">Los riesgos que corre tu empleada al no estar cubierta o no pagar a tiempo seguridad social:</span><br><br>
+                                    &#10122; No recibir servicios de salud.<br>
+                                    &#10123; No estar cubierta en caso de accidente laboral.<br>
+                                    &#10124; No recibir los beneficios para ella y su familia de caja de compensación.<br>
+
+                                </div>
+                            </td>
+                        </tr>
+                         <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr><!--espacios-->
+
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#909090; font-size: 15px; width:90%;margin:0 auto"><br>
+                                    <span style="color:#13878e;font-weight:600">¡Con Symplifica no olvidarás nada y siempre estarás tranquilo!</span><br>
+
+                                </div>
+                </td>
+            </tr>
+
+            <tr><td style="font-size: 0; line-height: 0;" height="20">&nbsp;</td></tr>
+            <tr>
+                {% include "RocketSellerTwoPickBundle:EmailTemplates:footer.txt.twig" %}
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+{% endblock %}

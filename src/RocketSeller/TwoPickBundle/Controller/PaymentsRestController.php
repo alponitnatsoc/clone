@@ -84,7 +84,7 @@ class PaymentsRestController extends FOSRestController
             'json' => $parameters,
             'timeout' => $timeout,
             'verify' => false,
-            //'cert' => ['/home/myKeystore.pem', 'N0v0payment']
+            //'cert' => ['/home/ubuntu/myKeystore.pem', 'N0v0payment']
         );
         $url_request = "http://localhost:8001/api/public/v1/mock" . $path;
         $ambiente = '';

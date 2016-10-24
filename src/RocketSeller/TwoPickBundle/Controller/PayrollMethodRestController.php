@@ -351,6 +351,73 @@ class PayrollMethodRestController extends FOSRestController
                 $podPila->setValue($totalPilaToPay);
                 $podPila->setPurchaseOrdersStatus($pos);
                 $purchaseOrder->addPurchaseOrderDescription($podPila);
+	
+		            if($podPila->getEnlaceOperativoFileName() == NULL && $podPila->getUploadedFile() == NULL){
+			            //Here we get the file of the pila and we send it to HighTech
+			            
+			            //TODO DanielRico Remove this as soon the final liquidation works and the novelty support is complete
+			            $payrollsPila = $podPila->getPayrollsPila();
+			            $haveNovelties = false;
+			            
+			            $payrollRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
+			            
+			            /** @var Payroll $payrollPila */
+			            foreach ( $payrollsPila as $payrollPila ){
+				            if( count($payrollPila->getNovelties()) > 0){
+				            	$haveNovelties = true;
+					            break;
+				            }
+				            //If is Quincenal we need to check the first payroll of the month to see If we have novelties
+				            if($payrollPila->getContractContract()->getFrequencyFrequency()->getPayrollCode() == "Q"){
+				            	$singlePayroll = $payrollRepo->findOneBy(array('contractContract' => $payrollPila->getContractContract() , 'period' => 2 , 'year' => $payrollPila->getYear() , 'month' => $payrollPila->getMonth()) );
+					            if($singlePayroll != NULL){
+						            if( count($singlePayroll->getNovelties()) > 0){
+							            $haveNovelties = true;
+							            break;
+						            }
+					            }
+				            }
+			            }
+			            //End of segment
+			
+			            $transactionType = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:TransactionType')->findOneBy(array('code' => 'CPla'));
+			
+			            $transaction = new Transaction();
+			            $transaction->setTransactionType($transactionType);
+			            
+			            if($haveNovelties == false) {
+				            $request->setMethod("GET");
+				            $insertionAnswerTextFile = $this->forward('RocketSellerTwoPickBundle:PilaPlainTextRest:getMonthlyPlainText', array('podId' => $podPila->getIdPurchaseOrdersDescription(), 'download' => 'generate'), array('_format' => 'json'));
+				
+				            $request->setMethod("POST");
+				            $request->request->add(array(
+					            "GSCAccount" => $employer->getIdHighTech(),
+					            "FileToUpload" => json_decode($insertionAnswerTextFile->getContent(), true)['fileToSend']
+				            ));
+				            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postUploadFileToPilaOperator', array('_format' => 'json'));
+				            if ($insertionAnswer->getStatusCode() == 200) {
+					            //Received succesfully
+					            $radicatedNumber = json_decode($insertionAnswer->getContent(), true)["numeroRadicado"];
+					            $transaction->setRadicatedNumber($radicatedNumber);
+					            $purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-PlaEnv'));
+				            } else {
+					            //If some kind of error
+					            $purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-ErrSer'));
+				            }
+			            }
+			            else {
+				            $purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-ErrSer'));
+			            }
+			
+			            $em = $this->getDoctrine()->getManager();
+			            $transaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
+			            $em->persist($transaction);
+			            $em->flush();
+			            $podPila->setUploadedFile($transaction->getIdTransaction());
+			            $podPila->addTransaction($transaction);
+			            $em->persist($podPila);
+			            $em->flush();
+		            }
             }
             if($purchaseOrder->getPurchaseOrderDescriptions()->count()==0){
               continue;

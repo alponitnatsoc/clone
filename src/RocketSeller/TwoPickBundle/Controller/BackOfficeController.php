@@ -14,6 +14,7 @@ use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\PromotionCode;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
+use RocketSeller\TwoPickBundle\Entity\Transaction;
 use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -427,8 +428,8 @@ class BackOfficeController extends Controller
                     $this->addEmployeeToSQL($ehe);
                 }
             }
-            //adding to hightec
-            if($user->getPersonPerson()->getEmployer()->getIdHighTech()!=null){
+            //adding to hightech (also creates the employer in the pila operator if needed)
+            if($user->getPersonPerson()->getEmployer()->getIdHighTech()==null){
                 $this->addToHighTech($user);
             }
 
@@ -1430,7 +1431,8 @@ class BackOfficeController extends Controller
 		return $this->render('RocketSellerTwoPickBundle:BackOffice:payState.html.twig', array('podsN' => $podNomina, 'podsP' => $podPila));
 	}
 	
-	public function payTypeInfoViewAction(){
+	public function payTypeInfoViewAction()
+	{
 		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
 		
 		$criteria = new \Doctrine\Common\Collections\Criteria();
@@ -1446,7 +1448,7 @@ class BackOfficeController extends Controller
 		$userArray = array();
 		
 		/** @var EmployerHasEmployee $ehe */
-		foreach ($filteredEheRepo as $ehe){
+		foreach ($filteredEheRepo as $ehe) {
 			$personId = $ehe->getEmployerEmployer()->getPersonPerson()->getIdPerson();
 			$personFound = $personRepo->find($personId);
 			/** @var User $userFound */
@@ -1455,5 +1457,62 @@ class BackOfficeController extends Controller
 		}
 		
 		return $this->render('RocketSellerTwoPickBundle:BackOffice:payTypeInfoView.html.twig', array('ehes' => $filteredEheRepo, 'usersEmail' => $userArray));
+	}
+	
+	public function checkPilaOperatorStateAction(){
+		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+		
+		$users = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User')->findAll();
+		
+		$employers = array();
+		foreach ($users as $user){
+			//If the user is already on the stage where it should be added to pila Operator
+			if($user->getStatus() == 2){
+				array_push($employers, $user->getPersonPerson()->getEmployer());
+			}
+		}
+		
+		return $this->render('RocketSellerTwoPickBundle:BackOffice:pilaOperatorState.html.twig', array('employers' => $employers));
+	}
+
+	public function updateStateRegistrationPilaOperatorAction($idEmployer){
+		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		$employerRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Employer");
+		/** @var Employer $employer */
+		$employer = $employerRepo->find($idEmployer);
+		
+		$request = $this->container->get('request');
+		$request->setMethod("POST");
+		$request->request->add(array(
+			"radicateNumber" => $employer->getRadicatedNumberPila(),
+		));
+		
+		$answer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postCheckStateRegisterEmployerPilaOperator', array('request'=>$request), array('_format' => 'json'));
+		
+		return $this->redirectToRoute('back_pila_operator_state_view');
+	}
+	
+	public function exportPilaOperatorAfiliationErrorAction($idTransaction){
+		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+		
+		/** @var Transaction $transaction */
+		$transaction = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Transaction")->find($idTransaction);
+		
+		$utils = $this->get('app.symplifica_utils');
+		$filePath = $utils->getDocumentPath($transaction->getTransactionState()->getDocument());
+		
+		header("Content-disposition: attachment; filename=$filePath");
+    header('Content-type: application/zip');
+    header('Expires: 0');
+    header('Cache-Control: must-revalidate');
+    header('Pragma: public');
+    ob_clean();
+    flush();
+    readfile($filePath);
+    ignore_user_abort(true);
+
 	}
 }

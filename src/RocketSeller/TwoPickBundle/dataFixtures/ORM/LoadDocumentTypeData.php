@@ -175,6 +175,16 @@ class LoadDocumentTypeData extends AbstractFixture implements OrderedFixtureInte
 		    $documentTypeCE->setDocCode('CE');
 		    $manager->persist($documentTypeCE);
 	    
+	      $documentTypePilaOperatorLog = new DocumentType();
+	      $documentTypePilaOperatorLog->setName('Enlace Operativo imagen de errores');
+	      $documentTypePilaOperatorLog->setDocCode('EOIE');
+	      $manager->persist($documentTypePilaOperatorLog);
+	    
+	      $documentTypePayslipPila = new DocumentType();
+	      $documentTypePayslipPila->setName('Enlace Operativo comprobante pago planilla');
+	      $documentTypePayslipPila->setDocCode('EOCP');
+	      $manager->persist($documentTypePayslipPila);
+	    
         $manager->flush();
 
         $this->addReference('document-type-cedula', $documentTypeCedula);
@@ -207,6 +217,8 @@ class LoadDocumentTypeData extends AbstractFixture implements OrderedFixtureInte
         $this->addReference('document-formato-rem',$documentTypeRem);
         $this->addReference('document-vacaciones-dinero',$documentTypeSDVD);
 	      $this->addReference('document-CE',$documentTypeCE);
+	      $this->addReference('document-EOIE', $documentTypePilaOperatorLog);
+	      $this->addReference('document-EOCP', $documentTypePayslipPila);
 
     }
     public function getOrder()

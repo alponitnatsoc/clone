@@ -21,9 +21,11 @@ use RocketSeller\TwoPickBundle\Entity\Document;
 use RocketSeller\TwoPickBundle\Form\DocumentRegistration;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Response;
+use RocketSeller\TwoPickBundle\Traits\EmployeeMethodsTrait;
 
 class DocumentRestSecuredController extends FOSRestController
 {
+    use EmployeeMethodsTrait;
 
   /**
    * upload single page of document (image)
@@ -164,7 +166,7 @@ class DocumentRestSecuredController extends FOSRestController
 
       return $view->setData(array("fileName" => $fileName));
   }
-  
+
   /**
    * download document <br/>
    *
@@ -331,10 +333,49 @@ class DocumentRestSecuredController extends FOSRestController
           'idNotification'=> $idNotification,
           'fileName' => $fileName
         );
-        // dump($params);
+
         $data = $this->forward('RocketSellerTwoPickBundle:Document:verifyAndPersitDocument', $params);
         $path = "uploads/tempDocumentPages/$fileName";
         unlink($path);
+
+        $notification = $this->getDoctrine()
+            ->getRepository('RocketSellerTwoPickBundle:Notification')
+            ->find($idNotification);
+        $user = $this->getDoctrine()
+            ->getRepository('RocketSellerTwoPickBundle:User')
+            ->findOneBy(array('personPerson' => $notification->getPersonPerson()));
+
+        $em = $this->getDoctrine()->getManager();
+
+        foreach ($this->allDocumentsReady($user) as $docStat ) {
+
+            $eHE  = $this->getDoctrine()
+                    ->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')
+                    ->find($docStat['idEHE']);
+
+            // Se envia el Email diahabil y se muestra el modal de documentos en validación
+            if( $docStat['docStatus'] == 2) {
+                $pushNotificationService = $this->get('app.symplifica_push_notification');
+                $pushNotificationService->sendMessageValidatingDocuments($this->getUser()->getId());
+                $eHE->setStatusCode(3);
+                $em->persist($eHE);
+                $em->flush();
+            } elseif ($docStat['docStatus'] == 3) {
+                //TODO
+            }
+
+            //si el usuario no tiene tareas pendientes y algun empleado fue completamente validado por backoffice
+            if($docStat['docStatus'] == 13) {
+                //TODO
+            }
+
+            if($docStat['docStatus'] == 11) {
+                //TODO
+            }
+            if($docStat['docStatus'] > 13) {
+                //TODO
+            }
+        }
 
         $view = View::create();
         $view->setStatusCode(200);

@@ -72,10 +72,23 @@ mailto:?subject=Regístrate en Symplifica&body=Registrate en Symplifica con este
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600,600italic,700" rel="stylesheet" type="text/css">
 <title>Bienvenido Symplifica</title>
 <style type="text/css">
-    @media only screen and (max-width: 480px) {
+      body {margin: 10px 0; padding: 0 10px; background: #FFF; font-size: 13px;}
+      table {border-collapse: collapse;}
+      td {font-family: arial, sans-serif; color: #333333;}
+
+      @media only screen and (max-width: 480px) {
+        body,table,td,p,a,li,blockquote {
+          -webkit-text-size-adjust:none !important;
+        }
         table {width: 100% !important}
-    }
-</style>
+
+        .responsive-image img {
+          height: auto !important;
+          max-width: 50% !important;
+          width: 50% !important;
+        }
+      }
+    </style>
 </head>
 <body style="margin: 0; padding: 0;">
      <table align="center" border="0"" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
@@ -83,129 +96,71 @@ mailto:?subject=Regístrate en Symplifica&body=Registrate en Symplifica con este
             {% include "RocketSellerTwoPickBundle:EmailTemplates:header.txt.twig" %}
         </tr>
         <tr>
-            <td bgcolor="#FFFFFF" style="padding: 40px 30px 40px 30px;">
-                <table border="0"" cellpadding="0" cellspacing="0" width="100%">
+            <td style="padding: 10px 10px 20px 10px;">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
                   <tr>
-                      <td style="font-family: 'Open Sans', sans-serif; font-weight: 700; font-size: 20px; color:#5D5D5D">
-                      ¡Bienvenido!
+                      <td>
+                        <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#40c1c3; font-size: 20px;width: 90%;margin: 0 auto;">¡Bienvenido!
+                          </div>
                       </td>
                   </tr>
-                    <tr>
-                        <td style="font-family: 'Open Sans', sans-serif; font-weight: 300; font-size: 20px; color:#5D5D5D">
-                        ¡Es momento de empezar a hacer las cosas bien!
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td style="font-family: 'Open Sans', sans-serif; font-weight: 600; font-style:italic; font-size: 20px; color:#858789">
-                            Registra tus datos y comienza a usar Symplifica,
-                        </td>
-                    </tr>
-                    <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr><!--espacios-->
-                    <tr>
-                        <td style="font-family: 'Open Sans', sans-serif; font-weight: 400; font-style:italic; font-size: 15px; color:#858789">
-                            <a href="{{ url('show_dashboard')}}" style="text-align:center;text-decoration:none;display:block;background:#E09236;height: auto;width: 170px;padding:5px;color:#FFF;">Iniciar Registro</a>
-                        </td>
-                    </tr>
-                    <!--<tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr><!--espacios-->
-                    <!--<tr>
-                        <td style="font-family: 'Open Sans', sans-serif; font-weight: 300; font-size: 17px; color:#858789">
-                            <span style="color: #DF9136">&#10003; </span>Guía práctica para la contratación.<br>
-<span style="color: #DF9136">&#10003; </span>Afiliación rápida de empleados y del empleador a las entidades de la Seguridad Social.<br>
-<span style="color: #DF9136">&#10003; </span>Liquidación y pago de nómina y aportes en pocos pasos.<br>
-<span style="color: #DF9136">&#10003; </span>Registro documental histórico de la relación laboral.
-                        </td>
-                    </tr>-->
+                  <tr>
+                      <td>
+                          <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#909090; font-size: 15px; width:90%;margin:0 auto"><span style="color:#13878e;font-weight:600">¡Es momento de empezar a hacer las cosas bien!</span><br>
+                Registra tus datos y comienza a usar Symplifica.<br><br>
+                          </div>
+                      </td>
+                  </tr>
                 </table>
             </td>
         </tr>
 
         <tr>
-            <td bgcolor="#F7F7F8" style="padding: 40px 30px 40px 30px;">
+            <td style="padding: 10px 10px 20px 10px;">
                 <table  border="0" cellpadding="0" cellspacing="0" width="100%">
-                    <!--<tr>
-                        <td style="font-family: 'Open Sans', sans-serif; font-weight: 300; font-size: 20px; color:#858789" align="center">
-                            Symplifica te recomienda
-                        </td>
-                    </tr>-->
                     <tr>
-                        <td style="font-family: 'Open Sans', sans-serif; font-weight: 300; font-size: 15px; color:#858789">
-                            Antes de empezar te recomendamos tener a la mano estos documentos e información:
+                        <td>
+                            <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#909090; font-size: 15px; width:90%;margin:0 auto"><br>
+                                <span style="color:#13878e;font-weight:600">Iniciar regístro</span><br>
+                                <span>Antes de empezar te recomendamos tener a la mano estos documentos e información:</span>
+                            </div>
                         </td>
                     </tr>
                      <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr><!--espacios-->
                     <tr>
-                        <td height="30" style="font-family: 'Open Sans', sans-serif; font-weight: 600; font-size: 15px; color:#5D5D5D">
-                            Para el empleador
+                        <td height="30">
+                            <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#909090; font-size: 15px; width:90%;margin:0 auto">
+                                <span style="color:#13878e;font-weight:600">Para el empleador</span><br>
+                                &#8226; Copia del documento de identidad.<br>
+                                &#8226; Copia del RUT.<br>
+                                &#8226; Datos de contacto.<br>
+                                &#8226; Entidades de seguridad social seleccionadas (ARL y CAJA DE COMPENSACIÓN).<br>
+                                &#8226; Datos de cuenta bancaria para pago de nómina y aportes (banco, tipo de cuenta, número de cuenta).<br>
+                            </div><br>
                         </td>
                     </tr>
                     <tr>
-                        <td height="30" style="font-family: 'Open Sans', sans-serif; font-weight: 300; font-size: 15px; color:#808183">
-                            &#8226; Copia del documento de identidad
+                        <td height="30">
+                            <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#909090; font-size: 15px; width:90%;margin:0 auto">
+                                <span style="color:#13878e;font-weight:600">Para el trabajador</span><br>
+                                &#8226; Copia del documento de identidad.<br>
+                                &#8226; Datos básicos (nombre, teléfono, dirección, estado civil).<br>
+                                &#8226; Datos del contrato (sueldo, fecha de ingreso, tipo de empleado, días que labora).<br>
+                                &#8226; Entidades de seguridad social seleccionadas (EPS y FONDO DE PENSIONES).<br>
+                            </div><br>
                         </td>
                     </tr>
-                    <tr><td style="font-size: 0; line-height: 0;" height="5">&nbsp;</td></tr><!--espacios pequeños-->
-                    <tr>
-                        <td height="30" style="font-family: 'Open Sans', sans-serif; font-weight: 300; font-size: 15px; color:#808183">
-                            &#8226; Copia del RUT
-                        </td>
-                    </tr>
-                    <tr><td style="font-size: 0; line-height: 0;" height="5">&nbsp;</td></tr><!--espacios pequeños-->
-                    <tr>
-                        <td height="30" style="font-family: 'Open Sans', sans-serif; font-weight: 300; font-size: 15px; color:#808183">
-                            &#8226; Datos de contacto
-                        </td>
-                    </tr>
-                    <tr><td style="font-size: 0; line-height: 0;" height="5">&nbsp;</td></tr><!--espacios pequeños-->
-                    <tr>
-                        <td height="30" style="font-family: 'Open Sans', sans-serif; font-weight: 300; font-size: 15px; color:#808183">
-                            &#8226; Entidades de seguridad social seleccionadas (ARL y CAJA DE COMPENSACIÓN)
-                        </td>
-                    </tr>
-                    <tr><td style="font-size: 0; line-height: 0;" height="5">&nbsp;</td></tr><!--espacios pequeños-->
-                    <tr>
-                        <td height="30" style="font-family: 'Open Sans', sans-serif; font-weight: 300; font-size: 15px; color:#808183">
-                            &#8226; Datos de cuenta bancaria para pago de nómina y aportes (banco, tipo de cuenta, número de cuenta)
-                        </td>
-                    </tr>
-                    <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr><!--espacios-->
-                    <tr>
-                        <td height="30" style="font-family: 'Open Sans', sans-serif; font-weight: 600; font-size: 15px; color:#5D5D5D">
-                            Para el empleado
-                        </td>
-                    </tr>
-                    <tr>
-                        <td height="30" style="font-family: 'Open Sans', sans-serif; font-weight: 300; font-size: 15px; color:#808183">
-                            &#8226; Copia del documento de identidad
-                        </td>
-                    </tr>
-                    <tr><td style="font-size: 0; line-height: 0;" height="5">&nbsp;</td></tr><!--espacios pequeños-->
-                    <tr>
-                        <td height="30" style="font-family: 'Open Sans', sans-serif; font-weight: 300; font-size: 15px; color:#808183">
-                          &#8226; Datos básicos (Nombre, Teléfono, dirección, Estado civil)
-                        </td>
-                    </tr>
-                    <tr><td style="font-size: 0; line-height: 0;" height="5">&nbsp;</td></tr><!--espacios pequeños-->
-                    <tr>
-                        <td height="30" style="font-family: 'Open Sans', sans-serif; font-weight: 300; font-size: 15px; color:#808183">
-                            &#8226; Datos del contrato (sueldo, fecha de ingreso, tipo de empleado, días que labora)
-                        </td>
-                    </tr>
-                    <tr><td style="font-size: 0; line-height: 0;" height="5">&nbsp;</td></tr><!--espacios pequeños-->
-                    <tr>
-                        <td height="30" style="font-family: 'Open Sans', sans-serif; font-weight: 300; font-size: 15px; color:#808183">
-                            &#8226; Entidades de seguridad social seleccionadas (EPS y FONDO DE PENSIONES)
-                        </td>
-                    </tr>
+
                 </table>
             </td>
         </tr>
         <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr><!--espacios-->
         <tr>
           <td style="font-family: 'Open Sans', sans-serif; font-weight: 500; font-style:italic; font-size: 15px; color:#858789">
-              <a href="{{ url('show_dashboard')}}" style="text-align:center;text-decoration:none;display:block;background:#E09236;height:auto;width: 170px;padding:5px;color:#FFF;">!Estoy listo!</a>
+              <a href="{{ url('show_dashboard')}}" style="text-decoration:none;width: 90%;display:block;margin: 0 auto;" target="_blank;"><div style="background:#13878e;border-radius:25px; height: 25px; font-size:14px; width: 170px; color:#FFFFFF;font-family: 'Open Sans', sans-serif; font-weight: 600; padding: 5px 0 0 0; text-align:center">¡Estoy listo!</div></a><br /><br />
           </td>
         </tr>
+
         <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr><!--espacios-->
         <!--<tr>
             <td bgcolor="#FFFFFF" style="padding: 40px 30px 40px 30px;">

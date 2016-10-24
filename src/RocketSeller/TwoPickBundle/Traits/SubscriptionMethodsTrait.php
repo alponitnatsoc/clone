@@ -12,10 +12,13 @@ use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\PayMethod;
 use RocketSeller\TwoPickBundle\Entity\PayType;
 use RocketSeller\TwoPickBundle\Entity\Referred;
+use RocketSeller\TwoPickBundle\Entity\Transaction;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\ProcedureType;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus;
+use RocketSeller\TwoPickBundle\Entity\TransactionType;
 use Symfony\Component\HttpFoundation\Response;
 use RocketSeller\TwoPickBundle\Traits\EmployeeMethodsTrait;
 use Doctrine\ORM\EntityManager;
@@ -715,7 +718,7 @@ trait SubscriptionMethodsTrait
         if ($employer->getIdSqlSociety() == null) {
             $request->setMethod("POST");
             $request->request->add(array(
-                "society_nit" => $person->getDocument(),
+                "society_nit" => $person->getDocumentType().$person->getDocument(),
                 "society_name" => $person->getNames(),
                 "society_start_date" => $dateToday->format("d-m-Y"),
                 "society_mail" => $user->getEmail(),
@@ -727,7 +730,7 @@ trait SubscriptionMethodsTrait
         }
 
         $request->setMethod("GET");
-        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getSociety', array("societyNit" => $person->getDocument()), array('_format' => 'json'));
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getSociety', array("societyNit" => $person->getDocumentType().$person->getDocument()), array('_format' => 'json'));
         if ($insertionAnswer->getStatusCode() != 200) {
             return false;
         }
@@ -912,6 +915,43 @@ trait SubscriptionMethodsTrait
                 $em->flush();
 
             }
+
+            //add employer to pila operator only if is already registered on Hightech
+            if($employer->getExistentPila() == NULL && $employer->getIdHighTech() != NULL){
+
+	            $request->setMethod("POST");
+	            $request->request->add(array(
+		            "GSCAccount" => $employer->getIdHighTech()
+	            ));
+
+	            $transactionType = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:TransactionType')->findOneBy(array('code' => 'IPil'));
+
+	            $transaction = new Transaction();
+	            $transaction->setTransactionType($transactionType);
+
+	            $pilaRegistrationAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postRegisterEmployerToPilaOperator', array('_format' => 'json'));
+
+	            if($pilaRegistrationAnswer->getStatusCode() == 200){
+		            //Received succesfully
+		            $radicatedNumber = json_decode($pilaRegistrationAnswer->getContent(), true)["numeroRadicado"];
+		            $transaction->setRadicatedNumber($radicatedNumber);
+		            $purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'InsPil-InsEnv'));
+	            }
+	            else{
+	            	//If some kind of error
+		            $purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'InsPil-ErrSer'));
+	            }
+
+	            $transaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
+	            $em->persist($transaction);
+	            $em->flush();
+	            $employer->setExistentPila($transaction->getIdTransaction());
+	            $employer->addTransaction($transaction);
+
+	            $em->persist($employer);
+	            $em->flush();
+
+            }
             $eHEes = $employer->getEmployerHasEmployees();
             //dump($eHEes);
             /** @var EmployerHasEmployee $employeeC */
@@ -963,12 +1003,9 @@ trait SubscriptionMethodsTrait
                             "employeeBankCode" => $payMC->getBankBank()->getHightechCode() ?: 23,
                         ));
                         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postRegisterBeneficiary', array('_format' => 'json'));
-                        if (!($insertionAnswer->getStatusCode() == 200)) {
-                            $this->addFlash('error', $insertionAnswer->getContent());
-
-                            return false;
+                        if ($insertionAnswer->getStatusCode() == 200) {
+	                        $employeeC->setExistentHighTec(1);
                         }
-                        $employeeC->setExistentHighTec(1);
                         $em->persist($employeeC);
                         $em->flush();
                     }

@@ -98,7 +98,6 @@ class Employer
 
     /**
      * @ORM\OneToMany(targetEntity="EmployerHasEntity", mappedBy="employerEmployer", cascade={"persist"})
-     * @Exclude
      */
     private $entities;
 
@@ -120,6 +119,24 @@ class Employer
      * @ORM\Column(type="integer", nullable=true)
      */
     private $status=0;
+
+		/**
+		 * -1 - Success
+		 * -2 - Employer was registered before PilaBot
+		 * Anything else, active transaction id
+		 * @ORM\Column(type="integer", nullable=TRUE)
+		 */
+		private $existentPila;
+
+
+		/**
+		 * @ORM\ManyToMany(targetEntity="Transaction", cascade={"persist"})
+		 * @ORM\JoinTable(name="employer_has_transactions",
+		 *      joinColumns={ @ORM\JoinColumn(name="employer_id_employer", referencedColumnName="id_employer")},
+		 *      inverseJoinColumns={@ORM\JoinColumn(name="transaction_id_transaction", referencedColumnName="id_transaction")}
+		 *      )
+		 */
+		private $transactions;
 
     /**
      * Set idEmployer
@@ -463,6 +480,7 @@ class Employer
         $this->realProcedure = new \Doctrine\Common\Collections\ArrayCollection();
         $this->employerHasEmployees = new \Doctrine\Common\Collections\ArrayCollection();
         $this->entities = new \Doctrine\Common\Collections\ArrayCollection();
+	      $this->transactions = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -548,6 +566,64 @@ class Employer
         $criteria = Criteria::create()
             ->where(Criteria::expr()->gte("state",2));
         return $this->employerHasEmployees->matching($criteria);
+    }
+
+    /**
+     * Set existentPila
+     *
+     * @param integer $existentPila
+     *
+     * @return Employer
+     */
+    public function setExistentPila($existentPila)
+    {
+        $this->existentPila = $existentPila;
+
+        return $this;
+    }
+
+    /**
+     * Get existentPila
+     *
+     * @return integer
+     */
+    public function getExistentPila()
+    {
+        return $this->existentPila;
+    }
+
+    /**
+     * Add transaction
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Transaction $transaction
+     *
+     * @return Employer
+     */
+    public function addTransaction(\RocketSeller\TwoPickBundle\Entity\Transaction $transaction)
+    {
+        $this->transactions[] = $transaction;
+
+        return $this;
+    }
+
+    /**
+     * Remove transaction
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Transaction $transaction
+     */
+    public function removeTransaction(\RocketSeller\TwoPickBundle\Entity\Transaction $transaction)
+    {
+        $this->transactions->removeElement($transaction);
+    }
+
+    /**
+     * Get transactions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTransactions()
+    {
+        return $this->transactions;
     }
 
     /**

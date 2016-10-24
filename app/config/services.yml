@@ -96,6 +96,10 @@ services:
                   resetting: '%fos_user.resetting.email.from_email%'
     app.symplifica_utils:
         class: RocketSeller\TwoPickBundle\Controller\UtilsController
+        arguments: ["@service_container"]
     app.symplifica_chrons:
         class: RocketSeller\TwoPickBundle\Controller\ChronServerRestController
+        arguments: ["@service_container"]
+    app.symplifica_push_notification:
+        class: RocketSeller\TwoPickBundle\Controller\PushNotificationRestController
         arguments: ["@service_container"]
