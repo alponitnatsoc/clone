@@ -4,6 +4,7 @@ namespace RocketSeller\TwoPickBundle\DataFixtures\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use RocketSeller\TwoPickBundle\Entity\Document;
 use RocketSeller\TwoPickBundle\Entity\DocumentType;
 
 class LoadDocumentTypeData extends AbstractFixture implements OrderedFixtureInterface
@@ -185,6 +186,11 @@ class LoadDocumentTypeData extends AbstractFixture implements OrderedFixtureInte
 	      $documentTypePayslipPila->setDocCode('EOCP');
 	      $manager->persist($documentTypePayslipPila);
 	    
+	      $documentTypePasaporte = new DocumentType();
+	      $documentTypePasaporte->setName('Pasaporte');
+	      $documentTypePasaporte->setDocCode('PASAPORTE');
+	      $manager->persist($documentTypePasaporte);
+	    
         $manager->flush();
 
         $this->addReference('document-type-cedula', $documentTypeCedula);
@@ -219,6 +225,7 @@ class LoadDocumentTypeData extends AbstractFixture implements OrderedFixtureInte
 	      $this->addReference('document-CE',$documentTypeCE);
 	      $this->addReference('document-EOIE', $documentTypePilaOperatorLog);
 	      $this->addReference('document-EOCP', $documentTypePayslipPila);
+	      $this->addReference('document-PASAPORTE', $documentTypePasaporte);
 
     }
     public function getOrder()

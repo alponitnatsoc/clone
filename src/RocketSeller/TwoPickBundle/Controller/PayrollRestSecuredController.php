@@ -340,6 +340,7 @@ class PayrollRestSecuredController extends FOSRestController
             $fourx1000POD = new PurchaseOrdersDescription();
             $fourx1000POD->setDescription("Cuatro por Mil");
             $fourx1000POD->setValue($fourX1000Cost);
+            $fourx1000POD->setProductProduct($productCPM);
             $realtoPay->addPurchaseOrderDescription($fourx1000POD);
 
             $total += $fourx1000POD->getValue();
@@ -359,6 +360,7 @@ class PayrollRestSecuredController extends FOSRestController
             $transactionPOD = new PurchaseOrdersDescription();
             $transactionPOD->setDescription("Costo transaccional");
             $transactionPOD->setValue($transactionCost);
+            $transactionPOD->setProductProduct($productCT);
             $realtoPay->addPurchaseOrderDescription($transactionPOD);
             $total += $transactionPOD->getValue();
 
@@ -417,6 +419,7 @@ class PayrollRestSecuredController extends FOSRestController
                 $symplificaPOD->setValue(round(($PS1->getPrice() * (1 + $PS1->getTaxTax()->getValue()) * $ps1Count) +
                     ($PS2->getPrice() * (1 + $PS2->getTaxTax()->getValue()) * $ps2Count) +
                     ($PS3->getPrice() * (1 + $PS3->getTaxTax()->getValue()) * $ps3Count), 0));
+                $symplificaPOD->setProductProduct($PS3);
                 $realtoPay->addPurchaseOrderDescription($symplificaPOD);
                 $total += $symplificaPOD->getValue();
 

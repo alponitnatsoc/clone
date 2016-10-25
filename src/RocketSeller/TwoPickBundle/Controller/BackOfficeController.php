@@ -253,7 +253,7 @@ class BackOfficeController extends Controller
                 if($po->getAlreadyRecived()==1&&$po->getPurchaseOrdersStatus()->getIdNovoPay()=="00"){
                     $datemin= new DateTime($po->getDateCreated()->format("Y-m-1"));
                     $datemax= new DateTime($po->getDateCreated()->format("Y-m-t"));
-                    if($dateToday>$datemin&&$dateToday<$datemax)
+                    if($dateToday>=$datemin&&$dateToday<=$datemax)
                         $efectivePurchaseOrders->add($po);
                 }
             }
