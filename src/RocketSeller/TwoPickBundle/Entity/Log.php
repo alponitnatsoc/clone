@@ -67,7 +67,7 @@ class Log
     /**
      * @var string
      *
-     * @ORM\Column(name="message", type="string", length=300)
+     * @ORM\Column(name="message", type="string", length=300, nullable=true)
      */
     private $message;
 
