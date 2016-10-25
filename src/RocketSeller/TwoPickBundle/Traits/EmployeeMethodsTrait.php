@@ -574,7 +574,12 @@ trait EmployeeMethodsTrait
             // {{ path('download_document', {'id': employees[0].personPerson.idPerson , 'idDocument':doc.idDocument}) }}
             if (!$docs[$type]) {
                 $msj = "";
-                $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findOneBy(array('docCode'=>$type));
+		            if($type == 'CC'){
+			            $documentType= $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findOneBy(array('docCode'=>$eePerson->getDocumentType()));
+		            }
+		            else{
+			            $documentType= $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findOneBy(array('docCode'=>$type));
+		            }
                 $dAction=null;
                 $nAction="Subir";
                 $dUrl=null;
@@ -657,7 +662,12 @@ trait EmployeeMethodsTrait
         foreach ($docs as $type => $status) {
             if (!$docs[$type]) {
                 $msj = "";
-                $documentType= $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findOneBy(array('docCode'=>$type));
+	              if($type == 'CC'){
+		              $documentType= $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findOneBy(array('docCode'=>$person->getDocumentType()));
+	              }
+	              else{
+		              $documentType= $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findOneBy(array('docCode'=>$type));
+	              }
                 $dAction=null;
                 $dUrl=null;
                 if ($type == 'CC') {
