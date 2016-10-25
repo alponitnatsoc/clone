@@ -432,7 +432,7 @@ trait EmployeeMethodsTrait
                     //getting the amount of documents pending for the employee
                     $ePend = $this->employeeDocumentsReady($eHE);
                     //if amount of pending docs for employee equal to 0 state is 2 message docs ready
-                    if($ePend['pending']==0){
+                    if($ePend==0){
                         $eHE->setDocumentStatus(2);
                         $this->checkSubscription($eHE);
                         $eHE->setDateDocumentsUploaded(new DateTime());
@@ -479,8 +479,17 @@ trait EmployeeMethodsTrait
                         $eHE->setDocumentStatus(11);
                     }
                 }elseif($case == 11){
-                    $ePend = $this->employeeDocumentsReady($eHE);
-                    if($ePend['contract']==0){
+                    if($eHE->getActiveContract()->getDocumentDocument()) {
+                        try {
+                            if($eHE->getActiveContract()->getDocumentDocument()->getMediaMedia() == null) {
+                                $ePend = 1;
+                            }
+                        } catch (Exception $e) {
+                            $ePend = 1;
+                        }
+
+                    }
+                    if($ePend==0){
                         $eHE->setDocumentStatus(14);
                     }else{
                         $eHE->setDocumentStatus(15);
@@ -490,8 +499,17 @@ trait EmployeeMethodsTrait
                 }elseif($case == 13){
                     $eHE->setDocumentStatus(16);
                 }elseif($case == 14){
-                    $ePend = $this->employeeDocumentsReady($eHE);
-                    if($ePend['contract']==0){
+                    if($eHE->getActiveContract()->getDocumentDocument()) {
+                        try {
+                            if($eHE->getActiveContract()->getDocumentDocument()->getMediaMedia() == null) {
+                                $ePend = 1;
+                            }
+                        } catch (Exception $e) {
+                            $ePend = 1;
+                        }
+
+                    }
+                    if($ePend==0){
                         $eHE->setDocumentStatus(14);
                     }else{
                         $eHE->setDocumentStatus(15);
@@ -514,7 +532,7 @@ trait EmployeeMethodsTrait
 
 
     /**
-     * function to generate all the employer and employee notifications 
+     * function to generate all the employer and employee notifications
      * @param User $user
      * @return bool
      */

@@ -357,7 +357,7 @@ class DocumentRestSecuredController extends FOSRestController
             if( $docStat['docStatus'] == 2) {
                 $pushNotificationService = $this->get('app.symplifica_push_notification');
                 $pushNotificationService->sendMessageValidatingDocuments($this->getUser()->getId());
-                $eHE->setStatusCode(3);
+                $eHE->setDocumentStatus(3);
                 $em->persist($eHE);
                 $em->flush();
             } elseif ($docStat['docStatus'] == 3) {
