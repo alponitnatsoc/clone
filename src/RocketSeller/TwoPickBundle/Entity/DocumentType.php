@@ -31,7 +31,7 @@ class DocumentType
     private $name;
     
     /**
-     * @ORM\Column(name="doc_code",type="string", length=4, nullable=TRUE)
+     * @ORM\Column(name="doc_code",type="string", length=10, nullable=TRUE)
      */
     private $docCode;
 
