@@ -580,7 +580,7 @@ trait EmployeeMethodsTrait
                 $dUrl=null;
                 if ($type == 'CC') {
                     $msj = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$eePerson->getNames())[0]." ". $eePerson->getLastName1());
-                    $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$eePerson->getIdPerson(),'docCode'=>'CC'));
+                    $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$eePerson->getIdPerson(),'docCode'=>$eePerson->getDocumentType()));
                 }elseif ($type == 'CAS') {
                     $msj = "Subir autorización firmada de manejo de datos y afiliación de " .$utils->mb_capitalize(explode(" ",$eePerson->getNames())[0]." ". $eePerson->getLastName1());
                     $url = $this->generateUrl("documentos_employee", array('entityType'=>'EmployerHasEmployee','entityId'=>$employerHasEmployee->getIdEmployerHasEmployee(),'docCode'=>'CAS'));
