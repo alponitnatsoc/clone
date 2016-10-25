@@ -22,6 +22,7 @@ use RocketSeller\TwoPickBundle\Entity\TransactionType;
 use Symfony\Component\HttpFoundation\Response;
 use RocketSeller\TwoPickBundle\Traits\EmployeeMethodsTrait;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpFoundation\Request;
 
 trait SubscriptionMethodsTrait
 {
@@ -148,6 +149,8 @@ trait SubscriptionMethodsTrait
         //Employee creation
         $request = $this->container->get('request');
         $employer = $eHE->getEmployerEmployer();
+        $userEmployer = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User')
+                        ->findOneBy(array('personPerson' => $employer->getPersonPerson()));
         $em = $this->getDoctrine()->getManager();
         if ($eHE->getState() > 2 && (!$eHE->getExistentSQL())) {
             $contracts = $eHE->getContracts();
@@ -205,6 +208,24 @@ trait SubscriptionMethodsTrait
             $eHE->setExistentSQL(1);
             $em->persist($eHE);
             $em->flush();
+
+            //send push notification
+            $message = "¡Bienvenido a Symplifica! Usa la plataforma";
+            $title = "Symplifica";
+            $longMessage = "¡Bienvenido a Symplifica! Ya puedes empezar a usar nuestra herramienta y la APP para gestionar el día a día de tus empleados.";
+
+            $request = new Request();
+            $request->setMethod("POST");
+            $request->request->add(array(
+                "idUser" => $userEmployer->getId(),
+                "title" => $title,
+                "message" => $message,
+                "longMessage" => $longMessage
+            ));
+            $pushNotificationService = $this->get('app.symplifica_push_notification');
+            $result = $pushNotificationService->postPushNotificationAction($request);
+            // push notification sent
+
             if ($actContract->getHolidayDebt() != null) { //If the employee has no vacations remaining or is new, we send 0, otherwise the value
 	            $request->setMethod("POST");
 	            $request->request->add(array(
@@ -1400,11 +1421,11 @@ trait SubscriptionMethodsTrait
             $smailer=$this->get('symplifica.mailer.twig_swift');
             $smailer->sendEmailByTypeMessage(array('emailType'=>'daviplata','user'=>$user,'subject'=>'Información Daviplata','toEmail'=>$user->getEmail()));
         }
-	
+
         //Email with info regarding the app
 		    $smailer=$this->get('symplifica.mailer.twig_swift');
 		    $smailer->sendEmailByTypeMessage(array('emailType'=>'appDownload','user'=>$user,'subject'=>'App Symplifica','toEmail'=>$user->getEmail()));
-        
+
         $em->persist($user);
         $em->flush();
         return true;
