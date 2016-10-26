@@ -199,17 +199,22 @@ trait SubscriptionMethodsTrait
             $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployee', array('_format' => 'json'));
             if ($insertionAnswer->getStatusCode() != 200) {
 
-                $log = new Log($this->getUser(),'EmployerHasEmployee','DateTryToRegisterToSQL',$eHE->getIdEmployerHasEmployee(),$eHE->getDateTryToRegisterToSQL()->format('d-m-Y H:i:s'),$today->format('d-m-Y H:i:s'),'Add to SQL fail');
+                if($eHE->getDateTryToRegisterToSQL()!=null){
+                    $log = new Log($this->getUser(),'EmployerHasEmployee','DateTryToRegisterToSQL',$eHE->getIdEmployerHasEmployee(),$eHE->getDateTryToRegisterToSQL()->format('d-m-Y H:i:s'),$today->format('d-m-Y H:i:s'),'Add to SQL fail');
+                }else{
+                    $log = new Log($this->getUser(),'EmployerHasEmployee','DateTryToRegisterToSQL',$eHE->getIdEmployerHasEmployee(),'',$today->format('d-m-Y H:i:s'),'Add to SQL fail');
+                }
                 $eHE->setDateTryToRegisterToSQL($today);
                 $em->persist($eHE);
                 $em->persist($log);
                 $em->flush();
                 return false;
             }
-            $log = new Log($this->getUser(),'EmployerHasEmployee','DateRegisterToSQL',$eHE->getIdEmployerHasEmployee(),$eHE->getDateRegisterToSQL()->format('d-m-Y H:i:s'),$today->format('d-m-Y H:i:s'),'Add to SQL success');
+            $log = new Log($this->getUser(),'EmployerHasEmployee','DateRegisterToSQL',$eHE->getIdEmployerHasEmployee(),'',$today->format('d-m-Y H:i:s'),'Add to SQL success');
             $eHE->setDateRegisterToSQL($today);
             $eHE->setExistentSQL(1);
             $em->persist($eHE);
+            $em->persist($log);
             $em->flush();
 
             //send push notification
