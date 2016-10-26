@@ -228,3 +228,6 @@ back_pila_state_register_update:
 export_error_pila_afiliation:
     path:         /backoffice/export/error/pila/inscription/{idTransaction}
     defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:exportPilaOperatorAfiliationError }
+back_fix_pods:
+    path:         /backoffice/fix/pod
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:fixPODPila }
