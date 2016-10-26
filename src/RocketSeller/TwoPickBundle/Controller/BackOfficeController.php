@@ -1563,5 +1563,53 @@ class BackOfficeController extends Controller
 			}
 		}
 		
+		return $this->redirectToRoute('back_office');
+	}
+	
+	public function addEmployerToEnlaceOperativoBackAction($idEmployer){
+		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+		
+		$em=$this->getDoctrine()->getManager();
+		
+		$employer = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer')->find($idEmployer);
+		
+		if($employer->getExistentPila() == NULL && $employer->getIdHighTech() != NULL){
+			
+			$request = $this->container->get('request');
+			$request->setMethod("POST");
+			$request->request->add(array(
+				"GSCAccount" => $employer->getIdHighTech()
+			));
+			
+			$transactionType = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:TransactionType')->findOneBy(array('code' => 'IPil'));
+			
+			$transaction = new Transaction();
+			$transaction->setTransactionType($transactionType);
+			
+			$pilaRegistrationAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postRegisterEmployerToPilaOperator', array('_format' => 'json'));
+			
+			if($pilaRegistrationAnswer->getStatusCode() == 200){
+				//Received succesfully
+				$radicatedNumber = json_decode($pilaRegistrationAnswer->getContent(), true)["numeroRadicado"];
+				$transaction->setRadicatedNumber($radicatedNumber);
+				$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'InsPil-InsEnv'));
+			}
+			else{
+				//If some kind of error
+				$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'InsPil-ErrSer'));
+			}
+			
+			$transaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
+			$em->persist($transaction);
+			$em->flush();
+			$employer->setExistentPila($transaction->getIdTransaction());
+			$employer->addTransaction($transaction);
+			
+			$em->persist($employer);
+			$em->flush();
+			
+		}
+		
+		return $this->redirectToRoute('back_office');
 	}
 }

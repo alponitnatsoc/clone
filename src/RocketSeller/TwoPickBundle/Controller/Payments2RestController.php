@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
+use RocketSeller\TwoPickBundle\Entity\HighTechLog;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
@@ -175,10 +176,19 @@ class Payments2RestController extends FOSRestController
       if($ambiente == 'produccion')
         $parametros_soap['location'] = 'https://cpsuite.htsoft.co:8080/dssp/services/' . $methodName . '/';
 
+      $htLog = new HighTechLog();
+      $htLog->setServiceCalled($methodName);
+      $htLog->setParameters($parameters);
+      $htLog->setTimeWhenCalled(new DateTgit ime());
+  
+      $em = $this->getDoctrine()->getManager();
+      $em->persist($htLog);
+      $em->flush();
+      
       $client = new \SoapClient($url_base . $path . "?wsdl", $parametros_soap);
 
       $res = $client->__soapCall($methodName, array($parameters));
-
+      
       // This other way also works, may be usefull.
       //$res = $client->RegistrarBeneficiario($parameters);
       // Trick to get everything as an array.
@@ -196,7 +206,12 @@ class Payments2RestController extends FOSRestController
           $errorCode = 404;
       else if($responseCode == 102)
           $errorCode = 422;
-
+  
+      $htLog->setResultCode($errorCode);
+      $htLog->setRawResultCode($responseCode);
+      $em->persist($htLog);
+      $em->flush();
+      
       // Set status code of view with http codes.
       $view->setStatusCode($errorCode);
 

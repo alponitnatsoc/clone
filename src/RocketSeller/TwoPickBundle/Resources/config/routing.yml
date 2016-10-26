@@ -231,3 +231,6 @@ export_error_pila_afiliation:
 back_fix_pods:
     path:         /backoffice/fix/pod
     defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:fixPODPila }
+back_add_employer_enlace_operativo:
+    path:         /backoffice/pila/add/enlace/operativo/{idEmployer}
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:addEmployerToEnlaceOperativoBack}
