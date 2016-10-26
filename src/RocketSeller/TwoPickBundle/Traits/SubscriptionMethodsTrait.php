@@ -7,6 +7,7 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use FOS\RestBundle\View\View;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\Log;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\PayMethod;
@@ -154,14 +155,7 @@ trait SubscriptionMethodsTrait
         $em = $this->getDoctrine()->getManager();
         if ($eHE->getState() > 2 && (!$eHE->getExistentSQL())) {
             $contracts = $eHE->getContracts();
-            $actContract = null;
-            /** @var Contract $c */
-            foreach ($contracts as $c) {
-                if ($c->getState() == 1) {
-                    $actContract = $c;
-                    break;
-                }
-            }
+            $actContract = $eHE->getActiveContract();
 //                 $liquidationType=$actContract->getPayMethodPayMethod()->getFrequencyFrequency()->getPayrollCode();
             $liquidationType = $actContract->getFrequencyFrequency()->getPayrollCode();
             $endDate = $actContract->getEndDate();
@@ -201,10 +195,19 @@ trait SubscriptionMethodsTrait
                     "last_contract_end_date" => $endDate->format("d-m-Y")
                 ));
             }
+            $today = new DateTime();
             $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployee', array('_format' => 'json'));
             if ($insertionAnswer->getStatusCode() != 200) {
+
+                $log = new Log($this->getUser(),'EmployerHasEmployee','DateTryToRegisterToSQL',$eHE->getIdEmployerHasEmployee(),$eHE->getDateTryToRegisterToSQL()->format('d-m-Y H:i:s'),$today->format('d-m-Y H:i:s'),'Add to SQL fail');
+                $eHE->setDateTryToRegisterToSQL($today);
+                $em->persist($eHE);
+                $em->persist($log);
+                $em->flush();
                 return false;
             }
+            $log = new Log($this->getUser(),'EmployerHasEmployee','DateRegisterToSQL',$eHE->getIdEmployerHasEmployee(),$eHE->getDateRegisterToSQL()->format('d-m-Y H:i:s'),$today->format('d-m-Y H:i:s'),'Add to SQL success');
+            $eHE->setDateRegisterToSQL($today);
             $eHE->setExistentSQL(1);
             $em->persist($eHE);
             $em->flush();

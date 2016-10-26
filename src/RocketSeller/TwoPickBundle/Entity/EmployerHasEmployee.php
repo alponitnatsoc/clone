@@ -133,6 +133,11 @@ class EmployerHasEmployee
     /**
      * @ORM\Column(type="datetime", nullable=TRUE)
      */
+    private $dateTryToRegisterToSQL;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=TRUE)
+     */
     private $dateFinished;
 
     /**
@@ -565,5 +570,29 @@ class EmployerHasEmployee
     public function getDateRegisterToSQL()
     {
         return $this->dateRegisterToSQL;
+    }
+
+    /**
+     * Set dateTryToRegisterToSQL
+     *
+     * @param \DateTime $dateTryToRegisterToSQL
+     *
+     * @return EmployerHasEmployee
+     */
+    public function setDateTryToRegisterToSQL($dateTryToRegisterToSQL)
+    {
+        $this->dateTryToRegisterToSQL = $dateTryToRegisterToSQL;
+
+        return $this;
+    }
+
+    /**
+     * Get dateTryToRegisterToSQL
+     *
+     * @return \DateTime
+     */
+    public function getDateTryToRegisterToSQL()
+    {
+        return $this->dateTryToRegisterToSQL;
     }
 }
