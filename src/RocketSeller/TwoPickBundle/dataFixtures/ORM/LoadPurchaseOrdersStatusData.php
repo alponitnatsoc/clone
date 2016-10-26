@@ -184,7 +184,7 @@ class LoadPurchaseOrdersStatusData extends AbstractFixture implements OrderedFix
 	
 		    $PurchaseOrdersStatusInscribirOperador4 = new PurchaseOrdersStatus();
 		    $PurchaseOrdersStatusInscribirOperador4->setName('Inscripción aprobada');
-		    $PurchaseOrdersStatusInscribirOperador4->setDescription('El operador ya está inscrito en el operador');
+		    $PurchaseOrdersStatusInscribirOperador4->setDescription('El empleador ya está inscrito en el operador');
 		    $PurchaseOrdersStatusInscribirOperador4->setIdNovoPay('InsPil-InsOk');
 		    $manager->persist($PurchaseOrdersStatusInscribirOperador4);
 	
