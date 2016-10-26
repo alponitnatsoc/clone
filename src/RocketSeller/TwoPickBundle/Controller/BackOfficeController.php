@@ -10,7 +10,9 @@ use RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
+use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Person;
+use RocketSeller\TwoPickBundle\Entity\PilaDetail;
 use RocketSeller\TwoPickBundle\Entity\PromotionCode;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
@@ -1514,5 +1516,52 @@ class BackOfficeController extends Controller
     readfile($filePath);
     ignore_user_abort(true);
 
+	}
+	
+	public function fixPODPilaAction(){
+		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+		
+		$em=$this->getDoctrine()->getManager();
+		
+		$payrolls = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll")->findBy(array("period" => 4, "month" => 10, "year" => 2016, "paid" => 1));
+		$pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array("idNovoPay" => "P1"));
+		$product = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product")->findOneBy(array("simpleName" => "PP"));
+		
+		foreach($payrolls as $payroll){
+			$pilaPOD = $payroll->getPila();
+			
+			if($pilaPOD->getProductProduct() == NULL){
+				
+				$pilaPOD->setPurchaseOrdersStatus($pos);
+				$pilaPOD->setProductProduct($product);
+				$pilaPOD->setDescription("Pago de Aportes a Seguridad Social mes Octubre");
+				
+				$poList = $payroll->getPurchaseOrdersDescription();
+				
+				/** @var PurchaseOrdersDescription $singlePod */
+				foreach ($poList as $singlePod){
+					$pilaPOD->setPurchaseOrders($singlePod->getPurchaseOrders());
+					break;
+				}
+				
+				$totalValue = 0;
+				$payrollsPila = $pilaPOD->getPayrollsPila();
+				
+				/** @var Payroll $singlePayroll */
+				foreach ($payrollsPila as $singlePayroll){
+					$pilaDetails = $singlePayroll->getPilaDetails();
+					
+					/** @var PilaDetail $singleDetail */
+					foreach ($pilaDetails as $singleDetail){
+						$totalValue = $totalValue + $singleDetail->getSqlValueCia() + $singleDetail->getSqlValueEmp();
+					}
+				}
+				
+				$pilaPOD->setValue($totalValue);
+				$em->persist($pilaPOD);
+				$em->flush();
+			}
+		}
+		
 	}
 }
