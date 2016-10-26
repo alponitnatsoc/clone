@@ -19,11 +19,10 @@ class PaymentAndNoveltyReminderCommand extends ContainerAwareCommand
                 ->setName('symplifica:payment:novelty:reminder')
                 ->setDescription('Sends push notification and mail reminding payments due day')
                 ->setHelp('The push notifications are sent
-                             //TODO REVISAR FECHAS!!
-                            -Report Novleties reminder: 6 days business days before 15.
-                            -Last day of pay reminder: 4 days business days before 15.
-                            -Report Novleties reminder: 6 days business days before 25.
-                            -Last day of pay reminder: 4 days business days before 25.')
+                            -Report Novleties reminder: 5 days business days before 12.
+                            -Last day of pay reminder: 12.
+                            -Report Novleties reminder: 5 days business days before 25.
+                            -Last day of pay reminder: 25.')
         ;
     }
 
@@ -39,13 +38,11 @@ class PaymentAndNoveltyReminderCommand extends ContainerAwareCommand
         $currYear = $now->format('Y');
         $currDate = $now->format('d');
 
-        $begin = new DateTime( '2010-05-01' );
-        $end = new DateTime( '2016-10-15' );
         $utils = $this->getContainer()->get('app.symplifica_utils');
 
         $dateString = $currYear . '-' . $currMonth . '-12';
-        $sixbusinessDaysBefore15 = $utils->getWorkableDaysToDateAction($dateString, -5);
-        if($sixbusinessDaysBefore15 == $now->format("Y-m-d")) {
+        $fivebusinessDaysBefore12 = $utils->getWorkableDaysToDateAction($dateString, -5);
+        if($fivebusinessDaysBefore12 == $now->format("Y-m-d")) {
             $response = $cronService->putPaymentReminderAction("Hola, es tiempo de reportar novedades y pagar",
                                                     "¡Hola! Es momento de reportar novedades y pagar la quincena de tu empleado. Da clic para entrar",
                                                     2);
@@ -59,13 +56,13 @@ class PaymentAndNoveltyReminderCommand extends ContainerAwareCommand
             $response = $cronService->putPaymentReminderAction("¡Último día! Realiza el pago a tu empleado",
                                                     "¡Importante! Hoy es el último día para realizar el pago a tu empleado y reportar las novedades de este período. Entra ya haciendo clic",
                                                     2);
-            $output->writeln("recordatorio de pago dia 12");
+            $output->writeln("ultimo día de pago - dia 12");
             $this->printResponse($response, $output);
         }
 
         $dateString = $currYear . '-' . $currMonth . '-25';
-        $sixbusinessDaysBefore25 = $utils->getWorkableDaysToDateAction($dateString, -5);
-        if($sixbusinessDaysBefore25 == $now->format("Y-m-d")) {
+        $fivebusinessDaysBefore25 = $utils->getWorkableDaysToDateAction($dateString, -5);
+        if($fivebusinessDaysBefore25 == $now->format("Y-m-d")) {
             $response = $cronService->putPaymentReminderAction("Hola, es tiempo de reportar novedades y pagar",
                                                     "¡Hola! Es momento de reportar novedades de este periodo y realizar los pagos de seguridad social y sueldo. Da clic para entrar",
                                                     2);
@@ -73,13 +70,13 @@ class PaymentAndNoveltyReminderCommand extends ContainerAwareCommand
             $this->printResponse($response, $output);
         }
 
-        $dateString = $currYear . '-' . $currMonth . '-26';
+        $dateString = $currYear . '-' . $currMonth . '-25';
         // $fourbusinessDaysBefore25 = $utils->getWorkableDaysToDateAction($dateString, -4);
         if($dateString == $now->format("Y-m-d")) {
             $response = $cronService->putPaymentReminderAction("¡Último día! Realiza el pago a tu empleado",
                                                     "¡Importante! Hoy es el último día para realizar el pago a tu empleado y reportar las novedades de este período. Entra ya haciendo clic",
                                                     4);
-            $output->writeln("recordatorio de pago dia 25");
+            $output->writeln("ulitmo día de pago - dia 25");
             $this->printResponse($response, $output);
         }
 
