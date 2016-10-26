@@ -1407,6 +1407,8 @@ class EmployeeRestController extends FOSRestController
     {
         /** @var User $user */
         $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+
         if ($user == null) {
             $view = View::create();
             $view->setData(array('error' => array('employee' => 'user not logged')))->setStatusCode(403);
@@ -1452,7 +1454,6 @@ class EmployeeRestController extends FOSRestController
             return $view;
         }
         $realEmployeeEnt = $realEmployee->getEntities();
-        $em = $this->getDoctrine()->getManager();
 
         if ($realEmployeeEnt->count() == 0) {
 
@@ -1562,9 +1563,15 @@ class EmployeeRestController extends FOSRestController
                 return $view;
             } else {
                 // It sends here the verification code.
-                $this->sendVerificationCode();
-                $view->setData(array())->setStatusCode(200);
-                return $view;
+                if($this->sendVerificationCode()){
+
+                    $view->setData(array())->setStatusCode(200);
+                    return $view;
+                }else{
+                    $realEmployerHasEmployee->setState(2);
+                    $em->persist($realEmployerHasEmployee);
+                    $em->flush();
+                }
             }
 
         } else {
@@ -2116,8 +2123,14 @@ class EmployeeRestController extends FOSRestController
 
         $twilio = $this->get('twilio.api');
         $cellphone = $phone;
-        $twilio->account->messages->sendMessage(
-            "+19562671001", "+57" . $cellphone->getPhoneNumber(), $message);
+
+        try{
+            $twilio->account->messages->sendMessage(
+                "+19562671001", "+57" . $cellphone->getPhoneNumber(), $message);
+            return true;
+        }catch(\Exception $e){
+            return false;
+        }
     }
 
     /**
