@@ -179,7 +179,7 @@ class Payments2RestController extends FOSRestController
       $htLog = new HighTechLog();
       $htLog->setServiceCalled($methodName);
       $htLog->setParameters($parameters);
-      $htLog->setTimeWhenCalled(new DateTgit ime());
+      $htLog->setTimeWhenCalled(new DateTime());
   
       $em = $this->getDoctrine()->getManager();
       $em->persist($htLog);
