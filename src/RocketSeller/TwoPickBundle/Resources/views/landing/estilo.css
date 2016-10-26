@@ -1,0 +1,151 @@
+*,a {margin: 0 auto; padding: 0; text-decoration: none}
+
+
+.grisclarofont  {color: #87868A}
+.grisoscurofont {color: #60605e}
+.naranjafont  {color: #FD9224}
+.azuloscurofont {color: #3c4b5a}
+.azulmediofont {color: #00838c}
+.azulclarofont {color: #00cccb}
+
+.fondo-section {background: #f7f7f7; padding-bottom: 50px;}
+
+.naranja {background: #FD9224}
+.azuloscuro {background: #3c4b5a}
+.azulmedio {background: #00838c}
+.azulclaro {background: #00cccb}
+.rojo {background: #fd5c5c}
+
+.light {font-family: 'Open Sans', sans-serif;font-weight: 300}
+.bold {font-family: 'Open Sans', sans-serif;font-weight: 700}
+.extrabold {font-family: 'Open Sans', sans-serif;font-weight: 800}
+
+
+main {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    text-align: center;
+    border-top: 20px solid #6c9da2;
+}
+header {
+    margin-bottom: 30px;
+}
+#headerCont {
+    width: 520px;
+}
+
+#headerCont span {
+    display: block;
+    margin: 15px 0;
+}
+#tiempoLimitado {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.back {
+    background: #c77425;
+    padding: 10px 30px;
+}
+#campañaTitle {
+    margin-bottom: 20px;
+}
+#campañaDesc {
+    background: #d37e2a;
+    color: #FFF;
+    padding: 10px 0 0;
+}
+#form {
+    margin: 20px 0;
+}
+#form .half {
+    width: 49%;
+}
+
+#form .full {
+    width: 99%;
+}
+
+#form .input {
+    margin: 5px 0;
+    font-size: 15px;
+    background: #f1f1f1;
+    border: none;
+    border-radius: 25px;
+    padding: 5px 0;
+    text-align: center;
+    outline: none;
+}
+
+#form .info {
+    background: #6c9da2;
+    border: none;
+    width: 49%;
+    color: #FFF
+}
+
+#form .start {
+    background: #3e6e73;
+    border: none;
+    width: 49%;
+    color: #FFF
+}
+
+#form .terms {
+    font-weight:  600;
+    background: #FFF;
+    border: 1px solid #CCC;
+    width: 300px;
+    margin: 5px 0 0;
+    color: #5D5D5D
+}
+
+.buttonf {
+    border-radius: 25px;
+    padding: 10px 0;
+    text-transform: uppercase;
+    outline: none;
+}
+
+#pig {
+    background: url(azul.png);
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center center;
+    height: 235px;
+}
+
+#pig img {
+    width: 500px;
+    height: auto;
+}
+.callTo {
+    width: 300px;
+    color: #FFF;
+    margin: 25px auto 0;
+}
+#descubre {
+    margin: 20px auto;
+    width: 1100px;
+    padding: 15px 0;
+}
+#ganaCont {
+    background: #fbfbfb;
+    padding: 30px 0;
+}
+#gana .pasos {
+    float: left;
+    width: 25%;
+}
+#gana {
+    width: 1100px;
+    clear: both;
+    height: auto;
+    overflow: hidden;
+}
+
+.pasos span {
+    font-size: 35px;
+    color: #fd9224;
+}
