@@ -807,6 +807,11 @@ class HighTechRestController extends FOSRestController
 			$singleTransaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
 
 			$purchaseOrderDescription = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')->findOneBy(array('uploadedFile' => $singleTransaction->getIdTransaction()));
+			
+			if($parameters['planillaNumber'] != ""){
+				$purchaseOrderDescription->setEnlaceOperativoFileName($parameters['planillaNumber']);
+				$em->persist($purchaseOrderDescription);
+			}
 
 			/** @var TransactionState $transactionState */
 			$transactionState = new TransactionState();
