@@ -1422,7 +1422,7 @@ class Payments2RestController extends FOSRestController
    *
    * @ApiDoc(
    *   resource = true,
-   *   description = "Check state of the employer registration on Enlace Operativo and does not takes action",
+   *   description = "Check state of the employer registration on Enlace Operativo",
    *   statusCodes = {
    *     200 = "Created",
    *     400 = "Bad Request",
@@ -1435,17 +1435,20 @@ class Payments2RestController extends FOSRestController
    * Rest Parameters:
    *
    * (name="radicatedNumber", nullable=false, requirements="[0-9]+", description="number given by Hightech when the request is send")
+   * (name="path", nullable=false, requirements="(.)*", description="Service to be called")
    *
    * @return View
    */
   public function postCheckStateRegisterEmployerPilaOperatorWithoutAction(Request $request){
-    $path = "ConsultarEstadoRegistroEmpleadorPila";
+    $path = $parameters['path'];
     $parameters = $request->request->all();
     $regex = array();
     $mandatory = array();
     // Set all the parameters info.
     $regex['radicatedNumber'] = '[0-9]+';
     $mandatory['radicatedNumber'] = true;
+    $regex['path'] = '(.)*';
+    $mandatory['path'] = true;
     
     $this->validateParamters($parameters, $regex, $mandatory);
     
@@ -1453,7 +1456,7 @@ class Payments2RestController extends FOSRestController
     $parameters_fixed['numeroRadicado'] = $parameters['radicatedNumber'];
     
     /** @var View $res */
-    $responseView = $this->callApi($parameters_fixed, $path, "ConsultarEstadoRegistroEmpleadorPila");
+    $responseView = $this->callApi($parameters_fixed, $path, $path);
     
     $temp = $this->handleView($responseView);
     $data = json_decode($temp->getContent(), true);
