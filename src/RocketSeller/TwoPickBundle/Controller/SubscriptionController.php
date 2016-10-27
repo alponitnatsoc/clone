@@ -443,7 +443,7 @@ class SubscriptionController extends Controller
                             return $this->redirectToRoute("subscription_error");
                         }
                     } elseif ($typeMethod == 'debito') {
-                        if($user->getPersonPerson()->getDocumentType()!="PASAPORTE"){
+                        if($user->getPersonPerson()->getDocumentType()=="PASAPORTE"){
                             $user->setDataCreditStatus(2);
                         }
                         if ($user->getDataCreditStatus() == 0) {
