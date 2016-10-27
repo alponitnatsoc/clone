@@ -1416,6 +1416,55 @@ class Payments2RestController extends FOSRestController
     $view->setData($data);
     return $view;
   }
+  
+  /**
+   * Check state of the employer registration on the pila operator and does not takes action<br/>
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = "Check state of the employer registration on Enlace Operativo and does not takes action",
+   *   statusCodes = {
+   *     200 = "Created",
+   *     400 = "Bad Request",
+   *     404 = "Not found",
+   *     422 = "Bad parameters"
+   *   }
+   * )
+   *
+   * @param Request $request.
+   * Rest Parameters:
+   *
+   * (name="radicatedNumber", nullable=false, requirements="[0-9]+", description="number given by Hightech when the request is send")
+   *
+   * @return View
+   */
+  public function postCheckStateRegisterEmployerPilaOperatorWithoutAction(Request $request){
+    $path = "ConsultarEstadoRegistroEmpleadorPila";
+    $parameters = $request->request->all();
+    $regex = array();
+    $mandatory = array();
+    // Set all the parameters info.
+    $regex['radicatedNumber'] = '[0-9]+';
+    $mandatory['radicatedNumber'] = true;
+    
+    $this->validateParamters($parameters, $regex, $mandatory);
+    
+    $parameters_fixed = array();
+    $parameters_fixed['numeroRadicado'] = $parameters['radicatedNumber'];
+    
+    /** @var View $res */
+    $responseView = $this->callApi($parameters_fixed, $path, "ConsultarEstadoRegistroEmpleadorPila");
+    
+    $temp = $this->handleView($responseView);
+    $data = json_decode($temp->getContent(), true);
+    $code = json_decode($temp->getStatusCode(), true);
+    
+    $view = View::create();
+    $view->setStatusCode($code);
+    $view->setData($data);
+    return $view;
+  }
+  
 }
 
 ?>
