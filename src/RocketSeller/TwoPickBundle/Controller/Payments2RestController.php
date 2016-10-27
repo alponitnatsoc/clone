@@ -1440,8 +1440,8 @@ class Payments2RestController extends FOSRestController
    * @return View
    */
   public function postCheckStateRegisterEmployerPilaOperatorWithoutAction(Request $request){
-    $path = $parameters['path'];
     $parameters = $request->request->all();
+    $path = $parameters['path'];
     $regex = array();
     $mandatory = array();
     // Set all the parameters info.
