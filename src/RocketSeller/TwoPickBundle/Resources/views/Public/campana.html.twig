@@ -1,0 +1,337 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Lo Hago Bien</title>
+    <style>
+        *,a {margin: 0 auto; padding: 0; text-decoration: none}
+
+
+        .grisclarofont  {color: #87868A}
+        .grisoscurofont {color: #60605e}
+        .naranjafont  {color: #FD9224}
+        .azuloscurofont {color: #3c4b5a}
+        .azulmediofont {color: #00838c}
+        .azulclarofont {color: #00cccb}
+
+        .fondo-section {background: #f7f7f7; padding-bottom: 50px;}
+
+        .naranja {background: #FD9224}
+        .azuloscuro {background: #3c4b5a}
+        .azulmedio {background: #00838c}
+        .azulclaro {background: #00cccb}
+        .rojo {background: #fd5c5c}
+
+        .light {font-family: 'Open Sans', sans-serif;font-weight: 300}
+        .bold {font-family: 'Open Sans', sans-serif;font-weight: 700}
+        .extrabold {font-family: 'Open Sans', sans-serif;font-weight: 800}
+
+
+        main {
+            width: 100%;
+            height: auto;
+            overflow: hidden;
+            text-align: center;
+            border-top: 20px solid #6c9da2;
+        }
+        header {
+            margin-bottom: 30px;
+        }
+        #headerCont {
+            width: 520px;
+        }
+
+        #headerCont span {
+            display: block;
+            margin: 15px 0;
+        }
+        #tiempoLimitado {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        .back {
+            background: #c77425;
+            padding: 10px 30px;
+        }
+        #campañaTitle {
+            margin-bottom: 20px;
+        }
+        #campañaDesc {
+            background: #d37e2a;
+            color: #FFF;
+            padding: 10px 0 0;
+        }
+        #form {
+            margin: 20px 0;
+        }
+        #form .half {
+            width: 49%;
+        }
+
+        #form .full {
+            width: 99%;
+        }
+
+        #form .input {
+            margin: 5px 0;
+            font-size: 15px;
+            background: #f1f1f1;
+            border: none;
+            border-radius: 25px;
+            padding: 5px 0;
+            text-align: center;
+            outline: none;
+        }
+
+        #form .info {
+            background: #6c9da2;
+            border: none;
+            width: 49%;
+            color: #FFF
+        }
+
+        #form .start {
+            background: #3e6e73;
+            border: none;
+            width: 49%;
+            color: #FFF
+        }
+
+        #form .terms {
+            font-weight:  600;
+            background: #FFF;
+            border: 1px solid #CCC;
+            width: 300px;
+            margin: 5px 0 0;
+            color: #5D5D5D
+        }
+
+        .buttonf {
+            border-radius: 25px;
+            padding: 10px 0;
+            text-transform: uppercase;
+            outline: none;
+        }
+
+        #pig {
+            background: url({{ asset('public/img/landing/azul.png') }});
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center center;
+            height: 235px;
+        }
+
+        #pig img {
+            width: 500px;
+            height: auto;
+        }
+        .callTo {
+            width: 300px;
+            color: #FFF;
+            margin: 25px auto 0;
+        }
+        #descubre {
+            margin: 20px auto;
+            width: 1100px;
+            padding: 15px 0;
+        }
+        #ganaCont {
+            background: #fbfbfb;
+            padding: 30px 0;
+        }
+        #gana .pasos {
+            float: left;
+            width: 25%;
+        }
+        #gana {
+            width: 1100px;
+            clear: both;
+            height: auto;
+            overflow: hidden;
+        }
+
+        .pasos span {
+            font-size: 35px;
+            color: #fd9224;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,700,800" rel="stylesheet">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600,600italic,700" rel="stylesheet" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <title>Responsive email</title>
+</head>
+
+<body>
+    <main>
+        <header>
+            <div id="headerCont">
+                <div id="tiempoLimitado">
+                    <img src="{{ asset('public/img/landing/time.png') }}" alt="tiempo limitado">
+                </div>
+                <span><img alt="Symplifica" src="{{ asset('public/img/landing/sello.png') }}"></span>
+                <span><img alt="Hacer las cosas bien paga" src="{{ asset('img/logo.png') }}"></span>
+                <div id="campañaTitle">
+                    <h2 class="bold azulmediofont">Gestiona de forma sencilla</h2>
+                    <h3 class="light azulmediofont">a los empleados de tu hogar</h3>
+                </div>
+                <div id="campañaDesc">
+                    <h1 class="bold">y recibe $150.000*</h1>
+                    <p class="back light">
+                        Inicia tu registro hoy mediante un pago electrónico y te daremos
+                        <strong>$150.000 pesos para pagar el sueldo de tu empleada*</strong>
+                    </p>
+                </div>
+                <div id="form">
+                    {{ form_start(form) }}
+                        <input class="half input" type="text" name="firstname" value="" placeholder="Nombre">
+                        <input class="half input" type="text" name="lastname" value="" placeholder="Apellido"><br>
+                        <input class="input full" type="text" name="cellphone" value="" placeholder="Celular"><br>
+                        <input class="input full" type="text" name="email" value="" placeholder="Correo electrónico">
+                        <br>
+                        <input class="info buttonf" type="submit" value="¡Quiero más información!">
+                        {{ form_widget(form.save, { 'attr': {'class': 'start buttonf'}}) }}
+                        <input class="terms buttonf" type="submit" value="Terminos y condiciones">
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </header>
+        <section>
+            <div id="pig"></div>
+            <div id="descubre">
+                <h1 class="light azulclarofont">Descubre Symplifica</h1>
+                <p class="light grisclarofont">
+                    Olvídate de los procesos tediosos y complicados, nosotros nos encargaremos de administrar el día a día de tus empleados domésticos de forma segura y según la ley.
+                </p>
+                <div class="buttonf light azulmedio callTo">Ver video</div>
+            </div>
+            <div id="ganaCont">
+                <div id="gana">
+                    <h1 class="light azulclarofont">¡Ganar es muy fácil!</h1><br><br>
+                    <div class="pasos light grisoscurofont">
+                        <span>&#10122;</span><br>
+                        <p>Regístrate en Symplifica.com</p>
+                    </div>
+                    <div class="pasos light grisoscurofont">
+                        <span>&#10123;</span><br>
+                        <p>Ingresa tus datos y los de tus empleados</p>
+                    </div>
+                    <div class="pasos light grisoscurofont">
+                        <span>&#10124;</span><br>
+                        <p>Registra el pago de nómina por medios electrónicos</p>
+                    </div>
+                    <div class="pasos light grisoscurofont">
+                        <span>&#10125;</span><br>
+                        <p>Completa unos documentos</p>
+                    </div>
+                </div><br><br>
+                <a href="{{ path('home_landing') }}" class="buttonf light callTo naranja">Ir a Symplifica</a>
+            </div>
+        </section>
+    </main>
+</body>
+<script type="text/javascript">
+
+
+
+    function playPause() {
+        if (myVideo.paused)
+            myVideo.play();
+        else
+            myVideo.pause();
+    }
+    $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
+        validator = $("form[name='form']").validate({
+            rules: {
+                "firstname": "required",
+                "lastname": "required",
+                "cellphone": {required : true, maxlength : 10},
+                "email": {required : true, email : true},
+                "chktyc": "required"
+            },
+            messages: {
+                "firstname": "&#8227; El nombre no puede estar vacio",
+                "lastname": "&#8227; Los apellidos no pueden estar vacios",
+                "cellphone": {required : "&#8227; El celular no puede estar vacio", maxlength : "&#8227; El celular no es válido"},
+                "email": {required : "&#8227; El email no puede estar vacio", email : "&#8227; El email no es válido"},
+                "chktyc": "&#8227; Acepta los Términos y Condiciones para continuar"
+            },
+            errorElement : 'div',
+            errorLabelContainer: '.errorTxt'
+        });
+    });
+    $('#pausar').click(function(){
+        document.getElementById('video1').pause();
+    });
+    $('#video2').click(function(){
+        document.getElementById('video1').play();
+    });
+
+    var myVideo = document.getElementById("video1");
+
+    $('#formfirstname').attr('oninvalid', 'setCustomValidity("El campo no puede estar vacio")');
+    $('#formfirstname').attr('oninput', "setCustomValidity('')");
+
+    $('#formlastname').attr('oninvalid', 'setCustomValidity("El campo no puede estar vacio")');
+    $('#formlastname').attr('oninput', "setCustomValidity('')");
+
+    $('#formcellphone').attr('oninvalid', 'setCustomValidity("El campo no puede estar vacio")');
+    $('#formcellphone').attr('oninput', "setCustomValidity('')");
+
+    $('#formemail').attr('oninvalid', 'setCustomValidity("El correo escrito no es valido")');
+    $('#formemail').attr('oninput', "setCustomValidity('')");
+
+
+//    $("form[name='form']").on('submit',function (e) {
+//        if (document.getElementById('formfirstname').value!= null){
+//            var nombre = document.getElementById('formfirstname').value;
+//        }else{
+//            var nombre = "anonymous";
+//        }
+//        if (document.getElementById('formlastname').value != null){
+//            nombre +=' '+document.getElementById('formlastname').value;
+//        }
+//        if (document.getElementById('formcellphone').value != null){
+//            var telefono = document.getElementById('formcellphone').value;
+//        }else{
+//            var telefono = "null";
+//        }
+//        if (document.getElementById('formemail').value != null){
+//            var email = document.getElementById('formemail').value;
+//        }else{
+//            var email = "ninguno";
+//        }
+//        var dateNow = new Date();
+//        var day = dateNow.getDate();
+//        if(day<10)
+//            day='0'+day;
+//        var month = dateNow.getMonth()+1;
+//        if (month<10)
+//            month='0'+month;
+//        var year = dateNow.getFullYear();
+//        var hour = dateNow.getHours();
+//        var min = dateNow.getMinutes();
+//        var fecha = day+"/"+month+"/"+year+" "+hour+":"+min;
+//        console.log(fecha);
+//        fbq('track', 'Lead', {value: email});
+//        window.Intercom("trackEvent", "Intento Registro Landing",{
+//            "Fecha del intento": fecha,
+//            "Nombre en formulario":nombre,
+//            "Celular en formulario":telefono,
+//            "Email en formulario":email,
+//        });
+//
+//    });
+
+
+
+    function stopVideo(){
+        $('#mainVideoFrame').attr('src', $('#mainVideoFrame').attr('src'));
+    }
+
+
+</script>
+
+</html>

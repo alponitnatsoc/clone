@@ -432,7 +432,7 @@ class HighTechRestController extends FOSRestController
 				        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 
                         //push notification
-                        ¡El pago de los aportes a seguridad social se ha realizado con éxito!
+                        //¡El pago de los aportes a seguridad social se ha realizado con éxito!
                         $message = "¡Hemos realizado tu pago con éxito!";
                         $title = "Symplifica";
                         $longMessage = "¡Hemos realizado El pago de los aportes a seguridad social con éxito!";
