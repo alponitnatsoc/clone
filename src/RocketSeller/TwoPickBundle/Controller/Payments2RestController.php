@@ -1418,11 +1418,11 @@ class Payments2RestController extends FOSRestController
   }
   
   /**
-   * Check state of the employer registration on the pila operator and does not takes action<br/>
+   * Retrieve a radicated number with no action <br/>
    *
    * @ApiDoc(
    *   resource = true,
-   *   description = "Check state of the employer registration on Enlace Operativo",
+   *   description = "Retrieve a radicated number with no action",
    *   statusCodes = {
    *     200 = "Created",
    *     400 = "Bad Request",
