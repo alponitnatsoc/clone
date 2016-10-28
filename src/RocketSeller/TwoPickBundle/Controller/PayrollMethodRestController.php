@@ -408,7 +408,7 @@ class PayrollMethodRestController extends FOSRestController
 				            }
 			            }
 			            else {
-				            $purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-ErrSer'));
+				            $purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-ErrNov'));
 			            }
 			
 			            $em = $this->getDoctrine()->getManager();
