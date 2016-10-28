@@ -215,7 +215,7 @@ class HighTechRestController extends FOSRestController
                 'phone'=>$dis->getIdUser()->getPersonPerson()->getPhones()->first()->getPhoneNumber(),
 	              'value'=>$dis->getValue()
             );
-            $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
+            //$this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
 
             //push notification
             $message = "Hubo un inconveniente al debitar tu cuenta";
@@ -482,7 +482,7 @@ class HighTechRestController extends FOSRestController
                 'idPOD'=>$rejectedPurchaseOrderDescription->getIdPurchaseOrdersDescription(),
                 'value'=>$value
             );
-            $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
+            //$this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
 
             $notification= new Notification();
             $notification->setAccion("Ver");
@@ -658,8 +658,8 @@ class HighTechRestController extends FOSRestController
 			$request->setMethod("PUT");
 			$request->request->add(array(
 				"radicatedNumber"=> $parameters['radicatedNumber'],
-				"registerState"=> isset($parameters['registerState']) && $parameters['registerState'] != NULL ? $parameters['registerState'] : "",
-				"errorLog" => isset($oarameters['errorLog']) &&  $oarameters['errorLog'] != NULL ? $parameters['errorLog'] : "",
+				"registerState"=> isset($parameters['registerState']) && $parameters['registerState'] != NULL ? $parameters['registerState'] : -1,
+				"errorLog" => isset($parameters['errorLog']) &&  $parameters['errorLog'] != NULL ? $parameters['errorLog'] : "",
 				"errorMessage" => isset($parameters['errorMessage']) && $parameters['errorMessage'] ? $parameters['errorMessage'] : ""
 			));
 
@@ -706,11 +706,17 @@ class HighTechRestController extends FOSRestController
 		$mandatory['payrollNumber'] = false;
 
 		$this->validateParamters($parameters, $regex, $mandatory);
-
+		
+		/*There are 4 cases...
+		The file uploaded (payrollState = 0) and was no problems, errorLog == null
+		The file uploaded (payrollState = 0) and was warnings or errors, errorLog != null
+		The file was not uploaded (payrollState != 0) and was a big problem, errorLog = null
+		The file was not uploaded (payrollState != 0) and was a specific problem , errorLog != null*/
+		
 		$request->setMethod("PUT");
 		$request->request->add(array(
 			"radicatedNumber"=> $parameters['radicatedNumber'],
-			"planillaState"=> isset($parameters['payrollState']) && $parameters['payrollState'] != NULL ? $parameters['payrollState'] : "",
+			"planillaState"=> isset($parameters['payrollState']) && $parameters['payrollState'] != NULL ? $parameters['payrollState'] : -1,
 			"errorLog" => isset($parameters['errorLog']) && $parameters['errorLog'] != NULL ? $parameters['errorLog'] : "",
 			"planillaNumber" => isset($parameters['payrollNumber']) && $parameters['payrollNumber'] != NULL ? $parameters['payrollNumber'] : "",
 			"errorMessage" => isset($parameters['errorMessage']) && $parameters['errorMessage'] != NULL ? $parameters['errorMessage'] : ""
@@ -762,7 +768,7 @@ class HighTechRestController extends FOSRestController
 		}
 
 		//This means the user was created succesfully
-		if( $parameters['registerState'] == 0 && $parameters['errorLog'] == "" && $parameters['errorMessage'] == "" ){
+		if( $parameters['registerState'] == 0 ){
 			$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'InsPil-InsOk'));
 			$singleTransaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
 
@@ -773,49 +779,64 @@ class HighTechRestController extends FOSRestController
 			$em->flush();
 
 		}
-		else if( $parameters['registerState'] != NULL && $parameters['errorLog'] != "" && $parameters['errorMessage'] != "" ){
+		else if( $parameters['registerState'] != -1 ){
 			$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'InsPil-InsRec'));
 			$documentType = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:DocumentType')->findOneBy(array('docCode' => 'EOCP'));
 			$singleTransaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
 
 			$employer = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer')->findOneBy(array('existentPila' => $singleTransaction->getIdTransaction()));
 
-			/** @var TransactionState $transactionState */
-			$transactionState = new TransactionState();
-			/** @var Document $document */
-			$document = new Document();
-			$document->setName("Enlace operativo employer creation error " . $employer->getIdEmployer());
-			$document->setStatus(1);
-			$document->setDocumentTypeDocumentType($documentType);
-
-			$filename = "tempErrorImg.zip";
-			$file = "uploads/temp/$filename";
-
-			file_put_contents($file, base64_decode($parameters['errorLog']));
-
-			$mediaManager = $this->container->get('sonata.media.manager.media');
-      $media = $mediaManager->create();
-      $media->setBinaryContent($file);
-      $media->setProviderName('sonata.media.provider.file');
-      $media->setName($document->getName());
-      $media->setProviderStatus(Media::STATUS_OK);
-      $media->setContext('person');
-      $media->setDocumentDocument($document);
-
-			$document->setMediaMedia($media);
-
-			$em->persist($document);
-
-			$transactionState->setDocument($document);
-			$transactionState->setLog($parameters['errorMessage']);
+			if($singleTransaction->getTransactionState() != NULL){
+				$transactionState = $singleTransaction->getTransactionState();
+			}
+			else{
+				/** @var TransactionState $transactionState */
+				$transactionState = new TransactionState();
+			}
+			
+			if($parameters['errorLog'] != "" ){
+				/** @var Document $document */
+				$document = new Document();
+				$document->setName("Enlace operativo employer creation error " . $employer->getIdEmployer());
+				$document->setStatus(1);
+				$document->setDocumentTypeDocumentType($documentType);
+				
+				$filename = "tempErrorImg.zip";
+				$file = "uploads/temp/$filename";
+				
+				file_put_contents($file, base64_decode($parameters['errorLog']));
+				
+				$mediaManager = $this->container->get('sonata.media.manager.media');
+				$media = $mediaManager->create();
+				$media->setBinaryContent($file);
+				$media->setProviderName('sonata.media.provider.file');
+				$media->setName($document->getName());
+				$media->setProviderStatus(Media::STATUS_OK);
+				$media->setContext('person');
+				$media->setDocumentDocument($document);
+				
+				$document->setMediaMedia($media);
+				
+				$em->persist($document);
+				
+				$transactionState->setDocument($document);
+			}
+			
+			if($parameters['errorMessage'] != ""){
+				$transactionState->setLog($parameters['errorMessage']);
+			}
+			
 			$transactionState->setOriginTransaction($singleTransaction);
 			$em->persist($transactionState);
 
 			$singleTransaction->setTransactionState($transactionState);
 			$em->persist($singleTransaction);
 			$em->flush();
-
-			unlink($file);
+			
+			if($parameters['errorLog'] != "" ) {
+				unlink($file);
+			}
+			
 		}
 		// Succesfull operation.
 		$view = View::create();
@@ -866,9 +887,12 @@ class HighTechRestController extends FOSRestController
 			$view->setData(array("returnCode" => 404 , "returnDescription" => "Radicated number not found"));
 			return $view;
 		}
-
-		//This means the planilla was created succesfully
-		if( $parameters['planillaState'] == 0 && $parameters['errorLog'] == "" && $parameters['errorMessage'] == "" ){
+		
+		$estadoPlanilla = $parameters['planillaState'];
+		$errorLog = $parameters['errorLog'];
+		
+		if( $estadoPlanilla == 0 && $errorLog == "" ){
+			//This means the planilla was created succesfully
 			$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-PlaOK'));
 			$singleTransaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
 
@@ -880,26 +904,34 @@ class HighTechRestController extends FOSRestController
 			$em->flush();
 
 		}
-		else if( $parameters['planillaState'] != NULL && $parameters['errorLog'] != "" && $parameters['errorMessage'] != "" ){
-			$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-PlaErr'));
+		elseif ( $estadoPlanilla == 0 && $errorLog != ""){
+			//This means the planilla was created succesfully but has warnings
+			$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-PlaWar'));
 			$documentType = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:DocumentType')->findOneBy(array('docCode' => 'EOIE'));
 			$singleTransaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
-
+			
 			$purchaseOrderDescription = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')->findOneBy(array('uploadedFile' => $singleTransaction->getIdTransaction()));
-
-			/** @var TransactionState $transactionState */
-			$transactionState = new TransactionState();
+			$purchaseOrderDescription->setEnlaceOperativoFileName($parameters['planillaNumber']);
+			
+			if($singleTransaction->getTransactionState() != NULL){
+				$transactionState = $singleTransaction->getTransactionState();
+			}
+			else{
+				/** @var TransactionState $transactionState */
+				$transactionState = new TransactionState();
+			}
+			
 			/** @var Document $document */
 			$document = new Document();
-			$document->setName("Enlace operativo upload file error " . $purchaseOrderDescription->getIdPurchaseOrdersDescription());
+			$document->setName("Enlace operativo uploaded file warning " . $purchaseOrderDescription->getIdPurchaseOrdersDescription());
 			$document->setStatus(1);
 			$document->setDocumentTypeDocumentType($documentType);
-
-			$filename = "tempErrorImg.zip";
+			
+			$filename = "tempWarningImg.zip";
 			$file = "uploads/temp/$filename";
-
+			
 			file_put_contents($file, base64_decode($parameters['errorLog']));
-
+			
 			$mediaManager = $this->container->get('sonata.media.manager.media');
 			$media = $mediaManager->create();
 			$media->setBinaryContent($file);
@@ -908,21 +940,81 @@ class HighTechRestController extends FOSRestController
 			$media->setProviderStatus(Media::STATUS_OK);
 			$media->setContext('person');
 			$media->setDocumentDocument($document);
-
+			
 			$document->setMediaMedia($media);
-
+			
 			$em->persist($document);
-
+			
 			$transactionState->setDocument($document);
 			$transactionState->setLog($parameters['errorMessage']);
+			$transactionState->setOriginTransaction($singleTransaction);
+			$em->persist($transactionState);
+			
+			$singleTransaction->setTransactionState($transactionState);
+			$em->persist($singleTransaction);
+			
+			$em->persist($purchaseOrderDescription);
+			$em->flush();
+			
+			unlink($file);
+		}
+		else if( $parameters['planillaState'] != -1  ){
+			$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-PlaErr'));
+			$documentType = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:DocumentType')->findOneBy(array('docCode' => 'EOIE'));
+			$singleTransaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
+			
+			$purchaseOrderDescription = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')->findOneBy(array('uploadedFile' => $singleTransaction->getIdTransaction()));
+			
+			if($singleTransaction->getTransactionState() != NULL){
+				$transactionState = $singleTransaction->getTransactionState();
+			}
+			else{
+				/** @var TransactionState $transactionState */
+				$transactionState = new TransactionState();
+			}
+			
+			if($parameters['errorLog'] != "" ) {
+				/** @var Document $document */
+				$document = new Document();
+				$document->setName("Enlace operativo upload file error " . $purchaseOrderDescription->getIdPurchaseOrdersDescription());
+				$document->setStatus(1);
+				$document->setDocumentTypeDocumentType($documentType);
+				
+				$filename = "tempErrorImg.zip";
+				$file = "uploads/temp/$filename";
+				
+				file_put_contents($file, base64_decode($parameters['errorLog']));
+				
+				$mediaManager = $this->container->get('sonata.media.manager.media');
+				$media = $mediaManager->create();
+				$media->setBinaryContent($file);
+				$media->setProviderName('sonata.media.provider.file');
+				$media->setName($document->getName());
+				$media->setProviderStatus(Media::STATUS_OK);
+				$media->setContext('person');
+				$media->setDocumentDocument($document);
+				
+				$document->setMediaMedia($media);
+				
+				$em->persist($document);
+				
+				$transactionState->setDocument($document);
+			}
+			
+			if($parameters['errorMessage'] != ""){
+				$transactionState->setLog($parameters['errorMessage']);
+			}
+			
 			$transactionState->setOriginTransaction($singleTransaction);
 			$em->persist($transactionState);
 
 			$singleTransaction->setTransactionState($transactionState);
 			$em->persist($singleTransaction);
 			$em->flush();
-
-			unlink($file);
+			
+			if($parameters['errorLog'] != "" ) {
+				unlink($file);
+			}
 		}
 		// Succesfull operation.
 		$view = View::create();

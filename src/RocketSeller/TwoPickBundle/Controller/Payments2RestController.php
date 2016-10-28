@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
+use RocketSeller\TwoPickBundle\Entity\HighTechLog;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
@@ -175,10 +176,19 @@ class Payments2RestController extends FOSRestController
       if($ambiente == 'produccion')
         $parametros_soap['location'] = 'https://cpsuite.htsoft.co:8080/dssp/services/' . $methodName . '/';
 
+      $htLog = new HighTechLog();
+      $htLog->setServiceCalled($methodName);
+      $htLog->setParameters($parameters);
+      $htLog->setTimeWhenCalled(new DateTime());
+  
+      $em = $this->getDoctrine()->getManager();
+      $em->persist($htLog);
+      $em->flush();
+      
       $client = new \SoapClient($url_base . $path . "?wsdl", $parametros_soap);
 
       $res = $client->__soapCall($methodName, array($parameters));
-
+      
       // This other way also works, may be usefull.
       //$res = $client->RegistrarBeneficiario($parameters);
       // Trick to get everything as an array.
@@ -196,7 +206,12 @@ class Payments2RestController extends FOSRestController
           $errorCode = 404;
       else if($responseCode == 102)
           $errorCode = 422;
-
+  
+      $htLog->setResultCode($errorCode);
+      $htLog->setRawResultCode($responseCode);
+      $em->persist($htLog);
+      $em->flush();
+      
       // Set status code of view with http codes.
       $view->setStatusCode($errorCode);
 
@@ -1240,10 +1255,21 @@ class Payments2RestController extends FOSRestController
       return $view;
     }
     
+    $estadoEmpleador = -1;
+    
+    if( isset($data['estadoEmpleador']) && $data['estadoEmpleador'] != NULL){
+      if($data['estadoEmpleador'] == "C"){
+        $estadoEmpleador = 0;
+      }
+      else{
+        $estadoEmpleador = 1;
+      }
+    }
+    
     $request->setMethod("PUT");
     $request->request->add(array(
       "radicatedNumber"=> $parameters['radicatedNumber'],
-      "registerState"=> isset($data['estadoEmpleador']) && $data['estadoEmpleador'] != NULL ? $data['estadoEmpleador'] : "",
+      "registerState"=> $estadoEmpleador,
       "errorLog" => isset($data['logBase64']) && $data['logBase64'] != NULL ? $data['logBase64'] : "",
       "errorMessage" => isset($data['mensajesError']) && $data['mensajesError'] != NULL ? $data['mensajesError']: ""
     ));
@@ -1350,11 +1376,22 @@ class Payments2RestController extends FOSRestController
       $view->setData($data);
       return $view;
     }
+  
+    $estadoPlanilla = -1;
+  
+    if( isset($data['estadoPlanilla']) && $data['estadoPlanilla'] != NULL){
+      if($data['estadoPlanilla'] == "C"){
+        $estadoPlanilla = 0;
+      }
+      else{
+        $estadoPlanilla = 1;
+      }
+    }
 
     $request->setMethod("PUT");
     $request->request->add(array(
       "radicatedNumber"=> $parameters['radicatedNumber'],
-      "planillaState"=> isset($data['estadoPlanilla']) && $data['estadoPlanilla'] != NULL ? $data['estadoPlanilla'] : "",
+      "planillaState"=> $estadoPlanilla,
       "errorLog" => isset($data['logBase64']) && $data['logBase64'] != NULL ? $data['logBase64'] : "",
       "planillaNumber" => isset($data['numeroPlanilla']) && $data['numeroPlanilla'] != NULL ? $data['numeroPlanilla'] : "",
       "errorMessage" => isset($data['mensajesError']) && $data['mensajesError'] != NULL ? $data['mensajesError']: ""
@@ -1401,6 +1438,58 @@ class Payments2RestController extends FOSRestController
     $view->setData($data);
     return $view;
   }
+  
+  /**
+   * Retrieve a radicated number with no action <br/>
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = "Retrieve a radicated number with no action",
+   *   statusCodes = {
+   *     200 = "Created",
+   *     400 = "Bad Request",
+   *     404 = "Not found",
+   *     422 = "Bad parameters"
+   *   }
+   * )
+   *
+   * @param Request $request.
+   * Rest Parameters:
+   *
+   * (name="radicatedNumber", nullable=false, requirements="[0-9]+", description="number given by Hightech when the request is send")
+   * (name="path", nullable=false, requirements="(.)*", description="Service to be called")
+   *
+   * @return View
+   */
+  public function postCheckStateRegisterEmployerPilaOperatorWithoutAction(Request $request){
+    $parameters = $request->request->all();
+    $path = $parameters['path'];
+    $regex = array();
+    $mandatory = array();
+    // Set all the parameters info.
+    $regex['radicatedNumber'] = '[0-9]+';
+    $mandatory['radicatedNumber'] = true;
+    $regex['path'] = '(.)*';
+    $mandatory['path'] = true;
+    
+    $this->validateParamters($parameters, $regex, $mandatory);
+    
+    $parameters_fixed = array();
+    $parameters_fixed['numeroRadicado'] = $parameters['radicatedNumber'];
+    
+    /** @var View $res */
+    $responseView = $this->callApi($parameters_fixed, $path, $path);
+    
+    $temp = $this->handleView($responseView);
+    $data = json_decode($temp->getContent(), true);
+    $code = json_decode($temp->getStatusCode(), true);
+    
+    $view = View::create();
+    $view->setStatusCode($code);
+    $view->setData($data);
+    return $view;
+  }
+  
 }
 
 ?>
