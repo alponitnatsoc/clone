@@ -234,3 +234,6 @@ back_fix_pods:
 back_add_employer_enlace_operativo:
     path:         /backoffice/pila/add/enlace/operativo/{idEmployer}
     defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:addEmployerToEnlaceOperativoBack}
+back_load_files_enlace_operativo:
+    path:         /backoffice/pila/load/file/enlace/operativo
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:sendPlanillaFileToEnlaceOperativoBack }
