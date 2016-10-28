@@ -1255,10 +1255,21 @@ class Payments2RestController extends FOSRestController
       return $view;
     }
     
+    $estadoEmpleador = -1;
+    
+    if( isset($data['estadoEmpleador']) && $data['estadoEmpleador'] != NULL){
+      if($data['estadoEmpleador'] == "C"){
+        $estadoEmpleador = 0;
+      }
+      else{
+        $estadoEmpleador = 1;
+      }
+    }
+    
     $request->setMethod("PUT");
     $request->request->add(array(
       "radicatedNumber"=> $parameters['radicatedNumber'],
-      "registerState"=> isset($data['estadoEmpleador']) && $data['estadoEmpleador'] != NULL ? $data['estadoEmpleador'] : "",
+      "registerState"=> $estadoEmpleador,
       "errorLog" => isset($data['logBase64']) && $data['logBase64'] != NULL ? $data['logBase64'] : "",
       "errorMessage" => isset($data['mensajesError']) && $data['mensajesError'] != NULL ? $data['mensajesError']: ""
     ));
@@ -1365,11 +1376,22 @@ class Payments2RestController extends FOSRestController
       $view->setData($data);
       return $view;
     }
+  
+    $estadoPlanilla = -1;
+  
+    if( isset($data['estadoPlanilla']) && $data['estadoPlanilla'] != NULL){
+      if($data['estadoPlanilla'] == "C"){
+        $estadoPlanilla = 0;
+      }
+      else{
+        $estadoPlanilla = 1;
+      }
+    }
 
     $request->setMethod("PUT");
     $request->request->add(array(
       "radicatedNumber"=> $parameters['radicatedNumber'],
-      "planillaState"=> isset($data['estadoPlanilla']) && $data['estadoPlanilla'] != NULL ? $data['estadoPlanilla'] : "",
+      "planillaState"=> $estadoPlanilla,
       "errorLog" => isset($data['logBase64']) && $data['logBase64'] != NULL ? $data['logBase64'] : "",
       "planillaNumber" => isset($data['numeroPlanilla']) && $data['numeroPlanilla'] != NULL ? $data['numeroPlanilla'] : "",
       "errorMessage" => isset($data['mensajesError']) && $data['mensajesError'] != NULL ? $data['mensajesError']: ""
