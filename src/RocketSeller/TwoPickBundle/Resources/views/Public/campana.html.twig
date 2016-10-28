@@ -51,14 +51,14 @@
             top: 0;
         }
         .back {
-            background: #c77425;
+            background: #FD9224;
             padding: 10px 30px;
         }
         #campañaTitle {
             margin-bottom: 20px;
         }
         #campañaDesc {
-            background: #d37e2a;
+            background: #ea861f;
             color: #FFF;
             padding: 10px 0 0;
         }
@@ -133,12 +133,12 @@
         }
         #descubre {
             margin: 20px auto;
-            width: 1100px;
+            width: 900px;
             padding: 15px 0;
         }
         #ganaCont {
             background: #fbfbfb;
-            padding: 30px 0;
+            padding: 60px 0;
         }
         #gana .pasos {
             float: left;
@@ -154,6 +154,94 @@
         .pasos span {
             font-size: 35px;
             color: #fd9224;
+        }
+
+        .postClic {
+          color: #5d5d5d;
+          border: dashed 1px #CCC;
+          border-radius: 5px;
+          padding: 15px;
+          margin-top: 10px;
+        }
+
+        #video {
+        	width: 100%;
+        	height: 450px;
+        	background: url("../../img/home/video.png");
+        	background-size:cover;
+        	background-position:center;
+        	padding: 100px 0 0 0;
+            box-sizing: border-box;
+        	margin: 40px 0 0 0}
+
+        #video-info {text-align: center}
+        #video-info p {color: #FFFFFF; margin-bottom: 30px;font-size: 20px;}
+        #video-info h3 {margin-top: 30px}
+        .callto2 {
+        	width: 200px;
+        	height: 35px;
+        	margin: 0 auto;
+        	border-radius: 3px;
+        	border-bottom:#D3731C 3px solid; color: #FFFFFF;
+        	padding: 6px 12px;
+        	box-sizing: border-box;
+        	text-align: center;
+        }
+        video {
+        	position: fixed;
+        	right: 0;
+        	top: 0;
+        	left: 0;
+        	bottom: 0;
+        	min-width: 90%;
+        	min-height: 100%;
+        	width: 100%;
+        	height: 88%;
+        	z-index: -100;
+        	background-size: cover;
+        }
+
+        /*modal 2*/
+        .modalDialog {
+            position: fixed;
+            font-family: Arial, Helvetica, sans-serif;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 99999;
+            opacity:0;
+            -webkit-transition: opacity 400ms ease-in;
+            -moz-transition: opacity 400ms ease-in;
+            transition: opacity 400ms ease-in;
+            pointer-events: none;
+        }
+        .modalDialog:target {
+            opacity:1;
+            pointer-events: auto;
+        }
+
+        .xdiv {
+        		background: #000;
+            width: 100%;
+            height: auto;
+            text-align: center;
+            overflow: hidden;
+            padding: 10px 0;
+            opacity: 0.3;
+        }
+        .close {
+            width: 100%;
+        		color: #FFF !important;
+        		opacity: 1;
+        }
+        .close:hover {
+            color: : #00d9ff;
+        }
+
+        .gratis {
+          margin: 25px 0 50px;
         }
     </style>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,700,800" rel="stylesheet">
@@ -193,8 +281,13 @@
                         <br>
                         <input class="info buttonf" type="submit" value="¡Quiero más información!">
                         {{ form_widget(form.save, { 'attr': {'class': 'start buttonf'}}) }}
-                        <input class="terms buttonf" type="submit" value="Terminos y condiciones">
                     {{ form_end(form) }}
+                    <a href="#openModal" id="terminos"><input class="terms buttonf" type="submit" value="Terminos y condiciones"></a>
+                    <div class="postClic light" hidden=""> <!--este es el div que apareceria si dan clic en ¡Quiero más información!-->
+                      Muy pronto uno de nuestros asesores expertos se contactará contigo para darte toda la información que necesitas.<br />
+                      <strong class="bold azulclarofont">¡Que tengas un buen día!</strong>
+                      {{ form_widget(form.save, { 'attr': {'class': 'start buttonf'}}) }}
+                    </div>
                 </div>
             </div>
         </header>
@@ -205,8 +298,29 @@
                 <p class="light grisclarofont">
                     Olvídate de los procesos tediosos y complicados, nosotros nos encargaremos de administrar el día a día de tus empleados domésticos de forma segura y según la ley.
                 </p>
-                <div class="buttonf light azulmedio callTo">Ver video</div>
+
+                <div onclick="playimg()" id="video2">
+                  <a href="#openModal" id="vid"><div class="buttonf light azulmedio callTo">Ver video</div></a>
+                </div>
             </div>
+
+            <div id="openModal" class="modalDialog">
+                <div id="secvid">
+      							<div class="xdiv">
+      								<a href="#close" title="Close" id="pausar" class="close">Cerrar</a>
+      							</div>
+      							<video controls="true" onclick="playPause()" id="video1" type='video/mp4'>
+      							  <source src="{{ asset('public/video/video.mp4') }}" type='video/mp4'></source>
+      							</video>
+                </div>
+                <div id="secterms">
+      							<div class="xdiv">
+      								<a href="#close" title="Close" id="pausar" class="close">Cerrar</a>
+      							</div>
+      							sdgfsdfgsdfgsdfgsdf
+                </div>
+            </div>
+
             <div id="ganaCont">
                 <div id="gana">
                     <h1 class="light azulclarofont">¡Ganar es muy fácil!</h1><br><br>
@@ -226,8 +340,12 @@
                         <span>&#10125;</span><br>
                         <p>Completa unos documentos</p>
                     </div>
-                </div><br><br>
-                <a href="{{ path('home_landing') }}" class="buttonf light callTo naranja">Ir a Symplifica</a>
+                </div>
+            </div>
+            <div class="light azulmediofont gratis">
+              Obtén un mes gratis<br />
+              <strong>en el uso de Symplifica</strong><br /><br />
+            <a href="{{ path('home_landing') }}" class="buttonf light callTo naranja" style="padding:10px 45px">Ir a Symplifica</a>
             </div>
         </section>
     </main>
@@ -261,6 +379,14 @@
             errorElement : 'div',
             errorLabelContainer: '.errorTxt'
         });
+    });
+    $('#terminos').click(function(){
+        $('#secvid').hide();
+        $('#secterms').show();
+    });
+    $('#vid').click(function(){
+        $('#secterms').hide();
+        $('#secvid').show();
     });
     $('#pausar').click(function(){
         document.getElementById('video1').pause();
