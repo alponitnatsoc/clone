@@ -206,6 +206,12 @@ class LoadPurchaseOrdersStatusData extends AbstractFixture implements OrderedFix
 		    $PurchaseOrdersStatusCargaPlanilla3->setDescription('La planilla presentó errores al subirla al operador');
 		    $PurchaseOrdersStatusCargaPlanilla3->setIdNovoPay('CarPla-PlaErr');
 		    $manager->persist($PurchaseOrdersStatusCargaPlanilla3);
+	
+		    $PurchaseOrdersStatusCargaPlanilla4 = new PurchaseOrdersStatus();
+		    $PurchaseOrdersStatusCargaPlanilla4->setName('Planilla advertencias');
+		    $PurchaseOrdersStatusCargaPlanilla4->setDescription('La planilla presentó advertencias al subirla al operador');
+		    $PurchaseOrdersStatusCargaPlanilla4->setIdNovoPay('CarPla-PlaWar');
+		    $manager->persist($PurchaseOrdersStatusCargaPlanilla4);
 	    
 		    $PurchaseOrdersStatusCargaPlanilla6 = new PurchaseOrdersStatus();
 		    $PurchaseOrdersStatusCargaPlanilla6->setName('Planilla cargada');
