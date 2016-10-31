@@ -110,7 +110,7 @@ show_pilas:
     path:     /backoffice/show/pilas
     defaults: { _controller: RocketSellerTwoPickBundle:PurchaseOrdersDescription:index}
 persist_planilla_id:
-    path:     /backoffice/planilla/persista/{id}/{idPod}/{payFile}
+    path:     /backoffice/planilla/persista/{fileName}/{idPod}/{payFile}
     defaults: { _controller: RocketSellerTwoPickBundle:PurchaseOrdersDescription:persistPilaEnlaceOperativoCode}
 add_planilla_type_to_contracts:
     path:     /backoffice/planillaType/addtoback/{autentication}
