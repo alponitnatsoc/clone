@@ -43,14 +43,20 @@ class PurchaseOrdersDescriptionController extends Controller
             '@RocketSellerTwoPick/BackOffice/pila.html.twig',array('pilas'=>$cPod, 'tipoPlanilla' =>$cPodFileType));
     }
 
-		public function persistPilaEnlaceOperativoCodeAction($id,$idPod, $payFile){
-			if($id != ""){
+		public function persistPilaEnlaceOperativoCodeAction($fileName,$idPod, $payFile){
+			if($fileName != ""){
 				/** @var PurchaseOrdersDescription $pod */
 				$pod = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')->findOneBy(array("idPurchaseOrdersDescription" => $idPod));
 				$oldFileName = $pod->getEnlaceOperativoFileName();
-				$pod->setEnlaceOperativoFileName($id);
-
-
+				$pod->setEnlaceOperativoFileName($fileName);
+				
+				if($payFile == "ok"){
+					$pod->setUploadedFile(-1);
+				}
+				else{
+					$pod->setUploadedFile(-2);
+				}
+				
 				$em = $this->getDoctrine()->getManager();
 				$em->persist($pod);
 				$em->flush();
@@ -58,12 +64,13 @@ class PurchaseOrdersDescriptionController extends Controller
 				//Si existe un PO ok
 				//Si already received en 1 ok
 				//Si el PO tiene IdNovopayStatus en 00 (aprobado)
-				//Si el campo a guardar estaba escrito antes
+				//Si la planilla esta aprobada
+				//Si ya se intentó mandar a dispersar
 				$po = $pod->getPurchaseOrders();
 				if( !is_null($po)
 							&& $po->getAlreadyRecived() == 1
 								&& $po->getPurchaseOrdersStatus()->getIdNovoPay() == "00"
-									&& $payFile == "ok"
+									&& $pod->getUploadedFile() == -1
 										&& $pod->getPayPay() != null ) {
 					$answerHighTech = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getDispersePurchaseOrder', array('idPurchaseOrder' => $po->getIdPurchaseOrders()), array('_format' => 'json'));
 				}
