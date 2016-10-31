@@ -175,15 +175,18 @@ class Payments2RestController extends FOSRestController
       // This is because of the https problem.
       if($ambiente == 'produccion')
         $parametros_soap['location'] = 'https://cpsuite.htsoft.co:8080/dssp/services/' . $methodName . '/';
+        $em = $this->getDoctrine()->getManager();
+        $htLog= null;
+        if($methodName!='ConsultarFuentesPago'){
+            $htLog = new HighTechLog();
+            $htLog->setServiceCalled($methodName);
+            $htLog->setParameters($parameters);
+            $htLog->setTimeWhenCalled(new DateTime());
 
-      $htLog = new HighTechLog();
-      $htLog->setServiceCalled($methodName);
-      $htLog->setParameters($parameters);
-      $htLog->setTimeWhenCalled(new DateTime());
-  
-      $em = $this->getDoctrine()->getManager();
-      $em->persist($htLog);
-      $em->flush();
+            $em->persist($htLog);
+            $em->flush();
+        }
+
       
       $client = new \SoapClient($url_base . $path . "?wsdl", $parametros_soap);
 
@@ -206,11 +209,13 @@ class Payments2RestController extends FOSRestController
           $errorCode = 404;
       else if($responseCode == 102)
           $errorCode = 422;
-  
-      $htLog->setResultCode($errorCode);
-      $htLog->setRawResultCode($responseCode);
-      $em->persist($htLog);
-      $em->flush();
+      if($methodName!='ConsultarFuentesPago'){
+          $htLog->setResultCode($errorCode);
+          $htLog->setRawResultCode($responseCode);
+          $em->persist($htLog);
+          $em->flush();
+      }
+
       
       // Set status code of view with http codes.
       $view->setStatusCode($errorCode);
