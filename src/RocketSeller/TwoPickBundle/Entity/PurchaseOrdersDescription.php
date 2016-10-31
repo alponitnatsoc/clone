@@ -97,6 +97,7 @@ class PurchaseOrdersDescription
 	
 		/**
 		 * -1 - Success
+		 * -2 - Operations is not ok with this file
 		 * Anything else, active transaction id
 		 * @ORM\Column(type="integer", nullable=TRUE)
 		 */

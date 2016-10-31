@@ -1612,4 +1612,92 @@ class BackOfficeController extends Controller
 		
 		return $this->redirectToRoute('back_office');
 	}
+	
+	public function sendPlanillaFileToEnlaceOperativoBackAction(){
+		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+		
+		$request = $this->container->get('request');
+		$conta = 0;
+		
+		$em=$this->getDoctrine()->getManager();
+		
+		$payrolls = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll")->findBy(array("period" => 4, "month" => 10, "year" => 2016, "paid" => 1));
+		
+		foreach($payrolls as $payroll){
+			$podPila = $payroll->getPila();
+			
+			if($podPila->getUploadedFile() == NULL){
+				
+				$payrollsPila = $podPila->getPayrollsPila();
+				$haveNovelties = false;
+				
+				$payrollRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
+				
+				/** @var Payroll $payrollPila */
+				foreach ( $payrollsPila as $payrollPila ){
+					if( count($payrollPila->getNovelties()) > 0){
+						$haveNovelties = true;
+						break;
+					}
+					//If is Quincenal we need to check the first payroll of the month to see If we have novelties
+					if($payrollPila->getContractContract()->getFrequencyFrequency()->getPayrollCode() == "Q"){
+						$singlePayroll = $payrollRepo->findOneBy(array('contractContract' => $payrollPila->getContractContract() , 'period' => 2 , 'year' => $payrollPila->getYear() , 'month' => $payrollPila->getMonth()) );
+						if($singlePayroll != NULL){
+							if( count($singlePayroll->getNovelties()) > 0){
+								$haveNovelties = true;
+								break;
+							}
+						}
+					}
+				}
+				
+				$transactionType = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:TransactionType')->findOneBy(array('code' => 'CPla'));
+				
+				$transaction = new Transaction();
+				$transaction->setTransactionType($transactionType);
+				
+				if($haveNovelties == false) {
+					$request->setMethod("GET");
+					$insertionAnswerTextFile = $this->forward('RocketSellerTwoPickBundle:PilaPlainTextRest:getMonthlyPlainText', array('podId' => $podPila->getIdPurchaseOrdersDescription(), 'download' => 'generate'), array('_format' => 'json'));
+					
+					$request->setMethod("POST");
+					$request->request->add(array(
+						"GSCAccount" => $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getIdHighTech(),
+						"FileToUpload" => json_decode($insertionAnswerTextFile->getContent(), true)['fileToSend']
+					));
+					$insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postUploadFileToPilaOperator', array('_format' => 'json'));
+					if ($insertionAnswer->getStatusCode() == 200) {
+						//Received succesfully
+						$radicatedNumber = json_decode($insertionAnswer->getContent(), true)["numeroRadicado"];
+						$transaction->setRadicatedNumber($radicatedNumber);
+						$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-PlaEnv'));
+					} else {
+						//If some kind of error
+						$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-ErrSer'));
+					}
+				}
+				else {
+					$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-ErrNov'));
+				}
+				
+				$em = $this->getDoctrine()->getManager();
+				$transaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
+				$em->persist($transaction);
+				$em->flush();
+				$podPila->setUploadedFile($transaction->getIdTransaction());
+				$podPila->addTransaction($transaction);
+				$em->persist($podPila);
+				$em->flush();
+				
+				$conta = $conta + 1;
+				
+			}
+			
+			if($conta == 10){
+				return $this->redirectToRoute('back_office');
+			}
+		}
+		
+		return $this->redirectToRoute('back_office');
+	}
 }
