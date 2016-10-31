@@ -8,7 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\StringInput;
 use DateTime;
 
-class PaymentAndNoveltyReminderCommand extends ContainerAwareCommand
+class DaviplataReminderCommand extends ContainerAwareCommand
 {
 
     private $output;
@@ -16,19 +16,15 @@ class PaymentAndNoveltyReminderCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-                ->setName('symplifica:payment:novelty:reminder')
-                ->setDescription('Sends push notification and mail reminding payments due day')
-                ->setHelp('The push notifications are sent
-                            -Report Novleties reminder: 5 days business days before 12.
-                            -Last day of pay reminder: 12.
-                            -Report Novleties reminder: 5 days business days before 25.
-                            -Last day of pay reminder: 25.')
+                ->setName('symplifica:daviplata:reminder')
+                ->setDescription('Sends push notification and mail reminding tu set daviplata')
+                ->setHelp('The push notifications are sent 5 business days before 12 and 25.')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('<comment>Running Cron Task PaymentAndNovletyReminder ' . date("Y/m/d h:i") . ' time_zone: ' . date_default_timezone_get() . '</comment>');
+        $output->writeln('<comment>Running Cron Task DaviplataReminder ' . date("Y/m/d h:i") . ' time_zone: ' . date_default_timezone_get() . '</comment>');
         $this->output = $output;
 
         $cronService = $this->getContainer()->get('app.symplifica_chrons');
@@ -43,44 +39,20 @@ class PaymentAndNoveltyReminderCommand extends ContainerAwareCommand
         $dateString = $currYear . '-' . $currMonth . '-12';
         $fivebusinessDaysBefore12 = $utils->getWorkableDaysToDateAction($dateString, -5);
         if($fivebusinessDaysBefore12 == $now->format("Y-m-d")) {
-            $response = $cronService->putPaymentReminderAction("Hola, es tiempo de reportar novedades y pagar",
-                                                    "¡Hola! Es momento de reportar novedades y pagar la quincena de tu empleado. Da clic para entrar",
-                                                    2);
+            $response = $cronService->putDaviplataReminderAction(2);
            $output->writeln("5 días hábiles antes del 12");
            $this->printResponse($response, $output);
         }
 
-        $dateString = $currYear . '-' . $currMonth . '-12';
-        // $fourbusinessDaysBefore15 = $utils->getWorkableDaysToDateAction($dateString, 0);
-        if($dateString == $now->format("Y-m-d")) {
-            $response = $cronService->putPaymentReminderAction("¡Último día! Realiza el pago a tu empleado",
-                                                    "¡Importante! Hoy es el último día para realizar el pago a tu empleado y reportar las novedades de este período. Entra ya haciendo clic",
-                                                    2);
-            $output->writeln("ultimo día de pago - dia 12");
-            $this->printResponse($response, $output);
-        }
-
-        $dateString = $currYear . '-' . $currMonth . '-25';
+        $dateString = $currYear . '-' . $currMonth . '-31';
         $fivebusinessDaysBefore25 = $utils->getWorkableDaysToDateAction($dateString, -5);
         if($fivebusinessDaysBefore25 == $now->format("Y-m-d")) {
-            $response = $cronService->putPaymentReminderAction("Hola, es tiempo de reportar novedades y pagar",
-                                                    "¡Hola! Es momento de reportar novedades de este periodo y realizar los pagos de seguridad social y sueldo. Da clic para entrar",
-                                                    4);
+            $response = $cronService->putDaviplataReminderAction(4);
             $output->writeln("5 días hábiles antes del 25");
             $this->printResponse($response, $output);
         }
 
-        $dateString = $currYear . '-' . $currMonth . '-25';
-        // $fourbusinessDaysBefore25 = $utils->getWorkableDaysToDateAction($dateString, -4);
-        if($dateString == $now->format("Y-m-d")) {
-            $response = $cronService->putPaymentReminderAction("¡Último día! Realiza el pago a tu empleado",
-                                                    "¡Importante! Hoy es el último día para realizar el pago a tu empleado y reportar las novedades de este período. Entra ya haciendo clic",
-                                                    4);
-            $output->writeln("ulitmo día de pago - dia 25");
-            $this->printResponse($response, $output);
-        }
-
-        $output->writeln('<comment>Done PaymentAndNovletyReminder!</comment>');
+        $output->writeln('<comment>Done DaviplataReminder!</comment>');
     }
 
     private function printResponse($response, OutputInterface $output) {
