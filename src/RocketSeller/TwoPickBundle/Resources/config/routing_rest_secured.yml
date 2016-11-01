@@ -38,3 +38,7 @@ novelty :
     type:         rest
     resource:     "RocketSellerTwoPickBundle:NoveltyRestSecured"
     name_prefix:  api_secured_
+notification :
+    type:         rest
+    resource:     "RocketSellerTwoPickBundle:NotificationRestSecured"
+    name_prefix:  api_secured_
