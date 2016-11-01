@@ -550,6 +550,9 @@ class PaymentMethodRestController extends FOSRestController
         $codes=array();
         /** @var PurchaseOrdersDescription $desc */
         foreach ($descriptions as $desc) {
+            if($desc->getProductProduct()!=null&&$desc->getProductProduct()->getSimpleName()=="DIS"){
+                continue;
+            }
             $pays=$desc->getPayPay();
             if($pays==null){
                 $dispersionAnswer=$this->disperseMoney($desc,$person);
