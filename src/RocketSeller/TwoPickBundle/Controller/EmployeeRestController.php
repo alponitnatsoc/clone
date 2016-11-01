@@ -2208,7 +2208,7 @@ class EmployeeRestController extends FOSRestController
             /** @var Campaign $campaign150 */
             $campaign150 = $campaignRepo->findOneBy(array('description'=>'150k'));
             $dateToday = new DateTime();
-            if($campaign150->getDateStart()<=$dateToday&&$campaign150->getDateEnd()>=$dateToday&&$actContract->getPayMethodPayMethod()->getPayTypePayType()->getSimpleName()=="EFE"){
+            if($campaign150->getDateStart()<=$dateToday&&$campaign150->getDateEnd()>=$dateToday&&$actContract->getPayMethodPayMethod()->getPayTypePayType()->getSimpleName()!="EFE"){
                 $uHCs = $user->getUserHasCampaigns();
                 if($this->check150kCampaing($uHCs)==null){
                     //activate 150k Campaign
