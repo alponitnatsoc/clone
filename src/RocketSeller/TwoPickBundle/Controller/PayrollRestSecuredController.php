@@ -483,6 +483,28 @@ class PayrollRestSecuredController extends FOSRestController
         }
         return $podsArray;
     }
+    /**
+     * @param User $user
+     * @return boolean
+     */
+    private function useDiscounts($user){
+        $uHCs = $user->getUserHasCampaigns();
+        $em=$this->getDoctrine()->getEntityManager();
+        $realCampaing = null;
+        /** @var UserHasCampaign $uHC */
+        foreach ($uHCs as $uHC) {
+            if($uHC->getCampaignCampaign()->getDescription()=="150k") {
+                $uHC->setUses($uHC->getUses() + 1);
+                $uHC->setLastUsed(new DateTime());
+                if($uHC->getUses()>=2){
+                    $uHC->setState(0);
+                }
+                $em->persist($uHC);
+            }
+        }
+        $em->flush();
+        return true;
+    }
 
 
     /**
@@ -774,6 +796,17 @@ class PayrollRestSecuredController extends FOSRestController
             }
             //now we search if there is any owe pod
             //$this->checkPendingSubscription($realtoPay,$total);
+            //now we check if there is any discount applicable
+            $discounts=null;
+            if($paysPila>0)
+                $discounts = $this->checkDiscounts($user);
+            if($discounts!=null){
+                /** @var PurchaseOrdersDescription $discount */
+                foreach ($discounts as $discount) {
+                    $realtoPay->addPurchaseOrderDescription($discount);
+                    $total += $discount->getValue();
+                }
+            }
         }
         $realtoPay->setIdUser($user);
         $realtoPay->setDatePaid(new DateTime());
@@ -786,7 +819,7 @@ class PayrollRestSecuredController extends FOSRestController
         $response = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getPayPurchaseOrder', array(
             "idPurchaseOrder" => $realtoPay->getIdPurchaseOrders()), array('_format' => 'json'));
         if ($response->getStatusCode() == 200) {
-
+            $this->useDiscounts($user);
             $pods = $realtoPay->getPurchaseOrderDescriptions();
             /** @var UtilsController $utils */
             $utils = $this->get('app.symplifica_utils');
