@@ -6,13 +6,16 @@ use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectManagerAware;
 use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\ORM\EntityManager;
 use RocketSeller\TwoPickBundle\Controller\UtilsController;
 use RocketSeller\TwoPickBundle\Entity\Action;
 use RocketSeller\TwoPickBundle\Entity\ActionType;
 use RocketSeller\TwoPickBundle\Entity\Configuration;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\Document;
+use RocketSeller\TwoPickBundle\Entity\DocumentType;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\Log;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\Employee;
@@ -80,6 +83,763 @@ trait EmployeeMethodsTrait
         }
 
         return null;
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════════════╗
+     * ║ Function getDocumentStatusByCode                                      ║
+     * ║ Returns the DocumentStatus that match the code send by parameter      ║
+     * ╠═══════════════════════════════════════════════════════════════════════╣
+     * ║  @param string $code                                                  ║
+     * ╠═══════════════════════════════════════════════════════════════════════╣
+     * ║  @return object|\RocketSeller\TwoPickBundle\Entity\DocumentStatusType ║
+     * ╚═══════════════════════════════════════════════════════════════════════╝
+     */
+    protected function getDocumentStatusByCode($code){
+        return $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:DocumentStatusType")->findOneBy(array('documentStatusCode'=>$code));
+    }
+
+    /**
+     * ╔═════════════════════════════════════════════════════════════════╗
+     * ║ Function getProcedureTypeByCode                                 ║
+     * ║ Returns the ProcedureType that match the code send by parameter ║
+     * ╠═════════════════════════════════════════════════════════════════╣
+     * ║  @param string $code                                            ║
+     * ╠═════════════════════════════════════════════════════════════════╣
+     * ║  @return object|\RocketSeller\TwoPickBundle\Entity\ProcedureType║
+     * ╚═════════════════════════════════════════════════════════════════╝
+     */
+    protected function getProcedureTypeByCode($code){
+        return $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:ProcedureType")->findOneBy(array('code'=>$code));
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function getActionTypeByActionTypeCode                        ║
+     * ║ Returns the ActionType that match the code send by parameter  ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param string $code                                          ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return object|\RocketSeller\TwoPickBundle\Entity\ActionType ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    protected function getActionTypeByActionTypeCode($code){
+        return $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>$code));
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function getStatusByStatusCode                                ║
+     * ║ Returns the StatusType that match the code send by parameter  ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param string $code                                          ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return object|\RocketSeller\TwoPickBundle\Entity\StatusTypes║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    protected function getStatusByStatusCode($code){
+        return $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>$code));
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function getNotificationByPersonAndDocumentType               ║
+     * ║ Returns the notification that match the parameters            ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param Person $owner                                         ║
+     * ║  @param Person $person                                        ║
+     * ║  @param DocumentType $docType                                 ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return Notification                                         ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    protected function getNotificationByPersonAndOwnerAndDocumentType($owner,$person,$docType){
+        $notifications = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Notification")->findBy(array('personPerson'=>$owner,'documentTypeDocumentType'=>$docType));
+        /** @var Notification $notification */
+        foreach ($notifications as $notification) {
+            $strex = explode('/',$notification->getRelatedLink());
+            switch ($strex[3]){
+                case 'Person':
+                    if(intval($strex[4])==$person->getIdPerson())
+                        return $notification;
+                    break;
+                case 'EmployerHasEmployee':
+                    $ehe = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->findOneBy(array('employeeEmployee'=>$person->getEmployee(),'employerEmployer'=>$owner->getEmployer()));
+                    if($ehe and intval($strex[4])==$ehe->getIdEmployerHasEmployee())
+                        return $notification;
+                    break;
+                case 'Employer':
+                    if($owner->getEmployer()->getIdEmployer()==intval($strex[4]))
+                        return $notification;
+                    break;
+                case 'Contract':
+                    $ehe = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->findOneBy(array('employeeEmployee'=>$person->getEmployee(),'employerEmployer'=>$owner->getEmployer()));
+                    if($ehe and $ehe->getActiveContract()->getIdContract()==intval($strex[4]))
+                        return $notification;
+                    break;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function getDocumentTypeByCode                                ║
+     * ║ Returns the documentType that match the code send by parameter║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param string $code                                          ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return DocumentType                                         ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    protected function getDocumentTypeByCode($code){
+        return $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array('docCode'=>$code));
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function createNotificationByDocType                          ║
+     * ║ Returns the notification                                      ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param Person $owner                                         ║
+     * ║  @param Person $person                                        ║
+     * ║  @param DocumentType $docType                                 ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return Notification                                         ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    protected function createNotificationByDocType($owner,$person,$docType){
+        $em=$this->getDoctrine()->getManager();
+        $id = $em->getRepository("RocketSellerTwoPickBundle:Notification")->createQueryBuilder('p')->select('MAX(p.id)')->getQuery()->getResult()[0][1]+1;
+        $utils = $this->get('app.symplifica_utils');
+        switch ($docType->getDocCode()){
+            case 'CC':
+                $dAction=null;
+                $dUrl=null;
+                $descripcion = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
+                $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$person->getIdPerson(),'docCode'=>$docType->getDocCode()));
+                $action = "subir";
+                break;
+            case 'CE':
+                $dAction=null;
+                $dUrl=null;
+                $descripcion = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
+                $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$person->getIdPerson(),'docCode'=>$docType->getDocCode()));
+                $action = "subir";
+                break;
+            case 'PASAPORTE':
+                $dAction=null;
+                $dUrl=null;
+                $descripcion = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
+                $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$person->getIdPerson(),'docCode'=>$docType->getDocCode()));
+                $action = "subir";
+                break;
+            case 'TI':
+                $dAction=null;
+                $dUrl=null;
+                $descripcion = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
+                $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$person->getIdPerson(),'docCode'=>$docType->getDocCode()));
+                $action = "subir";
+                break;
+            case 'RUT':
+                $dAction=null;
+                $dUrl=null;
+                $action = "subir";
+                $descripcion = "Subir copia del RUT de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
+                $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$person->getIdPerson(),'docCode'=>'RUT'));
+                break;
+            case 'MAND':
+                $action = "subir";
+                $descripcion = "Subir mandato firmado de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
+                $url = $this->generateUrl("documentos_employee", array('entityType'=>'Employer','entityId'=>$person->getEmployer()->getIdEmployer(),'docCode'=>'MAND'));
+                $dUrl = $this->generateUrl("download_documents", array('id' => $person->getIdPerson(), 'ref' => "mandato", 'type' => 'pdf'));
+                $dAction="Bajar";
+                break;
+            case 'CAS':
+                $employerHasEmployee = $em->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")->findOneBy(array("employeeEmployee"=>$person->getEmployee(),"employerEmployer"=>$owner->getEmployer()));
+                $dAction="Bajar";
+                $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getIdEmployerHasEmployee(), 'ref' => "aut-afiliacion-ss", 'type' => 'pdf'));
+                $action = "subir";
+                $descripcion = "Subir autorización firmada de manejo de datos y afiliación de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
+                $url = $this->generateUrl("documentos_employee", array('entityType'=>'EmployerHasEmployee','entityId'=>$employerHasEmployee->getIdEmployerHasEmployee(),'docCode'=>'CAS'));
+                break;
+        }
+        $notification = new Notification();
+        $notification->setPersonPerson($owner);
+        $notification->setStatus(0);
+        $notification->setDocumentTypeDocumentType($docType);
+        $notification->setType('alert');
+        $notification->setDescription($descripcion);
+        $notification->setRelatedLink($url);
+        $notification->setAccion($action);
+        $notification->setDownloadAction($dAction);
+        $notification->setDownloadLink($dUrl);
+        $em = $this->getDoctrine()->getManager();
+        $notification->setId($id);//setting the id to the realProcedure
+        $em->persist($notification);;//persisting the procedure
+        $metadata = $em->getClassMetadata(get_class($notification));//line of code necessaryy to force an id
+        $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);//line of code necessaryy to force an id
+        $em->flush();
+        return $notification;
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function getInfoEmployerActions                               ║
+     * ║ Returns the array whit the info and document actions of the   ║
+     * ║ Employer                                                      ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param RealProcedure $procedure                              ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return array                                                ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    protected function getInfoEmployerActions($procedure)
+    {
+        return array(
+            '0' => $procedure->getActionsByActionType($this->getActionTypeByActionTypeCode('VER'))->first(),
+            '1' => $procedure->getActionsByActionType($this->getActionTypeByActionTypeCode('VDDE'))->first(),
+            '2' => $procedure->getActionsByActionType($this->getActionTypeByActionTypeCode('VRTE'))->first(),
+            '3' => $procedure->getActionsByActionType($this->getActionTypeByActionTypeCode('VM'))->first()
+        );
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function checkEmployerInfoActions                             ║
+     * ║ Returns array with:                                           ║
+     * ║ bool error true when at least one info action has error       ║
+     * ║ DateTime firstErrorAt when error with the errorDate           ║
+     * ║ integer idActionError when error with the ActionErrorid       ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param RealProcedure $procedure                              ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return array                                                ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    public function checkEmployerInfoActions($procedure)
+    {
+        $actions = $this->getInfoEmployerActions($procedure);
+        $firstError = null;
+        $tempAction = null;
+        $finish = true;
+        $pending = false;
+        /** @var Action $action */
+        foreach ($actions as $action) {
+            if($action->getActionStatusCode()!= 'FIN')
+                $finish = false;
+            if($action->getActionStatusCode()=='DCPE')
+                $pending=true;
+            if($firstError == null and $action->getErrorAt()!= null){
+                $firstError = $action->getErrorAt();
+                $tempAction = $action;
+            }elseif($firstError != null and $action->getErrorAt()!=null){
+                if($action->getErrorAt()<$firstError){
+                    $firstError = $action->getErrorAt();
+                    $tempAction = $action;
+                }
+            }
+        }
+        if(!$pending){
+            $procedure->getEmployerEmployer()->setAllDocsReadyAt(New DateTime());
+            $this->getDoctrine()->getManager()->persist($procedure->getEmployerEmployer());
+            $this->getDoctrine()->getManager()->flush();
+        }
+        if ($firstError != null){
+            if($procedure->getEmployerEmployer()->getInfoErrorAt()==null){
+                $today = new DateTime();
+                if($this->getUser()){
+                    $log = new Log($this->getUser(),'Employer','infoErrorAt',$procedure->getEmployerEmployer()->getIdEmployer(),null,$today->format('d-m-Y H:i:s'),'Backoffice encontro errores al validar la información de un empleador');
+                    $this->getDoctrine()->getManager()->persist($log);
+                }
+                $procedure->getEmployerEmployer()->setInfoErrorAt($today);
+
+                $this->getDoctrine()->getManager()->persist($procedure);
+                $this->getDoctrine()->getManager()->flush();
+            }
+            if(!$finish){
+                return array('error'=>true,'firstErrorAt'=>$firstError,'idActionError'=>$tempAction->getIdAction(),'finish'=>false,'pending'=>$pending);
+            }else{
+                if($procedure->getEmployerEmployer()->getInfoValidatedAt() == null){
+                    if($this->getUser()){
+                        $log = new Log($this->getUser(),'Employer','infoValidatedAt',$procedure->getEmployerEmployer()->getIdEmployer(),null,$today->format('d-m-Y H:i:s'),'Backoffice terminó de validar la información de un empleador');
+                        $this->getDoctrine()->getManager()->persist($log);
+                    }
+                    $procedure->getEmployerEmployer()->setInfoValidatedAt($today);
+                    $this->getDoctrine()->getManager()->persist($procedure);
+                    $this->getDoctrine()->getManager()->flush();
+                }
+                return array('error'=>false,'firstErrorAt'=>$firstError,'idActionError'=>$tempAction->getIdAction(),'finish'=>true,'pending'=>$pending);
+            }
+        }elseif($finish and $procedure->getEmployerEmployer()->getInfoValidatedAt() == null){
+            $today = new DateTime();
+            if($this->getUser()){
+                $log = new Log($this->getUser(),'Employer','infoValidatedAt',$procedure->getEmployerEmployer()->getIdEmployer(),null,$today->format('d-m-Y H:i:s'),'Backoffice terminó de validar la información de un empleador');
+                $this->getDoctrine()->getManager()->persist($log);
+            }
+            $procedure->getEmployerEmployer()->setInfoValidatedAt($today);
+            $this->getDoctrine()->getManager()->persist($procedure);
+            $this->getDoctrine()->getManager()->flush();
+            return array('error'=>false,'finish'=>true,'pending'=>$pending);
+        }
+        return array('error'=>false,'finish'=>false, 'pending'=>$pending);
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function calculateEmployerDocStatus                           ║
+     * ║ calculates employerDocStatus                                  ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param Employer $employer                                    ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    protected function calculateEmployerDocStatus($employer)
+    {
+        /** @var ObjectManager $em */
+        $em =$this->getDoctrine()->getManager();
+        /** @var RealProcedure $procedure */
+        $procedure = $employer->getRealProcedureByProcedureTypeType($this->getProcedureTypeByCode('REE'))->first();
+        /** @var Action $vdde */
+        $vdde = $procedure->getActionsByActionType($this->getActionTypeByActionTypeCode('VDDE'))->first();
+        /** @var Action $vrte */
+        $vrte = $procedure->getActionsByActionType($this->getActionTypeByActionTypeCode('VRTE'))->first();
+        /** @var Action $vm */
+        $vm = $procedure->getActionsByActionType($this->getActionTypeByActionTypeCode('VM'))->first();
+        $cc = false;
+        $rut = false;
+        if($employer->getPersonPerson()->getDocumentDocument()){
+            if($employer->getPersonPerson()->getDocumentDocument()->getMediaMedia()){
+                $cc = true;
+                switch ($vdde->getActionStatusCode()){
+                    case 'DCPE':
+                        $vdde->setActionStatus($this->getStatusByStatusCode('NEW'));
+                        $log = new Log($this->getUser(),'Action','ActionStatus',$vdde->getIdAction(),$this->getStatusByStatusCode('DCPE')->getIdStatusType(),$this->getStatusByStatusCode('NEW')->getIdStatusType(),'El empleador ya tenia el documento');
+                        $em->persist($vdde);
+                        $em->persist($log);
+                        break;
+                }
+            }else{
+                if($this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$employer->getPersonPerson(),$this->getDocumentTypeByCode($employer->getPersonPerson()->getDocumentType()))){
+                    $notification = $this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$employer->getPersonPerson(),$this->getDocumentTypeByCode($employer->getPersonPerson()->getDocumentType()));
+                }else{
+                    $notification = $notification = $this->createNotificationByDocType($employer->getPersonPerson(),$employer->getPersonPerson(),$this->getDocumentTypeByCode($employer->getPersonPerson()->getDocumentType()));
+                }
+                if($notification->getStatus()!= 1){
+                    $log = new Log($this->getUser(),'Notification','Status',$notification->getId(),$notification->getStatus(),1,'Se activo la notificacion de subir cédula de empleador');
+                    $notification->setStatus(1);
+                    $em->persist($log);
+                    $em->persist($notification);
+                }
+
+            }
+        }else{
+            if($this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$employer->getPersonPerson(),$this->getDocumentTypeByCode($employer->getPersonPerson()->getDocumentType()))){
+                $notification = $this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$employer->getPersonPerson(),$this->getDocumentTypeByCode($employer->getPersonPerson()->getDocumentType()));
+            }else{
+                $notification = $notification = $this->createNotificationByDocType($employer->getPersonPerson(),$employer->getPersonPerson(),$this->getDocumentTypeByCode($employer->getPersonPerson()->getDocumentType()));
+            }
+            if($notification->getStatus()!= 1){
+                $log = new Log($this->getUser(),'Notification','Status',$notification->getId(),$notification->getStatus(),1,'Se activo la notificacion de subir cédula de empleador');
+                $notification->setStatus(1);
+                $em->persist($log);
+                $em->persist($notification);
+            }
+
+        }
+        if($employer->getPersonPerson()->getRutDocument()){
+            if($employer->getPersonPerson()->getRutDocument()->getMediaMedia()){
+                $rut = true;
+                switch ($vrte->getActionStatusCode()){
+                    case 'DCPE':
+                        $vrte->setActionStatus($this->getStatusByStatusCode('NEW'));
+                        $log = new Log($this->getUser(),'Action','ActionStatus',$vdde->getIdAction(),$this->getStatusByStatusCode('DCPE')->getIdStatusType(),$this->getStatusByStatusCode('NEW')->getIdStatusType(),'El empleador ya tenia el documento');
+                        $em->persist($vdde);
+                        $em->persist($log);
+                        break;
+                }
+            }else{
+                if($this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$employer->getPersonPerson(),$this->getDocumentTypeByCode($employer->getPersonPerson()->getDocumentType()))){
+                    $notification = $this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$employer->getPersonPerson(),$this->getDocumentTypeByCode($employer->getPersonPerson()->getDocumentType()));
+                }else{
+                    $notification = $notification = $this->createNotificationByDocType($employer->getPersonPerson(),$employer->getPersonPerson(),$this->getDocumentTypeByCode($employer->getPersonPerson()->getDocumentType()));
+                }
+                if($notification->getStatus()!= 1){
+                    $log = new Log($this->getUser(),'Notification','Status',$notification->getId(),$notification->getStatus(),1,'Se activo la notificacion de subir cédula de empleador');
+                    $notification->setStatus(1);
+                    $em->persist($log);
+                    $em->persist($notification);
+                }
+
+            }
+        }else{
+            if($this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$employer->getPersonPerson(),$this->getDocumentTypeByCode($employer->getPersonPerson()->getDocumentType()))){
+                $notification = $this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$employer->getPersonPerson(),$this->getDocumentTypeByCode($employer->getPersonPerson()->getDocumentType()));
+            }else{
+                $notification = $notification = $this->createNotificationByDocType($employer->getPersonPerson(),$employer->getPersonPerson(),$this->getDocumentTypeByCode($employer->getPersonPerson()->getDocumentType()));
+            }
+            if($notification->getStatus()!= 1){
+                $log = new Log($this->getUser(),'Notification','Status',$notification->getId(),$notification->getStatus(),1,'Se activo la notificacion de subir cédula de empleador');
+                $notification->setStatus(1);
+                $em->persist($log);
+                $em->persist($notification);
+            }
+
+        }
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function checkEmployerActionErros                             ║
+     * ║ Returns true if at least one error in employer actions        ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param RealProcedure $procedure                              ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return bool                                                 ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    protected function checkEmployerActionErros(RealProcedure $procedure){
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $actionType = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VER'));
+        if(count($procedure->getActionsByActionType($actionType)->first())>0){
+            /** @var Action $action */
+            $action = $procedure->getActionsByActionType($actionType)->first();
+            if($action->getActionStatusCode()=='ERRO')
+                return true;
+        }elseif(count($procedure->getEmployerEmployer()->getPersonPerson()->getActionsByActionType($em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VER'))))>0){
+            $action = $procedure->getActionsByActionType($procedure->getEmployerEmployer()->getPersonPerson()->getActionsByActionType($em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VER'))))->first();
+            if($action->getActionStatusCode()=='ERRO')
+                return true;
+        }elseif(count($procedure->getEmployerEmployer()->getPersonPerson()->getActionsByActionType($em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VEE'))))>0){
+            $action = $procedure->getActionsByActionType($procedure->getEmployerEmployer()->getPersonPerson()->getActionsByActionType($em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VEE'))))->first();
+            if($action->getActionStatusCode()=='ERRO')
+                return true;
+        }
+        $actionType = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VDDE'));
+        if(count($procedure->getActionsByActionType($actionType)->first())>0){
+            /** @var Action $action */
+            $action = $procedure->getActionsByActionType($actionType)->first();
+            if($action->getActionStatusCode()=='ERRO')
+                return true;
+        }elseif(count($procedure->getEmployerEmployer()->getPersonPerson()->getActionsByActionType($em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VDDE'))))>0){
+            $action = $procedure->getActionsByActionType($procedure->getEmployerEmployer()->getPersonPerson()->getActionsByActionType($em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VDDE'))))->first();
+            if($action->getActionStatusCode()=='ERRO')
+                return true;
+        }elseif(count($procedure->getEmployerEmployer()->getPersonPerson()->getActionsByActionType($em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VDD'))))>0){
+            $action = $procedure->getActionsByActionType($procedure->getEmployerEmployer()->getPersonPerson()->getActionsByActionType($em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VDD'))))->first();
+            if($action->getActionStatusCode()=='ERRO')
+                return true;
+        }
+        $actionType = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VRTE'));
+        if(count($procedure->getActionsByActionType($actionType)->first())>0){
+            /** @var Action $action */
+            $action = $procedure->getActionsByActionType($actionType)->first();
+            if($action->getActionStatusCode()=='ERRO')
+                return true;
+        }elseif(count($procedure->getEmployerEmployer()->getPersonPerson()->getActionsByActionType($em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VRTE'))))>0){
+            $action = $procedure->getActionsByActionType($procedure->getEmployerEmployer()->getPersonPerson()->getActionsByActionType($em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VRTE'))))->first();
+            if($action->getActionStatusCode()=='ERRO')
+                return true;
+        }elseif(count($procedure->getEmployerEmployer()->getPersonPerson()->getActionsByActionType($em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VRT'))))>0){
+            $action = $procedure->getActionsByActionType($procedure->getEmployerEmployer()->getPersonPerson()->getActionsByActionType($em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VRT'))))->first();
+            if($action->getActionStatusCode()=='ERRO')
+                return true;
+        }
+        $actionType = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VRCE'));
+        if(count($procedure->getActionsByActionType($actionType)->first())>0){
+            /** @var Action $action */
+            $action = $procedure->getActionsByActionType($actionType)->first();
+            if($action->getActionStatusCode()=='ERRO')
+                return true;
+        }elseif(count($procedure->getEmployerEmployer()->getPersonPerson()->getActionsByActionType($em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VRCE'))))>0){
+            $action = $procedure->getActionsByActionType($procedure->getEmployerEmployer()->getPersonPerson()->getActionsByActionType($em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VRCE'))))->first();
+            if($action->getActionStatusCode()=='ERRO')
+                return true;
+        }elseif(count($procedure->getEmployerEmployer()->getPersonPerson()->getActionsByActionType($em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VRC'))))>0){
+            $action = $procedure->getActionsByActionType($procedure->getEmployerEmployer()->getPersonPerson()->getActionsByActionType($em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VRC'))))->first();
+            if($action->getActionStatusCode()=='ERRO')
+                return true;
+        }
+        $actionType = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VM'));
+        if(count($procedure->getActionsByActionType($actionType)->first())>0){
+            /** @var Action $action */
+            $action = $procedure->getActionsByActionType($actionType)->first();
+            if($action->getActionStatusCode()=='ERRO')
+                return true;
+        }elseif(count($procedure->getEmployerEmployer()->getPersonPerson()->getActionsByActionType($em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VM'))))>0){
+            $action = $procedure->getActionsByActionType($procedure->getEmployerEmployer()->getPersonPerson()->getActionsByActionType($em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VM'))))->first();
+            if($action->getActionStatusCode()=='ERRO')
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function checkEmployeeActionErros                             ║
+     * ║ Returns true if at least one error in employee actions        ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param RealProcedure $procedure                              ║
+     * ║  @param EmployerHasEmployee $ehe                              ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return bool                                                 ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    protected function checkEmployeeActionErros(RealProcedure $procedure, EmployerHasEmployee $ehe){
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        $actionType = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VER'));
+        if(count($procedure->getActionsByActionType($actionType)->first())>0){
+            /** @var Action $action */
+            $action = $procedure->getActionsByActionType($actionType)->first();
+            if($action->getActionStatusCode()=='ERRO')
+                return true;
+        }
+        $actionType = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VDDE'));
+        if(count($procedure->getActionsByActionType($actionType)->first())>0){
+            /** @var Action $action */
+            $action = $procedure->getActionsByActionType($actionType)->first();
+            if($action->getActionStatusCode()=='ERRO')
+                return true;
+        }
+        $actionType = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VRTE'));
+        if(count($procedure->getActionsByActionType($actionType)->first())>0){
+            /** @var Action $action */
+            $action = $procedure->getActionsByActionType($actionType)->first();
+            if($action->getActionStatusCode()=='ERRO')
+                return true;
+        }
+        $actionType = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VRCE'));
+        if(count($procedure->getActionsByActionType($actionType)->first())>0){
+            /** @var Action $action */
+            $action = $procedure->getActionsByActionType($actionType)->first();
+            if($action->getActionStatusCode()=='ERRO')
+                return true;
+        }
+        $actionType = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VM'));
+        if(count($procedure->getActionsByActionType($actionType)->first())>0){
+            /** @var Action $action */
+            $action = $procedure->getActionsByActionType($actionType)->first();
+            if($action->getActionStatusCode()=='ERRO')
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function checkEmployeeInfoActions                             ║
+     * ║ Returns array with:                                           ║
+     * ║ bool error true when at least one info action has error       ║
+     * ║ DateTime firstErrorAt when error with the errorDate           ║
+     * ║ integer idActionError when error with the ActionErrorid       ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param RealProcedure $procedure                              ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return array                                                ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    public function checkEmployeeInfoActions($procedure)
+    {
+        $response = array();
+        /** @var EmployerHasEmployee $ehe */
+        foreach ($procedure->getEmployerEmployer()->getActiveEmployerHasEmployees() as $ehe) {
+            $actions = $this->getInfoEmployeeActions($procedure,$ehe);
+            $firstError = null;
+            $tempAction = null;
+            $finish = true;
+            $pending = false;
+            /** @var Action $action */
+            foreach ($actions as $action) {
+                if($action->getActionStatusCode()!= 'FIN')
+                    $finish = false;
+                if($action->getActionStatusCode()!= 'DCPE')
+                    $pending = true;
+                if($firstError == null and $action->getErrorAt()!= null){
+                    $firstError = $action->getErrorAt();
+                    $tempAction = $action;
+                }elseif($firstError != null and $action->getErrorAt()!=null){
+                    if($action->getErrorAt()<$firstError){
+                        $firstError = $action->getErrorAt();
+                        $tempAction = $action;
+                    }
+                }
+            }
+            if(!$pending){
+                if($procedure->getEmployerEmployer()->getAllDocsReadyAt()!=null){
+                    $ehe->setDateDocumentsUploaded(new DateTime());
+                    $ehe->setAllEmployeeDocsReadyAt(new DateTime());
+                    $this->getDoctrine()->getManager()->persist($ehe);
+                    $this->getDoctrine()->getManager()->flush();
+                }else{
+                    $ehe->setAllEmployeeDocsReadyAt(new DateTime());
+                    $this->getDoctrine()->getManager()->persist($ehe);
+                    $this->getDoctrine()->getManager()->flush();
+                }
+            }
+            if ($firstError != null){
+                if($ehe->getInfoErrorAt()==null){
+                    $today = new DateTime();
+                    if($this->getUser()){
+                        $log = new Log($this->getUser(),'EmployerHasEmployee','infoErrorAt',$ehe->getIdEmployerHasEmployee(),null,$today->format('d-m-Y H:i:s'),'Backoffice encontro errores al validar la información de un empleado');
+                        $this->getDoctrine()->getManager()->persist($log);
+                    }
+                    $ehe->setInfoErrorAt($today);
+                    $this->getDoctrine()->getManager()->persist($ehe);
+                    $this->getDoctrine()->getManager()->flush();
+                }
+                if(!$finish){
+                    $response[$ehe->getIdEmployerHasEmployee()] = array('error'=>true,'firstErrorAt'=>$firstError,'idActionError'=>$tempAction->getIdAction(),'finish'=>false);
+                }else{
+                    if($ehe->getInfoValidatedAt() == null){
+                        $today = new DateTime();
+                        if($this->getUser()){
+                            $log = new Log($this->getUser(),'EmployerHasEmployee','infoValidatedAt',$ehe->getIdEmployerHasEmployee(),null,$today->format('d-m-Y H:i:s'),'Backoffice terminó de validar la información de un empleado');
+                            $this->getDoctrine()->getManager()->persist($log);
+                        }
+                        $ehe->setInfoValidatedAt($today);
+                        $this->getDoctrine()->getManager()->persist($ehe);
+                        $this->getDoctrine()->getManager()->flush();
+                    }
+                    $response[$ehe->getIdEmployerHasEmployee()] =  array('error'=>false,'firstErrorAt'=>$firstError,'idActionError'=>$tempAction->getIdAction(),'finish'=>true);
+                }
+            }elseif($finish){
+                if($ehe->getInfoValidatedAt() == null){
+                    $today = new DateTime();
+                    if($this->getUser()){
+                        $log = new Log($this->getUser(),'EmployerHasEmployee','infoValidatedAt',$ehe->getIdEmployerHasEmployee(),null,$today->format('d-m-Y H:i:s'),'Backoffice terminó de validar la información de un empleado');
+                        $this->getDoctrine()->getManager()->persist($log);
+                    }
+                    $ehe->setInfoValidatedAt($today);
+                    $this->getDoctrine()->getManager()->persist($ehe);
+                    $this->getDoctrine()->getManager()->flush();
+                }
+                $response[$ehe->getIdEmployerHasEmployee()] = array('error'=>false,'finish'=>true);
+            }elseif(!$finish and $firstError == null){
+                $response[$ehe->getIdEmployerHasEmployee()] = array('error'=>false,'finish'=>false);
+            }
+        }
+        return $response;
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function getInfoEmployerActions                               ║
+     * ║ Returns the array whit the info and document actions of the   ║
+     * ║ Employee matching the employerHasEmployee                     ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param RealProcedure $procedure                              ║
+     * ║  @param EmployerHasEmployee $ehe                              ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return array                                                ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    protected function getInfoEmployeeActions($procedure,$ehe)
+    {
+        if($procedure->getProcedureTypeProcedureType()->getCode()!= 'REE'){
+            return null;
+        }
+        $response = array();
+        if(count($procedure->getActionsByPersonAndActionType($ehe->getEmployeeEmployee()->getPersonPerson(),$this->getActionTypeByActionTypeCode('VEE')))==1){
+            $response['0']=$procedure->getActionsByPersonAndActionType($ehe->getEmployeeEmployee()->getPersonPerson(),$this->getActionTypeByActionTypeCode('VEE'))->first();
+        }else{
+            if(count($ehe->getEmployeeEmployee()->getPersonPerson()->getActionsByActionType($this->getActionTypeByActionTypeCode('VEE')))==1)
+                $response['0']=$ehe->getEmployeeEmployee()->getPersonPerson()->getActionsByActionType($this->getActionTypeByActionTypeCode('VEE'))->first();
+        }
+        if(count($procedure->getActionsByPersonAndActionType($ehe->getEmployeeEmployee()->getPersonPerson(),$this->getActionTypeByActionTypeCode('VDD')))==1){
+            $response['1']=$procedure->getActionsByPersonAndActionType($ehe->getEmployeeEmployee()->getPersonPerson(),$this->getActionTypeByActionTypeCode('VDD'))->first();
+        }else{
+            if(count($ehe->getEmployeeEmployee()->getPersonPerson()->getActionsByActionType($this->getActionTypeByActionTypeCode('VDD')))==1)
+                $response['1']=$ehe->getEmployeeEmployee()->getPersonPerson()->getActionsByActionType($this->getActionTypeByActionTypeCode('VDD'))->first();
+        }
+        $response['2']=$procedure->getActionsByPersonAndActionType($ehe->getEmployeeEmployee()->getPersonPerson(),$this->getActionTypeByActionTypeCode('VCAT'))->first();
+        return $response;
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function calculateDocumentStatus                              ║
+     * ║ Calculates de DocumentStatus for employers and employees      ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param RealProcedure $procedure                              ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return integer                                              ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    protected function calculateDocumentStatus($procedure)
+    {
+        try{
+            $this->checkEmployerInfoActions($procedure);
+            $this->checkEmployeeInfoActions($procedure);
+            $employer = $procedure->getEmployerEmployer();
+            $employerHasEmployees = $employer->getActiveEmployerHasEmployees();
+            $em = $this->getDoctrine()->getManager();
+            if($employer->getAllDocsReadyAt()==null){
+                $employer->setDocumentStatus($this->getDocumentStatusByCode('ALLDCP'));
+                $em->persist($employer);
+            }elseif($employer->getInfoValidatedAt()!= null){
+                $employer->setDocumentStatus($this->getDocumentStatusByCode('ALDCVA'));
+                $em->persist($employer);
+            }elseif($employer->getInfoErrorAt()!=null){
+                $employer->setDocumentStatus($this->getDocumentStatusByCode('ALLDCE'));
+                $em->persist($employer);
+            }else{
+                $employer->setDocumentStatus($this->getDocumentStatusByCode('ALDCIV'));
+                $em->persist($employer);
+            }
+            /** @var EmployerHasEmployee $ehe */
+            foreach ($employerHasEmployees as $ehe) {
+                if ($ehe->getDateDocumentsUploaded() == null) {
+                    if ($employer->getAllDocsReadyAt() == null and $ehe->getAllEmployeeDocsReadyAt() == null) {
+                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALLDCP'));
+                        $em->persist($ehe);
+                    } elseif ($employer->getAllDocsReadyAt() == null and $ehe->getAllEmployeeDocsReadyAt() != null) {
+                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERDCPE'));
+                        $em->persist($ehe);
+                    } elseif ($employer->getAllDocsReadyAt() != null and $ehe->getAllEmployeeDocsReadyAt() == null) {
+                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEDCPE'));
+                        $em->persist($ehe);
+                    }
+                } elseif ($ehe->getInfoValidatedAt() != null) {
+                    if ($employer->getInfoValidatedAt() != null) {
+                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALDCVM'));
+                        $em->persist($ehe);
+                    } elseif ($employer->getInfoErrorAt() != null) {
+                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEVERE'));
+                        $em->persist($ehe);
+                    } else {
+                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEDCVA'));
+                        $em->persist($ehe);
+                    }
+                } elseif ($ehe->getInfoErrorAt() != null) {
+                    if ($employer->getInfoValidatedAt() != null) {
+                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERVEEE'));
+                        $em->persist($ehe);
+                    } elseif ($employer->getInfoErrorAt() != null) {
+                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALLDCE'));
+                        $em->persist($ehe);
+                    } else {
+                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEDCE'));
+                        $em->persist($ehe);
+                    }
+                } else {
+                    if ($employer->getInfoValidatedAt() != null) {
+                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERDCVA'));
+                        $em->persist($ehe);
+                    } elseif ($employer->getInfoErrorAt() != null) {
+                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERDCE'));
+                        $em->persist($ehe);
+                    } else {
+                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALDCIV'));
+                        $em->persist($ehe);
+                    }
+                }
+            }
+            return 1;
+        }catch(Exception $e){
+            return 0;
+        }
     }
 
     /**
@@ -202,7 +962,7 @@ trait EmployeeMethodsTrait
         //Finding the action type with code VDC validar Documentos
         /** @var ActionType $actionType */
         $actionType = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:ActionType')->findOneBy(array(
-            'code'  =>'VDC',
+            'code'  =>'VDDE',
         ));
         //Finding the action type with code VM validar Mandato
         /** @var ActionType $actionType */
@@ -317,7 +1077,7 @@ trait EmployeeMethodsTrait
             'employerEmployer' => $employer,
         ));
         $actionType = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:ActionType')->findOneBy(array(
-            'code'=>'VDC',
+            'code'=>'VDD',
         ));
         /** @var Action $action */
         $action = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Action')->findOneBy(array(
@@ -391,7 +1151,7 @@ trait EmployeeMethodsTrait
      * @return array arreglo de estado de documentos para cada empleado
      */
     protected function allDocumentsReady(User $user){
-
+        $response = array();
         //getting the person
         $person = $user->getPersonPerson();
         //getting all the employees
@@ -479,6 +1239,7 @@ trait EmployeeMethodsTrait
                         $eHE->setDocumentStatus(11);
                     }
                 }elseif($case == 11){
+                    $ePend = 0;
                     if($eHE->getActiveContract()->getDocumentDocument()) {
                         try {
                             if($eHE->getActiveContract()->getDocumentDocument()->getMediaMedia() == null) {
@@ -499,6 +1260,7 @@ trait EmployeeMethodsTrait
                 }elseif($case == 13){
                     $eHE->setDocumentStatus(16);
                 }elseif($case == 14){
+                    $ePend = 0;
                     if($eHE->getActiveContract()->getDocumentDocument()) {
                         try {
                             if($eHE->getActiveContract()->getDocumentDocument()->getMediaMedia() == null) {
@@ -527,6 +1289,7 @@ trait EmployeeMethodsTrait
             $em->persist($eHE);
             $em->flush();
         }
+        die;
         return $response;
     }
 
