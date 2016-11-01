@@ -585,7 +585,7 @@ class PaymentMethodRestController extends FOSRestController
                         'idPOD'=>$rejectedPOD->getIdPurchaseOrdersDescription(),
                         'value'=>$valor
                     );
-                    $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
+                    //$this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
                     $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'-2'));
                     $desc->setPurchaseOrdersStatus($pos);
                     $em->persist($purchaseOrder);
@@ -631,7 +631,7 @@ class PaymentMethodRestController extends FOSRestController
                             'toEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
                             'userName'=>$employerPerson->getFullName(),
                         );
-                        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+                        //$this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
                         $contextBack=array(
                             'emailType'=>'regectionDispersion',
                             'userEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
