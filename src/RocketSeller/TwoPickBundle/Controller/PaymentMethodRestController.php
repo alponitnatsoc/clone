@@ -948,11 +948,12 @@ class PaymentMethodRestController extends FOSRestController
                     $purchaseOrder->setDatePaid(new DateTime());
                     $em->persist($purchaseOrder);
                     $em->flush();
+                    $request->setMethod("POST");
                     $request->request->add(array(
                         "numeroRadicado" => $radicatedNumber,
                         "estado" => "0"
                     ));
-                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postCollectionNotification',array("request"=>$request), array('_format' => 'json'));
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:HighTechRest:postCollectionNotification',array("request"=>$request), array('_format' => 'json'));
                     return array('code'=>$insertionAnswer->getStatusCode(),'data'=> $insertionAnswer->getContent());
 
                 }else{
