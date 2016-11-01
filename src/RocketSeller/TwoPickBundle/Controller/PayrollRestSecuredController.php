@@ -22,6 +22,7 @@ use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Transaction;
 use RocketSeller\TwoPickBundle\Entity\PayMethod;
 use FOS\RestBundle\Controller\FOSRestController;
+use RocketSeller\TwoPickBundle\Entity\UserHasCampaign;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\View\View;
@@ -426,6 +427,19 @@ class PayrollRestSecuredController extends FOSRestController
             }
             //now we search if there is any owe pod
             $this->checkPendingSubscription($realtoPay,$total);
+            //now we check if there is any discount applicable
+            $discounts=null;
+            if($paysPila>0)
+                $discounts = $this->checkDiscounts($user);
+            if($discounts!=null){
+                /** @var PurchaseOrdersDescription $discount */
+                foreach ($discounts as $discount) {
+                    $realtoPay->addPurchaseOrderDescription($discount);
+                    $total += $discount->getValue();
+                }
+            }
+
+
         }
         $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getClientListPaymentMethods', array('idUser' => $user->getId()), array('_format' => 'json'));
         $responsePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
@@ -443,6 +457,31 @@ class PayrollRestSecuredController extends FOSRestController
 
         return $view->setStatusCode(200)->setData($answer);
 
+    }
+
+    /**
+     * @param User $user
+     * @return ArrayCollection
+     */
+    private function checkDiscounts($user){
+        $uHCs = $user->getUserHasCampaigns();
+        $realCampaing = null;
+        $podsArray=new ArrayCollection();
+        /** @var UserHasCampaign $uHC */
+        foreach ($uHCs as $uHC) {
+            if($uHC->getCampaignCampaign()->getDescription()=="150k"){
+                $productDiscount= $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product")->findOneBy(array('simpleName'=>'DIS'));
+                $realCampaing=$uHC;
+                if($realCampaing->getState()==1&&$realCampaing->getUses()<2){
+                    $pod150k=new PurchaseOrdersDescription();
+                    $pod150k->setDescription("Descuento $75.000");
+                    $pod150k->setValue(-75000);
+                    $pod150k->setProductProduct($productDiscount);
+                    $podsArray->add($pod150k);
+                }
+            }
+        }
+        return $podsArray;
     }
 
 

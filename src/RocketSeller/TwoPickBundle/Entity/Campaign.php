@@ -35,6 +35,13 @@ class Campaign
     private $stock;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(type="string", length=50, nullable=TRUE)
+     */
+    private $description;
+
+    /**
      * @var \DateTime
      * @ORM\Column(type="datetime", nullable=TRUE)
      */
@@ -196,5 +203,29 @@ class Campaign
     public function getUserHasCampaigns()
     {
         return $this->userHasCampaigns;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Campaign
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 }
