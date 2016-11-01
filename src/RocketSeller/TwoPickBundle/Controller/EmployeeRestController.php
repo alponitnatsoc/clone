@@ -1567,7 +1567,6 @@ class EmployeeRestController extends FOSRestController
             } else {
                 // It sends here the verification code.
                 if($this->sendVerificationCode()){
-
                     $view->setData(array())->setStatusCode(200);
                     return $view;
                 }else{
