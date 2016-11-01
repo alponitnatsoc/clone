@@ -359,7 +359,7 @@ class PayrollMethodRestController extends FOSRestController
 	
 		            if($podPila->getEnlaceOperativoFileName() == NULL && $podPila->getUploadedFile() == NULL){
 			            //this means the file has not be sent yet
-			            $podArray[] = $podPila;
+			            $podArray[] = $podPila->getIdPurchaseOrdersDescription();
 			            $employerArray[] = $employer;
 		            }
             }
@@ -398,8 +398,10 @@ class PayrollMethodRestController extends FOSRestController
 //         $total = $data;
 	    
 	      //From this point we send the pila files to hightech in order to be upload on Enlace Operativo
-	      foreach ($podArray as $index => $singlePod){
+	      foreach ($podArray as $index => $singlePodId){
 		      //TODO DanielRico Remove this as soon the final liquidation works and the novelty support is complete
+		      
+		      $singlePod = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription")->find($singlePodId);
 		      $payrollsPila = $singlePod->getPayrollsPila();
 		      $haveNovelties = false;
 		
