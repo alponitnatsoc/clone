@@ -98,7 +98,7 @@ class HighTechRestController extends FOSRestController
         $mandatory = array();
 
         // Set all the parameters info.
-        $regex['numeroRadicado'] = '([0-9])+';
+        $regex['numeroRadicado'] = '(.)+';
         $mandatory['numeroRadicado'] = true;
         $regex['estado'] = '([0-9])+';
         $mandatory['estado'] = true;
