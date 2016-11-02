@@ -159,6 +159,11 @@ class Employer
     private $allDocsReadyAt=null;
 
     /**
+     * @ORM\Column(name="dashboard_message",type="datetime", nullable=true)
+     */
+    private $dashboardMessage=null; 
+
+    /**
      * @var DocumentStatusType
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\DocumentStatusType")
      * @ORM\JoinColumn(name="document_status_type_id", referencedColumnName="id_document_status_type",nullable=true)
@@ -852,5 +857,29 @@ class Employer
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Set dashboardMessage
+     *
+     * @param \DateTime $dashboardMessage
+     *
+     * @return Employer
+     */
+    public function setDashboardMessage($dashboardMessage)
+    {
+        $this->dashboardMessage = $dashboardMessage;
+
+        return $this;
+    }
+
+    /**
+     * Get dashboardMessage
+     *
+     * @return \DateTime
+     */
+    public function getDashboardMessage()
+    {
+        return $this->dashboardMessage;
     }
 }

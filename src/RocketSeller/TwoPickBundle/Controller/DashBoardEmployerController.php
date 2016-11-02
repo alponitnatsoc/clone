@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use Doctrine\Common\Collections\Collection;
+use DateTime;
 use Doctrine\ORM\EntityManager;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Notification;
@@ -52,6 +53,27 @@ class DashBoardEmployerController extends Controller {
             //getting the user
             /** @var User $user */
             $user = $this->getUser();
+            $employer=$user->getPersonPerson()->getEmployer();
+            $today = new DateTime();
+            $em = $this->getDoctrine()->getManager();
+
+            if($user->getPersonPerson()->getEmployer()->getDashboardMessage()==null){
+                if($tareas){
+                    return $this->render('RocketSellerTwoPickBundle:Employer:dashBoard.html.twig', array(
+                        'notifications' => $notifications,
+                        'user' => $user->getPersonPerson(),
+                        'message'=>'welcome',
+                    ));
+                }else{
+                    $employer->setDashboardMessage($today);
+                    $em->persist($employer);
+                    $em->flush();
+                }
+            }
+
+
+
+
             //setting flags for end validation, clean dashboard and contract validated
             $endValid = false;
             $cleanDash = false;

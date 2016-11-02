@@ -2755,28 +2755,36 @@ class ProcedureController extends Controller
     }
 
     /**
-     * Funcion que crea las acciones y los real procedure para un usuario y sus empleados
-     * @param $employerId id del empleado al que se le crea el procedure
-     * @return bool 
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function procedureAction                                      ║
+     * ║ Creates all real procedures and actions for the user          ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param Integer $userId                                       ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return bool                                                 ║
+     * ╚═══════════════════════════════════════════════════════════════╝
      */
-    public function procedureAction($employerId)
+    public function procedureAction($userId)
     {
     	$em = $this->getDoctrine()->getManager();
-		$employer = $this->loadClassById($employerId,'Employer');
-        $idPerson = $employer->getPersonPerson()->getIdPerson();
-		/** @var User $user */
-        $user = $this->loadClassByArray(array('personPerson'=>$idPerson),"User");
-        if($employer != $user->getPersonPerson()->getEmployer()){
-            $employer = $user->getPersonPerson()->getEmployer();
+        /** @var User $user */
+        $user = $em->getRepository("RocketSellerTwoPickBundle:User")->find($userId);
+		$employer = $user->getPersonPerson()->getEmployer();
+        $employer->setDocumentStatus($this->getDocumentStatusByCode('ALLDCP'));
+        $em->persist($employer);
+        /** @var EmployerHasEmployee $ehe */
+        foreach ($employer->getActiveEmployerHasEmployees() as $ehe) {
+            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALLDCP'));
+            $em->persist($ehe);
         }
         $today = new DateTime();
         if($user->getRealProcedure()->isEmpty()){
             //se crea el procedure
             $procedure = new RealProcedure();
-            $procedure->setProcedureTypeProcedureType($this->getProcedureByType('REE'));//setting the procedure type
+            $procedure->setProcedureTypeProcedureType($this->getProcedureTypeByCode('REE'));//setting the procedure type
             $employer->addRealProcedure($procedure);//adding the realProcedure to the employer
             $procedure->setCreatedAt($today);//setting the createAt Date
-            $procedure->setProcedureStatus($this->getStatusByType('DCPE'));//setting the initial status Disable
+            $procedure->setProcedureStatus($this->getStatusByStatusCode('DCPE'));//setting the initial status Disable
             $procedure->setBackOfficeDate(null);//setting the backofice start Date
             $procedure->setFinishedAt(null);
             $procedure->setPriority(0);//setting the default priority
@@ -2784,10 +2792,10 @@ class ProcedureController extends Controller
             $ree = $procedure;
             //se crea el procedure
             $procedure = new RealProcedure();
-            $procedure->setProcedureTypeProcedureType($this->getProcedureByType('VAC'));//setting the procedure type
+            $procedure->setProcedureTypeProcedureType($this->getProcedureTypeByCode('VAC'));//setting the procedure type
             $employer->addRealProcedure($procedure);//adding the realProcedure to the employer
             $procedure->setCreatedAt($today);//setting the createAt Date
-            $procedure->setProcedureStatus($this->getStatusByType('DIS'));//setting the initial status Disable
+            $procedure->setProcedureStatus($this->getStatusByStatusCode('DIS'));//setting the initial status Disable
             $procedure->setBackOfficeDate(null);//setting the backofice start Date
             $procedure->setFinishedAt(null);
             $procedure->setPriority(0);//setting the default priority
@@ -2800,10 +2808,10 @@ class ProcedureController extends Controller
                 return false;
             }else{
                 $procedure = new RealProcedure();
-                $procedure->setProcedureTypeProcedureType($this->getProcedureByType('REE'));//setting the procedure type
+                $procedure->setProcedureTypeProcedureType($this->getProcedureTypeByCode('REE'));//setting the procedure type
                 $employer->addRealProcedure($procedure);//adding the realProcedure to the employer
                 $procedure->setCreatedAt($today);//setting the createAt Date
-                $procedure->setProcedureStatus($this->getStatusByType('DCPE'));//setting the initial status Disable
+                $procedure->setProcedureStatus($this->getStatusByStatusCode('DCPE'));//setting the initial status Disable
                 $procedure->setBackOfficeDate(null);//setting the backofice start Date
                 $procedure->setFinishedAt(null);
                 $procedure->setPriority(0);//setting the default priority
@@ -2816,10 +2824,10 @@ class ProcedureController extends Controller
                 return false;
             }else{
                 $procedure = new RealProcedure();
-                $procedure->setProcedureTypeProcedureType($this->getProcedureByType('VAC'));//setting the procedure type
+                $procedure->setProcedureTypeProcedureType($this->getProcedureTypeByCode('VAC'));//setting the procedure type
                 $employer->addRealProcedure($procedure);//adding the realProcedure to the employer
                 $procedure->setCreatedAt($today);//setting the createAt Date
-                $procedure->setProcedureStatus($this->getStatusByType('DIS'));//setting the initial status Disable
+                $procedure->setProcedureStatus($this->getStatusByStatusCode('DIS'));//setting the initial status Disable
                 $procedure->setBackOfficeDate(null);//setting the backofice start Date
                 $procedure->setFinishedAt(null);
                 $procedure->setPriority(0);//setting the default priority
@@ -2888,21 +2896,18 @@ class ProcedureController extends Controller
                         $action->setActionStatus($this->getStatusByStatusCode('CON'));//setting the initial state disable
                     }
                 }else{
-                    $action->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the Action Status to NEW
+                    $action->setActionStatus($this->getStatusByStatusCode('DCPE'));//setting the Action Status to NEW
                 }
                 $action->setUpdatedAt();//setting the action updatedAt Date
                 $action->setCreatedAt($today);//setting the Action createrAt Date
                 $em->persist($action);
             } else {
-                if($employer != $user->getPersonPerson()->getEmployer()){
-                    $employer = $user->getPersonPerson()->getEmployer();
-                }
                 $action = new Action();
                 $ree->addAction($action);//adding the action to the procedure
                 $employer->getPersonPerson()->addAction($action);//adding the action to the employerPerson
                 $user->addAction($action);//adding the action to the user
                 $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VDDE'));//setting the actionType validate employer Document
-                $action->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the Action Status to NEW
+                $action->setActionStatus($this->getStatusByStatusCode('DCPE'));//setting the Action Status to NEW
                 $action->setUpdatedAt();//setting the action updatedAt Date
                 $action->setCreatedAt($today);//setting the Action createrAt Date
                 $em->persist($action);
@@ -2930,21 +2935,18 @@ class ProcedureController extends Controller
                         $action->setActionStatus($this->getStatusByStatusCode('CON'));//setting the initial state disable
                     }
                 }else{
-                    $action->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the Action Status to NEW
+                    $action->setActionStatus($this->getStatusByStatusCode('DCPE'));//setting the Action Status to NEW
                 }
                 $action->setUpdatedAt();//setting the action updatedAt Date
                 $action->setCreatedAt($today);//setting the Action createrAt Date
                 $em->persist($action);
             } else {
-                if($employer != $user->getPersonPerson()->getEmployer()){
-                    $employer = $user->getPersonPerson()->getEmployer();
-                }
                 $action = new Action();
                 $ree->addAction($action);//adding the action to the procedure
                 $employer->getPersonPerson()->addAction($action);//adding the action to the employerPerson
                 $user->addAction($action);//adding the action to the user
                 $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VRTE'));//setting the actionType validate employer RUT
-                $action->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the Action Status to NEW
+                $action->setActionStatus($this->getStatusByStatusCode('DCPE'));//setting the Action Status to NEW
                 $action->setUpdatedAt();//setting the action updatedAt Date
                 $action->setCreatedAt($today);//setting the Action createrAt Date
                 $em->persist($action);
@@ -2963,7 +2965,7 @@ class ProcedureController extends Controller
             $employer->getPersonPerson()->addAction($action);//adding the action to the employerPerson
             $user->addAction($action);//adding the action to the user
             $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VM'));//setting the actionType validate employer mandatory
-            $action->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the Action Status to NEW
+            $action->setActionStatus($this->getStatusByStatusCode('DCPE'));//setting the Action Status to NEW
             $action->setUpdatedAt();//setting the action updatedAt Date
             $action->setCreatedAt($today);//setting the Action createrAt Date
             $em->persist($action);
@@ -3081,20 +3083,22 @@ class ProcedureController extends Controller
                             }elseif($ePerson->getActionByEmployeeHasEntity($employeeHasEntity)->count()>1){
                                 return false;
                             }elseif($ePerson->getActionByEmployeeHasEntity($employeeHasEntity)->count()==0){
-                                $action = new Action();
-                                $ree->addAction($action);//adding the action to the procedure
-                                $ePerson->addAction($action);//adding the action to the employerPerson
-                                $user->addAction($action);//adding the action to the user
-                                if($employeeHasEntity->getState()==0){
-                                    $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VEN'));//setting actionType to validate entity
-                                }elseif($employeeHasEntity->getState()==1){
-                                    $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('IN'));//setting actionType to validate entity
+                                if($employeeHasEntity->getState()!=-1){
+                                    $action = new Action();
+                                    $ree->addAction($action);//adding the action to the procedure
+                                    $ePerson->addAction($action);//adding the action to the employerPerson
+                                    $user->addAction($action);//adding the action to the user
+                                    if($employeeHasEntity->getState()==0){
+                                        $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VEN'));//setting actionType to validate entity
+                                    }elseif($employeeHasEntity->getState()==1){
+                                        $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('IN'));//setting actionType to validate entity
+                                    }
+                                    $action->setEmployeeEntity($employeeHasEntity);
+                                    $action->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the action status to new
+                                    $action->setUpdatedAt();//setting the action updatedAt Date
+                                    $action->setCreatedAt($today);//setting the Action createrAt Date
+                                    $em->persist($action);
                                 }
-                                $action->setEmployeeEntity($employeeHasEntity);
-                                $action->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the action status to new
-                                $action->setUpdatedAt();//setting the action updatedAt Date
-                                $action->setCreatedAt($today);//setting the Action createrAt Date
-                                $em->persist($action);
                             }
                         }
                     }else{
@@ -3164,32 +3168,29 @@ class ProcedureController extends Controller
                         }elseif($ePerson->getActionByEmployeeHasEntity($employeeHasEntity)->count()>1){
                             return false;
                         }elseif($ePerson->getActionByEmployeeHasEntity($employeeHasEntity)->count()==0){
-                            $action = new Action();
-                            $ree->addAction($action);//adding the action to the procedure
-                            $ePerson->addAction($action);//adding the action to the employerPerson
-                            $user->addAction($action);//adding the action to the user
-                            if($employeeHasEntity->getState()==0){
-                                $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VEN'));//setting actionType to validate entity
-                            }elseif($employeeHasEntity->getState()==1){
-                                $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('IN'));//setting actionType to validate entity
+                            if($employeeHasEntity->getState()!=-1) {
+                                $action = new Action();
+                                $ree->addAction($action);//adding the action to the procedure
+                                $ePerson->addAction($action);//adding the action to the employerPerson
+                                $user->addAction($action);//adding the action to the user
+                                if ($employeeHasEntity->getState() == 0) {
+                                    $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VEN'));//setting actionType to validate entity
+                                } elseif ($employeeHasEntity->getState() == 1) {
+                                    $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('IN'));//setting actionType to validate entity
+                                }
+                                $action->setEmployeeEntity($employeeHasEntity);
+                                $action->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the action status to new
+                                $action->setUpdatedAt();//setting the action updatedAt Date
+                                $action->setCreatedAt($today);//setting the Action createrAt Date
+                                $em->persist($action);
                             }
-                            $action->setEmployeeEntity($employeeHasEntity);
-                            $action->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the action status to new
-                            $action->setUpdatedAt();//setting the action updatedAt Date
-                            $action->setCreatedAt($today);//setting the Action createrAt Date
-                            $em->persist($action);
                         }
                     }
                 }
             }
         }
         $em->persist($ree);
-        foreach ($employer->getEmployerHasEmployees() as $ehe){
-//            if($ehe->getLegalFF()==)
-        }
-
-
-
+        $em->flush();
 
 //        switch(){
 //			// registro empleador y empleados
@@ -3433,8 +3434,7 @@ class ProcedureController extends Controller
 //				$em2->flush();
 //                break;
 //        }
-
-    	return true;
+        return true;
     }
 
     /**

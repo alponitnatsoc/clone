@@ -1,4 +1,5 @@
 {% extends "::base.html.twig" %}
+{% from '@RocketSellerTwoPick/modal_templates/modal_picker2.html.twig' import modal2 %}
 {% from '@RocketSellerTwoPick/modal_templates/modal_picker.twig' import modal %}
 {% block modales %}
     {{ parent() }}
@@ -10,6 +11,7 @@
             {{ modal(16) }}
         {% endif %}
     {% endfor %}
+    {{ modal2() }}
     {{ modal(24) }}
     {{ modal(17) }}
 {% endblock %}
@@ -799,9 +801,11 @@
     <script>
         $(document).ready(function () {
             try {
+                showModal2(1);
                 showModal(15);
                 showModal(6);
-                showModal(23);
+//                showModal(23);
+//                showModal2();
             }catch(e){
 
             }

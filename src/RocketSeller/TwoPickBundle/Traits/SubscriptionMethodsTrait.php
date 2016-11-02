@@ -1441,10 +1441,13 @@ trait SubscriptionMethodsTrait
 
     protected function crearTramites(User $user)
     {
-        $this->forward('RocketSellerTwoPickBundle:Procedure:procedure', array(
-            'employerId' => $user->getPersonPerson()->getEmployer()->getIdEmployer()
-        ), array('_format' => 'json'));
-        return true;
+        $response = $this->forward('RocketSellerTwoPickBundle:Procedure:procedure',
+            array('userId' => $user->getId()),
+            array('_format' => 'json'));
+        if($response->getContent()){
+            return true;
+        }
+        return false;
     }
 
     protected function getMethodId($documentNumber)

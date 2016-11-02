@@ -130,6 +130,9 @@ employer_state:
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:userBackOfficeState}
 
 #tramites
+create_procedures:
+    path: /backoffice/procedure/creates/{userId}
+    defaults: {_controller: RocketSellerTwoPickBundle:Procedure:procedure , userId: 0}
 show_procedure:
     path:     /backoffice/procedure/{procedureId}
     defaults: { _controller: RocketSellerTwoPickBundle:Procedure:procedureById }

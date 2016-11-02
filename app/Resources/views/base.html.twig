@@ -610,7 +610,15 @@
                 sendAjax($(this).attr('action'), $(this));
             });
         }
-
+        function showModal2(idModal){
+            switch (idModal){
+                case 1:
+                    break;
+                default:
+                    $("#modal_template").modal("show");
+                    break;
+            }
+        }
         function showModal(idModal){
             if(idModal==0){
                 $("#default_modal").modal("show");
@@ -633,7 +641,7 @@
             }else if(idModal==9){
                 $("#default_modal_9").modal("show");
             }else if(idModal==10){
-                $("#end_documents_modal").modal("show");
+                $("#consultoria_juridica_modal").modal("show");
             }else if(idModal==11){
                 $("#detalle_costo_trans_modal").modal("show");
             }else if(idModal==12){
@@ -642,7 +650,9 @@
                 $("#error_modal_transporte").modal("show");
             }else if(idModal==14){
                 $("#confirmation_token_modal").modal("show");
-            }else if(idModal==15){
+            }else if(idModal==15) {
+                $("#forbidden_format_modal").modal("show");
+            }else if(idModal==16){
                 $("#forbidden_format_modal").modal("show");
             }else if(idModal==17) {
                 $("#modal_image_Error").modal("show");

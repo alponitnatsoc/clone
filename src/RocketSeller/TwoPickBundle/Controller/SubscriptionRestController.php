@@ -86,10 +86,14 @@ class SubscriptionRestController extends FOSRestController
         $idUser = ($paramFetcher->get('idUser'));
         /* @var $user User */
         $user = $this->getUserById($idUser);
-        $tramites = $this->crearTramites($user);
+        if($this->crearTramites($user)){
+            $response = 'Tramites creados';
+        }else{
+            $response = 'Error creando tramites';
+        }
 
         $view = View::create();
-        $view->setData(array('tramites' => $tramites->getContent()));
+        $view->setData($response);
         $view->setStatusCode(200);
         return $view;
     }
