@@ -6,12 +6,12 @@
     <div id="main" class="col-sm-15">
         <div class="col-md-12">
             <div class="panel panel-title">
-                BackOffice Pila
+                BackOffice Vista Usuarios
             </div>
             <br>
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h4>Información de las pilas</h4>
+                    <h4>Información de los usuarios</h4>
                 </div>
 
                 {% for user in users %}
@@ -53,19 +53,38 @@
                                             <th>Nombres Empleador</th>
                                             <th>Apellidos Empleador</th>
                                             <th>Cédula</th>
+                                            <th>Fecha de nacimiento</th>
                                             <th>Número Sociedad SQL</th>
                                             <th>Id HighTech</th>
+                                            <th>Dirección Empleador</th>
                                         </tr>
                                         <tr>
                                             <td>{{ empPerson.names }}</td>
                                             <td>{{ empPerson.lastName1 }} {{ empPerson.lastName2 }}</td>
                                             <td>{{ empPerson.document }}</td>
+                                            <td>{% if empPerson.birthDate is defined %}
+                                                    {{ empPerson.birthDate|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                {% endif %}
+                                            </td>
                                             <td>{% if user.personPerson.employer.idSqlSociety is defined %}
                                                     {{ user.personPerson.employer.idSqlSociety }}
                                                 {% endif %}
                                             </td>
                                             <td>{% if user.personPerson.employer.idHighTech is defined %}
                                                     {{ user.personPerson.employer.idHighTech }}
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if empPerson.department != null %}
+                                                    {{ empPerson.department.name }}
+                                                {% endif %}
+                                                -
+                                                {% if empPerson.city != null %}
+                                                    {{ empPerson.city.name }}
+                                                {% endif %}
+                                                -
+                                                {% if empPerson.mainAddress != null %}
+                                                    {{ empPerson.mainAddress }}
                                                 {% endif %}
                                             </td>
                                         </tr>
