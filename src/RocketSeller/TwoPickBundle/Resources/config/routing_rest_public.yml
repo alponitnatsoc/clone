@@ -145,3 +145,7 @@ actions :
     type: rest
     resource : "RocketSellerTwoPickBundle:ActionsRest"
     name_prefix: api_public_
+email :
+    type: rest
+    resource : "RocketSellerTwoPickBundle:EmailRest"
+    name_prefix: api_public_
