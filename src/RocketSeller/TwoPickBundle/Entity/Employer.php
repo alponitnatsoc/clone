@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Exclude;
+use RocketSeller\TwoPickBundle\RocketSellerTwoPickBundle;
 
 /**
  * Employer
@@ -109,16 +110,10 @@ class Employer
      */
     private $mandatoryDocument;
 
-    /** @var integer
-     * 0 - new
-     * 1 - started
-     * 2 - error
-     * 3 - corrected
-     * 4 - finished
-     * 5 - contractValidated
-     * @ORM\Column(type="integer", nullable=true)
+    /**
+     * @ORM\Column(type="string", nullable=true)
      */
-    private $status=0;
+    private $status=null;
 
 		/**
 		 * -1 - Success
@@ -137,6 +132,38 @@ class Employer
 		 *      )
 		 */
 		private $transactions;
+
+    /**
+     * @ORM\Column(name="info_validated_at",type="datetime", nullable=true)
+     */
+    private $infoValidatedAt=null;
+
+    /**
+     * @ORM\Column(name="info_error_at",type="datetime", nullable=true)
+     */
+    private $infoErrorAt=null;
+
+    /**
+     * @ORM\Column(name="validated_email_sent_at",type="datetime", nullable=true)
+     */
+    private $validatedEmailSentAt=null;
+
+    /**
+     * @ORM\Column(name="error_email_sent_at",type="datetime", nullable=true)
+     */
+    private $ErrorEmailSentAt=null;
+
+    /**
+     * @ORM\Column(name="all_docs_ready_at",type="datetime", nullable=true)
+     */
+    private $allDocsReadyAt=null;
+
+    /**
+     * @var DocumentStatusType
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\DocumentStatusType")
+     * @ORM\JoinColumn(name="document_status_type_id", referencedColumnName="id_document_status_type",nullable=true)
+     */
+    private $documentStatus = null;
 
     /**
      * Set idEmployer
@@ -532,31 +559,6 @@ class Employer
         return $this->mandatoryDocument;
     }
 
-
-    /**
-     * Set status
-     *
-     * @param integer $status
-     *
-     * @return Employer
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * Get status
-     *
-     * @return integer
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
     /**
      * Get ActiveEmployerHasEmployees
      * @return \Doctrine\Common\Collections\Collection
@@ -566,6 +568,39 @@ class Employer
         $criteria = Criteria::create()
             ->where(Criteria::expr()->gte("state",2));
         return $this->employerHasEmployees->matching($criteria);
+    }
+
+    /**
+     * @param EntityType $entityType
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmployerHasEntityByEntityType($entityType)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq("entityEntity.entityTypeEntityType",$entityType));
+        return $this->entities->matching($criteria);
+    }
+
+    /**
+     * @param ProcedureType $procedureType
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRealProcedureByProcedureTypeType($procedureType)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq("procedureTypeProcedureType",$procedureType));
+        return $this->realProcedure->matching($criteria);
+    }
+
+    /**
+     * @param string $id
+     * @return RocketSellerTwoPickBundle:Workplace
+     */
+    public function getWorkplaceById($id)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('idWorkplace',intval($id)));
+        return $this->workplaces->matching($criteria)->first();
     }
 
     /**
@@ -648,5 +683,174 @@ class Employer
     public function getExistentNovo()
     {
         return $this->existentNovo;
+    }
+    
+    /**
+     * Set infoValidatedAt
+     *
+     * @param \DateTime $infoValidatedAt
+     *
+     * @return Employer
+     */
+    public function setInfoValidatedAt($infoValidatedAt)
+    {
+        $this->infoValidatedAt = $infoValidatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get infoValidatedAt
+     *
+     * @return \DateTime
+     */
+    public function getInfoValidatedAt()
+    {
+        return $this->infoValidatedAt;
+    }
+
+    /**
+     * Set validatedEmailSentAt
+     *
+     * @param \DateTime $validatedEmailSentAt
+     *
+     * @return Employer
+     */
+    public function setValidatedEmailSentAt($validatedEmailSentAt)
+    {
+        $this->validatedEmailSentAt = $validatedEmailSentAt;
+
+        return $this;
+    }
+
+    /**
+     * Get validatedEmailSentAt
+     *
+     * @return \DateTime
+     */
+    public function getValidatedEmailSentAt()
+    {
+        return $this->validatedEmailSentAt;
+    }
+
+    /**
+     * Set errorEmailSentAt
+     *
+     * @param \DateTime $errorEmailSentAt
+     *
+     * @return Employer
+     */
+    public function setErrorEmailSentAt($errorEmailSentAt)
+    {
+        $this->ErrorEmailSentAt = $errorEmailSentAt;
+
+        return $this;
+    }
+
+    /**
+     * Get errorEmailSentAt
+     *
+     * @return \DateTime
+     */
+    public function getErrorEmailSentAt()
+    {
+        return $this->ErrorEmailSentAt;
+    }
+
+
+    /**
+     * Set infoErrorAt
+     *
+     * @param \DateTime $infoErrorAt
+     *
+     * @return Employer
+     */
+    public function setInfoErrorAt($infoErrorAt)
+    {
+        $this->infoErrorAt = $infoErrorAt;
+
+        return $this;
+    }
+
+    /**
+     * Get infoErrorAt
+     *
+     * @return \DateTime
+     */
+    public function getInfoErrorAt()
+    {
+        return $this->infoErrorAt;
+    }
+
+    /**
+     * Set documentStatusType
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\DocumentStatusType $documentStatus
+     *
+     * @return Employer
+     */
+    public function setDocumentStatus(\RocketSeller\TwoPickBundle\Entity\DocumentStatusType $documentStatus = null)
+    {
+        $this->documentStatus= $documentStatus;
+        $this->status = $documentStatus->getName();
+        return $this;
+    }
+
+    /**
+     * Get documentStatus
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\DocumentStatusType
+     */
+    public function getDocumentStatus()
+    {
+        return $this->documentStatus;
+    }
+
+    /**
+     * Set allDocsReadyAt
+     *
+     * @param \DateTime $allDocsReadyAt
+     *
+     * @return Employer
+     */
+    public function setAllDocsReadyAt($allDocsReadyAt)
+    {
+        $this->allDocsReadyAt = $allDocsReadyAt;
+
+        return $this;
+    }
+
+    /**
+     * Get allDocsReadyAt
+     *
+     * @return \DateTime
+     */
+    public function getAllDocsReadyAt()
+    {
+        return $this->allDocsReadyAt;
+    }
+
+    /**
+     * Set status
+     *
+     * @param string $status
+     *
+     * @return Employer
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }

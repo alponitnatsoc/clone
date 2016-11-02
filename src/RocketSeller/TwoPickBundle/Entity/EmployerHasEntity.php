@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Entity;
 
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -47,7 +48,14 @@ class EmployerHasEntity
      */
     private $employerEmployer;
 
-
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Document
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Document")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="radicated_id_document", referencedColumnName="id_document")
+     * })
+     */
+    private $radicatedDocument;
 
     /**
      * Set idEmployerHasEntity
@@ -143,5 +151,29 @@ class EmployerHasEntity
     public function getState()
     {
         return $this->state;
+    }
+
+    /**
+     * Set radicatedDocument
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Document $radicatedDocument
+     *
+     * @return EmployerHasEntity
+     */
+    public function setRadicatedDocument(\RocketSeller\TwoPickBundle\Entity\Document $radicatedDocument = null)
+    {
+        $this->radicatedDocument = $radicatedDocument;
+
+        return $this;
+    }
+
+    /**
+     * Get radicatedDocument
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Document
+     */
+    public function getRadicatedDocument()
+    {
+        return $this->radicatedDocument;
     }
 }

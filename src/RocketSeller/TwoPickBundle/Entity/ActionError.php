@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use DateTime;
 
 /**
  * ActionError
@@ -44,6 +45,10 @@ class ActionError
      */
     private $action;
 
+    /**
+     * @ORM\Column(name="solved_at",type="datetime", nullable=true)
+     */
+    private $solvedAt;
 
     /**
      * Get id
@@ -89,7 +94,9 @@ class ActionError
     public function setStatus($status)
     {
         $this->status = $status;
-
+        if($status == 'solved'){
+            $this->solvedAt = new DateTime();
+        }
         return $this;
     }
 
@@ -125,5 +132,29 @@ class ActionError
     public function getAction()
     {
         return $this->action;
+    }
+
+    /**
+     * Set solvedAt
+     *
+     * @param \DateTime $solvedAt
+     *
+     * @return ActionError
+     */
+    public function setSolvedAt($solvedAt)
+    {
+        $this->solvedAt = $solvedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get solvedAt
+     *
+     * @return \DateTime
+     */
+    public function getSolvedAt()
+    {
+        return $this->solvedAt;
     }
 }

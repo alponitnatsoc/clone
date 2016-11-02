@@ -3,8 +3,10 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use DateTime;
+use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Controller\FOSRestController;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use FOS\RestBundle\Request\ParamFetcher;
 use RocketSeller\TwoPickBundle\Entity\Action;
 use RocketSeller\TwoPickBundle\Entity\ActionType;
 use RocketSeller\TwoPickBundle\Entity\Configuration;
@@ -35,6 +37,148 @@ class ActionsRestController extends FOSRestController
     use EmployeeMethodsTrait;
 
     /**
+     * Calculate procedure status
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Runs calculateProcedureStatus to all procedures",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors",
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function postCalculateProceduresStatusAction(){
+        $response = "Comienza<br>";
+        $change = false;
+        $em = $this->getDoctrine()->getManager();
+        $procedures = $em->getRepository("RocketSellerTwoPickBundle:RealProcedure")->findAll();
+        foreach ($procedures as $procedure) {
+            if($this->calculateProcedureStatus($procedure,true)==1){
+                $em->persist($procedure);
+                $change = true;
+            }
+        }
+        if($change)$em->flush();
+        $response .= "Estados actualizados<br>";
+        $view = View::create();
+        $view->setData($response)->setStatusCode(200);
+        return $view;
+    }
+
+    /**
+     * Calculate procedure priority
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Runs calculateProcedurePriority to all procedures",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors",
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher
+     *
+     * @RequestParam(name="begin", description="Recibe el numero menor")
+     * @RequestParam(name="end", description="Recibe el numero mayor")
+     *
+     * @return View
+     *
+     */
+    public function postCalculateProceduresPriorityAction(ParamFetcher $paramFetcher){
+        $begin = ($paramFetcher->get('begin'));
+        $end = ($paramFetcher->get('end'));
+        $response = "Comienza<br>";
+        $change = false;
+        $em = $this->getDoctrine()->getManager();
+        $procedures = $em->getRepository("RocketSellerTwoPickBundle:RealProcedure")->findAll();
+        $count = 1;
+        foreach ($procedures as $procedure) {
+            if($count >= $begin and $count<=$end){
+                if($this->calculateProcedurePriority($procedure,true)==1){
+                    $em->persist($procedure);
+                    $change = true;
+                }
+
+            }
+            if($count%10 == 0){
+                if($count >= $begin and $count<=$end){
+                    if($change){
+                        $response .= "grupo de ".($count - 9)." a ". $count ." Actualizado <br>";
+                        $em->flush();
+                    }else{
+                        $response .= "grupo de ". ($count - 9) ." a ". $count ." No tenia cambios <br>";
+                    }
+                }
+                $change = false;
+            }
+            $count++;
+
+        }
+        if($count >= $begin and $count<=$end) {
+            if ($change) {
+                $response .= "grupo hasta " . $count . " Actualizado <br>";
+                $em->flush();
+            }
+        }
+
+        $response .= "Prioridades actualizadas<br>";
+        $view = View::create();
+        $view->setData($response)->setStatusCode(200);
+        return $view;
+    }
+
+    /**
+     * Calculate Documents Status
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Runs CalculateDocumentsStatus to all procedures",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors",
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher
+     *
+     * @RequestParam(name="begin", description="Recibe el numero menor")
+     * @RequestParam(name="end", description="Recibe el numero mayor")
+     *
+     * @return View
+     *
+     */
+    public function postCalculateDocumentsStatusAction(ParamFetcher $paramFetcher){
+        $begin = ($paramFetcher->get('begin'));
+        $end = ($paramFetcher->get('end'));
+        $response = "Comienza<br>";
+        $em = $this->getDoctrine()->getManager();
+        $ehes = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")->findAll();
+        foreach ($ehes as $ehe) {
+            $ehe->setDocumentStatus(null);
+            $em->persist($ehe);
+        }
+        $procedures = $em->getRepository("RocketSellerTwoPickBundle:RealProcedure")->findAll();
+        $count = 1;
+        foreach ($procedures as $procedure) {
+            if($count >= $begin and $count<=$end and $count%2 != 0){
+                if($this->calculateDocumentStatus($procedure)==1){
+                    $em->persist($procedure);
+                }
+            }
+            $count++;
+        }
+        $em->flush();
+        $response .= "Estados de documentos actualizadas<br>";
+        $view = View::create();
+        $view->setData($response)->setStatusCode(200);
+        return $view;
+    }
+
+    /**
      * recreate actionTypes table
      *
      * @ApiDoc(
@@ -51,6 +195,10 @@ class ActionsRestController extends FOSRestController
     public function postRecreateActionTypesAction(){
         $response = "Comienza<br>";
         $em = $this->getDoctrine()->getManager();
+        foreach ($em->getRepository("RocketSellerTwoPickBundle:ActionError")->findAll() as $actionError) {
+            $em->remove($actionError);
+        }
+        $em->flush();
         foreach ($em->getRepository("RocketSellerTwoPickBundle:Action")->findAll() as $action){
             $em->remove($action);
         }
@@ -529,6 +677,79 @@ class ActionsRestController extends FOSRestController
     }
 
     /**
+     * Create Procedures
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Runs Create Procedures in range passed by param",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors",
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher
+     *
+     * @RequestParam(name="begin", description="Recibe el numero menor")
+     * @RequestParam(name="end", description="Recibe el numero mayor")
+     * @RequestParam(name="nCount", description="numero de notificaciones")
+     * @RequestParam(name="pCount", description="numero de realProcedures")
+     * @RequestParam(name="aCount", description="numero de actions")
+     *
+     * @return View
+     *
+     */
+    public function postRecreateProceduresByRangeAction(ParamFetcher $paramFetcher){
+        $begin = ($paramFetcher->get('begin'));
+        $end = ($paramFetcher->get('end'));
+        $nCount = ($paramFetcher->get('nCount'));
+        $pCount = ($paramFetcher->get('pCount'));
+        $aCount = ($paramFetcher->get('aCount'));
+        $response = "Comienza<br>";
+        $count = 1;
+        $em = $this->getDoctrine()->getManager();
+        $users = $em->getRepository("RocketSellerTwoPickBundle:User")->findAll();
+        /** @var User $user */
+        foreach ($users as $user) {
+            if($count>=$begin and $count<=$end){
+                try {
+                    $response .= "- - - USUARIO ".$count.": " . $user->getPersonPerson()->getFullName() . " - - -<br>";
+                    if ($user->getStatus() >= 2) {
+                        /**
+                         * ╔══════════════════════════════════════════════════╗
+                         * ║ creating user RealProcedures                     ║
+                         * ╚══════════════════════════════════════════════════╝
+                         */
+                        $response .= "- - - CREANDO TRAMITES - - -<br>";
+                        if ($user->getRealProcedure()->isEmpty()) {
+                            $result = $this->createProcedure($user, $pCount, $aCount, $nCount);
+                            $response .= $result['response'];
+                            $pCount = $result['pCount'];
+                            $aCount = $result['aCount'];
+                            $nCount = $result['nCount'];
+                        } else {
+                            $response .= "- - - YA EXISTEN TRAMITES - - -<br><br>";
+                        }
+                    } else {
+                        $response .= "- - - NO HA TERMINADO 3 DE 3 - - -<br><br>";
+                    }
+                } catch (Exception $e) {
+                    $response .= "Error en el usuario: " . $user->getPersonPerson()->getFullName()
+                        . "<br><strong>Error: </strong>" . $e->getCode() . " " . $e->getMessage() . "<br>";
+                }
+            }
+            $count++;
+        }
+        $response .= "pCount = ".$pCount."<br>";
+        $response .= "nCount = ".$nCount."<br>";
+        $response .= "aCount = ".$aCount."<br>";
+        $em->flush();
+        $view = View::create();
+        $view->setData($response)->setStatusCode(200);
+        return $view;
+    }
+
+    /**
      * recreate Procedures and actions in the DB
      *
      * @ApiDoc(
@@ -578,6 +799,8 @@ class ActionsRestController extends FOSRestController
                 $em->remove($notification);
             if($notification->getDocumentTypeDocumentType()==$this->getDocumentTypeByCode('CE'))
                 $em->remove($notification);
+            if($notification->getDocumentTypeDocumentType()==$this->getDocumentTypeByCode('CE'))
+                $em->remove($notification);
             if($notification->getDocumentTypeDocumentType()==$this->getDocumentTypeByCode('TI'))
                 $em->remove($notification);
             if($notification->getDocumentTypeDocumentType()==$this->getDocumentTypeByCode('RUT'))
@@ -589,6 +812,8 @@ class ActionsRestController extends FOSRestController
             if($notification->getDocumentTypeDocumentType()==$this->getDocumentTypeByCode('FIRM'))
                 $em->remove($notification);
             if($notification->getDocumentTypeDocumentType()==$this->getDocumentTypeByCode('CTR'))
+                $em->remove($notification);
+            if($notification->getDocumentTypeDocumentType()==$this->getDocumentTypeByCode('PASAPORTE'))
                 $em->remove($notification);
             if($notification->getRelatedLink()!=null){
                 $exstr = explode("/",$notification->getRelatedLink());
@@ -619,48 +844,6 @@ class ActionsRestController extends FOSRestController
             $nCount++;//increment notificationId Count
         }
         $em->flush();
-
-        $response.= "- - - ELEMENTOS ELIMINADOS - - -<br><br>";
-
-        $users = $em->getRepository("RocketSellerTwoPickBundle:User")->findAll();
-        $count = 1;
-        $pCount = 1;
-        $aCount = 1;
-        /** @var User $user */
-        foreach ($users as $user) {
-            try {
-                $response .= "- - - USUARIO ".$count.": " . $user->getPersonPerson()->getFullName() . " - - -<br>";
-                if ($user->getStatus() >= 2) {
-                    /**
-                     * ╔══════════════════════════════════════════════════╗
-                     * ║ creating user RealProcedures                     ║
-                     * ╚══════════════════════════════════════════════════╝
-                     */
-                    $response .= "- - - CREANDO TRAMITES - - -<br>";
-                    $count++;
-                    if ($user->getRealProcedure()->isEmpty()) {
-                        $result = $this->createProcedure($user, $pCount, $aCount, $nCount);
-                        $response .= $result['response'];
-                        $pCount = $result['pCount'];
-                        $aCount = $result['aCount'];
-                        $nCount = $result['nCount'];
-                    } else {
-                        $response .= "- - - YA EXISTEN TRAMITES - - -<br><br>";
-                    }
-                } else {
-                    $response .= "- - - NO HA TERMINADO 3 DE 3 - - -<br><br>";
-                }
-            } catch (Exception $e) {
-                $response .= "Error en el usuario: " . $user->getPersonPerson()->getFullName()
-                    . "<br><strong>Error: </strong>" . $e->getCode() . " " . $e->getMessage() . "<br>";
-            }
-        }
-        $em->flush();
-
-        foreach ($em->getRepository("RocketSellerTwoPickBundle:Log")->findAll() as $log) {
-            $em->remove($log);
-        }
-        $em->flush();
         $view = View::create();
         $view->setData($response)->setStatusCode(200);
         return $view;
@@ -681,15 +864,24 @@ class ActionsRestController extends FOSRestController
      * @return View
      */
     public function postSaveProceduresDataAction(){
+        $response = "Comienza<br>";
         $em =$this->getDoctrine()->getManager();
         $procedures = $em->getRepository("RocketSellerTwoPickBundle:RealProcedure")->findAll();
         /** @var RealProcedure $procedure */
         foreach ($procedures as $procedure) {
             $log = new Log($procedure->getUserUser(),"RealProcedure","createdAt",$procedure->getIdProcedure(),$procedure->getCreatedAt()->format("Y-m-d H:i:s"),"",null);
             $em->persist($log);
+            /** @var Action $action */
+            $response.= count($procedure->getAction())."<br>";
+            foreach ($procedure->getAction() as $action) {
+                if($action->getStatus()=='Error'){
+                    $log2 = new Log($procedure->getUserUser(),"Action",'Status',$action->getIdAction(),$action->getStatus(),'',$action->getActionTypeCode().':'.$action->getPersonPerson()->getIdPerson());
+                    $em->persist($log2);
+                }
+            }
         }
         $em->flush();
-        $response = "termino<br>";
+        $response .= "termino<br>";
         $view = View::create();
         $view->setData($response)->setStatusCode(200);
         return $view;
@@ -915,13 +1107,18 @@ class ActionsRestController extends FOSRestController
                     $action->setUpdatedAt();
                     if($employerHasEmployee->getActiveContract()->getDocumentDocument()){//if document exist
                         if($employerHasEmployee->getActiveContract()->getDocumentDocument()->getMediaMedia()){//searching for media
-                            $action->setActionStatus($this->getStatusByType('NEW'));//if contract document exist in DB
+                            if($this->getErrorInLog($procedure->getUserUser(),$employerHasEmployee->getEmployeeEmployee()->getPersonPerson(),'VC')){
+                                $action->setActionStatus($this->getStatusByType('ERRO'));//if contract document exist in DB
+                            }else{
+                                $action->setActionStatus($this->getStatusByType('NEW'));//if contract document exist in DB
+                            }
+
                         }else{//if not media found error
                             $action->setActionStatus($this->getStatusByType('ERRO'));
                             $response .= "- - - - ERROR: DOCUMENTO CONTRATO NO ENCONTRADO - - - - <br>";
                             $docType = $this->getDocumentTypeByCode('CTR');
-                            $notifications = $person->getNotificationByDocumentType($docType);//finding contract notifications for the person
-                            if($notifications->isEmpty()){//if notification not found
+                            $notifications = $this->getNotificationByPersonAndOwnerAndDocumentType($person,$employerHasEmployee->getEmployeeEmployee()->getPersonPerson(),$docType);//finding contract notifications for the person
+                            if($notifications== null){//if notification not found
                                 if($employerHasEmployee->getLegalFF()==1){//its ancient
                                     $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
                                     $utils = $this->get('app.symplifica_utils');
@@ -1009,8 +1206,8 @@ class ActionsRestController extends FOSRestController
                         $action->setActionStatus($this->getStatusByType('CTPE'));
                         $response .= "- - - - ERROR: DOCUMENTO CONTRATO NO ENCONTRADO - - - - <br>";
                         $docType = $this->getDocumentTypeByCode('CTR');
-                        $notifications = $employer->getPersonPerson()->getNotificationByDocumentType($docType);
-                        if($notifications->isEmpty()){
+                        $notifications = $this->getNotificationByPersonAndOwnerAndDocumentType($person,$employerHasEmployee->getEmployeeEmployee()->getPersonPerson(),$docType);
+                        if($notifications== null){
                             if($employerHasEmployee->getLegalFF()==1){//its ancient
                                 $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
                                 $utils = $this->get('app.symplifica_utils');
@@ -1106,8 +1303,8 @@ class ActionsRestController extends FOSRestController
                 }else{//employerHasEmployee doesn't exist in SQL
                     $response .= "- - - - NO EXISTE SQL - - - -<br>";
                     $docType = $this->getDocumentTypeByCode('CTR');
-                    $notifications = $employer->getPersonPerson()->getNotificationByDocumentType($docType);
-                    if($notifications->isEmpty()){
+                    $notifications = $this->getNotificationByPersonAndOwnerAndDocumentType($person,$employerHasEmployee->getEmployeeEmployee()->getPersonPerson(),$docType);
+                    if($notifications== null){
                         $response .= "- - - - ERROR: DOCUMENTO CONTRATO NO ENCONTRADO - - - - <br>";
                         if($employerHasEmployee->getLegalFF()==1){//its ancient
                             $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
@@ -1260,7 +1457,11 @@ class ActionsRestController extends FOSRestController
             $action->setActionStatus($this->getStatusByType('CON'));//setting the initial state disable
         }else{
             if ($employer->getIdSqlSociety()) {//if the employer exist in SQL info must be correct
-                $action->setActionStatus($this->getStatusByType('NEW'));//setting the Action Status to NEW
+                if($this->getErrorInLog($procedure->getUserUser(),$employer->getPersonPerson(),'VER')){
+                    $action->setActionStatus($this->getStatusByType('ERRO'));
+                }else {
+                    $action->setActionStatus($this->getStatusByType('NEW'));//setting the Action Status to NEW
+                }
             } else {//else info need to be checked by backoffice
                 $action->setActionStatus($this->getStatusByType('ERRO'));//setting the Action Status to ERRO
             }
@@ -1291,14 +1492,18 @@ class ActionsRestController extends FOSRestController
         }else{
             if ($employer->getPersonPerson()->getDocumentDocument()) {//if employer has documentDocument checking for existing media
                 if ($employer->getPersonPerson()->getDocumentDocument()->getMediaMedia()) {
-                    $action->setActionStatus($this->getStatusByType('NEW'));//if media found setting the action status to new
+                    if($this->getErrorInLog($procedure->getUserUser(),$employer->getPersonPerson(),'VDDE')){
+                        $action->setActionStatus($this->getStatusByType('ERRO'));
+                    }else {
+                        $action->setActionStatus($this->getStatusByType('NEW'));//if media found setting the action status to new
+                    }
                 } else {//if media not found changing action status to error
                     $action->setActionStatus($this->getStatusByType('ERRO'));//if media not found setting action status to error
                     //finding the notification to upload the document
                     $response .= "- - - - ERROR: DOCUMENTO DE IDENTIDAD NO ENCONTRADO - - - - <br>";
                     $docType = $this->getDocumentTypeByCode($person->getDocumentType());
-                    $notifications = $employer->getPersonPerson()->getNotificationByDocumentType($docType);
-                    if($notifications->isEmpty()){
+                    $notifications = $this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$person,$docType);
+                    if($notifications== null){
                         $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
                         $utils = $this->get('app.symplifica_utils');
                         $dAction=null;
@@ -1335,8 +1540,8 @@ class ActionsRestController extends FOSRestController
                 //finding the notification to upload the document
                 $response .= "- - - - ERROR: DOCUMENTO DE IDENTIDAD NO ENCONTRADO - - - - <br>";
                 $docType = $this->getDocumentTypeByCode($person->getDocumentType());
-                $notifications = $employer->getPersonPerson()->getNotificationByDocumentType($docType);
-                if($notifications->isEmpty()){
+                $notifications = $this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$person,$docType);
+                if($notifications== null){
                     $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
                     $utils = $this->get('app.symplifica_utils');
                     $dAction=null;
@@ -1399,13 +1604,17 @@ class ActionsRestController extends FOSRestController
         }else{
             if ($employer->getPersonPerson()->getRutDocument()) {//if employer has RutDocument checking for existing media
                 if ($employer->getPersonPerson()->getRutDocument()->getMediaMedia()) {
-                    $action->setActionStatus($this->getStatusByType('NEW'));//if media found setting the action status to new
+                    if($this->getErrorInLog($procedure->getUserUser(),$employer->getPersonPerson(),'VRTE')){
+                        $action->setActionStatus($this->getStatusByType('ERRO'));
+                    }else {
+                        $action->setActionStatus($this->getStatusByType('NEW'));//if media found setting the action status to new
+                    }
                 } else {//if media not found changing action status to error
                     $action->setActionStatus($this->getStatusByType('ERRO'));//if media not found setting action status to error
                     $response .= "- - - - ERROR: RUT NO ENCONTRADO - - - - <br>";
                     $docType = $this->getDocumentTypeByCode('RUT');
-                    $notifications = $employer->getPersonPerson()->getNotificationByDocumentType($docType);
-                    if($notifications->isEmpty()){
+                    $notifications = $this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$person,$docType);
+                    if($notifications== null){
                         $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
                         $utils = $this->get('app.symplifica_utils');
                         $dAction=null;
@@ -1441,8 +1650,8 @@ class ActionsRestController extends FOSRestController
                 $action->setActionStatus($this->getStatusByType('DCPE'));//changing the action status to document pending
                 $response .= "- - - - ERROR: RUT NO ENCONTRADO - - - - <br>";
                 $docType = $this->getDocumentTypeByCode('RUT');
-                $notifications = $employer->getPersonPerson()->getNotificationByDocumentType($docType);
-                if($notifications->isEmpty()){
+                $notifications = $this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$person,$docType);
+                if($notifications== null){
                     $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
                     $utils = $this->get('app.symplifica_utils');
                     $dAction=null;
@@ -1499,15 +1708,19 @@ class ActionsRestController extends FOSRestController
         $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
         if ($employer->getMandatoryDocument()) {//if employer has mandatoryDocument checking for existing media
             if ($employer->getMandatoryDocument()->getMediaMedia()) {
-                $action->setActionStatus($this->getStatusByType('NEW'));//if media found setting the action status to new
+                if($this->getErrorInLog($procedure->getUserUser(),$employer->getPersonPerson(),'VM')){
+                    $action->setActionStatus($this->getStatusByType('ERRO'));
+                }else {
+                    $action->setActionStatus($this->getStatusByType('NEW'));//if media found setting the action status to new
+                }
             } else {//if media not found changing action status to error
                 $action->setActionStatus($this->getStatusByType('ERRO'));//if media not found setting action status to error
                 $response .= "- - - - ERROR: MANDATO NO ENCONTRADO - - - - <br>";
                 //finding the notification to upload the document
                 $response .= "- - - - ERROR: MANDATO NO ENCONTRADO - - - - <br>";
                 $docType = $this->getDocumentTypeByCode('MAND');
-                $notifications = $employer->getPersonPerson()->getNotificationByDocumentType($docType);
-                if($notifications->isEmpty()){
+                $notifications = $this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$person,$docType);
+                if($notifications== null){
                     $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
                     $utils = $this->get('app.symplifica_utils');
                     $msj = "Subir mandato firmado de " .$utils->mb_capitalize(explode(" ",$employer->getPersonPerson()->getNames())[0]." ". $employer->getPersonPerson()->getLastName1());
@@ -1544,8 +1757,8 @@ class ActionsRestController extends FOSRestController
             //finding the notification to upload the document
             $response .= "- - - - ERROR: MANDATO NO ENCONTRADO - - - - <br>";
             $docType = $this->getDocumentTypeByCode('MAND');
-            $notifications = $employer->getPersonPerson()->getNotificationByDocumentType($docType);
-            if($notifications->isEmpty()){
+            $notifications = $this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$person,$docType);
+            if($notifications== null){
                 $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
                 $utils = $this->get('app.symplifica_utils');
                 $msj = "Subir mandato firmado de " .$utils->mb_capitalize(explode(" ",$employer->getPersonPerson()->getNames())[0]." ". $employer->getPersonPerson()->getLastName1());
@@ -1599,11 +1812,17 @@ class ActionsRestController extends FOSRestController
             $user->addAction($action);//adding the action to the user
             if ($employerHasEntity->getState() == 0) {//validate entity
                 $action->setActionTypeActionType($this->getActionByType('VENE'));//setting actionType to validate entity
+                $code = 'VENE';
             } elseif ($employerHasEntity->getState() == 1) {//subscribe entity
                 $action->setActionTypeActionType($this->getActionByType('INE'));//setting actionType to validate entity
+                $code = 'INE';
             }
             $action->setEmployerEntity($employerHasEntity);
-            $action->setActionStatus($this->getStatusByType('NEW'));//setting the action status to new
+            if($this->getErrorInLog($procedure->getUserUser(),$employer->getPersonPerson(),$code)){
+                $action->setActionStatus($this->getStatusByType('ERRO'));
+            }else {
+                $action->setActionStatus($this->getStatusByType('NEW'));//setting the action status to new
+            }
             $action->setUpdatedAt();//setting the action updatedAt Date
             $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
             if ($aCount != null) {//if there is a parameter for the id
@@ -1655,7 +1874,11 @@ class ActionsRestController extends FOSRestController
             $action->setUpdatedAt();//setting the action updatedAt Date
             $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
             if ($employer->getIdSqlSociety()) {//if the employer exist in SQL info must be correct
-                $action->setActionStatus($this->getStatusByType('NEW'));//setting the Action Status to NEW
+                if($this->getErrorInLog($procedure->getUserUser(),$employer->getPersonPerson(),'VER')){
+                    $action->setActionStatus($this->getStatusByType('ERRO'));
+                }else {
+                    $action->setActionStatus($this->getStatusByType('NEW'));//setting the Action Status to NEW
+                }
             } else {//else info need to be checked by backoffice
                 $action->setActionStatus($this->getStatusByType('ERRO'));//setting the Action Status to ERRO
             }
@@ -1683,14 +1906,18 @@ class ActionsRestController extends FOSRestController
             $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
             if ($employer->getPersonPerson()->getDocumentDocument()) {//if employer has documentDocument checking for existing media
                 if ($employer->getPersonPerson()->getDocumentDocument()->getMediaMedia()) {
-                    $action->setActionStatus($this->getStatusByType('NEW'));//if media found setting the action status to new
+                    if($this->getErrorInLog($procedure->getUserUser(),$employer->getPersonPerson(),'VDDE')){
+                        $action->setActionStatus($this->getStatusByType('ERRO'));
+                    }else {
+                        $action->setActionStatus($this->getStatusByType('NEW'));//if media found setting the action status to new
+                    }
                 } else {//if media not found changing action status to error
                     $action->setActionStatus($this->getStatusByType('ERRO'));//if media not found setting action status to error
                     //finding the notification to upload the document
                     $response .= "- - - - ERROR: DOCUMENTO DE IDENTIDAD NO ENCONTRADO - - - - <br>";
                     $docType = $this->getDocumentTypeByCode($person->getDocumentType());
-                    $notifications = $employer->getPersonPerson()->getNotificationByDocumentType($docType);
-                    if($notifications->isEmpty()){
+                    $notifications = $this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$person,$docType);
+                    if($notifications== null){
                         $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
                         $utils = $this->get('app.symplifica_utils');
                         $dAction=null;
@@ -1727,8 +1954,8 @@ class ActionsRestController extends FOSRestController
                 //finding the notification to upload the document
                 $response .= "- - - - ERROR: DOCUMENTO DE IDENTIDAD NO ENCONTRADO - - - - <br>";
                 $docType = $this->getDocumentTypeByCode($person->getDocumentType());
-                $notifications = $employer->getPersonPerson()->getNotificationByDocumentType($docType);
-                if($notifications->isEmpty()){
+                $notifications = $this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$person,$docType);
+                if($notifications== null){
                     $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
                     $utils = $this->get('app.symplifica_utils');
                     $dAction=null;
@@ -1784,14 +2011,18 @@ class ActionsRestController extends FOSRestController
             $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
             if ($employer->getPersonPerson()->getRutDocument()) {//if employer has RutDocument checking for existing media
                 if ($employer->getPersonPerson()->getRutDocument()->getMediaMedia()) {
-                    $action->setActionStatus($this->getStatusByType('NEW'));//if media found setting the action status to new
+                    if($this->getErrorInLog($procedure->getUserUser(),$employer->getPersonPerson(),'VRTE')){
+                        $action->setActionStatus($this->getStatusByType('ERRO'));
+                    }else {
+                        $action->setActionStatus($this->getStatusByType('NEW'));//if media found setting the action status to new
+                    }
                 } else {//if media not found changing action status to error
                     $action->setActionStatus($this->getStatusByType('ERRO'));//if media not found setting action status to error
                     //finding the notification to upload the document
                     $response .= "- - - - ERROR: RUT NO ENCONTRADO - - - - <br>";
                     $docType = $this->getDocumentTypeByCode('RUT');
-                    $notifications = $employer->getPersonPerson()->getNotificationByDocumentType($docType);
-                    if($notifications->isEmpty()){
+                    $notifications = $this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$person,$docType);
+                    if($notifications== null){
                         $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
                         $utils = $this->get('app.symplifica_utils');
                         $dAction=null;
@@ -1828,8 +2059,8 @@ class ActionsRestController extends FOSRestController
                 //finding the notification to upload the document
                 $response .= "- - - - ERROR: RUT NO ENCONTRADO - - - - <br>";
                 $docType = $this->getDocumentTypeByCode('RUT');
-                $notifications = $employer->getPersonPerson()->getNotificationByDocumentType($docType);
-                if($notifications->isEmpty()){
+                $notifications = $this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$person,$docType);
+                if($notifications == null ){
                     $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
                     $utils = $this->get('app.symplifica_utils');
                     $dAction=null;
@@ -1885,14 +2116,18 @@ class ActionsRestController extends FOSRestController
             $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
             if ($employer->getMandatoryDocument()) {//if employer has mandatoryDocument checking for existing media
                 if ($employer->getMandatoryDocument()->getMediaMedia()) {
-                    $action->setActionStatus($this->getStatusByType('NEW'));//if media found setting the action status to new
+                    if($this->getErrorInLog($procedure->getUserUser(),$employer->getPersonPerson(),'VM')){
+                        $action->setActionStatus($this->getStatusByType('ERRO'));
+                    }else {
+                        $action->setActionStatus($this->getStatusByType('NEW'));//if media found setting the action status to new
+                    }
                 } else {//if media not found changing action status to error
                     $action->setActionStatus($this->getStatusByType('ERRO'));//if media not found setting action status to error
                     //finding the notification to upload the document
                     $response .= "- - - - ERROR: MANDATO NO ENCONTRADO - - - - <br>";
                     $docType = $this->getDocumentTypeByCode('MAND');
-                    $notifications = $employer->getPersonPerson()->getNotificationByDocumentType($docType);
-                    if($notifications->isEmpty()){
+                    $notifications = $this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$person,$docType);
+                    if($notifications == null){
                         $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
                         $utils = $this->get('app.symplifica_utils');
                         $msj = "Subir mandato firmado de " .$utils->mb_capitalize(explode(" ",$employer->getPersonPerson()->getNames())[0]." ". $employer->getPersonPerson()->getLastName1());
@@ -1929,8 +2164,8 @@ class ActionsRestController extends FOSRestController
                 //finding the notification to upload the document
                 $response .= "- - - - ERROR: MANDATO NO ENCONTRADO - - - - <br>";
                 $docType = $this->getDocumentTypeByCode('MAND');
-                $notifications = $employer->getPersonPerson()->getNotificationByDocumentType($docType);
-                if($notifications->isEmpty()){
+                $notifications = $this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$person,$docType);
+                if($notifications == null ){
                     $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
                     $utils = $this->get('app.symplifica_utils');
                     $msj = "Subir mandato firmado de " .$utils->mb_capitalize(explode(" ",$employer->getPersonPerson()->getNames())[0]." ". $employer->getPersonPerson()->getLastName1());
@@ -1984,11 +2219,17 @@ class ActionsRestController extends FOSRestController
                 $user->addAction($action);//adding the action to the user
                 if ($employerHasEntity->getState() == 0) {//validate entity
                     $action->setActionTypeActionType($this->getActionByType('VENE'));//setting actionType to validate entity
+                    $code = 'VENE';
                 } elseif ($employerHasEntity->getState() == 1) {//subscribe entity
                     $action->setActionTypeActionType($this->getActionByType('INE'));//setting actionType to validate entity
+                    $code = 'INE';
                 }
                 $action->setEmployerEntity($employerHasEntity);
-                $action->setActionStatus($this->getStatusByType('NEW'));//setting the action status to new
+                if($this->getErrorInLog($procedure->getUserUser(),$employer->getPersonPerson(),$code)){
+                    $action->setActionStatus($this->getStatusByType('ERRO'));
+                }else {
+                    $action->setActionStatus($this->getStatusByType('NEW'));//setting the action status to new
+                }
                 $action->setUpdatedAt();//setting the action updatedAt Date
                 $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
                 if ($aCount != null) {//if there is a parameter for the id
@@ -2025,6 +2266,7 @@ class ActionsRestController extends FOSRestController
      */
     protected function createActionsEmployee(User $user,RealProcedure $procedure,EmployerHasEmployee $employerHasEmployee,$atLeastOneFinished,$aCount=null, $nCount=null){
         $response='- - - - - CREANDO ACCIONES EMPLEADO - - - - -<br>';
+        $employer = $employerHasEmployee->getEmployerEmployer();
         $employee = $employerHasEmployee->getEmployeeEmployee();
         $em = $this->getDoctrine()->getManager();
         /**
@@ -2040,7 +2282,7 @@ class ActionsRestController extends FOSRestController
         $action->setActionStatus($this->getStatusByType('DIS'));//setting the initial state disable
         $action->setUpdatedAt();//setting the action updatedAt Date
         $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
-        if ($employerHasEmployee->getExistentSQL()) {//if the employee exist in SQL info must be correct
+        if ($employerHasEmployee->getExistentSQL()==1) {//if the employee exist in SQL info must be correct
             $action->setActionStatus($this->getStatusByType('FIN'));//setting the Action Status to Finished
             if ($employerHasEmployee->getState() > 3 and !$atLeastOneFinished) {
                 $atLeastOneFinished = true;
@@ -2079,10 +2321,15 @@ class ActionsRestController extends FOSRestController
                     }
                 }
             }
-        } elseif ($employerHasEmployee->getState() > 3) {//else if the employee is finished info must have errors and need to be checked by backoffice
+
+        } elseif ($employerHasEmployee->getState() > 4) {//else if the employee is finished info must have errors and need to be checked by backoffice
             $action->setActionStatus($this->getStatusByType('ERRO'));//setting the Action Status to Error
         } else {
-            $action->setActionStatus($this->getStatusByType('NEW'));//setting the Action Status to new
+            if($this->getErrorInLog($procedure->getUserUser(),$employee->getPersonPerson(),'VEE')){
+                $action->setActionStatus($this->getStatusByType('ERRO'));
+            }else {
+                $action->setActionStatus($this->getStatusByType('NEW'));//setting the Action Status to new
+            }
         }
         if ($aCount != null) {//if there is a parameter for the id
             $action->setIdAction($aCount);//setting the action id
@@ -2107,17 +2354,21 @@ class ActionsRestController extends FOSRestController
         $action->setActionTypeActionType($this->getActionByType('VDD'));
         if ($employee->getPersonPerson()->getDocumentDocument()) {//if employee has documentDocument checking for existing media
             if ($employee->getPersonPerson()->getDocumentDocument()->getMediaMedia()) {
-                if ($employerHasEmployee->getState() > 3) {
+                if ($employerHasEmployee->getState() > 3 and $employerHasEmployee->getExistentSQL()==1) {
                     $action->setActionStatus($this->getStatusByType('FIN'));//if media found and state >3 employerHasEmployee finished set status to finish
                 } else {
-                    $action->setActionStatus($this->getStatusByType('NEW'));//if media found setting the action status to new
+                    if($this->getErrorInLog($procedure->getUserUser(),$employee->getPersonPerson(),'VDD')){
+                        $action->setActionStatus($this->getStatusByType('ERRO'));
+                    }else {
+                        $action->setActionStatus($this->getStatusByType('NEW'));//if media found setting the action status to new
+                    }
                 }
             } else {//if media not found changing action status to error
                 $action->setActionStatus($this->getStatusByType('ERRO'));//if media not found setting action status to error
                 $response .= "- - - - - ERROR: DOCUMENTO DE IDENTIDAD NO ENCONTRADO - - - - - <br>";
                 $docType = $this->getDocumentTypeByCode($employee->getPersonPerson()->getDocumentType());
-                $notifications = $employee->getPersonPerson()->getNotificationByDocumentType($docType);
-                if($notifications->isEmpty()){
+                $notifications = $this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$employee->getPersonPerson(),$docType);
+                if($notifications == null ){
                     $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
                     $utils = $this->get('app.symplifica_utils');
                     $dAction=null;
@@ -2153,8 +2404,8 @@ class ActionsRestController extends FOSRestController
             $action->setActionStatus($this->getStatusByType('DCPE'));//changing the action status to document pending
             $response .= "- - - - - ERROR: DOCUMENTO DE IDENTIDAD NO ENCONTRADO - - - - - <br>";
             $docType = $this->getDocumentTypeByCode($employee->getPersonPerson()->getDocumentType());
-            $notifications = $employee->getPersonPerson()->getNotificationByDocumentType($docType);
-            if($notifications->isEmpty()){
+            $notifications = $this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$employee->getPersonPerson(),$docType);
+            if($notifications == null){
                 $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
                 $utils = $this->get('app.symplifica_utils');
                 $dAction=null;
@@ -2209,17 +2460,21 @@ class ActionsRestController extends FOSRestController
         $action->setActionTypeActionType($this->getActionByType('VCAT'));
         if ($employerHasEmployee->getAuthDocument()) {//if employerHasEmployee has authLetter checking for existing media
             if ($employerHasEmployee->getAuthDocument()->getMediaMedia()) {
-                if ($employerHasEmployee->getState() > 3) {
+                if ($employerHasEmployee->getState() > 3 and $employerHasEmployee->getExistentSQL()==1) {
                     $action->setActionStatus($this->getStatusByType('FIN'));//if media found and state >3 employerHasEmployee finished set status to finish
                 } else {
-                    $action->setActionStatus($this->getStatusByType('NEW'));//if media found setting the action status to new
+                    if($this->getErrorInLog($procedure->getUserUser(),$employee->getPersonPerson(),'VCAT')){
+                        $action->setActionStatus($this->getStatusByType('ERRO'));
+                    }else {
+                        $action->setActionStatus($this->getStatusByType('NEW'));//if media found setting the action status to new
+                    }
                 }
             } else {//if media not found changing action status to error
                 $action->setActionStatus($this->getStatusByType('ERRO'));//if media not found setting action status to error
                 $response .= "- - - - - ERROR: CARTA DE AUTORIZACION NO ENCONTRADA - - - - - <br>";
                 $docType = $this->getDocumentTypeByCode('CAS');
-                $notifications = $employee->getPersonPerson()->getNotificationByDocumentType($docType);
-                if($notifications->isEmpty()){
+                $notifications = $this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$employee->getPersonPerson(),$docType);
+                if($notifications == null){
                     $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
                     $utils = $this->get('app.symplifica_utils');
                     $msj = "Subir autorización firmada de manejo de datos y afiliación de " .$utils->mb_capitalize(explode(" ",$employee->getPersonPerson()->getNames())[0]." ". $employee->getPersonPerson()->getLastName1());
@@ -2255,8 +2510,8 @@ class ActionsRestController extends FOSRestController
             $action->setActionStatus($this->getStatusByType('DCPE'));//changing the action status to document pending
             $response .= "- - - - - ERROR: CARTA DE AUTORIZACION NO ENCONTRADA - - - - - <br>";
             $docType = $this->getDocumentTypeByCode('CAS');
-            $notifications = $employee->getPersonPerson()->getNotificationByDocumentType($docType);
-            if($notifications->isEmpty()){
+            $notifications = $this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$employee->getPersonPerson(),$docType);
+            if($notifications== null){
                 $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
                 $utils = $this->get('app.symplifica_utils');
                 $dAction="Bajar";
@@ -2314,21 +2569,31 @@ class ActionsRestController extends FOSRestController
                 $action->setEmployeeEntity($employeeHasEntity);
                 if($employeeHasEntity->getState()==0){
                     $action->setActionTypeActionType($this->getActionByType('VEN'));
+                    $code = 'VEN';
                 }elseif($employeeHasEntity->getState() == 1){
                     $action->setActionTypeActionType($this->getActionByType('IN'));
+                    $code = 'IN';
                 }
-                if($employerHasEmployee->getExistentSQL()){
-                    if($employerHasEmployee->getState()>4){
+                if($employerHasEmployee->getExistentSQL() == 1){
+                    if($employerHasEmployee->getState()>3){
                         $action->setActionStatus($this->getStatusByType('FIN'));
                     }else{
-                        $action->setActionStatus($this->getStatusByType('NEW'));
+                        if($this->getErrorInLog($procedure->getUserUser(),$employee->getPersonPerson(),$code)){
+                            $action->setActionStatus($this->getStatusByType('ERRO'));
+                        }else {
+                            $action->setActionStatus($this->getStatusByType('NEW'));
+                        }
                     }
                 }else{
                     if($employerHasEmployee->getState()>4){
                         $action->setActionStatus($this->getStatusByType('ERRO'));
                         $response .= "- - - - - ERROR: EMPLEADO QUE NO EXISTE EN SQL Y ESTA TERMINADO - - - - - <br>";
                     }else{
-                        $action->setActionStatus($this->getStatusByType('NEW'));
+                        if($this->getErrorInLog($procedure->getUserUser(),$employee->getPersonPerson(),$code)){
+                            $action->setActionStatus($this->getStatusByType('ERRO'));
+                        }else {
+                            $action->setActionStatus($this->getStatusByType('NEW'));
+                        }
                     }
                 }
                 if ($aCount != null) {//if there is a parameter for the id
@@ -2366,6 +2631,7 @@ class ActionsRestController extends FOSRestController
     protected function createActionsEmployeeEmployee(User $user,RealProcedure $procedure,EmployerHasEmployee $employerHasEmployee,$atLeastOneFinished,$aCount=null, $nCount=null){
         $response='- - - - - CREANDO ACCIONES EMPLEADO - - - - -<br>';
         $employee = $employerHasEmployee->getEmployeeEmployee();
+        $employer = $employerHasEmployee->getEmployerEmployer();
         $em = $this->getDoctrine()->getManager();
         //Validate info must exist for this employee
         if($employee->getPersonPerson()->getActionsByActionType($this->getActionByType('VEE'))->isEmpty()){
@@ -2430,17 +2696,21 @@ class ActionsRestController extends FOSRestController
         $action->setActionTypeActionType($this->getActionByType('VCAT'));
         if ($employerHasEmployee->getAuthDocument()) {//if employerHasEmployee has authLetter checking for existing media
             if ($employerHasEmployee->getAuthDocument()->getMediaMedia()) {
-                if ($employerHasEmployee->getState() > 3) {
+                if ($employerHasEmployee->getState() > 3 and $employerHasEmployee->getExistentSQL()==1) {
                     $action->setActionStatus($this->getStatusByType('FIN'));//if media found and state >3 employerHasEmployee finished set status to finish
                 } else {
-                    $action->setActionStatus($this->getStatusByType('NEW'));//if media found setting the action status to new
+                    if($this->getErrorInLog($procedure->getUserUser(),$employee->getPersonPerson(),'VCAT')){
+                        $action->setActionStatus($this->getStatusByType('ERRO'));
+                    }else {
+                        $action->setActionStatus($this->getStatusByType('NEW'));//if media found setting the action status to new
+                    }
                 }
             } else {//if media not found changing action status to error
                 $action->setActionStatus($this->getStatusByType('ERRO'));//if media not found setting action status to error
                 $response .= "- - - - - ERROR: CARTA DE AUTORIZACION NO ENCONTRADA - - - - - <br>";
                 $docType = $this->getDocumentTypeByCode('CAS');
-                $notifications = $employee->getPersonPerson()->getNotificationByDocumentType($docType);
-                if($notifications->isEmpty()){
+                $notifications = $this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$employee->getPersonPerson(),$docType);
+                if($notifications== null){
                     $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
                     $utils = $this->get('app.symplifica_utils');
                     $dAction="Bajar";
@@ -2476,8 +2746,8 @@ class ActionsRestController extends FOSRestController
             $action->setActionStatus($this->getStatusByType('DCPE'));//changing the action status to document pending
             $response .= "- - - - - ERROR: CARTA DE AUTORIZACION NO ENCONTRADA - - - - - <br>";
             $docType = $this->getDocumentTypeByCode('CAS');
-            $notifications = $employee->getPersonPerson()->getNotificationByDocumentType($docType);
-            if($notifications->isEmpty()){
+            $notifications = $this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$employee->getPersonPerson(),$docType);
+            if($notifications== null){
                 $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
                 $utils = $this->get('app.symplifica_utils');
                 $dAction="Bajar";
@@ -2544,6 +2814,7 @@ class ActionsRestController extends FOSRestController
     protected function createActionsEmployeeEmployer(User $user,RealProcedure $procedure,EmployerHasEmployee $employerHasEmployee,$atLeastOneFinished,$aCount=null, $nCount=null){
         $response='- - - - - CREANDO ACCIONES EMPLEADO QUE ES EMPLEADOR - - - - -<br>';
         $employee = $employerHasEmployee->getEmployeeEmployee();
+        $employer = $employerHasEmployee->getEmployerEmployer();
         $em = $this->getDoctrine()->getManager();
         /**
          * ╔══════════════════════════════════════════════════╗
@@ -2558,7 +2829,7 @@ class ActionsRestController extends FOSRestController
         $action->setActionStatus($this->getStatusByType('CON'));//setting the initial state consulting
         $action->setUpdatedAt();//setting the action updatedAt Date
         $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
-        if ($employerHasEmployee->getExistentSQL()) {//if the employee exist in SQL info must be correct
+        if ($employerHasEmployee->getExistentSQL() == 1) {//if the employee exist in SQL info must be correct
             if ($employerHasEmployee->getState() > 3 and !$atLeastOneFinished) {
                 $atLeastOneFinished = true;
                 $response .= '- - - - - UN EMPLEADO FINALIZADO - - - - -<br>';
@@ -2642,17 +2913,21 @@ class ActionsRestController extends FOSRestController
         $action->setActionTypeActionType($this->getActionByType('VCAT'));
         if ($employerHasEmployee->getAuthDocument()) {//if employerHasEmployee has authLetter checking for existing media
             if ($employerHasEmployee->getAuthDocument()->getMediaMedia()) {
-                if ($employerHasEmployee->getState() > 3) {
+                if ($employerHasEmployee->getState() > 3 and $employerHasEmployee->getExistentSQL()==1) {
                     $action->setActionStatus($this->getStatusByType('FIN'));//if media found and state >3 employerHasEmployee finished set status to finish
                 } else {
-                    $action->setActionStatus($this->getStatusByType('NEW'));//if media found setting the action status to new
+                    if($this->getErrorInLog($procedure->getUserUser(),$employee->getPersonPerson(),'VCAT')){
+                        $action->setActionStatus($this->getStatusByType('ERRO'));
+                    }else {
+                        $action->setActionStatus($this->getStatusByType('NEW'));//if media found setting the action status to new
+                    }
                 }
             } else {//if media not found changing action status to error
                 $action->setActionStatus($this->getStatusByType('ERRO'));//if media not found setting action status to error
                 $response .= "- - - - - ERROR: CARTA DE AUTORIZACION NO ENCONTRADA - - - - - <br>";
                 $docType = $this->getDocumentTypeByCode('CAS');
-                $notifications = $employee->getPersonPerson()->getNotificationByDocumentType($docType);
-                if($notifications->isEmpty()){
+                $notifications = $this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$employee->getPersonPerson(),$docType);
+                if($notifications== null){
                     $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
                     $utils = $this->get('app.symplifica_utils');
                     $dAction="Bajar";
@@ -2688,8 +2963,8 @@ class ActionsRestController extends FOSRestController
             $action->setActionStatus($this->getStatusByType('DCPE'));//changing the action status to document pending
             $response .= "- - - - - ERROR: CARTA DE AUTORIZACION NO ENCONTRADA - - - - - <br>";
             $docType = $this->getDocumentTypeByCode('CAS');
-            $notifications = $employee->getPersonPerson()->getNotificationByDocumentType($docType);
-            if($notifications->isEmpty()){
+            $notifications = $this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$employee->getPersonPerson(),$docType);
+            if($notifications== null){
                 $response .= "- - - - CREANDO NOTIFICACION - - - - <br>";
                 $utils = $this->get('app.symplifica_utils');
                 $dAction="Bajar";
@@ -2746,14 +3021,20 @@ class ActionsRestController extends FOSRestController
                 $action->setCreatedAt($this->getDateCreatedInLog($user));//setting the Action createrAt Date
                 if($employeeHasEntity->getState()==0){
                     $action->setActionTypeActionType($this->getActionByType('VEN'));
+                    $code= 'VEN';
                 }elseif($employeeHasEntity->getState() == 1){
                     $action->setActionTypeActionType($this->getActionByType('IN'));
+                    $code = 'IN';
                 }
-                if($employerHasEmployee->getExistentSQL()){
-                    if($employerHasEmployee->setState()>4){
+                if($employerHasEmployee->getExistentSQL() == 1){
+                    if($employerHasEmployee->getState()>3 ){
                         $action->setActionStatus($this->getStatusByType('FIN'));
                     }else{
-                        $action->setActionStatus($this->getStatusByType('NEW'));
+                        if($this->getErrorInLog($procedure->getUserUser(),$employee->getPersonPerson(),$code)){
+                            $action->setActionStatus($this->getStatusByType('ERRO'));
+                        }else {
+                            $action->setActionStatus($this->getStatusByType('NEW'));
+                        }
                     }
                 }else{
                     if($employerHasEmployee->getState()>4){
@@ -2793,11 +3074,30 @@ class ActionsRestController extends FOSRestController
     }
 
     /**
-     * @param $code
-     * @return StatusTypes
+     * ╔═══════════════════════════════════════════════════════╗
+     * ║ Function getStatusByType                              ║
+     * ╠═══════════════════════════════════════════════════════╣
+     * ║  @param string $code of the statusType to find        ║
+     * ╠═══════════════════════════════════════════════════════╣
+     * ║  @return ProcedureType                                ║
+     * ╚═══════════════════════════════════════════════════════╝
      */
     protected function getStatusByType($code){
         return $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=> $code));
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function getActionTypeByActionTypeCode                        ║
+     * ║ Returns the StatusType that match the code send by parameter  ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param string $code                                          ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return object|\RocketSeller\TwoPickBundle\Entity\StatusTypes║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    protected function getActionStatusByStatusCode($code){
+        return $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>$code));
     }
 
     /**
@@ -2818,13 +3118,19 @@ class ActionsRestController extends FOSRestController
 
 
     /**
-     * @param User $user
-     * @return DateTime
+     * ╔═════════════════════════════════════════════════════════════════╗
+     * ║ Function getDateCreatedInLog                                    ║
+     * ║ Returns the date finded in log for the procedure creation       ║
+     * ╠═════════════════════════════════════════════════════════════════╣
+     * ║  @param User $user                                              ║
+     * ╠═════════════════════════════════════════════════════════════════╣
+     * ║  @return DateTime                                               ║
+     * ╚═════════════════════════════════════════════════════════════════╝
      */
     protected function getDateCreatedInLog(User $user){
         $em = $this->getDoctrine()->getManager();
         /** @var Log $log */
-        $log = $em->getRepository("RocketSellerTwoPickBundle:Log")->findOneBy(array("userUser"=>$user));
+        $log = $em->getRepository("RocketSellerTwoPickBundle:Log")->findOneBy(array("userUser"=>$user,'tableName'=>'RealProcedure'));
         if($log){
             $strDate = $log->getPreviousData();
             $date = DateTime::createFromFormat("Y-m-d H:i:s",$strDate);
@@ -2832,6 +3138,88 @@ class ActionsRestController extends FOSRestController
             $date = new DateTime();
         }
         return $date;
+    }
+
+    /**
+     * ╔═════════════════════════════════════════════════════════════════╗
+     * ║ Function getErrorInLog                                          ║
+     * ║ Returns true if the action has error                            ║
+     * ╠═════════════════════════════════════════════════════════════════╣
+     * ║  @param User $user                                              ║
+     * ║  @param Person $person                                          ║
+     * ║  @param string $code                                            ║
+     * ╠═════════════════════════════════════════════════════════════════╣
+     * ║  @return bool                                                   ║
+     * ╚═════════════════════════════════════════════════════════════════╝
+     */
+    protected function getErrorInLog(User $user, Person $person, $code){
+        $em = $this->getDoctrine()->getManager();
+        /** @var Log $log */
+        $log = $em->getRepository("RocketSellerTwoPickBundle:Log")->findOneBy(array("userUser"=>$user,'tableName'=>'Action'));
+        if($log){
+            $strEx = explode(':',$log->getMessage());
+            if(intval($strEx[1])==$person->getIdPerson()){
+                switch ($strEx[0]){
+                    case 'VER':
+                        //validar informacion
+                        if($code == 'VER'){
+                            return true;
+                        }else{
+                            return false;
+                        }
+                        break;
+                    case 'VEE':
+                        if($code == 'VEE'){
+                            return true;
+                        }else{
+                            return false;
+                        }
+                        //validar informacion empleado
+                        break;
+                    case 'VEN':
+                        if($code == 'VENE' or $code == 'VEN' ){
+                            return true;
+                        }else{
+                            return false;
+                        }
+                        //validar entidad
+                        break;
+                    case 'VDC':
+                        //validar documentos
+                        if($code == 'VDDE' or $code == 'VRTE' or $code == 'VRCE' or $code == 'VDD' or $code == 'VRT' or $code == 'VCAT' ){
+                            return true;
+                        }else{
+                            return false;
+                        }
+                        break;
+                    case 'IN':
+                        //inscribir entidad
+                        if($code == 'INE' or $code == 'IN' ){
+                            return true;
+                        }else{
+                            return false;
+                        }
+                        break;
+                    case 'VM':
+                        //validar mandato
+                        if($code == 'VM' ){
+                            return true;
+                        }else{
+                            return false;
+                        }
+                        break;
+                    case 'VC':
+                        //validar contrato
+                        if($code == 'VC' ){
+                            return true;
+                        }else{
+                            return false;
+                        }
+                        break;
+                }
+            }
+        }
+        return false;
     }
 
 
@@ -2873,6 +3261,497 @@ class ActionsRestController extends FOSRestController
             $em->persist($notification);;//persisting the procedure
         }
     }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function calculateProcedureStatus                             ║
+     * ║ Calculates de procedure Status if needed                      ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param RealProcedure $procedure                              ║
+     * ║  @param bool $force                                           ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return integer 0 if noting change 1 if something change     ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    protected function calculateProcedureStatus($procedure,$force = false)
+    {
+        if($procedure->getStatusUpdatedAt()==null or $procedure->getActionChangedAt()==null or $procedure->getStatusUpdatedAt()<$procedure->getActionChangedAt() or $force){
+            $today = new DateTime();
+            $type = $procedure->getProcedureTypeProcedureType()->getCode();
+            if($procedure->getActionChangedAt()==null){
+                $procedure->setActionChangedAt($today);
+            }
+            switch ($type){
+                case 'REE':
+                    /** @var Employer $emmployer */
+                    $emmployer = $procedure->getEmployerEmployer();
+                    //if employer have at least one active employerHasEmployee
+                    if(count($emmployer->getActiveEmployerHasEmployees())>0 and count($procedure->getAction())>0){
+                        $error=false;
+                        /** @var Action $actionError */
+                        $actionError = null;
+                        $corrected = false;
+                        /** @var Action $actionCorrected */
+                        $actionCorrected = null;
+                        $begin = false;
+                        $finish = true;
+                        $dcpe = false;
+                        $atLeastOne = false;
+                        $ehes = $procedure->getEmployerEmployer()->getEmployerHasEmployees();
+                        /** @var Action $action */
+                        /** @var EmployerHasEmployee $ehe */
+                        foreach ($ehes as $ehe) {
+                            $dcpe = false;
+                            foreach ($procedure->getActionsByEmployerHasEmployee($ehe) as $action) {
+                                if($action->getActionStatusCode()=='DCPE'){
+                                    $dcpe = true;
+                                    break;
+                                }
+                            }
+                            if(!$dcpe){
+                                $atLeastOne = true;
+                                break;
+                            }
+                        }
+                        if($atLeastOne){
+                            foreach ($procedure->getAction() as $action) {
+                                if($action->getActionStatusCode()=='ERRO'){
+                                    $error = true;
+                                    if($actionError==null or $action->getErrorAt()<$actionError->getErrorAt()){
+                                        $actionError = $action;
+                                    }
+                                }
+                                if($action->getActionStatusCode()=='CORT'){
+                                    $corrected = true;
+                                    if($actionCorrected==null or $action->getCorrectedAt()<$actionCorrected->getCorrectedAt()){
+                                        $actionCorrected=$action;
+                                    }
+                                }
+                                if($action->getActionStatusCode()=='FIN' and !$begin){
+                                    $begin = true;
+                                }
+                                if($action->getActionStatusCode()!='FIN' and $finish){
+                                    $finish = false;
+                                }
+                            }
+                            if($error and !$corrected){
+                                if($procedure->getErrorAt()!=$actionError->getErrorAt()){
+                                    $procedure->setErrorAt($actionError->getErrorAt());
+                                }
+                                if($procedure->getProcedureStatusCode()!='ERRO'){
+                                    $procedure->setProcedureStatus($this->getActionStatusByStatusCode('ERRO'));
+                                }
+                            }
+                            if($error and $corrected){
+                                if($procedure->getErrorAt()!=$actionError->getErrorAt()){
+                                    $procedure->setErrorAt($actionError->getErrorAt());
+                                }
+                                if($procedure->getCorrectedAt()!=$actionCorrected->getCorrectedAt()){
+                                    $procedure->setCorrectedAt($actionCorrected->getCorrectedAt());
+                                }
+                                if($procedure->getProcedureStatusCode()!='CORT'){
+                                    $procedure->setProcedureStatus($this->getActionStatusByStatusCode('CORT'));
+                                }
+                            }
+                            if($corrected and !$error){
+                                if($procedure->getCorrectedAt()!=$actionCorrected->getCorrectedAt()){
+                                    $procedure->setCorrectedAt($actionCorrected->getCorrectedAt());
+                                }
+                                if($procedure->getProcedureStatusCode()!='CORT'){
+                                    $procedure->setProcedureStatus($this->getActionStatusByStatusCode('CORT'));
+                                }
+                            }
+                            if(!$corrected and !$error){
+                                if($begin and !$finish){
+                                    $procedure->setProcedureStatus($this->getActionStatusByStatusCode('STRT'));
+                                }elseif($finish){
+                                    $procedure->setProcedureStatus($this->getActionStatusByStatusCode('FIN'));
+                                    foreach ($procedure->getEmployerEmployer()->getEmployerHasEmployees() as $ehe){
+                                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('BOFFFF'));
+                                        $ehe->setAllEmployeeDocsReadyAt(new DateTime());
+                                        $ehe->setDateFinished(new DateTime());
+                                        $this->getDoctrine()->getManager()->persist($ehe);
+                                    }
+                                }else{
+                                    $procedure->setProcedureStatus($this->getActionStatusByStatusCode('NEW'));
+                                }
+                            }
+                            $procedure->setStatusUpdatedAt($today);
+                        }else{
+                            $procedure->setProcedureStatus($this->getActionStatusByStatusCode('DCPE'));
+                            $procedure->setStatusUpdatedAt($today);
+                        }
+                    }else{
+                        $procedure->setProcedureStatus($this->getActionStatusByStatusCode('DIS'));
+                        $procedure->setStatusUpdatedAt($today);
+                    }
+                    break;
+                case 'PPL':
+                    break;
+                case 'VAC':
+                    /** @var Employer $emmployer */
+                    $emmployer = $procedure->getEmployerEmployer();
+                    //if employer have at least one active employerHasEmployee
+                    if(count($emmployer->getActiveEmployerHasEmployees())>0 and count($procedure->getAction())>0){
+                        $error=false;
+                        /** @var Action $actionError */
+                        $actionError = null;
+                        $corrected = false;
+                        /** @var Action $actionCorrected */
+                        $actionCorrected = null;
+                        $begin = false;
+                        $finish = true;
+                        $dcpe = false;
+                        /** @var Action $action */
+                        foreach ($procedure->getAction() as $action) {
+                            if($action->getActionStatusCode()=='CTPE'){
+                                $procedure->setProcedureStatus($this->getActionStatusByStatusCode('CTPE'));
+                                $procedure->setStatusUpdatedAt($today);
+                                $dcpe = true;
+                                break;
+                            }
+                            if($action->getActionStatusCode()=='ERRO'){
+                                $error = true;
+                                if($actionError==null or $action->getErrorAt()<$actionError->getErrorAt()){
+                                    $actionError = $action;
+                                }
+                            }
+                            if($action->getActionStatusCode()=='CORT'){
+                                $corrected = true;
+                                if($actionCorrected==null or $action->getCorrectedAt()<$actionCorrected->getCorrectedAt()){
+                                    $actionCorrected=$action;
+                                }
+                            }
+                            if($action->getActionStatusCode()=='FIN' and !$begin){
+                                $begin = true;
+                            }
+                            if($action->getActionStatusCode()!='FIN' and $finish){
+                                $finish = false;
+                            }
+
+                        }
+                        if(!$dcpe){
+                            if($error and !$corrected){
+                                if($procedure->getErrorAt()!=$actionError->getErrorAt()){
+                                    $procedure->setErrorAt($actionError->getErrorAt());
+                                }
+                                if($procedure->getProcedureStatusCode()!='ERRO'){
+                                    $procedure->setProcedureStatus($this->getActionStatusByStatusCode('ERRO'));
+                                }
+                            }
+                            if($error and $corrected){
+                                if($procedure->getErrorAt()!=$actionError->getErrorAt()){
+                                    $procedure->setErrorAt($actionError->getErrorAt());
+                                }
+                                if($procedure->getCorrectedAt()!=$actionCorrected->getCorrectedAt()){
+                                    $procedure->setCorrectedAt($actionCorrected->getCorrectedAt());
+                                }
+                                if($procedure->getProcedureStatusCode()!='CORT'){
+                                    $procedure->setProcedureStatus($this->getActionStatusByStatusCode('CORT'));
+                                }
+                            }
+                            if($corrected and !$error){
+                                if($procedure->getCorrectedAt()!=$actionCorrected->getCorrectedAt()){
+                                    $procedure->setCorrectedAt($actionCorrected->getCorrectedAt());
+                                }
+                                if($procedure->getProcedureStatusCode()!='CORT'){
+                                    $procedure->setProcedureStatus($this->getActionStatusByStatusCode('CORT'));
+                                }
+                            }
+                            if(!$corrected and !$error){
+                                if($begin and !$finish){
+                                    $procedure->setProcedureStatus($this->getActionStatusByStatusCode('STRT'));
+                                }elseif($finish){
+                                    $procedure->setProcedureStatus($this->getActionStatusByStatusCode('CTVA'));
+                                }else{
+                                    $procedure->setProcedureStatus($this->getActionStatusByStatusCode('NEW'));
+                                }
+                            }
+                            $procedure->setStatusUpdatedAt($today);
+                        }
+                    }else{
+                        $procedure->setProcedureStatus($this->getActionStatusByStatusCode('DIS'));
+                        $procedure->setStatusUpdatedAt($today);
+                    }
+                    break;
+                case 'SPL':
+
+                    break;
+            }
+            return 1;
+        }
+        return 0;
+
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function calculateProcedurePriority                           ║
+     * ║ Calculates de procedure priority if needed                    ║
+     * ║ return 1 if procedure changed 0 if not                        ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param RealProcedure $procedure                              ║
+     * ║  @param bool $force                                           ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return integer                                              ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    protected function calculateProcedurePriority($procedure,$force = false)
+    {
+        if($procedure->getPriorityUpdatedAt()<$procedure->getActionChangedAt() or $procedure->getPriorityUpdatedAt() == null or $force){
+            $today = new DateTime();
+            //if procedure already reached maxtime priority is 3
+            if($procedure->getMaxTimeReached()==1){
+                $priority = 3;
+            }else{
+                $toMuchTime = false;
+                switch($procedure->getProcedureTypeProcedureType()->getCode()){
+                    case 'REE':
+                        //checking the first error for the procedure
+                        if($procedure->getFirstErrorAt()!=null and $procedure->getProcedureStatusCode()!= 'DCPE'){
+                            //calculating the time between procedure creation and procedure first error
+                            $tempo = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getBackOfficeDate()->format("Y-m-d"),'dateEnd'=>$procedure->getFirstErrorAt()->format("Y-m-d")), array('_format' => 'json'));
+                            if ($tempo->getStatusCode() == 200) {
+                                $days = json_decode($tempo->getContent(),true)["days"];
+                                //if time in days > 3 time is exceeded and all the actions will have priority 2
+                                if($days = 3){
+                                    //flag to much time to notice time was exceeded
+                                    $toMuchTime = true;
+                                }
+                            }
+                        }
+                        //if time was not exceeded
+                        if(!$toMuchTime){
+                            $code = $procedure->getProcedureStatusCode();
+                            switch ($code){
+                                case 'DIS': //if status is Error, Disabled or DocsPending
+                                    //dateStart is today
+                                    $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$today->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                    break;
+                                case 'DCPE': //if status is Error, Disabled or DocsPending
+                                    //dateStart is today
+                                    $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$today->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                    break;
+                                case 'ERRO': //if status is Error, Disabled or DocsPending
+                                    //dateStart is today
+                                    $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$today->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                    break;
+                                case 'CORT'://if status is corrected
+                                    //dateStart is correctedAt
+                                    $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getCorrectedAt()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                    break;
+                                case 'NEW'://if status is new
+                                    //checking the first error for the procedure
+                                    if($procedure->getFirstErrorAt()!=null){//if procedure got at least one error
+                                        //checking maxtime was never exceeded
+                                        if($procedure->getMaxTimeReached() == 0){//if not
+                                            //if correctedAt is not null and greater than procedure errorAt startdate is correctedAt
+                                            if($procedure->getCorrectedAt()!=null and $procedure->getErrorAt()->diff($procedure->getCorrectedAt())->invert == 0){
+                                                $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getCorrectedAt()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                            }else{//if corrected at is null or errorAt is greater than correctedAt must be an error startdate is errorAt
+                                                $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getErrorAt()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                            }
+                                        }else{//maxtime was reached startdate is backoffice date
+                                            $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getBackOfficeDate()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                        }
+                                    }else{//if no errors
+                                        //if no errors datestart is backofficeDate
+                                        $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getBackOfficeDate()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                    }
+                                    break;
+                                case 'STRT'://if status is newstarted
+                                    //checking the first error for the procedure
+                                    if($procedure->getFirstErrorAt()!=null){//if procedure got at least one error
+                                        //checking maxtime was never exceeded
+                                        if($procedure->getMaxTimeReached() == 0){//if not
+                                            //if correctedAt is not null and greater than procedure errorAt startdate is correctedAt
+                                            if($procedure->getCorrectedAt()!=null and $procedure->getErrorAt()->diff($procedure->getCorrectedAt())->invert == 0){
+                                                $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getCorrectedAt()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                            }else{//if corrected at is null or errorAt is greater than correctedAt must be an error startdate is errorAt
+                                                $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getErrorAt()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                            }
+                                        }else{//maxtime was reached startdate is backoffice date
+                                            $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getBackOfficeDate()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                        }
+                                    }else{//if no errors
+                                        //if no errors datestart is backofficeDate
+                                        $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getBackOfficeDate()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                    }
+                                    break;
+
+                                case 'FIN'://is status is finished
+                                    //checking the first error for the procedure
+                                    if($procedure->getFirstErrorAt()!=null){//if procedure got at least one error
+                                        //checking maxtime was never exceeded
+                                        if($procedure->getMaxTimeReached() == 0){//if not
+                                            //if correctedAt is not null and greater than procedure errorAt startdate is correctedAt
+                                            if($procedure->getCorrectedAt()!=null and $procedure->getErrorAt()->diff($procedure->getCorrectedAt())->invert == 0){
+                                                $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getCorrectedAt()->format("Y-m-d"),'dateEnd'=>$procedure->getFinishedAt()->format("Y-m-d")), array('_format' => 'json'));
+                                            }else{//if corrected at is null or errorAt is greater than correctedAt must be an error startdate is errorAt
+                                                $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getErrorAt()->format("Y-m-d"),'dateEnd'=>$procedure->getFinishedAt()->format("Y-m-d")), array('_format' => 'json'));
+                                            }
+                                        }else{//maxtime was reached startdate is backoffice date
+                                            $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getBackOfficeDate()->format("Y-m-d"),'dateEnd'=>$procedure->getFinishedAt()->format("Y-m-d")), array('_format' => 'json'));
+                                        }
+                                    }else{//if no errors
+                                        //if no errors datestart is backofficeDate
+                                        $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getBackOfficeDate()->format("Y-m-d"),'dateEnd'=>$procedure->getFinishedAt()->format("Y-m-d")), array('_format' => 'json'));
+                                    }
+                                    break;
+                            }
+                            if ($response->getStatusCode() == 200) {
+                                $days = json_decode($response->getContent(),true)["days"];
+                                if($days == 0){
+                                    $priority = 0;
+                                }elseif ($days==1 or $days ==2){
+                                    $priority = 1;
+                                }elseif ($days==3){
+                                    $priority = 2;
+                                }elseif ($days >3){
+                                    $priority = 3;
+                                }
+                            }
+                        }else{
+                            //setting permanently max priority
+                            $priority = 3;
+                        }
+                        break;
+                    case 'PPL':
+                        break;
+                    case 'VAC':
+                        /** @var RealProcedure $REEProcedure */
+                        $REEProcedure = $procedure->getUserUser()->getProceduresByType($this->getProcedureTypeByCode('REE'))->first();
+                        if($REEProcedure->getFinishedAt()!= null){
+                            $stardate = $REEProcedure->getFinishedAt();
+                            if($procedure->getBackOfficeDate()!=$stardate){
+                                $procedure->setBackOfficeDate($stardate);
+                            }
+                        }else{
+                            $stardate = $today;
+                        }
+                        //checking the first error for the procedure
+                        if($procedure->getFirstErrorAt()!=null and $procedure->getProcedureStatusCode()!= 'CTPE'){
+                            if($stardate<$procedure->getFirstErrorAt()){
+                                //calculating the time between procedure creation and procedure first error
+                                $tempo = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$stardate->format("Y-m-d"),'dateEnd'=>$procedure->getFirstErrorAt()->format("Y-m-d")), array('_format' => 'json'));
+                                if ($tempo->getStatusCode() == 200) {
+                                    $days = json_decode($tempo->getContent(),true)["days"];
+                                    //if time in days > 3 time is exceeded and all the actions will have priority 2
+                                    if($days = 5){
+                                        //flag to much time to notice time was exceeded
+                                        $toMuchTime = true;
+                                    }
+                                }
+                            }
+                        }
+                        //if time was not exceeded
+                        if(!$toMuchTime){
+                            $code = $procedure->getProcedureStatusCode();
+                            switch ($code){
+                                case 'DIS': //if status is Error, Disabled or DocsPending
+                                    //dateStart is today
+                                    $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$today->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                    break;
+                                case 'CTPE': //if status is Error, Disabled or DocsPending
+                                    //dateStart is today
+                                    $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$today->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                    break;
+                                case 'ERRO': //if status is Error, Disabled or DocsPending
+                                    //dateStart is today
+                                    $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$today->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                    break;
+                                case 'CORT'://if status is corrected
+                                    //dateStart is correctedAt
+                                    $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getCorrectedAt()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                    break;
+                                case 'NEW'://if status is new
+                                    //checking the first error for the procedure
+                                    if($procedure->getFirstErrorAt()!=null){//if procedure got at least one error
+                                        //checking maxtime was never exceeded
+                                        if($procedure->getMaxTimeReached() == 0){//if not
+                                            //if correctedAt is not null and greater than procedure errorAt startdate is correctedAt
+                                            if($procedure->getCorrectedAt()!=null and $procedure->getErrorAt()->diff($procedure->getCorrectedAt())->invert == 0){
+                                                $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getCorrectedAt()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                            }else{//if corrected at is null or errorAt is greater than correctedAt must be an error startdate is errorAt
+                                                $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getErrorAt()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                            }
+                                        }else{//maxtime was reached startdate is backoffice date
+                                            $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$stardate->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                        }
+                                    }else{//if no errors
+                                        //if no errors datestart is backofficeDate
+                                        $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$stardate->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                    }
+                                    break;
+                                case 'STRT'://if status is started
+                                    //checking the first error for the procedure
+                                    if($procedure->getFirstErrorAt()!=null){//if procedure got at least one error
+                                        //checking maxtime was never exceeded
+                                        if($procedure->getMaxTimeReached() == 0){//if not
+                                            //if correctedAt is not null and greater than procedure errorAt startdate is correctedAt
+                                            if($procedure->getCorrectedAt()!=null and $procedure->getErrorAt()->diff($procedure->getCorrectedAt())->invert == 0){
+                                                $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getCorrectedAt()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                            }else{//if corrected at is null or errorAt is greater than correctedAt must be an error startdate is errorAt
+                                                $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getErrorAt()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                            }
+                                        }else{//maxtime was reached startdate is backoffice date
+                                            $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$stardate->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                        }
+                                    }else{//if no errors
+                                        //if no errors datestart is backofficeDate
+                                        $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$stardate->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                    }
+                                    break;
+                                case 'CTVA'://is status is finished
+                                    //checking the first error for the procedure
+                                    if($procedure->getFirstErrorAt()!=null){//if procedure got at least one error
+                                        //checking maxtime was never exceeded
+                                        if($procedure->getMaxTimeReached() == 0){//if not
+                                            //if correctedAt is not null and greater than procedure errorAt startdate is correctedAt
+                                            if($procedure->getCorrectedAt()!=null and $procedure->getErrorAt()->diff($procedure->getCorrectedAt())->invert == 0){
+                                                $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getCorrectedAt()->format("Y-m-d"),'dateEnd'=>$procedure->getFinishedAt()->format("Y-m-d")), array('_format' => 'json'));
+                                            }else{//if corrected at is null or errorAt is greater than correctedAt must be an error startdate is errorAt
+                                                $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getErrorAt()->format("Y-m-d"),'dateEnd'=>$procedure->getFinishedAt()->format("Y-m-d")), array('_format' => 'json'));
+                                            }
+                                        }else{//maxtime was reached startdate is backoffice date
+                                            $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$stardate->format("Y-m-d"),'dateEnd'=>$procedure->getFinishedAt()->format("Y-m-d")), array('_format' => 'json'));
+                                        }
+                                    }else{//if no errors
+                                        //if no errors datestart is backofficeDate
+                                        $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$stardate->format("Y-m-d"),'dateEnd'=>$procedure->getFinishedAt()->format("Y-m-d")), array('_format' => 'json'));
+                                    }
+                                    break;
+                            }
+                            if ($response->getStatusCode() == 200) {
+                                $days = json_decode($response->getContent(),true)["days"];
+                                if($days == 0){
+                                    $priority = 0;
+                                }elseif ($days==1 or $days ==2){
+                                    $priority = 1;
+                                }elseif ($days==3){
+                                    $priority = 2;
+                                }elseif ($days >3){
+                                    $priority = 3;
+                                }
+                            }
+                        }else{
+                            //setting permanently max priority
+                            $priority = 3;
+                        }
+                        break;
+                    case 'SPL':
+                        break;
+                }
+            }
+            if($procedure->getPriority()!=$priority){
+                $procedure->setPriority($priority);
+            }
+            $procedure->setPriorityUpdatedAt($today);
+            return 1;
+        }
+        return 0;
+    }
+
 
     /**
      * Assign document status for all employerHasEmployees

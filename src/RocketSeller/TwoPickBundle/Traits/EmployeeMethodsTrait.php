@@ -26,6 +26,7 @@ use RocketSeller\TwoPickBundle\Entity\RealProcedure;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\Notification;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\Validator\Constraints\Date;
 
 trait EmployeeMethodsTrait
 {
@@ -770,72 +771,132 @@ trait EmployeeMethodsTrait
     protected function calculateDocumentStatus($procedure)
     {
         try{
-            $this->checkEmployerInfoActions($procedure);
-            $this->checkEmployeeInfoActions($procedure);
-            $employer = $procedure->getEmployerEmployer();
-            $employerHasEmployees = $employer->getActiveEmployerHasEmployees();
             $em = $this->getDoctrine()->getManager();
-            if($employer->getAllDocsReadyAt()==null){
-                $employer->setDocumentStatus($this->getDocumentStatusByCode('ALLDCP'));
-                $em->persist($employer);
-            }elseif($employer->getInfoValidatedAt()!= null){
-                $employer->setDocumentStatus($this->getDocumentStatusByCode('ALDCVA'));
-                $em->persist($employer);
-            }elseif($employer->getInfoErrorAt()!=null){
-                $employer->setDocumentStatus($this->getDocumentStatusByCode('ALLDCE'));
-                $em->persist($employer);
+            if($procedure->getProcedureStatusCode()=='FIN'){
+                $procedure->getEmployerEmployer()->setDocumentStatus($this->getDocumentStatusByCode('BOFFFF'));
+                $em->persist($procedure->getEmployerEmployer());
+                /** @var EmployerHasEmployee $ehe */
+                foreach ($procedure->getEmployerEmployer()->getActiveEmployerHasEmployees() as $ehe) {
+                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('BOFFFF'));
+                    $em->persist($ehe);
+                }
             }else{
-                $employer->setDocumentStatus($this->getDocumentStatusByCode('ALDCIV'));
-                $em->persist($employer);
-            }
-            /** @var EmployerHasEmployee $ehe */
-            foreach ($employerHasEmployees as $ehe) {
-                if ($ehe->getDateDocumentsUploaded() == null) {
-                    if ($employer->getAllDocsReadyAt() == null and $ehe->getAllEmployeeDocsReadyAt() == null) {
-                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALLDCP'));
-                        $em->persist($ehe);
-                    } elseif ($employer->getAllDocsReadyAt() == null and $ehe->getAllEmployeeDocsReadyAt() != null) {
-                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERDCPE'));
-                        $em->persist($ehe);
-                    } elseif ($employer->getAllDocsReadyAt() != null and $ehe->getAllEmployeeDocsReadyAt() == null) {
-                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEDCPE'));
-                        $em->persist($ehe);
-                    }
-                } elseif ($ehe->getInfoValidatedAt() != null) {
-                    if ($employer->getInfoValidatedAt() != null) {
-                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALDCVM'));
-                        $em->persist($ehe);
-                    } elseif ($employer->getInfoErrorAt() != null) {
-                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEVERE'));
-                        $em->persist($ehe);
+                $this->checkEmployerInfoActions($procedure);
+                $this->checkEmployeeInfoActions($procedure);
+                $today = new DateTime();
+                $employer = $procedure->getEmployerEmployer();
+                $employerHasEmployees = $employer->getActiveEmployerHasEmployees();
+
+                if($employer->getAllDocsReadyAt()==null){
+                    $employer->setDocumentStatus($this->getDocumentStatusByCode('ALLDCP'));
+                    $em->persist($employer);
+                }elseif($employer->getInfoValidatedAt()!= null){
+                    $employer->setDocumentStatus($this->getDocumentStatusByCode('ALDCVA'));
+                    $em->persist($employer);
+                }elseif($employer->getInfoErrorAt()!=null){
+                    $employer->setDocumentStatus($this->getDocumentStatusByCode('ALLDCE'));
+                    $em->persist($employer);
+                }else{
+                    $employer->setDocumentStatus($this->getDocumentStatusByCode('ALDCIV'));
+                    $em->persist($employer);
+                }
+                /** @var EmployerHasEmployee $ehe */
+                foreach ($employerHasEmployees as $ehe) {
+                    if ($ehe->getDateDocumentsUploaded() == null) {
+                        if ($employer->getAllDocsReadyAt() == null and $ehe->getAllEmployeeDocsReadyAt() == null) {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALLDCP'));
+                            $em->persist($ehe);
+                        } elseif ($employer->getAllDocsReadyAt() == null and $ehe->getAllEmployeeDocsReadyAt() != null) {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERDCPE'));
+                            $em->persist($ehe);
+                        } elseif ($employer->getAllDocsReadyAt() != null and $ehe->getAllEmployeeDocsReadyAt() == null) {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEDCPE'));
+                            $em->persist($ehe);
+                        }elseif ($employer->getAllDocsReadyAt() != null and $ehe->getAllEmployeeDocsReadyAt() != null) {
+                            if($ehe->getAllDocsReadyMessageAt()==null){
+                                $ehe->setAllDocsReadyMessageAt($today);
+                            }
+                            if($ehe->getInfoValidatedAt() != null) {
+                                if ($employer->getInfoValidatedAt() != null) {
+                                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALDCVA'));
+                                    $em->persist($ehe);
+                                } elseif ($employer->getInfoErrorAt() != null) {
+                                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEVERE'));
+                                    $em->persist($ehe);
+                                } else {
+                                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEDCVA'));
+                                    $em->persist($ehe);
+                                }
+                            }elseif($ehe->getInfoErrorAt() != null) {
+                                if ($employer->getInfoValidatedAt() != null) {
+                                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERVEEE'));
+                                    $em->persist($ehe);
+                                } elseif ($employer->getInfoErrorAt() != null) {
+                                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALLDCE'));
+                                    $em->persist($ehe);
+                                } else {
+                                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEDCE'));
+                                    $em->persist($ehe);
+                                }
+                            } else {
+                                if ($employer->getInfoValidatedAt() != null) {
+                                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERDCVA'));
+                                    $em->persist($ehe);
+                                } elseif ($employer->getInfoErrorAt() != null) {
+                                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERDCE'));
+                                    $em->persist($ehe);
+                                } else {
+                                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALDCIV'));
+                                    $em->persist($ehe);
+                                }
+                            }
+                        }
+                    }elseif($ehe->getInfoValidatedAt() != null) {
+                        if($ehe->getAllDocsReadyMessageAt()==null){
+                            $ehe->setAllDocsReadyMessageAt($today);
+                        }
+                        if ($employer->getInfoValidatedAt() != null) {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALDCVM'));
+                            $em->persist($ehe);
+                        } elseif ($employer->getInfoErrorAt() != null) {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEVERE'));
+                            $em->persist($ehe);
+                        } else {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEDCVA'));
+                            $em->persist($ehe);
+                        }
+                    }elseif($ehe->getInfoErrorAt() != null) {
+                        if($ehe->getAllDocsReadyMessageAt()==null){
+                            $ehe->setAllDocsReadyMessageAt($today);
+                        }
+                        if ($employer->getInfoValidatedAt() != null) {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERVEEE'));
+                            $em->persist($ehe);
+                        } elseif ($employer->getInfoErrorAt() != null) {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALLDCE'));
+                            $em->persist($ehe);
+                        } else {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEDCE'));
+                            $em->persist($ehe);
+                        }
                     } else {
-                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEDCVA'));
-                        $em->persist($ehe);
-                    }
-                } elseif ($ehe->getInfoErrorAt() != null) {
-                    if ($employer->getInfoValidatedAt() != null) {
-                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERVEEE'));
-                        $em->persist($ehe);
-                    } elseif ($employer->getInfoErrorAt() != null) {
-                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALLDCE'));
-                        $em->persist($ehe);
-                    } else {
-                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEDCE'));
-                        $em->persist($ehe);
-                    }
-                } else {
-                    if ($employer->getInfoValidatedAt() != null) {
-                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERDCVA'));
-                        $em->persist($ehe);
-                    } elseif ($employer->getInfoErrorAt() != null) {
-                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERDCE'));
-                        $em->persist($ehe);
-                    } else {
-                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALDCIV'));
-                        $em->persist($ehe);
+                        if($ehe->getAllDocsReadyMessageAt()==null){
+                            $ehe->setAllDocsReadyMessageAt($today);
+                        }
+                        if ($employer->getInfoValidatedAt() != null) {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERDCVA'));
+                            $em->persist($ehe);
+                        } elseif ($employer->getInfoErrorAt() != null) {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERDCE'));
+                            $em->persist($ehe);
+                        } else {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALDCIV'));
+                            $em->persist($ehe);
+                        }
                     }
                 }
             }
+
             return 1;
         }catch(Exception $e){
             return 0;

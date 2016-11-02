@@ -363,6 +363,9 @@
                 width: 100%;
             }
 
+            .modal-responsive {
+                padding: 0 20px !important;
+            }
             .form-group {
                 text-align: center;
             }
@@ -584,9 +587,9 @@
         window.Intercom("trackEvent", "show-dashboard");
     </script>
     <title>{% block title %}Tu tablero de control - Symplifica{% endblock %}</title>
-    {% for eHE in user.employer.employerHasEmployees %}
+    {% for eHE in user.employer.activeEmployerHasEmployees %}
         {% if ready is defined %}
-
+            {% dump ready %}
             {#<h5>{{ user.idPerson }}</h5>#}
             {#<h1>{{  ready[eHE.idEmployerHasEmployee] }}</h1>#}
             {% if ready[eHE.idEmployerHasEmployee] == 2 %}

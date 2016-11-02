@@ -38,34 +38,38 @@
 
             <tr>
               <td style="padding: 10px 10px 20px 10px;">
-                  <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#40c1c3; font-size: 20px;width: 90%;margin: 0 auto;">¡Hola {{ user.personPerson.fullName }}</div>
+                  <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#40c1c3; font-size: 20px;width: 90%;margin: 0 auto;">¡Hola {{ userName }}</div>
                 <br />
                   <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#909090; font-size: 15px; width:90%;margin:0 auto"><span style="color:#13878e;font-weight:600">Encontramos inconvenientes al validar tu información</span><br>
-                  Uno o varios de los documentos cargados es ilegible, está incompleto o es erróneo. Es necesario que los revises y los cargues de nuevo para validar correctamente tu información
-                  y seguir con tu proceso de registro y el de tus empleados.</div>
+                  Uno o varios de los documentos cargados es ilegible, está incompleto o es erróneo. Es necesario que los revises y los cargues de nuevo para así poder continuar con tu
+                  proceso de registro y el de tus empleados.</div>
               </td>
             </tr>
 
             <tr>
                 <td bgcolor="#F7F7F8">
                     <table  border="0" cellpadding="0" cellspacing="0" width="100%">
-                         <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr><!--espacios-->
                         <tr>
                             <td height="30">
-                                <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#909090; font-size: 15px; width:90%;margin:0 auto">
-                                        <span style="color:#13878e;font-weight:600">Los documentos con error son:</span><br>
+                                <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#909090; font-size: 15px; width:90%;margin:10px auto">
+                                        <span style="color:#13878e;font-weight:600">{% if errors|length == 1 %}El documento con error es{% else %}Los documentos con error son{% endif %}:</span><br>
+                                    {% set count = 1 %}
                                     {% for error in errors %}
                                         {% if error == 'CC' or error == 'CE' or error=='PASAPORTE' %}
-                                        &#8226; Documento de identidad.<br>
+                                        &#8226; Documento de identidad.
                                         {% endif %}
-                                        {% if erro == 'RUT' %}
-                                        &#8226; RUT.<br>
+                                        {% if error == 'RUT' %}
+                                        &#8226; RUT.
                                         {% endif%}
-                                        {% if erro == 'MAND' %}
-                                        &#8226; Mandato.<br>
+                                        {% if error == 'MAND' %}
+                                        &#8226; Mandato.
                                         {% endif%}
+                                        {% if count != errors|length %}
+                                        <br>
+                                        {% endif %}
+                                        {% set count = 1 + count %}
                                     {% endfor %}
-                                </div><br>
+                                </div>
                             </td>
                         </tr>
 
@@ -87,7 +91,7 @@
            <tr>
              <td style="padding: 10px 10px 20px 10px;">
                <div style="font-family: 'Open Sans', sans-serif; font-weight: 300; color:#858789; font-size: 15px;width:90%;margin:0 auto">
-                   <span style="color:#13878e;font-weight:600">¡Que tengas un buen día, seguiremos trabajando pot ti!</span><br>
+                   <span style="color:#13878e;font-weight:600">¡Que tengas un buen día, seguiremos trabajando por ti!</span><br>
                    Equipo Symplifica<br>
                    </div>
              </td>

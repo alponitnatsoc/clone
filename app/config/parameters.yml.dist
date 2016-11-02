@@ -16,6 +16,7 @@ parameters:
     mailer_password:   ~
     mailer_port: ~
     mailer_encrypt: ~
+    mailer_delivery: 'suCorreoDePruebas@correo.com'
     ambiente: desarrollo
 
     # A secret key that's used to generate certain security-related tokens

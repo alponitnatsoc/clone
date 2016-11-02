@@ -265,7 +265,7 @@ class ExportController extends Controller
                }
                 //close zip
                 if($zip->close()!==TRUE)
-                    echo "no permisos";
+                    dump("no permisos");
                 //send the file to the browser as a download
                 header('Pragma: public');
                 header('Expires: 0');
@@ -439,21 +439,23 @@ class ExportController extends Controller
             throw $this->createNotFoundException();
         switch($document->getDocumentTypeDocumentType()->getDocCode()){
             case 'CC':
+            case 'CE':
+            case 'TI':
+            case 'PASAPORTE':
                 /** @var Person $person */
                 $person = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Person")->findOneBy(array('documentDocument'=>$document));
+                $name = $person->getFullName();
                 if(!$person)
                     throw $this->createNotFoundException();
                 if($person == $user->getPersonPerson()){
                     $auth=true;
-                    $name = $person->getFullName();
                 }else{
                     if($person->getEmployee()){
                         $eHEs = $person->getEmployee()->getEmployeeHasEmployers();
                         /** @var EmployerHasEmployee $eHE */
                         foreach ($eHEs as $eHE){
-                            if($eHE->getEmployerEmployer()->getPersonPerson()==$person){
+                            if($eHE->getEmployerEmployer()->getPersonPerson()==$user->getPersonPerson()){
                                 $auth=true;
-                                $name = $eHE->getEmployeeEmployee()->getPersonPerson()->getFullName();
                                 break;
                             }
                         }
@@ -463,19 +465,18 @@ class ExportController extends Controller
             case 'RUT':
                 /** @var Person $person */
                 $person = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Person")->findOneBy(array('rutDocument'=>$document));
+                $name = $person->getFullName();
                 if(!$person)
                     throw $this->createNotFoundException();
                 if($person == $user->getPersonPerson()){
                     $auth=true;
-                    $name = $person->getFullName();
                 }else{
                     if($person->getEmployee()){
                         $eHEs = $person->getEmployee()->getEmployeeHasEmployers();
                         /** @var EmployerHasEmployee $eHE */
                         foreach ($eHEs as $eHE){
-                            if($eHE->getEmployerEmployer()->getPersonPerson()==$person){
+                            if($eHE->getEmployerEmployer()->getPersonPerson()==$user->getPersonPerson()){
                                 $auth=true;
-                                $name = $eHE->getEmployeeEmployee()->getPersonPerson()->getFullName();
                                 break;
                             }
                         }
@@ -503,19 +504,18 @@ class ExportController extends Controller
             case 'RCDN':
                 /** @var Person $person */
                 $person = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Person")->findOneBy(array('birthRegDocument'=>$document));
+                $name = $person->getFullName();
                 if(!$person)
                     throw $this->createNotFoundException();
                 if($person == $user->getPersonPerson()){
                     $auth=true;
-                    $name = $person->getFullName();
                 }else{
                     if($person->getEmployee()){
                         $eHEs = $person->getEmployee()->getEmployeeHasEmployers();
                         /** @var EmployerHasEmployee $eHE */
                         foreach ($eHEs as $eHE){
-                            if($eHE->getEmployerEmployer()->getPersonPerson()==$person){
+                            if($eHE->getEmployerEmployer()->getPersonPerson()==$user->getPersonPerson()){
                                 $auth=true;
-                                $name = $eHE->getEmployeeEmployee()->getPersonPerson()->getFullName();
                                 break;
                             }
                         }
@@ -539,28 +539,6 @@ class ExportController extends Controller
                 if($payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson() == $user->getPersonPerson())
                     $auth=true;
                 $name=$payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName();
-                break;
-            case 'TI':
-                /** @var Person $person */
-                $person = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Person")->findOneBy(array('documentDocument'=>$document));
-                if(!$person)
-                    throw $this->createNotFoundException();
-                if($person == $user->getPersonPerson()){
-                    $auth=true;
-                    $name = $person->getFullName();
-                }else{
-                    if($person->getEmployee()){
-                        $eHEs = $person->getEmployee()->getEmployeeHasEmployers();
-                        /** @var EmployerHasEmployee $eHE */
-                        foreach ($eHEs as $eHE){
-                            if($eHE->getEmployerEmployer()->getPersonPerson()==$person){
-                                $auth=true;
-                                $name = $eHE->getEmployeeEmployee()->getPersonPerson()->getFullName();
-                                break;
-                            }
-                        }
-                    }
-                }
                 break;
         }
         if(!$backOffice and !$auth)

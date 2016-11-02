@@ -17,10 +17,10 @@ class LoadProcedureTypeData extends AbstractFixture implements OrderedFixtureInt
         $procedureTypeInscription->setCode('REE');
         $manager->persist($procedureTypeInscription);
 
-        $procedureTypeValidarContrato = new ProcedureType();
-        $procedureTypeValidarContrato->setName('Validar Contrato');
-        $procedureTypeValidarContrato->setCode('VAC');
-        $manager->persist($procedureTypeValidarContrato);
+        $procedureTypeAcciones = new ProcedureType();
+        $procedureTypeAcciones->setName('Acciones de validación');
+        $procedureTypeAcciones->setCode('VAC');
+        $manager->persist($procedureTypeAcciones);
 
         $procedureTypePagoPila = new ProcedureType();
         $procedureTypePagoPila->setName('Pago de pila');

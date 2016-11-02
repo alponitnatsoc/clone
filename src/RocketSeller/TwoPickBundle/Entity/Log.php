@@ -49,7 +49,7 @@ class Log
 
     /**
      * @var string
-     * @ORM\Column(name="previous_data",type="string",length=300)
+     * @ORM\Column(name="previous_data",type="string",length=300,nullable=true)
      */
     private $previousData;
 

@@ -116,14 +116,19 @@ class EmployerHasEmployee
     private $documentStatusType;
 
     /**
-     * @ORM\Column(type="integer", length=1, nullable=TRUE)
+     * @ORM\Column(type="string", length=50, nullable=TRUE)
      */
-    private $documentStatus = -2;
+    private $documentStatus = null;
 
     /**
      * @ORM\Column(type="datetime", nullable=TRUE)
      */
-    private $dateDocumentsUploaded;
+    private $dateDocumentsUploaded=null;
+
+    /**
+     * @ORM\Column(name="all_employee_docs_ready_at",type="datetime", nullable=TRUE)
+     */
+    private $allEmployeeDocsReadyAt=null;
 
     /**
      * @ORM\Column(type="datetime", nullable=TRUE)
@@ -139,6 +144,46 @@ class EmployerHasEmployee
      * @ORM\Column(type="datetime", nullable=TRUE)
      */
     private $dateFinished;
+
+    /**
+     * @ORM\Column(name="info_validated_at",type="datetime", nullable=true)
+     */
+    private $infoValidatedAt=null;
+
+    /**
+     * @ORM\Column(name="info_error_at",type="datetime", nullable=true)
+     */
+    private $infoErrorAt=null;
+
+    /**
+     * @ORM\Column(name="validated_email_sent_at",type="datetime", nullable=true)
+     */
+    private $validatedEmailSentAt=null;
+
+    /**
+     * @ORM\Column(name="all_docs_ready_message_at",type="datetime", nullable=true)
+     */
+    private $allDocsReadyMessageAt=null;
+
+    /**
+     * @ORM\Column(name="all_docs_validated_message_at",type="datetime", nullable=true)
+     */
+    private $allDocsValidatedMessageAt=null;
+
+    /**
+     * @ORM\Column(name="backoffice_finish_message_at",type="datetime", nullable=true)
+     */
+    private $backofficeFinishMessageAt=null;
+
+    /**
+     * @ORM\Column(name="doc_error_message_at",type="datetime", nullable=true)
+     */
+    private $docErrorMessageAt=null;
+
+    /**
+     * @ORM\Column(name="error_email_sent_at",type="datetime", nullable=true)
+     */
+    private $ErrorEmailSentAt=null;
 
     /**
      * Set idEmployerHasEmployee
@@ -405,30 +450,6 @@ class EmployerHasEmployee
     }
 
     /**
-     * Set documentStatus
-     *
-     * @param integer $documentStatus
-     *
-     * @return EmployerHasEmployee
-     */
-    public function setDocumentStatus($documentStatus)
-    {
-        $this->documentStatus = $documentStatus;
-
-        return $this;
-    }
-
-    /**
-     * Get documentStatus
-     *
-     * @return integer
-     */
-    public function getDocumentStatus()
-    {
-        return $this->documentStatus;
-    }
-
-    /**
      * Set existentHighTec
      *
      * @param integer $existentHighTec
@@ -534,7 +555,7 @@ class EmployerHasEmployee
     public function setDocumentStatusType(\RocketSeller\TwoPickBundle\Entity\DocumentStatusType $documentStatusType = null)
     {
         $this->documentStatusType = $documentStatusType;
-
+        $this->documentStatus = $documentStatusType->getName();
         return $this;
     }
 
@@ -594,5 +615,245 @@ class EmployerHasEmployee
     public function getDateTryToRegisterToSQL()
     {
         return $this->dateTryToRegisterToSQL;
+    }
+
+    /**
+     * Set infoValidatedAt
+     *
+     * @param \DateTime $infoValidatedAt
+     *
+     * @return EmployerHasEmployee
+     */
+    public function setInfoValidatedAt($infoValidatedAt)
+    {
+        $this->infoValidatedAt = $infoValidatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get infoValidatedAt
+     *
+     * @return \DateTime
+     */
+    public function getInfoValidatedAt()
+    {
+        return $this->infoValidatedAt;
+    }
+
+    /**
+     * Set validatedEmailSentAt
+     *
+     * @param \DateTime $validatedEmailSentAt
+     *
+     * @return EmployerHasEmployee
+     */
+    public function setValidatedEmailSentAt($validatedEmailSentAt)
+    {
+        $this->validatedEmailSentAt = $validatedEmailSentAt;
+
+        return $this;
+    }
+
+    /**
+     * Get validatedEmailSentAt
+     *
+     * @return \DateTime
+     */
+    public function getValidatedEmailSentAt()
+    {
+        return $this->validatedEmailSentAt;
+    }
+
+    /**
+     * Set errorEmailSentAt
+     *
+     * @param \DateTime $errorEmailSentAt
+     *
+     * @return EmployerHasEmployee
+     */
+    public function setErrorEmailSentAt($errorEmailSentAt)
+    {
+        $this->ErrorEmailSentAt = $errorEmailSentAt;
+
+        return $this;
+    }
+
+    /**
+     * Get errorEmailSentAt
+     *
+     * @return \DateTime
+     */
+    public function getErrorEmailSentAt()
+    {
+        return $this->ErrorEmailSentAt;
+    }
+
+    /**
+     * Set infoErrorAt
+     *
+     * @param \DateTime $infoErrorAt
+     *
+     * @return EmployerHasEmployee
+     */
+    public function setInfoErrorAt($infoErrorAt)
+    {
+        $this->infoErrorAt = $infoErrorAt;
+
+        return $this;
+    }
+
+    /**
+     * Get infoErrorAt
+     *
+     * @return \DateTime
+     */
+    public function getInfoErrorAt()
+    {
+        return $this->infoErrorAt;
+    }
+
+    /**
+     * Set documentStatus
+     *
+     * @param string $documentStatus
+     *
+     * @return EmployerHasEmployee
+     */
+    public function setDocumentStatus($documentStatus)
+    {
+        $this->documentStatus = $documentStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get documentStatus
+     *
+     * @return string
+     */
+    public function getDocumentStatus()
+    {
+        return $this->documentStatus;
+    }
+
+    /**
+     * Set allEmployeeDocsReadyAt
+     *
+     * @param \DateTime $allEmployeeDocsReadyAt
+     *
+     * @return EmployerHasEmployee
+     */
+    public function setAllEmployeeDocsReadyAt($allEmployeeDocsReadyAt)
+    {
+        $this->allEmployeeDocsReadyAt = $allEmployeeDocsReadyAt;
+
+        return $this;
+    }
+
+    /**
+     * Get allEmployeeDocsReadyAt
+     *
+     * @return \DateTime
+     */
+    public function getAllEmployeeDocsReadyAt()
+    {
+        return $this->allEmployeeDocsReadyAt;
+    }
+
+    /**
+     * Set allDocsReadyMessageAt
+     *
+     * @param \DateTime $allDocsReadyMessageAt
+     *
+     * @return EmployerHasEmployee
+     */
+    public function setAllDocsReadyMessageAt($allDocsReadyMessageAt)
+    {
+        $this->allDocsReadyMessageAt = $allDocsReadyMessageAt;
+
+        return $this;
+    }
+
+    /**
+     * Get allDocsReadyMessageAt
+     *
+     * @return \DateTime
+     */
+    public function getAllDocsReadyMessageAt()
+    {
+        return $this->allDocsReadyMessageAt;
+    }
+
+    /**
+     * Set allDocsValidatedMessageAt
+     *
+     * @param \DateTime $allDocsValidatedMessageAt
+     *
+     * @return EmployerHasEmployee
+     */
+    public function setAllDocsValidatedMessageAt($allDocsValidatedMessageAt)
+    {
+        $this->allDocsValidatedMessageAt = $allDocsValidatedMessageAt;
+
+        return $this;
+    }
+
+    /**
+     * Get allDocsValidatedMessageAt
+     *
+     * @return \DateTime
+     */
+    public function getAllDocsValidatedMessageAt()
+    {
+        return $this->allDocsValidatedMessageAt;
+    }
+
+    /**
+     * Set backofficeFinishMessageAt
+     *
+     * @param \DateTime $backofficeFinishMessageAt
+     *
+     * @return EmployerHasEmployee
+     */
+    public function setBackofficeFinishMessageAt($backofficeFinishMessageAt)
+    {
+        $this->backofficeFinishMessageAt = $backofficeFinishMessageAt;
+
+        return $this;
+    }
+
+    /**
+     * Get backofficeFinishMessageAt
+     *
+     * @return \DateTime
+     */
+    public function getBackofficeFinishMessageAt()
+    {
+        return $this->backofficeFinishMessageAt;
+    }
+
+    /**
+     * Set docErrorMessageAt
+     *
+     * @param \DateTime $docErrorMessageAt
+     *
+     * @return EmployerHasEmployee
+     */
+    public function setDocErrorMessageAt($docErrorMessageAt)
+    {
+        $this->docErrorMessageAt = $docErrorMessageAt;
+
+        return $this;
+    }
+
+    /**
+     * Get docErrorMessageAt
+     *
+     * @return \DateTime
+     */
+    public function getDocErrorMessageAt()
+    {
+        return $this->docErrorMessageAt;
     }
 }

@@ -47,8 +47,8 @@ back_office:
     path:     /backoffice
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:index}
 show_procedures:
-    path:     /backoffice/procedures/{orderType}/{order}
-    defaults: { _controller: RocketSellerTwoPickBundle:Procedure:index,orderType: 'date',order: 'ASC'}
+    path:     /backoffice/procedures/{orderType}/{order}/{state}/{document}/{names}/{prior}
+    defaults: { _controller: RocketSellerTwoPickBundle:Procedure:index,orderType: 'none',order: 'ASC',state: 'none',document: 'none',names: 'none',prior: 'none'}
 show_request:
     path:     /backoffice/request
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showRequest}
@@ -61,12 +61,16 @@ register_express:
 marketing:
     path:     /backoffice/marketing
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showLanding}
+
+#security break
 autenticate:
     path:     /backoffice/autenticate/{user}/{autentication}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:demoLogin}
 users_login_back:
     path:     /backoffice/show/users/autenticate
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showUsersLogin}
+
+#backoffice reports
 show_rejected_pods:
     path:     /backoffice/show/rejected/pods
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showRejectedPOD}
@@ -129,54 +133,24 @@ employer_state:
 show_procedure:
     path:     /backoffice/procedure/{procedureId}
     defaults: { _controller: RocketSellerTwoPickBundle:Procedure:procedureById }
+finish_action:
+    path:         /backoffice/action/{actionId}/finish
+    defaults:     { _controller: RocketSellerTwoPickBundle:Procedure:finish }
+activate_action:
+    path:         /backoffice/action/{actionId}/activate
+    defaults:     { _controller: RocketSellerTwoPickBundle:Procedure:activate }
+error_action:
+    path:         /backoffice/action/{actionId}/error
+    defaults:     { _controller: RocketSellerTwoPickBundle:Procedure:error }
+activate_notification:
+    path:         /backoffice/notification/{actionId}/{notificationId}/activate
+    defaults:     { _controller: RocketSellerTwoPickBundle:Procedure:activateNotification }
 
-#empleador
-check_register:
-    path:         /backoffice/check/register/{idAction}
-    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:checkRegister }
-validate_employer_documents:
-        path:     /backoffice/check/employer/documents/{idAction}
-        defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:checkDocuments}
-validate_mandatory:
-        path:     /backoffice/check/employer/mandatory/{idAction}
-        defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:validateMandatory}
-show_info:
-    path:         /backoffice/check/info/{idAction}
-    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:checkInfo}
-view_documents:
-    path:         /backoffice/view/emploeyer/documents/{idAction}
-    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:viewDocuments}
+#email test
+back_test_email:
+    path:         /backoffice/test/email
 
-#empleado
-check_employee:
-        path:     /backoffice/check/employee/{idAction}
-        defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:checkRegister }
-show_info_employee:
-        path:     /backoffice/check/info/employee/{idAction}
-        defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:checkInfoEmployee}
-
-validate_employee_documents:
-        path:     /backoffice/check/employee/documents/{idAction}
-        defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:checkEmployeeDocuments}
-view_employee_documents:
-    path:         /backoffice/view/emploeyee/documents/{idAction}
-    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:viewEmployeeDocuments}
-validate_contract:
-        path:     /backoffice/check/employee/contract/{idAction}
-        defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:validateContract}
-
-change_action_status:
-    path:         /backoffice/procedure/{procedureId}/{actionId}/{status}
-    defaults:     { _controller: RocketSellerTwoPickBundle:Procedure:changeVueltaState }
-change_action_error_status:
-    path:         /backoffice/procedure/action/error/{procedureId}/{actionError}/{status}
-    defaults:     { _controller: RocketSellerTwoPickBundle:Procedure:changeErrorStatus }
-report_error:
-    path:         /backoffice/report/{idAction}
-    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:reportError }
-back_add_sql:
-    path:         /backoffice/add/sql/{idEmployerHasEmployee}/{procedureId}
-    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:addToSQL }
+#export documents
 export_documents_entity:
     path:         /entity/documents/export/{entityType}/{idEntity}
     defaults:     { _controller: RocketSellerTwoPickBundle:Export:exportDocuments , entityType : null , idEntity: -1 }
@@ -192,20 +166,48 @@ export_contract:
 export_all_documents:
     path:         /backoffice/export/action/documents/{idAction}
     defaults:     { _controller: RocketSellerTwoPickBundle:Export:exportAllDocuments }
-complete_employee:
-    path:         /backoffice/procedure/{procedureId}/complete/employee/{idEmployerHasEmployee}
-    defaults:     { _controller: RocketSellerTwoPickBundle:Procedure:changeEmployeeStatus }
 export_landing:
     path:         /backoffice/export/landing
     defaults:     { _controller: RocketSellerTwoPickBundle:Export:exportLanding }
-back_employer_menu:
-    path:         /backoffice/employer/menu/{id}
-    defaults:     { _controller: RocketSellerTwoPickBundle:ExpressRegistration:menuEmployer }
 back_person_cvs_export:
     path:         /backoffice/export/excel/{idAction}
     defaults:     { _controller: RocketSellerTwoPickBundle:Export:generateCsvByAction }
-back_test_email:
-    path:         /backoffice/test/email
+
+
+#empleador
+send_info_validated:
+    path:     /backoffice/info/validated/email/{procedureId}
+    defaults: { _controller: RocketSellerTwoPickBundle:Procedure:sendEmployerInfoFinished}
+send_info_error:
+    path:     /backoffice/info/error/email/{procedureId}
+    defaults: { _controller: RocketSellerTwoPickBundle:Procedure:sendEmployerInfoError}
+
+#empleado
+send_employee_info_error:
+        path:     /backoffice/employee/info/error/email/{procedureId}/{eheId}
+        defaults: { _controller: RocketSellerTwoPickBundle:Procedure:sendEmployeeInfoError}
+send_employee_info_validated:
+        path:     /backoffice/employee/info/validated/email/{procedureId}/{eheId}
+        defaults: { _controller: RocketSellerTwoPickBundle:Procedure:sendEmployeeInfoFinished}
+back_add_sql:
+    path:         /backoffice/add/sql/{idEmployerHasEmployee}/{procedureId}
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:addToSQL }
+complete_employee:
+    path:         /backoffice/procedure/{procedureId}/complete/employee/{idEmployerHasEmployee}
+    defaults:     { _controller: RocketSellerTwoPickBundle:Procedure:completeEmployee }
+
+
+validate_contract:
+        path:     /backoffice/check/employee/contract/{idAction}
+        defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:validateContract}
+change_action_status:
+    path:         /backoffice/procedure/{procedureId}/{actionId}/{status}
+    defaults:     { _controller: RocketSellerTwoPickBundle:Procedure:changeVueltaState }
+
+
+back_employer_menu:
+    path:         /backoffice/employer/menu/{id}
+    defaults:     { _controller: RocketSellerTwoPickBundle:ExpressRegistration:menuEmployer }
     defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:testEmail}
 back_pending_vacations:
     path:         /backoffice/pending/{idEmployerHasEmployee}/vacations/{pendingDays}

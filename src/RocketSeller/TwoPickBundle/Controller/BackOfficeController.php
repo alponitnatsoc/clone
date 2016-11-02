@@ -464,6 +464,8 @@ class BackOfficeController extends Controller
         }
 
     }
+
+    //todo old function test an remove Andres
     /**
      * Funcion que valida la informacion del empleado
      * @param $idAction
@@ -513,6 +515,7 @@ class BackOfficeController extends Controller
         }
     }
 
+    //todo old function test an remove Andres
     /**
      * Funcion para poder consultar la informacion del empleador psterior a validar la informacion de registro
      * @param $idAction
@@ -544,6 +547,7 @@ class BackOfficeController extends Controller
         return $this->render('RocketSellerTwoPickBundle:BackOffice:checkInfo.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action,'employerHasEmployee'=>$employerHasEmployee));
     }
 
+    //todo old function test an remove Andres
     /**
      * Funcion para consultar la informacion del empleado posterior a validar la informacion registrada
      * @param $idAction
@@ -575,6 +579,7 @@ class BackOfficeController extends Controller
         return $this->render('RocketSellerTwoPickBundle:BackOffice:checkInfoEmployee.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action,'employerHasEmployee'=>$employerHasEmployee));
     }
 
+    //todo old function test an remove Andres
     /**
      * Funcion para validar los documentos del empleador
      * @param $idAction
@@ -622,6 +627,7 @@ class BackOfficeController extends Controller
         return $this->render('RocketSellerTwoPickBundle:BackOffice:ValidateDocuments.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action, 'cedula'=>$cedula,'path_document'=>$pathCedula,'nameDoc'=>$nameCedula ,'rut'=>$rut,'pathRut'=>$pathRut,'nameRut'=>$nameRut));
     }
 
+    //todo old function test an remove Andres
     /**
      * Funcion para validar el mandato del empleador
      * @param $idAction
@@ -651,6 +657,7 @@ class BackOfficeController extends Controller
         }
         return $this->render('RocketSellerTwoPickBundle:BackOffice:ValidateMandato.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action, 'mandato'=>$mandato,'path_document'=>$pathMandato,'nameDoc'=>$nameMandato));
     }
+
 
     /**
      * Funcion para validar el contrato del empleado
@@ -691,6 +698,7 @@ class BackOfficeController extends Controller
         return $this->render('RocketSellerTwoPickBundle:BackOffice:ValidateContract.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action, 'contrato'=>$docContrato,'path_document'=>$pathContrato,'nameDoc'=>$nameContrato, 'contract'=>$contract));
     }
 
+    //todo old function test an remove Andres
     public function viewDocumentsAction($idAction)
     {
         /** @var Action $action */
@@ -729,10 +737,10 @@ class BackOfficeController extends Controller
             $pathRut='';
             $nameRut='';
         }
-
         return $this->render('RocketSellerTwoPickBundle:BackOffice:ViewDocuments.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action, 'cedula'=>$cedula,'path_document'=>$pathCedula,'nameDoc'=>$nameCedula ,'rut'=>$rut,'pathRut'=>$pathRut,'nameRut'=>$nameRut));
     }
 
+    //todo old function test an remove Andres
     /**
      * Funcion para validar los documentos de cada empleado
      * @param $idAction
@@ -783,6 +791,7 @@ class BackOfficeController extends Controller
         return $this->render('RocketSellerTwoPickBundle:BackOffice:ValidateEmployeeDocuments.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action, 'cedula'=>$cedula,'path_document'=>$pathCedula,'nameDoc'=>$nameCedula ,'carta'=>$carta,'pathCarta'=>$pathCarta,'nameCarta'=>$nameCarta,'eHE'=>$eHE));
     }
 
+    //todo old function test an remove Andres
     public function viewEmployeeDocumentsAction($idAction)
     {
         /** @var Action $action */
@@ -830,12 +839,26 @@ class BackOfficeController extends Controller
 
 
     public function addToSQLAction($idEmployerHasEmployee,$procedureId){
+        $em = $this->getDoctrine()->getManager();
+        /** @var EmployerHasEmployee $employerHasEmployee */
         $employerHasEmployee = $this->loadClassById($idEmployerHasEmployee,"EmployerHasEmployee");
         $addToSQL = $this->addEmployeeToSQL($employerHasEmployee);
+        if($addToSQL){
+            $employerHasEmployee->setDateRegisterToSQL(new DateTime());
+            $em->persist($employerHasEmployee);
+            $em->flush();
+            $this->addFlash("employee_added_to_sql", 'Exito al agregar el empleado a SQL');
+        }else{
+            $employerHasEmployee->setDateTryToRegisterToSQL(new DateTime());
+            $em->persist($employerHasEmployee);
+            $em->flush();
+            $this->addFlash("employee_added_to_sql_failed", 'No se pudo agregar el empleado a SQL');
+        }
         return $this->redirectToRoute('show_procedure', array('procedureId'=>$procedureId), 301);
     }
 
 
+    //todo old function test an remove Andres
     public function reportErrorAction($idAction,Request $request)
     {
         /** @var Action $action */
@@ -1155,6 +1178,9 @@ class BackOfficeController extends Controller
 //        );
 //        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 
+
+        $this->get('symplifica.mailer.twig_swift')->sendBackValidatedMessage($this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User')->find(5),$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User')->find(5)->getPersonPerson()->getEmployer()->getEmployerHasEmployees()->first());
+
 //        /** test confirmation Email */
 //        $context=array(
 //            'emailType'=>'confirmation',
@@ -1162,12 +1188,6 @@ class BackOfficeController extends Controller
 //        );
 //        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 
-//        /** test confirmation Email */
-//        $context=array(
-//            'emailType'=>'resetting',
-//            'user'=>$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User')->find(3),
-//        );
-//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 
 //        /** test reminder Email */
 //        $context=array(
@@ -1255,43 +1275,43 @@ class BackOfficeController extends Controller
 //        );
 //        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 
-        /** test failRecollect Email */
-        $context=array(
-            'emailType'=>'failRecollect',
-            'userEmail'=>'algo@alg.com',
-            'toEmail'=>$toEmail,
-            'userName'=>'Andrés Felipe',
-            'rejectionDate'=>new DateTime(),
-            'value' => 230750.23,
-            'phone'=>'3183941645'
-        );
-        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
-
-        /** test regectionCollect Email */
-        $context=array(
-            'emailType'=>'regectionCollect',
-            'userEmail'=>$this->getUser()->getEmail(),
-            'userName'=>$this->getUser()->getPersonPerson()->getFullName(),
-            'rejectionDate'=>new DateTime(),
-            'toEmail'=> $toEmail,
-            'phone'=>'3183941645',
-            'value'=>'350400'
-        );
-        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
-
-        /** test regectionDispersion Email */
-        $context=array(
-            'emailType'=>'regectionDispersion',
-            'userEmail'=>'algo@algo.com',
-            'toEmail'=>$toEmail,
-            'userName'=>'Andrés Felipe',
-            'rejectionDate'=>new DateTime(),
-            'phone'=>'3183941645',
-            'rejectedProduct'=>'Nombre del producto',
-            'idPOD'=>4,
-            'value'=>483909,23
-        );
-        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+//        /** test failRecollect Email */
+//        $context=array(
+//            'emailType'=>'failRecollect',
+//            'userEmail'=>'algo@alg.com',
+//            'toEmail'=>$toEmail,
+//            'userName'=>'Andrés Felipe',
+//            'rejectionDate'=>new DateTime(),
+//            'value' => 230750.23,
+//            'phone'=>'3183941645'
+//        );
+//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+//
+//        /** test regectionCollect Email */
+//        $context=array(
+//            'emailType'=>'regectionCollect',
+//            'userEmail'=>$this->getUser()->getEmail(),
+//            'userName'=>$this->getUser()->getPersonPerson()->getFullName(),
+//            'rejectionDate'=>new DateTime(),
+//            'toEmail'=> $toEmail,
+//            'phone'=>'3183941645',
+//            'value'=>'350400'
+//        );
+//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+//
+//        /** test regectionDispersion Email */
+//        $context=array(
+//            'emailType'=>'regectionDispersion',
+//            'userEmail'=>'algo@algo.com',
+//            'toEmail'=>$toEmail,
+//            'userName'=>'Andrés Felipe',
+//            'rejectionDate'=>new DateTime(),
+//            'phone'=>'3183941645',
+//            'rejectedProduct'=>'Nombre del producto',
+//            'idPOD'=>4,
+//            'value'=>483909,23
+//        );
+//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 
 //        /** test succesfulDispersion Eamil */
 //        $context=array(
@@ -1317,24 +1337,24 @@ class BackOfficeController extends Controller
 //        $context['documentName']='Comprobante '.date_format(new DateTime(),'d-m-y H:i:s').'.pdf';
 //        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 
-        /** test failDispersion Eamil */
-        $context=array(
-            'emailType'=>'failDispersion',
-            'userEmail'=>'algo@algo.com',
-            'toEmail'=>$toEmail,
-            'userName'=>'Andrés Felipe'
-        );
-        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
-
-        /** test addPayMethod */
-        $context = array(
-            'emailType'=>'validatePayMethod',
-            'toEmail'=>$toEmail,
-            'userName'=>'Andrés Felipe Ramírez',
-            'starDate'=>new DateTime(),
-            'payMethod'=>'Tarjeta de Credito'
-        );
-        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+//        /** test failDispersion Eamil */
+//        $context=array(
+//            'emailType'=>'failDispersion',
+//            'userEmail'=>'algo@algo.com',
+//            'toEmail'=>$toEmail,
+//            'userName'=>'Andrés Felipe'
+//        );
+//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+//
+//        /** test addPayMethod */
+//        $context = array(
+//            'emailType'=>'validatePayMethod',
+//            'toEmail'=>$toEmail,
+//            'userName'=>'Andrés Felipe Ramírez',
+//            'starDate'=>new DateTime(),
+//            'payMethod'=>'Tarjeta de Credito'
+//        );
+//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 
 //        /** test backWarning Email */
 //        $context = array(

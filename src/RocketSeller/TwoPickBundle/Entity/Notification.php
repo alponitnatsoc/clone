@@ -136,6 +136,19 @@ class Notification {
     }
 
     /**
+     * Set Id
+     *
+     * @param integer $id
+     *
+     * @return Notification
+     */
+    public function setId($id) {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
      * Get id
      *
      * @return integer

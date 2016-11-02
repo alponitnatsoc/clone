@@ -308,13 +308,121 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                 $template = $this->parameters['template']['reminderDaviplata'];
                 return $this->sendMessage($template,$context,$teamFromEmail, $context['toEmail']);
                 break;
-		        case 'appDownload':
-				        /** $context must have:
-				         * string toEmail
-				         */
-				        $template = $this->parameters['template']['appDownload'];
-				        return $this->sendMessage($template, $context, $teamFromEmail ,$context['toEmail']);
-				        break;
+            case 'appDownload':
+                    /** $context must have:
+                     * string toEmail
+                     */
+                    $template = $this->parameters['template']['appDownload'];
+                    return $this->sendMessage($template, $context, $teamFromEmail ,$context['toEmail']);
+                    break;
+            case 'descubrir':
+                /** $context must have:
+                 * string toEmail
+                 */
+                $template = $this->parameters['template']['descubrir'];
+                return $this->sendMessage($template,$context,$teamFromEmail,$context['toEmail']);
+            case 'supplies':
+                /** $context must have:
+                 * string toEmail
+                 * string userName
+                 */
+                $template = $this->parameters['template']['supplies'];
+                return $this->sendMessage($template,$context,$teamFromEmail,$context['toEmail']);
+            case 'waiting':
+                /** $context must have:
+                 * string toEmail
+                 * string userName
+                 */
+                $template = $this->parameters['template']['waiting'];
+                return $this->sendMessage($template,$context,$teamFromEmail,$context['toEmail']);
+            case 'contractFinishReminder':
+                /** $context must have:
+                 * string toEmail
+                 * string userName
+                 * string employeeName
+                 */
+                $template = $this->parameters['template']['contractFinishReminder'];
+                return $this->sendMessage($template,$context,$teamFromEmail,$context['toEmail']);
+            case 'cesantCharges':
+                /** $context must have:
+                 * string toEmail
+                 * string userName
+                 * string employeeName
+                 */
+                $template = $this->parameters['template']['cesantCharges'];
+                return $this->sendMessage($template,$context,$teamFromEmail,$context['toEmail']);
+            case 'cesantPayment':
+                /** $context must have:
+                 * string toEmail
+                 * string userName
+                 * string employeeName
+                 */
+                $template = $this->parameters['template']['cesantPayment'];
+                return $this->sendMessage($template,$context,$teamFromEmail,$context['toEmail']);
+            case 'bonus':
+                /** $context must have:
+                 * string toEmail
+                 * string userName
+                 * string employeeName
+                 */
+                $template = $this->parameters['template']['bonus'];
+                return $this->sendMessage($template,$context,$teamFromEmail,$context['toEmail']);
+            case 'clientRecovery':
+                /** $context must have:
+                 * string toEmail
+                 * string userName
+                 */
+                $template = $this->parameters['template']['clientRecovery'];
+                return $this->sendMessage($template,$context,$teamFromEmail,$context['toEmail']);
+            case 'risks':
+                /** $context must have:
+                 * string toEmail
+                 * string userName
+                 */
+                $template = $this->parameters['template']['risks'];
+                return $this->sendMessage($template,$context,$teamFromEmail,$context['toEmail']);
+            case 'contractFinish':
+                /** $context must have:
+                 * string toEmail
+                 * string userName
+                 */
+                $template = $this->parameters['template']['contractFinish'];
+                return $this->sendMessage($template,$context,$teamFromEmail,$context['toEmail']);
+            case 'docsValidated':
+                /** $context must have:
+                 * string toEmail
+                 * string userName
+                 */
+                $template = $this->parameters['template']['docsValidated'];
+                return $this->sendMessage($template,$context,$teamFromEmail,$context['toEmail']);
+            case 'docsError':
+                /** $context must have:
+                 * string toEmail
+                 * string userName
+                 * array errors
+                 */
+                $template = $this->parameters['template']['docsError'];
+                return $this->sendMessage($template,$context,$teamFromEmail,$context['toEmail']);
+            case 'employeeDocsError':
+                /** $context must have:
+                 * string toEmail
+                 * string userName
+                 * string employeeName
+                 * array error
+                 */
+                $template = $this->parameters['template']['employeeDocsError'];
+                return $this->sendMessage($template,$context,$teamFromEmail,$context['toEmail']);
+                break;
+            case 'employeeDocsValidated':
+                /** $context must have:
+                 * string toEmail
+                 * string userName
+                 * string employeeName
+                 */
+                $template = $this->parameters['template']['employeeDocsValidated'];
+                return $this->sendMessage($template,$context,$teamFromEmail,$context['toEmail']);
+                break;
+
         }
     }
 

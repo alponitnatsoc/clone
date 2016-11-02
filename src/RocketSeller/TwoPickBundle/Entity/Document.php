@@ -260,11 +260,7 @@ class Document
         $service = $kernel->getContainer()->get('sonata.media.twig.extension');
 
         if($this->getMediaMedia()){
-            if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
-                return 'http://'.'127.0.0.1:8000' . $service->path($this->getMediaMedia(), 'reference');
-            }else {
-                return 'https://' . $_SERVER['HTTP_HOST'] . $service->path($this->getMediaMedia(), 'reference');
-            }
+            return '//' . $_SERVER['HTTP_HOST'] . $service->path($this->getMediaMedia(), 'reference');
         }else{
             return '';
         }
