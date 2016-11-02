@@ -432,7 +432,15 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                 $template = $this->parameters['template']['contractAttachmentEmail'];
                 return $this->sendMessage($template, $context, $teamFromEmail, $context['toEmail'], $context['path']);
                 break;
-
+            case 'notRegisteredUserApp':
+                /** $context must have:
+                 * string name
+                 * string userEmail
+                 * string phone
+                 */
+                $template = $this->parameters['template']['notRegisteredUserApp'];
+            return $this->sendMessage($template, $context,$contactPublicFromEmail,$contactPublic);
+                break;
         }
     }
 
@@ -587,5 +595,5 @@ class TwigSwiftMailer extends Controller implements MailerInterface
         return $this->mailer->send($message);
     }
 
-    
+
 }
