@@ -10,6 +10,7 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use GuzzleHttp\Psr7\Response;
 use RocketSeller\TwoPickBundle\Admin\ContractHasBenefitsAdmin;
@@ -18,6 +19,7 @@ use RocketSeller\TwoPickBundle\Entity\Action;
 use RocketSeller\TwoPickBundle\Entity\ActionType;
 use RocketSeller\TwoPickBundle\Entity\Bank;
 use RocketSeller\TwoPickBundle\Entity\Benefits;
+use RocketSeller\TwoPickBundle\Entity\Campaign;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\ContractDocumentStatusType;
 use RocketSeller\TwoPickBundle\Entity\ContractHasBenefits;
@@ -49,6 +51,7 @@ use RocketSeller\TwoPickBundle\Entity\Phone;
 use RocketSeller\TwoPickBundle\Entity\ProcedureType;
 use RocketSeller\TwoPickBundle\Entity\RealProcedure;
 use RocketSeller\TwoPickBundle\Entity\User;
+use RocketSeller\TwoPickBundle\Entity\UserHasCampaign;
 use RocketSeller\TwoPickBundle\Entity\WeekWorkableDays;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
 use RocketSeller\TwoPickBundle\Traits\EmployeeMethodsTrait;
@@ -1407,6 +1410,8 @@ class EmployeeRestController extends FOSRestController
     {
         /** @var User $user */
         $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+
         if ($user == null) {
             $view = View::create();
             $view->setData(array('error' => array('employee' => 'user not logged')))->setStatusCode(403);
@@ -1452,7 +1457,6 @@ class EmployeeRestController extends FOSRestController
             return $view;
         }
         $realEmployeeEnt = $realEmployee->getEntities();
-        $em = $this->getDoctrine()->getManager();
 
         if ($realEmployeeEnt->count() == 0) {
 
@@ -1562,9 +1566,14 @@ class EmployeeRestController extends FOSRestController
                 return $view;
             } else {
                 // It sends here the verification code.
-                $this->sendVerificationCode();
-                $view->setData(array())->setStatusCode(200);
-                return $view;
+                if($this->sendVerificationCode()){
+                    $view->setData(array())->setStatusCode(200);
+                    return $view;
+                }else{
+                    $this->finishEmployee($realEmployerHasEmployee );
+                    $view->setData(array('url' => $this->generateUrl('show_dashboard')))->setStatusCode(200);
+                    return $view;
+                }
             }
 
         } else {
@@ -2116,8 +2125,14 @@ class EmployeeRestController extends FOSRestController
 
         $twilio = $this->get('twilio.api');
         $cellphone = $phone;
-        $twilio->account->messages->sendMessage(
-            "+19562671001", "+57" . $cellphone->getPhoneNumber(), $message);
+
+        try{
+            $twilio->account->messages->sendMessage(
+                "+19562671001", "+57" . $cellphone->getPhoneNumber(), $message);
+            return true;
+        }catch(\Exception $e){
+            return false;
+        }
     }
 
     /**
@@ -2153,18 +2168,7 @@ class EmployeeRestController extends FOSRestController
         if ($code == 0)
             $view->setData([])->setStatusCode(404);
         elseif ($code == $user->getSmsCode()) {
-            if ($realEmployee->getRegisterState() == 99) {
-                $ehe->setState(2);
-                $realEmployee->setRegisterState(100);
-                $em->persist($realEmployee);
-                $em->persist($ehe);
-                $em->flush();
-                if($user->getStatus()==2){
-                    $this->crearTramites($user);
-                    $this->validateDocuments($user);
-                }
-
-            }
+            $this->finishEmployee($ehe);
             $view->setData(['url' => $this->generateUrl('show_dashboard')])->setStatusCode(200);
         } else
             $view->setData([])->setStatusCode(401);
@@ -2175,6 +2179,51 @@ class EmployeeRestController extends FOSRestController
         }
 
         return $view;
+    }
+
+    /**
+     * @param EmployerHasEmployee $ehe
+     */
+    private function finishEmployee($ehe){
+        $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user= $this->getUser();
+        $realEmployee = $ehe->getEmployeeEmployee();
+        if ($realEmployee->getRegisterState() == 99) {
+            $ehe->setState(2);
+            $realEmployee->setRegisterState(100);
+            $contracts=$ehe->getContracts();
+            $actContract=null;
+            /** @var Contract $contract */
+            foreach ($contracts as $contract) {
+                if($contract->getState()==1){
+                    $actContract=$contract;
+                    break;
+                }
+            }
+            $em->persist($realEmployee);
+            $em->persist($ehe);
+            $campaignRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Campaign");
+            /** @var Campaign $campaign150 */
+            $campaign150 = $campaignRepo->findOneBy(array('description'=>'150k'));
+            $dateToday = new DateTime();
+            if($campaign150->getDateStart()<=$dateToday&&$campaign150->getDateEnd()>=$dateToday&&$actContract->getPayMethodPayMethod()->getPayTypePayType()->getSimpleName()!="EFE"){
+                $uHCs = $user->getUserHasCampaigns();
+                if($this->check150kCampaing($uHCs)==null){
+                    //activate 150k Campaign
+                    $eligible = new UserHasCampaign();
+                    $eligible->setCampaignCampaign($campaign150);
+                    $eligible->setUserUser($user);
+                    $em->persist($eligible);
+                }
+            }
+            $em->flush();
+            if($user->getStatus()==2){
+                $this->crearTramites($user);
+                $this->validateDocuments($user);
+            }
+
+        }
     }
 
 }

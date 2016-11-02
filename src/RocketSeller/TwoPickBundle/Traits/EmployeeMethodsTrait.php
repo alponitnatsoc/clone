@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Traits;
 
 use DateTime;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectManagerAware;
 use Doctrine\Common\Persistence\ObjectRepository;
@@ -10,6 +11,7 @@ use Doctrine\ORM\EntityManager;
 use RocketSeller\TwoPickBundle\Controller\UtilsController;
 use RocketSeller\TwoPickBundle\Entity\Action;
 use RocketSeller\TwoPickBundle\Entity\ActionType;
+use RocketSeller\TwoPickBundle\Entity\Campaign;
 use RocketSeller\TwoPickBundle\Entity\Configuration;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\Document;
@@ -25,6 +27,7 @@ use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\RealProcedure;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\Notification;
+use RocketSeller\TwoPickBundle\Entity\UserHasCampaign;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Validator\Constraints\Date;
 
@@ -1559,6 +1562,7 @@ trait EmployeeMethodsTrait
         $dateToday = new DateTime();
         /** @var User $user */
         $user = $realUser;
+        $this->activate150KCampaign($user);
         $effectiveDate = $user->getLastPayDate();
         $isFreeMonths = $user->getIsFree();
         if($isFreeMonths==0){
@@ -1600,6 +1604,37 @@ trait EmployeeMethodsTrait
             }
         }
 
+    }
+
+    /**
+     * @param User $user
+     */
+    private function activate150KCampaign($user){
+        $em = $this->getDoctrine()->getManager();
+        $campaignRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Campaign");
+        /** @var Campaign $campaign150 */
+        $campaign150 = $campaignRepo->findOneBy(array('description'=>'150k'));
+        $dateToday = new DateTime();
+        if($campaign150->getDateStart()<=$dateToday&&$campaign150->getDateEnd()>=$dateToday){
+            $uHCs = $user->getUserHasCampaigns();
+            $uHC=$this->check150kCampaing($uHCs);
+            if($uHC!=null){
+                //enable 150k Campaign
+                $uHC->setDateStarted($dateToday);
+                $uHC->setState(1);
+                $em->persist($uHC);
+            }
+        }
+
+    }
+    private function check150kCampaing(Collection $uHCs){
+        /** @var UserHasCampaign $uHC */
+        foreach ($uHCs as $uHC) {
+            if($uHC->getCampaignCampaign()->getDescription()=="150k"){
+                return $uHC;
+            }
+        }
+        return null;
     }
 
 }

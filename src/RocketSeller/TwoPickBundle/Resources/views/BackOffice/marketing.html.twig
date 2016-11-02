@@ -21,6 +21,7 @@
                         <td class="tbHeader">E-Mail</>
                         <td class="tbHeader">Teléfono</td>
                         <td class="tbHeader">Fecha Inscripción</td>
+                        <td class="tbHeader">Tipo</td>
                     </tr>
                     </thead>
                     <tbody>
@@ -31,6 +32,7 @@
                             <td>{{ landing.email }}</td>
                             <td>{{ landing.phone }}</td>
                             <td>{{ landing.createdAt|date('y-m-d h:i:s a') }}</td>
+                            <td>{{ landing.type}}</td>
                         </tr>
                     {% endfor %}
                     </tbody>

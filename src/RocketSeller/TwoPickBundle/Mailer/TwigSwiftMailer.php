@@ -422,6 +422,16 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                 $template = $this->parameters['template']['employeeDocsValidated'];
                 return $this->sendMessage($template,$context,$teamFromEmail,$context['toEmail']);
                 break;
+            case 'contractAttachmentEmail':
+                /** $context must have:
+                 * string toEmail
+                 * string userName
+                 * strubg docType (contrato o mandato)
+                 * string path
+                 */
+                $template = $this->parameters['template']['contractAttachmentEmail'];
+                return $this->sendMessage($template, $context, $teamFromEmail, $context['toEmail'], $context['path']);
+                break;
 
         }
     }

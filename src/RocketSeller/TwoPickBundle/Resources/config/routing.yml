@@ -114,7 +114,7 @@ show_pilas:
     path:     /backoffice/show/pilas
     defaults: { _controller: RocketSellerTwoPickBundle:PurchaseOrdersDescription:index}
 persist_planilla_id:
-    path:     /backoffice/planilla/persista/{id}/{idPod}/{payFile}
+    path:     /backoffice/planilla/persista/{fileName}/{idPod}/{payFile}
     defaults: { _controller: RocketSellerTwoPickBundle:PurchaseOrdersDescription:persistPilaEnlaceOperativoCode}
 add_planilla_type_to_contracts:
     path:     /backoffice/planillaType/addtoback/{autentication}
@@ -230,3 +230,12 @@ back_pila_state_register_update:
 export_error_pila_afiliation:
     path:         /backoffice/export/error/pila/inscription/{idTransaction}
     defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:exportPilaOperatorAfiliationError }
+back_fix_pods:
+    path:         /backoffice/fix/pod
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:fixPODPila }
+back_add_employer_enlace_operativo:
+    path:         /backoffice/pila/add/enlace/operativo/{idEmployer}
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:addEmployerToEnlaceOperativoBack}
+back_load_files_enlace_operativo:
+    path:         /backoffice/pila/load/file/enlace/operativo
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:sendPlanillaFileToEnlaceOperativoBack }

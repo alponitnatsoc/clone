@@ -511,6 +511,10 @@ home_landing:
     path:     /
     defaults: { _controller: "%route_home%" }
 
+real_landing:
+    path:     /lohagobien
+    defaults: { _controller: RocketSellerTwoPickBundle:Public:landing }
+
 beneficios:
     path:     /beneficios
     defaults: { _controller: RocketSellerTwoPickBundle:Public:beneficios }

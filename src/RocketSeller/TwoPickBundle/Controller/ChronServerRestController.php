@@ -173,7 +173,7 @@ class ChronServerRestController extends FOSRestController
      *
      * @return View
      */
-    public function putPendingDocumentsRemainderAction() {
+    public function putPendingDocumentsReminderAction() {
 
         $userRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
         $users = $userRepo->findAll();
@@ -235,6 +235,67 @@ class ChronServerRestController extends FOSRestController
     }
 
     /**
+     *  Send reminder tu upload contract<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Send reminder tu upload contract",
+     *   statusCodes = {
+     *     200 = "OK"
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function putUploadContractReminderAction() {
+
+        $userRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+        $users = $userRepo->findAll();
+        $resultUsers = array();
+        foreach($users as $user) {
+            //status 2 -> completed step 3
+            if($user->getStatus() != 2) continue;
+
+            if($user->getDevices()->count() == 0) continue;
+
+            foreach ($user->getPersonPerson()->getEmployer()->getEmployerHasEmployees() as $eHE ){
+                if($eHE->getState() < 4) continue;
+                // dump($eHE);
+                $dateRegisteredToSQL = $eHE->getDateRegisterToSQL();
+                if($dateRegisteredToSQL == null) continue;
+                if($eHE->getActiveContract()->getDocumentDocument() != null) continue;
+                $today = new DateTime();
+                $difference = $today->diff($dateRegisteredToSQL);
+
+                //day 1, 7, 15 and 30 after added to sql
+                if($difference->d == 1 || $difference->d == 7 || $difference->d == 15 || $difference->d == 30) {
+
+                    $message = "¡Hola! No olvides subir tu contrato firmado";
+                    $title = "Symplifica";
+                    $longMessage = "¡Hola! No olvides subir tu contrato firmado y así formalizar por completo la relación laboral. Descárgalo ahora";
+
+                    $request = new Request();
+                    $request->setMethod("POST");
+                    $request->request->add(array(
+                        "idUser" => $user->getId(),
+                        "title" => $title,
+                        "message" => $message,
+                        "longMessage" => $longMessage
+                    ));
+                    $pushNotificationService = $this->get('app.symplifica_push_notification');
+                    $result = $pushNotificationService->postPushNotificationAction($request);
+                    $collect = $result->getData();
+                    $resultUsers[] = array('userId' => $user->getId(), 'resultPush' => $collect);
+                    break;
+                }
+            }
+        }
+        $view = View::create();
+        $view->setStatusCode(200);
+        return $view->setData($resultUsers);
+    }
+
+    /**
      *  Send reminder of payments and register novelties<br/>
      *
      * @ApiDoc(
@@ -247,42 +308,59 @@ class ChronServerRestController extends FOSRestController
      *
      * @return View
      */
-    public function putPaymentRemainderAction($message, $longMessage, $period) {
-        $payrollRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
+    public function putPaymentReminderAction($message, $longMessage, $period) {
+
         $now = new \DateTime('now');
         $currMonth = $now->format('m');
         $currYear = $now->format('Y');
-        $payrolls = $payrollRepo->findBy(array('period' => $period,
-                                               'year' => $currYear,
-                                               'month' => $currMonth,
-                                               'paid' => 0));
-        $people = array();
-        foreach ($payrolls as $payroll) {
-            if($payroll->getPaid() == 0) {
-                $person = $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()
-                                    ->getEmployerEmployer()->getPersonPerson();
-                $people[] = $person;
-            }
-        }
+
         $userRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
-        $users = $userRepo->findBy(array('personPerson' => $people));
+        $users = $userRepo->findAll();
         $resultUsers = array();
         foreach ($users as $user) {
-            $title = "Symplifica";
+            if($user->getStatus() < 2) continue;
 
-            $request = new Request();
-            $request->setMethod("POST");
-            $request->request->add(array(
-                "idUser" => $user->getId(),
-                "title" => $title,
-                "message" => $message,
-                "longMessage" => $longMessage,
-                "page" => 'PaymentsPage'
-            ));
-            $pushNotificationService = $this->get('app.symplifica_push_notification');
-            $result = $pushNotificationService->postPushNotificationAction($request);
-            $collect = $result->getData();
-            $resultUsers[] = array('userId' => $user->getId(), 'result' => $collect);
+            /** @var EmployerHasEmployee $eHE */
+            foreach ($user->getPersonPerson()->getEmployer()->getEmployerHasEmployees() as $eHE ){
+                if($eHE->getState() < 4) continue;
+                if($eHE->getActiveContract()) {
+                    $contract = $eHE->getActiveContract();
+                    $activPayroll = $contract->getActivePayroll();
+                    if($activPayroll && $activPayroll->getPeriod() == $period &&
+                       $activPayroll->getYear() == $currYear &&
+                       $activPayroll->getMonth() == $currMonth) {
+                        $title = "Symplifica";
+
+                        $request = new Request();
+                        $request->setMethod("POST");
+                        $request->request->add(array(
+                            "idUser" => $user->getId(),
+                            "title" => $title,
+                            "message" => $message,
+                            "longMessage" => $longMessage,
+                            "page" => 'PaymentsPage'
+                        ));
+                        $pushNotificationService = $this->get('app.symplifica_push_notification');
+                        $result = $pushNotificationService->postPushNotificationAction($request);
+                        $collect = $result->getData();
+
+                        $smailer = $this->get('symplifica.mailer.twig_swift');
+                        if ($period == 2) {
+                            $send=$smailer->sendEmailByTypeMessage(array('emailType'=>'lastReminderPay',
+                                                                     'toEmail'=>$user->getEmail(),
+                                                                     'userName'=>$user->getPersonPerson()->getFullName(),
+                                                                     'days'=>2));
+                        } elseif ($period == 4) {
+                            $send=$smailer->sendEmailByTypeMessage(array('emailType'=>'lastReminderPay',
+                                                                     'toEmail'=>$user->getEmail(),
+                                                                     'userName'=>$user->getPersonPerson()->getFullName(),
+                                                                     'days'=>3));
+                        }
+                        $resultUsers[] = array('userId' => $user->getId(), 'resultPush' => $collect, 'resultMail' => $send);
+                        break;
+                    }
+                }
+            }
         }
 
         $view = View::create();
@@ -345,6 +423,139 @@ class ChronServerRestController extends FOSRestController
         $view = View::create();
         $view->setStatusCode(200);
         return $view->setData($resultUsers);
+    }
+
+    /**
+     * Reminder daviplata.
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Send the reminder to create daviplata if not created.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when error"
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function putDaviplataReminderAction($period)
+    {
+        $resultUsers = array();
+        $notifications = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository("RocketSellerTwoPickBundle:Notification")
+            ->findBy(
+                array(
+                    "accion" => 'Crear Daviplata',
+                    "status" => 1,
+                )
+            );
+        if(!$notifications) {
+            $view = View::create();
+            $view->setStatusCode(200);
+            return $view->setData($resultUsers);
+        }
+
+        $date = new \DateTime();
+        if($period == 4) {
+            /** @var Notification $notification */
+            foreach ($notifications as $notification) {
+                $person = $notification->getPersonPerson();
+                /** @var User $user */
+                $user = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('personPerson'=>$person));
+                if($user) {
+                    $pices = explode('/',$notification->getRelatedLink());
+                    if($pices) {
+                        $pMethod = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:PayMethod")->find($pices[2]);
+                        if($pMethod) {
+                            /** @var Contract $contract */
+                            $contract=$this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:Contract")->findOneBy(array('payMethodPayMethod'=>$pMethod));
+                            if($contract){
+                                if($contract->getActivePayroll()->getMonth() == $date->format('m') and $contract->getActivePayroll()->getPeriod()==4) {
+                                    echo 'email    ' . $user->getEmail() . '      ----   ';
+                                    $smailer = $this->get('symplifica.mailer.twig_swift');
+                                    $context = array(
+                                        'emailType'=>'reminderDaviplata',
+                                        'toEmail'=>$user->getEmail(),
+                                        'userName'=>$user->getPersonPerson()->getFullName(),
+                                        'employeeName'=>$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName()
+                                    );
+                                    $send = $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+                                    $message = "¡Hola! Recuerda activar la cuenta Daviplata";
+                                    $title = "Symplifica";
+                                    $longMessage = "¡Hola! Te recordamos crear y activar la cuenta Daviplata de tu empleado antes de realizar el pago de su sueldo";
+
+                                    $request = new Request();
+                                    $request->setMethod("POST");
+                                    $request->request->add(array(
+                                        "idUser" => $user->getId(),
+                                        "title" => $title,
+                                        "message" => $message,
+                                        "longMessage" => $longMessage
+                                    ));
+                                    $pushNotificationService = $this->get('app.symplifica_push_notification');
+                                    $result = $pushNotificationService->postPushNotificationAction($request);
+                                    $collect = $result->getData();
+                                    $resultUsers[] = array('userId' => $user->getId(), 'resultPush' => $collect, 'resultMail' => $send);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } elseif ($period == 2) {
+            /** @var Notification $notification */
+            foreach ($notifications as $notification) {
+                $person = $notification->getPersonPerson();
+                /** @var User $user */
+                $user = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('personPerson' => $person));
+                if ($user) {
+                    $pices = explode('/', $notification->getRelatedLink());
+                    if ($pices) {
+                        $pMethod = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:PayMethod")->find($pices[2]);
+                        if ($pMethod) {
+                            /** @var Contract $contract */
+                            $contract = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:Contract")->findOneBy(array('payMethodPayMethod' => $pMethod));
+                            if ($contract) {
+                                if ($contract->getActivePayroll()->getMonth() == $date->format('m') and $contract->getActivePayroll()->getPeriod() == 2) {
+                                    $context = array(
+                                        'emailType'=>'daviplataReminder',
+                                        'toEmail'=>$user->getEmail(),
+                                        'userName'=>$user->getPersonPerson()->getFullName(),
+                                        'employeeName'=>$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName()
+                                    );
+                                    $send = $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+                                    $message = "¡Hola! Recuerda activar la cuenta Daviplata";
+                                    $title = "Symplifica";
+                                    $longMessage = "¡Hola! Te recordamos crear y activar la cuenta Daviplata de tu empleado antes de realizar el pago de su sueldo";
+
+                                    $request = new Request();
+                                    $request->setMethod("POST");
+                                    $request->request->add(array(
+                                        "idUser" => $user->getId(),
+                                        "title" => $title,
+                                        "message" => $message,
+                                        "longMessage" => $longMessage
+                                    ));
+                                    $pushNotificationService = $this->get('app.symplifica_push_notification');
+                                    $result = $pushNotificationService->postPushNotificationAction($request);
+                                    $collect = $result->getData();
+                                    $resultUsers[] = array('userId' => $user->getId(), 'resultPush' => $collect, 'resultMail' => $send);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        $view = View::create();
+        $view->setData($resultUsers)->setStatusCode(200);
+        return $view;
+
     }
 
 }

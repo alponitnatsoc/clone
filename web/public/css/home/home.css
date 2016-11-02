@@ -14,6 +14,7 @@ a {text-decoration: none}
 .azuloscuro {background: #3c4b5a}
 .azulmedio {background: #00838c}
 .azulclaro {background: #00cccb}
+.grisclaro {background: #f7f7f7}
 
 .light-italic {font-family: 'Open Sans', sans-serif;font-weight: 300;font-style:italic}
 .light {font-family: 'Open Sans', sans-serif;font-weight: 300}
@@ -324,6 +325,11 @@ font-weight: 100;
 .texto-bullets {padding: 60px 0; box-sizing: border-box; font-size: 17px}
 .texto-bullets p {margin: 0}
 .numeros { float: left;padding-right: 20px;}
+
+/*empieza la seccion de logos min*/
+
+.min {padding: 0 0 50px !important;}
+.minH2 {padding: 50px 0 0}
 
 /*modal 2*/
 .modalDialog {

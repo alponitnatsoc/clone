@@ -49,6 +49,13 @@ class LandingRegistration
     private $phone;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", length=10)
+     */
+    private $type;
+
+    /**
      * @var \DateTime
      * @ORM\Column(type="datetime")
      */
@@ -191,5 +198,29 @@ class LandingRegistration
     public function getPhone()
     {
         return $this->phone;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     *
+     * @return LandingRegistration
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 }

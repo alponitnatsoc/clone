@@ -38,12 +38,14 @@
                           <td style="vertical-align: middle">{{ utils.month_number_to_name(pila.payrollsPila[0].month) }}</td>
                           <td style="vertical-align: middle">Id: {{ pila.idPurchaseOrdersDescription }} - Tipo: {{ fileType }}</td>
                           <td style="vertical-align: middle">$ {{ pila.value|number_format(0) }} </td>
-                          <td style="vertical-align: middle"> <input id= {{idFileName}} value= "{{ fileStoredName }}" size="10"></input> <button id= {{idFileNameButton}} class="saveId">Guardar</button><button id= {{idFileNameButton}} class="okId">Aprobar Planilla</button></td>
+                          <td style="vertical-align: middle"> <input id= {{idFileName}} value= "{{ fileStoredName }}" size="10"></input> <button id= {{idFileNameButton}} class="saveId">Guardar Sin Aprobar</button><button id= {{idFileNameButton}} class="okId">Guardar y Aprobar</button></td>
                           <td style="vertical-align: middle">
                               {% if pila.uploadedFile == NULL %}
                                   El usuario no ha pagado aún
                               {% elseif pila.uploadedFile == -1 %}
-                                  El archivo subió sin errores ni advertencias
+                                  La planilla subió sin errores ni advertencias
+                              {% elseif pila.uploadedFile == -2 %}
+                                  Operaciones no ha aprobado la planilla
                               {% elseif pila.uploadedFile > 0 %}
                                 {% for trans in pila.transactions %}
                                     {% if trans.idTransaction ==  pila.uploadedFile %}

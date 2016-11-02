@@ -550,6 +550,9 @@ class PaymentMethodRestController extends FOSRestController
         $codes=array();
         /** @var PurchaseOrdersDescription $desc */
         foreach ($descriptions as $desc) {
+            if($desc->getProductProduct()!=null&&$desc->getProductProduct()->getSimpleName()=="DIS"){
+                continue;
+            }
             $pays=$desc->getPayPay();
             if($pays==null){
                 $dispersionAnswer=$this->disperseMoney($desc,$person);
@@ -585,7 +588,7 @@ class PaymentMethodRestController extends FOSRestController
                         'idPOD'=>$rejectedPOD->getIdPurchaseOrdersDescription(),
                         'value'=>$valor
                     );
-                    $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
+                    //$this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
                     $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'-2'));
                     $desc->setPurchaseOrdersStatus($pos);
                     $em->persist($purchaseOrder);
@@ -631,7 +634,7 @@ class PaymentMethodRestController extends FOSRestController
                             'toEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
                             'userName'=>$employerPerson->getFullName(),
                         );
-                        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+                        //$this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
                         $contextBack=array(
                             'emailType'=>'regectionDispersion',
                             'userEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
@@ -948,11 +951,12 @@ class PaymentMethodRestController extends FOSRestController
                     $purchaseOrder->setDatePaid(new DateTime());
                     $em->persist($purchaseOrder);
                     $em->flush();
+                    $request->setMethod("POST");
                     $request->request->add(array(
                         "numeroRadicado" => $radicatedNumber,
                         "estado" => "0"
                     ));
-                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postCollectionNotification',array("request"=>$request), array('_format' => 'json'));
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:HighTechRest:postCollectionNotification',array("request"=>$request), array('_format' => 'json'));
                     return array('code'=>$insertionAnswer->getStatusCode(),'data'=> $insertionAnswer->getContent());
 
                 }else{

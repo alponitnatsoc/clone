@@ -184,7 +184,7 @@ class LoadPurchaseOrdersStatusData extends AbstractFixture implements OrderedFix
 	
 		    $PurchaseOrdersStatusInscribirOperador4 = new PurchaseOrdersStatus();
 		    $PurchaseOrdersStatusInscribirOperador4->setName('Inscripción aprobada');
-		    $PurchaseOrdersStatusInscribirOperador4->setDescription('El operador ya está inscrito en el operador');
+		    $PurchaseOrdersStatusInscribirOperador4->setDescription('El empleador ya está inscrito en el operador');
 		    $PurchaseOrdersStatusInscribirOperador4->setIdNovoPay('InsPil-InsOk');
 		    $manager->persist($PurchaseOrdersStatusInscribirOperador4);
 	
@@ -206,12 +206,24 @@ class LoadPurchaseOrdersStatusData extends AbstractFixture implements OrderedFix
 		    $PurchaseOrdersStatusCargaPlanilla3->setDescription('La planilla presentó errores al subirla al operador');
 		    $PurchaseOrdersStatusCargaPlanilla3->setIdNovoPay('CarPla-PlaErr');
 		    $manager->persist($PurchaseOrdersStatusCargaPlanilla3);
+	
+		    $PurchaseOrdersStatusCargaPlanilla4 = new PurchaseOrdersStatus();
+		    $PurchaseOrdersStatusCargaPlanilla4->setName('Planilla advertencias');
+		    $PurchaseOrdersStatusCargaPlanilla4->setDescription('La planilla presentó advertencias al subirla al operador');
+		    $PurchaseOrdersStatusCargaPlanilla4->setIdNovoPay('CarPla-PlaWar');
+		    $manager->persist($PurchaseOrdersStatusCargaPlanilla4);
 	    
 		    $PurchaseOrdersStatusCargaPlanilla6 = new PurchaseOrdersStatus();
 		    $PurchaseOrdersStatusCargaPlanilla6->setName('Planilla cargada');
 		    $PurchaseOrdersStatusCargaPlanilla6->setDescription('La planilla se cargó correctamente');
 		    $PurchaseOrdersStatusCargaPlanilla6->setIdNovoPay('CarPla-PlaOK');
 		    $manager->persist($PurchaseOrdersStatusCargaPlanilla6);
+	
+		    $PurchaseOrdersStatusCargaPlanilla7 = new PurchaseOrdersStatus();
+		    $PurchaseOrdersStatusCargaPlanilla7->setName('Planilla no enviada');
+		    $PurchaseOrdersStatusCargaPlanilla7->setDescription('Hay novedades entonces no se envia');
+		    $PurchaseOrdersStatusCargaPlanilla7->setIdNovoPay('CarPla-ErrNov');
+		    $manager->persist($PurchaseOrdersStatusCargaPlanilla7);
 	    
 	      $manager->flush();
     }
