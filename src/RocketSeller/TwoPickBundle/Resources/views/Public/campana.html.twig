@@ -88,13 +88,14 @@
             background: #6c9da2;
             border: none;
             width: 49%;
-            color: #FFF
+            color: #FFF;
+            white-space: normal;
         }
 
         #form .start {
             background: #3e6e73;
             border: none;
-            width: 49%;
+            width: 90%;
             color: #FFF
         }
 
@@ -119,7 +120,7 @@
             background-size: cover;
             background-attachment: fixed;
             background-position: center center;
-            height: 235px;
+            height: 135px;
         }
 
         #pig img {
@@ -150,7 +151,11 @@
             height: auto;
             overflow: hidden;
         }
-
+        .error {
+          color: #5D5D5D;
+          font-size: 12px;
+          font-weight: 100;
+        }
         .pasos span {
             font-size: 35px;
             color: #fd9224;
@@ -257,12 +262,85 @@
           box-sizing: border-box;
           color: #5D5D5D;
         }
+        /*animaciones*/
+        .animated {
+          animation: 1s 2s 2;
+          animation-fill-mode: both;
+        }
+        .tada {
+  -webkit-animation-name: tada;
+  animation-name: tada;
+  -webkit-animation-duration: 1.5s;
+  animation-duration: 1.5s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  }
+  @-webkit-keyframes tada {
+  0% {
+  -webkit-transform: scale3d(1, 1, 1);
+  transform: scale3d(1, 1, 1);
+  }
+  10%, 20% {
+  -webkit-transform: scale3d(1, 1, 1) rotate3d(0, 0, 1, -0.5deg);
+  transform: scale3d(1, 1, 1) rotate3d(0, 0, 1, -0.5deg);
+  }
+  30%, 50%, 70%, 90% {
+  -webkit-transform: scale3d(1.05, 1.05, 1.05) rotate3d(0, 0, 1, 0.5deg);
+  transform: scale3d(1.05, 1.05, 1.05) rotate3d(0, 0, 1, 0.5deg);
+  }
+  40%, 60%, 80% {
+  -webkit-transform: scale3d(1.05, 1.05, 1.05) rotate3d(0, 0, 1, -0.5deg);
+  transform: scale3d(1.05, 1.05, 1.05) rotate3d(0, 0, 1, -0.5deg);
+  }
+  100% {
+  -webkit-transform: scale3d(1, 1, 1);
+  transform: scale3d(1, 1, 1);
+  }
+  }
+  @keyframes tada {
+  0% {
+  -webkit-transform: scale3d(1, 1, 1);
+  transform: scale3d(1, 1, 1);
+  }
+  10%, 20% {
+  -webkit-transform: scale3d(1, 1, 1) rotate3d(0, 0, 1, -0.5deg);
+  transform: scale3d(1, 1, 1) rotate3d(0, 0, 1, -0.5deg);
+  }
+  30%, 50%, 70%, 90% {
+  -webkit-transform: scale3d(1.05, 1.05, 1.05) rotate3d(0, 0, 1, 0.5deg);
+  transform: scale3d(1.05, 1.05, 1.05) rotate3d(0, 0, 1, 0.5deg);
+  }
+  40%, 60%, 80% {
+  -webkit-transform: scale3d(1.05, 1.05, 1.05) rotate3d(0, 0, 1, -0.5deg);
+  transform: scale3d(1.05, 1.05, 1.05) rotate3d(0, 0, 1, -0.5deg);
+  }
+  100% {
+  -webkit-transform: scale3d(1, 1, 1);
+  transform: scale3d(1, 1, 1);
+  }
+  }
+
+  /*responsive*/
+
+    @media only screen and (max-width: 1100px) {
+      #descubre, #gana {width: 90%}
+    }
+
+    @media only screen and (max-width: 520px) {
+      #headerCont {width: 90%}
+      #gana .pasos {width: 100%;margin: 30px 0;}
+    }
     </style>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,700,800" rel="stylesheet">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600,600italic,700" rel="stylesheet" type="text/css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="https://unpkg.com/scrollreveal@3.3.2/dist/scrollreveal.min.js"></script>
+    <script>
+        // JavaScript
+        window.sr = ScrollReveal();
+    </script>
     <title>Responsive email</title>
 </head>
 
@@ -273,18 +351,20 @@
                 <div id="tiempoLimitado">
                     <img src="{{ asset('public/img/landing/time.png') }}" alt="tiempo limitado">
                 </div>
-                <span><img alt="Symplifica" src="{{ asset('public/img/landing/sello.png') }}"></span>
-                <span><img alt="Hacer las cosas bien paga" src="{{ asset('img/logo.png') }}"></span>
-                <div id="campañaTitle">
-                    <h2 class="bold azulmediofont">Gestiona de forma sencilla</h2>
-                    <h3 class="light azulmediofont">a los empleados de tu hogar</h3>
-                </div>
-                <div id="campañaDesc">
-                    <h1 class="bold">y recibe $150.000*</h1>
-                    <p class="back light">
-                        Inicia tu registro hoy mediante un pago electrónico y te daremos
-                        <strong>$150.000 pesos para pagar el sueldo de tu empleada*</strong>
-                    </p>
+                <div class="demo">
+                  <span><img alt="Hacer las cosas bien paga" src="{{ asset('public/img/landing/sello.png') }}"></span>
+                  <span class="foo block"><img alt="Symplifica" src="{{ asset('img/logo.png') }}"></span>
+                  <div id="campañaTitle" class="bar block">
+                      <h2 class="bold azulmediofont">Gestiona de forma sencilla</h2>
+                      <h3 class="light azulmediofont">a los empleados de tu hogar</h3>
+                  </div>
+                  <div id="campañaDesc" class="bar block tada animated">
+                      <h1 class="bold">y recibe $150.000*</h1>
+                      <p class="back light">
+                          Registrate y si pagas el salario por medios electrónicos te regalaremos
+                          <strong>$150.000 pesos para pagar el sueldo de tu empleada*</strong>
+                      </p>
+                  </div>
                 </div>
                 <div id="form">
                     {{ form_start(form) }}
@@ -293,11 +373,11 @@
                         <input class="input full" type="text" name="cellphone" value="" placeholder="Celular"><br>
                         <input class="input full" type="text" name="email" value="" placeholder="Correo electrónico">
                         <br>
-                        <input class="info buttonf" type="submit" value="¡Quiero más información!">
+                        <!--<input class="info buttonf" type="submit" value="¡Quiero más información!">-->
                         {{ form_widget(form.save, { 'attr': {'class': 'start buttonf'}}) }}
-                    {{ form_end(form) }}
+                    {{ form_end(form) }}<br />
                     <a href="#openModal" id="terminos"><input class="terms buttonf" type="submit" value="Terminos y condiciones"></a>
-                    <div class="postClic light" hidden=""> <!--este es el div que apareceria si dan clic en ¡Quiero más información!-->
+                    <div class="postClic light" hidden=""><!--este es el div que apareceria si dan clic en ¡Quiero más información!-->
                       Muy pronto uno de nuestros asesores expertos se contactará contigo para darte toda la información que necesitas.<br />
                       <strong class="bold azulclarofont">¡Que tengas un buen día!</strong>
                       {{ form_widget(form.save, { 'attr': {'class': 'start buttonf'}}) }}
@@ -376,7 +456,7 @@
                         11). El premio es por empleador, independientemente del número de trabajadores registrados. Es decir, el empleador que complete
                         el registro de más de un trabajador en las fechas de vigencia de la promoción, únicamente tendrá derecho a recibir un valor máximo
                          de $150.000 como descuento en los pagos del primer trabajador registrado.<br /><br />
-                        12). Promoción válida sólo para Colombia, para aquellas ciudades donde haya cobertura de las entidades de seguridad social.<br /><br />
+                        12). Promoción válida sólo para Colombia, y aplica solo para aquellas ciudades donde symplifica pueda hacer afiliaciones a las entidades de seguridad social.<br /><br />
                         13). El premio no puede ser cambiado por dinero en efectivo o algún otro elemento.<br /><br />
                         14). l Usuario acogerse a esta promoción, no implica permanencia mínima. El Usuario podrá cancelar su suscripción en cualquier
                         momento, inactivando todos los trabajadores que tenga registrados en SYMPLIFICA, a través de la Plataforma. No obstante, se aclara
@@ -400,19 +480,19 @@
             <div id="ganaCont">
                 <div id="gana">
                     <h1 class="light azulclarofont">¡Ganar es muy fácil!</h1><br><br>
-                    <div class="pasos light grisoscurofont">
+                    <div class="pasos light grisoscurofont box">
                         <span>&#10122;</span><br>
                         <p>Regístrate en Symplifica.com</p>
                     </div>
-                    <div class="pasos light grisoscurofont">
+                    <div class="pasos light grisoscurofont box">
                         <span>&#10123;</span><br>
                         <p>Ingresa tus datos y los de tus empleados</p>
                     </div>
-                    <div class="pasos light grisoscurofont">
+                    <div class="pasos light grisoscurofont box">
                         <span>&#10124;</span><br>
                         <p>Registra el pago de nómina por medios electrónicos</p>
                     </div>
-                    <div class="pasos light grisoscurofont">
+                    <div class="pasos light grisoscurofont box">
                         <span>&#10125;</span><br>
                         <p>Completa unos documentos</p>
                     </div>
@@ -533,6 +613,11 @@
         $('#mainVideoFrame').attr('src', $('#mainVideoFrame').attr('src'));
     }
 
+    //reveal
+    sr.reveal( ".demo .block", { reset: true, viewOffset: { top: 64 } } );
+    sr.reveal('.foo');
+    sr.reveal('.bar');
+    sr.reveal( ".box", { reset: true, viewOffset: { top: 100 } }, 100 );
 
 </script>
 
