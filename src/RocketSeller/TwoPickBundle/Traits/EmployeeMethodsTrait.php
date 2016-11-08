@@ -1368,6 +1368,7 @@ trait EmployeeMethodsTrait
             '$employerHasEmployeeEmployerHasEmployee' => $employerHasEmployee,
             'state' => 1,
         )));
+        die;
         $contract = $employerHasEmployee->getActiveContract();
 
         /** @var UtilsController $utils */
