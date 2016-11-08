@@ -20,13 +20,13 @@
 .semi-italic {font-family: 'Open Sans', sans-serif;font-weight: 600;font-style:italic}
 .bold {font-family: 'Open Sans', sans-serif;font-weight: 700}
 .extrabold {font-family: 'Open Sans', sans-serif;font-weight: 800}
-/*boton*/
+/*boton es para usar*/
 .btn-azul {
-    text-transform: none;
+    border-radius: 25px;
     background-color: #00858c;
     outline: 0;
     color: #fff;
-    font-weight: 700;
+    text-transform: uppercase;
     letter-spacing: 1px;
     font-family: "Open Sans",Helvetica,Arial;
 }
@@ -34,7 +34,18 @@
 .btn-azul:hover{color:#fff;outline:0;background:#0a6267}
 .btn-azul:focus{color:#fff;outline:0!important}
 .btn-azul.disabled{opacity:.5;background-color:#df8728;color:#efc394}
+
+.btn-grisBorde {text-transform:uppercase;background:#edeef0;outline:0;color:#757575;border-radius: 25px;border:1px solid #dbdbdb;font-family:"Open Sans",Helvetica,Arial}
+.btn-grisBorde:active{opacity:.7;box-shadow:none;outline:0;color:#fff}
+.btn-grisBorde:hover{color:#757575;outline:0;background:#dbdbdb;box-shadow:none}
+.btn-grisBorde:focus{color:#757575;outline:0!important}
+.btn-grisBorde.disabled{opacity:.5;background:#df8728;color:#efc394}
 /*boton*/
+/*registro cabeza*/
+  .cabezoteBase {
+    padding-top: 50px; 
+  }
+/*registro cabeza*/
 .newEmplAd {
   border: 1px dashed #CCC;
   margin: 0 0 10px;

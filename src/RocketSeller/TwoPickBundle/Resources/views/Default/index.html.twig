@@ -1,48 +1,205 @@
 {% extends "::base.html.twig" %}
 {% block fos_user_content %}
-    {% include 'RocketSellerTwoPickBundle:Default:welcome-inicio-registro.html.twig' %}
-    <div class="row">
-        <div class="col-sm-10 col-sm-offset-1 col-xs-12 text-center">
-            <br/>
 
+    <div id="panatalla1">
+      {% include 'RocketSellerTwoPickBundle:Default:welcome-inicio-registro.html.twig' %}
+      <div class="row margin60">
+          <div class="col-sm-10 col-sm-offset-1 col-xs-12 text-center">
+              <h4 class="light grisclarofont">
+                  <img src="{{ asset('public/img/home/icon6.png') }}" width="80" height="auto" alt="">
+                  <br /><br /><br />
+                  ¿Tu empleado ya se encuentra trabajando para tí?
+              </h4>
+          </div>
+          <div class="col-sm-4 col-sm-offset-2 col-xs-12 multipleOptions multipleRight" style="">
+              <a id="btn_legal_status" class="btn btn-grisBorde notAjax responsivestyle padd" href="{{ path('legal') }}">Sí, ya inició labores</a>
+          </div>
+          <div class="col-sm-4 col-xs-12 multipleOptions">
+              <a class="btn btn-grisBorde notAjax responsivestyle" href="{{ path('change_flag',{'flag':0}) }}">No, aún no ha iniciado
+                  labores</a>
+          </div>
+      </div>
+      <div class="row center">
+          <div class="col-sm-8 col-xs-12 col-sm-offset-2 remember" style="opacity: 0.7;">
+              <h4 onclick="$(this).next().slideToggle()" style="font-size: 14px;cursor: pointer" class=""><i
+                          class="glyphicon glyphicon-exclamation-sign"></i> ¿Por qué te preguntamos esto?</h4>
+              <span style="color:#666; font-weight:300; display:none; font-size: 14px;" id="textPorque">De acuerdo a la situación con tu empleado, podremos darte mejores alternativas para el manejo de la contratación.</span>
+          </div>
+      </div>
+    </div>
 
-            <br/><br/>
-            <h4 class="light azulmediofont">
-                <i style="font-size:25px;">¿Tu empleado ya se encuentra
-                        <br/>
-                        trabajando para tí?</i>
-            </h4>
-            <br/><br/>
-        </div>
+    <div id="pantalla2">
+      <div class="row margin60">
+          <div class="col-sm-8 col-sm-offset-2 col-xs-12 text-center borderDo padding30">
+              <h3 class="light azulclarofont">
+                  <img src="{{ asset('public/img/landing/benefit7.png') }}" width="80" height="auto" alt="">
+                  <br /><br /><br />
+                  Ten en cuenta que...
+              </h3>
+              <p class="light grisclarofont">
+                En este momento no podemos administrar empleados de tiempo parcial que no pertenezcan al <strong>SISBEN</strong> es decir que no pertenezcan al régimen contributivo.
+              </p>
+              <h4 class="light grisclarofont margin30">¿Cómo se si está en el SISBEN?</h4>
+              <a id="btn_legal_status" class="btn btn-azul notAjax responsivestyle padd" href="{{ path('legal') }}">Revisar aquí</a>
+          </div>
+          <div class="col-sm-12 col-xs-12 center margin30">
+              <a id="btn-changeOld" href="" class="btn btn-grey notAjax" >Atrás</a>
+              <a id="btn-1" href="" class="btn btn-orange">Entendido</a>
+          </div>
+      </div>
     </div>
-    <div class="row">
-        <div class="col-sm-4 col-sm-offset-2 col-xs-12 multipleOptions multipleRight" style="">
-            <a id="btn_legal_status" class="btn btn-orange notAjax responsivestyle padd" href="{{ path('legal') }}">Sí, ya inició labores</a>
-        </div>
-        <div class="col-sm-4 col-xs-12 multipleOptions">
-            <a class="btn btn-orange notAjax responsivestyle" href="{{ path('change_flag',{'flag':0}) }}">No, aún no ha iniciado
-                labores</a>
-        </div>
+
+    <div id="panatalla3">
+      <div class="row margin60">
+          <div class="col-sm-10 col-sm-offset-1 col-xs-12 text-center">
+              <h4 class="light grisclarofont">
+                  <img src="{{ asset('public/img/home/icon6.png') }}" width="80" height="auto" alt="">
+                  <br /><br /><br />
+                  ¿El empleador es?
+              </h4>
+          </div>
+          <div class="col-sm-4 col-sm-offset-2 col-xs-12 multipleOptions multipleRight" style="">
+              <a id="btn_legal_status" class="btn btn-grisBorde notAjax responsivestyle padd" href="{{ path('legal') }}">Persona natural</a>
+          </div>
+          <div class="col-sm-4 col-xs-12 multipleOptions">
+              <a class="btn btn-grisBorde notAjax responsivestyle" href="{{ path('change_flag',{'flag':0}) }}">Empresa</a>
+          </div>
+      </div>
     </div>
-    <div class="roundContainer sisbenwizard" style="padding: 20px 20px 10px;">
-        <div class="media">
-            <div class="media-left">
-                <i class="glyphicon glyphicon-info-sign bigIcon"></i>
-            </div>
-            <div class="media-body">
-                <h4 style="font-size:15px" class="media-heading grisclarofont bold">Ten encuenta que</h4>
-                  <p class="light grisclarofont" style="font-size:13px">
-                    En este momento no podemos administrar empleados de tiempo parcial que no pertenezcan al SISBEN es decir que estén en el régimen contributivo.<br />
-                    <!--<a style="text-decoration:none" href="#"><span class="grisoscurofont bold">&#10095; Contactarme cuando sea posible hacerlo.</span></a>-->
-                  </p>
-            </div>
-        </div>
+
+    <div id="panatalla4">
+      <div class="row margin60">
+          <div class="col-sm-10 col-sm-offset-1 col-xs-12 text-center">
+              <h4 class="light grisclarofont">
+                  <img src="{{ asset('public/img/home/cat4.png') }}" width="80" height="auto" alt="">
+                  <br /><br /><br />
+                  ¿El empleado esta afiliado a seguridad social?
+              </h4>
+          </div>
+          <div class="col-sm-4 col-sm-offset-2 col-xs-12 multipleOptions multipleRight" style="">
+              <a id="btn_legal_status" class="btn btn-grisBorde notAjax responsivestyle padd" href="{{ path('legal') }}">Si</a>
+          </div>
+          <div class="col-sm-4 col-xs-12 multipleOptions">
+              <a class="btn btn-grisBorde notAjax responsivestyle" href="{{ path('change_flag',{'flag':0}) }}">No</a>
+          </div>
+      </div>
     </div>
-    <div class="row center">
-        <div class="col-sm-8 col-xs-12 col-sm-offset-2 remember" style="opacity: 0.7; border: 2px; ">
-            <h4 onclick="$(this).next().slideToggle()" style="font-size: 14px;cursor: pointer" class=""><i
-                        class="glyphicon glyphicon-exclamation-sign"></i> ¿Por qué te preguntamos esto?</h4>
-            <span style="color:#666; font-weight:300; display:none; font-size: 14px;" id="textPorque">De acuerdo a la situación con tu empleado, podremos darte mejores alternativas para el manejo de la contratación.</span>
+
+    <div id="panatalla5">
+      <div class="row margin60">
+          <div class="col-sm-10 col-sm-offset-1 col-xs-12 text-center">
+              <h4 class="light grisclarofont">
+                  <img src="{{ asset('public/img/landing/benefit2.png') }}" width="80" height="auto" alt="">
+                  <br /><br /><br />
+                  ¿Tu apareces como su empleador ante las entidades de seguridad social?
+              </h4>
+          </div>
+          <div class="col-sm-4 col-sm-offset-2 col-xs-12 multipleOptions multipleRight" style="">
+              <a id="btn_legal_status" class="btn btn-grisBorde notAjax responsivestyle padd" href="{{ path('legal') }}">Si</a>
+          </div>
+          <div class="col-sm-4 col-xs-12 multipleOptions">
+              <a class="btn btn-grisBorde notAjax responsivestyle" href="{{ path('change_flag',{'flag':0}) }}">No</a>
+          </div>
+      </div>
+    </div>
+
+    <div id="panatalla6">
+      <div class="row margin60">
+          <div class="col-sm-10 col-sm-offset-1 col-xs-12 text-center">
+              <h4 class="light grisclarofont">
+                  <img src="{{ asset('public/img/landing/benefit3.png') }}" width="80" height="auto" alt="">
+                  <br /><br /><br />
+                  ¿Has pagado la seguridad social de manera cumplida?
+              </h4>
+          </div>
+          <div class="col-sm-4 col-sm-offset-2 col-xs-12 multipleOptions multipleRight" style="">
+              <a id="btn_legal_status" class="btn btn-grisBorde notAjax responsivestyle padd" href="{{ path('legal') }}">Si</a>
+          </div>
+          <div class="col-sm-4 col-xs-12 multipleOptions">
+              <a class="btn btn-grisBorde notAjax responsivestyle" href="{{ path('change_flag',{'flag':0}) }}">No</a>
+          </div>
+      </div>
+    </div>
+
+    <div id="panatalla7">
+      <div class="row margin60">
+          <div class="col-sm-10 col-sm-offset-1 col-xs-12 text-center">
+              <h4 class="light grisclarofont">
+                  <img src="{{ asset('public/img/home/cat2.png') }}" width="80" height="auto" alt="">
+                  <br /><br /><br />
+                  ¿Tu empleado inicio labores en el presente año 2016?
+              </h4>
+          </div>
+          <div class="col-sm-4 col-sm-offset-2 col-xs-12 multipleOptions multipleRight" style="">
+              <a id="btn_legal_status" class="btn btn-grisBorde notAjax responsivestyle padd" href="{{ path('legal') }}">Si</a>
+          </div>
+          <div class="col-sm-4 col-xs-12 multipleOptions">
+              <a class="btn btn-grisBorde notAjax responsivestyle" href="{{ path('change_flag',{'flag':0}) }}">No</a>
+          </div>
+      </div>
+    </div>
+
+    <div id="panatalla8">
+      <div class="row margin60">
+          <div class="col-sm-10 col-sm-offset-1 col-xs-12 text-center">
+              <h4 class="light grisclarofont">
+                  <img src="{{ asset('public/img/home/cat3.png') }}" width="80" height="auto" alt="">
+                  <br /><br /><br />
+                  ¿Tienes un contrato firmado con tu empleado?
+              </h4>
+          </div>
+          <div class="col-sm-4 col-sm-offset-2 col-xs-12 multipleOptions multipleRight" style="">
+              <a id="btn_legal_status" class="btn btn-grisBorde notAjax responsivestyle padd" href="{{ path('legal') }}">Si</a>
+          </div>
+          <div class="col-sm-4 col-xs-12 multipleOptions">
+              <a class="btn btn-grisBorde notAjax responsivestyle" href="{{ path('change_flag',{'flag':0}) }}">No</a>
+          </div>
+      </div>
+    </div>
+
+    <div id="panatalla9">
+      <div class="row center">
+        <div class="col-md-12">
+          <img src="{{ asset('public/img/home/atention.png') }}" width="80" height="auto" alt="">
+          <br /><br /><br />
+          <h3 class="bold azuloscurofont">¡Symplifica te recomienda!</h3>
+          <p class="light grisclarofont">
+            Symplifica te recomienda asesorarte con nosotros antes de seguir tu proceso de registro.
+          </p>
+          <div class="cajaTexto textoBienve light grisclarofont">
+            Para darte la mejor solución a tu situación actual nos gustaría conocer más detalles de tu relación laboral.
+            Nos pondremos en contacto contigo y realizaremos una pre-evaluación para que inicies a usar Symplifica lo antes posible.
+          </div>
         </div>
+      </div>
+      <div class="col-sm-12 col-xs-12 center margin30">
+          <a id="btn-changeOld" href="" class="btn btn-grey notAjax" >Atrás</a>
+          <a id="btn-1" href="" class="btn btn-orange">Entendido</a>
+      </div>
+    </div>
+
+    <div id="panatalla10">
+      <div class="row center">
+        <div class="col-md-12">
+          <img src="{{ asset('public/img/home/atention.png') }}" width="80" height="auto" alt="">
+          <br /><br /><br />
+          <h3 class="bold azuloscurofont">¡Symplifica te recomienda!</h3>
+          <p class="light grisclarofont" style="width: 80%; margin:0 auto">
+            Para comenzar a usar Symplifica te recomendamos saldar las responsabilidades que tengas vigentes en el
+            pasado y comenzar hoy con una relación laboral formalizada.
+          </p>
+          <div class="cajaTexto textoBienve light grisclarofont">
+            <form action="demo_form.asp" method="get">
+              <input type="checkbox" name="vehicle" value="Bike" />
+              Para darte la mejor solución a tu situación actual nos gustaría conocer más detalles de tu relación laboral.<br /><br />
+              Nos pondremos en contacto contigo y realizaremos una pre-evaluación para que inicies a usar Symplifica lo antes posible.
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12 col-xs-12 center margin30">
+          <a id="btn-changeOld" href="" class="btn btn-grey notAjax" >Atrás</a>
+          <a id="btn-1" href="" class="btn btn-orange">Entendido</a>
+      </div>
     </div>
 {% endblock %}
