@@ -106,6 +106,7 @@ services:
                     employeeDocsError: 'FOSUserBundle:EmailTemplates:employeeDocumentsErrorValidation.txt.twig'
                     employeeDocsValidated: 'FOSUserBundle:EmailTemplates:employeeDocumentsValidated.txt.twig'
                     notRegisteredUserApp: 'FOSUserBundle:EmailTemplates:notRegisteredUserApp.txt.twig'
+                    helpTransaction: 'FOSUserBundle:EmailTemplates:helpTransaction.txt.twig'
 
                 from_email:
                   confirmation: '%fos_user.registration.confirmation.from_email%'
