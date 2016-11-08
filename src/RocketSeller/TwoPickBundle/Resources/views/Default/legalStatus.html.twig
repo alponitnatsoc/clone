@@ -1,0 +1,203 @@
+{% extends "::base.html.twig" %}
+
+{%  from '@RocketSellerTwoPick/modal_templates/modal_picker.twig' import modal %}
+
+{% block fos_user_content %}
+    {# 	{% include 'RocketSellerTwoPickBundle:Default:welcome-inicio-registro.html.twig' %}#}
+    {% block stylesheets %}
+
+    {% endblock %}
+    <script>
+        window.intercomSettings = {
+            app_id: "mydavhzb",
+            name: '{{ app.user.username }}', // Full name
+            email: '{{ app.user.email }}', // Email address
+            created_at: {{ app.user.dateCreated|date("U") }}, // Signup date as a Unix timestamp
+        };
+    </script>
+    <script>
+        (function(){
+                    var w=window;
+                    var ic=w.Intercom;
+                    if(typeof ic==="function"){
+                        ic('reattach_activator');
+                        ic('update',intercomSettings);
+                    }else{
+                        var d=document;
+                        var i=function(){
+                            i.c(arguments)
+                        };
+                        i.q=[];
+                        i.c=function(args){i.q.push(args)};
+                        w.Intercom=i;
+                        function l(){
+                            var s=d.createElement('script');
+                            s.type='text/javascript';
+                            s.async=true;
+                            s.src='https://widget.intercom.io/widget/mydavhzb';
+                            var x=d.getElementsByTagName('script')[0];
+                            x.parentNode.insertBefore(s,x);
+                        }
+                        if(w.attachEvent){
+                            w.attachEvent('onload',l);
+                        }else{
+                            w.addEventListener('load',l,false);
+                        }
+                    }
+                }
+        )()
+    </script>
+    <script>
+            window.Intercom("trackEvent", "Legal-status");
+    </script>
+
+    <div id="pregunta2" >
+        <div class="row margin60">
+            <div class="col-sm-10 col-sm-offset-1 col-xs-12 text-center">
+                <h4 class="light grisclarofont">
+                    <img src="{{ asset('public/img/home/cat4.png') }}" width="80" height="auto" alt="">
+                    <br /><br /><br />
+                    ¿El empleado esta afiliado a seguridad social?
+                </h4>
+            </div>
+            <div class="col-sm-4 col-sm-offset-2 col-xs-12 multipleOptions multipleRight" style="">
+                <a id="p2b1" class="btn btn-grisBorde notAjax responsivestyle padd">Si</a>
+            </div>
+            <div class="col-sm-4 col-xs-12 multipleOptions">
+                <a id="p2b2" class="btn btn-grisBorde notAjax responsivestyle">No</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="pregunta3" style="display: none;">
+        <div class="row margin60">
+            <div class="col-sm-10 col-sm-offset-1 col-xs-12 text-center">
+                <h4 class="light grisclarofont">
+                    <img src="{{ asset('public/img/landing/benefit2.png') }}" width="80" height="auto" alt="">
+                    <br /><br /><br />
+                    ¿Tu apareces como su empleador ante las entidades de seguridad social?
+                </h4>
+            </div>
+            <div class="col-sm-4 col-sm-offset-2 col-xs-12 multipleOptions multipleRight" style="">
+                <a id="p3b1" class="btn btn-grisBorde notAjax responsivestyle padd">Si</a>
+            </div>
+            <div class="col-sm-4 col-xs-12 multipleOptions">
+                <a id="p3b2" class="btn btn-grisBorde notAjax responsivestyle">No</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="pregunta4" style="display: none;">
+        <div class="row margin60">
+            <div class="col-sm-10 col-sm-offset-1 col-xs-12 text-center">
+                <h4 class="light grisclarofont">
+                    <img src="{{ asset('public/img/landing/benefit3.png') }}" width="80" height="auto" alt="">
+                    <br /><br /><br />
+                    ¿Has pagado la seguridad social de manera cumplida?
+                </h4>
+            </div>
+            <div class="col-sm-4 col-sm-offset-2 col-xs-12 multipleOptions multipleRight" style="">
+                <a id="p4b1" class="btn btn-grisBorde notAjax responsivestyle padd">Si</a>
+            </div>
+            <div class="col-sm-4 col-xs-12 multipleOptions">
+                <a id="p4b2" class="btn btn-grisBorde notAjax responsivestyle">No</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="pregunta5" style="display: none;">
+        <div class="row margin60">
+            <div class="col-sm-10 col-sm-offset-1 col-xs-12 text-center">
+                <h4 class="light grisclarofont">
+                    <img src="{{ asset('public/img/home/cat3.png') }}" width="80" height="auto" alt="">
+                    <br /><br /><br />
+                    ¿Tienes un contrato firmado con tu empleado?
+                </h4>
+            </div>
+            <div class="col-sm-4 col-sm-offset-2 col-xs-12 multipleOptions multipleRight" style="">
+                <a id="p5b1" class="btn btn-grisBorde notAjax responsivestyle padd">Si</a>
+            </div>
+            <div class="col-sm-4 col-xs-12 multipleOptions">
+                <a id="p5b2" class="btn btn-grisBorde notAjax responsivestyle">No</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="pregunta6" style="display: none;">
+        <div class="row margin60">
+            <div class="col-sm-10 col-sm-offset-1 col-xs-12 text-center">
+                <h4 class="light grisclarofont">
+                    <img src="{{ asset('public/img/home/cat2.png') }}" width="80" height="auto" alt="">
+                    <br /><br /><br />
+                    ¿Tu empleado inicio labores en el presente año 2016?
+                </h4>
+            </div>
+            <div class="col-sm-4 col-sm-offset-2 col-xs-12 multipleOptions multipleRight" style="">
+                <a id="p6b1" class="btn btn-grisBorde notAjax responsivestyle padd">Si</a>
+            </div>
+            <div class="col-sm-4 col-xs-12 multipleOptions">
+                <a id="p6b2" class="btn btn-grisBorde notAjax responsivestyle">No</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="pregunta7" style="display: none;">
+        <div class="row center">
+            <div class="col-md-12">
+                <img src="{{ asset('public/img/home/atention.png') }}" width="80" height="auto" alt="">
+                <br /><br /><br />
+                <h3 class="bold azuloscurofont">¡Symplifica te recomienda!</h3>
+                <p class="light grisclarofont">
+                    Symplifica te recomienda asesorarte con nosotros antes de seguir tu proceso de registro.
+                </p>
+                <div class="cajaTexto textoBienve light grisclarofont">
+                    Para darte la mejor solución a tu situación actual nos gustaría conocer más detalles de tu relación laboral.
+                    Nos pondremos en contacto contigo y realizaremos una pre-evaluación para que inicies a usar Symplifica lo antes posible.
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-xs-12 center margin30">
+            <a id="p7b1"  class="btn btn-grey notAjax" >Aceptar y Continuar</a>
+        </div>
+    </div>
+
+    <div id="pregunta8" style="display: none;">
+        <div class="row center">
+            <div class="col-md-12">
+                <img src="{{ asset('public/img/home/atention.png') }}" width="80" height="auto" alt="">
+                <br /><br /><br />
+                <h3 class="bold azuloscurofont">¡Symplifica te recomienda!</h3>
+                <p class="light grisclarofont" style="width: 80%; margin:0 auto">
+                    Para comenzar a usar Symplifica te recomendamos saldar las responsabilidades que tengas vigentes en el
+                    pasado y comenzar hoy con una relación laboral formalizada.
+                </p>
+                <div id="checkBox" class="cajaTexto textoBienve light grisclarofont">
+                    <form action="demo_form.asp" method="get">
+                        <input id="theCheckBox" type="checkbox" name="vehicle" value="Bike" />
+                        Para darte la mejor solución a tu situación actual nos gustaría conocer más detalles de tu relación laboral.<br /><br />
+                        Nos pondremos en contacto contigo y realizaremos una pre-evaluación para que inicies a usar Symplifica lo antes posible.
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-xs-12 center margin30">
+            <a id="p8b2" class="btn btn-orange notAjax">Entendido</a>
+        </div>
+    </div>
+
+    <div id="reiniciar">
+        <div class="col-sm-12 col-xs-12 center margin30">
+            <a id="restart" class="btn btn-grey notAjax" >Reiniciar Cuestionario</a>
+        </div>
+    </div>
+
+{% endblock fos_user_content %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script>
+  	$.getScript("{{ asset('/public/js/legal_status.js') }}").done(function () {
+        displayForm();
+  	});
+	</script>
+{% endblock %}

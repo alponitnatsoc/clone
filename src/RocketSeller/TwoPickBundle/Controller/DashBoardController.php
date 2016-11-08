@@ -46,7 +46,7 @@ class DashBoardController extends Controller
           }
         }
 
-        return $this->render('RocketSellerTwoPickBundle:Default:legalStatus.html.twig', array('legalStatusArr' => $legalStatusArr));
+        return $this->render('RocketSellerTwoPickBundle:Default:legalStatus.html.twig', array('legalStatusArr' => $legalStatusArr, 'user' => $this->getUser() ));
     }
     /**
      * Maneja el registro de una nueva persona con los datos básicos,

@@ -107,6 +107,7 @@ services:
                     employeeDocsValidated: 'FOSUserBundle:EmailTemplates:employeeDocumentsValidated.txt.twig'
                     notRegisteredUserApp: 'FOSUserBundle:EmailTemplates:notRegisteredUserApp.txt.twig'
                     helpTransaction: 'FOSUserBundle:EmailTemplates:helpTransaction.txt.twig'
+                    stuckRegistration: 'FOSUserBundle:EmailTemplates:stuck_registration_wizard.txt.twig'
 
                 from_email:
                   confirmation: '%fos_user.registration.confirmation.from_email%'

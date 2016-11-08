@@ -1,3 +1,6 @@
+var signedContract = -1;
+var ssSuscribed = -1;
+
 function prepareLegal() {
 
   hideOptionsAndLoadOldSettings();
@@ -265,7 +268,6 @@ function prepareUrlString (){
 }
 
 function displayForm(){
-  $("#pregunta2").hide();
   $("#pregunta3").hide();
   $("#pregunta4").hide();
   $("#pregunta5").hide();
@@ -273,14 +275,6 @@ function displayForm(){
   $("#pregunta7").hide();
   $("#pregunta8").hide();
 
-  $("#p1b1").click(function (){
-    $("#pregunta1").hide();
-    $("#pregunta2").show();
-  });
-  $("#p1b2").click(function (){
-    $("#pregunta1").hide();
-    $("#pregunta7").show();
-  });
 
   $("#p2b1").click(function (){
     $("#pregunta2").hide();
@@ -289,6 +283,7 @@ function displayForm(){
   $("#p2b2").click(function (){
     $("#pregunta2").hide();
     $("#pregunta5").show();
+    ssSuscribed = 0;
   });
 
   $("#p3b1").click(function (){
@@ -301,21 +296,23 @@ function displayForm(){
   });
 
   $("#p4b1").click(function (){
-    $("#pregunta4").hide();
-    //GOTO Register
+    window.location.href = "/store_config/1101100/change-flag/1";
   });
   $("#p4b2").click(function (){
     $("#pregunta4").hide();
     $("#pregunta7").show();
+    sendEmail("Revisar caso registro" , "El empleador es una persona natural. Si está afiliado a seguridad social. El usuario figura como su empleador en SS. Pero no ha pagado cumplidamente los aportes a SS");
   });
 
   $("#p5b1").click(function (){
     $("#pregunta5").hide();
     $("#pregunta6").show();
+    signedContract = 1;
   });
   $("#p5b2").click(function (){
     $("#pregunta5").hide();
     $("#pregunta6").show();
+    signedContract = 0;
   });
 
   $("#p6b1").click(function (){
@@ -325,20 +322,64 @@ function displayForm(){
   $("#p6b2").click(function (){
     $("#pregunta6").hide();
     $("#pregunta7").show();
-    //Differenciate email based on the p6 answer
+
+    if(signedContract == 1){
+      sendEmail("Revisar caso registro" , "El empleador es una persona natural. NO está afiliado a seguridad social. SI tiene un contrato firmado. Lo contrató hace más de un año");
+    }else {
+      sendEmail("Revisar caso registro" , "El empleador es una persona natural. NO está afiliado a seguridad social. NO tiene un contrato firmado. Lo contrató hace más de un año");
+    }
   });
 
-  $("#p8b1").click(function (){
-    $("#pregunta8").hide();
-    //Aceptar y continuar
+  $("#p7b1").click(function (){
+    window.location.href = "/logout";
   });
+
   $("#p8b2").click(function (){
-    $("#pregunta8").hide();
-    //Quiero ser contactado
+
+    if( $('#theCheckBox').is(":checked") ){
+      $contractVal = -1;
+
+      if(signedContract == 1){
+        $contractVal = 1;
+      }
+      else {
+        $contractVal = 0;
+      }
+
+      if(ssSuscribed == 0){
+        window.location.href = "/store_config/10000" + $contractVal + "0/change-flag/1";
+      }else{
+        window.location.href = "/store_config/11000" + $contractVal + "0/change-flag/1";
+      }
+    }
+
   });
 
   $("#restart").click(function (){
     location.reload();
+  });
+
+  $("#checkBox").click(function(){
+    if( $("#theCheckBox").prop('checked') == false ){
+      $("#theCheckBox").prop('checked', true);
+    }
+    else{
+      $("#theCheckBox").prop('checked', false);
+    }
+
+  });
+
+}
+
+function sendEmail(subject , message ){
+  var name = "{{ user.personPerson.fullName }}";
+  var phone = "{{ user.personPerson.phones.first.phoneNumber }}";
+  var email = "{{ user.email }}";
+
+  $.ajax( {
+    type: "POST",
+    url: '/api/public/v1/sends/registrations/stucks/emails',
+    data: jQuery.param( { "name" : name , "phone": phone , "email" : email , "message" : message , "subject" : subject } )
   });
 
 }
