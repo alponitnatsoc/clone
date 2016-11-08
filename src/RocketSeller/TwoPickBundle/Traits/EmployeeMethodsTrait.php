@@ -1092,6 +1092,16 @@ trait EmployeeMethodsTrait
             foreach ($ehes as $ehe) {
                 if($ehe->getAllDocsReadyMessageAt()==null and $ehe->getDocumentStatusType()->getDocumentStatusCode()=='ALDCIV'){
                     $this->checkSubscription($ehe);
+                    /** @var RealProcedure $procedure */
+                    $procedure = $user->getProceduresByType($this->getProcedureTypeByCode('REE'))->first();
+                    if($procedure->getProcedureStatusCode()=='DCPE'){
+                        $procedure->setProcedureStatus($this->getStatusByStatusCode('NEW'));
+                    }
+                    if($procedure->getBackOfficeDate()==null){
+                        $procedure->setBackOfficeDate(new DateTime());
+                    }
+                    $em->persist($procedure);
+                    $em->flush();
                 }
             }
             return 1;
