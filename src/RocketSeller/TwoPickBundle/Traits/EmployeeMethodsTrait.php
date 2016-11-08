@@ -179,7 +179,7 @@ trait EmployeeMethodsTrait
                 case 'Contract':
                     /** @var EmployerHasEmployee $ehe */
                     $ehe = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->findOneBy(array('employeeEmployee'=>$person->getEmployee(),'employerEmployer'=>$owner->getEmployer()));
-                    if($ehe and $ehe->getActiveContract()->getIdContract()==intval($strex[4]))
+                    if($ehe and $ehe->getActiveContract() and $ehe->getActiveContract()->getIdContract()==intval($strex[4]))
                         return $notification;
                     break;
             }
@@ -1361,10 +1361,7 @@ trait EmployeeMethodsTrait
         }
         // obtaining the active contract for the employerHasEmployee
         /** @var Contract $contract */
-        $contract = $em->getRepository('RocketSellerTwoPickBundle:Contract')->findOneBy(array(
-            'employerHasEmployeeEmployerHasEmployee' => $employerHasEmployee,
-            'state' => 1
-        ));
+        $contract = $employerHasEmployee->getActiveContract();
 
         /** @var UtilsController $utils */
         $utils = $this->get('app.symplifica_utils');
@@ -1376,7 +1373,7 @@ trait EmployeeMethodsTrait
         if($employerHasEmployee->getAuthDocument()){
             $docs['CAS']=true;
         }
-        if($contract->getDocumentDocument()){
+        if($contract!= null and $contract->getDocumentDocument()){
             $docs['CTR']=true;
         }
         foreach ($docs as $type => $status) {
