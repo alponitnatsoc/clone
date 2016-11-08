@@ -1092,6 +1092,8 @@ trait EmployeeMethodsTrait
             foreach ($ehes as $ehe) {
                 if($ehe->getAllDocsReadyMessageAt()==null and $ehe->getDocumentStatusType()->getDocumentStatusCode()=='ALDCIV'){
                     $this->checkSubscription($ehe);
+                }
+                if($ehe->getDateDocumentsUploaded()!=null){
                     /** @var RealProcedure $procedure */
                     $procedure = $user->getProceduresByType($this->getProcedureTypeByCode('REE'))->first();
                     if($procedure->getProcedureStatusCode()=='DCPE'){
