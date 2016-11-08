@@ -1220,6 +1220,16 @@ $(document).ready(function(){
                                                 ¿Cuál será el metodo de pago para tu empleado?
                                             </div>
                                         </div>
+                                        <div id="start150Campaign" class="hidden">
+                                            <div class="year">{{ campaignDates.dateStart|date("Y") }}</div>
+                                            <div class="month">{{ campaignDates.dateStart|date("m") }}</div>
+                                            <div class="day">{{ campaignDates.dateStart|date("d") }}</div>
+                                        </div>
+                                        <div id="end150Campaign" class="hidden">
+                                            <div class="year">{{ campaignDates.dateEnd|date("Y") }}</div>
+                                            <div class="month">{{ campaignDates.dateEnd|date("m") }}</div>
+                                            <div class="day">{{ campaignDates.dateEnd|date("d") }}</div>
+                                        </div>
                                         <!--<div class="col-sm-12 col-xs-12">
                                             <div class="introPayment" style="padding-bottom: 20px;">
                                                 <table>
@@ -1647,6 +1657,22 @@ $(document).ready(function(){
         {{ form_end(form) }}
     </div>
 
+    <!-- Modal campaña 150k  -->
+    <div class="modal fade" id="150kCampaign" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Advertencia medio de pago</h4>
+                </div>
+                <div class="modal-body">
+                    Estamos en campaña de obtener 150.000 si seleccionas efectivo no recibirás este beneficio
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Modal salario minimo -->
     <div class="modal fade" id="salarioMinimo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog" role="document">

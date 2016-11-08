@@ -325,6 +325,31 @@ de empleados que quieras administrar</h4>
 			</section>
 			<!--seccion de logos del min-->
 
+		<!-- Modal campaña 150k  -->
+		<div class="modal fade" id="150kCampaign" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-body" align="center">
+						<span><img alt="Symplifica" src="{{ asset('public/img/landing/sello.png') }}"></span>
+						<div id="campañaTitle">
+							<h2 class="bold azulmediofont">Gestiona de forma sencilla</h2>
+							<h3 class="light azulmediofont" style="margin-top:0;">a los empleados de tu hogar</h3>
+						</div>
+						<div id="campañaDesc" style="background: #fd9224;color: #FFF;">
+							<h1 class="bold">y recibe $150.000*</h1>
+							<p class="back light" style="margin-bottom: 15px;padding: 20px;background: #ea8b2a;">
+								Inicia tu registro hoy mediante un pago electrónico y te daremos
+								<strong>$150.000 pesos para pagar el sueldo de tu empleada*</strong>
+							</p>
+						</div>
+						<div><a class="btn azulmedio notAjax" href="{{ path('real_landing') }}" style="color:#FFF">Dime más</a></div>
+					</div>
+					<div class="modal-footer" style="background:#f1f1f1;text-align:center">
+						<button type="button" class="btn" data-dismiss="modal">Cerrar</button>
+					</div>
+				</div>
+			</div>
+		</div>
     </main>
 
 </body>
@@ -422,6 +447,15 @@ $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.mi
 
 	$('#formemail').attr('oninvalid', 'setCustomValidity("El correo escrito no es valido")');
 	$('#formemail').attr('oninput', "setCustomValidity('')");
+
+	var counter = 0;
+	var interval = setInterval(function() {
+		counter++;
+		if (counter == 10) {
+			$("#150kCampaign").modal("show");
+			clearInterval(interval);
+		}
+	}, 1000);
 
 
 	$("form[name='form']").on('submit',function (e) {

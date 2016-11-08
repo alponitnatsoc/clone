@@ -110,4 +110,54 @@ class EmailRestSecuredController extends FOSRestController {
     $view->setStatusCode(200);
     return $view->setData(array('send' => $send));
   }
+
+  /**
+   * send help transaction email
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = "send help transaction email ",
+   *   statusCodes = {
+   *     200 = "Created successfully",
+   *     400 = "Bad Request",
+   *   }
+   * )
+   *
+   * @param paramFetcher $paramFetcher ParamFetcher
+   *
+   * @RequestParam(name="idPod", nullable=false, strict=true, description="id pod")
+   * @RequestParam(name="phone", nullable=false, strict=true, description="contact phone")
+   *
+   * @return View
+   */
+  public function postSendHelpTransactionEmailAction(ParamFetcher $paramFetcher) {
+    $idPod = $paramFetcher->get('idPod');
+    $phone = $paramFetcher->get('phone');
+
+    $em = $this->getDoctrine()->getManager();
+
+    $pod = $this->getDoctrine()
+        ->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')
+        ->find($idPod);
+    $user = $this->getUser();
+
+    $context = array( 'emailType' => 'helpTransaction',
+                      'name' => $user->getPersonPerson()->getNames() . ' ' . $user->getPersonPerson()->getLastName1(),
+                      'username' => $user->getUsername(),
+                      'userId' => $user->getId(),
+                      'userEmail' => $user->getEmail(),
+                      'phone' => $phone,
+                      'idPod' => $idPod,
+                      'idNovoPay' => $pod->getPurchaseOrdersStatus()->getIdNovoPay(),
+                      'statusName' => $pod->getPurchaseOrdersStatus()->getName(),
+                      'statusDescription' => $pod->getPurchaseOrdersStatus()->getDescription()
+                  );
+
+    $smailer = $this->get('symplifica.mailer.twig_swift');
+    $send = $smailer->sendEmailByTypeMessage($context);
+
+    $view = View::create();
+    $view->setStatusCode(200);
+    return $view->setData(array('send' => $send));
+  }
 }

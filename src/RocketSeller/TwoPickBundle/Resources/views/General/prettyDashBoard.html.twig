@@ -1,0 +1,22 @@
+{% extends "::base.html.twig" %}
+{% block title %}Symplifica - Configuración inicial{% endblock %}
+{% block header %}{% endblock header %}
+{% block fos_user_content %}
+    <h3>Si quieres editar los datos que ya has ingresado da clic <a href="{{ path('show_dashboard', {'allcontents':'1'}) }}">aquí</a></h3>
+    <div class='col-sm-12 col-xs-12'><!--wizardAddLink-->
+        <a class="newEmplAd" href="{{ step1url }}">
+            <i class="fa fa-plus-circle azulclarofont"></i> Agregar empleado nuevo
+        </a>
+    </div>
+    <div id='' class='col-sm-12 col-xs-12'>
+        <a id='' class='btn col-sm-12 col-xs-12 blockStep active nav-link' href="{{ step2url }}">
+            <div id='' class='col-md-6 col-xs-12 txt-AD1'>
+                <div id='' class='text-left txt-AD1-center'>
+                    <span class="step">Ultimo Paso</span>
+                    Finalizar registro
+                </div>
+            </div>
+        </a>
+    </div>
+
+{% endblock fos_user_content %}
