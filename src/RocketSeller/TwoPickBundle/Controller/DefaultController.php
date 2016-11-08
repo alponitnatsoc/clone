@@ -19,7 +19,8 @@ class DefaultController extends Controller
         if ($this->isGranted('ROLE_BACK_OFFICE')) {
             return $this->redirectToRoute('back_office');
         }
-        return $this->render('RocketSellerTwoPickBundle:Default:index.html.twig');
+        return $this->render('RocketSellerTwoPickBundle:Default:index.html.twig', array(
+        	'user' => $this->getUser()));
     }
 
     public function contactAction(Request $request,$subject)
