@@ -305,7 +305,7 @@ class EmployerHasEmployee
      */
     public function getActiveContract(){
         $criteria = Criteria::create()
-        ->where(Criteria::expr()->eq("state",1));
+        ->where(Criteria::expr()->eq("state",true));
         return $this->contracts->matching($criteria)->first();
     }
 
