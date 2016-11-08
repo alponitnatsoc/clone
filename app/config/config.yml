@@ -115,7 +115,7 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     encryption: "%mailer_encrypt%"
-    delivery_address: "%mailer_delivery%"
+#    delivery_address: "%mailer_delivery%"
     spool:     { type: memory }
     auth_mode:  login
 
