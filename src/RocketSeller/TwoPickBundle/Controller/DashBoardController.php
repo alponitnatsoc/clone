@@ -165,10 +165,6 @@ class DashBoardController extends Controller
 //             'stateMessage' => $stateAfiliation != 100 ? "Iniciar" : "Editar",);
 //         $steps ['4'] = $step5;
 
-        if($stateEmployees == 100&&$paymentState!=1&&$allcontents==0){
-            return $this->render('RocketSellerTwoPickBundle:General:prettyDashBoard.html.twig', array('step1url' => $this->generateUrl('register_employee', array('id' => -1)),'step2url'=>$this->generateUrl('subscription_choices')));
-        }
-
         return $this->render('RocketSellerTwoPickBundle:General:dashBoard.html.twig', array('steps' => $steps));
     }
 

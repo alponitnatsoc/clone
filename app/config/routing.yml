@@ -267,8 +267,8 @@ show_user:
     path:      /user/show
     defaults:  { _controller: RocketSellerTwoPickBundle:User:myAccountShow}
 show_dashboard:
-    path:      /dashboard/{allcontents}
-    defaults:  { _controller: RocketSellerTwoPickBundle:DashBoard:showDashBoard, allcontents: 0 }
+    path:      /dashboard
+    defaults:  { _controller: RocketSellerTwoPickBundle:DashBoard:showDashBoard }
 show_dashboard_employer:
     path:      /dashboard/employer
     defaults:  { _controller: RocketSellerTwoPickBundle:DashBoardEmployer:showDashBoard }
