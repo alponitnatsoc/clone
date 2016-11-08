@@ -1361,6 +1361,13 @@ trait EmployeeMethodsTrait
         }
         // obtaining the active contract for the employerHasEmployee
         /** @var Contract $contract */
+        dump('Contrato');
+        dump($employerHasEmployee->getActiveContract());
+        dump('Contrato2');
+        dump($em->getRepository('RocketSellerTwoPickBundle:Contract')->findOneBy(array(
+            '$employerHasEmployeeEmployerHasEmployee' => $employerHasEmployee,
+            'state' => 1,
+        )));
         $contract = $employerHasEmployee->getActiveContract();
 
         /** @var UtilsController $utils */
@@ -1373,6 +1380,7 @@ trait EmployeeMethodsTrait
         if($employerHasEmployee->getAuthDocument()){
             $docs['CAS']=true;
         }
+        dump($contract);
         if($contract!= null and $contract->getDocumentDocument()){
             $docs['CTR']=true;
         }
