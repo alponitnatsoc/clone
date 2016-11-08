@@ -1362,6 +1362,7 @@ trait EmployeeMethodsTrait
         // obtaining the active contract for the employerHasEmployee
         /** @var Contract $contract */
         dump('Contrato');
+        dump($employerHasEmployee->getContracts());
         dump($employerHasEmployee->getActiveContract());
         dump('Contrato2');
         dump($em->getRepository('RocketSellerTwoPickBundle:Contract')->findOneBy(array(
