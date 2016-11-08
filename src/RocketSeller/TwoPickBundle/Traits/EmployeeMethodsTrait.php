@@ -1365,7 +1365,7 @@ trait EmployeeMethodsTrait
         dump($employerHasEmployee->getActiveContract());
         dump('Contrato2');
         dump($em->getRepository('RocketSellerTwoPickBundle:Contract')->findOneBy(array(
-            '$employerHasEmployeeEmployerHasEmployee' => $employerHasEmployee,
+            'employerHasEmployeeEmployerHasEmployee' => $employerHasEmployee,
             'state' => 1,
         )));
         die;
