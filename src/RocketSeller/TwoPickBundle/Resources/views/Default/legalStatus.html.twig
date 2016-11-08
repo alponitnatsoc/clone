@@ -1,5 +1,11 @@
 {% extends "::base.html.twig" %}
 
+{% block usrName %}
+{% endblock %}
+
+{% block logout %}
+{% endblock %}
+
 {%  from '@RocketSellerTwoPick/modal_templates/modal_picker.twig' import modal %}
 
 {% block fos_user_content %}
@@ -57,7 +63,7 @@
                 <h4 class="light grisclarofont">
                     <img src="{{ asset('public/img/home/cat4.png') }}" width="80" height="auto" alt="">
                     <br /><br /><br />
-                    ¿El empleado esta afiliado a seguridad social?
+                    ¿El empleado está afiliado a seguridad social?
                 </h4>
             </div>
             <div class="col-sm-4 col-sm-offset-2 col-xs-12 multipleOptions multipleRight" style="">
@@ -129,7 +135,7 @@
                 <h4 class="light grisclarofont">
                     <img src="{{ asset('public/img/home/cat2.png') }}" width="80" height="auto" alt="">
                     <br /><br /><br />
-                    ¿Tu empleado inicio labores en el presente año 2016?
+                    ¿Tu empleado inició a trabajar contigo este año (2016)?
                 </h4>
             </div>
             <div class="col-sm-4 col-sm-offset-2 col-xs-12 multipleOptions multipleRight" style="">
@@ -146,9 +152,9 @@
             <div class="col-md-12">
                 <img src="{{ asset('public/img/home/atention.png') }}" width="80" height="auto" alt="">
                 <br /><br /><br />
-                <h3 class="bold azuloscurofont">¡Symplifica te recomienda!</h3>
+                <h3 class="bold azuloscurofont">¡Importante!</h3>
                 <p class="light grisclarofont">
-                    Symplifica te recomienda asesorarte con nosotros antes de seguir tu proceso de registro.
+                    De acuerdo con tu situación Symplifica te recomienda asesorarte con nosotros antes de seguir tu proceso de registro.
                 </p>
                 <div class="cajaTexto textoBienve light grisclarofont">
                     Para darte la mejor solución a tu situación actual nos gustaría conocer más detalles de tu relación laboral.
@@ -166,7 +172,7 @@
             <div class="col-md-12">
                 <img src="{{ asset('public/img/home/atention.png') }}" width="80" height="auto" alt="">
                 <br /><br /><br />
-                <h3 class="bold azuloscurofont">¡Symplifica te recomienda!</h3>
+                <h3 class="bold azuloscurofont">¡Importante!</h3>
                 <p class="light grisclarofont" style="width: 80%; margin:0 auto">
                     Para comenzar a usar Symplifica te recomendamos saldar las responsabilidades que tengas vigentes en el
                     pasado y comenzar hoy con una relación laboral formalizada.
@@ -181,13 +187,31 @@
             </div>
         </div>
         <div class="col-sm-12 col-xs-12 center margin30">
-            <a id="p8b2" class="btn btn-orange notAjax">Entendido</a>
+            <a id="p8b1" class="btn btn-orange notAjax">Aceptar y Continuar</a>
+            <a id="p8b2" class="btn btn-orange notAjax">Quiero ser contactado</a>
+        </div>
+    </div>
+
+    <div id="pregunta81" style="display: none;">
+        <div class="row center">
+            <div class="col-md-12">
+                <img src="{{ asset('public/img/home/icon7.png') }}" width="80" height="auto" alt="">
+                <br /><br /><br />
+                <h3 class="bold azuloscurofont">¡Haz terminado!</h3>
+                <p class="light grisclarofont" style="width: 80%; margin:0 auto">
+                    Muy pronto uno de nuestros asesores expertos se pondrá en contacto contigo para darte la mejor asesoría antes de usar Symplifica.<br />
+                    <strong>¡Que tengas un buen día!</strong>
+                </p>
+            </div>
+        </div>
+        <div class="col-sm-12 col-xs-12 center margin30">
+            <a id="p81b1" class="btn btn-grisBorde notAjax responsivestyle padd">Aceptar y Continuar</a>
         </div>
     </div>
 
     <div id="reiniciar">
-        <div class="col-sm-12 col-xs-12 center margin30">
-            <a id="restart" class="btn btn-grey notAjax" >Reiniciar Cuestionario</a>
+        <div class="col-sm-8 col-sm-offset-2 col-xs-12 multipleOptions multipleRight" style="">
+            <a id="restart" class="btn btn-grisBorde notAjax responsivestyle padd" >Reiniciar Cuestionario</a>
         </div>
     </div>
 
