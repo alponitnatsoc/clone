@@ -177,6 +177,7 @@ trait EmployeeMethodsTrait
                         return $notification;
                     break;
                 case 'Contract':
+                    /** @var EmployerHasEmployee $ehe */
                     $ehe = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->findOneBy(array('employeeEmployee'=>$person->getEmployee(),'employerEmployer'=>$owner->getEmployer()));
                     if($ehe and $ehe->getActiveContract()->getIdContract()==intval($strex[4]))
                         return $notification;
@@ -1389,7 +1390,7 @@ trait EmployeeMethodsTrait
                     $documentType= $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findOneBy(array('docCode'=>$type));
                 }
                 if($this->getNotificationByPersonAndOwnerAndDocumentType($user->getPersonPerson(),$eePerson,$documentType)!= null){
-                    break;
+                    continue;
                 }
                 $dAction=null;
                 $nAction="Subir";
@@ -1479,8 +1480,8 @@ trait EmployeeMethodsTrait
                 else{
                   $documentType= $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findOneBy(array('docCode'=>$type));
                 }
-                if($this->getNotificationByPersonAndOwnerAndDocumentType($user->getPersonPerson(),$person,$documentType)!= null){
-                    break;
+                if($this->getNotificationByPersonAndOwnerAndDocumentType($person,$person,$documentType)!= null){
+                    continue;
                 }
                 $dAction=null;
                 $dUrl=null;
