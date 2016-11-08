@@ -268,17 +268,19 @@ function prepareUrlString (){
 }
 
 function displayForm(){
+  
   $("#pregunta3").hide();
   $("#pregunta4").hide();
   $("#pregunta5").hide();
   $("#pregunta6").hide();
   $("#pregunta7").hide();
   $("#pregunta8").hide();
+  $("#pregunta81").hide();
 
 
   $("#p2b1").click(function (){
     $("#pregunta2").hide();
-    $("#pregunta3").show();
+    $("#pregunta5").show();
   });
   $("#p2b2").click(function (){
     $("#pregunta2").hide();
@@ -292,11 +294,20 @@ function displayForm(){
   });
   $("#p3b2").click(function (){
     $("#pregunta3").hide();
-    $("#pregunta5").show();
+    $("#pregunta6").show();
   });
 
   $("#p4b1").click(function (){
-    window.location.href = "/store_config/1101100/change-flag/1";
+    $contractVal = -1;
+
+    if(signedContract == 1){
+      $contractVal = 1;
+    }
+    else {
+      $contractVal = 0;
+    }
+
+    window.location.href = "/store_config/11011" + $contractVal + "0/change-flag/1";
   });
   $("#p4b2").click(function (){
     $("#pregunta4").hide();
@@ -306,12 +317,24 @@ function displayForm(){
 
   $("#p5b1").click(function (){
     $("#pregunta5").hide();
-    $("#pregunta6").show();
+
+    if(ssSuscribed == 0){
+      $("#pregunta6").show();
+    }
+    else{
+      $("#pregunta3").show();
+    }
     signedContract = 1;
   });
   $("#p5b2").click(function (){
     $("#pregunta5").hide();
-    $("#pregunta6").show();
+
+    if(ssSuscribed == 0){
+      $("#pregunta6").show();
+    }
+    else{
+      $("#pregunta3").show();
+    }
     signedContract = 0;
   });
 
@@ -334,7 +357,7 @@ function displayForm(){
     window.location.href = "/logout";
   });
 
-  $("#p8b2").click(function (){
+  $("#p8b1").click(function (){
 
     if( $('#theCheckBox').is(":checked") ){
       $contractVal = -1;
@@ -355,8 +378,26 @@ function displayForm(){
 
   });
 
+  $("#p8b2").click(function (){
+
+    if( $('#theCheckBox').is(":checked") ){
+      if(signedContract == 1){
+        sendEmail("Revisar caso registro" , "El empleador es una persona natural. NO está afiliado a seguridad social. SI tiene un contrato firmado. Lo contrató este año pero no quizo continuar en el aviso de riesgo");
+      }else {
+        sendEmail("Revisar caso registro" , "El empleador es una persona natural. NO está afiliado a seguridad social. NO tiene un contrato firmado. Lo contrató este año pero no quizo continuar en el aviso de riesgo");
+      }
+
+      $("#pregunta8").hide();
+      $("#pregunta81").show();
+    }
+  });
+
+  $("#p81b1").click( function () {
+    window.location.href = "/logout";
+  });
+
   $("#restart").click(function (){
-    location.reload();
+    location.reload(true);
   });
 
   $("#checkBox").click(function(){

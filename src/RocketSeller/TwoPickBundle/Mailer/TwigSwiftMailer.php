@@ -47,7 +47,7 @@ class TwigSwiftMailer extends Controller implements MailerInterface
         $contactPublic = 'contactanos@symplifica.com';
         $contactPrivate = 'servicioalcliente@symplifica.com';
         $testEmail = 'andres.ramirez@symplifica.com';
-	      $registrationStuck = 'daniel.rico@symplifica.com';
+	      $registrationStuck = 'salua.garcia@symplifica.com';
         switch ($context['emailType']){
             /** tested OK */
             //$context['emailType']=='welcome'
