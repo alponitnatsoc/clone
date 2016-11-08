@@ -354,6 +354,7 @@
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="col-sm-4 col-xs-11 person">
                                         <div class="col-sm-12 col-xs-12">
                                             <h4>
@@ -364,6 +365,7 @@
 
                                             <div class="pull-right">
                                                 {% block logout %}
+                                                  {% if app.user is defined and app.user.status>=2 %}
                                                     <span id="profile" style="display: inline">
                                                         <a
                                                             {% if status < 2 %}
@@ -372,8 +374,16 @@
                                                                 class="notAjax" href=" {{ path('show_user') }}"
                                                             {% endif %}
                                                         >Mi cuenta</a>
-                                                    </span> | <span id="logout" style="display: inline"><a class="notAjax" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
-                                                    </span>
+                                                    </span> |
+                                                  {% endif %}
+                                                  {% if app.user is defined and app.user.status<2 %}
+                                                  <span id="logout" style="display: inline; margin-left:30px"><a class="notAjax" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
+                                                  </span>
+                                                  {% else %}
+                                                  <span id="logout" style="display: inline"><a class="notAjax" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
+                                                  </span>
+                                                  {% endif %}
+
                                                 {% endblock %}
                                             </div>
                                         </div>
@@ -656,6 +666,8 @@
                 $("#forbidden_format_modal").modal("show");
             }else if(idModal==17) {
                 $("#modal_image_Error").modal("show");
+            }else if(idModal==18) {
+                $("#welcome_dashboard_modal").modal("show");
             }else if(idModal==21){
                 $("#modalSiben").modal("show");
             }else if(idModal==22){
