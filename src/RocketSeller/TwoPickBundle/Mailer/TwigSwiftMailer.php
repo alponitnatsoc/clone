@@ -439,7 +439,22 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                  * string phone
                  */
                 $template = $this->parameters['template']['notRegisteredUserApp'];
-            return $this->sendMessage($template, $context,$contactPublicFromEmail,$contactPublic);
+                return $this->sendMessage($template, $context,$contactPublicFromEmail,$contactPublic);
+                break;
+            case 'helpTransaction':
+                /** $context must have:
+                 * string name
+                 * string userEmail
+                 * string phone
+                 * string userID
+                 * string username
+                 * string idPod
+                 * string idNovoPay
+                 * string statusName
+                 * string statusDescription
+                 */
+                $template = $this->parameters['template']['helpTransaction'];
+                return $this->sendMessage($template, $context,$contactPublicFromEmail,$contactPrivate);
                 break;
         }
     }
