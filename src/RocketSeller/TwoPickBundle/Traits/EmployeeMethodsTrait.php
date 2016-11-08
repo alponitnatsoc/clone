@@ -1373,7 +1373,6 @@ trait EmployeeMethodsTrait
         if($employerHasEmployee->getAuthDocument()){
             $docs['CAS']=true;
         }
-        dump($contract);
         if($contract!= null and $contract->getDocumentDocument()){
             $docs['CTR']=true;
         }
