@@ -263,3 +263,82 @@ function prepareUrlString (){
 
   return optString;
 }
+
+function displayForm(){
+  $("#pregunta2").hide();
+  $("#pregunta3").hide();
+  $("#pregunta4").hide();
+  $("#pregunta5").hide();
+  $("#pregunta6").hide();
+  $("#pregunta7").hide();
+  $("#pregunta8").hide();
+
+  $("#p1b1").click(function (){
+    $("#pregunta1").hide();
+    $("#pregunta2").show();
+  });
+  $("#p1b2").click(function (){
+    $("#pregunta1").hide();
+    $("#pregunta7").show();
+  });
+
+  $("#p2b1").click(function (){
+    $("#pregunta2").hide();
+    $("#pregunta3").show();
+  });
+  $("#p2b2").click(function (){
+    $("#pregunta2").hide();
+    $("#pregunta5").show();
+  });
+
+  $("#p3b1").click(function (){
+    $("#pregunta3").hide();
+    $("#pregunta4").show();
+  });
+  $("#p3b2").click(function (){
+    $("#pregunta3").hide();
+    $("#pregunta5").show();
+  });
+
+  $("#p4b1").click(function (){
+    $("#pregunta4").hide();
+    //GOTO Register
+  });
+  $("#p4b2").click(function (){
+    $("#pregunta4").hide();
+    $("#pregunta7").show();
+  });
+
+  $("#p5b1").click(function (){
+    $("#pregunta5").hide();
+    $("#pregunta6").show();
+  });
+  $("#p5b2").click(function (){
+    $("#pregunta5").hide();
+    $("#pregunta6").show();
+  });
+
+  $("#p6b1").click(function (){
+    $("#pregunta6").hide();
+    $("#pregunta8").show();
+  });
+  $("#p6b2").click(function (){
+    $("#pregunta6").hide();
+    $("#pregunta7").show();
+    //Differenciate email based on the p6 answer
+  });
+
+  $("#p8b1").click(function (){
+    $("#pregunta8").hide();
+    //Aceptar y continuar
+  });
+  $("#p8b2").click(function (){
+    $("#pregunta8").hide();
+    //Quiero ser contactado
+  });
+
+  $("#restart").click(function (){
+    location.reload();
+  });
+
+}

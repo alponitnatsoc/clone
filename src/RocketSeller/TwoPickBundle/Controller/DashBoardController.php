@@ -24,8 +24,7 @@ class DashBoardController extends Controller
           "2" => 0,
           "3" => 0,
           "4" => 0,
-          "5" => 0,
-          "6" => 0
+          "5" => 0
         );
 
         foreach($configurationArr as $cr){
@@ -35,17 +34,14 @@ class DashBoardController extends Controller
           elseif ($cr->getValue() == "PreLegal-SocialSecurity") {
             $legalStatusArr["2"] = 1;
           }
-          elseif( $cr->getValue() == "PreLegal-DaysMinimalWage") {
+          elseif ($cr->getValue() == "PreLegal-SocialSecurityEmployer") {
             $legalStatusArr["3"] = 1;
           }
-          elseif ($cr->getValue() == "PreLegal-SocialSecurityEmployer") {
+          elseif( $cr->getValue() == "PreLegal-SocialSecurityPayment") {
             $legalStatusArr["4"] = 1;
           }
-          elseif( $cr->getValue() == "PreLegal-SocialSecurityPayment") {
-            $legalStatusArr["5"] = 1;
-          }
           elseif ($cr->getValue() == "PreLegal-SignedContract") {
-            $legalStatusArr["6"] = 1;
+            $legalStatusArr["5"] = 1;
           }
         }
 
