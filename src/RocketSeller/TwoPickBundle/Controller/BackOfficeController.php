@@ -224,6 +224,7 @@ class BackOfficeController extends Controller
         return $this->render('RocketSellerTwoPickBundle:BackOffice:usersBackLogin.html.twig',array('users'=>$users));
 
     }
+
     public function showUnfinishedUsersAction()
     {
         $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
@@ -232,6 +233,7 @@ class BackOfficeController extends Controller
         return $this->render('RocketSellerTwoPickBundle:BackOffice:showUnfinishedUsers.html.twig',array('users'=>$users));
 
     }
+
     public function showBaseRegisterUsersAction()
     {
         $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
@@ -240,6 +242,7 @@ class BackOfficeController extends Controller
         return $this->render('RocketSellerTwoPickBundle:BackOffice:showBaseRegisterUsers.html.twig',array('users'=>$users));
 
     }
+
     public function showSuccessfulInvoicesAction($year,$month)
     {
         $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
@@ -264,6 +267,7 @@ class BackOfficeController extends Controller
         return $this->render('RocketSellerTwoPickBundle:BackOffice:showInvoices.html.twig',array('pos'=>$efectivePurchaseOrders));
 
     }
+
     public function addToNovoBackAction($user,$autentication)
     {
         $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
@@ -282,6 +286,7 @@ class BackOfficeController extends Controller
 
 
     }
+
     public function addToSQLEntitiesBackAction($user,$autentication, $idEhe)
     {
         $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
@@ -409,6 +414,7 @@ class BackOfficeController extends Controller
         return $this->redirectToRoute("show_dashboard");
 
     }
+
     public function addToSQLandHighTecBackAction($user,$autentication)
     {
         $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
@@ -439,6 +445,7 @@ class BackOfficeController extends Controller
         return $this->redirectToRoute("show_dashboard");
 
     }
+
     public function demoLoginAction($user,$autentication)
     {
         $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
@@ -465,6 +472,37 @@ class BackOfficeController extends Controller
           return $this->redirectToRoute("pages");
         }
 
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function addToSQLAction                                       ║
+     * ║ Creates employee in SQL and creates VAC actions               ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param integer $idEmployerHasEmployee                        ║
+     * ║  @param integer $procedureId                                  ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return \Symfony\Component\HttpFoundation\RedirectResponse   ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    public function addToSQLAction($idEmployerHasEmployee,$procedureId){
+        $em = $this->getDoctrine()->getManager();
+        /** @var EmployerHasEmployee $employerHasEmployee */
+        $employerHasEmployee = $this->loadClassById($idEmployerHasEmployee,"EmployerHasEmployee");
+        $addToSQL = $this->addEmployeeToSQL($employerHasEmployee);
+        if($addToSQL){
+            $employerHasEmployee->setDateRegisterToSQL(new DateTime());
+            $em->persist($employerHasEmployee);
+            $em->flush();
+            $this->addFlash("employee_added_to_sql", 'Exito al agregar el empleado a SQL');
+
+        }else{
+            $employerHasEmployee->setDateTryToRegisterToSQL(new DateTime());
+            $em->persist($employerHasEmployee);
+            $em->flush();
+            $this->addFlash("employee_added_to_sql_failed", 'No se pudo agregar el empleado a SQL');
+        }
+        return $this->redirectToRoute('show_procedure', array('procedureId'=>$procedureId), 301);
     }
 
     //todo old function test an remove Andres
@@ -838,27 +876,6 @@ class BackOfficeController extends Controller
 
         return $this->render('RocketSellerTwoPickBundle:BackOffice:ViewEmployeeDocuments.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action, 'cedula'=>$cedula,'path_document'=>$pathCedula,'nameDoc'=>$nameCedula ,'carta'=>$carta,'pathCarta'=>$pathCarta,'nameCarta'=>$nameCarta,'eHE'=>$eHE));
     }
-
-
-    public function addToSQLAction($idEmployerHasEmployee,$procedureId){
-        $em = $this->getDoctrine()->getManager();
-        /** @var EmployerHasEmployee $employerHasEmployee */
-        $employerHasEmployee = $this->loadClassById($idEmployerHasEmployee,"EmployerHasEmployee");
-        $addToSQL = $this->addEmployeeToSQL($employerHasEmployee);
-        if($addToSQL){
-            $employerHasEmployee->setDateRegisterToSQL(new DateTime());
-            $em->persist($employerHasEmployee);
-            $em->flush();
-            $this->addFlash("employee_added_to_sql", 'Exito al agregar el empleado a SQL');
-        }else{
-            $employerHasEmployee->setDateTryToRegisterToSQL(new DateTime());
-            $em->persist($employerHasEmployee);
-            $em->flush();
-            $this->addFlash("employee_added_to_sql_failed", 'No se pudo agregar el empleado a SQL');
-        }
-        return $this->redirectToRoute('show_procedure', array('procedureId'=>$procedureId), 301);
-    }
-
 
     //todo old function test an remove Andres
     public function reportErrorAction($idAction,Request $request)
@@ -1392,14 +1409,14 @@ class BackOfficeController extends Controller
         return $this->redirect($this->generateUrl('back_office'));
     }
 
-		public function userViewAction(){
-			$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+    public function userViewAction(){
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
 
-			$em = $this->getDoctrine()->getManager();
-			$userRepo = $em->getRepository('RocketSellerTwoPickBundle:User')->findAll();
+        $em = $this->getDoctrine()->getManager();
+        $userRepo = $em->getRepository('RocketSellerTwoPickBundle:User')->findAll();
 
-			return $this->render('RocketSellerTwoPickBundle:BackOffice:userView.html.twig',array('users'=>$userRepo));
-		}
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:userView.html.twig',array('users'=>$userRepo));
+    }
 
 	public function userBackOfficeStateAction(){
 		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');

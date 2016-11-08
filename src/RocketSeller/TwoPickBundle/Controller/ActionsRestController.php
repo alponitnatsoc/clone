@@ -3101,8 +3101,14 @@ class ActionsRestController extends FOSRestController
     }
 
     /**
-     * @param $docCode
-     * @return DocumentType
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function getDocumentTypeByCode                                ║
+     * ║ Returns the DocumentType that match the code send by parameter║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param $docCode                                              ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return DocumentType                                         ║
+     * ╚═══════════════════════════════════════════════════════════════╝
      */
     protected function getDocumentTypeByCode($docCode){
         return $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array('docCode'=> $docCode));
@@ -3285,6 +3291,11 @@ class ActionsRestController extends FOSRestController
                 case 'REE':
                     /** @var Employer $emmployer */
                     $emmployer = $procedure->getEmployerEmployer();
+                    if($emmployer->getIdSqlSociety()==null){
+                        $procedure->setProcedureStatus($this->getActionStatusByStatusCode('DIS'));
+                        $procedure->setStatusUpdatedAt($today);
+                        break;
+                    }
                     //if employer have at least one active employerHasEmployee
                     if(count($emmployer->getActiveEmployerHasEmployees())>0 and count($procedure->getAction())>0){
                         $error=false;
@@ -3296,6 +3307,17 @@ class ActionsRestController extends FOSRestController
                         $begin = false;
                         $finish = true;
                         $dcpe = false;
+                        /** @var Action $action */
+                        foreach ($this->getInfoEmployerActions($procedure) as $action) {
+                            if($action->getActionStatusCode()=='DCPE'){
+                                $dcpe = true;
+                            }
+                        }
+                        if($dcpe){
+                            $procedure->setProcedureStatus($this->getActionStatusByStatusCode('DCPE'));
+                            $procedure->setStatusUpdatedAt($today);
+                            break;
+                        }
                         $atLeastOne = false;
                         $ehes = $procedure->getEmployerEmployer()->getEmployerHasEmployees();
                         /** @var Action $action */
@@ -3391,6 +3413,19 @@ class ActionsRestController extends FOSRestController
                 case 'VAC':
                     /** @var Employer $emmployer */
                     $emmployer = $procedure->getEmployerEmployer();
+                    $oneFinished = false;
+                    /** @var EmployerHasEmployee $ehe */
+                    foreach ($emmployer->getActiveEmployerHasEmployees() as $ehe) {
+                        if($ehe->getExistentSQL()==1){
+                            $oneFinished = true;
+                            break;
+                        }
+                    }
+                    if(!$oneFinished){
+                        $procedure->setProcedureStatus($this->getStatusByStatusCode('DIS'));
+                        $procedure->setStatusUpdatedAt($today);
+                        break;
+                    }
                     //if employer have at least one active employerHasEmployee
                     if(count($emmployer->getActiveEmployerHasEmployees())>0 and count($procedure->getAction())>0){
                         $error=false;

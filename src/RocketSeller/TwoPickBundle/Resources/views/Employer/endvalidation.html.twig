@@ -1,5 +1,17 @@
 {% extends "::base.html.twig" %}
 {% block content %}
+    {% for eHE in user.employer.activeEmployerHasEmployees %}
+        {% if ready[eHE.idEmployerHasEmployee] is defined and ready[eHE.idEmployerHasEmployee] %}
+            {% from '@RocketSellerTwoPick/modal_templates/modal_picker.twig' import modal %}
+            {% set name = eHE.employeeEmployee.personPerson.fullName %}
+            {{ modal(6,'',name) }}
+        {% endif %}
+        {% if validated[eHE.idEmployerHasEmployee] is defined and validated[eHE.idEmployerHasEmployee] %}
+            {% from '@RocketSellerTwoPick/modal_templates/modal_picker.twig' import modal %}
+            {% set name = eHE.employeeEmployee.personPerson.fullName %}
+            {{ modal(19,'',name) }}
+        {% endif %}
+    {% endfor %}
     <link rel="stylesheet" type="text/css" href="{{ asset('../css/pantallas.css') }}"/>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700' rel='stylesheet'
           type='text/css'>
@@ -87,3 +99,24 @@
     </div>
 
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            try {
+                showModal(6);
+                showModal(15);
+                showModal(16);
+                showModal(18);
+                showModal(19);
+
+//                showModal(23);
+//                showModal2();
+            }catch(e){
+
+            }
+
+        });
+    </script>
+{% endblock javascripts %}

@@ -568,15 +568,19 @@ class ProcedureController extends Controller
         $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
         $em = $this->getDoctrine()->getManager();
         $today = new DateTime();
+        //getting the realProcedure
         /** @var RealProcedure $procedure */
     	$procedure = $this->loadClassById($procedureId,'RealProcedure');
+        $this->calculateProcedureStatus($procedure);
+        $em->persist($procedure);
+        $em->flush();
+        //calculating generalStatus for employer and all employees
         $generalStatus = array();
         $generalStatus['employerInfo']=$this->checkEmployerInfoActions($procedure);
         $generalStatus['employeesInfo']=$this->checkEmployeeInfoActions($procedure);
-        $this->calculateProcedureStatus($procedure);
+
         $this->calculateProcedurePriority($procedure);
-        $em->persist($procedure);
-        $em->flush();
+
         /** @var Action $action */
         foreach ($procedure->getAction() as $action) {
             $action->setPriority($procedure->getPriority());
@@ -614,98 +618,20 @@ class ProcedureController extends Controller
         if($employer->getAllDocsReadyAt()==null){
             $employer->setDocumentStatus($this->getDocumentStatusByCode('ALLDCP'));
             $em->persist($employer);
-            $em->flush();
         }elseif($employer->getInfoValidatedAt()!= null){
             $employer->setDocumentStatus($this->getDocumentStatusByCode('ALDCVA'));
+            $employer->setDashboardMessage($today);
             $em->persist($employer);
-            $em->flush();
         }elseif($employer->getInfoErrorAt()!=null){
             $employer->setDocumentStatus($this->getDocumentStatusByCode('ALLDCE'));
+            $employer->setDashboardMessage($today);
             $em->persist($employer);
-            $em->flush();
         }else{
             $employer->setDocumentStatus($this->getDocumentStatusByCode('ALDCIV'));
+            $employer->setDashboardMessage($today);
             $em->persist($employer);
-            $em->flush();
         }
-        /** @var EmployerHasEmployee $ehe */
-        foreach ($employerHasEmployees as $ehe){
-            if($ehe->getDateDocumentsUploaded()==null){
-                if($employer->getAllDocsReadyAt()==null and $ehe->getAllEmployeeDocsReadyAt()==null){
-                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALLDCP'));
-                    $em->persist($ehe);
-                    $em->flush();
-                }elseif($employer->getAllDocsReadyAt()==null and $ehe->getAllEmployeeDocsReadyAt()!=null) {
-                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERDCPE'));
-                    $em->persist($ehe);
-                    $em->flush();
-                }elseif($employer->getAllDocsReadyAt()!=null and $ehe->getAllEmployeeDocsReadyAt()==null) {
-                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEDCPE'));
-                    $em->persist($ehe);
-                    $em->flush();
-                }elseif($employer->getAllDocsReadyAt()!=null and $ehe->getAllEmployeeDocsReadyAt()!=null) {
-                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALDCIV'));
-                    $em->persist($ehe);
-                    $em->flush();
-                }
-            }elseif($ehe->getInfoValidatedAt()!=null){
-                if($employer->getInfoValidatedAt()!=null){
-                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALDCVM'));
-                    $em->persist($ehe);
-                    $em->flush();
-                }elseif($employer->getInfoErrorAt()!=null){
-                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEVERE'));
-                    $em->persist($ehe);
-                    $em->flush();
-                }else{
-                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEDCVA'));
-                    $em->persist($ehe);
-                    $em->flush();
-                }
-            }elseif($ehe->getInfoErrorAt()!=null){
-                if($employer->getInfoValidatedAt()!=null){
-                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERVEEE'));
-                    $em->persist($ehe);
-                    $em->flush();
-                }elseif($employer->getInfoErrorAt()!=null){
-                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALLDCE'));
-                    $em->persist($ehe);
-                    $em->flush();
-                }else{
-                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEDCE'));
-                    $em->persist($ehe);
-                    $em->flush();
-                }
-            }else{
-                if($employer->getInfoValidatedAt()!=null){
-                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERDCVA'));
-                    $em->persist($ehe);
-                    $em->flush();
-                }elseif($employer->getInfoErrorAt()!=null){
-                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERDCE'));
-                    $em->persist($ehe);
-                    $em->flush();
-                }else{
-                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALDCIV'));
-                    $em->persist($ehe);
-                    $em->flush();
-                }
-            }
-            $employeesNotifications[$ehe->getIdEmployerHasEmployee()]=array();
-            if($this->getNotificationByPersonAndOwnerAndDocumentType($ehe->getEmployerEmployer()->getPersonPerson(),$ehe->getEmployeeEmployee()->getPersonPerson(),$this->getDocumentTypeByCode($ehe->getEmployeeEmployee()->getPersonPerson()->getDocumentType()))){
-                $notification = $this->getNotificationByPersonAndOwnerAndDocumentType($ehe->getEmployerEmployer()->getPersonPerson(),$ehe->getEmployeeEmployee()->getPersonPerson(),$this->getDocumentTypeByCode($ehe->getEmployeeEmployee()->getPersonPerson()->getDocumentType()));
-            }else{
-                $notification = $this->createNotificationByDocType($ehe->getEmployerEmployer()->getPersonPerson(),$ehe->getEmployeeEmployee()->getPersonPerson(),$this->getDocumentTypeByCode($ehe->getEmployeeEmployee()->getPersonPerson()->getDocumentType()));
-            }
-            $employeesNotifications[$ehe->getIdEmployerHasEmployee()]['notCC'] = $notification;
-            if($this->getNotificationByPersonAndOwnerAndDocumentType($ehe->getEmployerEmployer()->getPersonPerson(),$ehe->getEmployeeEmployee()->getPersonPerson(),$this->getDocumentTypeByCode('CAS'))){
-                $notification = $this->getNotificationByPersonAndOwnerAndDocumentType($ehe->getEmployerEmployer()->getPersonPerson(),$ehe->getEmployeeEmployee()->getPersonPerson(),$this->getDocumentTypeByCode('CAS'));
-            }else{
-                $notification = $this->createNotificationByDocType($ehe->getEmployerEmployer()->getPersonPerson(),$ehe->getEmployeeEmployee()->getPersonPerson(),$this->getDocumentTypeByCode('CAS'));
-            }
-            $employeesNotifications[$ehe->getIdEmployerHasEmployee()]['notCAS'] = $notification;
-        }
-
+        $em->flush();
         //Creating form for EmployerInfo
         if($procedure->getActionsByActionType($actionTypes['VER'])->first()->getActionStatusCode()!='FIN'){
             $formDocument = $this->createFormBuilder()
@@ -917,6 +843,7 @@ class ProcedureController extends Controller
             $formCount++;
         }
 
+        $atLeastOne = false;
         $formsInfoEmployees = array();
         $viewsInfoEmployees = array();
         $formEmployeesWorkplaces = array();
@@ -929,6 +856,126 @@ class ProcedureController extends Controller
         $viewsEmployeesEndDates = array();
         /** @var EmployerHasEmployee $ehe */
         foreach ($employerHasEmployees as $ehe){
+            if($ehe->getExistentSQL()==1){
+                $atLeastOne = true;
+                $ehe->setDocumentStatusType($this->getDocumentStatusByCode('BOFFFF'));
+                if($ehe->getState()<4)$ehe->setState(4);
+                $em->persist($ehe);
+                $em->flush();
+            }
+            if ($ehe->getDateDocumentsUploaded() == null) {
+                if ($employer->getAllDocsReadyAt() == null and $ehe->getAllEmployeeDocsReadyAt() == null) {
+                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALLDCP'));
+                    $em->persist($ehe);
+                } elseif ($employer->getAllDocsReadyAt() == null and $ehe->getAllEmployeeDocsReadyAt() != null) {
+                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERDCPE'));
+                    $em->persist($ehe);
+                } elseif ($employer->getAllDocsReadyAt() != null and $ehe->getAllEmployeeDocsReadyAt() == null) {
+                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEDCPE'));
+                    $em->persist($ehe);
+                }elseif ($employer->getAllDocsReadyAt() != null and $ehe->getAllEmployeeDocsReadyAt() != null) {
+                    $ehe->setDateDocumentsUploaded($today);
+                    $em->persist($ehe);
+                    if($ehe->getInfoValidatedAt() != null) {
+                        if ($employer->getInfoValidatedAt() != null) {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALDCVM'));
+                            if($ehe->getAllDocsReadyMessageAt()==null)$ehe->setAllDocsReadyMessageAt($today);
+                            $em->persist($ehe);
+                        } elseif ($employer->getInfoErrorAt() != null) {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEVERE'));
+                            if($ehe->getAllDocsReadyMessageAt()==null)$ehe->setAllDocsReadyMessageAt($today);
+                            $em->persist($ehe);
+                        } else {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEDCVA'));
+                            if($ehe->getAllDocsReadyMessageAt()==null)$ehe->setAllDocsReadyMessageAt($today);
+                            $em->persist($ehe);
+                        }
+                    }elseif($ehe->getInfoErrorAt() != null) {
+                        if ($employer->getInfoValidatedAt() != null) {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERVEEE'));
+                            if($ehe->getAllDocsReadyMessageAt()==null)$ehe->setAllDocsReadyMessageAt($today);
+                            $em->persist($ehe);
+                        } elseif ($employer->getInfoErrorAt() != null) {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALLDCE'));
+                            if($ehe->getAllDocsReadyMessageAt()==null)$ehe->setAllDocsReadyMessageAt($today);
+                            $em->persist($ehe);
+                        } else {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEDCE'));
+                            if($ehe->getAllDocsReadyMessageAt()==null)$ehe->setAllDocsReadyMessageAt($today);
+                            $em->persist($ehe);
+                        }
+                    } else {
+                        if ($employer->getInfoValidatedAt() != null) {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERDCVA'));
+                            if($ehe->getAllDocsReadyMessageAt()==null)$ehe->setAllDocsReadyMessageAt($today);
+                            $em->persist($ehe);
+                        } elseif ($employer->getInfoErrorAt() != null) {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERDCE'));
+                            if($ehe->getAllDocsReadyMessageAt()==null)$ehe->setAllDocsReadyMessageAt($today);
+                            $em->persist($ehe);
+                        } else {
+
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALDCIV'));
+                            $em->persist($ehe);
+                        }
+                    }
+                }
+            }elseif($ehe->getInfoValidatedAt() != null) {
+                if($ehe->getAllDocsReadyMessageAt()==null){
+                    $ehe->setAllDocsReadyMessageAt($today);
+                }
+                if ($employer->getInfoValidatedAt() != null) {
+                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALDCVM'));
+                    $em->persist($ehe);
+                } elseif ($employer->getInfoErrorAt() != null) {
+                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEVERE'));
+                    $em->persist($ehe);
+                } else {
+                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEDCVA'));
+                    $em->persist($ehe);
+                }
+            }elseif($ehe->getInfoErrorAt() != null) {
+                if($ehe->getAllDocsReadyMessageAt()==null){
+                    $ehe->setAllDocsReadyMessageAt($today);
+                }
+                if ($employer->getInfoValidatedAt() != null) {
+                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERVEEE'));
+                    $em->persist($ehe);
+                } elseif ($employer->getInfoErrorAt() != null) {
+                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALLDCE'));
+                    $em->persist($ehe);
+                } else {
+                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEDCE'));
+                    $em->persist($ehe);
+                }
+            } else {
+                if ($employer->getInfoValidatedAt() != null) {
+                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERDCVA'));
+                    if($ehe->getAllDocsReadyMessageAt()==null)$ehe->setAllDocsReadyMessageAt($today);
+                    $em->persist($ehe);
+                } elseif ($employer->getInfoErrorAt() != null) {
+                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERDCE'));
+                    if($ehe->getAllDocsReadyMessageAt()==null)$ehe->setAllDocsReadyMessageAt($today);
+                    $em->persist($ehe);
+                } else {
+                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALDCIV'));
+                    $em->persist($ehe);
+                }
+            }
+
+            $employeesNotifications[$ehe->getIdEmployerHasEmployee()]=array();
+            if($this->getNotificationByPersonAndOwnerAndDocumentType($ehe->getEmployerEmployer()->getPersonPerson(),$ehe->getEmployeeEmployee()->getPersonPerson(),$this->getDocumentTypeByCode($ehe->getEmployeeEmployee()->getPersonPerson()->getDocumentType()))){
+                $notification = $this->getNotificationByPersonAndOwnerAndDocumentType($ehe->getEmployerEmployer()->getPersonPerson(),$ehe->getEmployeeEmployee()->getPersonPerson(),$this->getDocumentTypeByCode($ehe->getEmployeeEmployee()->getPersonPerson()->getDocumentType()));
+            }else{
+                $notification = $this->createNotificationByDocType($ehe->getEmployerEmployer()->getPersonPerson(),$ehe->getEmployeeEmployee()->getPersonPerson(),$this->getDocumentTypeByCode($ehe->getEmployeeEmployee()->getPersonPerson()->getDocumentType()));
+            }
+            $employeesNotifications[$ehe->getIdEmployerHasEmployee()]['notCC'] = $notification;
+            if($this->getNotificationByPersonAndOwnerAndDocumentType($ehe->getEmployerEmployer()->getPersonPerson(),$ehe->getEmployeeEmployee()->getPersonPerson(),$this->getDocumentTypeByCode('CAS'))){
+                $notification = $this->getNotificationByPersonAndOwnerAndDocumentType($ehe->getEmployerEmployer()->getPersonPerson(),$ehe->getEmployeeEmployee()->getPersonPerson(),$this->getDocumentTypeByCode('CAS'));
+            }else{
+                $notification = $this->createNotificationByDocType($ehe->getEmployerEmployer()->getPersonPerson(),$ehe->getEmployeeEmployee()->getPersonPerson(),$this->getDocumentTypeByCode('CAS'));
+            }
+            $employeesNotifications[$ehe->getIdEmployerHasEmployee()]['notCAS'] = $notification;
             if ($ehe->getEmployeeEmployee()->getPersonPerson()->getActionsByActionType($this->getActionTypeByActionTypeCode('VEE'))->first() != null){
                 /** @var Action $eeAction */
                 $eeAction = $ehe->getEmployeeEmployee()->getPersonPerson()->getActionsByActionType($this->getActionTypeByActionTypeCode('VEE'))->first();
@@ -1263,6 +1310,11 @@ class ProcedureController extends Controller
             }
         }
 
+        if($atLeastOne){
+            $employer->setDocumentStatus($this->getDocumentStatusByCode('BOFFFF'));
+            $em->persist($employer);
+            $em->flush();
+        }
         $formDocument->handleRequest($request);
 
         if ($formDocument->isValid() and $formDocument->isSubmitted()) {
@@ -1319,6 +1371,7 @@ class ProcedureController extends Controller
                 'formEmployeesEntities'=>$viewsEmployeesEntities,
                 'formEmployeesStartDates'=>$viewsEmployeesStartDates,
                 'formEmployeesEndDates'=>$viewsEmployeesEndDates,
+                'atLeastOne'=>$atLeastOne,
             ));
         }
 
@@ -1330,6 +1383,31 @@ class ProcedureController extends Controller
             if ($formsEntity->isValid() and $formsEntity->isSubmitted()) {
                 /** @var Action $tempAction */
                 $tempAction = $procedure->getActionById($formsEntity->get('actionId')->getData());
+                /** @var RealProcedure $tempProcedure */
+                $tempProcedure = $employer->getRealProcedureByProcedureTypeType($this->getProcedureTypeByCode('VAC'))->first();
+                if($tempProcedure->getActionByEmployerHasEntity($tempAction->getEmployerEntity())->first()){
+                    $action = $tempProcedure->getActionByEmployerHasEntity($tempAction->getEmployerEntity())->first();
+                    if($action->getEmployerEntity()->getState()!= $formsEntity->get('actionType')->getData()){
+                        if($formsEntity->get('actionType')->getData()==1){
+                            $action->setActionStatus($this->getStatusByStatusCode('NEW'));
+                            $em->persist($action);
+                        }else{
+                            $action->setActionStatus($this->getStatusByStatusCode('DIS'));
+                            $em->persist($action);
+                        }
+                    }
+                }elseif( $formsEntity->get('actionType')->getData()==1){
+                    $action = new Action();
+                    $tempProcedure->addAction($action);//adding the action to the procedure
+                    $employer->getPersonPerson()->addAction($action);//adding the action to the employerPerson
+                    $tempProcedure->getUserUser()->addAction($action);//adding the action to the user
+                    $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('SDE'));//setting actionType to validate entity
+                    $action->setEmployerEntity($tempAction->getEmployerEntity());
+                    $action->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the action status to new
+                    $action->setUpdatedAt();//setting the action updatedAt Date
+                    $action->setCreatedAt($today);//setting the Action createrAt Date
+                    $em->persist($action);
+                }
                 if($tempAction->getEmployerEntity()->getState()!=$formsEntity->get('actionType')->getData()){
                     $log = new Log($this->getUser(),'EmployerHasEntity','State',$tempAction->getEmployerEntity()->getIdEmployerHasEntity(),$tempAction->getEmployerEntity()->getState(),$formsEntity->get('actionType')->getData(),'backoffice cambió la acción de la entidad del empleador');
                     $tempAction->getEmployerEntity()->setState($formsEntity->get('actionType')->getData());
@@ -1463,6 +1541,7 @@ class ProcedureController extends Controller
                     'formEmployeesEntities'=>$viewsEmployeesEntities,
                     'formEmployeesStartDates'=>$viewsEmployeesStartDates,
                     'formEmployeesEndDates'=>$viewsEmployeesEndDates,
+                    'atLeastOne'=>$atLeastOne,
                 ));
             }
 
@@ -1521,6 +1600,7 @@ class ProcedureController extends Controller
                     'formEmployeesEntities'=>$viewsEmployeesEntities,
                     'formEmployeesStartDates'=>$viewsEmployeesStartDates,
                     'formEmployeesEndDates'=>$viewsEmployeesEndDates,
+                    'atLeastOne'=>$atLeastOne,
                 ));
             }
 
@@ -1533,6 +1613,32 @@ class ProcedureController extends Controller
                     if ($formEntity->isValid() and $formEntity->isSubmitted()) {
                         /** @var Action $tempAction */
                         $tempAction = $ehe->getEmployeeEmployee()->getPersonPerson()->getActionById($formEntity->get('actionId')->getData());
+                        if($ehe->getEmployeeEmployee()->getPersonPerson()->getActionByEmployeeHasEntity($tempAction->getEmployeeEntity())->first()){
+                            $action = $ehe->getEmployeeEmployee()->getPersonPerson()->getActionByEmployeeHasEntity($tempAction->getEmployeeEntity())->first();
+                            if($action->getEmployeeEntity()->getState()!= $formEntity->get('actionType')->getData()){
+                                if($formEntity->get('actionType')->getData()==1){
+                                    $action->setActionStatus($this->getStatusByStatusCode('NEW'));
+                                    $em->persist($action);
+                                }else{
+                                    $action->setActionStatus($this->getStatusByStatusCode('DIS'));
+                                    $em->persist($action);
+                                }
+                            }
+                        }else{
+                            $tempProcedure = $employer->getRealProcedureByProcedureTypeType($this->getProcedureTypeByCode('VAC'))->first();
+                            if($formEntity->get('actionType')->getData()==1){
+                                $action = new Action();
+                                $tempProcedure->addAction($action);//adding the action to the procedure
+                                $ehe->getEmployeeEmployee()->getPersonPerson()->addAction($action);//adding the action to the employerPerson
+                                $tempProcedure->getUserUser()->addAction($action);//adding the action to the user
+                                $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('SDE'));//setting actionType to validate entity
+                                $action->setEmployeeEntity($tempAction->getEmployeeEntity());
+                                $action->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the action status to new
+                                $action->setUpdatedAt();//setting the action updatedAt Date
+                                $action->setCreatedAt($today);//setting the Action createrAt Date
+                                $em->persist($action);
+                            }
+                        }
                         if($tempAction->getEmployeeEntity()->getState()!=$formEntity->get('actionType')->getData()){
                             $log = new Log($this->getUser(),'EmployeeHasEntity','State',$tempAction->getEmployeeEntity()->getIdEmployeeHasEntity(),$tempAction->getEmployeeEntity()->getState(),$formEntity->get('actionType')->getData(),'backoffice cambió la acción de la entidad del empleado');
                             $tempAction->getEmployeeEntity()->setState($formEntity->get('actionType')->getData());
@@ -1568,6 +1674,7 @@ class ProcedureController extends Controller
             'formEmployeesEntities'=>$viewsEmployeesEntities,
             'formEmployeesStartDates'=>$viewsEmployeesStartDates,
             'formEmployeesEndDates'=>$viewsEmployeesEndDates,
+            'atLeastOne'=>$atLeastOne,
         ));
 
     }
@@ -1784,6 +1891,52 @@ class ProcedureController extends Controller
         /** @var Action $action */
         $action = $em->getRepository("RocketSellerTwoPickBundle:Action")->find($actionId);
         if($action){
+            if($action->getActionTypeCode()=='INE'){
+                if($action->getPersonPerson()->getActionByEmployerHasEntity($action->getEmployerEntity())->first()!=null){
+                    /** @var Action $tempAction */
+                    $tempAction = $action->getPersonPerson()->getActionByEmployerHasEntity($action->getEmployerEntity())->first();
+                    if($tempAction->getActionStatusCode()=='DIS'){
+                        $tempAction->setActionStatus($this->getStatusByStatusCode('NEW'));
+                        $em->persist($tempAction);
+                    }
+                }else{
+                    /** @var RealProcedure $vac */
+                    $vac = $action->getRealProcedureRealProcedure()->getUserUser()->getProceduresByType($this->getProcedureTypeByCode('VAC'))->first();
+                    $tempAction = new Action();
+                    $vac->addAction($tempAction);//adding the action to the procedure
+                    $action->getPersonPerson()->addAction($tempAction);//adding the action to the employerPerson
+                    $vac->getUserUser()->addAction($tempAction);//adding the action to the user
+                    $tempAction->setActionTypeActionType($this->getActionTypeByActionTypeCode('SDE'));//setting actionType to validate entity
+                    $tempAction->setEmployeeEntity($action->getEmployerEntity());
+                    $tempAction->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the action status to new
+                    $tempAction->setUpdatedAt();//setting the action updatedAt Date
+                    $tempAction->setCreatedAt(new DateTime());//setting the Action createrAt Date
+                    $em->persist($tempAction);
+                }
+            }
+            if($action->getActionTypeCode()=='IN'){
+                if($action->getPersonPerson()->getActionByEmployeeHasEntity($action->getEmployeeEntity())->first()!=null){
+                    /** @var Action $tempAction */
+                    $tempAction = $action->getPersonPerson()->getActionByEmployeeHasEntity($action->getEmployeeEntity())->first();
+                    if($tempAction->getActionStatusCode()=='DIS'){
+                        $tempAction->setActionStatus($this->getStatusByStatusCode('NEW'));
+                        $em->persist($tempAction);
+                    }
+                }else{
+                    /** @var RealProcedure $vac */
+                    $vac = $action->getRealProcedureRealProcedure()->getUserUser()->getProceduresByType($this->getProcedureTypeByCode('VAC'))->first();
+                    $tempAction = new Action();
+                    $vac->addAction($tempAction);//adding the action to the procedure
+                    $action->getPersonPerson()->addAction($tempAction);//adding the action to the employerPerson
+                    $vac->getUserUser()->addAction($tempAction);//adding the action to the user
+                    $tempAction->setActionTypeActionType($this->getActionTypeByActionTypeCode('SDE'));//setting actionType to validate entity
+                    $tempAction->setEmployeeEntity($action->getEmployeeEntity());
+                    $tempAction->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the action status to new
+                    $tempAction->setUpdatedAt();//setting the action updatedAt Date
+                    $tempAction->setCreatedAt(new DateTime());//setting the Action createrAt Date
+                    $em->persist($tempAction);
+                }
+            }
             $log = new Log($this->getUser(),"Action",'ActionStatus',$action->getIdAction(),$action->getActionStatus(),$this->getStatusByStatusCode('FIN'),"backoffice finalizó una acción");
             $action->setUpdatedAt();
             $action->setActionStatus($this->getStatusByStatusCode('FIN'));
@@ -1941,13 +2094,14 @@ class ProcedureController extends Controller
      * ║ Calculates de procedure Status if needed                      ║
      * ╠═══════════════════════════════════════════════════════════════╣
      * ║  @param RealProcedure $procedure                              ║
+     * ║  @param bool $force                                           ║
      * ╠═══════════════════════════════════════════════════════════════╣
      * ║  @return integer 0 if noting change 1 if something change     ║
      * ╚═══════════════════════════════════════════════════════════════╝
      */
-    protected function calculateProcedureStatus($procedure)
+    protected function calculateProcedureStatus($procedure,$force=false)
     {
-        if($procedure->getStatusUpdatedAt()==null or $procedure->getActionChangedAt()==null or $procedure->getStatusUpdatedAt()<$procedure->getActionChangedAt()){
+        if($procedure->getStatusUpdatedAt()==null or $procedure->getActionChangedAt()==null or $procedure->getStatusUpdatedAt()<$procedure->getActionChangedAt() or $force){
             $today = new DateTime();
             $type = $procedure->getProcedureTypeProcedureType()->getCode();
             if($procedure->getActionChangedAt()==null){
@@ -1957,17 +2111,33 @@ class ProcedureController extends Controller
                 case 'REE':
                     /** @var Employer $emmployer */
                     $emmployer = $procedure->getEmployerEmployer();
+                    if($emmployer->getIdSqlSociety()==null){
+                        $procedure->setProcedureStatus($this->getStatusByStatusCode('DIS'));
+                        $procedure->setStatusUpdatedAt($today);
+                        break;
+                    }
                     //if employer have at least one active employerHasEmployee
                     if(count($emmployer->getActiveEmployerHasEmployees())>0 and count($procedure->getAction())>0){
                         $error=false;
-                        /** @var Action $actionError */
-                        $actionError = null;
                         $corrected = false;
-                        /** @var Action $actionCorrected */
-                        $actionCorrected = null;
                         $begin = false;
                         $finish = true;
                         $dcpe = false;
+                        /** @var Action $actionError */
+                        $actionError = null;
+                        /** @var Action $actionCorrected */
+                        $actionCorrected = null;
+                        /** @var Action $action */
+                        foreach ($this->getInfoEmployerActions($procedure) as $action) {
+                            if($action->getActionStatusCode()=='DCPE'){
+                                $dcpe = true;
+                            }
+                        }
+                        if($dcpe){
+                            $procedure->setProcedureStatus($this->getStatusByStatusCode('DCPE'));
+                            $procedure->setStatusUpdatedAt($today);
+                            break;
+                        }
                         $atLeastOne = false;
                         $ehes = $procedure->getEmployerEmployer()->getEmployerHasEmployees();
                         /** @var Action $action */
@@ -1984,9 +2154,7 @@ class ProcedureController extends Controller
                                 $atLeastOne = true;
                                 break;
                             }
-
                         }
-
                         if($atLeastOne){
                             foreach ($procedure->getAction() as $action) {
                                 if($action->getActionStatusCode()=='ERRO'){
@@ -2040,8 +2208,11 @@ class ProcedureController extends Controller
                                     $procedure->setProcedureStatus($this->getStatusByStatusCode('STRT'));
                                 }elseif($finish){
                                     $procedure->setProcedureStatus($this->getStatusByStatusCode('FIN'));
-                                    foreach ($procedure->getEmployerEmployer()->getEmployerHasEmployees() as $ehe) {
-                                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('BOFFMS'));
+                                    foreach ($procedure->getEmployerEmployer()->getEmployerHasEmployees() as $ehe){
+                                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('BOFFFF'));
+                                        $ehe->setAllEmployeeDocsReadyAt(new DateTime());
+                                        $ehe->setDateFinished(new DateTime());
+                                        $this->getDoctrine()->getManager()->persist($ehe);
                                     }
                                 }else{
                                     $procedure->setProcedureStatus($this->getStatusByStatusCode('NEW'));
@@ -2052,18 +2223,29 @@ class ProcedureController extends Controller
                             $procedure->setProcedureStatus($this->getStatusByStatusCode('DCPE'));
                             $procedure->setStatusUpdatedAt($today);
                         }
-
                     }else{
                         $procedure->setProcedureStatus($this->getStatusByStatusCode('DIS'));
                         $procedure->setStatusUpdatedAt($today);
                     }
                     break;
                 case 'PPL':
-                    //todo Procedure type PPL
                     break;
                 case 'VAC':
                     /** @var Employer $emmployer */
                     $emmployer = $procedure->getEmployerEmployer();
+                    $oneFinished = false;
+                    /** @var EmployerHasEmployee $ehe */
+                    foreach ($emmployer->getActiveEmployerHasEmployees() as $ehe) {
+                        if($ehe->getExistentSQL()==1){
+                            $oneFinished = true;
+                            break;
+                        }
+                    }
+                    if(!$oneFinished){
+                        $procedure->setProcedureStatus($this->getStatusByStatusCode('DIS'));
+                        $procedure->setStatusUpdatedAt($today);
+                        break;
+                    }
                     //if employer have at least one active employerHasEmployee
                     if(count($emmployer->getActiveEmployerHasEmployees())>0 and count($procedure->getAction())>0){
                         $error=false;
@@ -2083,22 +2265,22 @@ class ProcedureController extends Controller
                                 $dcpe = true;
                                 break;
                             }
-                            if($action->getStatusCode()=='ERRO'){
+                            if($action->getActionStatusCode()=='ERRO'){
                                 $error = true;
                                 if($actionError==null or $action->getErrorAt()<$actionError->getErrorAt()){
                                     $actionError = $action;
                                 }
                             }
-                            if($action->getStatusCode()=='CORT'){
+                            if($action->getActionStatusCode()=='CORT'){
                                 $corrected = true;
                                 if($actionCorrected==null or $action->getCorrectedAt()<$actionCorrected->getCorrectedAt()){
                                     $actionCorrected=$action;
                                 }
                             }
-                            if($action->getStatusCode()=='FIN' and !$begin){
+                            if($action->getActionStatusCode()=='FIN' and !$begin){
                                 $begin = true;
                             }
-                            if($action->getStatusCode()!='FIN' and $finish){
+                            if($action->getActionStatusCode()!='FIN' and $finish){
                                 $finish = false;
                             }
 
@@ -2148,13 +2330,12 @@ class ProcedureController extends Controller
                     }
                     break;
                 case 'SPL':
-                    //todo Procedure type SPL
+
                     break;
             }
             return 1;
         }
         return 0;
-
     }
 
     /**
@@ -3437,6 +3618,9 @@ class ProcedureController extends Controller
         return true;
     }
 
+
+
+
     /**
      * estructura de tramite para generar vueltas y tramites
      * @param  $id $id_employer       id del empleador que genera el tramite
@@ -3691,7 +3875,5 @@ class ProcedureController extends Controller
 		->findOneBy($array);
 		return $loadedClass;
     }
-
-
 
 }
