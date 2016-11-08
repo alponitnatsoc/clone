@@ -757,45 +757,30 @@
 
         {% set primary_modal_footer %}
         {% endset %}
+
         {% set modal_style %}width: 70%;{% endset %}
-        {% set modal_header_style %}
-            style="background-color:#FFF;
-            padding: 0px 0px;
-            border-top-left-radius: 5px;
-            border-top-right-radius: 5px;"
-        {% endset %}
 
-        {% set modal_header %}
-            <h1 style="font-weight: 700;font-size: 100%;margin: 0;padding: 10px 0 10px 15px;  ">¡Bienvenido a Symplfiica!</h1>
-        {% endset %}
-
-        {% set modal_content_class %}
-            class="text-center"
-        {% endset %}
-
-        {% set modal_content_style %}
-        {% endset %}
-
-        {% set modal_content %}
-            <h1 style="font-weight: 700;font-size: 20px;margin: 0;padding: 0;color: #1cbeca;">¡Bienvenido a Symplifica!</h1>
-            <p style="color: #5D5D5D; padding: 4%;font-size: 17px;margin-bottom: 1%;margin-left: 10px; margin-right: 10px">
-                Aquí podras subir tus documentos y los de tus empleados y ver revizar tus tareas pendientes del mes.</p>
-        {% endset %}
-
-        {% set modal_style_button %}
-            style="width: 110px; font-size:18px;font-weight: 500;padding: 5px 12px;"
-        {% endset %}
-
-        {% set modal_button %}
-            aceptar
-        {% endset %}
-
-        {% set modal_style_button2 %}
-            style="display: none"
-        {% endset %}
-
-        {% set modal_button2 %}
-            cerrar2
+        {% set primary_modal_body %}
+            <div class="row-fluid clearfix" >
+                <div class="row">
+                    <div  class="text-center" style="padding: 10px 20px" >
+                        <h1 style="font-weight: 700;font-size: 20px;margin: 5px 0px;padding: 0;color: #1cbeca;">¡Bienvenido a tu tablero de control!</h1>
+                        <p style="color: #5D5D5D; padding: 4%;font-size: 17px;margin-bottom: 1%;margin-left: 10px; margin-right: 10px">
+                            Aquí podras:
+                        </p>
+                        <ul style="padding:0px 20%;text-align: left">
+                            <li>Subir tus documentos</li>
+                            <li>Subir los documentos de tus empleados</li>
+                            <li>Ver las tareas pendientes del mes</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row" style="margin: 10px 0;">
+                    <div class="text-center">
+                        <button type="button" class="btn btn-orange" data-dismiss="modal" style="width: 110px; font-size:18px;font-weight: 500;padding: 5px 12px;">aceptar</button>
+                    </div>
+                </div>
+            </div>
         {% endset %}
 
     {% elseif template_parameter == 21 %}
