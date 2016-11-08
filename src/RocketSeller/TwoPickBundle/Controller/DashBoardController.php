@@ -58,7 +58,7 @@ class DashBoardController extends Controller
      * @param el Request que manjea el form que se imprime
      * @return La vista de el formulario de la nueva persona
      * */
-    public function showDashBoardAction(Request $request, $allcontents)
+    public function showDashBoardAction(Request $request)
     {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
