@@ -57,6 +57,7 @@
                                             <th>Número Sociedad SQL</th>
                                             <th>Id HighTech</th>
                                             <th>Dirección Empleador</th>
+                                            <th>Telefono Empleador</th>
                                         </tr>
                                         <tr>
                                             <td>{{ empPerson.names }}</td>
@@ -86,6 +87,12 @@
                                                 {% if empPerson.mainAddress != null %}
                                                     {{ empPerson.mainAddress }}
                                                 {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if empPerson.phones|length > 0 %}
+                                                    {{ empPerson.phones.0.phoneNumber }}
+                                                {% endif %}
+
                                             </td>
                                         </tr>
                                     </table>
