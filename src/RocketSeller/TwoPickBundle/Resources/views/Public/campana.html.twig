@@ -221,7 +221,6 @@
             -moz-transition: opacity 400ms ease-in;
             transition: opacity 400ms ease-in;
             pointer-events: none;
-            overflow-y: scroll;
 
         }
         .modalDialog:target {
@@ -236,7 +235,7 @@
             text-align: center;
             overflow: hidden;
             padding: 15px 0;
-            opacity: 0.3;
+            opacity: 0.8;
             font-weight: 800;
             font-size: 25px;
         }
@@ -261,6 +260,10 @@
           text-align: left;
           box-sizing: border-box;
           color: #5D5D5D;
+          overflow: hidden;
+          overflow-y: scroll;
+          height: 700px;
+          }
         }
         /*animaciones*/
         .animated {
@@ -328,6 +331,7 @@
 
     @media only screen and (max-width: 520px) {
       #headerCont {width: 90%}
+      #terminosText {width: 90%; height: 600px}
       #gana .pasos {width: 100%;margin: 30px 0;}
     }
     </style>
@@ -361,7 +365,7 @@
                   <div id="campañaDesc" class="bar block tada animated">
                       <h1 class="bold">y recibe $150.000*</h1>
                       <p class="back light">
-                          Registrate y si pagas el salario por medios electrónicos te regalaremos
+                          Regístrate y si pagas el salario por medios electrónicos te regalaremos
                           <strong>$150.000 pesos para pagar el sueldo de tu empleada*</strong>
                       </p>
                   </div>
@@ -494,7 +498,7 @@
                     </div>
                     <div class="pasos light grisoscurofont box">
                         <span>&#10125;</span><br>
-                        <p>Completa unos documentos</p>
+                        <p>Completa unos pocos documentos</p>
                     </div>
                 </div>
             </div>
