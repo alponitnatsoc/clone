@@ -1,5 +1,4 @@
 {% extends "::base.html.twig" %}
-{% from '@RocketSellerTwoPick/modal_templates/modal_picker2.html.twig' import modal2 %}
 {% from '@RocketSellerTwoPick/modal_templates/modal_picker.twig' import modal %}
 {% block modales %}
     {{ parent() }}
@@ -11,7 +10,9 @@
             {{ modal(16) }}
         {% endif %}
     {% endfor %}
-    {{ modal2() }}
+    {% if welcome  %}
+        {{ modal(18) }}
+    {% endif %}
     {{ modal(24) }}
     {{ modal(17) }}
 {% endblock %}
@@ -590,15 +591,15 @@
     </script>
     <title>{% block title %}Tu tablero de control - Symplifica{% endblock %}</title>
     {% for eHE in user.employer.activeEmployerHasEmployees %}
-        {% if ready is defined %}
-            {% dump ready %}
-            {#<h5>{{ user.idPerson }}</h5>#}
-            {#<h1>{{  ready[eHE.idEmployerHasEmployee] }}</h1>#}
-            {% if ready[eHE.idEmployerHasEmployee] == 2 %}
+        {% if ready[eHE.idEmployerHasEmployee] is defined and ready[eHE.idEmployerHasEmployee] %}
                 {% from '@RocketSellerTwoPick/modal_templates/modal_picker.twig' import modal %}
                 {% set name = eHE.employeeEmployee.personPerson.fullName %}
                 {{ modal(6,'',name) }}
-            {% endif %}
+        {% endif %}
+        {% if validated[eHE.idEmployerHasEmployee] is defined and validated[eHE.idEmployerHasEmployee] %}
+            {% from '@RocketSellerTwoPick/modal_templates/modal_picker.twig' import modal %}
+            {% set name = eHE.employeeEmployee.personPerson.fullName %}
+            {{ modal(19,'',name) }}
         {% endif %}
     {% endfor %}
     {% if notifications is defined %}
@@ -801,9 +802,12 @@
     <script>
         $(document).ready(function () {
             try {
-                showModal2(1);
-                showModal(15);
                 showModal(6);
+                showModal(15);
+                showModal(16);
+                showModal(18);
+                showModal(19);
+
 //                showModal(23);
 //                showModal2();
             }catch(e){

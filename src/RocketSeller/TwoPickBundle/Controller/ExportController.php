@@ -264,8 +264,8 @@ class ExportController extends Controller
 
                }
                 //close zip
-                if($zip->close()!==TRUE)
-                    dump("no permisos");
+                //if($zip->close()!==TRUE)
+                  //  dump("no permisos");
                 //send the file to the browser as a download
                 header('Pragma: public');
                 header('Expires: 0');

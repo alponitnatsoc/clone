@@ -288,8 +288,7 @@
         {% set modal_content %}
             <span style="text-align:center"><img src="{{ asset('public/img/landing/benefit1.png') }}" width="80"/></span>
             <p style="color: #8a8a8a;padding: 20px 35px;font-size: 17px;text-align: center;font-weight: 100;"><strong style="color:#00858c">¡Haz subido todos los documentos de<br>{% if param is defined %}{{ param }}{% endif %}!</strong><br><br>
-            En un máximo de 1 día hábil iniciaremos a validar tu proceso y radicarlo ante las entidades de seguridad social
-            de ser necesario. Si tienes tareas pendientes puedes seguir con ellas.</p>
+            Validaremos la información y en un día hábil te informaremos del resultado. Si tienes tareas pendientes puedes seguir con ellas.</p>
         {% endset %}
 
         {% set param = '' %}
@@ -783,45 +782,46 @@
             </div>
         {% endset %}
 
-        {% elseif  template_parameter == 19 %}
-            {% set primary_modal_header %}
-            {% endset %}
+    {% elseif  template_parameter == 19 %}
+        {% set primary_modal_header %}
+        {% endset %}
 
-            {% set primary_modal_footer %}
-            {% endset %}
+        {% set primary_modal_footer %}
+        {% endset %}
 
-            {% set modal_id = 'end_documents_validation_modal' %}
+        {% set modal_id = 'end_documents_validation_modal' %}
 
-            {% set modal_style %}padding: 0;line-height: 1;{% endset %}
+        {% set modal_style %}padding: 0;line-height: 1;{% endset %}
 
-            {% set modal_header_style %}
-                style="background-color: #3c4b5a; padding: 0px 0px"
-            {% endset %}
+        {% set modal_header_style %}
+            style="background-color: #3c4b5a; padding: 0px 0px"
+        {% endset %}
 
-            {% set modal_header %}
-                <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Documentos validados</h1>
-            {% endset %}
+        {% set modal_header %}
+            <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Documentos validados</h1>
+        {% endset %}
 
-            {% set modal_content_style %}
-                style="padding: 10px 20px"
-            {% endset %}
+        {% set modal_content_style %}
+            style="padding: 10px 20px"
+        {% endset %}
 
-            {% set modal_content %}
-                <span style="text-align:center"><img src="{{ asset('public/img/landing/benefit1.png') }}" width="80"/></span>
-                <p style="color: #8a8a8a;padding: 20px 15px;font-size: 17px;text-align: center;font-weight: 100;"><strong style="color:#00858c">¡Todos los documentos de<br>{% if param is defined %}{{ param }}{% endif %}han sido validados!</strong><br><br>
-                Estamos validando tu proceso y radicandolo ante las entidades de seguridad social. En un plazo de 3 días hábiles te estaremos informando.<br />
-                Si tienes tareas pendientes puedes seguir con ellas.</p>
-            {% endset %}
+        {% set modal_content %}
+            <span style="text-align:center"><img src="{{ asset('public/img/landing/benefit1.png') }}" width="80"/></span>
+            <p style="color: #8a8a8a;padding: 20px 15px;font-size: 17px;text-align: center;font-weight: 100;"><strong style="color:#00858c">¡Todos los documentos de<br>{% if param is defined %}{{ param }}{% endif %} han sido validados!</strong><br><br>
+            Estamos validando tu proceso y radicandolo ante las entidades de seguridad social. En un plazo de 3 días hábiles te estaremos informando y
+            podrás comenzar a gestionar tus empleados de la mejor manera.<br />
+            Si tienes tareas pendientes puedes seguir con ellas.</p>
+        {% endset %}
 
-            {% set param = '' %}
+        {% set param = '' %}
 
-            {% set modal_style_button %}
-                style="width: 30%; font-size:20px"
-            {% endset %}
+        {% set modal_style_button %}
+            style="width: 30%; font-size:20px"
+        {% endset %}
 
-            {% set modal_style_button2 %}
-                style="display:none"
-            {% endset %}
+        {% set modal_style_button2 %}
+            style="display:none"
+        {% endset %}
 
     {% elseif template_parameter == 21 %}
 
@@ -921,7 +921,7 @@
 
         {% set primary_modal_header %}
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">¡Proceso de validación exitoso!</h4>
+                <h4 class="modal-title" id="myModalLabel">¡Tu empleado esta listo!</h4>
             </div>
         {% endset %}
 
@@ -929,10 +929,8 @@
 
         {% set primary_modal_body %}
             <p style="padding: 15px 10px 5px 15px;">
-                El proceso de validación de {% if param is defined %}{{ param }}{% endif %} fue éxitoso, realizaremos la
-                afiliación a
-                las diferentes entidades de seguridad social, en un máximo de 3 días hábiles podrás usar
-                nuestra plataforma y comenzar a gestionar a tus empleados de la mejor manera. Ya puedes descargar el
+                Hemos terminado los tramites ante las entidades de seguridad social de tu empleado <strong>{% if param is defined %}{{ param }}{% endif %}</strong><br>
+                Ya puedes comenzar a gestionar a tu empleado de la mejor manera. Recuerda que ya puedes descargar el
                 contrato y subirlo.</p>
         {% endset %}
 

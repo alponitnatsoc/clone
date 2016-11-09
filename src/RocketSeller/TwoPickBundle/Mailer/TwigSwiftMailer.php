@@ -47,6 +47,7 @@ class TwigSwiftMailer extends Controller implements MailerInterface
         $contactPublic = 'contactanos@symplifica.com';
         $contactPrivate = 'servicioalcliente@symplifica.com';
         $testEmail = 'andres.ramirez@symplifica.com';
+	      $registrationStuck = 'salua.garcia@symplifica.com';
         switch ($context['emailType']){
             /** tested OK */
             //$context['emailType']=='welcome'
@@ -456,6 +457,17 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                 $template = $this->parameters['template']['helpTransaction'];
                 return $this->sendMessage($template, $context,$contactPublicFromEmail,$contactPrivate);
                 break;
+	        
+	          case 'stuckRegistration':
+		            /** $context must have:
+		             * string name
+		             * string userEmail
+		             * string phone
+		             * string message
+		             * string subject
+			           */
+		            $template = $this->parameters['template']['stuckRegistration'];
+		            return $this->sendMessage($template, $context, $teamFromEmail, $registrationStuck);
         }
     }
 
@@ -534,7 +546,7 @@ class TwigSwiftMailer extends Controller implements MailerInterface
         return $this->sendMessage($template,$context,array('registro@symplifica.com'=>'Equipo Symplifica'), $to);
     }
 
-    public function sendBackValidatedMessage(UserInterface $user,EmployerHasEmployee $eHE){
+    public function sendBackValidatedMessage(User $user,EmployerHasEmployee $eHE){
         $to = $user->getEmail();
         $template = $this->parameters['template']['backval'];
         $context = array(

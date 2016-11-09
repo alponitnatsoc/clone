@@ -87,12 +87,12 @@ interface MailerInterface
     /**
      * Send an reminder Backoffice validation
      *
-     * @param UserInterface $user
+     * @param User $user
      * @param EmployerHasEmployee $eHE
      *
      * @return void
      */
-    public function sendBackValidatedMessage(UserInterface $user,EmployerHasEmployee $eHE);
+    public function sendBackValidatedMessage(User $user,EmployerHasEmployee $eHE);
 
 
     /**

@@ -56,79 +56,86 @@ class DashBoardEmployerController extends Controller {
             $employer=$user->getPersonPerson()->getEmployer();
             $today = new DateTime();
             $em = $this->getDoctrine()->getManager();
-
-            if($user->getPersonPerson()->getEmployer()->getDashboardMessage()==null){
-                if($tareas){
-                    return $this->render('RocketSellerTwoPickBundle:Employer:dashBoard.html.twig', array(
-                        'notifications' => $notifications,
-                        'user' => $user->getPersonPerson(),
-                        'message'=>'welcome',
-                    ));
-                }else{
-                    $employer->setDashboardMessage($today);
-                    $em->persist($employer);
-                    $em->flush();
-                }
-            }
-
-
-
-
-            //setting flags for end validation, clean dashboard and contract validated
-            $endValid = false;
-            $cleanDash = false;
+            $state = $this->allDocumentsReady($user);
+            $ready=array();
+            $validated = array();
+            $finished = array();
             $valContract = false;
-            //
-
-            foreach ($this->allDocumentsReady($user) as $docStat ){
-                //se asigna la bandera ready para cada id de empleado con su respectivo status
-                $ready[$docStat['idEHE']]=$docStat['docStatus'];
-                // Se envia el Email diahabil y se muestra el modal de documentos en validación
-                if($tareas and $docStat['docStatus']==2){
-                    $em = $this->getDoctrine()->getManager();
-                    $eHE = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->find($docStat['idEHE']);
-                    $smailer = $this->get('symplifica.mailer.twig_swift');
-                    $smailer->sendOneDayMessage($this->getUser(),$eHE);
-                    $pushNotificationService = $this->get('app.symplifica_push_notification');
-                    $pushNotificationService->sendMessageValidatingDocuments($this->getUser()->getId());
-                }elseif(!$tareas and ($docStat['docStatus']==2)){
-                    $cleanDash =true;
-                }elseif(!$tareas and $docStat['docStatus']==3){
-                    $cleanDash =true;
+            $valid = false;
+            $backval = false;
+            if($state ==1){
+                if($user->getPersonPerson()->getEmployer()->getDashboardMessage()==null){
+                    $employer->setDashboardMessage($today);
+                    $welcome = true;
+                    $em->persist($employer);
+                }else{
+                    $welcome = false;
                 }
-
-                //si el usuario no tiene tareas pendientes y algun empleado fue completamente validado por backoffice
-                if(!$tareas and $docStat['docStatus']==13){
-                    $endValid = true;
-                }
-
-
-
-                if($tareas and $docStat['docStatus']==11){
-                    $eHE = $this->getDoctrine()->getManager()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->find($docStat['idEHE']);
-                    return $this->redirectToRoute('employer_completion_documents',array('idEHE'=>$eHE->getIdEmployerHasEmployee()));
-                }
-                if(!$tareas and $docStat['docStatus']>13){
+                /** @var EmployerHasEmployee $ehe */
+                foreach ($user->getPersonPerson()->getEmployer()->getActiveEmployerHasEmployees() as $ehe) {
+                    if($ehe->getAllEmployeeDocsReadyAt()!= null and $ehe->getAllDocsReadyMessageAt()==null){
+                        $ehe->setAllDocsReadyMessageAt($today);
+                        $ready[$ehe->getIdEmployerHasEmployee().'']=true;
+                        $smailer = $this->get('symplifica.mailer.twig_swift');
+                        $smailer->sendOneDayMessage($this->getUser(),$ehe);
+                        $pushNotificationService = $this->get('app.symplifica_push_notification');
+                        $pushNotificationService->sendMessageValidatingDocuments($this->getUser()->getId());
+                        $em->persist($ehe);
+                    }
+                    if($ehe->getDocumentStatusType()->getDocumentStatusCode()=='ALDCVM' and $ehe->getAllDocsValidatedMessageAt()==null){
+                        $ehe->setAllDocsValidatedMessageAt($today);
+                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALDCVA'));
+                        $validated[$ehe->getIdEmployerHasEmployee().'']=true;
+                        if(!$valid)$valid=true;
+                        $em->persist($ehe);
+                    }
+                    if($ehe->getDocumentStatusType()->getDocumentStatusCode()=='BOFFFF' and $ehe->getBackofficeFinishMessageAt()==null){
+                        $ehe->setBackofficeFinishMessageAt($today);
+                        $finished[$ehe->getIdEmployerHasEmployee().'']=true;
+                        if(!$backval)$backval=true;
+                        $em->persist($ehe);
+                    }
                 }
             }
-            if($endValid){
-                return $this->render('@RocketSellerTwoPick/Employer/endvalidation.html.twig',array(
-                    'user' => $user->getPersonPerson(),
-                    'ready'=>$ready,
-                ));
-            }
-            if($cleanDash){
-                return $this->render('@RocketSellerTwoPick/Employer/cleanDashboard.html.twig',array(
-                    'user' => $user->getPersonPerson(),
-                    'ready' => $ready
-                ));
-            }
-            return $this->render('RocketSellerTwoPickBundle:Employer:dashBoard.html.twig', array(
+            $em->flush();
+
+            if($tareas){
+                return $this->render('RocketSellerTwoPickBundle:Employer:dashBoard.html.twig', array(
                     'notifications' => $notifications,
                     'user' => $user->getPersonPerson(),
+                    'welcome'=>$welcome,
                     'ready'=>$ready,
-            ));
-
+                    'validated'=>$validated,
+                    'finished'=>$finished,
+                ));
+            }else{
+                if($valid and !$backval) {
+                    return $this->render('@RocketSellerTwoPick/Employer/endvalidation.html.twig', array(
+                        'user' => $user->getPersonPerson(),
+                        'ready' => $ready,
+                        'validated' => $validated,
+                    ));
+                }elseif($valid and $backval){
+                    return $this->render('@RocketSellerTwoPick/Employer/endvalidation.html.twig',array(
+                        'user' => $user->getPersonPerson(),
+                        'ready'=>$ready,
+                        'validated'=>$validated,
+                        'backval'=>$backval,
+                    ));
+                }elseif(!$valid and $backval){
+                    return $this->render('@RocketSellerTwoPick/Employer/endvalidation.html.twig',array(
+                        'user' => $user->getPersonPerson(),
+                        'ready'=>$ready,
+                        'backval'=>$backval,
+                    ));
+                }else{
+                    return $this->render('@RocketSellerTwoPick/Employer/cleanDashboard.html.twig',array(
+                        'user' => $user->getPersonPerson(),
+                        'ready' => $ready,
+                        'validated'=>$valid,
+                    ));
+                }
+            }
         } catch (Exception $ex) {
             return $this->render('RocketSellerTwoPickBundle:Employer:dashBoard.html.twig', array(
                         'notifications' => false,

@@ -304,7 +304,7 @@ trait SubscriptionMethodsTrait
 	                        "period" => "2",
                         ));
 
-                        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
+                        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('request' => $request ), array('_format' => 'json'));
                         if ($insertionAnswer->getStatusCode() != 200) {
 	                        return false;
                         }
@@ -322,7 +322,7 @@ trait SubscriptionMethodsTrait
 														"period" => "4",
 													));
 
-													$insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
+													$insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('request' => $request ), array('_format' => 'json'));
 													if ($insertionAnswer->getStatusCode() != 200) {
 														return false;
 													}
@@ -349,7 +349,7 @@ trait SubscriptionMethodsTrait
 													"period" => "4",
 												));
 
-												$insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
+												$insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('request' => $request ), array('_format' => 'json'));
 												if ($insertionAnswer->getStatusCode() != 200) {
 													return false;
 												}
@@ -375,7 +375,7 @@ trait SubscriptionMethodsTrait
 								          "period" => "2",
 							          ));
 
-							          $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
+							          $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('request' => $request ), array('_format' => 'json'));
 							          if ($insertionAnswer->getStatusCode() != 200) {
 								          return false;
 							          }
@@ -393,7 +393,7 @@ trait SubscriptionMethodsTrait
 									          "period" => "4",
 								          ));
 
-								          $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
+								          $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('request' => $request ), array('_format' => 'json'));
 								          if ($insertionAnswer->getStatusCode() != 200) {
 									          return false;
 								          }
@@ -417,7 +417,7 @@ trait SubscriptionMethodsTrait
 								          "period" => "4",
 							          ));
 
-							          $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
+							          $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('request' => $request ), array('_format' => 'json'));
 							          if ($insertionAnswer->getStatusCode() != 200) {
 								          return false;
 							          }
@@ -447,7 +447,7 @@ trait SubscriptionMethodsTrait
 							          "period" => "4",
 						          ));
 
-						          $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
+						          $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('request' => $request ), array('_format' => 'json'));
 						          if ($insertionAnswer->getStatusCode() != 200) {
 							          return false;
 						          }
@@ -471,7 +471,7 @@ trait SubscriptionMethodsTrait
 							          "period" => "4",
 						          ));
 
-						          $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
+						          $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('request' => $request ), array('_format' => 'json'));
 						          if ($insertionAnswer->getStatusCode() != 200) {
 							          return false;
 						          }
@@ -500,7 +500,7 @@ trait SubscriptionMethodsTrait
 							          "period" => "2",
 						          ));
 
-						          $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
+						          $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('request' => $request ), array('_format' => 'json'));
 						          if ($insertionAnswer->getStatusCode() != 200) {
 							          return false;
 						          }
@@ -518,7 +518,7 @@ trait SubscriptionMethodsTrait
 								          "period" => "4",
 							          ));
 
-							          $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
+							          $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('request' => $request ), array('_format' => 'json'));
 							          if ($insertionAnswer->getStatusCode() != 200) {
 								          return false;
 							          }
@@ -540,7 +540,7 @@ trait SubscriptionMethodsTrait
 							          "period" => "2",
 						          ));
 
-						          $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
+						          $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('request' => $request ), array('_format' => 'json'));
 						          if ($insertionAnswer->getStatusCode() != 200) {
 							          return false;
 						          }
@@ -558,7 +558,7 @@ trait SubscriptionMethodsTrait
 								          "period" => "4",
 							          ));
 
-							          $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
+							          $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('request' => $request ), array('_format' => 'json'));
 							          if ($insertionAnswer->getStatusCode() != 200) {
 								          return false;
 							          }
@@ -582,7 +582,7 @@ trait SubscriptionMethodsTrait
 							          "period" => "4",
 						          ));
 
-						          $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
+						          $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('request' => $request ), array('_format' => 'json'));
 						          if ($insertionAnswer->getStatusCode() != 200) {
 							          return false;
 						          }
@@ -604,7 +604,7 @@ trait SubscriptionMethodsTrait
 							          "period" => "4",
 						          ));
 
-						          $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
+						          $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('request' => $request ), array('_format' => 'json'));
 						          if ($insertionAnswer->getStatusCode() != 200) {
 							          return false;
 						          }
@@ -625,7 +625,7 @@ trait SubscriptionMethodsTrait
                 "date_change" => $actContract->getStartDate()->format("d-m-Y"),
             ));
 
-            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddFixedConcepts', array('_format' => 'json'));
+            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddFixedConcepts', array('request' => $request ), array('_format' => 'json'));
             if ($insertionAnswer->getStatusCode() != 200) {
                 return false;
             }
@@ -645,7 +645,7 @@ trait SubscriptionMethodsTrait
                         "entity_code" => $entity->getPayrollCode(),
                         "start_date" => $actContract->getStartDate()->format("d-m-Y"),
                     ));
-                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('request' => $request ), array('_format' => 'json'));
                     if ($insertionAnswer->getStatusCode() != 200) {
                         return false;
                     }
@@ -664,7 +664,7 @@ trait SubscriptionMethodsTrait
                         "entity_code" => $entity->getPayrollCode(),
                         "start_date" => $actContract->getStartDate()->format("d-m-Y"),
                     ));
-                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('request' => $request ), array('_format' => 'json'));
                     if ($insertionAnswer->getStatusCode() != 200) {
                         echo "Cago insertar entidad AFP " . $eHE->getIdEmployerHasEmployee() . " SC" . $insertionAnswer->getStatusCode();
                         die();
@@ -681,7 +681,7 @@ trait SubscriptionMethodsTrait
                         "entity_code" => intval($entity->getPayrollCode()),
                         "start_date" => $actContract->getStartDate()->format("d-m-Y"),
                     ));
-                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('request' => $request ), array('_format' => 'json'));
                     if ($insertionAnswer->getStatusCode() != 200) {
                         return false;
                     }
@@ -702,7 +702,7 @@ trait SubscriptionMethodsTrait
                         "entity_code" => $entity->getPayrollCode(),
                         "start_date" => $actContract->getStartDate()->format("d-m-Y"),
                     ));
-                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('request' => $request ), array('_format' => 'json'));
                     if ($insertionAnswer->getStatusCode() != 200) {
                         return false;
                     }
@@ -721,7 +721,7 @@ trait SubscriptionMethodsTrait
                         "entity_code" => $entity->getPayrollCode(),
                         "start_date" => $actContract->getStartDate()->format("d-m-Y"),
                     ));
-                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('request' => $request ), array('_format' => 'json'));
                     if ($insertionAnswer->getStatusCode() != 200) {
                         return false;
                     }

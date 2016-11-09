@@ -529,6 +529,9 @@
 											Subir Documento
 										</a>
 									{% else %}
+										<a class="btn-backoffice-upload notAjax download-link" href="{{ employerNotifications['notCC'].relatedLink }}/{{ employerNotifications['notCC'].id }}/{{ procedure.idProcedure }}">
+											Subir Documento
+										</a>
 										<a class="btn-backoffice notAjax" href="{{ path('finish_action',{'actionId':action_employer.idAction}) }}">
 											Validar Documento
 										</a>
@@ -719,6 +722,9 @@
 											Subir Documento
 										</a>
 									{% else %}
+										<a class="btn-backoffice-upload notAjax download-link" href="{{ employerNotifications['notRUT'].relatedLink }}/{{ employerNotifications['notRUT'].id }}/{{ procedure.idProcedure }}">
+											Subir Documento
+										</a>
 										<a class="btn-backoffice notAjax" href="{{ path('finish_action',{'actionId':action_employer.idAction}) }}">
 											Validar Documento
 										</a>
@@ -767,6 +773,9 @@
 											Subir Documento
 										</a>
 									{% else %}
+										<a class="btn-backoffice-upload notAjax download-link" href="{{ employerNotifications['notMAND'].relatedLink }}/{{ employerNotifications['notMAND'].id }}/{{ procedure.idProcedure }}">
+											Subir Documento
+										</a>
 										<a class="btn-backoffice notAjax" href="{{ path('finish_action',{'actionId':action_employer.idAction}) }}">
 											Validar Documento
 										</a>
@@ -1723,6 +1732,9 @@
 													Subir Documento
 												</a>
 											{% else %}
+												<a class="btn-backoffice-upload notAjax download-link" href="{{ employeesNotifications[employerHasEmployee.idEmployerHasEmployee]['notCC'].relatedLink }}/{{ employeesNotifications[employerHasEmployee.idEmployerHasEmployee]['notCC'].id }}/{{ procedure.idProcedure }}">
+													Subir Documento
+												</a>
 												<a class="btn-backoffice notAjax" href="{{ path('finish_action',{'actionId':action_employee.idAction}) }}">
 													Validar Documento
 												</a>
@@ -1801,6 +1813,9 @@
 													Subir Documento
 												</a>
 											{% else %}
+												<a class="btn-backoffice-upload notAjax download-link" href="{{ employeesNotifications[employerHasEmployee.idEmployerHasEmployee]['notCAS'].relatedLink }}/{{ employeesNotifications[employerHasEmployee.idEmployerHasEmployee]['notCAS'].id }}/{{ procedure.idProcedure }}">
+													Subir Documento
+												</a>
 												<a class="btn-backoffice notAjax" href="{{ path('finish_action',{'actionId':action_employee.idAction}) }}">
 													Validar Documento
 												</a>
@@ -1918,13 +1933,15 @@
 														</div>
 													</div>
 												{% else %}
-													<div class="col-md-15 row-content text-center">
-														<div class="col-md-15">
-															<a class="btn-backoffice notAjax" href="{{ path('activate_action',{'actionId':action_employee.idAction}) }}" style="padding: 1px 10px; margin-top: 20px">
-																Activar Tramite
-															</a>
+													{% if employerHasEmployee.existentSQL!=1 %}
+														<div class="col-md-15 row-content text-center">
+															<div class="col-md-15">
+																<a class="btn-backoffice notAjax" href="{{ path('activate_action',{'actionId':action_employee.idAction}) }}" style="padding: 1px 10px; margin-top: 20px">
+																	Activar Tramite
+																</a>
+															</div>
 														</div>
-													</div>
+													{% endif %}
 												{% endif %}
 												{{ form_end(formE) }}
 											</div>

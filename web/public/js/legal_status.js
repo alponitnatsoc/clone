@@ -1,3 +1,6 @@
+var signedContract = -1;
+var ssSuscribed = -1;
+
 function prepareLegal() {
 
   hideOptionsAndLoadOldSettings();
@@ -262,4 +265,162 @@ function prepareUrlString (){
   }
 
   return optString;
+}
+
+function displayForm(){
+  
+  $("#pregunta3").hide();
+  $("#pregunta4").hide();
+  $("#pregunta5").hide();
+  $("#pregunta6").hide();
+  $("#pregunta7").hide();
+  $("#pregunta8").hide();
+  $("#pregunta81").hide();
+
+
+  $("#p2b1").click(function (){
+    $("#pregunta2").hide();
+    $("#pregunta5").show();
+  });
+  $("#p2b2").click(function (){
+    $("#pregunta2").hide();
+    $("#pregunta5").show();
+    ssSuscribed = 0;
+  });
+
+  $("#p3b1").click(function (){
+    $("#pregunta3").hide();
+    $("#pregunta4").show();
+  });
+  $("#p3b2").click(function (){
+    $("#pregunta3").hide();
+    $("#pregunta6").show();
+  });
+
+  $("#p4b1").click(function (){
+    $contractVal = -1;
+
+    if(signedContract == 1){
+      $contractVal = 1;
+    }
+    else {
+      $contractVal = 0;
+    }
+
+    window.location.href = "/store_config/11011" + $contractVal + "0/change-flag/1";
+  });
+  $("#p4b2").click(function (){
+    $("#pregunta4").hide();
+    $("#pregunta7").show();
+    sendEmail("Revisar caso registro" , "El empleador es una persona natural. Si está afiliado a seguridad social. El usuario figura como su empleador en SS. Pero no ha pagado cumplidamente los aportes a SS");
+  });
+
+  $("#p5b1").click(function (){
+    $("#pregunta5").hide();
+
+    if(ssSuscribed == 0){
+      $("#pregunta6").show();
+    }
+    else{
+      $("#pregunta3").show();
+    }
+    signedContract = 1;
+  });
+  $("#p5b2").click(function (){
+    $("#pregunta5").hide();
+
+    if(ssSuscribed == 0){
+      $("#pregunta6").show();
+    }
+    else{
+      $("#pregunta3").show();
+    }
+    signedContract = 0;
+  });
+
+  $("#p6b1").click(function (){
+    $("#pregunta6").hide();
+    $("#pregunta8").show();
+  });
+  $("#p6b2").click(function (){
+    $("#pregunta6").hide();
+    $("#pregunta7").show();
+
+    if(signedContract == 1){
+      sendEmail("Revisar caso registro" , "El empleador es una persona natural. NO está afiliado a seguridad social. SI tiene un contrato firmado. Lo contrató hace más de un año");
+    }else {
+      sendEmail("Revisar caso registro" , "El empleador es una persona natural. NO está afiliado a seguridad social. NO tiene un contrato firmado. Lo contrató hace más de un año");
+    }
+  });
+
+  $("#p7b1").click(function (){
+    window.location.href = "/logout";
+  });
+
+  $("#p8b1").click(function (){
+
+    if( $('#theCheckBox').is(":checked") ){
+      $contractVal = -1;
+
+      if(signedContract == 1){
+        $contractVal = 1;
+      }
+      else {
+        $contractVal = 0;
+      }
+
+      if(ssSuscribed == 0){
+        window.location.href = "/store_config/10000" + $contractVal + "0/change-flag/1";
+      }else{
+        window.location.href = "/store_config/11000" + $contractVal + "0/change-flag/1";
+      }
+    }
+
+  });
+
+  $("#p8b2").click(function (){
+
+    if( $('#theCheckBox').is(":checked") ){
+      if(signedContract == 1){
+        sendEmail("Revisar caso registro" , "El empleador es una persona natural. NO está afiliado a seguridad social. SI tiene un contrato firmado. Lo contrató este año pero no quizo continuar en el aviso de riesgo");
+      }else {
+        sendEmail("Revisar caso registro" , "El empleador es una persona natural. NO está afiliado a seguridad social. NO tiene un contrato firmado. Lo contrató este año pero no quizo continuar en el aviso de riesgo");
+      }
+
+      $("#pregunta8").hide();
+      $("#pregunta81").show();
+    }
+  });
+
+  $("#p81b1").click( function () {
+    window.location.href = "/logout";
+  });
+
+  $("#restart").click(function (){
+    location.reload(true);
+  });
+
+  $("#checkBox").click(function(){
+    if( $("#theCheckBox").prop('checked') == false ){
+      $("#theCheckBox").prop('checked', true);
+    }
+    else{
+      $("#theCheckBox").prop('checked', false);
+    }
+
+  });
+
+}
+
+function sendEmail(subject , message ){
+  var name = "{{ user.personPerson.fullName }}";
+  var phone = "{{ user.personPerson.phones.first.phoneNumber }}";
+  var email = "{{ user.email }}";
+
+  $.ajax( {
+    type: "POST",
+    url: '/api/public/v1/sends/registrations/stucks/emails',
+    data: jQuery.param( { "name" : name , "phone": phone , "email" : email , "message" : message , "subject" : subject } )
+  });
+
 }

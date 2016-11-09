@@ -130,13 +130,9 @@ class Contract
     private $contractDocumentStatusType;
 
     /**
-     * 0 Pending
-     * 1 Uploaded
-     * 2 Error
-     * 3 Validated
-     * @ORM\Column(type="integer", nullable=TRUE)
+     * @ORM\Column(type="string", nullable=TRUE)
      */
-    private $backStatus=0;
+    private $backStatus=null;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\EmployeeContractType
@@ -980,8 +976,8 @@ class Contract
      */
     public function setContractDocumentStatusType(\RocketSeller\TwoPickBundle\Entity\ContractDocumentStatusType $contractDocumentStatusType = null)
     {
+        $this->backStatus = $contractDocumentStatusType->getName();
         $this->contractDocumentStatusType = $contractDocumentStatusType;
-
         return $this;
     }
 
