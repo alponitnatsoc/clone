@@ -2709,7 +2709,7 @@ class ProcedureController extends Controller
                 $em->persist($employerHasEmployee);
                 $em->flush();
                 $smailer = $this->get('symplifica.mailer.twig_swift');
-                $smailer->sendBackValidatedMessage($this->getUser(),$employerHasEmployee);
+                $smailer->sendBackValidatedMessage($procedure->getUserUser(),$employerHasEmployee);
                 $this->addFlash("employee_ended_successfully", 'Éxito al dar de alta al empleado');
                 $contracts = $employerHasEmployee->getContracts();
                 /** @var Contract $contract */
