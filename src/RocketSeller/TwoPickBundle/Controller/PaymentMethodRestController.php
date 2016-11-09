@@ -267,7 +267,7 @@ class PaymentMethodRestController extends FOSRestController
         $clientListPaymentmethodsCC = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:getClientListPaymentmethods', array('documentNumber' => $user->getPersonPerson()->getDocument()), array('_format' => 'json'));
         $responsePaymentsMethodsCC = json_decode($clientListPaymentmethodsCC->getContent(), true);
 	    
-	      if($user->getPersonPerson()->getEmployer() != NULL){
+	      if($user->getPersonPerson()->getEmployer() != NULL && $user->getPersonPerson()->getEmployer()->getIdHighTech() != NULL ) {
 		      $clientListPaymentmethodsCD = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:getEmployerPaymentMethods', array('accountNumber' => $user->getPersonPerson()->getEmployer()->getIdHighTech()), array('_format' => 'json'));
 		      $responsePaymentsMethodsCD = json_decode($clientListPaymentmethodsCD->getContent(), true);
 		      $realPayMethods=[];
