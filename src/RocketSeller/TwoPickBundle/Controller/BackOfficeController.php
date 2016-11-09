@@ -16,6 +16,7 @@ use RocketSeller\TwoPickBundle\Entity\PilaDetail;
 use RocketSeller\TwoPickBundle\Entity\PromotionCode;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
+use RocketSeller\TwoPickBundle\Entity\RealProcedure;
 use RocketSeller\TwoPickBundle\Entity\Transaction;
 use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -500,6 +501,7 @@ class BackOfficeController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 /** @var EmployerHasEmployee $employerHasEmployee */
                 $employerHasEmployee = $this->loadClassById($idEmployerHasEmployee,'EmployerHasEmployee');
+                /** @var RealProcedure $procedure */
                 $procedure = $this->loadClassById($procedureId,'RealProcedure');
                 if($this->checkActionCompletion($employerHasEmployee,$procedure)){
                     $employerHasEmployee->setState(4);
@@ -508,7 +510,7 @@ class BackOfficeController extends Controller
                     $em->persist($employerHasEmployee);
                     $em->flush();
                     $smailer = $this->get('symplifica.mailer.twig_swift');
-                    $smailer->sendBackValidatedMessage($this->getUser(),$employerHasEmployee);
+                    $smailer->sendBackValidatedMessage($procedure->getUserUser(),$employerHasEmployee);
                     $this->addFlash("employee_ended_successfully", 'Éxito al dar de alta al empleado');
                     $contracts = $employerHasEmployee->getContracts();
                     /** @var Contract $contract */
@@ -516,9 +518,16 @@ class BackOfficeController extends Controller
                         if($contract->getState()==1){
                             //we update the payroll
                             $activeP = $contract->getActivePayroll();
-                            $realMonth=$contract->getStartDate()->format("m");
-                            $realYear=$contract->getStartDate()->format("Y");
-                            $realPeriod=intval($contract->getStartDate()->format("d"))<=15&&$contract->getFrequencyFrequency()->getPayrollCode()=="Q"?2:4;
+                            $dateNow=new DateTime();
+                            if($contract->getStartDate()>$dateNow){
+                                $realMonth=$contract->getStartDate()->format("m");
+                                $realYear=$contract->getStartDate()->format("Y");
+                                $realPeriod=intval($contract->getStartDate()->format("d"))<=15&&$contract->getFrequencyFrequency()->getPayrollCode()=="Q"?2:4;
+                            }else{
+                                $realMonth=$dateNow->format("m");
+                                $realYear=$dateNow->format("Y");
+                                $realPeriod=intval($dateNow->format("d"))<=15&&$contract->getFrequencyFrequency()->getPayrollCode()=="Q"?2:4;
+                            }
                             $activeP->setMonth($realMonth);
                             $activeP->setYear($realYear);
                             $activeP->setPeriod($realPeriod);
@@ -1229,7 +1238,7 @@ class BackOfficeController extends Controller
 
     public function testEmailAction(){
 
-        $toEmail = "esteban.palma@symplifica.com";
+        $toEmail = "alponitnatsnoc@gmail.com.com";
 
 //        /** test welcome Email*/
 //        $context = array(
