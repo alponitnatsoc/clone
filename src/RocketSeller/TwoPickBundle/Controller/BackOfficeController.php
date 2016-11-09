@@ -19,6 +19,7 @@ use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\Transaction;
 use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -1699,5 +1700,28 @@ class BackOfficeController extends Controller
 		}
 		
 		return $this->redirectToRoute('back_office');
+	}
+	
+	public function highTechCheckAction(){
+		
+		$empRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User')->findAll();
+		
+		/** @var User $sE */
+		foreach ($empRepo as $sE){
+			
+			try{
+				$answ = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getClientListPaymentMethods', array("idUser" => $sE->getId()));
+			}catch(Exception $e){
+				continue;
+			}
+			
+			if($answ->getStatusCode() != 404){
+				$cA = json_decode($answ->getContent(), true );
+				
+				var_dump($sE->getPersonPerson()->getFullName());
+				print_r($cA);
+				var_dump("-------------");
+			}
+		}
 	}
 }
