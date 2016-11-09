@@ -73,7 +73,6 @@ class EmailRestController extends FOSRestController {
 	 */
 	public function postSendRegistrationStuckEmailAction(ParamFetcher $paramFetcher) {
 		
-		dump($paramFetcher);
 		if($this->getUser() != NULL){
 			$name = $paramFetcher->get('name');
 			$phone = $paramFetcher->get('phone');
