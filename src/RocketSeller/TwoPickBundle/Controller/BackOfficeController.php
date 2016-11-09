@@ -1719,7 +1719,7 @@ class BackOfficeController extends Controller
 				$cA = json_decode($answ->getContent(), true );
 				
 				var_dump($sE->getPersonPerson()->getFullName());
-				print_r($cA);
+				var_dump($cA);
 				var_dump("-------------");
 			}
 		}
