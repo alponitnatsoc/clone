@@ -2718,9 +2718,15 @@ class ProcedureController extends Controller
                         //we update the payroll
                         $activeP = $contract->getActivePayroll();
                         $dateNow=new DateTime();
-                        $realMonth=$contract->getStartDate()->format("m");
-                        $realYear=$contract->getStartDate()->format("Y");
-                        $realPeriod=intval($contract->getStartDate()->format("d"))<=15&&$contract->getFrequencyFrequency()->getPayrollCode()=="Q"?2:4;
+                        if($contract->getStartDate()>$dateNow){
+                            $realMonth=$contract->getStartDate()->format("m");
+                            $realYear=$contract->getStartDate()->format("Y");
+                            $realPeriod=intval($contract->getStartDate()->format("d"))<=15&&$contract->getFrequencyFrequency()->getPayrollCode()=="Q"?2:4;
+                        }else{
+                            $realMonth=$dateNow->format("m");
+                            $realYear=$dateNow->format("Y");
+                            $realPeriod=intval($dateNow->format("d"))<=15&&$contract->getFrequencyFrequency()->getPayrollCode()=="Q"?2:4;
+                        }
                         $activeP->setMonth($realMonth);
                         $activeP->setYear($realYear);
                         $activeP->setPeriod($realPeriod);
