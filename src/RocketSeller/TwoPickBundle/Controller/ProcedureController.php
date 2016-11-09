@@ -529,7 +529,7 @@ class ProcedureController extends Controller
                 if($change or $priorityChange)$em->flush();
 
             } catch (Exception $e) {
-                dump($e);
+                //todo error redirect
             }
 
             return $this->render('@RocketSellerTwoPick/BackOffice/procedures.html.twig',array('procedures'=>$procedures,'order'=>$order,'state'=>$state,'names'=>$names,'document'=>$document,'prior'=>$prior,'form' => $form->createView()));
