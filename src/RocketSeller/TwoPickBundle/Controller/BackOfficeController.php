@@ -16,6 +16,7 @@ use RocketSeller\TwoPickBundle\Entity\PilaDetail;
 use RocketSeller\TwoPickBundle\Entity\PromotionCode;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
+use RocketSeller\TwoPickBundle\Entity\RealProcedure;
 use RocketSeller\TwoPickBundle\Entity\Transaction;
 use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -499,6 +500,7 @@ class BackOfficeController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 /** @var EmployerHasEmployee $employerHasEmployee */
                 $employerHasEmployee = $this->loadClassById($idEmployerHasEmployee,'EmployerHasEmployee');
+                /** @var RealProcedure $procedure */
                 $procedure = $this->loadClassById($procedureId,'RealProcedure');
                 if($this->checkActionCompletion($employerHasEmployee,$procedure)){
                     $employerHasEmployee->setState(4);
@@ -507,7 +509,7 @@ class BackOfficeController extends Controller
                     $em->persist($employerHasEmployee);
                     $em->flush();
                     $smailer = $this->get('symplifica.mailer.twig_swift');
-                    $smailer->sendBackValidatedMessage($this->getUser(),$employerHasEmployee);
+                    $smailer->sendBackValidatedMessage($procedure->getUserUser(),$employerHasEmployee);
                     $this->addFlash("employee_ended_successfully", 'Éxito al dar de alta al empleado');
                     $contracts = $employerHasEmployee->getContracts();
                     /** @var Contract $contract */
@@ -1228,7 +1230,7 @@ class BackOfficeController extends Controller
 
     public function testEmailAction(){
 
-        $toEmail = "esteban.palma@symplifica.com";
+        $toEmail = "alponitnatsnoc@gmail.com.com";
 
 //        /** test welcome Email*/
 //        $context = array(

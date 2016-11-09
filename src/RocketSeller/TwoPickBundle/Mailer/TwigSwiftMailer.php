@@ -546,7 +546,7 @@ class TwigSwiftMailer extends Controller implements MailerInterface
         return $this->sendMessage($template,$context,array('registro@symplifica.com'=>'Equipo Symplifica'), $to);
     }
 
-    public function sendBackValidatedMessage(UserInterface $user,EmployerHasEmployee $eHE){
+    public function sendBackValidatedMessage(User $user,EmployerHasEmployee $eHE){
         $to = $user->getEmail();
         $template = $this->parameters['template']['backval'];
         $context = array(
