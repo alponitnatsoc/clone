@@ -495,6 +495,46 @@ class BackOfficeController extends Controller
             $em->persist($employerHasEmployee);
             $em->flush();
             $this->addFlash("employee_added_to_sql", 'Exito al agregar el empleado a SQL');
+            try {
+                $em = $this->getDoctrine()->getManager();
+                /** @var EmployerHasEmployee $employerHasEmployee */
+                $employerHasEmployee = $this->loadClassById($idEmployerHasEmployee,'EmployerHasEmployee');
+                $procedure = $this->loadClassById($procedureId,'RealProcedure');
+                if($this->checkActionCompletion($employerHasEmployee,$procedure)){
+                    $employerHasEmployee->setState(4);
+                    $employerHasEmployee->setDocumentStatusType($this->getDocumentStatusByCode('BOFFFF'));
+                    $employerHasEmployee->setDateFinished(new DateTime());
+                    $em->persist($employerHasEmployee);
+                    $em->flush();
+                    $smailer = $this->get('symplifica.mailer.twig_swift');
+                    $smailer->sendBackValidatedMessage($this->getUser(),$employerHasEmployee);
+                    $this->addFlash("employee_ended_successfully", 'Éxito al dar de alta al empleado');
+                    $contracts = $employerHasEmployee->getContracts();
+                    /** @var Contract $contract */
+                    foreach ($contracts as $contract) {
+                        if($contract->getState()==1){
+                            //we update the payroll
+                            $activeP = $contract->getActivePayroll();
+                            $realMonth=$contract->getStartDate()->format("m");
+                            $realYear=$contract->getStartDate()->format("Y");
+                            $realPeriod=intval($contract->getStartDate()->format("d"))<=15&&$contract->getFrequencyFrequency()->getPayrollCode()=="Q"?2:4;
+                            $activeP->setMonth($realMonth);
+                            $activeP->setYear($realYear);
+                            $activeP->setPeriod($realPeriod);
+                            $em->persist($activeP);
+                            $em->flush();
+                            break;
+                        }
+                    }
+
+                    return $this->redirectToRoute('show_procedure', array('procedureId'=>$procedureId), 301);
+                }else{
+                    $this->addFlash("employee_ended_faild", 'No se han terminado todos los tramites para este empleado.');
+                }
+            }catch(Exeption $e){
+                $this->addFlash("employee_ended_faild", 'Ocurrio un error terminando el empleado: '. $e);
+                return $this->redirectToRoute('show_procedure',array('procedureId'=>$procedureId));
+            }
 
         }else{
             $employerHasEmployee->setDateTryToRegisterToSQL(new DateTime());

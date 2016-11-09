@@ -808,7 +808,8 @@
         {% set modal_content %}
             <span style="text-align:center"><img src="{{ asset('public/img/landing/benefit1.png') }}" width="80"/></span>
             <p style="color: #8a8a8a;padding: 20px 15px;font-size: 17px;text-align: center;font-weight: 100;"><strong style="color:#00858c">¡Todos los documentos de<br>{% if param is defined %}{{ param }}{% endif %} han sido validados!</strong><br><br>
-            Estamos validando tu proceso y radicandolo ante las entidades de seguridad social. En un plazo de 3 días hábiles te estaremos informando.<br />
+            Estamos validando tu proceso y radicandolo ante las entidades de seguridad social. En un plazo de 3 días hábiles te estaremos informando y
+            podrás comenzar a gestionar tus empleados de la mejor manera.<br />
             Si tienes tareas pendientes puedes seguir con ellas.</p>
         {% endset %}
 
@@ -920,7 +921,7 @@
 
         {% set primary_modal_header %}
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">¡Proceso de validación exitoso!</h4>
+                <h4 class="modal-title" id="myModalLabel">¡Tu empleado esta listo!</h4>
             </div>
         {% endset %}
 
@@ -928,10 +929,8 @@
 
         {% set primary_modal_body %}
             <p style="padding: 15px 10px 5px 15px;">
-                El proceso de validación de {% if param is defined %}{{ param }}{% endif %} fue éxitoso, realizaremos la
-                afiliación a
-                las diferentes entidades de seguridad social, en un máximo de 3 días hábiles podrás usar
-                nuestra plataforma y comenzar a gestionar a tus empleados de la mejor manera. Ya puedes descargar el
+                Hemos terminado los tramites ante las entidades de seguridad social de tu empleado <strong>{% if param is defined %}{{ param }}{% endif %}</strong><br>
+                Ya puedes comenzar a gestionar a tu empleado de la mejor manera. Recuerda que ya puedes descargar el
                 contrato y subirlo.</p>
         {% endset %}
 

@@ -59,8 +59,10 @@ class DashBoardEmployerController extends Controller {
             $state = $this->allDocumentsReady($user);
             $ready=array();
             $validated = array();
+            $finished = array();
             $valContract = false;
             $valid = false;
+            $backval = false;
             if($state ==1){
                 if($user->getPersonPerson()->getEmployer()->getDashboardMessage()==null){
                     $employer->setDashboardMessage($today);
@@ -87,6 +89,12 @@ class DashBoardEmployerController extends Controller {
                         if(!$valid)$valid=true;
                         $em->persist($ehe);
                     }
+                    if($ehe->getDocumentStatusType()->getDocumentStatusCode()=='BOFFFF' and $ehe->getBackofficeFinishMessageAt()==null){
+                        $ehe->setBackofficeFinishMessageAt($today);
+                        $finished[$ehe->getIdEmployerHasEmployee().'']=true;
+                        if(!$backval)$backval=true;
+                        $em->persist($ehe);
+                    }
                 }
             }
             $em->flush();
@@ -98,13 +106,27 @@ class DashBoardEmployerController extends Controller {
                     'welcome'=>$welcome,
                     'ready'=>$ready,
                     'validated'=>$validated,
+                    'finished'=>$finished,
                 ));
             }else{
-                if($valid){
+                if($valid and !$backval) {
+                    return $this->render('@RocketSellerTwoPick/Employer/endvalidation.html.twig', array(
+                        'user' => $user->getPersonPerson(),
+                        'ready' => $ready,
+                        'validated' => $validated,
+                    ));
+                }elseif($valid and $backval){
                     return $this->render('@RocketSellerTwoPick/Employer/endvalidation.html.twig',array(
                         'user' => $user->getPersonPerson(),
                         'ready'=>$ready,
                         'validated'=>$validated,
+                        'backval'=>$backval,
+                    ));
+                }elseif(!$valid and $backval){
+                    return $this->render('@RocketSellerTwoPick/Employer/endvalidation.html.twig',array(
+                        'user' => $user->getPersonPerson(),
+                        'ready'=>$ready,
+                        'backval'=>$backval,
                     ));
                 }else{
                     return $this->render('@RocketSellerTwoPick/Employer/cleanDashboard.html.twig',array(
