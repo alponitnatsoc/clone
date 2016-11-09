@@ -266,38 +266,42 @@ class PaymentMethodRestController extends FOSRestController
         }
         $clientListPaymentmethodsCC = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:getClientListPaymentmethods', array('documentNumber' => $user->getPersonPerson()->getDocument()), array('_format' => 'json'));
         $responsePaymentsMethodsCC = json_decode($clientListPaymentmethodsCC->getContent(), true);
-        $clientListPaymentmethodsCD = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:getEmployerPaymentMethods', array('accountNumber' => $user->getPersonPerson()->getEmployer()->getIdHighTech()), array('_format' => 'json'));
-        $responsePaymentsMethodsCD = json_decode($clientListPaymentmethodsCD->getContent(), true);
-        $realPayMethods=[];
-        if (isset($responsePaymentsMethodsCC["payment-methods"])) {
-            foreach ($responsePaymentsMethodsCC["payment-methods"] as $key=>$value ) {
-                $realPayMethods[]=array(
-                  'payment-type'=>$value["payment-type"]==3?"VISA":"MasterC",
-                  'account'=>$value["account"],
-                  'method-id'=>'0-'.$value["method-id"],
-                  'bank'=>'',
-                  'id-provider'=>'0',
-                );
-            }
-        }
-        if (isset($responsePaymentsMethodsCD["payment-methods"])) {
-            foreach ($responsePaymentsMethodsCD["payment-methods"] as $key=>$value ) {
-                if($value["estado"]=="DISPONIBLE"){
-                    /** @var Bank $bank */
-                    $bank=$bankRepo->findOneBy(array('hightechCode'=>$value["codBanco"]));
-                    $realPayMethods[]=array(
-                        'payment-type'=>$value["tipoCuenta"]=="AH"?"Ahorros":"Corriente",
-                        'account'=>$value["numeroCuenta"],
-                        'method-id'=>'1-'.$value["idCuenta"],
-                        'bank'=>$bank->getName(),
-                        'id-provider'=>'1',
-                    );
-                }
-            }
-        }
-
-        return $view->setStatusCode(200)->setData(array("payment-methods"=>$realPayMethods));
-
+	    
+	      if($user->getPersonPerson()->getEmployer() != NULL && $user->getPersonPerson()->getEmployer()->getIdHighTech() != NULL ) {
+		      $clientListPaymentmethodsCD = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:getEmployerPaymentMethods', array('accountNumber' => $user->getPersonPerson()->getEmployer()->getIdHighTech()), array('_format' => 'json'));
+		      $responsePaymentsMethodsCD = json_decode($clientListPaymentmethodsCD->getContent(), true);
+		      $realPayMethods=[];
+		      if (isset($responsePaymentsMethodsCC["payment-methods"])) {
+			      foreach ($responsePaymentsMethodsCC["payment-methods"] as $key=>$value ) {
+				      $realPayMethods[]=array(
+					      'payment-type'=>$value["payment-type"]==3?"VISA":"MasterC",
+					      'account'=>$value["account"],
+					      'method-id'=>'0-'.$value["method-id"],
+					      'bank'=>'',
+					      'id-provider'=>'0',
+				      );
+			      }
+		      }
+		      if (isset($responsePaymentsMethodsCD["payment-methods"])) {
+			      foreach ($responsePaymentsMethodsCD["payment-methods"] as $key=>$value ) {
+				      if($value["estado"]=="DISPONIBLE"){
+					      /** @var Bank $bank */
+					      $bank=$bankRepo->findOneBy(array('hightechCode'=>$value["codBanco"]));
+					      $realPayMethods[]=array(
+						      'payment-type'=>$value["tipoCuenta"]=="AH"?"Ahorros":"Corriente",
+						      'account'=>$value["numeroCuenta"],
+						      'method-id'=>'1-'.$value["idCuenta"],
+						      'bank'=>$bank->getName(),
+						      'id-provider'=>'1',
+					      );
+				      }
+			      }
+		      }
+		
+		      return $view->setStatusCode(200)->setData(array("payment-methods"=>$realPayMethods));
+	      }
+	
+	      return $view->setStatusCode(404);
     }
     /**
      * Return the overall user list.
@@ -646,7 +650,7 @@ class PaymentMethodRestController extends FOSRestController
                             'idPOD'=>$rejectedPOD->getIdPurchaseOrdersDescription(),
                             'value'=>$valor
                         );
-                        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
+                        //$this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
                         $codes[$desc->getIdPurchaseOrdersDescription()]=$dispersionAnswer['code'];
                         $failFlag=false;
                     }else{

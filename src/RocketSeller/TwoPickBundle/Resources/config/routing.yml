@@ -242,3 +242,6 @@ back_add_employer_enlace_operativo:
 back_load_files_enlace_operativo:
     path:         /backoffice/pila/load/file/enlace/operativo
     defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:sendPlanillaFileToEnlaceOperativoBack }
+back_check_banks:
+    path:         /backoffice/check/banks/ht
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:highTechCheck }
