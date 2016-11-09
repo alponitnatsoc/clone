@@ -441,7 +441,25 @@ function startEmployee() {
     }
 
     payType.on('change', function () {
+        //aqui miramos que metodo de pago escojió
+        var campaignvar = $("#start150Campaign");
+        var campaignEndVar = $("#end150Campaign");
+        var dateStart = new Date(
+            parseInt(campaignvar.find(".year").text()),
+            parseInt(campaignvar.find(".month").text()-1),
+            parseInt(campaignvar.find(".day").text()));
+        var dateEnd = new Date(
+            parseInt(campaignEndVar.find(".year").text()),
+            parseInt(campaignEndVar.find(".month").text()-1),
+            parseInt(campaignEndVar.find(".day").text()));
+        var nowDate=new Date();
+
         var payMethod = $("input[name='register_employee[employeeHasEmployers][payMethod]']:checked");
+        if(dateStart<=nowDate&&dateEnd>=nowDate){
+            if(payMethod.parent().parent().parent().find(".paymentMethodImage").attr("src")=="/img/icon_cash.png"){
+                $("#150kCampaign").modal("show");
+            }
+        }
         $.ajax({
             url: '/pay/method/fields/' + payMethod.val(),
             type: 'GET'

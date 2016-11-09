@@ -53,6 +53,16 @@ class EmployeeHasEntity
     private $state =0 ;
 
     /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Document
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Document")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="radicated_id_document", referencedColumnName="id_document")
+     * })
+     * @Exclude
+     */
+    private $radicatedDocument;
+
+    /**
      * Set idEmployeeHasEntity
      *
      * @param integer $idEmployeeHasEntity
@@ -146,5 +156,29 @@ class EmployeeHasEntity
     public function getState()
     {
         return $this->state;
+    }
+
+    /**
+     * Set radicatedDocument
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Document $radicatedDocument
+     *
+     * @return EmployeeHasEntity
+     */
+    public function setRadicatedDocument(\RocketSeller\TwoPickBundle\Entity\Document $radicatedDocument = null)
+    {
+        $this->radicatedDocument = $radicatedDocument;
+
+        return $this;
+    }
+
+    /**
+     * Get radicatedDocument
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Document
+     */
+    public function getRadicatedDocument()
+    {
+        return $this->radicatedDocument;
     }
 }

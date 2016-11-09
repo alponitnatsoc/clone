@@ -98,7 +98,7 @@ class HighTechRestController extends FOSRestController
         $mandatory = array();
 
         // Set all the parameters info.
-        $regex['numeroRadicado'] = '([0-9])+';
+        $regex['numeroRadicado'] = '(.)+';
         $mandatory['numeroRadicado'] = true;
         $regex['estado'] = '([0-9])+';
         $mandatory['estado'] = true;
@@ -180,6 +180,21 @@ class HighTechRestController extends FOSRestController
 
             $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 
+            //push notification
+            $message = "¡Hemos debitado tu cuenta con éxito!";
+            $title = "Symplifica";
+            $longMessage = "¡Hemos debitado tu cuenta con éxito! Te avisaremos en cuanto se hayan realizado los pagos correspondientes";
+
+            $request = new Request();
+            $request->setMethod("POST");
+            $request->request->add(array(
+                "idUser" => $rejectedPurchaseOrderDescription->getPurchaseOrders()->getIdUser(),
+                "title" => $title,
+                "message" => $message,
+                "longMessage" => $longMessage
+            ));
+            $pushNotificationService = $this->get('app.symplifica_push_notification');
+            $result = $pushNotificationService->postPushNotificationAction($request);
         } else {
             //nicetohave buscar este ID
             $paymethodId = $dis->getPayMethodId();
@@ -201,6 +216,22 @@ class HighTechRestController extends FOSRestController
 	              'value'=>$dis->getValue()
             );
             //$this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($contextBack);
+
+            //push notification
+            $message = "Hubo un inconveniente al debitar tu cuenta";
+            $title = "Symplifica";
+            $longMessage = "Tuvimos un inconveniente al realizar el débito de tu cuenta, nos pondremos en contacto.";
+
+            $request = new Request();
+            $request->setMethod("POST");
+            $request->request->add(array(
+                "idUser" => $rejectedPurchaseOrderDescription->getPurchaseOrders()->getIdUser(),
+                "title" => $title,
+                "message" => $message,
+                "longMessage" => $longMessage
+            ));
+            $pushNotificationService = $this->get('app.symplifica_push_notification');
+            $result = $pushNotificationService->postPushNotificationAction($request);
 
             $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => 'P1'));
             //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
@@ -304,6 +335,22 @@ class HighTechRestController extends FOSRestController
                 $context['documentName']='Comprobante '.date_format(new DateTime(),'d-m-y H:i:s').'.pdf';
                 $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 
+                //push notification
+                $message = "¡Hemos realizado tu pago con éxito!";
+                $title = "Symplifica";
+                $longMessage = "¡Hemos realizado tu pago con éxito! Puedes entrar y obtener sus comprobantes";
+
+                $request = new Request();
+                $request->setMethod("POST");
+                $request->request->add(array(
+                    "idUser" => $rejectedPurchaseOrderDescription->getPurchaseOrders()->getIdUser(),
+                    "title" => $title,
+                    "message" => $message,
+                    "longMessage" => $longMessage
+                ));
+                $pushNotificationService = $this->get('app.symplifica_push_notification');
+                $result = $pushNotificationService->postPushNotificationAction($request);
+
                 //here i create the comprobante
                 /* This is not longer necesary
 
@@ -384,6 +431,22 @@ class HighTechRestController extends FOSRestController
 				        $context['documentName']= 'Comprobante pago aportes '.date_format(new DateTime(),'d-m-y H:i:s').'.pdf';
 				        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 
+                        //push notification
+                        //¡El pago de los aportes a seguridad social se ha realizado con éxito!
+                        $message = "¡Hemos realizado tu pago con éxito!";
+                        $title = "Symplifica";
+                        $longMessage = "¡Hemos realizado El pago de los aportes a seguridad social con éxito!";
+
+                        $request = new Request();
+                        $request->setMethod("POST");
+                        $request->request->add(array(
+                            "idUser" => $rejectedPurchaseOrderDescription->getPurchaseOrders()->getIdUser(),
+                            "title" => $title,
+                            "message" => $message,
+                            "longMessage" => $longMessage
+                        ));
+                        $pushNotificationService = $this->get('app.symplifica_push_notification');
+                        $result = $pushNotificationService->postPushNotificationAction($request);
 			        }
 		        }
 
@@ -435,6 +498,22 @@ class HighTechRestController extends FOSRestController
             $em->persist($notification);
             $em->flush();
 
+            //push notification
+            $message = "Hubo un inconveniente al realizar tu pago";
+            $title = "Symplifica";
+            $longMessage = "Tuvimos un inconveniente al realizar tu pago, puedes realizar el cambio de tu método de pago";
+
+            $request = new Request();
+            $request->setMethod("POST");
+            $request->request->add(array(
+                "idUser" => $rejectedPurchaseOrderDescription->getPurchaseOrders()->getIdUser(),
+                "title" => $title,
+                "message" => $message,
+                "longMessage" => $longMessage,
+                "page" => 'TransactionsInProcessPage'
+            ));
+            $pushNotificationService = $this->get('app.symplifica_push_notification');
+            $result = $pushNotificationService->postPushNotificationAction($request);
         }
         $em->persist($pay);
         $em->flush();

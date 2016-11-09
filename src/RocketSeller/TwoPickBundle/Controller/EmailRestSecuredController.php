@@ -55,4 +55,109 @@ class EmailRestSecuredController extends FOSRestController {
     $view->setStatusCode(200);
     return $view->setData(array('send' => $send));
   }
+
+  /**
+   * send attached document email
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = "send attached document email",
+   *   statusCodes = {
+   *     200 = "Created successfully",
+   *     400 = "Bad Request",
+   *   }
+   * )
+   *
+   * @param paramFetcher $paramFetcher ParamFetcher
+   *
+   * @RequestParam(name="docType", nullable=false, strict=true, description="document type: contrato | mandato")
+   * @RequestParam(name="idDocument", nullable=false, strict=true, description="id to fetch docuement")
+   *
+   * @return View
+   */
+  public function postSendAttachDocumentEmailAction(ParamFetcher $paramFetcher) {
+
+    // contrato | mandato
+    $docType = $paramFetcher->get('docType');
+    $idDocument = $paramFetcher->get('idDocument');
+    $user = $this->getUser();
+    $params = array(
+        'ref'=> $docType,
+        'id' => $idDocument,
+        'type' => 'pdf',
+        'attach' => null
+    );
+    $documentResult = $this->forward('RocketSellerTwoPickBundle:Document:downloadDocuments', $params);
+    $file =  $documentResult->getContent();
+    if (!file_exists('uploads/temp/mailDocs')) {
+        mkdir('uploads/temp/mailDocs', 0777, true);
+    }
+    $path = 'uploads/temp/mailDocs/'.$user->getId().'_tempDocumentToMail.pdf';
+    file_put_contents($path, $file);
+
+    $context = array( 'emailType' => 'contractAttachmentEmail',
+                      'userName' => $user->getPersonPerson()->getNames() . ' ' . $user->getPersonPerson()->getLastName1(),
+                      'docType' => $docType,
+                      'path' => $path,
+                      'toEmail' => $user->getEmail(),
+                      'documentName' => $docType
+                    );
+
+    $smailer = $this->get('symplifica.mailer.twig_swift');
+    $send = $smailer->sendEmailByTypeMessage($context);
+
+    $view = View::create();
+    $view->setStatusCode(200);
+    return $view->setData(array('send' => $send));
+  }
+
+  /**
+   * send help transaction email
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = "send help transaction email ",
+   *   statusCodes = {
+   *     200 = "Created successfully",
+   *     400 = "Bad Request",
+   *   }
+   * )
+   *
+   * @param paramFetcher $paramFetcher ParamFetcher
+   *
+   * @RequestParam(name="idPod", nullable=false, strict=true, description="id pod")
+   * @RequestParam(name="phone", nullable=false, strict=true, description="contact phone")
+   *
+   * @return View
+   */
+  public function postSendHelpTransactionEmailAction(ParamFetcher $paramFetcher) {
+    $idPod = $paramFetcher->get('idPod');
+    $phone = $paramFetcher->get('phone');
+
+    $em = $this->getDoctrine()->getManager();
+
+    $pod = $this->getDoctrine()
+        ->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')
+        ->find($idPod);
+    $user = $this->getUser();
+
+    $context = array( 'emailType' => 'helpTransaction',
+                      'name' => $user->getPersonPerson()->getNames() . ' ' . $user->getPersonPerson()->getLastName1(),
+                      'username' => $user->getUsername(),
+                      'userId' => $user->getId(),
+                      'userEmail' => $user->getEmail(),
+                      'phone' => $phone,
+                      'idPod' => $idPod,
+                      'idNovoPay' => $pod->getPurchaseOrdersStatus()->getIdNovoPay(),
+                      'statusName' => $pod->getPurchaseOrdersStatus()->getName(),
+                      'statusDescription' => $pod->getPurchaseOrdersStatus()->getDescription()
+                  );
+
+    $smailer = $this->get('symplifica.mailer.twig_swift');
+    $send = $smailer->sendEmailByTypeMessage($context);
+
+    $view = View::create();
+    $view->setStatusCode(200);
+    return $view->setData(array('send' => $send));
+  }
 }

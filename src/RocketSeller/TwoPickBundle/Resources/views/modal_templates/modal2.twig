@@ -1,0 +1,28 @@
+{% block modalMessage %}
+<div class="modal" id="{{ modal_id| default("modal_template") }}">
+    <div class="modal-dialog modal-md" id="{{ modal_body_id|default("cuerpo_modal") }}" role="document" style="min-width: 30%;min-height: 20%;background-color: rgb(255, 255, 255);border: 1px solid black;border-radius: 8px;{{ modal_body_width|default("width: 30%") }}">
+        <div class="modal-content" style ="
+            {{ modal_style | default('width: 100.4%;
+                                      height: 39px;
+                                      background-color: #00838c;
+                                      border: 1px solid #05383c;
+                                      border-radius: 6px 6px 0px 0px;
+                                      margin: -1px;') }}">
+
+            {#{% if primary_modal_header is defined and primary_modal_header !="" %}#}
+                {#{{ primary_modal_header }}#}
+            {#{% endif %}#}
+            <div class="modal-body" style="padding: 0;line-height: 1;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 6px;z-index: 100; color: #fff;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                hola mundo
+                {#{% if primary_modal_body is defined %}#}
+                    {#{{ primary_modal_body }}#}
+                {#{% else %}#}
+                {#{% endif %}#}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

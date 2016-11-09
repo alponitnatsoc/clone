@@ -3,271 +3,1983 @@
 {% block title %}Tramite No {{ procedure.idProcedure }}{% endblock %}
 
 {% block fos_user_content %}
-	<div id="main" class="col-sm-12">
-		<div class="col-md-12">
-			<div class="back-panel-title">
-				<p>Tramite No: {{ procedure.idProcedure }}</p>
-			</div>
-			<br>
-			<div class="back-panel" id="employer_section">
-				<div class="backoffice-headding">
+	<link rel="stylesheet" href="{{ asset('public/css/backOfficeProcedures.css') }}" type="text/css">
+	<style>
+		{% set var1 = 1 %}
+		{% for entity in employer.entities %}
+			#validate-entity-employer{{ var1 }}{
+				touch-action: manipulation;
+				cursor: pointer;
+				-webkit-user-select: none;
+			}
+			{% set var1 = var1 + 1 %}
+		{% endfor %}
+		{% set var1 = 1 %}
+		{% for ehe in employerHasEmployees %}
+		form[name="formInfoEmployee{{ ehe.idEmployerHasEmployee }}"]{
+			margin: -5% -10% 0 0;
+		}
+		form[name*="formEmployeeEntity"]{
+			margin: -5% -10% 0 0;
+		}
+		div[id*="validate-entity-employee{{ ehe.idEmployerHasEmployee }}"]{
+			touch-action: manipulation;
+			cursor: pointer;
+			-webkit-user-select: none;
+		}
+		select[name="formEmployeeStartDate{{ ehe.idEmployerHasEmployee}}[startDate][day]"]{
+			border: none;
+			box-shadow: none;
+			height: 22px;
+		}
+		select[name="formEmployeeStartDate{{ ehe.idEmployerHasEmployee}}[startDate][month]"]{
+			border: none;
+			box-shadow: none;
+			height: 22px;
+		}
+		select[name="formEmployeeStartDate{{ ehe.idEmployerHasEmployee}}[startDate][year]"]{
+			border: none;
+			box-shadow: none;
+			height: 22px;
+		}
+		select[name="formEmployeeEndDate{{ ehe.idEmployerHasEmployee}}[endDate][day]"]{
+			border: none;
+			box-shadow: none;
+			height: 22px;
+		}
+		select[name="formEmployeeEndDate{{ ehe.idEmployerHasEmployee}}[endDate][month]"]{
+			border: none;
+			box-shadow: none;
+			height: 22px;
+		}
+		select[name="formEmployeeEndDate{{ ehe.idEmployerHasEmployee}}[endDate][year]"]{
+			border: none;
+			box-shadow: none;
+			height: 22px;
+		}
+
+		#aditional-actions{{ ehe.idEmployerHasEmployee }}{
+			touch-action: manipulation;
+			cursor: pointer;
+			-webkit-user-select: none;
+		}
+		#formInfoEmployee{{ ehe.idEmployerHasEmployee }}_expeditionDate_day{
+			height: 20px;
+			font-size: 12px;
+			border: 0px;
+			margin: 0px 6px 0px 2px;
+		}
+		#formInfoEmployee{{ ehe.idEmployerHasEmployee }}_expeditionDate_month{
+			height: 20px;
+			font-size: 12px;
+			border: 0px;
+			margin: 0px 6px 0px 2px;
+		}
+		#formInfoEmployee{{ ehe.idEmployerHasEmployee }}_expeditionDate_year{
+			height: 20px;
+			font-size: 12px;
+			border: 0px;
+			margin: 0px 6px 0px 2px;
+		}
+		#formInfoEmployee{{ ehe.idEmployerHasEmployee }}_birthDate_day{
+			height: 20px;
+			font-size: 12px;
+			border: 0px;
+			margin: 0px 6px 0px 2px;
+		}
+		#formInfoEmployee{{ ehe.idEmployerHasEmployee }}_birthDate_month{
+			height: 20px;
+			font-size: 12px;
+			border: 0px;
+			margin: 0px 6px 0px 2px;
+		}
+		#formInfoEmployee{{ ehe.idEmployerHasEmployee }}_birthDate_year{
+			height: 20px;
+			font-size: 12px;
+			border: 0px;
+			margin: 0px 6px 0px 2px;
+		}
+		#validate-info-employee{{ var1 }},#validate-doc-employee{{ var1 }},#validate-cat-employee{{ var1 }},#eployee{{ var1 }}{
+			touch-action: manipulation;
+			cursor: pointer;
+			-webkit-user-select: none;
+		}
+		{% set var1 = var1 + 1 %}
+		{% endfor %}
+
+	</style>
+
+	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+	<script>
+		$(document).ready(function () {
+			$('#validate-info-employer').on("click",function () {
+				$('#employer-info-content').toggle();
+			});
+			$('#validate-doc-employer').on("click",function () {
+				$('#employer-info-content').toggle();
+			});
+			$('#validate-rut-employer').on("click",function () {
+				$('#employer-docs-content').toggle();
+			});
+			$('#validate-mand-employer').on("click",function () {
+				$('#employer-docs-content').toggle();
+			});
+			$('#aditional-info').on("click",function () {
+				$('#aditional-info-content').toggle();
+			});
+			{% set var1 = 1 %}
+			{% for employee in employerHasEmployees %}
+				$('#eployee{{ var1 }}').on("click",function () {
+					$('#employee-content{{ var1 }}').toggle();
+				});
+				$('#validate-info-employee{{ var1 }}').on("click",function () {
+					$('#employee-info-content{{ var1 }}').toggle();
+				});
+				$('#validate-doc-employee{{ var1 }}').on("click",function () {
+					$('#employee-info-content{{ var1 }}').toggle();
+				});
+				$('#validate-cat-employee{{ var1 }}').on("click",function () {
+					$('#employee-info-content{{ var1 }}').toggle();
+				});
+				$('#aditional-actions{{ employee.idEmployerHasEmployee }}').on("click",function () {
+					$('#aditional-actions-content{{ employee.idEmployerHasEmployee }}').toggle();
+				});
+				{% set var2 = 1 %}
+				{% for entity in employee.employeeEmployee.entities %}
+					{% if entity.state != -1  %}
+						$('#validate-entity-employee{{ employee.idEmployerHasEmployee }}{{ var2 }}').on("click",function () {
+							$('#employee-entities-content{{ employee.idEmployerHasEmployee}}').toggle();
+						});
+						{% set var2 = var2 +1 %}
+					{% endif %}
+				{% endfor %}
+			{% set var1 = var1 + 1 %}
+			{% endfor %}
+			{% set var1 = 1 %}
+			{% for entity in employer.entities %}
+				$('#validate-entity-employer{{ var1 }}').on("click",function () {
+					$('#employer-entities-content').toggle();
+				});
+				{% set var1 = var1 + 1 %}
+			{% endfor %}
+			{% set var1 = 0 %}
+			{% for workplace in employer.workplaces %}
+				$('#workplace-button{{ var1 }}').on("click",function () {
+					$('#workplace-info{{ var1 }}').toggle();
+					$('#workplace-form{{ var1 }}').toggle();
+				});
+				$('#workplaceCancel{{ var1 }}').on("click",function () {
+					$('#workplace-info{{ var1 }}').toggle();
+					$('#workplace-form{{ var1 }}').toggle();
+				});
+				{% set var1 = var1 + 1 %}
+			{% endfor %}
+			$(".download-link").on('click', function (event) {
+				event.preventDefault();
+				var uri = $(this).attr("href");
+				var html = '';
+//                 alert(uri);
+				$.ajax({
+					//method: "POST",
+					url: uri,
+					//(data: $('form[name="pago_membresia"]').serialize(),
+					beforeSend: function (xhr) {
+					}
+				}).done(function (data) {
+					html = data;
+//                    alert(html);
+					$("#modal-body").html('');
+
+					$('#modal-body').html($(html).find('#cuerpoModal'));
+					$("#myModal").modal();
+					$("#myModal").modal('show');
+
+					var files;
+					// Add events
+					$('input[type=file]').on('change', prepareUpload);
+
+					// Grab the files and set them to our variable
+					function prepareUpload(event) {
+						files = event.target.files;
+					}
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					console.log(jqXHR);
+					console.log(textStatus);
+					console.log(errorThrown);
+
+				});
+			});
+		});
+	</script>
+	<!--Div where documents modal is rendered-->
+	<div id="myModal" class="modal fade" role="dialog">
+		<div id="modal-body">
+		</div>
+	</div>
+	<!--End of modal rendering-->
+	{% set procedure = procedure %}
+	<div id="main" class="col-md -12">
+		<!--Begin of Real Procedure-->
+		<div class="back-panel-title">
+			<p>Tramite No: {{ procedure.idProcedure }}</p>
+		</div>
+		<!--Begin of Employer Actions-->
+		<div class="back-panel">
+			<div id="hide_employer">
+				<!--Employer Name-->
+				<div class="backoffice-headding" >
 					<h7>Empleador: {{ procedure.userUser.personPerson.fullName }}</h7>
 				</div>
-				<table class="col-md-12 back-table ">
+				<!--End of employer Name-->
+				<table class="col-md-12 back-table">
+					<!--Employer Table header-->
 					<thead>
 					<tr>
-						<th>Vuelta</th>
-						<th>persona</th>
-						<th>entidad</th>
-						<th>Estado</th>
-						<th>Acción</th>
+						<th class="th-title">Tramite</th>
+						<th class="th-title">Estado</th>
+						<th class="th-title">Fecha de Entrada</th>
+						<th class="th-title">Dado de alta</th>
 					</tr>
 					</thead>
+					<!--End of employer Table header-->
 					<tbody>
-					{% set documentos = 0 %}
-					{% for action in procedure.action if action.personPerson == employerHasEmployees[0].employerEmployer.personPerson %}
-						{% if  action.status|lower == "nuevo" %}
-							<tr>
-						{% elseif  action.status|lower == "completado" %}
-							<tr style="background-color:#A2E383;">
-						{% elseif action.status|lower == "iniciado" %}
-							<tr>
-						{% elseif action.status|lower == "error" %}
-							<tr style="background-color: #CB6D6C">
-						{% elseif action.status|lower == "corregido" %}
-							<tr>
+					<!--Employer Actions begin-->
+					<tr>
+						<!--td styles based on action status-->
+						{% set infoFinished = 0 %}
+						{% set action_employer = procedure.getActionsByActionType(actionTypes['VER']).first %}
+						{% if action_employer.priority == 0 %}
+							{% set tdDateStyle = "background-color: rgba(74, 169, 36, 0.34);color: #145456;" %}
+						{% elseif action_employer.priority == 1 %}
+							{% set tdDateStyle = "background-color: rgba(169, 148, 36, 0.52);color: #563808;" %}
+						{% elseif action_employer.priority >= 2%}
+							{% set tdDateStyle = "background-color: rgba(224, 110, 110, 0.45);color: #c70707;" %}
 						{% endif %}
-						<td class="{{action.personPerson.idPerson}}">{{ action.ActionTypeActionType.name }}</td>
-						<td>{{ action.personPerson.fullName }}</td>
-						<td>
-							{% if action.employerEntity %}
-								{{ action.employerEntity.entityEntity.name }}
+						{% if action_employer.actionStatus.code == 'FIN' %}
+							{% set tdStyle = "background-color: rgba(74, 169, 36, 0.34);color: #145456;" %}
+							{% set infoFinished = 1 %}
+						{% elseif  action_employer.actionStatus.code == 'NEW' %}
+							{% set tdStyle = "" %}
+						{% elseif  action_employer.actionStatus.code == 'CORT' %}
+							{% set tdStyle = "background-color: rgba(169, 148, 36, 0.52);color: #563808;" %}
+						{% elseif  action_employer.actionStatus.code == 'ERRO' %}
+							{% set tdStyle = "background-color: rgba(224, 110, 110, 0.45);color: #c70707;" %}
+						{% else %}
+							{% set tdStyle = "" %}
+						{% endif %}
+						<!--End of td styles-->
+						<!--validate info action-->
+						<td class="td-title" style="{{ tdStyle }}">
+							<div id="validate-info-employer">
+								{{ action_employer.actionTypeName }}
+							</div>
+						</td>
+						<td class="td-title" style="{{ tdStyle }}">
+							{{ action_employer.status }}
+						</td>
+						<td class="td-title" style="{{ tdStyle }}">
+							{{ action_employer.createdAt|date("m/d/Y") }}
+						</td>
+						<td class="td-title" style="{{ tdDateStyle }}">
+							{% if action_employer.finishedAt is not null %}
+								{{ action_employer.finishedAt|date("m/d/Y") }}
 							{% else %}
 								-
 							{% endif %}
 						</td>
-						<td>
-							{{ action.status}}
-						</td>
-						{% if action.status|lower != "completado" %}
-							{% if action.ActionTypeActionType.name|lower == "validar informacion del empleador" %}
-								<td><a class="notAjax" href="{{ path('check_register',{'idAction':action.idAction})}}">Validar Datos Empleador</a></td>
-							{% elseif action.ActionTypeActionType.name|lower == "validar documentos" %}
-								<td><a class="notAjax" href="{{ path('validate_employer_documents',{'idAction':action.idAction})}}">Validar Documentos</a></td>
-							{% elseif action.ActionTypeActionType.name|lower == "inscripcion" %}
-								<td><a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Inscrito</a></td>
-							{% elseif action.ActionTypeActionType.name|lower == "validar entidad" %}
-								<td><a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Validado</a></td>
-							{% elseif action.ActionTypeActionType.name|lower == "validar mandato" %}
-								<td><a class="notAjax" href="{{ path('validate_mandatory',{'idAction':action.idAction})}}">Validar Mandato</a></td>
-							{% endif %}
-						{% else %}
-							{% if action.ActionTypeActionType.name|lower == "validar informacion del empleador" %}
-								<td><a class="notAjax" href="{{ path('show_info',{'idAction':action.idAction})}}">Consultar Información</a></td>
-							{% elseif action.ActionTypeActionType.name|lower == "validar documentos" %}
-								<td><a class="notAjax" href="{{ path('view_documents',{'idAction':action.idAction})}}">Ver Documentos</a></td>
-								{% if documentos == 0 %}
-									{% set documentos =  1 %}
-								{% endif %}
-							{% elseif action.ActionTypeActionType.name|lower == "inscripcion" %}
-								<td>Inscrito</td>
-							{% elseif action.ActionTypeActionType.name|lower == "validar entidad" %}
-								<td>Validado</td>
-							{% elseif action.ActionTypeActionType.name|lower == "validar mandato" %}
-								<td>Validado</td>
-							{% else %}
-								<td>Terminado</td>
-							{% endif %}
+					</tr>
+					<tr>
+						{% set action_employer = procedure.getActionsByActionType(actionTypes['VDDE']).first %}
+						{% if action_employer.priority == 0 %}
+							{% set tdDateStyle = "background-color: rgba(74, 169, 36, 0.34);color: #145456;" %}
+						{% elseif action_employer.priority == 1 %}
+							{% set tdDateStyle = "background-color: rgba(169, 148, 36, 0.52);color: #563808;" %}
+						{% elseif action_employer.priority == 2%}
+							{% set tdDateStyle = "background-color: rgba(224, 110, 110, 0.45);color: #c70707;" %}
 						{% endif %}
+						{% if action_employer.actionStatus.code == 'FIN' %}
+							{% set tdStyle = "background-color: rgba(74, 169, 36, 0.34);color: #145456;" %}
+							{% if infoFinished is defined and infoFinished == 1 %}
+								{% set infoFinished = 2 %}
+							{% endif %}
+						{% elseif  action_employer.actionStatus.code == 'NEW' %}
+							{% set tdStyle = "" %}
+						{% elseif  action_employer.actionStatus.code == 'CORT' %}
+							{% set tdStyle = "background-color: rgba(169, 148, 36, 0.52);color: #563808;" %}
+						{% elseif  action_employer.actionStatus.code == 'ERRO' %}
+							{% set tdStyle = "background-color: rgba(224, 110, 110, 0.45);color: #c70707;" %}
+						{% else %}
+							{% set tdStyle = "" %}
+						{% endif %}
+						<!--validate Document Action-->
+						<td class="td-title" style="{{ tdStyle }}">
+							<div id="validate-doc-employer">
+								{{ action_employer.actionTypeName }}
+							</div>
+						</td>
+						<td class="td-title" style="{{ tdStyle }}">
+							{{ action_employer.status }}
+						</td>
+						<td class="td-title" style="{{ tdStyle }}">
+							{{ action_employer.createdAt|date("m/d/Y") }}
+						</td>
+						<td class="td-title" style="{{ tdDateStyle }}">
+							{% if action_employer.finishedAt is not null %}
+								{{ action_employer.finishedAt|date("m/d/Y") }}
+							{% else %}
+								-
+							{% endif %}
+						</td>
+					</tr>
+					<!--validate info content and document content-->
+					{% if infoFinished is defined and infoFinished == 2 %}
+						{% set dysplayInfo = "display:none;" %}
+					{% else %}
+						{% set dysplayInfo = "" %}
+					{% endif %}
+					<tr id="employer-info-content" style="{{ dysplayInfo }}">
+						<td colspan="4">
+							<div class="back-section col-md-12">
+								<!--Form employer info begin-->
+								<div class="col-md-6" style="padding: 0px;margin: 0px 5px 0px 25px;">
+									<div class="col-md-15 text-center content-title">
+										Datos del Empleador
+									</div>
+									<div style="border: 3px solid #525659;margin-right: 6px; height: 480px; padding: 20px 0">
+										{{ form_start(formDocument) }}
+										<div class="col-md-15 row-content " style="margin-top: 30px">
+											<div class="col-md-5 no-padding">
+												{{ form_label(formDocument.document) }}
+											</div>
+											<div class="col-md-6 no-padding">
+												{{ form_widget(formDocument.document) }}
+											</div>
+										</div>
+										<div class="col-md-15 row-content">
+											<div class="col-md-5 no-padding">
+												{{ form_label(formDocument.documentType) }}
+											</div>
+											<div class="col-md-6 no-padding">
+												{{ form_widget(formDocument.documentType) }}
+											</div>
+										</div>
+										<div class="col-md-15 row-content">
+											<div class="col-md-5 no-padding">
+												{{ form_label(formDocument.name) }}
+											</div>
+											<div class="col-md-6 no-padding">
+												{{ form_widget(formDocument.name) }}
+											</div>
+										</div>
+										<div class="col-md-15 row-content">
+											<div class="col-md-5 no-padding">
+												{{ form_label(formDocument.lastName1) }}
+											</div>
+											<div class="col-md-6 no-padding">
+												{{ form_widget(formDocument.lastName1) }}
+											</div>
+										</div>
+										<div class="col-md-15 row-content">
+											<div class="col-md-5 no-padding">
+												{{ form_label(formDocument.lastName2) }}
+											</div>
+											<div class="col-md-6 no-padding">
+												{{ form_widget(formDocument.lastName2) }}
+											</div>
+										</div>
+										<div class="col-md-15 row-content">
+											<div class="col-md-5 no-padding">
+												{{ form_label(formDocument.expeditionDate) }}
+											</div>
+											<div class="col-md-6 no-padding">
+												{{ form_widget(formDocument.expeditionDate) }}
+											</div>
+										</div>
+										<div class="col-md-15 row-content">
+											<div class="col-md-5 no-padding">
+												{{ form_label(formDocument.birthDate) }}
+											</div>
+											<div class="col-md-6 no-padding">
+												{{ form_widget(formDocument.birthDate) }}
+											</div>
+										</div>
+										<div class="col-md-15 row-content">
+											<div class="col-md-5 no-padding">
+												{{ form_label(formDocument.email) }}
+											</div>
+											<div class="col-md-6 no-padding">
+												{{ form_widget(formDocument.email) }}
+											</div>
+										</div>
+										<div class="col-md-15 row-content">
+											<div class="col-md-5 no-padding">
+												{{ form_label(formDocument.phone) }}
+											</div>
+											<div class="col-md-6 no-padding">
+												{{ form_widget(formDocument.phone) }}
+											</div>
+										</div>
+										{% if infoFinished == 0 %}
+											<div class="col-md-12 row-content text-center">
+												<div class="col-md-10">
+													{{ form_widget(formDocument.edit) }}
+												</div>
+											</div>
+										{% endif %}
+										{{ form_end(formDocument) }}
+									</div>
+								</div>
+								<!--Form employer info end-->
+								<!--Employer document dysplay-->
+								<div class="col-md-5 text-center" style="padding: 0px;margin: 0px 20px 0px 10px">
+									<div class="col-md-5 text-center content-title" style="width: 100%">
+										{% if employer.personPerson.documentType == 'CC' %}
+											Cédula del empleador
+										{% elseif employer.personPerson.documentType == 'CE'%}
+											Cédula de Extranjería del empleador
+										{% elseif employer.personPerson.documentType == 'PASAPORTE'%}
+											Pasaporte del empleador
+										{% elseif employer.personPerson.documentType == 'TI' %}
+											Tarjeta de identidad del empleador
+										{% endif %}
+									</div>
+									{% if employer.personPerson.documentDocument %}
+										{% if utils.getDocumentPath(employer.personPerson.documentDocument) == '' %}
+											<div class="doc-message">
+												{% if employer.personPerson.documentType == 'CC' %}
+													<h7>LLamar al empleador y decirle que suba la cédula</h7>
+												{% elseif employer.personPerson.documentType == 'CE'%}
+													<h7>LLamar al empleador y decirle que suba la cédula de extranjería</h7>
+												{% elseif employer.personPerson.documentType == 'PASAPORTE'%}
+													<h7>LLamar al empleador y decirle que suba el pasaporte</h7>
+												{% elseif employer.personPerson.documentType == 'TI' %}
+													<h7>LLamar al empleador y decirle que suba la tarjeta de identidad</h7>
+												{% endif %}
+											</div>
+										{% else %}
+											<div style="border: 3px solid #525659;margin-top: 32px;width: 100%; height: 480px;font-size: 15px">
+												<embed width="100%" height="474" src={{ utils.getDocumentPath( employer.personPerson.documentDocument) }}  alt=”pdf” pluginspage=”//www.adobe.com/products/acrobat/readstep2.html”>
+												</embed>
+											</div>
+										{% endif %}
+									{% else %}
+										<div class="doc-message">
+											{% if employer.personPerson.documentType == 'CC' %}
+												<h7>LLamar al empleador y decirle que suba la cédula</h7>
+											{% elseif employer.personPerson.documentType == 'CE'%}
+												<h7>LLamar al empleador y decirle que suba la cédula de extranjería</h7>
+											{% elseif employer.personPerson.documentType == 'PASAPORTE'%}
+												<h7>LLamar al empleador y decirle que suba el pasaporte</h7>
+											{% elseif employer.personPerson.documentType == 'TI' %}
+												<h7>LLamar al empleador y decirle que suba la tarjeta de identidad</h7>
+											{% endif %}
+										</div>
+									{% endif %}
+								</div>
+								<!--Employer document dysplay end-->
+								<!--Employer info action buttons begin-->
+								<div class="col-md-6 text-center" style="padding: 0px;margin: 20px 0px 0px 0px;">
+									{% set action_employer = procedure.getActionsByActionType(actionTypes['VER']).first %}
+									{% if action_employer.actionStatus.code == 'FIN' %}
+										<a class="btn-backoffice notAjax" href="{{ path('activate_action',{'actionId':action_employer.idAction}) }}">
+											Activar Tramite
+										</a>
+									{% else %}
+										<a class="btn-backoffice notAjax" href="{{ path('finish_action',{'actionId':action_employer.idAction}) }}">
+											Validar Información
+										</a>
+									{% endif %}
+								</div>
+								<!--validate employer action end-->
+								<!--Document action buttons begin-->
+								<div class="col-md-6 text-center" style="padding: 0px;margin: 20px 0px 0px 0px;">
+
+									{% set action_employer = procedure.getActionsByActionType(actionTypes['VDDE']).first %}
+									{% if action_employer.actionStatus.code == 'ERRO' %}
+										{% if employerNotifications['notCC'].status == 0 %}
+											<a class="btn-backoffice notAjax" href="{{ path('activate_notification',{ 'notificationId':employerNotifications['notCC'].id, 'actionId':action_employer.idAction }) }}">
+												Activar Notificación
+											</a>
+										{% endif %}
+										<a class="btn-backoffice-download notAjax" target="_blank" href="{{ path('export_document_by_id',{'idDoc':employer.personPerson.documentDocument.idDocument})}}">
+											Descargar
+										</a>
+										<a class="btn-backoffice-upload notAjax download-link" href="{{ employerNotifications['notCC'].relatedLink }}/{{ employerNotifications['notCC'].id }}/{{ procedure.idProcedure }}">
+											Subir Documento
+										</a>
+									{% elseif action_employer.actionStatus.code == 'CORT' %}
+										<a class="btn-backoffice notAjax" href="{{ path('finish_action',{'actionId':action_employer.idAction}) }}">
+											Validar Documento
+										</a>
+										<a class="btn-backoffice-download notAjax" target="_blank" href="{{ path('export_document_by_id',{'idDoc':employer.personPerson.documentDocument.idDocument})}}">
+											Descargar
+										</a>
+										<a class="btn-backoffice-error notAjax" href="{{ path('error_action',{'actionId':action_employer.idAction}) }}">
+											Error
+										</a>
+									{% elseif action_employer.actionStatus.code == 'FIN' %}
+										<a class="btn-backoffice-download notAjax" target="_blank" href="{{ path('export_document_by_id',{'idDoc':employer.personPerson.documentDocument.idDocument})}}">
+											Descargar
+										</a>
+										<a class="btn-backoffice-error notAjax" href="{{ path('error_action',{'actionId':action_employer.idAction}) }}">
+											Error
+										</a>
+									{% elseif action_employer.actionStatus.code == 'DCPE' %}
+										<a class="btn-backoffice-upload notAjax download-link" href="{{ employerNotifications['notCC'].relatedLink }}/{{ employerNotifications['notCC'].id }}/{{ procedure.idProcedure }}">
+											Subir Documento
+										</a>
+									{% else %}
+										<a class="btn-backoffice-upload notAjax download-link" href="{{ employerNotifications['notCC'].relatedLink }}/{{ employerNotifications['notCC'].id }}/{{ procedure.idProcedure }}">
+											Subir Documento
+										</a>
+										<a class="btn-backoffice notAjax" href="{{ path('finish_action',{'actionId':action_employer.idAction}) }}">
+											Validar Documento
+										</a>
+										<a class="btn-backoffice-download notAjax" target="_blank" href="{{ path('export_document_by_id',{'idDoc':employer.personPerson.documentDocument.idDocument})}}">
+											Descargar
+										</a>
+										<a class="btn-backoffice-error notAjax" href="{{ path('error_action',{'actionId':action_employer.idAction}) }}">
+											Error
+										</a>
+									{% endif %}
+								</div>
+								<!--Document action buttons end-->
+							</div>
+						</td>
+					</tr>
+					<tr>
+						{% set docsFinished = 0 %}
+						{% set action_employer = procedure.getActionsByActionType(actionTypes['VRTE']).first %}
+						{% if action_employer.priority == 0 %}
+							{% set tdDateStyle = "background-color: rgba(74, 169, 36, 0.34);color: #145456;" %}
+						{% elseif action_employer.priority == 1 %}
+							{% set tdDateStyle = "background-color: rgba(169, 148, 36, 0.52);color: #563808;" %}
+						{% elseif action_employer.priority == 2%}
+							{% set tdDateStyle = "background-color: rgba(224, 110, 110, 0.45);color: #c70707;" %}
+						{% endif %}
+						{% if action_employer.actionStatus.code == 'FIN' %}
+							{% set tdStyle = "background-color: rgba(74, 169, 36, 0.34);color: #145456;" %}
+							{% set docsFinished = 1 %}
+						{% elseif  action_employer.actionStatus.code == 'NEW' %}
+							{% set tdStyle = "" %}
+						{% elseif  action_employer.actionStatus.code == 'CORT' %}
+							{% set tdStyle = "background-color: rgba(169, 148, 36, 0.52);color: #563808;" %}
+						{% elseif  action_employer.actionStatus.code == 'ERRO' %}
+							{% set tdStyle = "background-color: rgba(224, 110, 110, 0.45);color: #c70707;" %}
+						{% else %}
+							{% set tdStyle = "" %}
+						{% endif %}
+						<!--action RUT validation-->
+						<td class="td-title" style="{{ tdStyle }}">
+							<div id="validate-rut-employer">
+								{{ action_employer.actionTypeName }}
+							</div>
+						</td>
+						<td class="td-title" style="{{ tdStyle }}">
+							{{ action_employer.status }}
+						</td>
+						<td class="td-title" style="{{ tdStyle }}">
+							{{ action_employer.createdAt|date("m/d/Y") }}
+						</td>
+						<td class="td-title" style="{{ tdDateStyle }}">
+							{% if action_employer.finishedAt is not null %}
+								{{ action_employer.finishedAt|date("m/d/Y") }}
+							{% else %}
+								-
+							{% endif %}
+						</td>
+					</tr>
+					<tr>
+						{% set action_employer = procedure.getActionsByActionType(actionTypes['VM']).first %}
+						{% if action_employer.priority == 0 %}
+							{% set tdDateStyle = "background-color: rgba(74, 169, 36, 0.34);color: #145456;" %}
+						{% elseif action_employer.priority == 1 %}
+							{% set tdDateStyle = "background-color: rgba(169, 148, 36, 0.52);color: #563808;" %}
+						{% elseif action_employer.priority == 2%}
+							{% set tdDateStyle = "background-color: rgba(224, 110, 110, 0.45);color: #c70707;" %}
+						{% endif %}
+						{% if action_employer.actionStatus.code == 'FIN' %}
+							{% set tdStyle = "background-color: rgba(74, 169, 36, 0.34);color: #145456;" %}
+							{% if docsFinished is defined and docsFinished == 1 %}
+								{% set docsFinished = 2 %}
+							{% endif %}
+						{% elseif  action_employer.actionStatus.code == 'NEW' %}
+							{% set tdStyle = "" %}
+						{% elseif  action_employer.actionStatus.code == 'CORT' %}
+							{% set tdStyle = "background-color: rgba(169, 148, 36, 0.52);color: #563808;" %}
+						{% elseif  action_employer.actionStatus.code == 'ERRO' %}
+							{% set tdStyle = "background-color: rgba(224, 110, 110, 0.45);color: #c70707;" %}
+						{% else %}
+							{% set tdStyle = "" %}
+						{% endif %}
+						<!--Action mandatory validation-->
+						<td class="td-title" style="{{ tdStyle }}">
+							<div id="validate-mand-employer">
+								{{ action_employer.actionTypeName }}
+							</div>
+						</td>
+						<td class="td-title" style="{{ tdStyle }}">
+							{{ action_employer.status }}
+						</td>
+						<td class="td-title" style="{{ tdStyle }}">
+							{{ action_employer.createdAt|date("m/d/Y") }}
+						</td>
+						<td class="td-title" style="{{ tdDateStyle }}">
+							{% if action_employer.finishedAt is not null %}
+								{{ action_employer.finishedAt|date("m/d/Y") }}
+							{% else %}
+								-
+							{% endif %}
+						</td>
+					</tr>
+					<!--RUT and Mandatory content begin-->
+					{% if docsFinished is defined and docsFinished == 2 %}
+						{% set dysplayDocs = "display:none;" %}
+					{% else %}
+						{% set dysplayDocs = "" %}
+					{% endif %}
+					<tr id="employer-docs-content" style="{{ dysplayDocs }}">
+						<td colspan="4">
+							<div class="back-section col-md-12">
+								<!--RUT display begin -->
+								<div class="col-md-6 text-center" style="padding: 0px 25px;margin: 0px">
+									<div class="col-md-5 text-center content-title" style="width: 100%">
+										RUT del empleador
+									</div>
+									{% if employer.personPerson.rutDocument %}
+										{% if utils.getDocumentPath(employer.personPerson.rutDocument) == '' %}
+											<div class="doc-message">
+												<h7>LLamar al empleador y decirle que suba el RUT</h7>
+											</div>
+										{% else %}
+											<div style="border: 3px solid #525659;margin-top: 32px;width: 100%; height: 480px;font-size: 15px">
+												<embed width="100%" height="474" src={{ utils.getDocumentPath( employer.personPerson.rutDocument) }}  alt=”pdf” pluginspage=”//www.adobe.com/products/acrobat/readstep2.html”>
+												</embed>
+											</div>
+										{% endif %}
+									{% else %}
+										<div class="doc-message">
+										<h7>LLamar al empleador y decirle que suba el RUT</h7>
+										</div>
+									{% endif %}
+								</div>
+								<!--Mandatory display begin-->
+								<div class="col-md-6 text-center" style="padding: 0px 25px;margin: 0px">
+									<div class="col-md-5 text-center content-title" style="width: 100%">
+										Mandato del empleador
+									</div>
+									{% if employer.mandatoryDocument %}
+										{% if utils.getDocumentPath(employer.mandatoryDocument) == '' %}
+											<div class="doc-message">
+												<h7>LLamar al empleador y decirle que suba el Mandato</h7>
+											</div>
+										{% else %}
+											<div style="border: 3px solid #525659;margin-top: 32px;width: 100%; height: 480px;font-size: 15px">
+												<embed width="100%" height="474" src={{ utils.getDocumentPath( employer.mandatoryDocument) }}  alt=”pdf” pluginspage=”//www.adobe.com/products/acrobat/readstep2.html”>
+												</embed>
+											</div>
+										{% endif %}
+									{% else %}
+										<div class="doc-message">
+											<h7>LLamar al empleador y decirle que suba el Mandato</h7>
+										</div>
+									{% endif %}
+								</div>
+								<!--RUT action buttons begin-->
+								<div class="col-md-6 text-center" style="padding: 0px;margin: 20px 0px 0px 0px;">
+									{% set action_employer = procedure.getActionsByActionType(actionTypes['VRTE']).first %}
+									{% if action_employer.actionStatus.code == 'ERRO' %}
+										{% if employerNotifications['notRUT'].status == 0 %}
+											<a class="btn-backoffice notAjax" href="{{ path('activate_notification',{ 'notificationId':employerNotifications['notRUT'].id, 'actionId':action_employer.idAction }) }}">
+												Activar Notificación
+											</a>
+										{% endif %}
+										<a class="btn-backoffice-download notAjax" target="_blank" href="{{ path('export_document_by_id',{'idDoc':employer.personPerson.rutDocument.idDocument})}}">
+											Descargar
+										</a>
+										<a class="btn-backoffice-upload notAjax download-link" href="{{ employerNotifications['notRUT'].relatedLink }}/{{ employerNotifications['notRUT'].id }}/{{ procedure.idProcedure }}">
+											Subir Documento
+										</a>
+									{% elseif action_employer.actionStatus.code == 'CORT' %}
+										<a class="btn-backoffice notAjax" href="{{ path('finish_action',{'actionId':action_employer.idAction}) }}">
+											Validar Documento
+										</a>
+										<a class="btn-backoffice-download notAjax" target="_blank" href="{{ path('export_document_by_id',{'idDoc':employer.personPerson.rutDocument.idDocument})}}">
+											Descargar
+										</a>
+										<a class="btn-backoffice-error notAjax" href="{{ path('error_action',{'actionId':action_employer.idAction}) }}">
+											Error
+										</a>
+									{% elseif action_employer.actionStatus.code == 'FIN' %}
+										<a class="btn-backoffice-download notAjax" target="_blank" href="{{ path('export_document_by_id',{'idDoc':employer.personPerson.rutDocument.idDocument})}}">
+											Descargar
+										</a>
+										<a class="btn-backoffice-error notAjax" href="{{ path('error_action',{'actionId':action_employer.idAction}) }}">
+											Error
+										</a>
+									{% elseif action_employer.actionStatus.code == 'DCPE' %}
+										<a class="btn-backoffice-upload notAjax download-link" href="{{ employerNotifications['notRUT'].relatedLink }}/{{ employerNotifications['notRUT'].id }}/{{ procedure.idProcedure }}">
+											Subir Documento
+										</a>
+									{% else %}
+										<a class="btn-backoffice-upload notAjax download-link" href="{{ employerNotifications['notRUT'].relatedLink }}/{{ employerNotifications['notRUT'].id }}/{{ procedure.idProcedure }}">
+											Subir Documento
+										</a>
+										<a class="btn-backoffice notAjax" href="{{ path('finish_action',{'actionId':action_employer.idAction}) }}">
+											Validar Documento
+										</a>
+										<a class="btn-backoffice-download notAjax" target="_blank" href="{{ path('export_document_by_id',{'idDoc':employer.personPerson.rutDocument.idDocument})}}">
+											Descargar
+										</a>
+										<a class="btn-backoffice-error notAjax" href="{{ path('error_action',{'actionId':action_employer.idAction}) }}">
+											Error
+										</a>
+									{% endif %}
+								</div>
+								<!--Mandatory action buttons begin-->
+								<div class="col-md-6 text-center" style="padding: 0px;margin: 20px 0px 0px 0px;">
+									{% set action_employer = procedure.getActionsByActionType(actionTypes['VM']).first %}
+									{% if action_employer.actionStatus.code == 'ERRO' %}
+										{% if employerNotifications['notMAND'].status == 0 %}
+											<a class="btn-backoffice notAjax" href="{{ path('activate_notification',{ 'notificationId':employerNotifications['notMAND'].id, 'actionId':action_employer.idAction }) }}">
+												Activar Notificación
+											</a>
+										{% endif %}
+										<a class="btn-backoffice-download notAjax" target="_blank" href="{{ path('export_document_by_id',{'idDoc':employer.mandatoryDocument.idDocument})}}">
+											Descargar
+										</a>
+										<a class="btn-backoffice-upload notAjax download-link" href="{{ employerNotifications['notMAND'].relatedLink }}/{{ employerNotifications['notMAND'].id }}/{{ procedure.idProcedure }}">
+											Subir Documento
+										</a>
+									{% elseif action_employer.actionStatus.code == 'CORT' %}
+										<a class="btn-backoffice notAjax" href="{{ path('finish_action',{'actionId':action_employer.idAction}) }}">
+											Validar Documento
+										</a>
+										<a class="btn-backoffice-download notAjax" target="_blank" href="{{ path('export_document_by_id',{'idDoc':employer.mandatoryDocument.idDocument})}}">
+											Descargar
+										</a>
+										<a class="btn-backoffice-error notAjax" href="{{ path('error_action',{'actionId':action_employer.idAction}) }}">
+											Error
+										</a>
+									{% elseif action_employer.actionStatus.code == 'FIN' %}
+										<a class="btn-backoffice-download notAjax" target="_blank" href="{{ path('export_document_by_id',{'idDoc':employer.mandatoryDocument.idDocument})}}">
+											Descargar
+										</a>
+										<a class="btn-backoffice-error notAjax" href="{{ path('error_action',{'actionId':action_employer.idAction}) }}">
+											Error
+										</a>
+									{% elseif action_employer.actionStatus.code == 'DCPE' %}
+										<a class="btn-backoffice-upload notAjax download-link" href="{{ employerNotifications['notMAND'].relatedLink }}/{{ employerNotifications['notMAND'].id }}/{{ procedure.idProcedure }}">
+											Subir Documento
+										</a>
+									{% else %}
+										<a class="btn-backoffice-upload notAjax download-link" href="{{ employerNotifications['notMAND'].relatedLink }}/{{ employerNotifications['notMAND'].id }}/{{ procedure.idProcedure }}">
+											Subir Documento
+										</a>
+										<a class="btn-backoffice notAjax" href="{{ path('finish_action',{'actionId':action_employer.idAction}) }}">
+											Validar Documento
+										</a>
+										<a class="btn-backoffice-download notAjax" target="_blank" href="{{ path('export_document_by_id',{'idDoc':employer.mandatoryDocument.idDocument})}}">
+											Descargar
+										</a>
+										<a class="btn-backoffice-error notAjax" href="{{ path('error_action',{'actionId':action_employer.idAction}) }}">
+											Error
+										</a>
+									{% endif %}
+								</div>
+							</div>
+						</td>
+					</tr>
+					<!--Employer entity actions begin-->
+					{% set entitiesFinished = 0 %}
+					{% set employerEntitiesCount = 0 %}
+					{% for employerHasEntity in employer.entities %}
+						{% set action_employer = procedure.actionByEmployerHasEntity(employerHasEntity).first %}
+						{% set employerEntitiesCount = employerEntitiesCount + 1 %}
+						<tr>
+							{% if action_employer.priority == 0 %}
+								{% set tdDateStyle = "background-color: rgba(74, 169, 36, 0.34);color: #145456;" %}
+							{% elseif action_employer.priority == 1 %}
+								{% set tdDateStyle = "background-color: rgba(169, 148, 36, 0.52);color: #563808;" %}
+							{% elseif action_employer.priority == 2%}
+								{% set tdDateStyle = "background-color: rgba(224, 110, 110, 0.45);color: #c70707;" %}
+							{% endif %}
+							{% if action_employer.actionStatus.code == 'FIN' %}
+								{% set tdStyle = "background-color: rgba(74, 169, 36, 0.34);color: #145456;" %}
+								{% set entitiesFinished = entitiesFinished + 1 %}
+							{% elseif  action_employer.actionStatus.code == 'NEW' %}
+								{% set tdStyle = "" %}
+							{% elseif  action_employer.actionStatus.code == 'CORT' %}
+								{% set tdStyle = "background-color: rgba(169, 148, 36, 0.52);color: #563808;" %}
+							{% elseif  action_employer.actionStatus.code == 'ERRO' %}
+								{% set tdStyle = "background-color: rgba(224, 110, 110, 0.45);color: #c70707;" %}
+							{% else %}
+								{% set tdStyle = "" %}
+							{% endif %}
+							<td class="td-title" style="{{ tdStyle }}">
+								<div id="validate-entity-employer{{ employerEntitiesCount }}">
+									{{ action_employer.actionTypeName }}
+								</div>
+							</td>
+							<td class="td-title" style="{{ tdStyle }}">
+								{{ action_employer.status }}
+							</td>
+							<td class="td-title" style="{{ tdStyle }}">
+								{{ action_employer.createdAt|date("m/d/Y") }}
+							</td>
+							<td class="td-title" style="{{ tdDateStyle }}">
+								{% if action_employer.finishedAt is not null %}
+									{{ action_employer.finishedAt|date("m/d/Y") }}
+								{% else %}
+									-
+								{% endif %}
+							</td>
 						</tr>
 					{% endfor %}
+					<!--entity action content begin-->
+					{% if entitiesFinished == employer.entities|length %}
+						{% set dysplayEntities = "display:none;" %}
+					{% else %}
+						{% set dysplayEntities = "" %}
+					{% endif %}
+					<tr id="employer-entities-content" style="{{ dysplayEntities }}">
+						<td colspan="4">
+							<div class="back-section col-md-12">
+								<!--Form employer entity action begin-->
+								{% for formE in formEmployerEntities %}
+									{% set action_employer = procedure.actionById(formE['actionId'].vars['data']) %}
+									<div class="col-md-6" style="padding: 0px;margin: 0px;">
+										<div class="col-md-15 text-center content-title">
+											Datos de la entidad
+										</div>
+										<div style="border: 3px solid #525659;margin-right: 1.3%;height: 160px;overflow: hidden;">
+											{{ form_start(formE) }}
+											<div class="col-md-15 row-content " style="margin-top: 30px">
+												<div class="col-md-5 no-padding">
+													{{ form_label(formE.name) }}
+												</div>
+												<div class="col-md-6 no-padding">
+													{{ form_widget(formE.name) }}
+												</div>
+											</div>
+
+											<div class="col-md-15 row-content">
+												<div class="col-md-5 no-padding">
+												{{ form_label(formE.actionType) }}
+												</div>
+												<div class="col-md-6 no-padding">
+												{{ form_widget(formE.actionType) }}
+												</div>
+											</div>
+											<!--Entity action buttons begin-->
+											{% if action_employer.actionStatus.code != 'FIN' %}
+												<div class="col-md-15 row-content text-center">
+													<div class="col-md-15">
+													{{ form_widget(formE.edit) }}
+													<a class="btn-backoffice notAjax" href="{{ path('finish_action',{'actionId':action_employer.idAction}) }}" style="padding: 1px 10px; margin-top:6px;">
+														{% if action_employer.employerEntity.state == 0 %}
+															Entidad Validada
+														{% else %}
+															Inscripción Terminada
+														{% endif %}
+													</a>
+													</div>
+												</div>
+											{% else %}
+												<div class="col-md-15 row-content text-center">
+													<div class="col-md-15">
+														<a class="btn-backoffice notAjax" href="{{ path('activate_action',{'actionId':action_employer.idAction}) }}" style="padding: 1px 10px; margin-top: 20px">
+															Activar Tramite
+														</a>
+													</div>
+												</div>
+											{% endif %}
+											{{ form_end(formE) }}
+										</div>
+									</div>
+								{% endfor %}
+							</div>
+						</td>
+					</tr>
+					<!--Employer aditional info begin-->
+					<tr>
+						{% set tdStyle = "background-color: rgba(74, 169, 36, 0.34);color: #145456;" %}
+						<td class="td-title text-center" colspan="4" style="font-size: 14px;background-color: #083435;border-width: 2px 1px;border-color: #083435;color: white;">
+							<div id="aditional-info">
+								Información Adicional
+							</div>
+						</td>
+					</tr>
+					<tr id="aditional-info-content">
+						<td colspan="4">
+							<div class="back-section col-md-12">
+								<!--employer workplaces begin-->
+								<div class="col-md-6" style="padding: 0px;margin: 0px;">
+									<div class="col-md-15 text-center content-title">
+										Lugares de trabajo
+									</div>
+									{% set workplaceCount = 0 %}
+									{% for formW in formEmployerWorkplaces %}
+										{% set employerWorkplace = employer.workplaceById(formW['workplaceId'].vars['data']) %}
+										<div class="additional-info-title text-center">
+											{{ employerWorkplace.name }}
+										</div>
+										<div id="workplace-info{{ workplaceCount}}" style="border: 1px solid black;margin-right: 1.3%;overflow: hidden;">
+											<div class="col-md-6" style="font-size: 12px;border-right: 1px solid black">
+												Dirección
+											</div>
+											<div class="col-md-6" style="font-size: 12px;border-left: 1px solid black;margin-left: -1px;">
+												{{ employerWorkplace.mainAddress }}
+											</div>
+											<div class="col-md-6" style="font-size: 12px;border-right: 1px solid black;border-top: 1px solid black;">
+												País
+											</div>
+											<div class="col-md-6" style="font-size: 12px;border-left: 1px solid black;border-top: 1px solid black;margin-left: -1px;">
+												{{employerWorkplace.department.countryCountry.name }}
+											</div>
+											<div class="col-md-6" style="font-size: 12px;border-right: 1px solid black;border-top: 1px solid black;">
+												Departamento
+											</div>
+											<div class="col-md-6" style="font-size: 12px;border-left: 1px solid black;border-top: 1px solid black;margin-left: -1px;">
+												{{ employerWorkplace.department.name }}
+											</div>
+											<div class="col-md-6" style="font-size: 12px;border-right: 1px solid black;border-top: 1px solid black;">
+												Ciudad
+											</div>
+											<div class="col-md-6" style="font-size: 12px;border-left: 1px solid black;border-top: 1px solid black;margin-left: -1px;">
+												{{ employerWorkplace.city.name }}
+											</div>
+											<div class="col-md-6" style="font-size: 12px;border-right: 1px solid black;border-top: 1px solid black;">
+												Empleados
+											</div>
+											<div class="col-md-6" style="font-size: 12px;border-left: 1px solid black;border-top: 1px solid black;margin-left: -1px;">
+
+												{{ employerWorkplace.activeContracts|length }}
+											</div>
+											<div class="text-center workplaceEdit" id="workplace-button{{ workplaceCount }}">
+												Editar
+											</div>
+										</div>
+										<div id="workplace-form{{ workplaceCount }}" style="border: 1px solid black;margin-right: 1.3%;overflow: hidden;display: none;">
+											{{ form_start(formW) }}
+											<div class="col-md-12">
+												{{ form_label(formW.addressName) }}
+											</div>
+											<div class="col-md-12" style="margin: -3% 3%;">
+												{{ form_widget(formW.addressName) }}
+											</div>
+											<div class="col-md-12">
+												{{ form_label(formW.mainAddress) }}
+											</div>
+											<div class="col-md-12" style="margin: -3% 3%;">
+												{{ form_widget(formW.mainAddress) }}
+											</div>
+											<div class="col-md-12 text-center">
+												{{ form_widget(formW.save) }}
+												<a id="workplaceCancel{{ workplaceCount }}" class="btn-backoffice notAjax" style="padding: 1px 10px;border-color: #480001;;background-color: #6a0002;margin-top: 5px;">Cancelar</a>
+											</div>
+											{{ form_end(formW) }}
+										</div>
+										{% set workplaceCount = workplaceCount +1 %}
+									{% endfor %}
+								</div>
+								<!--Employer sql, hightech and datacreditStatus begin-->
+								<div class="col-md-6" style="padding: 0px;margin: 0px;">
+									<div class="col-md-15 text-center content-title">
+										Estados de inscripción
+									</div>
+									<div style="border: 1px solid black;margin-right: 1.3%;overflow: hidden;">
+										<div class="col-md-6" style="font-size: 12px;border-right: 1px solid black">
+											ID SQL
+										</div>
+										{% if employer.idSqlSociety is not null %}
+											<div class="col-md-6" style="font-size: 12px;border-left: 1px solid black;margin-left: -1px;color: green;">
+												{{ employer.idSqlSociety }}
+											</div>
+										{% else %}
+											<div class="col-md-6" style="font-size: 12px;border-left: 1px solid black;margin-left: -1px;color: darkred;">
+												<strong>No se encontro el id</strong>
+											</div>
+										{% endif %}
+										<div class="col-md-6" style="font-size: 12px;border-right: 1px solid black;border-top: 1px solid black;">
+											ID HIGHTECH
+										</div>
+										{% if employer.idHighTech is not null %}
+											<div class="col-md-6" style="font-size: 12px;border-left: 1px solid black;margin-left: -1px;color: green;border-top: 1px solid black;">
+												{{ employer.idHighTech}}
+											</div>
+										{% else %}
+											<div class="col-md-6" style="font-size: 12px;border-left: 1px solid black;margin-left: -1px;color: darkred;border-top: 1px solid black;">
+												<strong>No se encontro el id</strong>
+											</div>
+										{% endif %}
+										<div class="col-md-6" style="font-size: 12px;border-right: 1px solid black;border-top: 1px solid black;">
+											DATA CREDITO
+										</div>
+										{% if  procedure.userUser.dataCreditStatus == 0 %}
+											<div class="col-md-6" style="font-size: 12px;border-left: 1px solid black;margin-left: -1px;color: darkred;border-top: 1px solid black;">
+												<strong>No enviado</strong>
+											</div>
+										{% elseif procedure.userUser.dataCreditStatus == 1 %}
+											<div class="col-md-6" style="font-size: 12px;border-left: 1px solid black;margin-left: -1px;color: darkgoldenrod;border-top: 1px solid black;">
+												<strong>Enviado</strong>
+											</div>
+										{% elseif procedure.userUser.dataCreditStatus == 2 %}
+											<div class="col-md-6" style="font-size: 12px;border-left: 1px solid black;margin-left: -1px;color: darkgreen;border-top: 1px solid black;">
+												<strong>Aprobado</strong>
+											</div>
+										{% elseif procedure.userUser.dataCreditStatus == 3 %}
+											<div class="col-md-6" style="font-size: 12px;border-left: 1px solid black;margin-left: -1px;color: darkred;border-top: 1px solid black;">
+												<strong>No aprobado</strong>
+											</div>
+										{% elseif procedure.userUser.dataCreditStatus == 4 %}
+											<div class="col-md-6" style="font-size: 12px;border-left: 1px solid black;margin-left: -1px;color: darkred;border-top: 1px solid black;">
+												<strong>Excedió numero de intentos</strong>
+											</div>
+										{% elseif procedure.userUser.dataCreditStatus == 5 %}
+											<div class="col-md-6" style="font-size: 12px;border-left: 1px solid black;margin-left: -1px;color: black;border-top: 1px solid black;">
+												<strong>Error de datacredito</strong>
+											</div>
+										{% endif %}
+									</div>
+									<div class="col-md-15 text-center">
+										{% if generalStatus['employerInfo']['finish'] and employer.validatedEmailSentAt == null %}
+											<a class="btn-backoffice notAjax" href="{{ path('send_info_validated',{'procedureId':procedure.idProcedure}) }}" style="padding: 10px 15px; margin-top: 20px;font-size: 16px">
+												Notificar al usuario
+											</a>
+										{% elseif generalStatus['employerInfo']['error'] and employer.errorEmailSentAt == null and employer.infoValidatedAt == null %}
+											<a class="btn-backoffice-error notAjax" href="{{ path('send_info_error',{'procedureId':procedure.idProcedure}) }}" style="padding: 10px 15px; margin-top: 20px;font-size: 16px">
+												Reportar errores al usuario
+											</a>
+										{% elseif generalStatus['employerInfo']['error'] and employer.errorEmailSentAt != null %}
+											<div class="text-center" style="font-size: 16px;margin: 20px auto 0 auto;color: black;">
+												<strong>El usuario ya fue notificado de los errores</strong>
+											</div>
+										{% elseif generalStatus['employerInfo']['finish'] and employer.validatedEmailSentAt != null  %}
+											<div class="text-center" style="font-size: 16px;margin: 20px auto 0 auto;color: black;">
+												<strong>El usuario ya fue notificado</strong>
+											</div>
+										{% else %}
+										{% endif %}
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
 					</tbody>
 				</table>
 			</div>
-			<div class="col-sm-12">
-				<div class="row">
-					{% for success_message in app.session.flashBag.get('employee_ended_successfully')%}
-						<div class="alert alert-success semi-italic" for="alert">
-							{{ success_message }}
-						</div>
-					{% endfor %}
-					{% for fail_message in app.session.flashBag.get('employee_ended_faild')%}
-						<div class="alert alert-fail semi-italic" for="alert">
-							{{ fail_message }}
-						</div>
-					{% endfor %}
-				</div>
-			</div>
-			<div id="employees_section" style="border: 0px solid lightgrey; border-top-right-radius: 5px; border-top-left-radius: 5px; margin: 5px 0px" >
-				<div class="back-panel">
-					<div class="backoffice-headding">
-						<h7>Empleados</h7>
+		</div>
+		<div class="col-md-12">
+			<div class="row">
+				{% for success_message in app.session.flashBag.get('employee_ended_successfully')%}
+					<div class="alert alert-success semi-italic" for="alert">
+						{{ success_message }}
 					</div>
-				</div>
-			{% set act = 0 %}
-
-				{% for employerHasEmployee in employerHasEmployees %}
-					{% if employerHasEmployee.state >=2 %}
-						{% if documentos == 2 %}
-							{% set documentos = 1 %}
-						{% endif %}
-						<div class="back-panel" id="employe_section">
-							<div class="back-employee-headding">
-								<h9> {{ employerHasEmployee.employeeEmployee.personPerson.fullName}}</h9>
-							</div>
-						</div>
-
-							<table class="col-md-12 back-table">
-								<thead>
-								<tr>
-									<th>Vuelta</th>
-									<th>persona</th>
-									<th>entidad</th>
-									<th>Estado</th>
-									<th>Acción</th>
-								</tr>
-								</thead>
-								<tbody>
-								{% for action in employerHasEmployee.employeeEmployee.personPerson.action %}
-									{% if action.realProcedureRealProcedure.idProcedure == procedure.idProcedure %}
-										{% if  action.status|lower == "nuevo" %}
-											<tr>
-										{% elseif  action.status|lower == "completado" %}
-											<tr style="background-color:#A2E383;">
-										{% elseif action.status|lower == "iniciado" %}
-											<tr>
-										{% elseif action.status|lower == "error" %}
-											<tr style="background-color: #CB6D6C">
-										{% endif %}
-										<td class="{{action.personPerson.idPerson}}">{{ action.ActionTypeActionType.name }}</td>
-										<td>{{ action.personPerson.fullName }}</td>
-										<td>
-											{% if action.employeeEntity %}
-												{{ action.employeeEntity.entityEntity.name }}
-											{% else %}
-												-
-											{% endif %}
-										</td>
-										<td>
-											{{ action.status}}
-										</td>
-										{% if action.status|lower != "completado" %}
-											{% if action.ActionTypeActionType.name|lower == "validar informacion del empleado" %}
-												<td><a class="notAjax" href="{{ path('check_employee',{'idAction':action.idAction})}}">Validar Datos del Empleado</a></td>
-
-											{% elseif action.ActionTypeActionType.name|lower == "validar documentos" %}
-												<td><a class="notAjax" href="{{ path('validate_employee_documents',{'idAction':action.idAction})}}">Validar Documentos</a></td>
-												{% set act = action %}
-											{% elseif action.ActionTypeActionType.name|lower == "inscripcion" %}
-												<td><a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Inscrito</a></td>
-											{% elseif action.ActionTypeActionType.name|lower == "validar entidad" %}
-												<td><a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Validado</a></td>
-											{% elseif action.ActionTypeActionType.name|lower == "validar contrato" %}
-												<td><a class="notAjax" href="{{ path('validate_contract',{'idAction':action.idAction})}}">Validar Contrato</a></td>
-											{% endif %}
-										{% else %}
-											{% if action.ActionTypeActionType.name|lower == "validar informacion del empleado" %}
-												<td><a class="notAjax" href="{{ path('show_info_employee',{'idAction':action.idAction})}}">Consultar Información</a></td>
-											{% elseif action.ActionTypeActionType.name|lower == "validar documentos" %}
-												<td><a class="notAjax" href="{{ path('view_employee_documents',{'idAction':action.idAction})}}">Ver Documentos</a></td>
-												{% set act = action %}
-												{% if documentos == 1 %}
-													{% set documentos = 2 %}
-												{% endif %}
-											{% elseif action.ActionTypeActionType.name|lower == "inscripcion" %}
-												<td>Inscrito</td>
-											{% elseif action.ActionTypeActionType.name|lower == "validar entidad" %}
-												<td>Validado</td>
-											{% elseif action.ActionTypeActionType.name|lower == "validar contrato" %}
-												<td>Validado</td>
-											{% else %}
-												<td>Terminado</td>
-											{% endif %}
-										{% endif %}
-									{% endif %}
-									</tr>
-								{% endfor %}
-								</tbody>
-							</table>
-							<div style="margin-top:10px; margin-bottom:20px; text-align:center;">
-								{% if employerHasEmployee.state == 4 %}
-									<a class="btn btn-bitbucket notAjax" style="margin-bottom: 20px" href="{{path('export_all_documents',{'idAction':act.idAction})}}">Descargar Documentos</a>
-									<p> proceso de: {{ employerHasEmployee.employeeEmployee.personPerson.names}} terminado</p>
-								{% elseif employerHasEmployee.state == 3 and employerHasEmployee.existentSQL == 1 %}
-									<a class="btn btn-orange notAjax" href="{{ path('complete_employee',{'idEmployerHasEmployee':employerHasEmployee.idEmployerHasEmployee,'procedureId':procedure.idProcedure })}}"> Terminar proceso </a>
-								{% else %}
-									<a class="btn btn-bitbucket notAjax" style="margin-bottom: 20px" href="{{path('export_all_documents',{'idAction':act.idAction})}}">Descargar Documentos</a>
-									<br>
-									<p> <strong>Aun no se puede terminar el proceso de este empleado</strong></p>
-								{% endif %}
-								{% if documentos == 2 %}
-									{% if employerHasEmployee and (act.personPerson.employee) %}
-										{% if employerHasEmployee.existentSQL == 0 %}
-											<a class="btn btn-orange notAjax" style="background-color: #8c8c8c; border-color: #8c8c8c" href="{{ path('back_add_sql',{'idEmployerHasEmployee':employerHasEmployee.idEmployerHasEmployee,'procedureId':procedure.idProcedure})}}">Agregar a SQL</a>
-										{% elseif employerHasEmployee.existentSQL == 1 %}
-											<p>ya esta inscrio en SQL </p>
-										{% endif %}
-									{% endif %}
-								{% endif %}
-							</div>
-
-					{% endif %}
+				{% endfor %}
+				{% for success_message in app.session.flashBag.get('employee_added_to_sql')%}
+					<div class="alert alert-success semi-italic" for="alert">
+						{{ success_message }}
+					</div>
+				{% endfor %}
+				{% for fail_message in app.session.flashBag.get('employee_ended_faild')%}
+					<div class="alert alert-fail semi-italic" for="alert">
+						{{ fail_message }}
+					</div>
+				{% endfor %}
+				{% for fail_message in app.session.flashBag.get('employee_added_to_sql_failed')%}
+					<div class="alert alert-fail semi-italic" for="alert">
+						{{ fail_message }}
+					</div>
 				{% endfor %}
 			</div>
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h4>Errores</h4>
-				</div>
-				<table class="table">
-					<thead>
+		</div>
+		<div class="back-panel" id="employer_section">
+			<div class="backoffice-headding" >
+				<h7>Empleados</h7>
+			</div>
+			{% set employeeCount = 1 %}
+			{% for employerHasEmployee in employerHasEmployees %}
+				{% set employee = employerHasEmployee.employeeEmployee %}
+				{% set pending = false %}
+				{% for thisAction in procedure.actionsByEmployerHasEmployee(employerHasEmployee) %}
+					{% if thisAction.actionStatus.code == 'DCPE' %}
+						{% set pending = true %}
+					{% endif %}
+				{% endfor %}
+				{% if pending %}
+					{% set employeeDysplay = 'display:none' %}
+				{% else %}
+					{% set employeeDysplay = '' %}
+				{% endif %}
+				{% if procedure.getActionsByPersonAndActionType(employerHasEmployee.employeeEmployee.personPerson,actionTypes['VEE']).first != NULL %}
+					{% set owner = true %}
+				{% else %}
+					{% set owner = false %}
+				{% endif %}
+			<div id="eployee{{ employeeCount }}" class="back-employee-headding">
+				<h9>
+					{% if owner %}
+						{{ employerHasEmployee.employeeEmployee.personPerson.fullName}}
+					{% else %}
+						{{ employerHasEmployee.employeeEmployee.personPerson.fullName}}   (Este empleado es compartido solo se mostrara la información)
+					{% endif %}
+				</h9>
+			</div>
+			<table id="employee-content{{ employeeCount }}" class="col-md-12 back-table" style="{{ employeeDysplay }}">
+				<thead>
+				<tr>
+					<th class="th-title">Tramite</th>
+					<th class="th-title">Estado</th>
+					<th class="th-title">Fecha de Entrada</th>
+					<th class="th-title">Dado de alta</th>
+				</tr>
+				</thead>
+				<tbody>
 					<tr>
-						<th>Vuelta</th>
-						<th>persona</th>
-						<th>entidad</th>
-						<th>Estado</th>
-						<th>Acción</th>
+						{% if procedure.getActionsByPersonAndActionType(employerHasEmployee.employeeEmployee.personPerson,actionTypes['VEE']).first != NULL %}
+							{% set action_employee = procedure.getActionsByPersonAndActionType(employerHasEmployee.employeeEmployee.personPerson,actionTypes['VEE']).first %}
+							{% set owner = true %}
+						{% else %}
+							{% set action_employee =  employerHasEmployee.employeeEmployee.personPerson.getActionsByActionType(actionTypes['VEE']).first %}
+							{% set owner = false %}
+						{% endif %}
+
+						{% set employeeInfoFinished = 0 %}
+						{% if action_employee.priority == 0 %}
+							{% set tdDateStyle = "background-color: rgba(74, 169, 36, 0.34);color: #145456;" %}
+						{% elseif action_employee.priority == 1 %}
+							{% set tdDateStyle = "background-color: rgba(169, 148, 36, 0.52);color: #563808;" %}
+						{% elseif action_employee.priority >= 2%}
+							{% set tdDateStyle = "background-color: rgba(224, 110, 110, 0.45);color: #c70707;" %}
+						{% endif %}
+						{% if action_employee.actionStatus.code == 'FIN' %}
+							{% set tdStyle = "background-color: rgba(74, 169, 36, 0.34);color: #145456;" %}
+							{% set employeeInfoFinished = 1 %}
+						{% elseif  action_employee.actionStatus.code == 'NEW' %}
+							{% set tdStyle = "" %}
+						{% elseif  action_employee.actionStatus.code == 'CORT' %}
+							{% set tdStyle = "background-color: rgba(169, 148, 36, 0.52);color: #563808;" %}
+						{% elseif  action_employee.actionStatus.code == 'ERRO' %}
+							{% set tdStyle = "background-color: rgba(224, 110, 110, 0.45);color: #c70707;" %}
+						{% else %}
+							{% set tdStyle = "" %}
+						{% endif %}
+						<!--Action mandatory validation-->
+						<td class="td-title" style="{{ tdStyle }}">
+							<div id="validate-info-employee{{ employeeCount }}">
+								{% if owner %}
+									{{ action_employee.actionTypeName }}
+								{% else %}
+									{{ action_employee.actionTypeName }}
+								{% endif %}
+							</div>
+						</td>
+						<td class="td-title" style="{{ tdStyle }}">
+							{{ action_employee.status }}
+						</td>
+						<td class="td-title" style="{{ tdStyle }}">
+							{{ action_employee.createdAt|date("m/d/Y") }}
+						</td>
+						<td class="td-title" style="{{ tdDateStyle }}">
+							{% if action_employee.finishedAt is not null %}
+								{{ action_employee.finishedAt|date("m/d/Y") }}
+							{% else %}
+								-
+							{% endif %}
+						</td>
 					</tr>
-					</thead>
-					<tbody>
-					{% for action in procedure.action %}
-						{% if action is defined %}
-								{#<tr>#}
-								{#<td>{{ actionE.id}}</td>#}
-								{#<td>{{ action.personPerson.names}} {{action.personPerson.lastName1}}</td>#}
-								{#<td>{{ action.realProcedureRealProcedure.employerEmployer.personPerson.phones[0].phoneNumber}}</td>#}
-								{#<td>{{ actionE.description}}</td>#}
-								{#<td>{{ actionE.status}}</td>#}
-								{#{% if actionE.status|lower == "sin contactar" %}#}
-								{#<td><a class="notAjax" href="{{ path('change_action_error_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionError':actionE.id,'status':"Contactado"})}}">Contactado</a></td>#}
-								{#{% elseif actionE.status|lower =="contactado" %}#}
-								{#<td><a class="notAjax" href="{{ path('change_action_error_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionError':actionE.id,'status':"Corregido"})}}">Corregido</a></td>#}
-								{#{% elseif actionE.status|lower == "corregido" %}#}
-								{#<td>-</td>#}
-								{#{% endif %}#}
-								{#</tr>#}
+					<tr>
+						{% if procedure.getActionsByPersonAndActionType(employerHasEmployee.employeeEmployee.personPerson,actionTypes['VDD']).first != NULL %}
+							{% set action_employee = procedure.getActionsByPersonAndActionType(employerHasEmployee.employeeEmployee.personPerson,actionTypes['VDD']).first %}
+							{% set owner = true %}
+						{% else %}
+							{% set action_employee =  employerHasEmployee.employeeEmployee.personPerson.getActionsByActionType(actionTypes['VDD']).first %}
+							{% set owner = false %}
+						{% endif %}
+						{% set employeeDocsFinished = 0 %}
+						{% if action_employee.priority == 0 %}
+							{% set tdDateStyle = "background-color: rgba(74, 169, 36, 0.34);color: #145456;" %}
+						{% elseif action_employee.priority == 1 %}
+							{% set tdDateStyle = "background-color: rgba(169, 148, 36, 0.52);color: #563808;" %}
+						{% elseif action_employee.priority == 2%}
+							{% set tdDateStyle = "background-color: rgba(224, 110, 110, 0.45);color: #c70707;" %}
+						{% endif %}
+						{% if action_employee.actionStatus.code == 'FIN' %}
+							{% set tdStyle = "background-color: rgba(74, 169, 36, 0.34);color: #145456;" %}
+							{% set employeeDocsFinished = 1 %}
+						{% elseif  action_employee.actionStatus.code == 'NEW' %}
+							{% set tdStyle = "" %}
+						{% elseif  action_employee.actionStatus.code == 'CORT' %}
+							{% set tdStyle = "background-color: rgba(169, 148, 36, 0.52);color: #563808;" %}
+						{% elseif  action_employee.actionStatus.code == 'ERRO' %}
+							{% set tdStyle = "background-color: rgba(224, 110, 110, 0.45);color: #c70707;" %}
+						{% else %}
+							{% set tdStyle = "" %}
+						{% endif %}
+						<!--action RUT validation-->
+						<td class="td-title" style="{{ tdStyle }}">
+							<div id="validate-doc-employee{{ employeeCount }}">
+								{{ action_employee.actionTypeName }}
+							</div>
+						</td>
+						<td class="td-title" style="{{ tdStyle }}">
+							{{ action_employee.status }}
+						</td>
+						<td class="td-title" style="{{ tdStyle }}">
+							{{ action_employee.createdAt|date("m/d/Y") }}
+						</td>
+						<td class="td-title" style="{{ tdDateStyle }}">
+							{% if action_employee.finishedAt is not null %}
+								{{ action_employee.finishedAt|date("m/d/Y") }}
+							{% else %}
+								-
+							{% endif %}
+						</td>
+					</tr>
+					<tr>
+						{% if procedure.getActionsByPersonAndActionType(employerHasEmployee.employeeEmployee.personPerson,actionTypes['VCAT']).first != NULL %}
+							{% set action_employee = procedure.getActionsByPersonAndActionType(employerHasEmployee.employeeEmployee.personPerson,actionTypes['VCAT']).first %}
+							{% set owner = true %}
+						{% else %}
+							{% set action_employee =  employerHasEmployee.employeeEmployee.personPerson.getActionsByActionType(actionTypes['VCAT']).first %}
+							{% set owner = false %}
+						{% endif %}
+						{% if action_employee.priority == 0 %}
+							{% set tdDateStyle = "background-color: rgba(74, 169, 36, 0.34);color: #145456;" %}
+						{% elseif action_employee.priority == 1 %}
+							{% set tdDateStyle = "background-color: rgba(169, 148, 36, 0.52);color: #563808;" %}
+						{% elseif action_employee.priority == 2%}
+							{% set tdDateStyle = "background-color: rgba(224, 110, 110, 0.45);color: #c70707;" %}
+						{% endif %}
+						{% if action_employee.actionStatus.code == 'FIN' %}
+							{% set tdStyle = "background-color: rgba(74, 169, 36, 0.34);color: #145456;" %}
+							{% if employeeDocsFinished is defined and employeeDocsFinished == 1 %}
+								{% set employeeDocsFinished = 2 %}
+							{% endif %}
+						{% elseif  action_employee.actionStatus.code == 'NEW' %}
+							{% set tdStyle = "" %}
+						{% elseif  action_employee.actionStatus.code == 'CORT' %}
+							{% set tdStyle = "background-color: rgba(169, 148, 36, 0.52);color: #563808;" %}
+						{% elseif  action_employee.actionStatus.code == 'ERRO' %}
+							{% set tdStyle = "background-color: rgba(224, 110, 110, 0.45);color: #c70707;" %}
+						{% else %}
+							{% set tdStyle = "" %}
+						{% endif %}
+						<!--Action mandatory validation-->
+						<td class="td-title" style="{{ tdStyle }}">
+							<div id="validate-cat-employee{{ employeeCount }}">
+								{{ action_employee.actionTypeName }}
+							</div>
+						</td>
+						<td class="td-title" style="{{ tdStyle }}">
+							{{ action_employee.status }}
+						</td>
+						<td class="td-title" style="{{ tdStyle }}">
+							{{ action_employee.createdAt|date("m/d/Y") }}
+						</td>
+						<td class="td-title" style="{{ tdDateStyle }}">
+							{% if action_employee.finishedAt is not null %}
+								{{ action_employee.finishedAt|date("m/d/Y") }}
+							{% else %}
+								-
+							{% endif %}
+						</td>
+					</tr>
+					<!--validate info content and document content-->
+					{% if employeeInfoFinished is defined and employeeInfoFinished == 1  and employeeDocsFinished is defined and employeeDocsFinished == 2 %}
+						{% if employerHasEmployee.state < 4 and employerHasEmployee.validatedEmailSentAt == null %}
+							{% set dysplayEmployeeInfo = "" %}
+						{% elseif employerHasEmployee.state < 4 or employerHasEmployee.validatedEmailSentAt != null %}
+							{% set dysplayEmployeeInfo = "display:none;" %}
+						{% elseif employerHasEmployee.state >= 4 %}
+							{% set dysplayEmployeeInfo = "display:none;" %}
+						{% endif %}
+					{% else %}
+						{% set dysplayEmployeeInfo = "" %}
+					{% endif %}
+					<tr id="employee-info-content{{ employeeCount }}" style="{{ dysplayEmployeeInfo }}">
+						<td colspan="4">
+							<div class="back-section col-md-12">
+								<div class="col-md-6" style="padding: 0px;margin: 0px 5px 0px 25px;">
+									<div class="info-employee-form">
+										<!--Form employee info begin-->
+										<div class="col-md-15 text-center content-title">
+											Datos del Empleado
+										</div>
+										<div style="border: 3px solid #525659;margin-right: 6px; height: 680px">
+											{% set eeForm = formsInfoEmployees[employerHasEmployee.idEmployerHasEmployee] %}
+											{{ form_start(eeForm) }}
+											<div class="col-md-15 row-content " style="margin-top: 30px">
+												<div class="col-md-5 no-padding">
+													{{ form_label(eeForm.document) }}
+												</div>
+												<div class="col-md-6 no-padding">
+													{{ form_widget(eeForm.document) }}
+												</div>
+											</div>
+											<div class="col-md-15 row-content">
+												<div class="col-md-5 no-padding">
+													{{ form_label(eeForm.documentType) }}
+												</div>
+												<div class="col-md-6 no-padding">
+													{{ form_widget(eeForm.documentType) }}
+												</div>
+											</div>
+											<div class="col-md-15 row-content">
+												<div class="col-md-5 no-padding">
+													{{ form_label(eeForm.name) }}
+												</div>
+												<div class="col-md-6 no-padding">
+													{{ form_widget(eeForm.name) }}
+												</div>
+											</div>
+											<div class="col-md-15 row-content">
+												<div class="col-md-5 no-padding">
+													{{ form_label(eeForm.lastName1) }}
+												</div>
+												<div class="col-md-6 no-padding">
+													{{ form_widget(eeForm.lastName1) }}
+												</div>
+											</div>
+											<div class="col-md-15 row-content">
+												<div class="col-md-5 no-padding">
+													{{ form_label(eeForm.lastName2) }}
+												</div>
+												<div class="col-md-6 no-padding">
+													{{ form_widget(eeForm.lastName2) }}
+												</div>
+											</div>
+											<div class="col-md-15 row-content">
+												<div class="col-md-5 no-padding">
+													{{ form_label(eeForm.expeditionDate) }}
+												</div>
+												<div class="col-md-6 no-padding">
+													{{ form_widget(eeForm.expeditionDate) }}
+												</div>
+											</div>
+											<div class="col-md-15 row-content">
+												<div class="col-md-5 no-padding">
+													{{ form_label(eeForm.documentExpeditionPlace) }}
+												</div>
+												<div class="col-md-6 no-padding">
+													{{ form_widget(eeForm.documentExpeditionPlace) }}
+												</div>
+											</div>
+											<div class="col-md-15 row-content">
+												<div class="col-md-5 no-padding">
+													{{ form_label(eeForm.birthDate) }}
+												</div>
+												<div class="col-md-6 no-padding">
+													{{ form_widget(eeForm.birthDate) }}
+												</div>
+											</div>
+											<div class="col-md-15 row-content">
+												<div class="col-md-5 no-padding">
+													{{ form_label(eeForm.birthCountry) }}
+												</div>
+												<div class="col-md-6 no-padding">
+													{{ form_widget(eeForm.birthCountry) }}
+												</div>
+											</div>
+											<div class="col-md-15 row-content">
+												<div class="col-md-5 no-padding">
+													{{ form_label(eeForm.birthDepartment) }}
+												</div>
+												<div class="col-md-6 no-padding">
+													{{ form_widget(eeForm.birthDepartment) }}
+												</div>
+											</div>
+											<div class="col-md-15 row-content">
+												<div class="col-md-5 no-padding">
+													{{ form_label(eeForm.birthCity) }}
+												</div>
+												<div class="col-md-6 no-padding">
+													{{ form_widget(eeForm.birthCity) }}
+												</div>
+											</div>
+											<div class="col-md-15 row-content">
+												<div class="col-md-5 no-padding">
+													{{ form_label(eeForm.gender) }}
+												</div>
+												<div class="col-md-6 no-padding">
+													{{ form_widget(eeForm.gender) }}
+												</div>
+											</div>
+											<div class="col-md-15 row-content">
+												<div class="col-md-5 no-padding">
+													{{ form_label(eeForm.civilStatus) }}
+												</div>
+												<div class="col-md-6 no-padding">
+													{{ form_widget(eeForm.civilStatus) }}
+												</div>
+											</div>
+											<div class="col-md-15 row-content">
+												<div class="col-md-5 no-padding">
+													{{ form_label(eeForm.email) }}
+												</div>
+												<div class="col-md-6 no-padding">
+													{{ form_widget(eeForm.email) }}
+												</div>
+											</div>
+											<div class="col-md-15 row-content">
+												<div class="col-md-5 no-padding">
+													{{ form_label(eeForm.phone) }}
+												</div>
+												<div class="col-md-6 no-padding">
+													{{ form_widget(eeForm.phone) }}
+												</div>
+											</div>
+											{% if employeeInfoFinished == 0 and procedure.getActionsByPersonAndActionType(employerHasEmployee.employeeEmployee.personPerson,actionTypes['VEE']).first != NULL %}
+												<div class="col-md-12 row-content text-center">
+													<div class="col-md-11">
+														{{ form_widget(eeForm.edit) }}
+													</div>
+												</div>
+											{% endif %}
+											{{ form_end(eeForm) }}
+										</div>
+										<!--Form employee info end-->
+									</div>
+									<!--Employee info action buttons begin-->
+									<div class="text-center" style="padding: 0px;margin: 20px 0px 0px 0px;">
+										{% if procedure.getActionsByPersonAndActionType(employerHasEmployee.employeeEmployee.personPerson,actionTypes['VEE']).first != NULL %}
+											{% set action_employee = procedure.getActionsByPersonAndActionType(employerHasEmployee.employeeEmployee.personPerson,actionTypes['VEE']).first %}
+											{% set owner = true %}
+										{% else %}
+											{% set action_employee =  employerHasEmployee.employeeEmployee.personPerson.getActionsByActionType(actionTypes['VEE']).first %}
+											{% set owner = false %}
+										{% endif %}
+										{% if owner %}
+											{% if action_employee.actionStatus.code == 'FIN' %}
+												<a class="btn-backoffice notAjax" href="{{ path('activate_action',{'actionId':action_employee.idAction}) }}">
+													Activar Tramite
+												</a>
+											{% else %}
+												<a class="btn-backoffice notAjax" href="{{ path('finish_action',{'actionId':action_employee.idAction}) }}">
+													Validar Información
+												</a>
+											{% endif %}
+										{% else %}
+											<a class="btn-backoffice notAjax" href="{{ path('show_procedure',{'procedureId':action_employee.realProcedureRealProcedure.idProcedure})}}">
+												Ir al tramite original
+											</a>
+										{% endif %}
+									</div>
+									<!--Employee info action end-->
+									<div style="padding: 0px;margin: 15px 0px 0px 0px;width: 100%;">
+										<div class="col-md-15 text-center content-title">
+											Información del Contrato
+										</div>
+										<div class="additional-info-title text-center">
+										</div>
+										<div style="border: 1px solid black;margin-right: 1.3%;overflow: hidden;">
+											<table width="100%">
+												<tbody>
+												<tr>
+													<td style="font-size: 12px; text-align: center;width: 150px">
+														Jornada laboral
+													</td>
+													<td colspan="2" style="font-size: 14px;border-left: 1px solid black;margin-left: -1px;color: black;text-align: center">
+														<strong>{{ employerHasEmployee.getActiveContract().contractTypeContractType.name }}</strong>
+													</td>
+												</tr>
+												<tr>
+													<td style="font-size: 12px; text-align: center">
+														Frecuencia de pago
+													</td>
+													<td colspan="2" style="font-size: 14px;border-left: 1px solid black;margin-left: -1px;color: black;text-align: center">
+														<strong>{{ employerHasEmployee.getActiveContract().frequencyFrequency.name }}</strong>
+													</td>
+												</tr>
+												<tr>
+													<td style="font-size: 12px; text-align: center">
+														Id relación empleador-empledo
+													</td>
+													<td colspan="2" style="font-size: 14px;border-left: 1px solid black;margin-left: -1px;color: black;text-align: center">
+														<strong>{{ employerHasEmployee.idEmployerHasEmployee }}</strong>
+													</td>
+												</tr>
+												<tr>
+													{{ form_start(formEmployeesWorkplaces[employerHasEmployee.idEmployerHasEmployee]) }}
+													<td style="font-size: 12px; text-align: center">
+														{{ form_label(formEmployeesWorkplaces[employerHasEmployee.idEmployerHasEmployee].workplace,null,{'label_attr': {'style': 'padding: 0px;margin-bottom: 0px'}}) }}
+													</td>
+													{% if employerHasEmployee.existentSQL != 1 %}
+														<td style="font-size: 14px;border-left: 1px solid black;margin-left: -1px;color: black;text-align: center">
+															{{ form_widget(formEmployeesWorkplaces[employerHasEmployee.idEmployerHasEmployee].workplace, {'attr': {'style': 'border: none;box-shadow: none;height: 22px;'}}) }}
+														</td>
+														<td style="font-size: 14px;border-left: 1px solid black;margin-left: -1px;color: black;text-align: center">
+															{{ form_widget(formEmployeesWorkplaces[employerHasEmployee.idEmployerHasEmployee].edit,{'attr': {'style': 'padding: 0px 25px;margin: 0px 0px;'}}) }}
+														</td>
+													{% else %}
+														<td colspan="2" style="font-size: 14px;border-left: 1px solid black;margin-left: -1px;color: black;text-align: center">
+															{{ form_widget(formEmployeesWorkplaces[employerHasEmployee.idEmployerHasEmployee].workplace, {'attr': {'style': 'border: none;box-shadow: none;height: 22px;'}}) }}
+														</td>
+													{% endif %}
+
+													{{ form_end(formEmployeesWorkplaces[employerHasEmployee.idEmployerHasEmployee]) }}
+												</tr>
+												<tr>
+													<td style="font-size: 12px; text-align: center">
+														<strong>Dirección lugar de trabajo</strong>
+													</td>
+													<td colspan="2" style="font-size: 14px;border-left: 1px solid black;margin-left: -1px;color: black;text-align: center">
+														<strong>{{ employerHasEmployee.activeContract.workplaceWorkplace.mainAddress }}</strong>
+													</td>
+												</tr>
+												<tr>
+													<td style="font-size: 12px; text-align: center">
+														<strong>Tiempo de trabajo</strong>
+													</td>
+													<td colspan="2" style="font-size: 14px;border-left: 1px solid black;margin-left: -1px;color: black;text-align: center">
+														<strong>{{ employerHasEmployee.activeContract.timeCommitmentTimeCommitment.name }}</strong>
+													</td>
+												</tr>
+												<tr>
+													<td style="font-size: 12px; text-align: center">
+														<strong>Días que trabaja al mes</strong>
+													</td>
+													<td colspan="2" style="font-size: 14px;border-left: 1px solid black;margin-left: -1px;color: black;text-align: center">
+														<strong>{{ employerHasEmployee.activeContract.workableDaysMonth }}</strong>
+													</td>
+												</tr>
+												<tr>
+													<td style="font-size: 12px; text-align: center">
+														<strong>Salario</strong>
+													</td>
+													<td colspan="2" style="font-size: 14px;border-left: 1px solid black;margin-left: -1px;color: black;text-align: center">
+														<strong>{{ employerHasEmployee.activeContract.salary }}</strong>
+													</td>
+												</tr>
+												<tr>
+													<td style="font-size: 12px; text-align: center">
+														<strong>Subsidio de transporte</strong>
+													</td>
+													<td colspan="2" style="font-size: 14px;border-left: 1px solid black;margin-left: -1px;color: black;text-align: center">
+														{% if employerHasEmployee.activeContract.transportAid == null or employerHasEmployee.activeContract.transportAid == 0 %}
+															<strong>Si</strong>
+														{% else %}
+															<strong>No</strong>
+														{% endif %}
+													</td>
+												</tr>
+												<tr>
+													<td style="font-size: 12px; text-align: center">
+														<strong>Cargo</strong>
+													</td>
+													<td colspan="2" style="font-size: 14px;border-left: 1px solid black;margin-left: -1px;color: black;text-align: center">
+														<strong>{{ employerHasEmployee.activeContract.positionPosition.name }}</strong>
+													</td>
+												</tr>
+												<tr>
+													{{ form_start(formEmployeesStartDates[employerHasEmployee.idEmployerHasEmployee]) }}
+													<td style="font-size: 12px; text-align: center">
+														{{ form_label(formEmployeesStartDates[employerHasEmployee.idEmployerHasEmployee].startDate,null,{'label_attr': {'style': 'padding: 0px;margin-bottom: 0px'}}) }}
+													</td>
+													{% if employerHasEmployee.existentSQL != 1 %}
+														<td style="font-size: 14px;border-left: 1px solid black;margin-left: -1px;color: black;text-align: center">
+															{{ form_widget(formEmployeesStartDates[employerHasEmployee.idEmployerHasEmployee].startDate, {'attr': {'style': 'border: none;box-shadow: none;height: 22px;'}}) }}
+														</td>
+														<td style="font-size: 14px;border-left: 1px solid black;margin-left: -1px;color: black;text-align: center">
+															{{ form_widget(formEmployeesStartDates[employerHasEmployee.idEmployerHasEmployee].edit,{'attr': {'style': 'padding: 0px 25px;margin: 0px 0px;'}}) }}
+														</td>
+													{% else %}
+														<td colspan="2" style="font-size: 14px;border-left: 1px solid black;margin-left: -1px;color: black;text-align: center">
+															{{ form_widget(formEmployeesStartDates[employerHasEmployee.idEmployerHasEmployee].startDate, {'attr': {'style': 'border: none;box-shadow: none;height: 22px;'}}) }}
+														</td>
+													{% endif %}
+
+													{{ form_end(formEmployeesStartDates[employerHasEmployee.idEmployerHasEmployee]) }}
+												</tr>
+												{% if employerHasEmployee.activeContract.endDate != null %}
+													<tr>
+														{{ form_start(formEmployeesEndDates[employerHasEmployee.idEmployerHasEmployee]) }}
+														<td style="font-size: 12px; text-align: center">
+															{{ form_label(formEmployeesEndDates[employerHasEmployee.idEmployerHasEmployee].endDate,null,{'label_attr': {'style': 'padding: 0px;margin-bottom: 0px'}}) }}
+														</td>
+														{% if employerHasEmployee.existentSQL != 1 %}
+															<td style="font-size: 14px;border-left: 1px solid black;margin-left: -1px;color: black;text-align: center">
+																{{ form_widget(formEmployeesEndDates[employerHasEmployee.idEmployerHasEmployee].endDate, {'attr': {'style': 'border: none;box-shadow: none;height: 22px;'}}) }}
+															</td>
+															<td style="font-size: 14px;border-left: 1px solid black;margin-left: -1px;color: black;text-align: center">
+																{{ form_widget(formEmployeesEndDates[employerHasEmployee.idEmployerHasEmployee].edit,{'attr': {'style': 'padding: 0px 25px;margin: 0px 0px;'}}) }}
+															</td>
+														{% else %}
+															<td colspan="2" style="font-size: 14px;border-left: 1px solid black;margin-left: -1px;color: black;text-align: center">
+																{{ form_widget(formEmployeesEndDates[employerHasEmployee.idEmployerHasEmployee].endDate, {'attr': {'style': 'border: none;box-shadow: none;height: 22px;'}}) }}
+															</td>
+														{% endif %}
+
+														{{ form_end(formEmployeesEndDates[employerHasEmployee.idEmployerHasEmployee]) }}
+													</tr>
+												{% endif %}
+												<tr>
+													<td style="font-size: 12px; text-align: center">
+														<strong>Inscrito en SQL</strong>
+													</td>
+													{% if employerHasEmployee.existentSQL == 1 %}
+														<td style="font-size: 14px;border-left: 1px solid black;margin-left: -1px;color: green;text-align: center">
+															<strong>Inscrito</strong>
+														</td>
+														<td class="col-md-4" style="font-size: 14px;border-left: 1px solid black;margin-left: -1px;color: green;text-align: center">
+															<strong>{{ employerHasEmployee.dateRegisterToSQL|date("m/d/Y") }}</strong>
+														</td>
+													{% else %}
+														<td colspan="2" style="font-size: 14px;margin-left: -1px;color: darkred;text-align: center">
+															<strong>Pendiente</strong>
+														</td>
+													{% endif %}
+												</tr>
+												</tbody>
+											</table>
+										</div>
+										<div class="col-md-15 text-center">
+											{% if generalStatus['employeesInfo'][employerHasEmployee.idEmployerHasEmployee]['finish'] and employerHasEmployee.validatedEmailSentAt == null and employer.infoValidatedAt != null%}
+												<a class="btn-backoffice notAjax" href="{{ path('send_employee_info_validated',{'procedureId':procedure.idProcedure,'eheId':employerHasEmployee.idEmployerHasEmployee}) }}" style="padding: 10px 15px; margin-top: 20px;font-size: 16px">
+													Notificar al usuario
+												</a>
+											{% elseif generalStatus['employeesInfo'][employerHasEmployee.idEmployerHasEmployee]['error'] and employerHasEmployee.errorEmailSentAt == null and employerHasEmployee.infoValidatedAt == null %}
+												<a class="btn-backoffice-error notAjax" href="{{ path('send_employee_info_error',{'procedureId':procedure.idProcedure,'eheId':employerHasEmployee.idEmployerHasEmployee}) }}" style="padding: 10px 15px; margin-top: 20px;font-size: 16px">
+													Reportar errores al usuario
+												</a>
+											{% elseif generalStatus['employeesInfo'][employerHasEmployee.idEmployerHasEmployee]['error'] and employerHasEmployee.errorEmailSentAt != null %}
+												<div class="text-center" style="font-size: 16px;margin: 20px auto 0 auto;color: black;">
+													<strong>El usuario ya fue notificado de los errores</strong>
+												</div>
+											{% elseif generalStatus['employeesInfo'][employerHasEmployee.idEmployerHasEmployee]['finish'] and employerHasEmployee.validatedEmailSentAt != null and employer.infoValidatedAt != null %}
+												<div class="text-center" style="font-size: 16px;margin: 20px auto 0 auto;color: black;">
+													<strong>El usuario ya fue notificado de la validación</strong>
+												</div>
+											{% else %}
+											{% endif %}
+										</div>
+									</div>
+								</div>
+
+								<!--Employer document dysplay-->
+								<div class="col-md-5 no-padding" >
+									<div class="col-md-12 text-center" style="padding: 0px;margin: 0px 20px 0px 10px; clear: both;">
+										<div class="col-md-5 text-center content-title" style="width: 100%">
+											{% if employerHasEmployee.employeeEmployee.personPerson.documentType == 'CC' %}
+												Cédula del empleado
+											{% elseif employerHasEmployee.employeeEmployee.personPerson.documentType == 'CE'%}
+												Cédula de Extranjería del empleado
+											{% elseif employerHasEmployee.employeeEmployee.personPerson.documentType == 'PASAPORTE'%}
+												Pasaporte del empleado
+											{% elseif employerHasEmployee.employeeEmployee.personPerson.documentType == 'TI' %}
+												Tarjeta de identidad del empleado
+											{% endif %}
+										</div>
+										{% if employee.personPerson.documentDocument %}
+											{% if utils.getDocumentPath(employee.personPerson.documentDocument) == '' %}
+												<div class="doc-message">
+													<h7>LLamar al empleador y decirle que suba la cédula del empleado {{ employee.personPerson.fullName }}</h7>
+												</div>
+											{% else %}
+												<div style="border: 3px solid #525659;margin-top: 32px;width: 100%; height: 480px;font-size: 15px">
+													<embed width="100%" height="474" src={{ utils.getDocumentPath( employee.personPerson.documentDocument) }}  alt=”pdf” pluginspage=”//www.adobe.com/products/acrobat/readstep2.html”>
+													</embed>
+												</div>
+											{% endif %}
+										{% else %}
+											<div class="doc-message">
+												<h7>LLamar al empleador y decirle que suba la cédula del empleado {{ employee.personPerson.fullName }}</h7>
+											</div>
+										{% endif %}
+									</div>
+									<!--Document action buttons begin-->
+									<div class="col-md-12 text-center" style="padding: 0px;margin: 20px 0px 0px 0px;">
+										{% if procedure.getActionsByPersonAndActionType(employerHasEmployee.employeeEmployee.personPerson,actionTypes['VDD']).first != NULL %}
+											{% set action_employee = procedure.getActionsByPersonAndActionType(employerHasEmployee.employeeEmployee.personPerson,actionTypes['VDD']).first %}
+											{% set owner = true %}
+										{% else %}
+											{% set action_employee =  employerHasEmployee.employeeEmployee.personPerson.getActionsByActionType(actionTypes['VDD']).first %}
+											{% set owner = false %}
+										{% endif %}
+										{% if owner %}
+											{% if action_employee.actionStatus.code == 'ERRO' %}
+												{% if employeesNotifications[employerHasEmployee.idEmployerHasEmployee]['notCC'].status == 0 %}
+													<a class="btn-backoffice notAjax" href="{{ path('activate_notification',{ 'notificationId':employeesNotifications[employerHasEmployee.idEmployerHasEmployee]['notCC'].id, 'actionId':action_employee.idAction }) }}">
+														Activar Notificación
+													</a>
+												{% endif %}
+												<a class="btn-backoffice-download notAjax" target="_blank" href="{{ path('export_document_by_id',{'idDoc':employee.personPerson.documentDocument.idDocument})}}">
+													Descargar
+												</a>
+												<a class="btn-backoffice-upload notAjax download-link" href="{{ employeesNotifications[employerHasEmployee.idEmployerHasEmployee]['notCC'].relatedLink }}/{{ employeesNotifications[employerHasEmployee.idEmployerHasEmployee]['notCC'].id }}/{{ procedure.idProcedure }}">
+													Subir Documento
+												</a>
+											{% elseif action_employer.actionStatus.code == 'CORT' %}
+												<a class="btn-backoffice notAjax" href="{{ path('finish_action',{'actionId':action_employee.idAction}) }}">
+													Validar Documento
+												</a>
+												<a class="btn-backoffice-download notAjax" target="_blank" href="{{ path('export_document_by_id',{'idDoc':employee.personPerson.documentDocument.idDocument})}}">
+													Descargar
+												</a>
+												<a class="btn-backoffice-error notAjax" href="{{ path('error_action',{'actionId':action_employee.idAction}) }}">
+													Error
+												</a>
+											{% elseif action_employee.actionStatus.code == 'FIN' %}
+												<a class="btn-backoffice-download notAjax" target="_blank" href="{{ path('export_document_by_id',{'idDoc':employee.personPerson.documentDocument.idDocument})}}">
+													Descargar
+												</a>
+												<a class="btn-backoffice-error notAjax" href="{{ path('error_action',{'actionId':action_employee.idAction}) }}">
+													Error
+												</a>
+											{% elseif action_employee.actionStatus.code == 'DCPE' %}
+												<a class="btn-backoffice-upload notAjax download-link" href="{{ employeesNotifications[employerHasEmployee.idEmployerHasEmployee]['notCC'].relatedLink }}/{{ employeesNotifications[employerHasEmployee.idEmployerHasEmployee]['notCC'].id }}/{{ procedure.idProcedure }}">
+													Subir Documento
+												</a>
+											{% else %}
+												<a class="btn-backoffice-upload notAjax download-link" href="{{ employeesNotifications[employerHasEmployee.idEmployerHasEmployee]['notCC'].relatedLink }}/{{ employeesNotifications[employerHasEmployee.idEmployerHasEmployee]['notCC'].id }}/{{ procedure.idProcedure }}">
+													Subir Documento
+												</a>
+												<a class="btn-backoffice notAjax" href="{{ path('finish_action',{'actionId':action_employee.idAction}) }}">
+													Validar Documento
+												</a>
+												<a class="btn-backoffice-download notAjax" target="_blank" href="{{ path('export_document_by_id',{'idDoc':employee.personPerson.documentDocument.idDocument})}}">
+													Descargar
+												</a>
+												<a class="btn-backoffice-error notAjax" href="{{ path('error_action',{'actionId':action_employee.idAction}) }}">
+													Error
+												</a>
+											{% endif %}
+										{% else %}
+
+										{% endif %}
+									</div>
+									<div class="col-md-12 text-center" style="padding: 0px;margin: 15px 20px 0px 10px">
+										<div class="col-md-5 text-center content-title" style="width: 100%">
+											Carta de autorización
+										</div>
+										{% if employerHasEmployee.authDocument %}
+											{% if utils.getDocumentPath(employerHasEmployee.authDocument) == '' %}
+												<div style="border: 3px solid #525659; margin-right: 5px;margin-top: 32px;width: 100%;height: 450px; padding-top: 50%;font-size: 15px;padding-left: 1%;padding-rigth: 1%;">
+													<h7>LLamar al empleador y decirle que suba la carta de autorización del empleado {{ employee.personPerson.fullName }}</h7>
+												</div>
+											{% else %}
+												<div style="border: 3px solid #525659;margin-top: 32px;width: 100%; height: 480px;font-size: 15px">
+													<embed width="402" height="474" src={{ utils.getDocumentPath( employerHasEmployee.authDocument) }}  alt=”pdf” pluginspage=”//www.adobe.com/products/acrobat/readstep2.html”>
+													</embed>
+												</div>
+											{% endif %}
+										{% else %}
+											<div style="border: 3px solid #525659; margin-right: 5px;margin-top: 32px;width: 100%;height: 450px; padding-top: 50%;font-size: 15px;padding-left: 1%;padding-rigth: 1%;">
+												<h7>LLamar al empleador y decirle que suba la la carta de autorización del empleado {{ employee.personPerson.fullName }}</h7>
+											</div>
+										{% endif %}
+									</div>
+									<div class="col-md-12 text-center" style="padding: 0px;margin: 20px 0px 0px 0px;">
+										{% if procedure.getActionsByPersonAndActionType(employerHasEmployee.employeeEmployee.personPerson,actionTypes['VCAT']).first != NULL %}
+											{% set action_employee = procedure.getActionsByPersonAndActionType(employerHasEmployee.employeeEmployee.personPerson,actionTypes['VCAT']).first %}
+											{% set owner = true %}
+										{% else %}
+											{% set action_employee =  employerHasEmployee.employeeEmployee.personPerson.getActionsByActionType(actionTypes['VCAT']).first %}
+											{% set owner = false %}
+										{% endif %}
+										{% if owner %}
+											{% if action_employee.actionStatus.code == 'ERRO' %}
+												{% if employerNotifications['notCC'].status == 0 %}
+													<a class="btn-backoffice notAjax" href="{{ path('activate_notification',{ 'notificationId':employeesNotifications[employerHasEmployee.idEmployerHasEmployee]['notCAS'].id, 'actionId':action_employee.idAction }) }}">
+														Activar Notificación
+													</a>
+												{% endif %}
+												<a class="btn-backoffice-download notAjax" target="_blank" href="{{ path('export_document_by_id',{'idDoc':employerHasEmployee.authDocument.idDocument})}}">
+													Descargar
+												</a>
+												<a class="btn-backoffice-upload notAjax download-link" href="{{ employeesNotifications[employerHasEmployee.idEmployerHasEmployee]['notCAS'].relatedLink }}/{{ employeesNotifications[employerHasEmployee.idEmployerHasEmployee]['notCAS'].id }}/{{ procedure.idProcedure }}">
+													Subir Documento
+												</a>
+											{% elseif action_employer.actionStatus.code == 'CORT' %}
+												<a class="btn-backoffice notAjax" href="{{ path('finish_action',{'actionId':action_employee.idAction}) }}">
+													Validar Documento
+												</a>
+												<a class="btn-backoffice-download notAjax" target="_blank" href="{{ path('export_document_by_id',{'idDoc':employerHasEmployee.authDocument.idDocument})}}">
+													Descargar
+												</a>
+												<a class="btn-backoffice-error notAjax" href="{{ path('error_action',{'actionId':action_employee.idAction}) }}">
+													Error
+												</a>
+											{% elseif action_employee.actionStatus.code == 'FIN' %}
+												<a class="btn-backoffice-download notAjax" target="_blank" href="{{ path('export_document_by_id',{'idDoc':employerHasEmployee.authDocument.idDocument})}}">
+													Descargar
+												</a>
+												<a class="btn-backoffice-error notAjax" href="{{ path('error_action',{'actionId':action_employee.idAction}) }}">
+													Error
+												</a>
+											{% elseif action_employee.actionStatus.code == 'DCPE' %}
+												<a class="btn-backoffice-upload notAjax download-link" href="{{ employeesNotifications[employerHasEmployee.idEmployerHasEmployee]['notCAS'].relatedLink }}/{{ employeesNotifications[employerHasEmployee.idEmployerHasEmployee]['notCAS'].id }}/{{ procedure.idProcedure }}">
+													Subir Documento
+												</a>
+											{% else %}
+												<a class="btn-backoffice-upload notAjax download-link" href="{{ employeesNotifications[employerHasEmployee.idEmployerHasEmployee]['notCAS'].relatedLink }}/{{ employeesNotifications[employerHasEmployee.idEmployerHasEmployee]['notCAS'].id }}/{{ procedure.idProcedure }}">
+													Subir Documento
+												</a>
+												<a class="btn-backoffice notAjax" href="{{ path('finish_action',{'actionId':action_employee.idAction}) }}">
+													Validar Documento
+												</a>
+												<a class="btn-backoffice-download notAjax" target="_blank" href="{{ path('export_document_by_id',{'idDoc':employerHasEmployee.authDocument.idDocument})}}">
+													Descargar
+												</a>
+												<a class="btn-backoffice-error notAjax" href="{{ path('error_action',{'actionId':action_employee.idAction}) }}">
+													Error
+												</a>
+											{% endif %}
+										{% else %}
+
+										{% endif %}
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<!--Employee entity actions begin-->
+					{% set employeeEntitiesFinished = 0 %}
+					{% set employeeEntitiesCount = 0 %}
+					{% for employeeHasEntity in employerHasEmployee.employeeEmployee.entities %}
+						{% if  employeeHasEntity.state != -1 %}
+							{% set action_employee = employerHasEmployee.employeeEmployee.personPerson.actionByEmployeeHasEntity(employeeHasEntity).first %}
+							{% set employeeEntitiesCount = employeeEntitiesCount + 1 %}
+							<tr>
+								{% if action_employee.priority == 0 %}
+									{% set tdDateStyle = "background-color: rgba(74, 169, 36, 0.34);color: #145456;" %}
+								{% elseif action_employee.priority == 1 %}
+									{% set tdDateStyle = "background-color: rgba(169, 148, 36, 0.52);color: #563808;" %}
+								{% elseif action_employee.priority == 2%}
+									{% set tdDateStyle = "background-color: rgba(224, 110, 110, 0.45);color: #c70707;" %}
+								{% endif %}
+								{% if action_employee.actionStatus.code == 'FIN' %}
+									{% set tdStyle = "background-color: rgba(74, 169, 36, 0.34);color: #145456;" %}
+									{% set employeeEntitiesFinished = employeeEntitiesFinished + 1 %}
+								{% elseif  action_employee.actionStatus.code == 'NEW' %}
+									{% set tdStyle = "" %}
+								{% elseif  action_employee.actionStatus.code == 'CORT' %}
+									{% set tdStyle = "background-color: rgba(169, 148, 36, 0.52);color: #563808;" %}
+								{% elseif  action_employee.actionStatus.code == 'ERRO' %}
+									{% set tdStyle = "background-color: rgba(224, 110, 110, 0.45);color: #c70707;" %}
+								{% else %}
+									{% set tdStyle = "" %}
+								{% endif %}
+								<td class="td-title" style="{{ tdStyle }}">
+									<div id="validate-entity-employee{{ employerHasEmployee.idEmployerHasEmployee }}{{ employeeEntitiesCount }}">
+										{{ action_employee.actionTypeName }}
+									</div>
+								</td>
+								<td class="td-title" style="{{ tdStyle }}">
+									{{ action_employee.status }}
+								</td>
+								<td class="td-title" style="{{ tdStyle }}">
+									{{ action_employee.createdAt|date("m/d/Y") }}
+								</td>
+								<td class="td-title" style="{{ tdDateStyle }}">
+									{% if action_employee.finishedAt is not null %}
+										{{ action_employee.finishedAt|date("m/d/Y") }}
+									{% else %}
+										-
+									{% endif %}
+								</td>
+							</tr>
 						{% endif %}
 					{% endfor %}
-					</tbody>
-				</table>
-			</div>
-			<div class="col-sm-12">
-				<div class="row">
-					{% for success_message in app.session.flashBag.get('success_send_email')%}
-						<div class="alert alert-success semi-italic" for="alert">
-							{{ success_message }}
-						</div>
-					{% endfor %}
-					{% for fail_message in app.session.flashBag.get('fail_send_email')%}
-						<div class="alert alert-fail semi-italic" for="alert">
-							{{ fail_message }}
-						</div>
-					{% endfor %}
-				</div>
-			</div>
+					<!--entity action content begin-->
+					{% if employeeEntitiesFinished == employeeEntitiesCount %}
+						{% set dysplayEntities = "display:none;" %}
+					{% else %}
+						{% set dysplayEntities = "" %}
+					{% endif %}
+					{% if employerHasEmployee.employeeEmployee.entities|length >0 %}
+						<tr id="employee-entities-content{{ employerHasEmployee.idEmployerHasEmployee}}" style="{{ dysplayEntities }}">
+							<td colspan="4">
+								<div class="back-section col-md-12" style="margin: 0px">
+									<!--Form employer entity action begin-->
+									{% for formE in formEmployeesEntities[employerHasEmployee.idEmployerHasEmployee] %}
+										{% set action_employee = employerHasEmployee.employeeEmployee.PersonPerson.actionById(formE['actionId'].vars['data']) %}
+										<div class="col-md-6" style="padding: 0px;margin: 10px 0px 10px 0px;">
+											<div class="col-md-15 text-center content-title">
+												Datos de la entidad
+											</div>
+											<div style="border: 3px solid #525659;margin-right: 1.3%;height: 160px;overflow: hidden;">
+												{{ form_start(formE) }}
+												<div class="col-md-15 row-content " style="margin-top: 30px">
+													<div class="col-md-5 no-padding">
+														{{ form_label(formE.name) }}
+													</div>
+													<div class="col-md-6 no-padding">
+														{{ form_widget(formE.name) }}
+													</div>
+												</div>
 
-			<div class="col-md-12 text center" style="margin-top: 20px">
-				<a class="btn btn-bitbucket notAjax" href="{{ path('show_procedures') }}">Volver a los tramites</a>
-			</div>
+												<div class="col-md-15 row-content">
+													<div class="col-md-5 no-padding">
+														{{ form_label(formE.actionType) }}
+													</div>
+													<div class="col-md-6 no-padding">
+														{{ form_widget(formE.actionType) }}
+													</div>
+												</div>
+												{#<!--Entity action buttons begin-->#}
+												{% if action_employee.actionStatus.code != 'FIN' %}
+													<div class="col-md-15 row-content text-center">
+														<div class="col-md-15">
+															{{ form_widget(formE.edit) }}
+															<a class="btn-backoffice notAjax" href="{{ path('finish_action',{'actionId':action_employee.idAction}) }}" style="padding: 1px 10px; margin-top:6px;">
+																{% if action_employee.employeeEntity.state == 0 %}
+																	Entidad Validada
+																{% else %}
+																	Inscripción Terminada
+																{% endif %}
+															</a>
+														</div>
+													</div>
+												{% else %}
+													{% if employerHasEmployee.existentSQL!=1 %}
+														<div class="col-md-15 row-content text-center">
+															<div class="col-md-15">
+																<a class="btn-backoffice notAjax" href="{{ path('activate_action',{'actionId':action_employee.idAction}) }}" style="padding: 1px 10px; margin-top: 20px">
+																	Activar Tramite
+																</a>
+															</div>
+														</div>
+													{% endif %}
+												{% endif %}
+												{{ form_end(formE) }}
+											</div>
+										</div>
+									{% endfor %}
+								</div>
+							</td>
+						</tr>
+					{% endif %}
+					<tr>
+						{% set tdStyle = "background-color: rgba(74, 169, 36, 0.34);color: #145456;" %}
+						<td class="td-title text-center" colspan="4" style="font-size: 14px;background-color: #083435;border-width: 2px 1px;border-color: #083435;color: white;">
+							<div id="aditional-actions{{ employerHasEmployee.idEmployerHasEmployee }}">
+								Acciones Adicionales
+							</div>
+						</td>
+					</tr>
+					<tr id="aditional-actions-content{{ employerHasEmployee.idEmployerHasEmployee }}">
+						<td colspan="4">
+							<div class="back-section col-md-12">
+								<div class="text-center" style="margin-right: 1.3%;margin-left: 1.3%;overflow: hidden;">
+									<a class="btn-backoffice-download notAjax" style="margin-top: 1%" href="{{path('export_all_documents',{'idAction':action_employee.idAction})}}">Descargar Documentos</a>
+									{% if employeeInfoFinished is defined and employeeInfoFinished == 1  and docsFinished is defined and docsFinished == 2 and employeeEntitiesFinished == employeeEntitiesCount and infoFinished is defined and infoFinished == 2 and employeeDocsFinished is defined and employeeDocsFinished == 2 and entitiesFinished == employer.entities|length %}
+										{% if employerHasEmployee.existentSQL != 1 %}
+										<a class="btn-backoffice notAjax" style="margin-top: 1%"  href="{{ path('back_add_sql',{'idEmployerHasEmployee':employerHasEmployee.idEmployerHasEmployee,'procedureId':procedure.idProcedure})}}">Inscribir a SQL</a>
+										{% endif %}
+										{% if employerHasEmployee.existentSQL == 1 and employerHasEmployee.state < 4 %}
+										<a class="btn-backoffice-upload notAjax" style="margin-top: 1%" href="{{ path('complete_employee',{'idEmployerHasEmployee':employerHasEmployee.idEmployerHasEmployee,'procedureId':procedure.idProcedure })}}"> Terminar proceso </a>
+										{% endif %}
+									{% endif %}
+								</div>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+				{% set employeeCount = employeeCount + 1 %}
+			{% endfor %}
 		</div>
 	</div>
 {% endblock %}

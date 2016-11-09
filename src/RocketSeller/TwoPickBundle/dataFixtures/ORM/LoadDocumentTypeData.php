@@ -171,25 +171,30 @@ class LoadDocumentTypeData extends AbstractFixture implements OrderedFixtureInte
         $documentTypeSDVD->setRefPdf('vacaciones-dinero');
         $manager->persist($documentTypeSDVD);
 	
-		    $documentTypeCE = new DocumentType();
-		    $documentTypeCE->setName('Cédula de extranjería');
-		    $documentTypeCE->setDocCode('CE');
-		    $manager->persist($documentTypeCE);
+        $documentTypeCE = new DocumentType();
+        $documentTypeCE->setName('Cédula de extranjería');
+        $documentTypeCE->setDocCode('CE');
+        $manager->persist($documentTypeCE);
+
+        $documentTypeRad = new DocumentType();
+        $documentTypeRad->setName('Radicado');
+        $documentTypeRad->setDocCode('RAD');
+        $manager->persist($documentTypeRad);
 	    
-	      $documentTypePilaOperatorLog = new DocumentType();
-	      $documentTypePilaOperatorLog->setName('Enlace Operativo imagen de errores');
-	      $documentTypePilaOperatorLog->setDocCode('EOIE');
-	      $manager->persist($documentTypePilaOperatorLog);
-	    
-	      $documentTypePayslipPila = new DocumentType();
-	      $documentTypePayslipPila->setName('Enlace Operativo comprobante pago planilla');
-	      $documentTypePayslipPila->setDocCode('EOCP');
-	      $manager->persist($documentTypePayslipPila);
-	    
-	      $documentTypePasaporte = new DocumentType();
-	      $documentTypePasaporte->setName('Pasaporte');
-	      $documentTypePasaporte->setDocCode('PASAPORTE');
-	      $manager->persist($documentTypePasaporte);
+        $documentTypePilaOperatorLog = new DocumentType();
+        $documentTypePilaOperatorLog->setName('Enlace Operativo imagen de errores');
+        $documentTypePilaOperatorLog->setDocCode('EOIE');
+        $manager->persist($documentTypePilaOperatorLog);
+
+        $documentTypePayslipPila = new DocumentType();
+        $documentTypePayslipPila->setName('Enlace Operativo comprobante pago planilla');
+        $documentTypePayslipPila->setDocCode('EOCP');
+        $manager->persist($documentTypePayslipPila);
+
+        $documentTypePasaporte = new DocumentType();
+        $documentTypePasaporte->setName('Pasaporte');
+        $documentTypePasaporte->setDocCode('PASAPORTE');
+        $manager->persist($documentTypePasaporte);
 	    
         $manager->flush();
 
@@ -222,10 +227,11 @@ class LoadDocumentTypeData extends AbstractFixture implements OrderedFixtureInte
         $this->addReference('document-Registro-civil-nacido-vivo',$documentTypeRegNacVivo);
         $this->addReference('document-formato-rem',$documentTypeRem);
         $this->addReference('document-vacaciones-dinero',$documentTypeSDVD);
-	      $this->addReference('document-CE',$documentTypeCE);
-	      $this->addReference('document-EOIE', $documentTypePilaOperatorLog);
-	      $this->addReference('document-EOCP', $documentTypePayslipPila);
-	      $this->addReference('document-PASAPORTE', $documentTypePasaporte);
+        $this->addReference('document-CE',$documentTypeCE);
+        $this->addReference('document-RAD', $documentTypeRad);
+        $this->addReference('document-EOIE', $documentTypePilaOperatorLog);
+        $this->addReference('document-EOCP', $documentTypePayslipPila);
+        $this->addReference('document-PASAPORTE', $documentTypePasaporte);
 
     }
     public function getOrder()

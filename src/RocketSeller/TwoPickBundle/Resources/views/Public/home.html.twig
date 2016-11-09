@@ -308,9 +308,71 @@ de empleados que quieras administrar</h4>
             </div>
         </section>
 
-      <!--aca va el footer que ya esta hecho-->
+      <!--seccion de logos del min-->
+			<section class="grisclaro section group">
+				<h2 class="light grisclarofont minH2">Hacemos parte del cambio</h2>
+				<a href="http://www.mintrabajo.gov.co/images/documentos/red-formalizacion-laboral.pdf" target="_blank"><div id="contenido-pc" class="section group min">
+					<div class="col span_1_of_3" align="center">
+						<strong style="margin-right: 95px;color: #5D5D5D;">Hacemos parte de</strong><br />
+						<img src="{{ asset('public/img/home/minlogo1.png') }}" width="250" height="auto" />
+					</div>
+					<div class="col span_1_of_3" align="center">
+						<img src="{{ asset('public/img/home/minlogo2.png') }}" width="200" height="auto" />
+					</div>
+					<div class="col span_1_of_3" align="center">
+						<img src="{{ asset('public/img/home/minlogo3.png') }}" width="200" height="auto" />
+					</div>
+				</div></a>
+			</section>
+			<!--seccion de logos del min-->
 
+			<!--seccion de logos de quienes hablan de nostros-->
+			<section class="section group" style="margin-bottom: 60px">
+				<h2 class="light grisclarofont minH2">Quienes estan hablando de nosotros</h2><br /><br />
+					<div class="col span_1_of_5" align="center">
+						<a href="http://www.wradio.com.co/escucha/archivo_de_audio/symplifica-es-la-herramienta-para-administrar-empleados-domesticos-camilo-mendez/20161014/oir/3274657.aspx" target="_blank"><img src="{{ asset('public/img/home/minlogo4.png') }}" width="150" height="auto" /></a>
+					</div>
+					<div class="col span_1_of_5" align="center">
+						<a href="http://www.dinero.com/edicion-impresa/negocios/articulo/nueva-aplicacion-simplifica-pagos-a-empleados-domesticos/237309" target="_blank"><img src="{{ asset('public/img/home/minlogo5.png') }}" width="150" height="auto" /></a>
+					</div>
+					<div class="col span_1_of_5" align="center">
+						<a href="http://www.elespectador.com/noticias/economia/un-servicio-de-aseo-domestico-al-alcance-de-un-clic-articulo-657492" target="_blank"><img src="{{ asset('public/img/home/minlogo6.png') }}" width="150" height="auto" /></a>
+					</div>
+					<div class="col span_1_of_5" align="center">
+						<a href="http://www.finanzaspersonales.com.co/trabajo-y-educacion/articulo/como-liquidar-aportes-de-una-empleada-domestica/67318" target="_blank"><img src="{{ asset('public/img/home/minlogo7.png') }}" width="150" height="auto" /></a>
+					</div>
+					<div class="col span_1_of_5" align="center">
+						<a href="http://www.pulzo.com/economia/salario-empleada-domestica-colombia/PP150439" target="_blank"><img src="{{ asset('public/img/home/minlogo8.png') }}" width="150" height="auto" /></a>
+					</div>
+				</div></a>
+			</section>
+			<!--seccion de logos de quienes hablan de nostros-->
 
+		<!-- Modal campaña 150k  -->
+		<div class="modal fade" id="150kCampaign" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-body" align="center">
+						<span><img alt="Symplifica" src="{{ asset('public/img/landing/sello.png') }}"></span>
+						<div id="campañaTitle">
+							<h2 class="bold azulmediofont">Gestiona de forma sencilla</h2>
+							<h3 class="light azulmediofont" style="margin-top:0;">a los empleados de tu hogar</h3>
+						</div>
+						<div id="campañaDesc" style="background: #fd9224;color: #FFF;">
+							<h1 class="bold">y recibe $150.000*</h1>
+							<p class="back light" style="margin-bottom: 15px;padding: 20px;background: #ea8b2a;">
+								Inicia tu registro hoy mediante un pago electrónico y te daremos
+								<strong>$150.000 pesos para pagar el sueldo de tu empleada*</strong>
+							</p>
+						</div>
+						<div><a class="btn azulmedio notAjax" href="{{ path('real_landing') }}" style="color:#FFF">Dime más</a></div>
+					</div>
+					<a href="#"><div data-dismiss="modal" class="modal-footer" style="background:#f1f1f1;text-align:center">
+						Cerrar
+					</div></a>
+				</div>
+			</div>
+		</div>
     </main>
 
 </body>
@@ -408,6 +470,15 @@ $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.mi
 
 	$('#formemail').attr('oninvalid', 'setCustomValidity("El correo escrito no es valido")');
 	$('#formemail').attr('oninput', "setCustomValidity('')");
+
+	var counter = 0;
+	var interval = setInterval(function() {
+		counter++;
+		if (counter == 10) {
+			$("#150kCampaign").modal("show");
+			clearInterval(interval);
+		}
+	}, 1000);
 
 
 	$("form[name='form']").on('submit',function (e) {

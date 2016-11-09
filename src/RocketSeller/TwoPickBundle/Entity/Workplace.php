@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Entity;
 
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Exclude;
@@ -61,13 +62,23 @@ class Workplace
      * @ORM\JoinColumn(name="id_city", referencedColumnName="id_city")
      */
     private $city;
+    
+    /**
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActiveContracts()
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('state',1));
+        return $this->contracts->matching($criteria);
+    }
 
-     /**
+    /**
      * Constructor
      */
     public function __construct()
     {
-        $this->workplaces = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contracts = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -78,6 +89,30 @@ class Workplace
     public function getIdWorkplace()
     {
         return $this->idWorkplace;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Workplace
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 
     /**
@@ -129,6 +164,41 @@ class Workplace
     }
 
     /**
+     * Add contract
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Contract $contract
+     *
+     * @return Workplace
+     */
+    public function addContract(\RocketSeller\TwoPickBundle\Entity\Contract $contract)
+    {
+        $contract->setWorkplaceWorkplace($this);
+        $this->contracts[] = $contract;
+
+        return $this;
+    }
+
+    /**
+     * Remove contract
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Contract $contract
+     */
+    public function removeContract(\RocketSeller\TwoPickBundle\Entity\Contract $contract)
+    {
+        $this->contracts->removeElement($contract);
+    }
+
+    /**
+     * Get contracts
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContracts()
+    {
+        return $this->contracts;
+    }
+
+    /**
      * Set department
      *
      * @param \RocketSeller\TwoPickBundle\Entity\Department $department
@@ -174,64 +244,5 @@ class Workplace
     public function getCity()
     {
         return $this->city;
-    }
-
-
-    /**
-     * Add contract
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\Contract $contract
-     *
-     * @return Workplace
-     */
-    public function addContract(\RocketSeller\TwoPickBundle\Entity\Contract $contract)
-    {
-        $this->contracts[] = $contract;
-
-        return $this;
-    }
-
-    /**
-     * Remove contract
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\Contract $contract
-     */
-    public function removeContract(\RocketSeller\TwoPickBundle\Entity\Contract $contract)
-    {
-        $this->contracts->removeElement($contract);
-    }
-
-    /**
-     * Get contracts
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getContracts()
-    {
-        return $this->contracts;
-    }
-
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Workplace
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 }

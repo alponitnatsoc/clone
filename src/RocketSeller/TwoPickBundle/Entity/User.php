@@ -90,6 +90,7 @@ class User extends BaseUser
         $this->payments = new \Doctrine\Common\Collections\ArrayCollection();
         $this->invitations = new \Doctrine\Common\Collections\ArrayCollection();
         $this->referrals = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->userHasCampaigns = new \Doctrine\Common\Collections\ArrayCollection();
         // your own logic
     }
 
@@ -102,6 +103,11 @@ class User extends BaseUser
      * })
      */
     private $personPerson;
+
+    /**
+     * @ORM\OneToMany(targetEntity="UserHasCampaign", mappedBy="userUser", cascade={"persist"})
+     */
+    private $userHasCampaigns;
 
     /**
      * @ORM\OneToMany(targetEntity="Device", mappedBy="userUser", cascade={"persist"})
@@ -1147,5 +1153,39 @@ class User extends BaseUser
     public function getPromoCodes()
     {
         return $this->promoCodes;
+    }
+
+    /**
+     * Add userHasCampaign
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\UserHasCampaign $userHasCampaign
+     *
+     * @return User
+     */
+    public function addUserHasCampaign(\RocketSeller\TwoPickBundle\Entity\UserHasCampaign $userHasCampaign)
+    {
+        $this->userHasCampaigns[] = $userHasCampaign;
+
+        return $this;
+    }
+
+    /**
+     * Remove userHasCampaign
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\UserHasCampaign $userHasCampaign
+     */
+    public function removeUserHasCampaign(\RocketSeller\TwoPickBundle\Entity\UserHasCampaign $userHasCampaign)
+    {
+        $this->userHasCampaigns->removeElement($userHasCampaign);
+    }
+
+    /**
+     * Get userHasCampaigns
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUserHasCampaigns()
+    {
+        return $this->userHasCampaigns;
     }
 }

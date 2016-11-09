@@ -1,99 +1,209 @@
 {% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
-
 {% block title %}Tramites{% endblock %}
-
 {% block fos_user_content %}
-    <div id="main" class="col-sm-15">
-        <div class="col-md-9">
-            <div class="panel panel-title">
-                Tramites
+    <div id="main" class="col-md -12">
+        <div class="back-panel-title">
+            Tramites
+        </div>
+        {% if document is not defined %}
+            {% set document = 'none' %}
+        {% endif %}
+        {% if names is not defined %}
+            {% set names = 'none' %}
+        {% endif %}
+        {% if state is not defined %}
+            {% set state = 'none' %}
+        {% endif %}
+        {% if prior is not defined %}
+            {% set prior = 'none' %}
+        {% endif %}
+        {% if app.request.request.get('formFilter') is not null %}
+            {% if app.request.request.get('formFilter')['documento'] != '' %}
+                {% set document = app.request.request.get('formFilter')['documento'] %}
+            {% else %}
+                {% set document = 'none' %}
+            {% endif %}
+            {% if app.request.request.get('formFilter')['nombre'] != '' %}
+                {% set names = app.request.request.get('formFilter')['nombre'] %}
+            {% else %}
+                {% set names = 'none' %}
+            {% endif %}
+            {% if app.request.request.get('formFilter')['estado'] != '' %}
+                {% set state = app.request.request.get('formFilter')['estado'] %}
+            {% else %}
+                {% set state = 'none' %}
+            {% endif %}
+            {% if app.request.request.get('formFilter')['prioridad'] != '' %}
+                {% set prior = app.request.request.get('formFilter')['prioridad'] %}
+            {% else %}
+                {% set prior = 'none' %}
+            {% endif %}
+        {% endif %}
+        <div class="col-md-12">
+            {{ form_start(form) }}
+            <div class="col-md-3">
+                {{ form_row(form.nombre,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:auto;padding:1px 5px'},'label_attr':{'style':'min-height:30px'}}) }}
             </div>
-            <br>
-            <div class="back-panel">
-                <div class="backoffice-headding" >
-                    <h7>Tramites Pendientes {{ "now"|date("m/d/Y") }}</h7>
-                </div>
-                {% if order is not defined %}
-                    {% set order = 'ASC' %}
-                {% endif %}
-                {% if order == 'ASC' %}
-                    {% set order = 'DESC' %}
-                {% else %}
-                    {% set order = 'ASC' %}
-                {% endif %}
+            <div class="col-md-2">
+                {{ form_row(form.documento,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:auto;padding:1px 5px'},'label_attr':{'style':'min-height:30px'}}) }}
             </div>
+            <div class="col-md-2">
+                {{ form_row(form.estado,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:21px'},'label_attr':{'style':'min-height:30px'}}) }}
+            </div>
+            <div class="col-md-2">
+                {{ form_row(form.prioridad,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:21px'},'label_attr':{'style':'min-height:30px'}}) }}
+            </div>
+            <div class="col-md-2 text-center">
+                {{ form_widget(form.buscar,{'attr':{'class':'btn-back'}}) }}
+            </div>
+            {{ form_end(form) }}
+        </div>
+        <div class="back-panel">
+            <div class="backoffice-headding" >
+                <h7>Tramites Pendientes {{ "now"|date("m/d/Y") }}</h7>
+            </div>
+            {% if order is not defined %}
+                {% set order = 'ASC' %}
+            {% endif %}
+            {% if order == 'ASC' %}
+                {% set order = 'DESC' %}
+            {% else %}
+                {% set order = 'ASC' %}
+            {% endif %}
             <table class="col-md-12 back-table">
                 <thead>
                 <tr>
-                    <th rowspan="2">
-                        <a id="orderByName" class ='notAjax' href="{{ path('show_procedures',{'orderType':'name','order':order}) }}">Empleador</a>
+                    <th>
+                        <a id="orderById" class ='a-back notAjax' href="{{ path('show_procedures',{'orderType':'id','order':order,'state':state,'document':document,'names':names,'prior':prior}) }}">Noº</a>
                     </th>
-                    <th rowspan="2">
-                        <a id="orderByName" class ='notAjax' href="{{ path('show_procedures',{'orderType':'document','order':order}) }}">Identificación</a>
+                    <th>
+                        Pr
                     </th>
-                    <th rowspan="2">Tipo de Tramite</th>
-                    <th rowspan="2">estado</th>
-                    <th rowspan="2">
-                        <a id="orderByName" class ='notAjax' href="{{ path('show_procedures',{'orderType':'date','order':order}) }}">Fecha Pago</a>
+                    <th>
+                        <a id="orderByName" class ='a-back notAjax' href="{{ path('show_procedures',{'orderType':'name','order':order,'state':state,'document':document,'names':names,'prior':prior}) }}">Empleador</a>
                     </th>
-                    <th rowspan="2">Accion</th>
+                    <th>
+                        NE
+                    </th>
+                    <th>
+                        <a id="orderByDocument" class ='a-back notAjax' href="{{ path('show_procedures',{'orderType':'document','order':order,'state':state,'document':document,'names':names,'prior':prior}) }}">Documento</a>
+                    </th>
+                    <th>
+                        <a id="orderByType" class ='a-back notAjax' href="{{ path('show_procedures',{'orderType':'type','order':order,'state':state,'document':document,'names':names,'prior':prior}) }}">Tipo de tramite</a>
+                    </th>
+                    <th>
+                        <a id="orderByState" class ='a-back notAjax' href="{{ path('show_procedures',{'orderType':'state','order':order,'state':state,'document':document,'names':names,'prior':prior}) }}">Estado</a>
+                    </th>
+                    <th>
+                        <a id="orderByDateIn" class ='a-back notAjax' href="{{ path('show_procedures',{'orderType':'datein','order':order,'state':state,'document':document,'names':names,'prior':prior}) }}">Fecha de ingreso</a>
+                    </th>
+                    <th>
+                        <a id="orderByDateOut" class ='a-back notAjax' href="{{ path('show_procedures',{'orderType':'dateout','order':order,'state':state,'document':document,'names':names,'prior':prior}) }}">Fecha de finalización</a>
+                    </th>
+                    <th>Acción</th>
+
                 </tr>
                 </thead>
                 <tbody>
+                {% set count = 1 %}
                 {% for procedure in procedures %}
-                    {% set estado =  procedure.employerEmployer.status %}
-                    <tr{% if estado == 0%}
-                        style="background-color: rgba(21, 204, 11, 0.26);"
-                    {% elseif estado ==1 %}
-                    {% elseif estado == 2 %}
-                    {% elseif estado == 3 %}
-                    {% elseif estado == 4 %}
-                    {% elseif 5 %}
-                    {% endif %}>
-                        <td>{{ procedure.employerEmployer.personPerson.fullName}}</td>
-                        <td>{{ procedure.employerEmployer.personPerson.document}}</td>
-                        <td>{{ procedure.procedureTypeProcedureType.name }}</td>
-                        <td {%  if  estado == 2 %}
-                            style="color: #9C2F2F"
-                        {% elseif estado == 1 %}
-                            style="color: #666666"
-                        {% elseif estado == 0 %}
-                            style="color: black"
-                        {% elseif estado == 3 %}
-                            style="color: #d59401"
-                        {% elseif estado == 4 %}
-                            style="color: #008800"
-                        {% elseif estado == 5 %}
-                            style="color: #008800"
-                        {% endif %}>
-                            {%  if  estado == 2 %}
-                                Error
-                            {% elseif estado == 1 %}
-                                En tramite
-                            {% elseif estado == 0 %}
-                                Nuevo
-                            {% elseif estado == 3 %}
-                                Corregido
-                            {% elseif estado == 4 %}
-                                Terminado
-                            {% elseif estado == 5 %}
-                                Contrato Validado
-                            {% endif %}</td>
-                        <td>{{ procedure.createdAt|date('y-m-d h:i:s a') }}</td>
-                        <td><a class="notAjax" href="{{ path('show_procedure',{'procedureId':procedure.idProcedure})}}">Ver</a></td>
+                    {% if count%2 == 0 %}
+                        {% set statusCode =  procedure.procedureStatus.code %}
+                        {% if statusCode == 'DIS' %}
+                            {% set trstyle = "background-color: rgb(0, 0, 0);color: rgb(245, 240, 240);" %}
+                            {% set astyle = "color: rgb(255, 255, 255);" %}
+                        {% elseif statusCode == 'NEW' %}
+                            {% set trstyle = "rgb(255,255,255);" %}
+                            {% set astyle = "" %}
+                        {% elseif statusCode == 'FIN' %}
+                            {% set trstyle = "background-color: rgba(113, 185, 49, 0.4);" %}
+                            {% set astyle = "color:rgb(38, 136, 78);" %}
+                        {% elseif statusCode == 'ERRO' %}
+                            {% set trstyle = " background-color: rgba(185, 49, 49, 0.3);" %}
+                            {% set astyle = "color: rgb(214, 33, 33);" %}
+                        {% elseif statusCode == 'CORT' %}
+                            {% set trstyle = "background-color: rgba(220, 144, 0, 0.3);" %}
+                            {% set astyle = "color: rgb(82, 82, 82);" %}
+                        {% elseif statusCode == 'DCPE' %}
+                            {% set trstyle = "background-color: rgba(160, 153, 153, 0.48);" %}
+                            {% set astyle = "color: rgb(82, 82, 82);" %}
+                        {% elseif statusCode == 'CTPE' %}
+                            {% set trstyle = "background-color: rgba(51, 122, 183, 0.3);" %}
+                            {% set astyle = "color: rgb(82, 68, 17);" %}
+                        {% elseif statusCode == 'STRT' %}
+                            {% set trstyle = "background-color: rgba(162, 205, 0, 0.4);" %}
+                            {% set astyle = "color: rgb(54, 72, 4);" %}
+                        {% endif %}
+                        {% set priority = procedure.priority %}
+                        {% if priority == 0 %}
+                            {% set priorStyle = "background-color: rgba(125, 185, 49, 0.6);color: #0e4144;" %}
+                        {% elseif priority == 1 %}
+                            {% set priorStyle = "background-color: rgb(255, 249, 0);color: #0e4144;" %}
+                        {% elseif priority == 2 or priority == 3 %}
+                            {% set priorStyle = "background-color: rgba(163, 0, 5, 0.55);color: #333;border-color: #5a1a1a;" %}
+                        {% endif %}
+                    {% else %}
+                        {% set statusCode =  procedure.procedureStatus.code %}
+                        {% if statusCode == 'DIS' %}
+                            {% set trstyle = "background-color: rgba(0, 0, 0, 0.9);color: rgb(245, 240, 240);" %}
+                            {% set astyle = "color: rgb(255, 255, 255);" %}
+                        {% elseif statusCode == 'NEW' %}
+                            {% set trstyle = "background-color: rgb(244,246,240);" %}
+                            {% set astyle = "" %}
+                        {% elseif statusCode == 'FIN' %}
+                            {% set trstyle = "background-color: rgba(113, 185, 49, 0.28);" %}
+                            {% set astyle = "color:rgb(38, 136, 78);" %}
+                        {% elseif statusCode == 'ERRO' %}
+                            {% set trstyle = " background-color: rgba(185, 49, 49, 0.23);" %}
+                            {% set astyle = "color: rgb(214, 33, 33);" %}
+                        {% elseif statusCode == 'CORT' %}
+                            {% set trstyle = "background-color: rgba(220, 144, 0, 0.23);" %}
+                            {% set astyle = "color: rgb(82, 82, 82);" %}
+                        {% elseif statusCode == 'DCPE' %}
+                            {% set trstyle = "background-color: rgba(160, 153, 153, 0.23);" %}
+                            {% set astyle = "color: rgb(82, 82, 82);" %}
+                        {% elseif statusCode == 'CTPE' %}
+                            {% set trstyle = "background-color: rgba(51, 122, 183, 0.23);" %}
+                            {% set astyle = "color: rgb(82, 68, 17);" %}
+                        {% elseif statusCode == 'STRT' %}
+                            {% set trstyle = "background-color: rgba(162, 205, 0, 0.23);" %}
+                            {% set astyle = "color: rgb(54, 72, 4);" %}
+                        {% endif %}
+                        {% set priority = procedure.priority %}
+                        {% if priority == 0 %}
+                            {% set priorStyle = "background-color: rgba(177, 203, 102, 0.44);color: #0e4144;" %}
+                        {% elseif priority == 1 %}
+                            {% set priorStyle = "background-color: rgba(255, 214, 0, 0.84);;color: #0e4144;" %}
+                        {% elseif priority == 2 or priority == 3 %}
+                            {% set priorStyle = "background-color: rgba(170, 20, 25, 0.45);color: #333;border-color: #5a1a1a;" %}
+                        {% endif %}
+                    {% endif %}
+
+                    <tr>
+                        <td><strong>{{ count }}</strong></td>
+                        <td style="{{ priorStyle }}"></td>
+                        <td style="{{ trstyle }} width: 30%">{{ procedure.employerEmployer.personPerson.fullName}}</td>
+                        <td style="{{ trstyle }}">{{ procedure.employerEmployer.activeEmployerHasEmployees.count }}</td>
+                        <td style="{{ trstyle }}">{{ procedure.employerEmployer.personPerson.document}}</td>
+                        <td style="{{ trstyle }}">{{ procedure.procedureTypeProcedureType.name }}</td>
+                        <td style="{{ trstyle }}">{{ procedure.status }}</td>
+                        <td style="{{ trstyle }}">{{ procedure.backOfficeDate|date('d-m-Y h:i:s a') }}</td>
+                        <td style="{{ trstyle }}">{% if procedure.finishedAt != null %}{{ procedure.finishedAt|date('d-m-Y h:i:s a') }}{% else %}-{% endif %}</td>
+                        <td style="{{ trstyle }}">
+                            {% if procedure.procedureTypeProcedureType.code == 'REE' %}
+                                <a class="back-link notAjax" href="{{ path('show_procedure',{'procedureId':procedure.idProcedure})}}" style="{{ astyle }}">Ver</a>
+                            {% elseif procedure.procedureTypeProcedureType.code == 'VAC' %}
+                                no
+                            {% endif %}
+                        </td>
+
                     </tr>
+                    {% set count = count + 1 %}
                 {% endfor %}
+
                 </tbody>
             </table>
         </div>
-        {% block rightContent %}
-            <div class="col-sm-3 col-md-3" id="form_procedures" style="margin-top: 30px; border-left: 1px solid lightgrey">
-                {{ form_start(form) }}
-                {{ form_end(form) }}
-            </div>
 
-        {% endblock %}
-
-        <br>
     </div>
 {% endblock %}

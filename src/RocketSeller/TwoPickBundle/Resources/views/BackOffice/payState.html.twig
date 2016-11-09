@@ -151,7 +151,7 @@
                                     </td>
                                 {% endif %}
                             {% else %}
-                                {% if podP.purchaseOrders.idUser.personPerson.document != NULL %}
+                                {% if podP.purchaseOrders != null and podP.purchaseOrders.idUser.personPerson.document != NULL %}
                                     <td>{{ podP.idPurchaseOrdersDescription }}</td>
                                     <td>{{ podP.purchaseOrders.idUser.personPerson.document }}</td>
                                     <td>{{ podP.purchaseOrders.idUser.personPerson.fullName }}</td>

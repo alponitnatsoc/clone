@@ -7,6 +7,7 @@ use DateInterval;
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\SecurityExtraBundle\Tests\Fixtures\A;
 use RocketSeller\TwoPickBundle\Entity\Beneficiary;
+use RocketSeller\TwoPickBundle\Entity\Campaign;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\Country;
 use RocketSeller\TwoPickBundle\Entity\Document;
@@ -545,7 +546,8 @@ class EmployeeController extends Controller
                 $form->get('idContract')->setData($currentContract->getIdContract());
             }
         }
-
+        /** @var Campaign $campaign150k */
+        $campaign150k = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Campaign")->findOneBy(array('description'=>'150k'));
         $options = $form->get('employeeHasEmployers')->get('payMethod')->getConfig()->getOptions();
         $choices = $options['choice_list']->getChoices();
         return $this->render('RocketSellerTwoPickBundle:Registration:EmployeeForm.html.twig', array(
@@ -560,6 +562,7 @@ class EmployeeController extends Controller
                         'd'=>$permittedDate->format("d")),
                     'coverageCodes' => $positions,
                     'legalOptions' => $legalStatusArr,
+                    'campaignDates' => array('dateStart'=>$campaign150k->getDateStart(),'dateEnd'=>$campaign150k->getDateEnd())
         ));
     }
 

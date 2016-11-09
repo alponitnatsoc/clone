@@ -14,6 +14,7 @@ a {text-decoration: none}
 .azuloscuro {background: #3c4b5a}
 .azulmedio {background: #00838c}
 .azulclaro {background: #00cccb}
+.grisclaro {background: #f7f7f7}
 
 .light-italic {font-family: 'Open Sans', sans-serif;font-weight: 300;font-style:italic}
 .light {font-family: 'Open Sans', sans-serif;font-weight: 300}
@@ -325,6 +326,11 @@ font-weight: 100;
 .texto-bullets p {margin: 0}
 .numeros { float: left;padding-right: 20px;}
 
+/*empieza la seccion de logos min*/
+
+.min {padding: 0 0 50px !important;}
+.minH2 {padding: 50px 0 0;font-size: 20px}
+
 /*modal 2*/
 .modalDialog {
     position: fixed;
@@ -410,7 +416,7 @@ font-weight: 100;
 .col {
 	display: block;
 	float:left;
-	margin: 1% 0 1% 1%;
+	margin: 1% 0 1% 0;
 }
 
 .col:first-child { margin-left: 0; } /* all browsers except IE6 and lower */

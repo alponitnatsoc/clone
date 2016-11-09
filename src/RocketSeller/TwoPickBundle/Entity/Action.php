@@ -114,11 +114,40 @@ class Action
     private $finishedAt=null;
 
     /**
+     * @ORM\Column(name="error_at",type="datetime", nullable=true)
+     */
+    private $errorAt=null;
+
+    /**
+     * @ORM\Column(name="corrected_at",type="datetime", nullable=true)
+     */
+    private $correctedAt=null;
+
+    /**
+     * @ORM\Column(name="first_error_at",type="datetime", nullable=true)
+     */
+    private $firstErrorAt=null;
+
+    /**
+     * @ORM\Column(name="calculated_at",type="datetime", nullable=true)
+     */
+    private $calculatedAt=null;
+
+    /**
      * @var \RocketSeller\TwoPickBundle\Entity\ActionError
      *
      * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\ActionError", mappedBy="action", cascade={"persist"})
      */
     private $actionErrorActionError;
+
+    /**
+     * @var integer
+     * 0 - normal
+     * 1 - medium
+     * 2 - High
+     * @ORM\Column(type="integer")
+     */
+    private $priority = 0;
     
     /**
      * Set idAction
@@ -318,7 +347,6 @@ class Action
     {
         $actionErrorActionError->setAction($this);
         $this->actionErrorActionError[] = $actionErrorActionError;
-
         return $this;
     }
 
@@ -334,9 +362,6 @@ class Action
 
     /**
      * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     *
      * @return Action
      */
     public function setUpdatedAt()
@@ -364,10 +389,28 @@ class Action
      */
     public function setActionStatus(\RocketSeller\TwoPickBundle\Entity\StatusTypes $actionStatus = null)
     {
+        $today = new DateTime();
         $this->status = $actionStatus->getName();
-        $this->getRealProcedureRealProcedure()->setActionChangedAt(new DateTime());
+        $this->getRealProcedureRealProcedure()->setActionChangedAt($today);
         if($actionStatus->getCode()=='FIN')
-            $this->finishedAt = new DateTime();
+            $this->finishedAt = $today;
+        if($actionStatus->getCode()=='ERRO'){
+            $this->finishedAt = null;
+            $this->errorAt = $today;
+            if($this->firstErrorAt==null)
+                $this->firstErrorAt = $today;
+            if($this->getRealProcedureRealProcedure()->getErrorAt()==null){
+                $this->getRealProcedureRealProcedure()->setErrorAt($today);
+                $this->getRealProcedureRealProcedure()->setProcedureStatus($actionStatus);
+            }
+        }
+        if($actionStatus->getCode()=='CORT'){
+            $this->finishedAt = null;
+            $this->correctedAt = $today;
+        }
+        if($actionStatus->getCode()=='NEW'){
+            $this->finishedAt = null;
+        }
         $this->actionStatus = $actionStatus;
         return $this;
     }
@@ -509,5 +552,118 @@ class Action
     public function getActionErrorActionError()
     {
         return $this->actionErrorActionError;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getActionTypeName();
+    }
+
+    /**
+     * Set priority
+     *
+     * @param integer $priority
+     *
+     * @return Action
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
+
+        return $this;
+    }
+
+    /**
+     * Get priority
+     *
+     * @return integer
+     */
+    public function getPriority()
+    {
+        return $this->priority;
+    }
+
+    /**
+     * Set errorAt
+     *
+     * @param \DateTime $errorAt
+     *
+     * @return Action
+     */
+    public function setErrorAt($errorAt)
+    {
+        $this->errorAt = $errorAt;
+        if($this->firstErrorAt == null){
+            $this->firstErrorAt = $errorAt;
+        }
+        return $this;
+    }
+
+    /**
+     * Get errorAt
+     *
+     * @return \DateTime
+     */
+    public function getErrorAt()
+    {
+        return $this->errorAt;
+    }
+
+    /**
+     * Set correctedAt
+     *
+     * @param \DateTime $correctedAt
+     *
+     * @return Action
+     */
+    public function setCorrectedAt($correctedAt)
+    {
+        $this->correctedAt = $correctedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get correctedAt
+     *
+     * @return \DateTime
+     */
+    public function getCorrectedAt()
+    {
+        return $this->correctedAt;
+    }
+
+    /**
+     * Get firstErrorAt
+     *
+     * @return \DateTime
+     */
+    public function getFirstErrorAt()
+    {
+        return $this->firstErrorAt;
+    }
+
+    /**
+     * Set calculatedAt
+     * @return Action
+     */
+    public function setCalculatedAt()
+    {
+        $this->setUpdatedAt();
+        $this->calculatedAt = $this->getUpdatedAt();
+        return $this;
+    }
+
+    /**
+     * Get calculatedAt
+     *
+     * @return \DateTime
+     */
+    public function getCalculatedAt()
+    {
+        return $this->calculatedAt;
     }
 }

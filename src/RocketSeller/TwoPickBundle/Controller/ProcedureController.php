@@ -3,10 +3,18 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use DateTime;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use RocketSeller\TwoPickBundle\Entity\Document;
+use FOS\RestBundle\Request\ParameterBag;
+use RocketSeller\TwoPickBundle\Entity\ActionError;
+use RocketSeller\TwoPickBundle\Entity\ActionType;
+use RocketSeller\TwoPickBundle\Entity\Department;
 use RocketSeller\TwoPickBundle\Entity\Log;
+use RocketSeller\TwoPickBundle\Entity\Person;
+use RocketSeller\TwoPickBundle\Entity\Workplace;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\DocumentType;
@@ -20,148 +28,352 @@ use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\Action;
 use RocketSeller\TwoPickBundle\Entity\RealProcedure;
-
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Validator\Constraints\Date;
 
 class ProcedureController extends Controller
 {
 	use EmployeeMethodsTrait;
 
-
     /**
-     * Funcion que carga la pagina de tramites para el backoffice
-     * Muestra un acceso directo a tramites pendientes de:
-     * 		Registro empleador Empleados
-     * 		//otros tramites futuros
-     * @param string $orderType order type for the switch
-     * @param string $order order ASC or DESC
-     * @param Request $request
-     * @return Response /backoffice/procedures
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function indexAction                                          ║
+     * ║ shows all the real procedures and filter it by parameters     ║
+     * ║ actually there exist two types of realProcedures:             ║
+     * ║ EmployerAndEmployeeRegister               REE                 ║
+     * ║ ValidationActions                         VAC                 ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param string $orderType order type for the switch           ║
+     * ║  @param string $order order ASC or DESC                       ║
+     * ║  @param string $state                                         ║
+     * ║  @param string $document                                      ║
+     * ║  @param string $names                                         ║
+     * ║  @param $prior                                                ║
+     * ║  @param Request $request                                      ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return Response /backoffice/procedures                      ║
+     * ╚═══════════════════════════════════════════════════════════════╝
      */
-    public function indexAction($orderType, $order, Request $request)
+    public function indexAction($orderType = 'none' , $order = 'ASC',$state = 'none',$document = 'none',$names = 'none', $prior = 'none', Request $request)
     {
+
 		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
-        /** @var QueryBuilder $query */
-        $query = $this->getDoctrine()->getManager()->createQueryBuilder();
-        switch($orderType){
-            case 'name':
-                $query
-                    ->add('select','p')
-                    ->from('RocketSellerTwoPickBundle:RealProcedure','p')
-                    ->join('RocketSellerTwoPickBundle:Employer','em','WITH','p.employerEmployer = em.idEmployer')
-                    ->join('RocketSellerTwoPickBundle:Person','pe','WITH','em.personPerson = pe.idPerson')
-                    ->orderBy('pe.names',$order)
-                    ->addOrderBy('pe.lastName1',$order)
-                    ->addOrderBy('pe.lastName2',$order);
-                break;
-            case 'document':
-                $query
-                    ->add('select','p')
-                    ->from('RocketSellerTwoPickBundle:RealProcedure','p')
-                    ->join('RocketSellerTwoPickBundle:Employer','em','WITH','p.employerEmployer = em.idEmployer')
-                    ->join('RocketSellerTwoPickBundle:Person','pe','WITH','em.personPerson = pe.idPerson')
-                    ->orderBy('pe.document',$order);
-                break;
-            case 'date':
-                $query
-                    ->add('select','p')
-                    ->from('RocketSellerTwoPickBundle:RealProcedure','p')
-                    ->orderBy('p.createdAt',$order);
-                break;
-        }
-        $procedures = $query->getQuery()->getResult();
-        /** @var RealProcedure $procedure */
-        foreach ($procedures as $procedure){
-            $actions = $procedure->getAction();
-            $new = true;
-            $completado = true;
-            $error = false;
-            $corregido = false;
-            $eCon = false;
-            $cContract = false;
-            $comContract = true;
-            $valCon = false;
-            /** @var Action $action */
-            foreach ($actions as $action){
-                if($action->getActionTypeActionType()->getCode()!='VC'){
-                    if($action->getStatus()=='Error'){
-                        $error = true;
+        $em = $this->getDoctrine()->getManager();
+        //if no search parameters
+        if($state == 'none' and $document == 'none' and $names == 'none' and $prior == 'none') {
+            /** @var QueryBuilder $query */
+            $query = $em->createQueryBuilder();
+            switch ($orderType) {
+                case 'name'://query ordered by name
+                    $query
+                        ->add('select', 'p')
+                        ->from('RocketSellerTwoPickBundle:RealProcedure', 'p')
+                        ->join('RocketSellerTwoPickBundle:Employer', 'em', 'WITH', 'p.employerEmployer = em.idEmployer')
+                        ->join('RocketSellerTwoPickBundle:Person', 'pe', 'WITH', 'em.personPerson = pe.idPerson')
+                        ->orderBy('pe.names', $order)
+                        ->where('p.procedureStatus != ?1')
+                        ->andWhere('p.procedureStatus!= ?2')
+                        ->andWhere('p.procedureStatus!= ?3')
+                        ->addOrderBy('pe.lastName1', $order)
+                        ->addOrderBy('pe.lastName2', $order)
+                        ->setParameter('1', $this->getStatusByStatusCode('DIS'))
+                        ->setParameter('2', $this->getStatusByStatusCode('DCPE'))
+                        ->setParameter('3', $this->getStatusByStatusCode('FIN'));
+                    break;
+                case 'document'://query ordered by document
+                    $query
+                        ->add('select', 'p')
+                        ->from('RocketSellerTwoPickBundle:RealProcedure', 'p')
+                        ->join('RocketSellerTwoPickBundle:Employer', 'em', 'WITH', 'p.employerEmployer = em.idEmployer')
+                        ->join('RocketSellerTwoPickBundle:Person', 'pe', 'WITH', 'em.personPerson = pe.idPerson')
+                        ->where('p.procedureStatus != ?1')
+                        ->andWhere('p.procedureStatus!= ?2')
+                        ->andWhere('p.procedureStatus!= ?3')
+                        ->orderBy('pe.document', $order)
+                        ->setParameter('1', $this->getStatusByStatusCode('DIS'))
+                        ->setParameter('2', $this->getStatusByStatusCode('DCPE'))
+                        ->setParameter('3', $this->getStatusByStatusCode('FIN'));
+                    break;
+                case 'datein'://query ordered by backoffice date
+                    $query
+                        ->add('select', 'p')
+                        ->from('RocketSellerTwoPickBundle:RealProcedure', 'p')
+                        ->orderBy('p.backOfficeDate', $order)
+                        ->where('p.procedureStatus != ?1')
+                        ->andWhere('p.procedureStatus!= ?2')
+                        ->andWhere('p.procedureStatus!= ?3')
+                        ->setParameter('1', $this->getStatusByStatusCode('DIS'))
+                        ->setParameter('2', $this->getStatusByStatusCode('DCPE'))
+                        ->setParameter('3', $this->getStatusByStatusCode('FIN'));
+                    break;
+                case 'dateout'://query ordered by backoffice finished
+                    $query
+                        ->add('select', 'p')
+                        ->from('RocketSellerTwoPickBundle:RealProcedure', 'p')
+                        ->where('p.procedureStatus != ?1')
+                        ->andWhere('p.procedureStatus!= ?2')
+                        ->andWhere('p.procedureStatus!= ?3')
+                        ->orderBy('p.finishedAt', $order)
+                        ->setParameter('1', $this->getStatusByStatusCode('DIS'))
+                        ->setParameter('2', $this->getStatusByStatusCode('DCPE'))
+                        ->setParameter('3', $this->getStatusByStatusCode('FIN'));
+                    break;
+                case 'none'://default query ordered by procedure id
+                    $query
+                        ->add('select', 'p')
+                        ->from('RocketSellerTwoPickBundle:RealProcedure', 'p')
+                        ->where('p.procedureStatus != ?1')
+                        ->andWhere('p.procedureStatus!= ?2')
+                        ->andWhere('p.procedureStatus!= ?3')
+                        ->orderBy('p.idProcedure', $order)
+                        ->setParameter('1', $this->getStatusByStatusCode('DIS'))
+                        ->setParameter('2', $this->getStatusByStatusCode('DCPE'))
+                        ->setParameter('3', $this->getStatusByStatusCode('FIN'));
+                    break;
+                case 'id'://query ordered by procedure id
+                    $query
+                        ->add('select', 'p')
+                        ->from('RocketSellerTwoPickBundle:RealProcedure', 'p')
+                        ->where('p.procedureStatus != ?1')
+                        ->andWhere('p.procedureStatus!= ?2')
+                        ->andWhere('p.procedureStatus!= ?3')
+                        ->orderBy('p.idProcedure', $order)
+                        ->setParameter('1', $this->getStatusByStatusCode('DIS'))
+                        ->setParameter('2', $this->getStatusByStatusCode('DCPE'))
+                        ->setParameter('3', $this->getStatusByStatusCode('FIN'));
+                    break;
+                case 'type'://query ordered by procedure type
+                    $query
+                        ->add('select', 'p')
+                        ->from('RocketSellerTwoPickBundle:RealProcedure', 'p')
+                        ->where('p.procedureStatus != ?1')
+                        ->andWhere('p.procedureStatus!= ?2')
+                        ->andWhere('p.procedureStatus!= ?3')
+                        ->orderBy('p.procedureTypeProcedureType', $order)
+                        ->setParameter('1', $this->getStatusByStatusCode('DIS'))
+                        ->setParameter('2', $this->getStatusByStatusCode('DCPE'))
+                        ->setParameter('3', $this->getStatusByStatusCode('FIN'));
+                    break;
+                case 'state'://query ordered by procedure state
+                    $query
+                        ->add('select', 'p')
+                        ->from('RocketSellerTwoPickBundle:RealProcedure', 'p')
+                        ->where('p.procedureStatus != ?1')
+                        ->andWhere('p.procedureStatus!= ?2')
+                        ->andWhere('p.procedureStatus!= ?3')
+                        ->orderBy('p.procedureStatus', $order)
+                        ->setParameter('1', $this->getStatusByStatusCode('DIS'))
+                        ->setParameter('2', $this->getStatusByStatusCode('DCPE'))
+                        ->setParameter('3', $this->getStatusByStatusCode('FIN'));
+                    break;
+            }
+            $procedures = $query->getQuery()->getResult();//getting the procedures matching the querybuilder
+        }else{//if search parameters
+            $docNum = false;//flag for document number search
+            $name = false;//flag for name search
+            $status = false;//flag for status search
+            $pr = false;
+            if ($document!= 'none') {//if documents parameter different to none docnum search was done
+                $docNum = true;
+            }
+            if ($names != 'none') {//if names parameter different to none name search was done
+                $name = true;
+            }
+            if ($state != 'none'){//if state parameter different to none status search was done
+                $status = true;
+            }
+            if ($prior != 'none'){//if state parameter different to none status search was done
+                $pr = true;
+            }
+
+            /** @var QueryBuilder $query2 */
+            if($state =='ALL'){
+                $query2 = $em->createQueryBuilder();//creating the query based on search parameters
+                $query2->select('p');
+                $query2->from('RocketSellerTwoPickBundle:RealProcedure','p')->join('p.procedureStatus','es')->join('p.employerEmployer','em')->join('em.personPerson','p2')->join('em.employerHasEmployees','ehe')->join('ehe.employeeEmployee','ee')->join('ee.personPerson','pe');
+            }else{
+                $query2 = $em->createQueryBuilder();//creating the query based on search parameters
+                $query2->select('p');
+                $query2->from('RocketSellerTwoPickBundle:RealProcedure','p')->join('p.action','ac')->join('ac.personPerson','pe')->join('p.procedureStatus','es')->join('p.employerEmployer','em')->join('em.personPerson','p2');
+            }
+
+            if($docNum){//if docnum parameter searching for employer persons and employees persons matching document number
+                $query2
+                    ->andWhere($query2->expr()->orX(
+                        $query2->expr()->eq('pe.document', '?1'),
+                        $query2->expr()->like('pe.document', '?1'),
+                        $query2->expr()->eq('p2.document', '?1'),
+                        $query2->expr()->like('p2.document', '?1')))
+                    ->setParameter('1', '%' . $document . '%');
+            }
+            if($name){//if name parameter searching for employers persons and employees persons matching person names, lastName1 and lastName2
+                $tempStrs = explode(' ',$names);
+                $strCount = count($tempStrs);
+                if ($strCount>1){//if name parameter has more than 1 word
+                    if($strCount==2){//creating query matching two words
+                        $query2
+                            ->andWhere($query2->expr()->orX(
+                                $query2->expr()->andX($query2->expr()->like('pe.names', '?2'),$query2->expr()->like('pe.lastName1', '?3')),
+                                $query2->expr()->andX($query2->expr()->like('pe.names', '?2'),$query2->expr()->like('pe.lastName2', '?3')),
+                                $query2->expr()->like('pe.names', '?4 '),
+                                $query2->expr()->eq('pe.names', '?4 '),
+                                $query2->expr()->andX($query2->expr()->like('pe.lastName1', '?2'),$query2->expr()->like('pe.lastName2', '?3')),
+                                $query2->expr()->andX($query2->expr()->like('p2.names', '?2'),$query2->expr()->like('p2.lastName1', '?3')),
+                                $query2->expr()->andX($query2->expr()->like('p2.names', '?2'),$query2->expr()->like('p2.lastName2', '?3')),
+                                $query2->expr()->like('p2.names', '?4 '),
+                                $query2->expr()->eq('p2.names', '?4 '),
+                                $query2->expr()->andX($query2->expr()->like('p2.lastName1', '?2'),$query2->expr()->like('p2.lastName2', '?3'))
+                            ))
+                            ->setParameter('2', '%' . $tempStrs[0] . '%')
+                            ->setParameter('3', '%' . $tempStrs[1] . '%')
+                            ->setParameter('4', '%' . $tempStrs[0] . ' ' . $tempStrs[1] . '%');
+                    }elseif($strCount==3){//creating query matching three words
+                        $query2
+                            ->andWhere($query2->expr()->orX(
+                                $query2->expr()->andX($query2->expr()->like('pe.names', '?5'),$query2->expr()->like('pe.lastName1', '?6'),$query2->expr()->like('pe.lastName2', '?7')),
+                                $query2->expr()->andX($query2->expr()->like('pe.names', '?8'),$query2->expr()->like('pe.lastName1', '?7')),
+                                $query2->expr()->andX($query2->expr()->like('pe.names', '?8'),$query2->expr()->like('pe.lastName2', '?7')),
+                                $query2->expr()->andX($query2->expr()->like('p2.names', '?5'),$query2->expr()->like('p2.lastName1', '?6'),$query2->expr()->like('p2.lastName2', '?7')),
+                                $query2->expr()->andX($query2->expr()->like('p2.names', '?8'),$query2->expr()->like('p2.lastName1', '?7')),
+                                $query2->expr()->andX($query2->expr()->like('p2.names', '?8'),$query2->expr()->like('p2.lastName2', '?7'))
+                            ))
+                            ->setParameter('5', '%' . $tempStrs[0] . '%')
+                            ->setParameter('6', '%' . $tempStrs[1] . '%')
+                            ->setParameter('7', '%' . $tempStrs[2] . '%')
+                            ->setParameter('8', '%' . $tempStrs[0] . ' ' . $tempStrs[1] . '%');
+                    }elseif($strCount==4){//creating query matching four words
+                        $query2
+                            ->andWhere($query2->expr()->orX(
+                                $query2->expr()->andX($query2->expr()->like('pe.names', '?9'),$query2->expr()->like('pe.lastName1', '?10'),$query2->expr()->like('pe.lastName2', '?11')),
+                                $query2->expr()->andX($query2->expr()->eq('pe.names', '?9'),$query2->expr()->eq('pe.lastName1', '?10'),$query2->expr()->eq('pe.lastName2', '?11')),
+                                $query2->expr()->andX($query2->expr()->like('p2.names', '?9'),$query2->expr()->like('p2.lastName1', '?10'),$query2->expr()->like('p2.lastName2', '?11')),
+                                $query2->expr()->andX($query2->expr()->eq('p2.names', '?9'),$query2->expr()->eq('p2.lastName1', '?10'),$query2->expr()->eq('p2.lastName2', '?11'))
+                            ))
+                            ->setParameter('9', '%' . $tempStrs[0] . ' ' . $tempStrs[1] . '%')
+                            ->setParameter('10', '%' . $tempStrs[2] . '%')
+                            ->setParameter('11', '%' . $tempStrs[3] . '%');
                     }
-                    if($action->getStatus()=='Corregido'){
-                        $corregido=true;
-                    }
-                    if($action->getStatus()!='Nuevo')
-                        $new = false;
-                    if($action->getStatus()!='Completado')
-                        $completado=false;
-                }else{
-                    $valCon = true;
-                    /** @var EmployerHasEmployee $EHE */
-                    $EHE = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->findOneBy(array(
-                        'employerEmployer'=>$action->getUserUser()->getPersonPerson()->getEmployer(),
-                        'employeeEmployee'=>$action->getPersonPerson()->getEmployee()
-                    ));
-                    /** @var Contract $contract */
-                    $contract = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Contract')->findOneBy(array(
-                        'employerHasEmployeeEmployerHasEmployee'=>$EHE,
-                        'state'=>1
-                    ));
-                    if($contract->getDocumentDocument()){
-                        if($action->getStatus()=='Error'){
-                            $eCon = true;
-                        }
-                        if($action->getStatus()=='Corregido'){
-                            $cContract=true;
-                        }
-                        if($action->getStatus()!='Completado'){
-                            $comContract=false;
-                        }
-                    }
+                }else{//names has only one word
+                    $query2
+                        ->andWhere($query2->expr()->orX(
+                            $query2->expr()->eq('pe.names', '?12'),
+                            $query2->expr()->like('pe.names', '?12 '),
+                            $query2->expr()->eq('pe.lastName1', '?12'),
+                            $query2->expr()->like('pe.lastName1', '?12 '),
+                            $query2->expr()->eq('pe.lastName2', '?12'),
+                            $query2->expr()->like('pe.lastName2', '?12 '),
+                            $query2->expr()->eq('p2.names', '?12'),
+                            $query2->expr()->like('p2.names', '?12 '),
+                            $query2->expr()->eq('p2.lastName1', '?12'),
+                            $query2->expr()->like('p2.lastName1', '?12 '),
+                            $query2->expr()->eq('p2.lastName2', '?12'),
+                            $query2->expr()->like('p2.lastName2', '?12 ')
+                        ))
+                        ->setParameter('12', '%' . $names . '%');
                 }
 
             }
-            if($new){
-                $procedure->getEmployerEmployer()->setStatus(0);
-            }elseif($error or $eCon){
-                $procedure->getEmployerEmployer()->setStatus(2);
-            }elseif($corregido or $cContract){
-                $procedure->getEmployerEmployer()->setStatus(3);
-            }elseif($completado and !$comContract){
-                $procedure->getEmployerEmployer()->setStatus(4);
-            }elseif($completado and $comContract){
-                $procedure->getEmployerEmployer()->setStatus(5);
-            }else{
-                $procedure->getEmployerEmployer()->setStatus(1);
+            if($status){//if status parameter searching for procedures matching procedure status
+                if($state!='ALL'){//if status is all searching all procedures
+                    $query2
+                        ->andWhere($query2->expr()->eq('p.procedureStatus','?13'))
+                        ->setParameter('13',$this->getStatusByStatusCode($state));
+                }
             }
-            $this->getDoctrine()->getManager()->persist($procedure);
-            $this->getDoctrine()->getManager()->flush();
-
-
+            if($pr){
+                if(intval($prior)<3){
+                    $query2
+                        ->andWhere($query2->expr()->eq('p.priority','?14'))
+                        ->setParameter('14',intval($prior)-1);
+                }else{
+                    $query2
+                        ->andWhere($query2->expr()->gte('p.priority','?15'))
+                        ->setParameter('15',2);
+                }
+            }
+            if(!$name and !$docNum and !$status and !$pr){//if search parameters not found searching for procedures with status different to disabled and docs pending
+                $query2
+                    ->where('p.procedureStatus != ?14')
+                    ->andWhere('p.procedureStatus!= ?15')
+                    ->andWhere('p.procedureStatus!= ?16')
+                    ->setParameter('14',$this->getStatusByStatusCode('DIS'))
+                    ->setParameter('15',$this->getStatusByStatusCode('DCPE'))
+                    ->setParameter('16', $this->getStatusByStatusCode('FIN'));
+            }
+            switch($orderType) {//if order parameter send after search
+                case 'name'://adding name ordering
+                    $query2
+                        ->orderBy('p2.names', $order)
+                        ->addOrderBy('p2.lastName1', $order)
+                        ->addOrderBy('p2.lastName2', $order)
+                        ->addOrderBy('pe.names', $order)
+                        ->addOrderBy('pe.lastName1', $order)
+                        ->addOrderBy('pe.lastName2', $order);
+                    break;
+                case 'document'://adding document ordering
+                    $query2
+                        ->addOrderBy('p2.document', $order)
+                        ->addOrderBy('p2.document', $order);
+                    break;
+                case 'datein'://adding backoffice date ordering
+                    $query2
+                        ->addOrderBy('p.backOfficeDate', $order);
+                    break;
+                case 'dateout'://adding backofice finished ordering
+                    $query2
+                        ->addOrderBy('p.finishedAt', $order);
+                    break;
+                case 'none'://if no order set default order by procedure id
+                    $query2
+                        ->addOrderBy('p.idProcedure', $order);
+                    break;
+                case 'type'://adding order by procedure type
+                    $query2
+                        ->addOrderBy('p.procedureTypeProcedureType', $order);
+                    break;
+                case 'state'://adding order by procedure state
+                    $query2
+                        ->addOrderBy('p.procedureStatus', $order);
+                    break;
+                case 'id'://adding order by id
+                    $query2
+                        ->addOrderBy('p.idProcedure', $order);
+                    break;
+            }
+            $procedures = $query2->getQuery()->getResult();
         }
 
-        $form = $this->createFormBuilder()
-            ->add('documento','text',array('label'=>'Numero de documento:','required'=>false,'attr'=>array('class'=>'documentNumberInput','style'=>'width: 90%;margin-left: 2px;'),'label_attr'=>array('class'=>'documenNumberLabel','style'=>'margin-left: 2px;')))
-            ->add('nombre','text',array('label'=>'Nombre del empleador:','required'=>false,'attr'=>array('class'=>'nameInput','style'=>'width: 90%;margin-left: 2px;'),'label_attr'=>array('class'=>'nameLabel','style'=>'margin-left: 2px;')))
-            ->add('estado','choice', array('label'=>'Estado','expanded'=>false,'multiple'=>false,'placeholder' => 'Seleccionar estado','required'=>false,
+        $form =$this->get('form.factory')->createNamedBuilder('formFilter')
+            ->add('documento','text',array('label'=>'Numero de documento:','required'=>false,'attr'=>array('class'=>'documentNumberInput'),'label_attr'=>array('class'=>'documenNumberLabel')))
+            ->add('nombre','text',array('label'=>'Nombre(s) o apellido(s) de empleador o empleado:','required'=>false,'attr'=>array('class'=>'nameInput'),'label_attr'=>array('class'=>'nameLabel')))
+            ->add('estado','choice', array('label'=>'Estado:','expanded'=>false,'multiple'=>false,'placeholder' => 'Seleccionar estado','required'=>false,
                 'choices' => array(
-                    1 => 'Nuevo',
-                    2 => 'En tramite',
-                    3 => 'Error',
-                    4 => 'Corregido',
-                    5 => 'Terminado',
-                    6 => 'Contrato Validado',
-                    7 => 'Todos',
+                    'NEW' => 'Nuevo',
+                    'STRT' => 'En tramite',
+                    'ERRO'=> 'Error',
+                    'CORT' => 'Corregido',
+                    'FIN' => 'Terminado',
+                    'CTPE' => 'Contrato Pendiente',
+                    'CTVA' => 'Contrato Validado',
+                    'DCPE' => 'Documentos Pendientes',
+                    'ALL' => 'Todos',
+                )))
+            ->add('prioridad','choice', array('label'=>'Prioridad:','expanded'=>false,'multiple'=>false,'placeholder' => 'Prioridad','required'=>false,
+                'choices' => array(
+                    '1' => 'Baja',
+                    '2' => 'Media',
+                    '3'=> 'Alta',
                 )))
             ->add('buscar', 'submit', array('label' => 'Buscar'))
             ->getForm();
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isValid() and $form->isSubmitted()) {
             $docNum = false;
             $name = false;
             $status = false;
+            $pr = false;
             if ($form->get('documento')->getData()) {
                 $docNum = true;
             }
@@ -169,152 +381,2364 @@ class ProcedureController extends Controller
                 $name = true;
             }
             if ($form->get('estado')->getData()){
-                if($form->get('estado')->getData()!=7)
-                    $status = true;
+                $status = true;
             }
-            $query2 = $this->getDoctrine()->getManager()->createQueryBuilder();
-            $query2
-                ->add('select', 'p')
-                ->from('RocketSellerTwoPickBundle:RealProcedure', 'p')
-                ->join('RocketSellerTwoPickBundle:Employer', 'em', 'WITH', 'p.employerEmployer = em.idEmployer')
-                ->join('RocketSellerTwoPickBundle:Person', 'pe', 'WITH', 'em.personPerson = pe.idPerson');
+            if ($form->get('prioridad')->getData()){
+                $pr = true;
+            }
+            /** @var QueryBuilder $query2 */
+            if($form->get('estado')->getData() =='ALL'){
+                $query2 = $em->createQueryBuilder();//creating the query based on search parameters
+                $query2->select('p');
+                $query2->from('RocketSellerTwoPickBundle:RealProcedure','p')->join('p.procedureStatus','es')->join('p.employerEmployer','em')->join('em.personPerson','p2')->join('em.employerHasEmployees','ehe')->join('ehe.employeeEmployee','ee')->join('ee.personPerson','pe');
+            }else{
+                $query2 = $em->createQueryBuilder();//creating the query based on search parameters
+                $query2->select('p');
+                $query2->from('RocketSellerTwoPickBundle:RealProcedure','p')->join('p.action','ac')->join('ac.personPerson','pe')->join('p.procedureStatus','es')->join('p.employerEmployer','em')->join('em.personPerson','p2');
+            }
 
             try {
                 if($docNum){
                     $query2
-                        ->where($query->expr()->orX(
-                            $query->expr()->eq('pe.document', '?1'),
-                            $query->expr()->like('pe.document', '?1 ')
-                        ))
+                        ->andWhere($query2->expr()->orX(
+                            $query2->expr()->eq('pe.document', '?1'),
+                            $query2->expr()->like('pe.document', '?1'),
+                            $query2->expr()->eq('p2.document', '?1'),
+                            $query2->expr()->like('p2.document', '?1')))
                         ->setParameter('1', '%' . $form->get('documento')->getData() . '%');
                 }
                 if($name){
-                    $query2
-                        ->where($query->expr()->orX(
-                            $query->expr()->eq('pe.names', '?1'),
-                            $query->expr()->like('pe.names', '?1 '),
-                            $query->expr()->eq('pe.lastName1', '?1'),
-                            $query->expr()->like('pe.lastName1', '?1 '),
-                            $query->expr()->eq('pe.lastName2', '?1'),
-                            $query->expr()->like('pe.lastName2', '?1 ')
-                        ))
-                        ->setParameter('1', '%' . $form->get('nombre')->getData() . '%');
+                    $tempStrs = explode(' ',$form->get('nombre')->getData());
+                    $strCount = count($tempStrs);
+                    if ($strCount>1){
+                        if($strCount==2){
+                            $query2
+                                ->andWhere($query2->expr()->orX(
+                                    $query2->expr()->andX($query2->expr()->like('pe.names', '?2'),$query2->expr()->like('pe.lastName1', '?3')),
+                                    $query2->expr()->andX($query2->expr()->like('pe.names', '?2'),$query2->expr()->like('pe.lastName2', '?3')),
+                                    $query2->expr()->like('pe.names', '?4 '),
+                                    $query2->expr()->eq('pe.names', '?4 '),
+                                    $query2->expr()->andX($query2->expr()->like('pe.lastName1', '?2'),$query2->expr()->like('pe.lastName2', '?3')),
+                                    $query2->expr()->andX($query2->expr()->like('p2.names', '?2'),$query2->expr()->like('p2.lastName1', '?3')),
+                                    $query2->expr()->andX($query2->expr()->like('p2.names', '?2'),$query2->expr()->like('p2.lastName2', '?3')),
+                                    $query2->expr()->like('p2.names', '?4 '),
+                                    $query2->expr()->eq('p2.names', '?4 '),
+                                    $query2->expr()->andX($query2->expr()->like('p2.lastName1', '?2'),$query2->expr()->like('p2.lastName2', '?3'))
+                                ))
+                                ->setParameter('2', '%' . $tempStrs[0] . '%')
+                                ->setParameter('3', '%' . $tempStrs[1] . '%')
+                                ->setParameter('4', '%' . $tempStrs[0] . ' ' . $tempStrs[1] . '%');
+                        }elseif($strCount==3){
+                            $query2
+                                ->andWhere($query2->expr()->orX(
+                                    $query2->expr()->andX($query2->expr()->like('pe.names', '?5'),$query2->expr()->like('pe.lastName1', '?6'),$query2->expr()->like('pe.lastName2', '?7')),
+                                    $query2->expr()->andX($query2->expr()->like('pe.names', '?8'),$query2->expr()->like('pe.lastName1', '?7')),
+                                    $query2->expr()->andX($query2->expr()->like('pe.names', '?8'),$query2->expr()->like('pe.lastName2', '?7')),
+                                    $query2->expr()->andX($query2->expr()->like('p2.names', '?5'),$query2->expr()->like('p2.lastName1', '?6'),$query2->expr()->like('p2.lastName2', '?7')),
+                                    $query2->expr()->andX($query2->expr()->like('p2.names', '?8'),$query2->expr()->like('p2.lastName1', '?7')),
+                                    $query2->expr()->andX($query2->expr()->like('p2.names', '?8'),$query2->expr()->like('p2.lastName2', '?7'))
+                                ))
+                                ->setParameter('5', '%' . $tempStrs[0] . '%')
+                                ->setParameter('6', '%' . $tempStrs[1] . '%')
+                                ->setParameter('7', '%' . $tempStrs[2] . '%')
+                                ->setParameter('8', '%' . $tempStrs[0] . ' ' . $tempStrs[1] . '%');
+                        }elseif($strCount==4){
+                            $query2
+                                ->andWhere($query2->expr()->orX(
+                                    $query2->expr()->andX($query2->expr()->like('pe.names', '?9'),$query2->expr()->like('pe.lastName1', '?10'),$query2->expr()->like('pe.lastName2', '?11')),
+                                    $query2->expr()->andX($query2->expr()->eq('pe.names', '?9'),$query2->expr()->eq('pe.lastName1', '?10'),$query2->expr()->eq('pe.lastName2', '?11')),
+                                    $query2->expr()->andX($query2->expr()->like('p2.names', '?9'),$query2->expr()->like('p2.lastName1', '?10'),$query2->expr()->like('p2.lastName2', '?11')),
+                                    $query2->expr()->andX($query2->expr()->eq('p2.names', '?9'),$query2->expr()->eq('p2.lastName1', '?10'),$query2->expr()->eq('p2.lastName2', '?11'))
+                                ))
+                                ->setParameter('9', '%' . $tempStrs[0] . ' ' . $tempStrs[1] . '%')
+                                ->setParameter('10', '%' . $tempStrs[2] . '%')
+                                ->setParameter('11', '%' . $tempStrs[3] . '%');
+                        }
+                    }else{
+                        $query2
+                            ->andWhere($query2->expr()->orX(
+                                $query2->expr()->eq('pe.names', '?12'),
+                                $query2->expr()->like('pe.names', '?12 '),
+                                $query2->expr()->eq('pe.lastName1', '?12'),
+                                $query2->expr()->like('pe.lastName1', '?12 '),
+                                $query2->expr()->eq('pe.lastName2', '?12'),
+                                $query2->expr()->like('pe.lastName2', '?12 '),
+                                $query2->expr()->eq('p2.names', '?12'),
+                                $query2->expr()->like('p2.names', '?12 '),
+                                $query2->expr()->eq('p2.lastName1', '?12'),
+                                $query2->expr()->like('p2.lastName1', '?12 '),
+                                $query2->expr()->eq('p2.lastName2', '?12'),
+                                $query2->expr()->like('p2.lastName2', '?12 ')
+                            ))
+                            ->setParameter('12', '%' . $form->get('nombre')->getData() . '%');
+                    }
+
                 }
                 if($status){
+                    if($form->get('estado')->getData()!='ALL'){
+                        $query2
+                            ->andWhere($query2->expr()->eq('p.procedureStatus','?13'))
+                            ->setParameter('13',$this->getStatusByStatusCode($form->get('estado')->getData()));
+                    }
+                }
+                if($pr){
+                    if($form->get('prioridad')->getData()<3){
+                        $query2
+                            ->andWhere($query2->expr()->eq('p.priority','?14'))
+                            ->setParameter('14',$form->get('prioridad')->getData()-1);
+                    }else{
+                        $query2
+                            ->andWhere($query2->expr()->gte('p.priority','?15'))
+                            ->setParameter('15',2);
+                    }
+                }
+                if(!$name and !$docNum and !$status and !$pr){
                     $query2
-                        ->where($query->expr()->orX(
-                            $query->expr()->eq('em.status', '?1')
-                        ))
-                        ->setParameter('1',$form->get('estado')->getData()-1);
+                        ->where('p.procedureStatus != ?14')
+                        ->andWhere('p.procedureStatus!= ?15')
+                        ->andWhere('p.procedureStatus!= ?16')
+                        ->setParameter('14',$this->getStatusByStatusCode('DIS'))
+                        ->setParameter('15',$this->getStatusByStatusCode('DCPE'))
+                        ->setParameter('16',$this->getStatusByStatusCode('FIN'));
 
+                    $state = 'none';
+                    $document = 'none';
+                    $names = 'none';
+                    $prior = 'none';
                 }
                 $query2
-                ->orderBy('pe.names', $order)
-                ->addOrderBy('pe.lastName1', $order)
-                ->addOrderBy('pe.lastName2', $order)
-                ->addOrderBy('em.status','DESC');
-
+                    ->orderBy('p.idProcedure',$order)
+                    ->addOrderBy('pe.names', $order)
+                    ->addOrderBy('pe.lastName1', $order)
+                    ->addOrderBy('pe.lastName2', $order)
+                    ->addOrderBy('p.procedureStatus','ASC');
                 $procedures = $query2->getQuery()->getResult();
-            } catch (Exception $e) {
-                dump($e);
-            }
-            return $this->render('@RocketSellerTwoPick/BackOffice/procedures.html.twig',array('procedures'=>$procedures,'order'=>$order,'form' => $form->createView()));
-        }
+                $change = false;
+                $priorityChange = false;
+                foreach ($procedures as $procedure) {
+                    if($this->calculateProcedureStatus($procedure)==1){
+                        $em->persist($procedure);
+                        $change = true;
+                    }
+                    if($this->calculateProcedurePriority($procedure)==1){
+                        $em->persist($procedure);
+                        $priorityChange = true;
+                    }
 
+                }
+                if($change or $priorityChange)$em->flush();
+
+            } catch (Exception $e) {
+                //todo error redirect
+            }
+
+            return $this->render('@RocketSellerTwoPick/BackOffice/procedures.html.twig',array('procedures'=>$procedures,'order'=>$order,'state'=>$state,'names'=>$names,'document'=>$document,'prior'=>$prior,'form' => $form->createView()));
+        }
+        $change = false;
+        $priorityChange = false;
+        foreach ($procedures as $procedure) {
+            if($this->calculateProcedureStatus($procedure)==1){
+                $em->persist($procedure);
+                $change = true;
+            }
+            if($this->calculateProcedurePriority($procedure)==1){
+                $em->persist($procedure);
+                $priorityChange = true;
+            }
+        }
+        if($change or $priorityChange)$em->flush();
 		return $this->render(
-            '@RocketSellerTwoPick/BackOffice/procedures.html.twig',array('procedures'=>$procedures,'order'=>$order,'form' => $form->createView())
+            '@RocketSellerTwoPick/BackOffice/procedures.html.twig',array('procedures'=>$procedures,'order'=>$order,'state'=>$state,'names'=>$names,'document'=>$document,'prior'=>$prior,'form' => $form->createView())
         );
     }
 
-	/**
-	 * Funcion que carga la informacion de un tramite por su id
-	 * muestra accesos directos a:
-	 * 		Revisar informacion del empleador y empledos
-	 * 		validar documentos
-	 * 		inscribir entidades
-	 * 		validar entidades
-	 *
-	 * @param Integer $procedureId ID del real procedure que llega de la pagina de tramites
-	 * @return Response /backoffice/procedure/{procedureId}
-     */
-	public function procedureByIdAction($procedureId)
-    {
-    	$procedure = $this->loadClassById($procedureId,'RealProcedure');
-    	$employer = $procedure->getEmployerEmployer();
-    	$employerHasEmployees =  $employer->getEmployerHasEmployees();
-    	return $this->render('RocketSellerTwoPickBundle:BackOffice:procedure.html.twig'
-			,array('procedure'=>$procedure, 'employerHasEmployees'=>$employerHasEmployees,));
-
-    }
-
-
     /**
-     * Función para verificar el estado de los tramites de un empleado
-     * @param Integer $idEHE id del EmployerHasEmployee
-     * @param Integer $idProc id del RealProcedure
-     * @return bool true cuando estan completadas todas las acciones
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function procedureByIdAction                                  ║
+     * ║ Shows all the actions for the realProcedure passed            ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param integer $procedureId                                  ║
+     * ║  @param Request $request                                      ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return Response /backoffice/procedure/{procedureId}         ║
+     * ╚═══════════════════════════════════════════════════════════════╝
      */
-    public function checkActionCompletation($idEHE, $idProc)
+	public function procedureByIdAction($procedureId, Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        $em = $this->getDoctrine()->getManager();
+        $today = new DateTime();
+        //getting the realProcedure
         /** @var RealProcedure $procedure */
-        $procedure = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:RealProcedure")->find($idProc);
-        /** @var EmployerHasEmployee $eHE */
-        $eHE = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")->find($idEHE);
-        $actions = $eHE->getEmployeeEmployee()->getPersonPerson()->getAction();
+    	$procedure = $this->loadClassById($procedureId,'RealProcedure');
+        $this->calculateProcedureStatus($procedure);
+        $em->persist($procedure);
+        $em->flush();
+        //calculating generalStatus for employer and all employees
+        $generalStatus = array();
+        $generalStatus['employerInfo']=$this->checkEmployerInfoActions($procedure);
+        $generalStatus['employeesInfo']=$this->checkEmployeeInfoActions($procedure);
+
+        $this->calculateProcedurePriority($procedure);
+
         /** @var Action $action */
-        foreach ($actions as $action){
-            if($action->getRealProcedureRealProcedure()==$procedure and $action->getStatus()!="Completado"){
-                return false;
+        foreach ($procedure->getAction() as $action) {
+            $action->setPriority($procedure->getPriority());
+            $em->persist($action);
+        }
+        $em->flush();
+
+        /** @var Employer $employer */
+    	$employer = $procedure->getEmployerEmployer();
+    	$employerHasEmployees =  $employer->getActiveEmployerHasEmployees();
+        $actionTypes = $this->getAllProcedureActionTypes();
+
+        //Settign the employer notifications;
+        $employerNotifications = array();
+        if($this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$employer->getPersonPerson(),$this->getDocumentTypeByCode($employer->getPersonPerson()->getDocumentType()))){
+            $notification = $this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$employer->getPersonPerson(),$this->getDocumentTypeByCode($employer->getPersonPerson()->getDocumentType()));
+        }else{
+            $notification = $this->createNotificationByDocType($employer->getPersonPerson(),$employer->getPersonPerson(),$this->getDocumentTypeByCode($employer->getPersonPerson()->getDocumentType()));
+        }
+        $employerNotifications['notCC']=$notification;
+        if($this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$employer->getPersonPerson(),$this->getDocumentTypeByCode('RUT'))){
+            $notification = $this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$employer->getPersonPerson(),$this->getDocumentTypeByCode('RUT'));
+        }else{
+            $notification = $this->createNotificationByDocType($employer->getPersonPerson(),$employer->getPersonPerson(),$this->getDocumentTypeByCode('RUT'));
+        }
+        $employerNotifications['notRUT']=$notification;
+        if($this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$employer->getPersonPerson(),$this->getDocumentTypeByCode('MAND'))){
+            $notification = $this->getNotificationByPersonAndOwnerAndDocumentType($employer->getPersonPerson(),$employer->getPersonPerson(),$this->getDocumentTypeByCode('MAND'));
+        }else{
+            $notification = $this->createNotificationByDocType($employer->getPersonPerson(),$employer->getPersonPerson(),$this->getDocumentTypeByCode('MAND'));
+        }
+        $employerNotifications['notMAND']=$notification;
+
+        $employeesNotifications = array();
+        if($employer->getAllDocsReadyAt()==null){
+            $employer->setDocumentStatus($this->getDocumentStatusByCode('ALLDCP'));
+            $em->persist($employer);
+        }elseif($employer->getInfoValidatedAt()!= null){
+            $employer->setDocumentStatus($this->getDocumentStatusByCode('ALDCVA'));
+            $employer->setDashboardMessage($today);
+            $em->persist($employer);
+        }elseif($employer->getInfoErrorAt()!=null){
+            $employer->setDocumentStatus($this->getDocumentStatusByCode('ALLDCE'));
+            $employer->setDashboardMessage($today);
+            $em->persist($employer);
+        }else{
+            $employer->setDocumentStatus($this->getDocumentStatusByCode('ALDCIV'));
+            $employer->setDashboardMessage($today);
+            $em->persist($employer);
+        }
+        $em->flush();
+        //Creating form for EmployerInfo
+        if($procedure->getActionsByActionType($actionTypes['VER'])->first()->getActionStatusCode()!='FIN'){
+            $formDocument = $this->createFormBuilder()
+                ->add('document','text',array('label'=>'Numero de documento:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                ->add('documentType','choice', array('label'=>'Tipo de Documento:','expanded'=>false,'disabled'=>true,'multiple'=>false,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),'placeholder' => 'seleccionar opción','required'=>false,
+                    'choices' => array(
+                        'CC' => 'Cédula de ciudadania',
+                        'CE' => 'Cédula de Extranjería',
+                        'PASAPORTE' => 'Pasaporte'
+                    )))
+                ->add('name','text',array('label'=>'Nombre Completo:','required'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                ->add('lastName1','text',array('label'=>'Primer Apellido:','required'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                ->add('lastName2','text',array('label'=>'Segundo Apellido:','required'=>false,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                ->add('expeditionDate', 'date', array('label'=>'Fecha de expedición:','required'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),
+                    'placeholder' => array(
+                        'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
+                    ),
+                    'years' => range(intval($today->format("Y")),1900)
+                ))
+                ->add('birthDate', 'date', array('label'=>'Fecha de nacimiento:','required'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),
+                    'placeholder' => array(
+                        'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
+                    ),
+                    'years' => range(intval($today->format("Y")),1900)
+                ))
+                ->add('email','text',array('label'=>'Correo:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                ->add('phone','text',array('label'=>'Telefono/Celular:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                ->add('edit', 'submit', array('label' => 'Editar','attr'=>array('class'=>'form-button')))
+                ->getForm();
+        }else{
+            $formDocument = $this->createFormBuilder()
+                ->add('document','text',array('label'=>'Numero de documento:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                ->add('documentType','choice', array('label'=>'Tipo de Documento:','expanded'=>false,'multiple'=>false,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),'placeholder' => 'seleccionar opción','required'=>false,
+                    'choices' => array(
+                        'CC' => 'Cédula de ciudadania',
+                        'CE' => 'Cédula de Extranjería',
+                        'PAS' => 'Pasaporte'
+                    )))
+                ->add('name','text',array('label'=>'Nombre Completo:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                ->add('lastName1','text',array('label'=>'Primer Apellido:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                ->add('lastName2','text',array('label'=>'Segundo Apellido:','required'=>false,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                ->add('expeditionDate', 'date', array('label'=>'Fecha de expedición:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),
+                    'placeholder' => array(
+                        'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
+                    ),
+                    'years' => range(intval($today->format("Y")),1900)
+                ))
+                ->add('birthDate', 'date', array('label'=>'Fecha de nacimiento:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),
+                    'placeholder' => array(
+                        'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
+                    ),
+                    'years' => range(intval($today->format("Y")),1900)
+                ))
+                ->add('email','text',array('label'=>'Correo:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                ->add('phone','text',array('label'=>'Telefono/Celular:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                ->getForm();
+        }
+
+
+        $formDocument['document']->setData($employer->getPersonPerson()->getDocument());
+        $formDocument['documentType']->setData($employer->getPersonPerson()->getDocumentType());
+        $formDocument['name']->setData($employer->getPersonPerson()->getNames());
+        $formDocument['lastName1']->setData($employer->getPersonPerson()->getLastName1());
+        $formDocument['lastName2']->setData($employer->getPersonPerson()->getLastName2());
+        $formDocument['expeditionDate']->setData($employer->getPersonPerson()->getDocumentExpeditionDate());
+        $formDocument['birthDate']->setData($employer->getPersonPerson()->getBirthDate());
+        $formDocument['email']->setData($procedure->getUserUser()->getEmail());
+        $formDocument['phone']->setData($procedure->getUserUser()->getPersonPerson()->getPhones()->first()->getPhoneNumber());
+
+        //Creating form for employer Entities
+        $formsEntities = array();
+        $formsEntitiesViews = array();
+        /** @var EmployerHasEntity $employerHasEntity */
+        foreach ($employer->getEntities() as $employerHasEntity) {
+            $action = $procedure->getActionByEmployerHasEntity($employerHasEntity)->first();
+            if($action->getActionStatusCode()!='FIN'){
+                if($action->getEmployerEntity()->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode()=='PARAFISCAL'){
+                    /** @var Department $department */
+                    $id = $action->getEmployerEntity()->getEntityEntity()->getDepartments()->first()->getIdDepartment();
+                    $formEmployerEntities = $this->createFormBuilder()
+                        ->add('actionId','text',array('required'=>true,'disabled'=>true,'attr'=>array('style'=>'display:none'),'label_attr'=>array('style'=>'display:none')))
+                        ->add('name','entity',array(
+                            'class'=>'RocketSeller\TwoPickBundle\Entity\Entity',
+                            'query_builder'=>function (EntityRepository $er) use($id){
+                                $query = $er->createQueryBuilder('p');
+                                return $query
+                                    ->join('RocketSellerTwoPickBundle:EntityType', 'et', 'WITH', 'p.entityTypeEntityType = et.idEntityType')
+//                                ->join('p.departments','de')
+                                    ->where($query->expr()->eq('et.payroll_code','?1'))
+//                                ->andWhere($query->expr()->eq('de.idDepartment','?2'))
+                                    ->setParameter('1','PARAFISCAL');
+//                                ->setParameter('2',$id);
+                            },
+                            'choice_label'=>'name',
+                            'label'=>'Nombre Entidad:','required'=>true,'disabled'=>false,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')
+
+                        ))
+                        ->add('actionType','choice', array('label'=>'Acción:','expanded'=>false,'multiple'=>false,'disabled'=>false,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),'placeholder' => 'seleccionar opción','required'=>true,
+                            'choices' => array(
+                                0 => 'Validar entidad',
+                                1 => 'Inscribir Entidad',
+                            )))
+                        ->add('edit', 'submit', array('label' => 'Editar','attr'=>array('class'=>'form-button')))
+                        ->getForm();
+                    $formEmployerEntities['name']->setData($action->getEmployerEntity()->getEntityEntity());
+                }else{
+                    $type = $action->getEmployerEntity()->getEntityEntity()->getEntityTypeEntityType();
+                    $formEmployerEntities = $this->createFormBuilder()
+                        ->add('actionId','text',array('required'=>true,'disabled'=>true,'attr'=>array('style'=>'display:none'),'label_attr'=>array('style'=>'display:none')))
+                        ->add('name','entity',array(
+                            'class'=>'RocketSeller\TwoPickBundle\Entity\Entity',
+                            'query_builder'=>function (EntityRepository $er) use($type){
+                                $query = $er->createQueryBuilder('p');
+                                return $query
+                                    ->where($query->expr()->eq('p.entityTypeEntityType','?1'))
+                                    ->setParameter('1',$type);
+                            },
+                            'choice_label'=>'name',
+                            'label'=>'Nombre Entidad:','required'=>true,'disabled'=>false,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')
+
+                        ))
+                        ->add('actionType','choice', array('label'=>'Acción:','expanded'=>false,'multiple'=>false,'disabled'=>false,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),'placeholder' => 'seleccionar opción','required'=>true,
+                            'choices' => array(
+                                0 => 'Validar entidad',
+                                1 => 'Inscribir Entidad',
+                            )))
+                        ->add('edit', 'submit', array('label' => 'Editar','attr'=>array('class'=>'form-button')))
+                        ->getForm();
+                    $formEmployerEntities['name']->setData($action->getEmployerEntity()->getEntityEntity());
+                }
+            }else{
+                if($action->getEmployerEntity()->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode()=='PARAFISCAL'){
+                    /** @var Department $department */
+                    $id = $action->getEmployerEntity()->getEntityEntity()->getDepartments()->first()->getIdDepartment();
+                    $formEmployerEntities = $this->createFormBuilder()
+                        ->add('actionId','text',array('required'=>true,'disabled'=>true,'attr'=>array('style'=>'display:none'),'label_attr'=>array('style'=>'display:none')))
+                        ->add('name','entity',array(
+                            'class'=>'RocketSeller\TwoPickBundle\Entity\Entity',
+                            'query_builder'=>function (EntityRepository $er) use($id){
+                                $query = $er->createQueryBuilder('p');
+                                return $query
+                                    ->join('RocketSellerTwoPickBundle:EntityType', 'et', 'WITH', 'p.entityTypeEntityType = et.idEntityType')
+//                                ->join('p.departments','de')
+                                    ->where($query->expr()->eq('et.payroll_code','?1'))
+//                                ->andWhere($query->expr()->eq('de.idDepartment','?2'))
+                                    ->setParameter('1','PARAFISCAL');
+//                                ->setParameter('2',$id);
+                            },
+                            'choice_label'=>'name',
+                            'label'=>'Nombre Entidad:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')
+
+                        ))
+                        ->add('actionType','choice', array('label'=>'Acción:','expanded'=>false,'multiple'=>false,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),'placeholder' => 'seleccionar opción','required'=>true,
+                            'choices' => array(
+                                0 => 'Validar entidad',
+                                1 => 'Inscribir Entidad',
+                            )))
+                        ->getForm();
+                    $formEmployerEntities['name']->setData($action->getEmployerEntity()->getEntityEntity());
+                }else{
+                    $type = $action->getEmployerEntity()->getEntityEntity()->getEntityTypeEntityType();
+                    $formEmployerEntities = $this->createFormBuilder()
+                        ->add('actionId','text',array('required'=>true,'disabled'=>true,'attr'=>array('style'=>'display:none'),'label_attr'=>array('style'=>'display:none')))
+                        ->add('name','entity',array(
+                            'class'=>'RocketSeller\TwoPickBundle\Entity\Entity',
+                            'query_builder'=>function (EntityRepository $er) use($type){
+                                $query = $er->createQueryBuilder('p');
+                                return $query
+                                    ->where($query->expr()->eq('p.entityTypeEntityType','?1'))
+                                    ->setParameter('1',$type);
+                            },
+                            'choice_label'=>'name',
+                            'label'=>'Nombre Entidad:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')
+
+                        ))
+                        ->add('actionType','choice', array('label'=>'Acción:','expanded'=>false,'multiple'=>false,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),'placeholder' => 'seleccionar opción','required'=>true,
+                            'choices' => array(
+                                0 => 'Validar entidad',
+                                1 => 'Inscribir Entidad',
+                            )))
+                        ->getForm();
+                    $formEmployerEntities['name']->setData($action->getEmployerEntity()->getEntityEntity());
+                }
+            }
+            $formEmployerEntities['actionId']->setData($action->getIdAction());
+            $formEmployerEntities['actionType']->setData($action->getEmployerEntity()->getState());
+            $formsEntities[]=$formEmployerEntities;
+            $formsEntitiesViews[]=$formEmployerEntities->createView();
+        }
+
+        //Creating form for employer workplaces
+        $formsWorkPlaces = array();
+        $formsWorkPlacesViews = array();
+        $formCount=0;
+        /** @var Workplace $workplace */
+        foreach ($employer->getWorkplaces() as $workplace) {
+            $formEmployerWorkPlace= $this->get('form.factory')->createNamedBuilder('formWorkplace'.$formCount)
+                ->add('workplaceId','text',array('required'=>true,'disabled'=>true,'attr'=>array('style'=>'display:none'),'label_attr'=>array('style'=>'display:none')))
+                ->add('addressName','text',array('label'=>'Nombre:','required'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                ->add('mainAddress','text',array('label'=>'Dirección:','required'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+//                ->add('country','text',array('label'=>'Dirección:','required'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                ->add('save', 'submit', array('label' => 'Guardar','attr'=>array('class'=>'form-button')))
+                ->getForm();
+            $formEmployerWorkPlace['workplaceId']->setData($workplace->getIdWorkplace());
+            $formEmployerWorkPlace['addressName']->setData($workplace->getName());
+            $formEmployerWorkPlace['mainAddress']->setData($workplace->getMainAddress());
+            $formsWorkPlaces[] = $formEmployerWorkPlace;
+            $formsWorkPlacesViews[] = $formEmployerWorkPlace->createView();
+            $formCount++;
+        }
+
+        $atLeastOne = false;
+        $formsInfoEmployees = array();
+        $viewsInfoEmployees = array();
+        $formEmployeesWorkplaces = array();
+        $viewsEmployeesWorkplaces = array();
+        $formEmployeesEntities = array();
+        $viewsEmployeesEntities = array();
+        $formEmployeesStartDates = array();
+        $formEmployeesEndDates = array();
+        $viewsEmployeesStartDates = array();
+        $viewsEmployeesEndDates = array();
+        /** @var EmployerHasEmployee $ehe */
+        foreach ($employerHasEmployees as $ehe){
+            if($ehe->getExistentSQL()==1){
+                $atLeastOne = true;
+                $ehe->setDocumentStatusType($this->getDocumentStatusByCode('BOFFFF'));
+                if($ehe->getState()<4)$ehe->setState(4);
+                $em->persist($ehe);
+                $em->flush();
+            }
+            if ($ehe->getDateDocumentsUploaded() == null) {
+                if ($employer->getAllDocsReadyAt() == null and $ehe->getAllEmployeeDocsReadyAt() == null) {
+                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALLDCP'));
+                    $em->persist($ehe);
+                } elseif ($employer->getAllDocsReadyAt() == null and $ehe->getAllEmployeeDocsReadyAt() != null) {
+                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERDCPE'));
+                    $em->persist($ehe);
+                } elseif ($employer->getAllDocsReadyAt() != null and $ehe->getAllEmployeeDocsReadyAt() == null) {
+                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEDCPE'));
+                    $em->persist($ehe);
+                }elseif ($employer->getAllDocsReadyAt() != null and $ehe->getAllEmployeeDocsReadyAt() != null) {
+                    $ehe->setDateDocumentsUploaded($today);
+                    $em->persist($ehe);
+                    if($ehe->getInfoValidatedAt() != null) {
+                        if ($employer->getInfoValidatedAt() != null) {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALDCVM'));
+                            if($ehe->getAllDocsReadyMessageAt()==null)$ehe->setAllDocsReadyMessageAt($today);
+                            $em->persist($ehe);
+                        } elseif ($employer->getInfoErrorAt() != null) {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEVERE'));
+                            if($ehe->getAllDocsReadyMessageAt()==null)$ehe->setAllDocsReadyMessageAt($today);
+                            $em->persist($ehe);
+                        } else {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEDCVA'));
+                            if($ehe->getAllDocsReadyMessageAt()==null)$ehe->setAllDocsReadyMessageAt($today);
+                            $em->persist($ehe);
+                        }
+                    }elseif($ehe->getInfoErrorAt() != null) {
+                        if ($employer->getInfoValidatedAt() != null) {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERVEEE'));
+                            if($ehe->getAllDocsReadyMessageAt()==null)$ehe->setAllDocsReadyMessageAt($today);
+                            $em->persist($ehe);
+                        } elseif ($employer->getInfoErrorAt() != null) {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALLDCE'));
+                            if($ehe->getAllDocsReadyMessageAt()==null)$ehe->setAllDocsReadyMessageAt($today);
+                            $em->persist($ehe);
+                        } else {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEDCE'));
+                            if($ehe->getAllDocsReadyMessageAt()==null)$ehe->setAllDocsReadyMessageAt($today);
+                            $em->persist($ehe);
+                        }
+                    } else {
+                        if ($employer->getInfoValidatedAt() != null) {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERDCVA'));
+                            if($ehe->getAllDocsReadyMessageAt()==null)$ehe->setAllDocsReadyMessageAt($today);
+                            $em->persist($ehe);
+                        } elseif ($employer->getInfoErrorAt() != null) {
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERDCE'));
+                            if($ehe->getAllDocsReadyMessageAt()==null)$ehe->setAllDocsReadyMessageAt($today);
+                            $em->persist($ehe);
+                        } else {
+
+                            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALDCIV'));
+                            $em->persist($ehe);
+                        }
+                    }
+                }
+            }elseif($ehe->getInfoValidatedAt() != null) {
+                if($ehe->getAllDocsReadyMessageAt()==null){
+                    $ehe->setAllDocsReadyMessageAt($today);
+                }
+                if ($employer->getInfoValidatedAt() != null) {
+                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALDCVM'));
+                    $em->persist($ehe);
+                } elseif ($employer->getInfoErrorAt() != null) {
+                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEVERE'));
+                    $em->persist($ehe);
+                } else {
+                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEDCVA'));
+                    $em->persist($ehe);
+                }
+            }elseif($ehe->getInfoErrorAt() != null) {
+                if($ehe->getAllDocsReadyMessageAt()==null){
+                    $ehe->setAllDocsReadyMessageAt($today);
+                }
+                if ($employer->getInfoValidatedAt() != null) {
+                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERVEEE'));
+                    $em->persist($ehe);
+                } elseif ($employer->getInfoErrorAt() != null) {
+                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALLDCE'));
+                    $em->persist($ehe);
+                } else {
+                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEDCE'));
+                    $em->persist($ehe);
+                }
+            } else {
+                if ($employer->getInfoValidatedAt() != null) {
+                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERDCVA'));
+                    if($ehe->getAllDocsReadyMessageAt()==null)$ehe->setAllDocsReadyMessageAt($today);
+                    $em->persist($ehe);
+                } elseif ($employer->getInfoErrorAt() != null) {
+                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ERDCE'));
+                    if($ehe->getAllDocsReadyMessageAt()==null)$ehe->setAllDocsReadyMessageAt($today);
+                    $em->persist($ehe);
+                } else {
+                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALDCIV'));
+                    $em->persist($ehe);
+                }
+            }
+
+            $employeesNotifications[$ehe->getIdEmployerHasEmployee()]=array();
+            if($this->getNotificationByPersonAndOwnerAndDocumentType($ehe->getEmployerEmployer()->getPersonPerson(),$ehe->getEmployeeEmployee()->getPersonPerson(),$this->getDocumentTypeByCode($ehe->getEmployeeEmployee()->getPersonPerson()->getDocumentType()))){
+                $notification = $this->getNotificationByPersonAndOwnerAndDocumentType($ehe->getEmployerEmployer()->getPersonPerson(),$ehe->getEmployeeEmployee()->getPersonPerson(),$this->getDocumentTypeByCode($ehe->getEmployeeEmployee()->getPersonPerson()->getDocumentType()));
+            }else{
+                $notification = $this->createNotificationByDocType($ehe->getEmployerEmployer()->getPersonPerson(),$ehe->getEmployeeEmployee()->getPersonPerson(),$this->getDocumentTypeByCode($ehe->getEmployeeEmployee()->getPersonPerson()->getDocumentType()));
+            }
+            $employeesNotifications[$ehe->getIdEmployerHasEmployee()]['notCC'] = $notification;
+            if($this->getNotificationByPersonAndOwnerAndDocumentType($ehe->getEmployerEmployer()->getPersonPerson(),$ehe->getEmployeeEmployee()->getPersonPerson(),$this->getDocumentTypeByCode('CAS'))){
+                $notification = $this->getNotificationByPersonAndOwnerAndDocumentType($ehe->getEmployerEmployer()->getPersonPerson(),$ehe->getEmployeeEmployee()->getPersonPerson(),$this->getDocumentTypeByCode('CAS'));
+            }else{
+                $notification = $this->createNotificationByDocType($ehe->getEmployerEmployer()->getPersonPerson(),$ehe->getEmployeeEmployee()->getPersonPerson(),$this->getDocumentTypeByCode('CAS'));
+            }
+            $employeesNotifications[$ehe->getIdEmployerHasEmployee()]['notCAS'] = $notification;
+            if ($ehe->getEmployeeEmployee()->getPersonPerson()->getActionsByActionType($this->getActionTypeByActionTypeCode('VEE'))->first() != null){
+                /** @var Action $eeAction */
+                $eeAction = $ehe->getEmployeeEmployee()->getPersonPerson()->getActionsByActionType($this->getActionTypeByActionTypeCode('VEE'))->first();
+                if($eeAction->getActionStatusCode()!= 'FIN' and $eeAction->getRealProcedureRealProcedure() == $procedure){
+                    $form = $this->get('form.factory')->createNamedBuilder('formInfoEmployee'.$ehe->getIdEmployerHasEmployee())
+                        ->add('document','text',array('label'=>'Numero de documento:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                        ->add('documentType','choice', array('label'=>'Tipo de Documento:','expanded'=>false,'disabled'=>true,'multiple'=>false,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),'placeholder' => 'seleccionar opción','required'=>false,
+                            'choices' => array(
+                                'CC' => 'Cédula de ciudadania',
+                                'CE' => 'Cédula de Extranjería',
+                                'PAS' => 'Pasaporte'
+                            )))
+                        ->add('name','text',array('label'=>'Nombre Completo:','required'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                        ->add('lastName1','text',array('label'=>'Primer Apellido:','required'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                        ->add('lastName2','text',array('label'=>'Segundo Apellido:','required'=>false,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                        ->add('expeditionDate', 'date', array('label'=>'Fecha de expedición:','required'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),
+                            'placeholder' => array(
+                                'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
+                            ),
+                            'years' => range(intval($today->format("Y")),1900)
+                        ))
+                        ->add('documentExpeditionPlace', 'text', array('attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),
+                            'label' => 'Lugar de expedición:',
+                            'required' => true
+                        ))
+                        ->add('birthDate', 'date', array('label'=>'Fecha de nacimiento:','required'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),
+                            'placeholder' => array(
+                                'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
+                            ),
+                            'years' => range(intval($today->format("Y")),1900)
+                        ))
+                        ->add('birthCountry','text',array('label'=>'País de Nacimiento:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                        ->add('birthDepartment','text',array('label'=>'Dpto. de Nacimiento:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                        ->add('birthCity','text',array('label'=>'Ciudad de Nacimiento:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                        ->add('email','text',array('label'=>'Correo:','required'=>false,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                        ->add('phone','text',array('label'=>'Telefono/Celular:','required'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                        ->add('civilStatus', 'choice', array('label' => 'Estado civil:', 'placeholder' => 'Seleccionar una opción','required' => true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),
+                            'choices' => array(
+                                'soltero'   => 'Soltero(a)',
+                                'casado' => 'Casado(a)',
+                                'unionLibre' => 'Union Libre',
+                                'viudo' => 'Viudo(a)'
+                            ),
+                            'multiple' => false,
+                            'expanded' => false
+                        ))
+
+                        ->add('gender', 'choice', array('multiple' => false, 'expanded' => false, 'label' => 'Género:', 'placeholder' => 'Seleccionar una opción', 'required' => true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),
+                            'choices' => array(
+                                'MAS'   => 'Masculino',
+                                'FEM' => 'Femenino'
+                            ),
+                        ))
+                        ->add('edit', 'submit', array('label' => 'Editar','attr'=>array('class'=>'form-button')))
+                        ->getForm();
+                }else{
+                    $form = $this->get('form.factory')->createNamedBuilder('formInfoEmployee'.$ehe->getIdEmployerHasEmployee())
+                        ->add('document','text',array('label'=>'Numero de documento:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                        ->add('documentType','choice', array('label'=>'Tipo de Documento:','disabled'=>true,'expanded'=>false,'multiple'=>false,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),'placeholder' => 'seleccionar opción','required'=>false,
+                            'choices' => array(
+                                'CC' => 'Cédula de ciudadania',
+                                'CE' => 'Cédula de Extranjería',
+                                'PAS' => 'Pasaporte'
+                            )))
+                        ->add('name','text',array('label'=>'Nombre Completo:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                        ->add('lastName1','text',array('label'=>'Primer Apellido:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                        ->add('lastName2','text',array('label'=>'Segundo Apellido:','required'=>false,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                        ->add('expeditionDate', 'date', array('label'=>'Fecha de expedición:','disabled'=>true,'required'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),
+                            'placeholder' => array(
+                                'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
+                            ),
+                            'years' => range(intval($today->format("Y")),1900)
+                        ))
+                        ->add('documentExpeditionPlace', 'text', array('attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),
+                            'label' => 'Lugar de expedición:',
+                            'required' => true,'disabled'=>true,
+                        ))
+                        ->add('birthDate', 'date', array('label'=>'Fecha de nacimiento:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),
+                            'placeholder' => array(
+                                'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
+                            ),
+                            'years' => range(intval($today->format("Y")),1900)
+                        ))
+                        ->add('birthCountry','text',array('label'=>'País de Nacimiento:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                        ->add('birthDepartment','text',array('label'=>'Dpto. de Nacimiento:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                        ->add('birthCity','text',array('label'=>'Ciudad de Nacimiento:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                        ->add('email','text',array('label'=>'Correo:','required'=>false,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                        ->add('phone','text',array('label'=>'Telefono/Celular:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                        ->add('civilStatus', 'choice', array('label' => 'Estado civil:', 'placeholder' => 'Seleccionar una opción','disabled'=>true,'required' => true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),
+                            'choices' => array(
+                                'soltero'   => 'Soltero(a)',
+                                'casado' => 'Casado(a)',
+                                'unionLibre' => 'Union Libre',
+                                'viudo' => 'Viudo(a)'
+                            ),
+                            'multiple' => false,
+                            'expanded' => false
+                        ))
+                        ->add('gender', 'choice', array('multiple' => false, 'expanded' => false,'disabled'=>true, 'label' => 'Género:', 'placeholder' => 'Seleccionar una opción', 'required' => true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),
+                            'choices' => array(
+                                'MAS'   => 'Masculino',
+                                'FEM' => 'Femenino'
+                            ),
+                        ))
+                        ->getForm();
+                }
+                $form->get('document')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getDocument());
+                $form->get('documentType')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getDocumentType());
+                $form->get('name')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getNames());
+                $form->get('lastName1')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getLastName1());
+                $form->get('lastName2')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getLastName2());
+                $form->get('expeditionDate')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getDocumentExpeditionDate());
+                $form->get('documentExpeditionPlace')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getDocumentExpeditionPlace());
+                $form->get('birthDate')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getBirthDate());
+                $form->get('birthCountry')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getBirthCountry());
+                $form->get('birthDepartment')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getBirthDepartment());
+                $form->get('birthCity')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getBirthCity());
+                $form->get('email')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getEmail());
+                $form->get('phone')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getPhones()->first()->getPhoneNumber());
+                $form->get('civilStatus')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getCivilStatus());
+                $form->get('gender')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getGender());
+                $formsInfoEmployees[$ehe->getIdEmployerHasEmployee().''] = $form;
+                $viewsInfoEmployees[$ehe->getIdEmployerHasEmployee().''] = $form->createView();
+            }else{
+                $form = $this->get('form.factory')->createNamedBuilder('formInfoEmployee'.$ehe->getIdEmployerHasEmployee())
+                    ->add('document','text',array('label'=>'Numero de documento:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                    ->add('documentType','choice', array('label'=>'Tipo de Documento:','disabled'=>true,'expanded'=>false,'multiple'=>false,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),'placeholder' => 'seleccionar opción','required'=>false,
+                        'choices' => array(
+                            'CC' => 'Cédula de ciudadania',
+                            'CE' => 'Cédula de Extranjería',
+                            'PAS' => 'Pasaporte'
+                        )))
+                    ->add('name','text',array('label'=>'Nombre Completo:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                    ->add('lastName1','text',array('label'=>'Primer Apellido:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                    ->add('lastName2','text',array('label'=>'Segundo Apellido:','required'=>false,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                    ->add('expeditionDate', 'date', array('label'=>'Fecha de expedición:','required'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),
+                        'placeholder' => array(
+                            'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
+                        ),
+                        'years' => range(intval($today->format("Y")),1900)
+                    ))
+                    ->add('documentExpeditionPlace', 'text', array('attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),
+                        'label' => 'Lugar de expedición:',
+                        'required' => true,'disabled'=>true,
+                    ))
+                    ->add('birthDate', 'date', array('label'=>'Fecha de nacimiento:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),
+                        'placeholder' => array(
+                            'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
+                        ),
+                        'years' => range(intval($today->format("Y")),1900)
+                    ))
+                    ->add('birthCountry','text',array('label'=>'País de Nacimiento:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                    ->add('birthDepartment','text',array('label'=>'Dpto. de Nacimiento:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                    ->add('birthCity','text',array('label'=>'Ciudad de Nacimiento:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                    ->add('email','text',array('label'=>'Correo:','required'=>false,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                    ->add('phone','text',array('label'=>'Telefono/Celular:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
+                    ->add('civilStatus', 'choice', array('label' => 'Estado civil:', 'placeholder' => 'Seleccionar una opción','disabled'=>true,'required' => true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),
+                        'choices' => array(
+                            'soltero'   => 'Soltero(a)',
+                            'casado' => 'Casado(a)',
+                            'unionLibre' => 'Union Libre',
+                            'viudo' => 'Viudo(a)'
+                        ),
+                        'multiple' => false,
+                        'expanded' => false
+                    ))
+
+                    ->add('gender', 'choice', array('multiple' => false, 'expanded' => false,'disabled'=>true, 'label' => 'Género:', 'placeholder' => 'Seleccionar una opción', 'required' => true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title'),
+                        'choices' => array(
+                            'MAS'   => 'Masculino',
+                            'FEM' => 'Femenino'
+                        ),
+                    ))
+                    ->getForm();
+                $form->get('document')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getDocument());
+                $form->get('documentType')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getDocumentType());
+                $form->get('name')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getNames());
+                $form->get('lastName1')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getLastName1());
+                $form->get('lastName2')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getLastName2());
+                $form->get('expeditionDate')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getDocumentExpeditionDate());
+                $form->get('documentExpeditionPlace')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getDocumentExpeditionPlace());
+                $form->get('birthDate')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getBirthDate());
+                $form->get('birthCountry')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getBirthCountry());
+                $form->get('birthDepartment')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getBirthDepartment());
+                $form->get('birthCity')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getBirthCity());
+                $form->get('email')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getEmail());
+                $form->get('phone')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getPhones()->first()->getPhoneNumber());
+                $form->get('civilStatus')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getCivilStatus());
+                $form->get('gender')->setData($ehe->getEmployeeEmployee()->getPersonPerson()->getGender());
+                $formsInfoEmployees[$ehe->getIdEmployerHasEmployee().''] = $form;
+                $viewsInfoEmployees[$ehe->getIdEmployerHasEmployee().''] = $form->createView();
+            }
+            if($ehe->getExistentSQL()!=1){
+                $formEW = $this->get('form.factory')->createNamedBuilder('formWorkplaceEmployee'.$ehe->getIdEmployerHasEmployee())
+                    ->add('workplace', 'entity', array(
+                        'class' => 'RocketSellerTwoPickBundle:Workplace',
+                        'choices' => $employer->getWorkplaces(),
+                        'property' => 'name',
+                        'multiple' => false,
+                        'expanded' => false,
+                        'property_path' => 'workplaceWorkplace',
+                        'label'=>'Lugar de Trabajo',
+                        'placeholder' => 'Seleccionar una opción',
+                        'required' => true
+                    ))
+                    ->add('edit', 'submit', array('label' => 'Editar','attr'=>array('class'=>'form-button')))
+                    ->getForm();
+                $formSD = $this->get('form.factory')->createNamedBuilder('formEmployeeStartDate'.$ehe->getIdEmployerHasEmployee())
+                    ->add('startDate', 'date', array('label'=>'Fecha de inicio del contrato:','required'=>true,'disabled'=>false,
+                        'placeholder' => array(
+                            'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
+                        ),
+                        'years' => range(intval($today->format("Y"))+1,intval($ehe->getActiveContract()->getStartDate()->format("Y")))
+                    ))
+                    ->add('edit', 'submit', array('label' => 'Editar','attr'=>array('class'=>'form-button')))
+                    ->getForm();
+                if($ehe->getActiveContract()->getEndDate()!= null){
+                    $formED = $this->get('form.factory')->createNamedBuilder('formEmployeeEndDate'.$ehe->getIdEmployerHasEmployee())
+                        ->add('endDate', 'date', array('label'=>'Fecha de fin del contrato:','required'=>true,'disabled'=>false,
+                            'placeholder' => array(
+                                'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
+                            ),
+                            'years' => range(intval($today->format("Y"))+3,intval($ehe->getActiveContract()->getEndDate()->format("Y")))
+                        ))
+                        ->add('edit', 'submit', array('label' => 'Editar','attr'=>array('class'=>'form-button')))
+                        ->getForm();
+                }
+            }else{
+                $formEW = $this->get('form.factory')->createNamedBuilder('formWorkplaceEmployee'.$ehe->getIdEmployerHasEmployee())
+                    ->add('workplace', 'entity', array(
+                        'class' => 'RocketSellerTwoPickBundle:Workplace',
+                        'disabled'=>true,
+                        'choices' => $employer->getWorkplaces(),
+                        'property' => 'name',
+                        'multiple' => false,
+                        'expanded' => false,
+                        'property_path' => 'workplaceWorkplace',
+                        'label'=>'Lugar de Trabajo',
+                        'placeholder' => 'Seleccionar una opción',
+                        'required' => true
+                    ))
+                    ->getForm();
+                $formSD = $this->get('form.factory')->createNamedBuilder('formEmployeeStartDate'.$ehe->getIdEmployerHasEmployee())
+                    ->add('startDate', 'date', array('label'=>'Fecha de inicio del contrato:','required'=>true,'disabled'=>true,
+                        'placeholder' => array(
+                            'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
+                        ),
+                        'years' => range(intval($today->format("Y")),intval($ehe->getActiveContract()->getStartDate()->format("Y"))+1)
+                    ))
+                    ->getForm();
+                if($ehe->getActiveContract()->getEndDate()!= null){
+                    $formED = $this->get('form.factory')->createNamedBuilder('formEmployeeEndDate'.$ehe->getIdEmployerHasEmployee())
+                        ->add('endDate', 'date', array('label'=>'Fecha de fin del contrato:','required'=>true,'disabled'=>false,
+                            'placeholder' => array(
+                                'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
+                            ),
+                            'years' => range(intval($today->format("Y"))+3,intval($ehe->getActiveContract()->getEndDate()->format("Y")))
+                        ))
+                        ->getForm();
+                }
+            }
+
+            $formEW->get('workplace')->setData($ehe->getActiveContract()->getWorkplaceWorkplace());
+            $formEmployeesWorkplaces[$ehe->getIdEmployerHasEmployee().''] = $formEW;
+            $viewsEmployeesWorkplaces[$ehe->getIdEmployerHasEmployee().''] = $formEW->createView();
+            $formSD->get('startDate')->setData($ehe->getActiveContract()->getStartDate());
+            $formEmployeesStartDates[$ehe->getIdEmployerHasEmployee().''] = $formSD;
+            $viewsEmployeesStartDates[$ehe->getIdEmployerHasEmployee().''] = $formSD->createView();
+            if($ehe->getActiveContract()->getEndDate()!= null){
+                $formED->get('endDate')->setData($ehe->getActiveContract()->getEndDate());
+                $formEmployeesEndDates[$ehe->getIdEmployerHasEmployee().''] = $formED;
+                $viewsEmployeesEndDates[$ehe->getIdEmployerHasEmployee().''] = $formED->createView();
+            }
+
+            /** @var EmployeeHasEntity $employeeHasEntity */
+            foreach ($ehe->getEmployeeEmployee()->getEntities() as $employeeHasEntity) {
+                if($employeeHasEntity->getState()!=-1){
+                    $action = $ehe->getEmployeeEmployee()->getPersonPerson()->getActionByEmployeeHasEntity($employeeHasEntity)->first();
+                    if ($action->getActionStatusCode() != 'FIN') {
+                        $type = $action->getEmployeeEntity()->getEntityEntity()->getEntityTypeEntityType();
+                        $formEmployeeEntity = $this->get('form.factory')->createNamedBuilder('formEmployeeEntity' . $type . $ehe->getIdEmployerHasEmployee())
+                            ->add('actionId', 'text', array('required' => true, 'disabled' => true, 'attr' => array('style' => 'display:none'), 'label_attr' => array('style' => 'display:none')))
+                            ->add('name', 'entity', array(
+                                'class' => 'RocketSeller\TwoPickBundle\Entity\Entity',
+                                'query_builder' => function (EntityRepository $er) use ($type) {
+                                    $query = $er->createQueryBuilder('p');
+                                    return $query
+                                        ->where($query->expr()->eq('p.entityTypeEntityType', '?1'))
+                                        ->setParameter('1', $type);
+                                },
+                                'choice_label' => 'name',
+                                'label' => 'Nombre Entidad:', 'required' => true, 'disabled' => false, 'attr' => array('class' => 'value-content'), 'label_attr' => array('class' => 'value-title')
+
+                            ))
+                            ->add('actionType', 'choice', array('label' => 'Acción:', 'expanded' => false, 'multiple' => false, 'disabled' => false, 'attr' => array('class' => 'value-content'), 'label_attr' => array('class' => 'value-title'), 'placeholder' => 'seleccionar opción', 'required' => true,
+                                'choices' => array(
+                                    0 => 'Validar entidad',
+                                    1 => 'Inscribir Entidad',
+                                )))
+                            ->add('edit', 'submit', array('label' => 'Editar', 'attr' => array('class' => 'form-button')))
+                            ->getForm();
+                        $formEmployeeEntity['name']->setData($action->getEmployeeEntity()->getEntityEntity());
+                    } else {
+                        $type = $action->getEmployeeEntity()->getEntityEntity()->getEntityTypeEntityType();
+                        $formEmployeeEntity = $this->get('form.factory')->createNamedBuilder('formEmployeeEntity' . $type . $ehe->getIdEmployerHasEmployee())
+                            ->add('actionId', 'text', array('required' => true, 'disabled' => true, 'attr' => array('style' => 'display:none'), 'label_attr' => array('style' => 'display:none')))
+                            ->add('name', 'entity', array(
+                                'class' => 'RocketSeller\TwoPickBundle\Entity\Entity',
+                                'query_builder' => function (EntityRepository $er) use ($type) {
+                                    $query = $er->createQueryBuilder('p');
+                                    return $query
+                                        ->where($query->expr()->eq('p.entityTypeEntityType', '?1'))
+                                        ->setParameter('1', $type);
+                                },
+                                'choice_label' => 'name',
+                                'label' => 'Nombre Entidad:', 'required' => true, 'disabled' => true, 'attr' => array('class' => 'value-content'), 'label_attr' => array('class' => 'value-title')
+
+                            ))
+                            ->add('actionType', 'choice', array('label' => 'Acción:', 'expanded' => false, 'multiple' => false, 'disabled' => true, 'attr' => array('class' => 'value-content'), 'label_attr' => array('class' => 'value-title'), 'placeholder' => 'seleccionar opción', 'required' => true,
+                                'choices' => array(
+                                    0 => 'Validar entidad',
+                                    1 => 'Inscribir Entidad',
+                                )))
+                            ->getForm();
+                        $formEmployeeEntity['name']->setData($action->getEmployeeEntity()->getEntityEntity());
+                    }
+                    $formEmployeeEntity['actionId']->setData($action->getIdAction());
+                    $formEmployeeEntity['actionType']->setData($action->getEmployeeEntity()->getState());
+                    $formEmployeesEntities[$ehe->getIdEmployerHasEmployee() . ''][] = $formEmployeeEntity;
+                    $viewsEmployeesEntities[$ehe->getIdEmployerHasEmployee() . ''][] = $formEmployeeEntity->createView();
+                }
             }
         }
-        return true;
+
+        if($atLeastOne){
+            $employer->setDocumentStatus($this->getDocumentStatusByCode('BOFFFF'));
+            $em->persist($employer);
+            $em->flush();
+        }
+        $formDocument->handleRequest($request);
+
+        if ($formDocument->isValid() and $formDocument->isSubmitted()) {
+            $ePerson = $employer->getPersonPerson();
+            if($ePerson->getDocumentType()!= $formDocument->get("documentType")->getData()){
+                $notification = $this->getNotificationByPersonAndOwnerAndDocumentType($ePerson,$ePerson,$this->getDocumentTypeByCode($ePerson->getDocumentType()));
+                $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$ePerson->getIdPerson(),'docCode'=>$ePerson->getDocumentType()));
+                $notification->setRelatedLink($url);
+                $log = new Log($this->getUser(),"Person","DocumentType",$ePerson->getIdPerson(),$ePerson->getDocumentType(),$formDocument->get("documentType")->getData(),"backoffice cambio el typo de documento de una persona");
+                $employer->getPersonPerson()->setDocumentType($formDocument->get("documentType")->getData());
+                $em->persist($log);
+                $em->persist($notification);
+            }
+            if($ePerson->getNames()!= $formDocument->get("name")->getData()){
+                $log = new Log($this->getUser(),"Person","Names",$ePerson->getIdPerson(),$ePerson->getNames(),$formDocument->get("name")->getData(),"backoffice cambió el nombre de una persona");
+                $employer->getPersonPerson()->setNames($formDocument->get("name")->getData());
+                $em->persist($log);
+            }
+            if($ePerson->getLastName1()!= $formDocument->get("lastName1")->getData()){
+                $log = new Log($this->getUser(),"Person","LastName1",$ePerson->getIdPerson(),$ePerson->getLastName1(),$formDocument->get("lastName1")->getData(),"backoffice cambió el primer apellido de una persona");
+                $employer->getPersonPerson()->setLastName1($formDocument->get("lastName1")->getData());
+                $em->persist($log);
+            }
+            if($ePerson->getLastName2()!= $formDocument->get("lastName2")->getData()){
+                $log = new Log($this->getUser(),"Person","LastName2",$ePerson->getIdPerson(),$ePerson->getLastName2(),$formDocument->get("lastName2")->getData(),"backoffice cambió el segundo apellido de una persona");
+                $employer->getPersonPerson()->setLastName2($formDocument->get("lastName2")->getData());
+                $em->persist($log);
+            }
+            if($ePerson->getDocumentExpeditionDate()!= $formDocument->get("expeditionDate")->getData()){
+                $log = new Log($this->getUser(),"Person","DocumentExpeditionDate",$ePerson->getIdPerson(),$ePerson->getDocumentExpeditionDate()->format("Y-m-d H:i:s"),$formDocument->get("expeditionDate")->getData()->format("Y-m-d H:i:s"),"backoffice cambió la fecha de expedición del documento de una persona");
+                $employer->getPersonPerson()->setDocumentExpeditionDate($formDocument->get("expeditionDate")->getData());
+                $em->persist($log);
+            }
+            if($ePerson->getBirthDate()!= $formDocument->get("birthDate")->getData()){
+                $log = new Log($this->getUser(),"Person","BirthDate",$ePerson->getIdPerson(),$ePerson->getBirthDate()->format("Y-m-d H:i:s"),$formDocument->get("birthDate")->getData()->format("Y-m-d H:i:s"),"backoffice cambió la fecha de nacimiento de una persona");
+                $employer->getPersonPerson()->setBirthDate($formDocument->get("birthDate")->getData());
+                $em->persist($log);
+            }
+            $em->persist($ePerson);
+            $em->flush();
+            return $this->render('RocketSellerTwoPickBundle:BackOffice:procedure.html.twig',array(
+                'procedure'=>$procedure,
+                'employerHasEmployees'=>$employerHasEmployees,
+                'employer'=>$employer,
+                'actionTypes'=>$actionTypes,
+                'formDocument' => $formDocument->createView(),
+                'employerNotifications'=>$employerNotifications,
+                'employeesNotifications'=>$employeesNotifications,
+                'formEmployerEntities'=>$formsEntitiesViews,
+                'formEmployerWorkplaces'=>$formsWorkPlacesViews,
+                'formsInfoEmployees'=>$viewsInfoEmployees,
+                'generalStatus'=>$generalStatus,
+                'formEmployeesWorkplaces'=>$viewsEmployeesWorkplaces,
+                'formEmployeesEntities'=>$viewsEmployeesEntities,
+                'formEmployeesStartDates'=>$viewsEmployeesStartDates,
+                'formEmployeesEndDates'=>$viewsEmployeesEndDates,
+                'atLeastOne'=>$atLeastOne,
+            ));
+        }
+
+        $formCount = 0;
+        foreach ($formsEntities as $formsEntity) {
+            $formsEntity->handleRequest($request);
+            $formsEntitiesViews[$formCount] = $formsEntity->createView();
+            $formCount++;
+            if ($formsEntity->isValid() and $formsEntity->isSubmitted()) {
+                /** @var Action $tempAction */
+                $tempAction = $procedure->getActionById($formsEntity->get('actionId')->getData());
+                /** @var RealProcedure $tempProcedure */
+                $tempProcedure = $employer->getRealProcedureByProcedureTypeType($this->getProcedureTypeByCode('VAC'))->first();
+                if($tempProcedure->getActionByEmployerHasEntity($tempAction->getEmployerEntity())->first()){
+                    $action = $tempProcedure->getActionByEmployerHasEntity($tempAction->getEmployerEntity())->first();
+                    if($action->getEmployerEntity()->getState()!= $formsEntity->get('actionType')->getData()){
+                        if($formsEntity->get('actionType')->getData()==1){
+                            $action->setActionStatus($this->getStatusByStatusCode('NEW'));
+                            $em->persist($action);
+                        }else{
+                            $action->setActionStatus($this->getStatusByStatusCode('DIS'));
+                            $em->persist($action);
+                        }
+                    }
+                }elseif( $formsEntity->get('actionType')->getData()==1){
+                    $action = new Action();
+                    $tempProcedure->addAction($action);//adding the action to the procedure
+                    $employer->getPersonPerson()->addAction($action);//adding the action to the employerPerson
+                    $tempProcedure->getUserUser()->addAction($action);//adding the action to the user
+                    $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('SDE'));//setting actionType to validate entity
+                    $action->setEmployerEntity($tempAction->getEmployerEntity());
+                    $action->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the action status to new
+                    $action->setUpdatedAt();//setting the action updatedAt Date
+                    $action->setCreatedAt($today);//setting the Action createrAt Date
+                    $em->persist($action);
+                }
+                if($tempAction->getEmployerEntity()->getState()!=$formsEntity->get('actionType')->getData()){
+                    $log = new Log($this->getUser(),'EmployerHasEntity','State',$tempAction->getEmployerEntity()->getIdEmployerHasEntity(),$tempAction->getEmployerEntity()->getState(),$formsEntity->get('actionType')->getData(),'backoffice cambió la acción de la entidad del empleador');
+                    $tempAction->getEmployerEntity()->setState($formsEntity->get('actionType')->getData());
+                    $em->persist($log);
+                }
+                if($tempAction->getEmployerEntity()->getEntityEntity() != $formsEntity->get('name')->getData()){
+                    $log = new Log($this->getUser(),'EmployerHasEntity','EntityEntity',$tempAction->getEmployerEntity()->getIdEmployerHasEntity(),$tempAction->getEmployerEntity()->getEntityEntity()->getIdEntity(),$formsEntity->get('name')->getData()->getIdEntity(),'backoffice cambió una entidad del empleador');
+                    $tempAction->getEmployerEntity()->setEntityEntity($formsEntity->get('name')->getData());
+                    $em->persist($log);
+                }
+                $em->persist($tempAction);
+                $em->flush();
+            }
+        }
+
+
+        $formWorkPlacesCount = 0;
+        /** @var Form $formWorkPlace */
+        foreach ($formsWorkPlaces as $formWorkPlace) {
+            $formWorkPlace->handleRequest($request);
+            $formsWorkPlacesViews[$formWorkPlacesCount] = $formWorkPlace->createView();
+            $formWorkPlacesCount++;
+            $id = $formWorkPlace->get('workplaceId')->getData();
+            if($formWorkPlace->isValid() and $formWorkPlace->isSubmitted()){
+                /** @var Workplace $tempWorkplace */
+                $tempWorkplace = $employer->getWorkplaceById($id);
+                if($tempWorkplace->getName()!=$formWorkPlace->get('addressName')->getData()){
+                    $log = new Log($this->getUser(),'Workplace','name',$tempWorkplace->getIdWorkplace(),$tempWorkplace->getName(),$formWorkPlace->get('addressName')->getData(),'backoffice cambió el nombre de un lugar de trabajo');
+                    $tempWorkplace->setName($formWorkPlace->get('addressName')->getData());
+                    $em->persist($log);
+                }
+                if($tempWorkplace->getMainAddress()!=$formWorkPlace->get('mainAddress')->getData()){
+                    $log = new Log($this->getUser(),'Workplace','mainAddress',$tempWorkplace->getIdWorkplace(),$tempWorkplace->getMainAddress(),$formWorkPlace->get('mainAddress')->getData(),'backoffice cambió la dirección de un lugar de trabajo');
+                    $tempWorkplace->setMainAddress($formWorkPlace->get('mainAddress')->getData());
+                    $em->persist($log);
+                }
+                $em->persist($tempWorkplace);
+                $em->flush();
+            }
+        }
+
+        foreach ($employerHasEmployees as $ehe) {
+            $eeForm = $formsInfoEmployees[$ehe->getIdEmployerHasEmployee()];
+            $eeForm->handleRequest($request);
+
+            if($eeForm->isValid() and $eeForm->isSubmitted()){
+                /** @var Person $eePerson */
+                $eePerson = $ehe->getEmployeeEmployee()->getPersonPerson();
+                if($eePerson->getDocument()!= $eeForm->get("document")->getData()){
+                    $log = new Log($this->getUser(),"Person","document",$eePerson->getIdPerson(),$eePerson->getDocument(),$eeForm->get("document")->getData(),"backoffice cambio el documento de un empleado");
+                    $eePerson->setDocument($eeForm->get("document")->getData());
+                    $em->persist($log);
+                }
+                if($eePerson->getDocumentType()!= $eeForm->get("documentType")->getData()){
+                    $notification = $this->getNotificationByPersonAndOwnerAndDocumentType($ehe->getEmployerEmployer()->getPersonPerson(),$eePerson,$this->getDocumentTypeByCode($eePerson->getDocumentType()));
+                    $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$eePerson->getIdPerson(),'docCode'=>$eePerson->getDocumentType()));
+                    $notification->setRelatedLink($url);
+                    $log = new Log($this->getUser(),"Person","documentType",$eePerson->getIdPerson(),$eePerson->getDocumentType(),$eeForm->get("documentType")->getData(),"backoffice cambio el tipo de documento de un empleado");
+                    $eePerson->setDocumentType($eeForm->get("documentType")->getData());
+                    $em->persist($log);
+                    $em->persist($notification);
+                }
+                if($eePerson->getNames()!= $eeForm->get("name")->getData()){
+                    $log = new Log($this->getUser(),"Person","names",$eePerson->getIdPerson(),$eePerson->getNames(),$eeForm->get("name")->getData(),"backoffice cambio el nombre de un empleado");
+                    $eePerson->setNames($eeForm->get("name")->getData());
+                    $em->persist($log);
+                }
+                if($eePerson->getLastName1()!= $eeForm->get("lastName1")->getData()){
+                    $log = new Log($this->getUser(),"Person","lastName1",$eePerson->getIdPerson(),$eePerson->getLastName1(),$eeForm->get("lastName1")->getData(),"backoffice cambio el primer apellido de un empleado");
+                    $eePerson->setLastName1($eeForm->get("lastName1")->getData());
+                    $em->persist($log);
+                }
+                if($eePerson->getlastName2()!= $eeForm->get("lastName2")->getData()){
+                    $log = new Log($this->getUser(),"Person","lastName2",$eePerson->getIdPerson(),$eePerson->getlastName2(),$eeForm->get("lastName2")->getData(),"backoffice cambio el segundo apellido de un empleado");
+                    $eePerson->setLastName2($eeForm->get("lastName2")->getData());
+                    $em->persist($log);
+                }
+                if($eePerson->getDocumentExpeditionDate()!= $eeForm->get("expeditionDate")->getData()){
+                    $log = new Log($this->getUser(),"Person","DocumentExpeditionDate",$eePerson->getIdPerson(),$eePerson->getDocumentExpeditionDate()->format("Y-m-d H:i:s"),$eeForm->get("expeditionDate")->getData()->format("Y-m-d H:i:s"),"backoffice cambio la fecha de expedición del documento de un empleado");
+                    $eePerson->setDocumentExpeditionDate($eeForm->get("expeditionDate")->getData());
+                    $em->persist($log);
+                }
+                if($eePerson->getDocumentExpeditionPlace()!= $eeForm->get("documentExpeditionPlace")->getData()){
+                    $log = new Log($this->getUser(),"Person","documentExpeditionPlace",$eePerson->getIdPerson(),$eePerson->getDocumentExpeditionPlace(),$eeForm->get("documentExpeditionPlace")->getData(),"backoffice cambio el lugar de expedición del documento de un empleado");
+                    $eePerson->setDocumentExpeditionPlace($eeForm->get("documentExpeditionPlace")->getData());
+                    $em->persist($log);
+                }
+                if($eePerson->getBirthDate()!= $eeForm->get("birthDate")->getData()){
+                    $log = new Log($this->getUser(),"Person","birthDate",$eePerson->getIdPerson(),$eePerson->getBirthDate()->format("Y-m-d H:i:s"),$eeForm->get("birthDate")->getData()->format("Y-m-d H:i:s"),"backoffice cambio la fecha de nacimiento de un empleado");
+                    $eePerson->setBirthDate($eeForm->get("birthDate")->getData());
+                    $em->persist($log);
+                }
+                if($eePerson->getGender()!= $eeForm->get("gender")->getData()){
+                    $log = new Log($this->getUser(),"Person","gender",$eePerson->getIdPerson(),$eePerson->getGender(),$eeForm->get("gender")->getData(),"backoffice cambio el genero de un empleado");
+                    $eePerson->setGender($eeForm->get("gender")->getData());
+                    $em->persist($log);
+                }
+                if($eePerson->getCivilStatus()!= $eeForm->get("civilStatus")->getData()){
+                    $log = new Log($this->getUser(),"Person","civilStatus",$eePerson->getIdPerson(),$eePerson->getCivilStatus(),$eeForm->get("civilStatus")->getData(),"backoffice cambio el estado civil de un empleado");
+                    $eePerson->setCivilStatus($eeForm->get("civilStatus")->getData());
+                    $em->persist($log);
+                }
+                if($eePerson->getEmail()!= $eeForm->get("email")->getData()){
+                    $log = new Log($this->getUser(),"Person","email",$eePerson->getIdPerson(),$eePerson->getEmail(),$eeForm->get("email")->getData(),"backoffice cambio el email civil de un empleado");
+                    $eePerson->setEmail($eeForm->get("email")->getData());
+                    $em->persist($log);
+                }
+                if($eePerson->getPhones()->first()->getPhoneNumber()!= $eeForm->get("phone")->getData()){
+                    $log = new Log($this->getUser(),"Phone","phoneNumber",$eePerson->getPhones()->first()->getIdPhone(),$eePerson->getPhones()->first()->getPhoneNumber(),$eeForm->get("phone")->getData(),"backoffice cambio el celular de un empleado");
+                    $phone = $em->getRepository("RocketSellerTwoPickBundle:Phone")->find($eePerson->getPhones()->first()->getIdPhone());
+                    $phone->setPhoneNumber($eeForm->get("phone")->getData());
+                    $em->persist($phone);
+                    $em->persist($log);
+                }
+                $em->persist($eePerson);
+                $em->flush();
+                $viewsInfoEmployees[$ehe->getIdEmployerHasEmployee()]=$eeForm->createView();
+                return $this->render('RocketSellerTwoPickBundle:BackOffice:procedure.html.twig',array(
+                    'procedure'=>$procedure,
+                    'employerHasEmployees'=>$employerHasEmployees,
+                    'employer'=>$employer,
+                    'actionTypes'=>$actionTypes,
+                    'formDocument' => $formDocument->createView(),
+                    'employerNotifications'=>$employerNotifications,
+                    'employeesNotifications'=>$employeesNotifications,
+                    'formEmployerEntities'=>$formsEntitiesViews,
+                    'formEmployerWorkplaces'=>$formsWorkPlacesViews,
+                    'formsInfoEmployees'=>$viewsInfoEmployees,
+                    'generalStatus'=>$generalStatus,
+                    'formEmployeesWorkplaces'=>$viewsEmployeesWorkplaces,
+                    'formEmployeesEntities'=>$viewsEmployeesEntities,
+                    'formEmployeesStartDates'=>$viewsEmployeesStartDates,
+                    'formEmployeesEndDates'=>$viewsEmployeesEndDates,
+                    'atLeastOne'=>$atLeastOne,
+                ));
+            }
+
+            $esdForm = $formEmployeesStartDates[$ehe->getIdEmployerHasEmployee()];
+            $esdForm->handleRequest($request);
+            if($esdForm->isValid() and $esdForm->isSubmitted()){
+                if($ehe->getActiveContract()->getStartDate()!= $esdForm->get("startDate")->getData()){
+                    $log = new Log($this->getUser(),"Contract","StartDate",$ehe->getActiveContract()->getIdContract(),$ehe->getActiveContract()->getStartDate()->format("Y-m-d H:i:s"),$esdForm->get("startDate")->getData()->format("Y-m-d H:i:s"),"backoffice cambio la fecha de inicio de un contrato");
+                    $ehe->getActiveContract()->setStartDate($esdForm->get("startDate")->getData());
+                    $em->persist($log);
+                }
+                $em->persist($ehe);
+                $em->flush();
+                $viewsEmployeesStartDates[$ehe->getIdEmployerHasEmployee()]=$esdForm->createView();
+            }
+
+            if($ehe->getActiveContract()->getEndDate()!= null){
+                $eedForm = $formEmployeesEndDates[$ehe->getIdEmployerHasEmployee()];
+                $eedForm->handleRequest($request);
+                if($eedForm->isValid() and $eedForm->isSubmitted()){
+                    if($ehe->getActiveContract()->getEndDate()!= $eedForm->get("endDate")->getData()){
+                        $log = new Log($this->getUser(),"Contract","EndDate",$ehe->getActiveContract()->getIdContract(),$ehe->getActiveContract()->getEndDate()->format("Y-m-d H:i:s"),$eedForm->get("endDate")->getData()->format("Y-m-d H:i:s"),"backoffice cambio la fecha de fin de un contrato");
+                        $ehe->getActiveContract()->setEndDate($eedForm->get("endDate")->getData());
+                        $em->persist($log);
+                    }
+                    $em->persist($ehe);
+                    $em->flush();
+                    $viewsEmployeesEndDates[$ehe->getIdEmployerHasEmployee()]=$eedForm->createView();
+                }
+            }
+
+            $eewForm = $formEmployeesWorkplaces[$ehe->getIdEmployerHasEmployee()];
+            $eewForm->handleRequest($request);
+            if($eewForm->isValid() and $eewForm->isSubmitted()){
+                if($ehe->getActiveContract()->getWorkplaceWorkplace()!= $eewForm->get("workplace")->getData()){
+                    $log = new Log($this->getUser(),"Contract","WorkplaceWorkplace",$ehe->getActiveContract()->getIdContract(),$ehe->getActiveContract()->getWorkplaceWorkplace()->getIdWorkplace(),$eewForm->get("workplace")->getData()->getIdWorkplace(),"backoffice cambio el lugar de trabajo de un empleado");
+                    $ehe->getActiveContract()->setWorkplaceWorkplace($eewForm->get('workplace')->getData());
+                    $em->persist($log);
+                }
+                $em->persist($ehe);
+                $em->flush();
+                $viewsEmployeesWorkplaces[$ehe->getIdEmployerHasEmployee()]=$eewForm->createView();
+                return $this->render('RocketSellerTwoPickBundle:BackOffice:procedure.html.twig',array(
+                    'procedure'=>$procedure,
+                    'employerHasEmployees'=>$employerHasEmployees,
+                    'employer'=>$employer,
+                    'actionTypes'=>$actionTypes,
+                    'formDocument' => $formDocument->createView(),
+                    'employerNotifications'=>$employerNotifications,
+                    'employeesNotifications'=>$employeesNotifications,
+                    'formEmployerEntities'=>$formsEntitiesViews,
+                    'formEmployerWorkplaces'=>$formsWorkPlacesViews,
+                    'formsInfoEmployees'=>$viewsInfoEmployees,
+                    'generalStatus'=>$generalStatus,
+                    'formEmployeesWorkplaces'=>$viewsEmployeesWorkplaces,
+                    'formEmployeesEntities'=>$viewsEmployeesEntities,
+                    'formEmployeesStartDates'=>$viewsEmployeesStartDates,
+                    'formEmployeesEndDates'=>$viewsEmployeesEndDates,
+                    'atLeastOne'=>$atLeastOne,
+                ));
+            }
+
+            $formEmployeeCount = 0;
+            if(count($ehe->getEmployeeEmployee()->getEntities())>0){
+                foreach ($formEmployeesEntities[$ehe->getIdEmployerHasEmployee()] as $formEntity) {
+                    $formEntity->handleRequest($request);
+                    $viewsEmployeesEntities[$ehe->getIdEmployerHasEmployee()][$formEmployeeCount] = $formEntity->createView();
+                    $formEmployeeCount++;
+                    if ($formEntity->isValid() and $formEntity->isSubmitted()) {
+                        /** @var Action $tempAction */
+                        $tempAction = $ehe->getEmployeeEmployee()->getPersonPerson()->getActionById($formEntity->get('actionId')->getData());
+                        if($ehe->getEmployeeEmployee()->getPersonPerson()->getActionByEmployeeHasEntity($tempAction->getEmployeeEntity())->first()){
+                            $action = $ehe->getEmployeeEmployee()->getPersonPerson()->getActionByEmployeeHasEntity($tempAction->getEmployeeEntity())->first();
+                            if($action->getEmployeeEntity()->getState()!= $formEntity->get('actionType')->getData()){
+                                if($formEntity->get('actionType')->getData()==1){
+                                    $action->setActionStatus($this->getStatusByStatusCode('NEW'));
+                                    $em->persist($action);
+                                }else{
+                                    $action->setActionStatus($this->getStatusByStatusCode('DIS'));
+                                    $em->persist($action);
+                                }
+                            }
+                        }else{
+                            $tempProcedure = $employer->getRealProcedureByProcedureTypeType($this->getProcedureTypeByCode('VAC'))->first();
+                            if($formEntity->get('actionType')->getData()==1){
+                                $action = new Action();
+                                $tempProcedure->addAction($action);//adding the action to the procedure
+                                $ehe->getEmployeeEmployee()->getPersonPerson()->addAction($action);//adding the action to the employerPerson
+                                $tempProcedure->getUserUser()->addAction($action);//adding the action to the user
+                                $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('SDE'));//setting actionType to validate entity
+                                $action->setEmployeeEntity($tempAction->getEmployeeEntity());
+                                $action->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the action status to new
+                                $action->setUpdatedAt();//setting the action updatedAt Date
+                                $action->setCreatedAt($today);//setting the Action createrAt Date
+                                $em->persist($action);
+                            }
+                        }
+                        if($tempAction->getEmployeeEntity()->getState()!=$formEntity->get('actionType')->getData()){
+                            $log = new Log($this->getUser(),'EmployeeHasEntity','State',$tempAction->getEmployeeEntity()->getIdEmployeeHasEntity(),$tempAction->getEmployeeEntity()->getState(),$formEntity->get('actionType')->getData(),'backoffice cambió la acción de la entidad del empleado');
+                            $tempAction->getEmployeeEntity()->setState($formEntity->get('actionType')->getData());
+                            $em->persist($log);
+                        }
+                        if($tempAction->getEmployeeEntity()->getEntityEntity() != $formEntity->get('name')->getData()){
+                            $log = new Log($this->getUser(),'EmployeeHasEntity','EntityEntity',$tempAction->getEmployeeEntity()->getIdEmployeeHasEntity(),$tempAction->getEmployeeEntity()->getEntityEntity()->getIdEntity(),$formEntity->get('name')->getData()->getIdEntity(),'backoffice cambió una entidad del empleado');
+                            $tempAction->getEmployeeEntity()->setEntityEntity($formEntity->get('name')->getData());
+                            $em->persist($log);
+                        }
+                        $em->persist($tempAction);
+                        $em->flush();
+                    }
+                }
+            }
+
+
+        }
+
+    	return $this->render('RocketSellerTwoPickBundle:BackOffice:procedure.html.twig',array(
+    	    'procedure'=>$procedure,
+            'employerHasEmployees'=>$employerHasEmployees,
+            'employer'=>$employer,
+            'actionTypes'=>$actionTypes,
+            'formDocument' => $formDocument->createView(),
+            'employerNotifications'=>$employerNotifications,
+            'employeesNotifications'=>$employeesNotifications,
+            'formEmployerEntities'=>$formsEntitiesViews,
+            'formEmployerWorkplaces'=>$formsWorkPlacesViews,
+            'formsInfoEmployees'=>$viewsInfoEmployees,
+            'generalStatus'=>$generalStatus,
+            'formEmployeesWorkplaces'=>$viewsEmployeesWorkplaces,
+            'formEmployeesEntities'=>$viewsEmployeesEntities,
+            'formEmployeesStartDates'=>$viewsEmployeesStartDates,
+            'formEmployeesEndDates'=>$viewsEmployeesEndDates,
+            'atLeastOne'=>$atLeastOne,
+        ));
 
     }
 
     /**
-     * Funcion para cambiar el estado de backoffice de un employerHasEmployee
-     * @param Integer $procedureId
-     * @param Integer $idEmployerHasEmployee
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function sendEmployerInfoFinishedAction                       ║
+     * ║ Send the employerInfoConfirmationEmail                        ║
+     * ║  return true if email was sent                                ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param integer $procedureId                                  ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return \Symfony\Component\HttpFoundation\RedirectResponse   ║
+     * ╚═══════════════════════════════════════════════════════════════╝
      */
-    public function changeEmployeeStatusAction($procedureId, $idEmployerHasEmployee)
+    public function sendEmployerInfoFinishedAction($procedureId)
     {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+
+        $em = $this->getDoctrine()->getManager();
+        $today = new DateTime();
+        /** @var RealProcedure $procedure */
+        $procedure = $em->getRepository('RocketSellerTwoPickBundle:RealProcedure')->find($procedureId);
+        if ($procedure->getEmployerEmployer()->getValidatedEmailSentAt() == null){
+            $user = $procedure->getUserUser();
+            $log = new Log($this->getUser(),'Employer','ValidatedEmailSentAt',$procedure->getEmployerEmployer()->getIdEmployer(),null,$today->format('d-m-Y H:i:s'),'Backoffice envio un correo de validacion de información del empleador');
+            $context = array(
+                'emailType'=>'docsValidated',
+                'toEmail'=>$user->getEmail(),
+                'userName'=>$user->getPersonPerson()->getNames(),
+            );
+            $send = $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+            if($send){
+                $procedure->getEmployerEmployer()->setValidatedEmailSentAt($today);
+                $em->persist($log);
+                $em->persist($procedure);
+                $em->flush();
+            }
+        }
+        return $this->redirectToRoute('show_procedure', array('procedureId'=>$procedure->getIdProcedure()), 301);
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function sendEmployeeInfoFinishedAction                       ║
+     * ║ Send the employerInfoConfirmationEmail                        ║
+     * ║  return true if email was sent                                ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param integer $procedureId                                  ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return \Symfony\Component\HttpFoundation\RedirectResponse   ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    public function sendEmployeeInfoFinishedAction($procedureId,$eheId)
+    {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+
+        $em = $this->getDoctrine()->getManager();
+        $today = new DateTime();
+        /** @var RealProcedure $procedure */
+        $procedure = $em->getRepository('RocketSellerTwoPickBundle:RealProcedure')->find($procedureId);
+        /** @var EmployerHasEmployee $ehe */
+        $ehe = $em->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")->find($eheId);
+        if ($ehe->getValidatedEmailSentAt() == null){
+            $user = $procedure->getUserUser();
+            $log = new Log($this->getUser(),'EmployerHasEmployee','ValidatedEmailSentAt',$ehe->getIdEmployerHasEmployee(),null,$today->format('d-m-Y H:i:s'),'Backoffice envio un correo de validacion de información del empleado');
+            $context = array(
+                'emailType'=>'employeeDocsValidated',
+                'toEmail'=>$user->getEmail(),
+                'userName'=>$user->getPersonPerson()->getNames(),
+                'employeeName'=>$ehe->getEmployeeEmployee()->getPersonPerson()->getNames(),
+            );
+            $send = $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+            if($send){
+                $ehe->setValidatedEmailSentAt($today);
+                $em->persist($log);
+                $em->persist($procedure);
+                $em->flush();
+            }
+        }
+        return $this->redirectToRoute('show_procedure', array('procedureId'=>$procedure->getIdProcedure()), 301);
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function sendEmployerInfoErrorAction                          ║
+     * ║ Send the employerInfoConfirmationEmail                        ║
+     * ║  return true if email was sent                                ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param integer $procedureId                                  ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return \Symfony\Component\HttpFoundation\RedirectResponse   ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    public function sendEmployerInfoErrorAction($procedureId)
+    {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+
+        $em = $this->getDoctrine()->getManager();
+        $today = new DateTime();
+        /** @var RealProcedure $procedure */
+        $procedure = $em->getRepository('RocketSellerTwoPickBundle:RealProcedure')->find($procedureId);
+        if ($procedure->getEmployerEmployer()->getErrorEmailSentAt() == null){
+            $user = $procedure->getUserUser();
+            $errors = array();
+            $log = new Log($this->getUser(),'Employer','ErrorEmailSentAt',$procedure->getEmployerEmployer()->getIdEmployer(),null,$today->format('d-m-Y H:i:s'),'Backoffice envio un correo de reporte de errores del empleador');
+            /** @var Action $action */
+            foreach ($this->getInfoEmployerActions($procedure) as $action){
+                if($action->getActionStatusCode()=='ERRO'){
+                    switch ($action->getActionTypeCode()){
+                        case 'VDDE':
+                            $errors[] = $action->getPersonPerson()->getDocumentType();
+                            break;
+                        case 'VRTE':
+                            $errors[] = 'RUT';
+                            break;
+                        case 'VM';
+                            $errors[] = 'MAND';
+                            break;
+                    }
+                }
+            }
+            $context = array(
+                'emailType'=>'docsError',
+                'toEmail'=>$user->getEmail(),
+                'errors'=>$errors,
+                'userName'=>$user->getPersonPerson()->getNames(),
+            );
+            $send = $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+            if($send){
+                $procedure->getEmployerEmployer()->setErrorEmailSentAt($today);
+                $em->persist($log);
+                $em->persist($procedure);
+                $em->flush();
+            }
+        }
+        return $this->redirectToRoute('show_procedure', array('procedureId'=>$procedure->getIdProcedure()), 301);
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function sendEmployerInfoErrorAction                          ║
+     * ║ Send the employerInfoConfirmationEmail                        ║
+     * ║  return true if email was sent                                ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param integer $procedureId                                  ║
+     * ║  @param integer $eheId                                        ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return \Symfony\Component\HttpFoundation\RedirectResponse   ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    public function sendEmployeeInfoErrorAction($procedureId,$eheId)
+    {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+
+        $em = $this->getDoctrine()->getManager();
+        $today = new DateTime();
+        /** @var RealProcedure $procedure */
+        $procedure = $em->getRepository('RocketSellerTwoPickBundle:RealProcedure')->find($procedureId);
+        /** @var EmployerHasEmployee $ehe */
+        $ehe = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->find($eheId);
+        if ($ehe->getErrorEmailSentAt() == null){
+            $user = $procedure->getUserUser();
+            $errors = array();
+            $log = new Log($this->getUser(),'EmployerHasEmployee','ErrorEmailSentAt',$ehe->getIdEmployerHasEmployee(),null,$today->format('d-m-Y H:i:s'),'Backoffice envio un correo de reporte de errores del empleado');
+            /** @var Action $action */
+            foreach ($this->getInfoEmployeeActions($procedure,$ehe) as $action){
+                if($action->getActionStatusCode()=='ERRO'){
+                    switch ($action->getActionTypeCode()){
+                        case 'VDD':
+                            $errors[] = $action->getPersonPerson()->getDocumentType();
+                            break;
+                        case 'VRT':
+                            $errors[] = 'RUT';
+                            break;
+                        case 'VCAT';
+                            $errors[] = 'CAS';
+                            break;
+                    }
+                }
+            }
+            $context = array(
+                'emailType'=>'employeeDocsError',
+                'employeeName'=>$ehe->getEmployeeEmployee()->getPersonPerson()->getNames(),
+                'toEmail'=>$user->getEmail(),
+                'errors'=>$errors,
+                'userName'=>$user->getPersonPerson()->getNames(),
+            );
+            $send = $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+            if($send){
+                $ehe->setErrorEmailSentAt($today);
+                $em->persist($log);
+                $em->persist($ehe);
+                $em->flush();
+            }
+        }
+        return $this->redirectToRoute('show_procedure', array('procedureId'=>$procedure->getIdProcedure()), 301);
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function finishAction                                         ║
+     * ║ Function that changes the action status to finish and         ║
+     * ║ sets all the states in procedure and employer                 ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param integer $actionId                                     ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return \Symfony\Component\HttpFoundation\RedirectResponse   ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    public function finishAction($actionId){
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        $em = $this->getDoctrine()->getManager();
+        /** @var Action $action */
+        $action = $em->getRepository("RocketSellerTwoPickBundle:Action")->find($actionId);
+        if($action){
+            if($action->getActionTypeCode()=='INE'){
+                if($action->getPersonPerson()->getActionByEmployerHasEntity($action->getEmployerEntity())->first()!=null){
+                    /** @var Action $tempAction */
+                    $tempAction = $action->getPersonPerson()->getActionByEmployerHasEntity($action->getEmployerEntity())->first();
+                    if($tempAction->getActionStatusCode()=='DIS'){
+                        $tempAction->setActionStatus($this->getStatusByStatusCode('NEW'));
+                        $em->persist($tempAction);
+                    }
+                }else{
+                    /** @var RealProcedure $vac */
+                    $vac = $action->getRealProcedureRealProcedure()->getUserUser()->getProceduresByType($this->getProcedureTypeByCode('VAC'))->first();
+                    $tempAction = new Action();
+                    $vac->addAction($tempAction);//adding the action to the procedure
+                    $action->getPersonPerson()->addAction($tempAction);//adding the action to the employerPerson
+                    $vac->getUserUser()->addAction($tempAction);//adding the action to the user
+                    $tempAction->setActionTypeActionType($this->getActionTypeByActionTypeCode('SDE'));//setting actionType to validate entity
+                    $tempAction->setEmployeeEntity($action->getEmployerEntity());
+                    $tempAction->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the action status to new
+                    $tempAction->setUpdatedAt();//setting the action updatedAt Date
+                    $tempAction->setCreatedAt(new DateTime());//setting the Action createrAt Date
+                    $em->persist($tempAction);
+                }
+            }
+            if($action->getActionTypeCode()=='IN'){
+                if($action->getPersonPerson()->getActionByEmployeeHasEntity($action->getEmployeeEntity())->first()!=null){
+                    /** @var Action $tempAction */
+                    $tempAction = $action->getPersonPerson()->getActionByEmployeeHasEntity($action->getEmployeeEntity())->first();
+                    if($tempAction->getActionStatusCode()=='DIS'){
+                        $tempAction->setActionStatus($this->getStatusByStatusCode('NEW'));
+                        $em->persist($tempAction);
+                    }
+                }else{
+                    /** @var RealProcedure $vac */
+                    $vac = $action->getRealProcedureRealProcedure()->getUserUser()->getProceduresByType($this->getProcedureTypeByCode('VAC'))->first();
+                    $tempAction = new Action();
+                    $vac->addAction($tempAction);//adding the action to the procedure
+                    $action->getPersonPerson()->addAction($tempAction);//adding the action to the employerPerson
+                    $vac->getUserUser()->addAction($tempAction);//adding the action to the user
+                    $tempAction->setActionTypeActionType($this->getActionTypeByActionTypeCode('SDE'));//setting actionType to validate entity
+                    $tempAction->setEmployeeEntity($action->getEmployeeEntity());
+                    $tempAction->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the action status to new
+                    $tempAction->setUpdatedAt();//setting the action updatedAt Date
+                    $tempAction->setCreatedAt(new DateTime());//setting the Action createrAt Date
+                    $em->persist($tempAction);
+                }
+            }
+            $log = new Log($this->getUser(),"Action",'ActionStatus',$action->getIdAction(),$action->getActionStatus(),$this->getStatusByStatusCode('FIN'),"backoffice finalizó una acción");
+            $action->setUpdatedAt();
+            $action->setActionStatus($this->getStatusByStatusCode('FIN'));
+            /** @var ActionError $error */
+            foreach ($action->getActionErrorActionError() as $error) {
+                $error->setStatus("solved");
+            }
+            $em->persist($action);
+            $em->persist($log);
+            $em->flush();
+        }else{
+            $this->createNotFoundException("No se encontro una acción con id: ".$actionId);
+        }
+        return $this->redirectToRoute('show_procedure', array('procedureId'=>$action->getRealProcedureRealProcedure()->getIdProcedure()), 301);
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function activateAction                                       ║
+     * ║ Function that changes the action status to NEW and            ║
+     * ║ sets all the states in procedure and employer                 ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param integer $actionId                                     ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return \Symfony\Component\HttpFoundation\RedirectResponse   ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    public function activateAction($actionId){
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        $em = $this->getDoctrine()->getManager();
+        /** @var Action $action */
+        $action = $em->getRepository("RocketSellerTwoPickBundle:Action")->find($actionId);
+        if($action){
+            $log = new Log($this->getUser(),"Action",'ActionStatus',$action->getIdAction(),$action->getActionStatus(),$this->getStatusByStatusCode('NEW'),"backoffice reactivó una acción");
+            $action->setUpdatedAt();
+            $action->setActionStatus($this->getStatusByStatusCode('NEW'));
+            $em->persist($action);
+            $em->persist($log);
+            $em->flush();
+        }else{
+            $this->createNotFoundException("No se encontro una acción con id: ".$actionId);
+        }
+        return $this->redirectToRoute('show_procedure', array('procedureId'=>$action->getRealProcedureRealProcedure()->getIdProcedure()), 301);
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function errorDocumentAction                                  ║
+     * ║ Function that changes the action status to error and          ║
+     * ║ creates the action error and log                              ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param integer $actionId                                     ║
+     * ║  @param integer $notificationId                               ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return \Symfony\Component\HttpFoundation\RedirectResponse   ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    public function errorDocumentAction($actionId,$notificationId){
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        $em = $this->getDoctrine()->getManager();
+        /** @var Action $action */
+        $action = $em->getRepository("RocketSellerTwoPickBundle:Action")->find($actionId);
+        /** @var Notification $notification */
+        $notification = $em->getRepository("RocketSellerTwoPickBundle:Notification")->find($notificationId);
+        if($action and $notification){
+            $log = new Log($this->getUser(),"Action",'ActionStatus',$action->getIdAction(),$action->getActionStatus(),$this->getStatusByStatusCode('ERRO'),"backoffice reportó una error en una acción");
+            $action->setUpdatedAt();
+            $action->setActionStatus($this->getStatusByStatusCode('ERRO'));
+            $actionError = new ActionError();
+            $action->addActionErrorActionError($actionError);
+            $actionError->setStatus("unresolved");
+            $actionError->setDescription("Se encontro un error en el documento");
+            $notification->setStatus(1);
+            $em->persist($notification);
+            $em->persist($actionError);
+            $em->persist($action);
+            $em->persist($log);
+            $em->flush();
+        }else{
+            $this->createNotFoundException("No se encontro el elemento");
+        }
+        return $this->redirectToRoute('show_procedure', array('procedureId'=>$action->getRealProcedureRealProcedure()->getIdProcedure()), 301);
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function errorAction                                          ║
+     * ║ Function that changes the action status to error and          ║
+     * ║ creates the action error and log                              ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param integer $actionId                                     ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return \Symfony\Component\HttpFoundation\RedirectResponse   ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    public function errorAction($actionId){
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        $em = $this->getDoctrine()->getManager();
+        /** @var Action $action */
+        $action = $em->getRepository("RocketSellerTwoPickBundle:Action")->find($actionId);
+        if($action){
+            $log = new Log($this->getUser(),"Action",'ActionStatus',$action->getIdAction(),$action->getActionStatus(),$this->getStatusByStatusCode('ERRO'),"backoffice reportó una error en una acción");
+            $action->setUpdatedAt();
+            $action->setActionStatus($this->getStatusByStatusCode('ERRO'));
+            $actionError = new ActionError();
+            $action->addActionErrorActionError($actionError);
+            $actionError->setStatus("unresolved");
+            $actionError->setDescription("Se encontro un error en la acción");
+            $em->persist($actionError);
+            $em->persist($action);
+            $em->persist($log);
+            $em->flush();
+        }else{
+            $this->createNotFoundException("No se encontro el elemento");
+        }
+        return $this->redirectToRoute('show_procedure', array('procedureId'=>$action->getRealProcedureRealProcedure()->getIdProcedure()), 301);
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function activateNotificationAction                           ║
+     * ║ Function that activates the notification with the id send     ║
+     * ║ by parameter                                                  ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param integer $notificationId                               ║
+     * ║  @param integer $actionId                                     ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return boolean                                              ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    public function activateNotificationAction($notificationId,$actionId){
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        $em = $this->getDoctrine()->getManager();
+        /** @var Action $action */
+        $action = $em->getRepository("RocketSellerTwoPickBundle:Action")->find($actionId);
+        /** @var Notification $notification */
+        $notification = $em->getRepository("RocketSellerTwoPickBundle:Notification")->find($notificationId);
+        if($notification){
+            $log = new Log($this->getUser(),"Notification",'status',$notificationId,$notification->getStatus(),1,"backoffice reactivó una notificación");
+            $notification->activate();
+            $em->persist($notification);
+            $em->persist($log);
+            $em->flush();
+        }else{
+            $this->createNotFoundException("No se encontro el elemento");
+        }
+        return $this->redirectToRoute('show_procedure', array('procedureId'=>$action->getRealProcedureRealProcedure()->getIdProcedure()), 301);
+    }
+
+    // --------------------Controller Functions-------------------------
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function calculateProcedureStatus                             ║
+     * ║ Calculates de procedure Status if needed                      ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param RealProcedure $procedure                              ║
+     * ║  @param bool $force                                           ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return integer 0 if noting change 1 if something change     ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    protected function calculateProcedureStatus($procedure,$force=false)
+    {
+        if($procedure->getStatusUpdatedAt()==null or $procedure->getActionChangedAt()==null or $procedure->getStatusUpdatedAt()<$procedure->getActionChangedAt() or $force){
+            $today = new DateTime();
+            $type = $procedure->getProcedureTypeProcedureType()->getCode();
+            if($procedure->getActionChangedAt()==null){
+                $procedure->setActionChangedAt($today);
+            }
+            switch ($type){
+                case 'REE':
+                    /** @var Employer $emmployer */
+                    $emmployer = $procedure->getEmployerEmployer();
+                    if($emmployer->getIdSqlSociety()==null){
+                        $procedure->setProcedureStatus($this->getStatusByStatusCode('DIS'));
+                        $procedure->setStatusUpdatedAt($today);
+                        break;
+                    }
+                    //if employer have at least one active employerHasEmployee
+                    if(count($emmployer->getActiveEmployerHasEmployees())>0 and count($procedure->getAction())>0){
+                        $error=false;
+                        $corrected = false;
+                        $begin = false;
+                        $finish = true;
+                        $dcpe = false;
+                        /** @var Action $actionError */
+                        $actionError = null;
+                        /** @var Action $actionCorrected */
+                        $actionCorrected = null;
+                        /** @var Action $action */
+                        foreach ($this->getInfoEmployerActions($procedure) as $action) {
+                            if($action->getActionStatusCode()=='DCPE'){
+                                $dcpe = true;
+                            }
+                        }
+                        if($dcpe){
+                            $procedure->setProcedureStatus($this->getStatusByStatusCode('DCPE'));
+                            $procedure->setStatusUpdatedAt($today);
+                            break;
+                        }
+                        $atLeastOne = false;
+                        $ehes = $procedure->getEmployerEmployer()->getEmployerHasEmployees();
+                        /** @var Action $action */
+                        /** @var EmployerHasEmployee $ehe */
+                        foreach ($ehes as $ehe) {
+                            $dcpe = false;
+                            foreach ($procedure->getActionsByEmployerHasEmployee($ehe) as $action) {
+                                if($action->getActionStatusCode()=='DCPE'){
+                                    $dcpe = true;
+                                    break;
+                                }
+                            }
+                            if(!$dcpe){
+                                $atLeastOne = true;
+                                break;
+                            }
+                        }
+                        if($atLeastOne){
+                            foreach ($procedure->getAction() as $action) {
+                                if($action->getActionStatusCode()=='ERRO'){
+                                    $error = true;
+                                    if($actionError==null or $action->getErrorAt()<$actionError->getErrorAt()){
+                                        $actionError = $action;
+                                    }
+                                }
+                                if($action->getActionStatusCode()=='CORT'){
+                                    $corrected = true;
+                                    if($actionCorrected==null or $action->getCorrectedAt()<$actionCorrected->getCorrectedAt()){
+                                        $actionCorrected=$action;
+                                    }
+                                }
+                                if($action->getActionStatusCode()=='FIN' and !$begin){
+                                    $begin = true;
+                                }
+                                if($action->getActionStatusCode()!='FIN' and $finish){
+                                    $finish = false;
+                                }
+                            }
+                            if($error and !$corrected){
+                                if($procedure->getErrorAt()!=$actionError->getErrorAt()){
+                                    $procedure->setErrorAt($actionError->getErrorAt());
+                                }
+                                if($procedure->getProcedureStatusCode()!='ERRO'){
+                                    $procedure->setProcedureStatus($this->getStatusByStatusCode('ERRO'));
+                                }
+                            }
+                            if($error and $corrected){
+                                if($procedure->getErrorAt()!=$actionError->getErrorAt()){
+                                    $procedure->setErrorAt($actionError->getErrorAt());
+                                }
+                                if($procedure->getCorrectedAt()!=$actionCorrected->getCorrectedAt()){
+                                    $procedure->setCorrectedAt($actionCorrected->getCorrectedAt());
+                                }
+                                if($procedure->getProcedureStatusCode()!='CORT'){
+                                    $procedure->setProcedureStatus($this->getStatusByStatusCode('CORT'));
+                                }
+                            }
+                            if($corrected and !$error){
+                                if($procedure->getCorrectedAt()!=$actionCorrected->getCorrectedAt()){
+                                    $procedure->setCorrectedAt($actionCorrected->getCorrectedAt());
+                                }
+                                if($procedure->getProcedureStatusCode()!='CORT'){
+                                    $procedure->setProcedureStatus($this->getStatusByStatusCode('CORT'));
+                                }
+                            }
+                            if(!$corrected and !$error){
+                                if($begin and !$finish){
+                                    $procedure->setProcedureStatus($this->getStatusByStatusCode('STRT'));
+                                }elseif($finish){
+                                    $procedure->setProcedureStatus($this->getStatusByStatusCode('FIN'));
+                                    foreach ($procedure->getEmployerEmployer()->getEmployerHasEmployees() as $ehe){
+                                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('BOFFFF'));
+                                        $ehe->setAllEmployeeDocsReadyAt(new DateTime());
+                                        $ehe->setDateFinished(new DateTime());
+                                        $this->getDoctrine()->getManager()->persist($ehe);
+                                    }
+                                }else{
+                                    $procedure->setProcedureStatus($this->getStatusByStatusCode('NEW'));
+                                }
+                            }
+                            $procedure->setStatusUpdatedAt($today);
+                        }else{
+                            $procedure->setProcedureStatus($this->getStatusByStatusCode('DCPE'));
+                            $procedure->setStatusUpdatedAt($today);
+                        }
+                    }else{
+                        $procedure->setProcedureStatus($this->getStatusByStatusCode('DIS'));
+                        $procedure->setStatusUpdatedAt($today);
+                    }
+                    break;
+                case 'PPL':
+                    break;
+                case 'VAC':
+                    /** @var Employer $emmployer */
+                    $emmployer = $procedure->getEmployerEmployer();
+                    $oneFinished = false;
+                    /** @var EmployerHasEmployee $ehe */
+                    foreach ($emmployer->getActiveEmployerHasEmployees() as $ehe) {
+                        if($ehe->getExistentSQL()==1){
+                            $oneFinished = true;
+                            break;
+                        }
+                    }
+                    if(!$oneFinished){
+                        $procedure->setProcedureStatus($this->getStatusByStatusCode('DIS'));
+                        $procedure->setStatusUpdatedAt($today);
+                        break;
+                    }
+                    //if employer have at least one active employerHasEmployee
+                    if(count($emmployer->getActiveEmployerHasEmployees())>0 and count($procedure->getAction())>0){
+                        $error=false;
+                        /** @var Action $actionError */
+                        $actionError = null;
+                        $corrected = false;
+                        /** @var Action $actionCorrected */
+                        $actionCorrected = null;
+                        $begin = false;
+                        $finish = true;
+                        $dcpe = false;
+                        /** @var Action $action */
+                        foreach ($procedure->getAction() as $action) {
+                            if($action->getActionStatusCode()=='CTPE'){
+                                $procedure->setProcedureStatus($this->getStatusByStatusCode('CTPE'));
+                                $procedure->setStatusUpdatedAt($today);
+                                $dcpe = true;
+                                break;
+                            }
+                            if($action->getActionStatusCode()=='ERRO'){
+                                $error = true;
+                                if($actionError==null or $action->getErrorAt()<$actionError->getErrorAt()){
+                                    $actionError = $action;
+                                }
+                            }
+                            if($action->getActionStatusCode()=='CORT'){
+                                $corrected = true;
+                                if($actionCorrected==null or $action->getCorrectedAt()<$actionCorrected->getCorrectedAt()){
+                                    $actionCorrected=$action;
+                                }
+                            }
+                            if($action->getActionStatusCode()=='FIN' and !$begin){
+                                $begin = true;
+                            }
+                            if($action->getActionStatusCode()!='FIN' and $finish){
+                                $finish = false;
+                            }
+
+                        }
+                        if(!$dcpe){
+                            if($error and !$corrected){
+                                if($procedure->getErrorAt()!=$actionError->getErrorAt()){
+                                    $procedure->setErrorAt($actionError->getErrorAt());
+                                }
+                                if($procedure->getProcedureStatusCode()!='ERRO'){
+                                    $procedure->setProcedureStatus($this->getStatusByStatusCode('ERRO'));
+                                }
+                            }
+                            if($error and $corrected){
+                                if($procedure->getErrorAt()!=$actionError->getErrorAt()){
+                                    $procedure->setErrorAt($actionError->getErrorAt());
+                                }
+                                if($procedure->getCorrectedAt()!=$actionCorrected->getCorrectedAt()){
+                                    $procedure->setCorrectedAt($actionCorrected->getCorrectedAt());
+                                }
+                                if($procedure->getProcedureStatusCode()!='CORT'){
+                                    $procedure->setProcedureStatus($this->getStatusByStatusCode('CORT'));
+                                }
+                            }
+                            if($corrected and !$error){
+                                if($procedure->getCorrectedAt()!=$actionCorrected->getCorrectedAt()){
+                                    $procedure->setCorrectedAt($actionCorrected->getCorrectedAt());
+                                }
+                                if($procedure->getProcedureStatusCode()!='CORT'){
+                                    $procedure->setProcedureStatus($this->getStatusByStatusCode('CORT'));
+                                }
+                            }
+                            if(!$corrected and !$error){
+                                if($begin and !$finish){
+                                    $procedure->setProcedureStatus($this->getStatusByStatusCode('STRT'));
+                                }elseif($finish){
+                                    $procedure->setProcedureStatus($this->getStatusByStatusCode('CTVA'));
+                                }else{
+                                    $procedure->setProcedureStatus($this->getStatusByStatusCode('NEW'));
+                                }
+                            }
+                            $procedure->setStatusUpdatedAt($today);
+                        }
+                    }else{
+                        $procedure->setProcedureStatus($this->getStatusByStatusCode('DIS'));
+                        $procedure->setStatusUpdatedAt($today);
+                    }
+                    break;
+                case 'SPL':
+
+                    break;
+            }
+            return 1;
+        }
+        return 0;
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function calculateProcedurePriority                           ║
+     * ║ Calculates de procedure priority if needed                    ║
+     * ║ return 1 if procedure changed 0 if not                        ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param RealProcedure $procedure                              ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return integer                                              ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    protected function calculateProcedurePriority($procedure)
+    {
+        if($procedure->getPriorityUpdatedAt()<$procedure->getActionChangedAt() or $procedure->getPriorityUpdatedAt() == null){
+            $today = new DateTime();
+            //if procedure already reached maxtime priority is 3
+            if($procedure->getMaxTimeReached()==1){
+                $priority = 3;
+            }else{
+                $toMuchTime = false;
+                switch($procedure->getProcedureTypeProcedureType()->getCode()){
+                    case 'REE':
+                        //checking the first error for the procedure
+                        if($procedure->getFirstErrorAt()!=null and $procedure->getProcedureStatusCode()!= 'DCPE'){
+                            //calculating the time between procedure creation and procedure first error
+                            $tempo = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getBackOfficeDate()->format("Y-m-d"),'dateEnd'=>$procedure->getFirstErrorAt()->format("Y-m-d")), array('_format' => 'json'));
+                            if ($tempo->getStatusCode() == 200) {
+                                $days = json_decode($tempo->getContent(),true)["days"];
+                                //if time in days > 3 time is exceeded and all the actions will have priority 2
+                                if($days = 3){
+                                    //flag to much time to notice time was exceeded
+                                    $toMuchTime = true;
+                                }
+                            }
+                        }
+                        //if time was not exceeded
+                        if(!$toMuchTime){
+                            $code = $procedure->getProcedureStatusCode();
+                            switch ($code){
+                                case 'DIS': //if status is Error, Disabled or DocsPending
+                                    //dateStart is today
+                                    $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$today->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                    break;
+                                case 'DCPE': //if status is Error, Disabled or DocsPending
+                                    //dateStart is today
+                                    $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$today->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                    break;
+                                case 'ERRO': //if status is Error, Disabled or DocsPending
+                                    //dateStart is today
+                                    $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$today->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                    break;
+                                case 'CORT'://if status is corrected
+                                    //dateStart is correctedAt
+                                    $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getCorrectedAt()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                    break;
+                                case 'NEW'://if status is new
+                                    //checking the first error for the procedure
+                                    if($procedure->getFirstErrorAt()!=null){//if procedure got at least one error
+                                        //checking maxtime was never exceeded
+                                        if($procedure->getMaxTimeReached() == 0){//if not
+                                            //if correctedAt is not null and greater than procedure errorAt startdate is correctedAt
+                                            if($procedure->getCorrectedAt()!=null and $procedure->getErrorAt()->diff($procedure->getCorrectedAt())->invert == 0){
+                                                $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getCorrectedAt()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                            }else{//if corrected at is null or errorAt is greater than correctedAt must be an error startdate is errorAt
+                                                $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getErrorAt()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                            }
+                                        }else{//maxtime was reached startdate is backoffice date
+                                            $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getBackOfficeDate()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                        }
+                                    }else{//if no errors
+                                        //if no errors datestart is backofficeDate
+                                        $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getBackOfficeDate()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                    }
+                                    break;
+                                case 'STRT'://if status is newstarted
+                                    //checking the first error for the procedure
+                                    if($procedure->getFirstErrorAt()!=null){//if procedure got at least one error
+                                        //checking maxtime was never exceeded
+                                        if($procedure->getMaxTimeReached() == 0){//if not
+                                            //if correctedAt is not null and greater than procedure errorAt startdate is correctedAt
+                                            if($procedure->getCorrectedAt()!=null and $procedure->getErrorAt()->diff($procedure->getCorrectedAt())->invert == 0){
+                                                $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getCorrectedAt()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                            }else{//if corrected at is null or errorAt is greater than correctedAt must be an error startdate is errorAt
+                                                $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getErrorAt()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                            }
+                                        }else{//maxtime was reached startdate is backoffice date
+                                            $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getBackOfficeDate()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                        }
+                                    }else{//if no errors
+                                        //if no errors datestart is backofficeDate
+                                        $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getBackOfficeDate()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                    }
+                                    break;
+
+                                case 'FIN'://is status is finished
+                                    //checking the first error for the procedure
+                                    if($procedure->getFirstErrorAt()!=null){//if procedure got at least one error
+                                        //checking maxtime was never exceeded
+                                        if($procedure->getMaxTimeReached() == 0){//if not
+                                            //if correctedAt is not null and greater than procedure errorAt startdate is correctedAt
+                                            if($procedure->getCorrectedAt()!=null and $procedure->getErrorAt()->diff($procedure->getCorrectedAt())->invert == 0){
+                                                $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getCorrectedAt()->format("Y-m-d"),'dateEnd'=>$procedure->getFinishedAt()->format("Y-m-d")), array('_format' => 'json'));
+                                            }else{//if corrected at is null or errorAt is greater than correctedAt must be an error startdate is errorAt
+                                                $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getErrorAt()->format("Y-m-d"),'dateEnd'=>$procedure->getFinishedAt()->format("Y-m-d")), array('_format' => 'json'));
+                                            }
+                                        }else{//maxtime was reached startdate is backoffice date
+                                            $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getBackOfficeDate()->format("Y-m-d"),'dateEnd'=>$procedure->getFinishedAt()->format("Y-m-d")), array('_format' => 'json'));
+                                        }
+                                    }else{//if no errors
+                                        //if no errors datestart is backofficeDate
+                                        $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getBackOfficeDate()->format("Y-m-d"),'dateEnd'=>$procedure->getFinishedAt()->format("Y-m-d")), array('_format' => 'json'));
+                                    }
+                                    break;
+                            }
+                            if ($response->getStatusCode() == 200) {
+                                $days = json_decode($response->getContent(),true)["days"];
+                                if($days == 0){
+                                    $priority = 0;
+                                }elseif ($days==1 or $days ==2){
+                                    $priority = 1;
+                                }elseif ($days==3){
+                                    $priority = 2;
+                                }elseif ($days >3){
+                                    $priority = 3;
+                                }
+                            }
+                        }else{
+                            //setting permanently max priority
+                            $priority = 3;
+                        }
+                        break;
+                    case 'PPL':
+                        break;
+                    case 'VAC':
+                        /** @var RealProcedure $REEProcedure */
+                        $REEProcedure = $procedure->getUserUser()->getProceduresByType($this->getProcedureTypeByCode('REE'))->first();
+                        if($REEProcedure->getFinishedAt()!= null){
+                            $stardate = $REEProcedure->getFinishedAt();
+                            if($procedure->getBackOfficeDate()!=$stardate){
+                                $procedure->setBackOfficeDate($stardate);
+                            }
+                        }else{
+                            $stardate = $today;
+                        }
+                        //checking the first error for the procedure
+                        if($procedure->getFirstErrorAt()!=null and $procedure->getProcedureStatusCode()!= 'CTPE'){
+                            if($stardate<$procedure->getFirstErrorAt()){
+                                //calculating the time between procedure creation and procedure first error
+                                $tempo = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$stardate->format("Y-m-d"),'dateEnd'=>$procedure->getFirstErrorAt()->format("Y-m-d")), array('_format' => 'json'));
+                                if ($tempo->getStatusCode() == 200) {
+                                    $days = json_decode($tempo->getContent(),true)["days"];
+                                    //if time in days > 3 time is exceeded and all the actions will have priority 2
+                                    if($days = 5){
+                                        //flag to much time to notice time was exceeded
+                                        $toMuchTime = true;
+                                    }
+                                }
+                            }
+                        }
+                        //if time was not exceeded
+                        if(!$toMuchTime){
+                            $code = $procedure->getProcedureStatusCode();
+                            switch ($code){
+                                case 'DIS': //if status is Error, Disabled or DocsPending
+                                    //dateStart is today
+                                    $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$today->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                    break;
+                                case 'CTPE': //if status is Error, Disabled or DocsPending
+                                    //dateStart is today
+                                    $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$today->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                    break;
+                                case 'ERRO': //if status is Error, Disabled or DocsPending
+                                    //dateStart is today
+                                    $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$today->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                    break;
+                                case 'CORT'://if status is corrected
+                                    //dateStart is correctedAt
+                                    $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getCorrectedAt()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                    break;
+                                case 'NEW'://if status is new
+                                    //checking the first error for the procedure
+                                    if($procedure->getFirstErrorAt()!=null){//if procedure got at least one error
+                                        //checking maxtime was never exceeded
+                                        if($procedure->getMaxTimeReached() == 0){//if not
+                                            //if correctedAt is not null and greater than procedure errorAt startdate is correctedAt
+                                            if($procedure->getCorrectedAt()!=null and $procedure->getErrorAt()->diff($procedure->getCorrectedAt())->invert == 0){
+                                                $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getCorrectedAt()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                            }else{//if corrected at is null or errorAt is greater than correctedAt must be an error startdate is errorAt
+                                                $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getErrorAt()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                            }
+                                        }else{//maxtime was reached startdate is backoffice date
+                                            $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$stardate->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                        }
+                                    }else{//if no errors
+                                        //if no errors datestart is backofficeDate
+                                        $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$stardate->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                    }
+                                    break;
+                                case 'STRT'://if status is started
+                                    //checking the first error for the procedure
+                                    if($procedure->getFirstErrorAt()!=null){//if procedure got at least one error
+                                        //checking maxtime was never exceeded
+                                        if($procedure->getMaxTimeReached() == 0){//if not
+                                            //if correctedAt is not null and greater than procedure errorAt startdate is correctedAt
+                                            if($procedure->getCorrectedAt()!=null and $procedure->getErrorAt()->diff($procedure->getCorrectedAt())->invert == 0){
+                                                $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getCorrectedAt()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                            }else{//if corrected at is null or errorAt is greater than correctedAt must be an error startdate is errorAt
+                                                $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getErrorAt()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                            }
+                                        }else{//maxtime was reached startdate is backoffice date
+                                            $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$stardate->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                        }
+                                    }else{//if no errors
+                                        //if no errors datestart is backofficeDate
+                                        $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$stardate->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
+                                    }
+                                    break;
+                                case 'CTVA'://is status is finished
+                                    //checking the first error for the procedure
+                                    if($procedure->getFirstErrorAt()!=null){//if procedure got at least one error
+                                        //checking maxtime was never exceeded
+                                        if($procedure->getMaxTimeReached() == 0){//if not
+                                            //if correctedAt is not null and greater than procedure errorAt startdate is correctedAt
+                                            if($procedure->getCorrectedAt()!=null and $procedure->getErrorAt()->diff($procedure->getCorrectedAt())->invert == 0){
+                                                $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getCorrectedAt()->format("Y-m-d"),'dateEnd'=>$procedure->getFinishedAt()->format("Y-m-d")), array('_format' => 'json'));
+                                            }else{//if corrected at is null or errorAt is greater than correctedAt must be an error startdate is errorAt
+                                                $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getErrorAt()->format("Y-m-d"),'dateEnd'=>$procedure->getFinishedAt()->format("Y-m-d")), array('_format' => 'json'));
+                                            }
+                                        }else{//maxtime was reached startdate is backoffice date
+                                            $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$stardate->format("Y-m-d"),'dateEnd'=>$procedure->getFinishedAt()->format("Y-m-d")), array('_format' => 'json'));
+                                        }
+                                    }else{//if no errors
+                                        //if no errors datestart is backofficeDate
+                                        $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$stardate->format("Y-m-d"),'dateEnd'=>$procedure->getFinishedAt()->format("Y-m-d")), array('_format' => 'json'));
+                                    }
+                                    break;
+                            }
+                            if ($response->getStatusCode() == 200) {
+                                $days = json_decode($response->getContent(),true)["days"];
+                                if($days == 0){
+                                    $priority = 0;
+                                }elseif ($days==1 or $days ==2){
+                                    $priority = 1;
+                                }elseif ($days==3){
+                                    $priority = 2;
+                                }elseif ($days >3){
+                                    $priority = 3;
+                                }
+                            }
+                        }else{
+                            //setting permanently max priority
+                            $priority = 3;
+                        }
+                        break;
+                    case 'SPL':
+                        break;
+                }
+            }
+            if($procedure->getPriority()!=$priority){
+                $procedure->setPriority($priority);
+            }
+            $procedure->setPriorityUpdatedAt($today);
+            return 1;
+        }
+        return 0;
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function calculateActionPriority                              ║
+     * ║ Calculates de action priority if needed                       ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param Action $action                                        ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    protected function calculateActionPriority($action)
+    {
+        if ($action->getUpdatedAt()>$action->getCalculatedAt()){
+            $em = $this->getDoctrine()->getManager();
+            /** @var Person $person */
+            $person = $action->getPersonPerson();
+            /** @var RealProcedure $procedure */
+            $procedure = $action->getRealProcedureRealProcedure();
+            $code = $action->getActionTypeCode();
+            switch($code){
+                case 'VER':
+
+                    break;
+                case 'VDDE':
+
+                    break;
+                case 'VRTE':
+
+                    break;
+                case 'VRCE':
+                    //todo
+                    break;
+                case 'VM':
+
+                    break;
+                case 'VENE':
+
+                    break;
+
+            }
+
+
+        }
+        return;
+    }
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function getAllProceudreActionTypes                           ║
+     * ║ Returns the array whit all the action types for the procedure ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param string $code                                          ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return array                                                ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    protected function getAllProcedureActionTypes()
+    {
+        return array(
+            'VER'=>$this->getActionTypeByActionTypeCode('VER'),
+            'VDDE'=>$this->getActionTypeByActionTypeCode('VDDE'),
+            'VRTE'=>$this->getActionTypeByActionTypeCode('VRTE'),
+            'VM'=>$this->getActionTypeByActionTypeCode('VM'),
+            'VENE'=>$this->getActionTypeByActionTypeCode('VENE'),
+            'INE'=>$this->getActionTypeByActionTypeCode('INE'),
+            'VEE'=>$this->getActionTypeByActionTypeCode('VEE'),
+            'VDD'=>$this->getActionTypeByActionTypeCode('VDD'),
+            'VCAT'=>$this->getActionTypeByActionTypeCode('VCAT'),
+            'VEN'=>$this->getActionTypeByActionTypeCode('VEN'),
+            'VIN'=>$this->getActionTypeByActionTypeCode('IN')
+        );
+    }
+
+    public function DateString(DateTime $date)
+    {
+        return $date->format("Y-m-d H:i:s");
+    }
+
+
+    /**
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function completeEmployeeAction                               ║
+     * ║ Ends the employerHasEmployee Backoffice validation then send  ║
+     * ║ an email to the employee user and activates the pods          ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param Integer $procedureId                                  ║
+     * ║  @param Integer $idEmployerHasEmployee                        ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return \Symfony\Component\HttpFoundation\RedirectResponse   ║
+     * ╚═══════════════════════════════════════════════════════════════╝
+     */
+    public function completeEmployeeAction($procedureId, $idEmployerHasEmployee)
+    {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
     	try {
             $em = $this->getDoctrine()->getManager();
             /** @var EmployerHasEmployee $employerHasEmployee */
             $employerHasEmployee = $this->loadClassById($idEmployerHasEmployee,'EmployerHasEmployee');
-            //$actComplete = $this->checkActionCompletation($idEmployerHasEmployee,$procedureId);
-            $employerHasEmployee->setState(4);
-            $em->persist($employerHasEmployee);
-            $em->flush();
-            $smailer = $this->get('symplifica.mailer.twig_swift');
-            $smailer->sendBackValidatedMessage($this->getUser(),$employerHasEmployee);
-            $this->addFlash("employee_ended_successfully", 'Exito al terminar los tramites del empleado');
-            $contracts = $employerHasEmployee->getContracts();
-            /** @var Contract $contract */
-            foreach ($contracts as $contract) {
-                if($contract->getState()==1){
-                    //we update the payroll
-                    $activeP = $contract->getActivePayroll();
-                    $dateNow=new DateTime();
-                    if($contract->getStartDate()>$dateNow){
-                        $realMonth=$contract->getStartDate()->format("m");
-                        $realYear=$contract->getStartDate()->format("Y");
-                        $realPeriod=intval($contract->getStartDate()->format("d"))<=15&&$contract->getFrequencyFrequency()->getPayrollCode()=="Q"?2:4;
-                    }else{
-                        $realMonth=$dateNow->format("m");
-                        $realYear=$dateNow->format("Y");
-                        $realPeriod=intval($dateNow->format("d"))<=15&&$contract->getFrequencyFrequency()->getPayrollCode()=="Q"?2:4;
+            $procedure = $this->loadClassById($procedureId,'RealProcedure');
+            if($this->checkActionCompletion($employerHasEmployee,$procedure)){
+                $employerHasEmployee->setState(4);
+                $employerHasEmployee->setDocumentStatusType($this->getDocumentStatusByCode('BOFFMS'));
+                $employerHasEmployee->setDateFinished(new DateTime());
+                $em->persist($employerHasEmployee);
+                $em->flush();
+                $smailer = $this->get('symplifica.mailer.twig_swift');
+                $smailer->sendBackValidatedMessage($procedure->getUserUser(),$employerHasEmployee);
+                $this->addFlash("employee_ended_successfully", 'Éxito al dar de alta al empleado');
+                $contracts = $employerHasEmployee->getContracts();
+                /** @var Contract $contract */
+                foreach ($contracts as $contract) {
+                    if($contract->getState()==1){
+                        //we update the payroll
+                        $activeP = $contract->getActivePayroll();
+                        $dateNow=new DateTime();
+                        if($contract->getStartDate()>$dateNow){
+                            $realMonth=$contract->getStartDate()->format("m");
+                            $realYear=$contract->getStartDate()->format("Y");
+                            $realPeriod=intval($contract->getStartDate()->format("d"))<=15&&$contract->getFrequencyFrequency()->getPayrollCode()=="Q"?2:4;
+                        }else{
+                            $realMonth=$dateNow->format("m");
+                            $realYear=$dateNow->format("Y");
+                            $realPeriod=intval($dateNow->format("d"))<=15&&$contract->getFrequencyFrequency()->getPayrollCode()=="Q"?2:4;
+                        }
+                        $activeP->setMonth($realMonth);
+                        $activeP->setYear($realYear);
+                        $activeP->setPeriod($realPeriod);
+                        $em->persist($activeP);
+                        $em->flush();
+                        break;
                     }
-                    $activeP->setMonth($realMonth);
-                    $activeP->setYear($realYear);
-                    $activeP->setPeriod($realPeriod);
-                    $em->persist($activeP);
-                    $em->flush();
-                    break;
                 }
+                return $this->redirectToRoute('show_procedure',array('procedureId'=>$procedureId));
+            }else{
+                $this->addFlash("employee_ended_faild", 'No se han terminado todos los tramites para este empleado.');
             }
-            return $this->redirectToRoute('show_procedure',array('procedureId'=>$procedureId));
         }catch(Exeption $e){
             $this->addFlash("employee_ended_faild", 'Ocurrio un error terminando el empleado: '. $e);
             return $this->redirectToRoute('show_procedure',array('procedureId'=>$procedureId));
@@ -322,278 +2746,690 @@ class ProcedureController extends Controller
     }
 
     /**
-     * Funcion que crea las acciones y los real procedure para un usuario y sus empleados
-     * @param $employerId id del empleado al que se le crea el procedure
-     * @param $idProcedureType tipo del procedure que debe crearse
-     * @return bool 
+     * ╔═══════════════════════════════════════════════════════════════╗
+     * ║ Function procedureAction                                      ║
+     * ║ Creates all real procedures and actions for the user          ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @param Integer $userId                                       ║
+     * ╠═══════════════════════════════════════════════════════════════╣
+     * ║  @return bool                                                 ║
+     * ╚═══════════════════════════════════════════════════════════════╝
      */
-    public function procedureAction($employerId, $idProcedureType)
+    public function procedureAction($userId)
     {
     	$em = $this->getDoctrine()->getManager();
-    	$em2 = $this->getDoctrine()->getManager();
-		/** @var Employer $employerSearch */
-    	$employerSearch = $this->loadClassById($employerId,"Employer");
-		//OJO
-        //se agrega por el momento el usuario de backoffice que sera el encargado de todos los realProcedures
-        $idPerson =$employerSearch->getPersonPerson()->getIdPerson();
-		// $this->loadClassByArray(array('names'=>'Back'),"Person");
-		/** @var User $userSearch */
-        $userSearch = $this->loadClassByArray(array('personPerson'=>$idPerson),"User");
-        //fin de la busqueda del usuario de backoffice
-        
-        //se crea el procedure
-        $procedureType =  $this->loadClassById($idProcedureType,"ProcedureType");
-        $procedure = new RealProcedure();
-        $procedure->setCreatedAt(new \DateTime());
-        $procedure->setProcedureTypeProcedureType($procedureType);
-        $employerSearch->addRealProcedure($procedure);
-        $userSearch->addRealProcedure($procedure);
-        $em2->persist($procedure);
-        switch($idProcedureType){
-			// registro empleador y empleados
-            case 1:
-				// se crea la accion para validar la informacion registrada por el empleador
-				$action = new Action();
-				$action->setStatus('Nuevo');
-				$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VER'),"ActionType"));
-                $procedure->addAction($action);
-                $employerSearch->getPersonPerson()->addAction($action);
-                $userSearch->addAction($action);
-				$em->persist($action);
-
-				// se crea la accion para validar documentos del empleador
-				$action = new Action();
-				$action->setStatus('Nuevo');
-				$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VDC'),"ActionType"));
-                $procedure->addAction($action);
-                $employerSearch->getPersonPerson()->addAction($action);
-                $userSearch->addAction($action);
-				$em->persist($action);
-
-				$action = new Action();
-				$action->setStatus('Nuevo');
-				$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VM'),"ActionType"));
-                $procedure->addAction($action);
-                $employerSearch->getPersonPerson()->addAction($action);
-                $userSearch->addAction($action);
-				$em->persist($action);
-
-				// se obtienen las entidades del empleador
-				/** @var EmployerHasEntity $entities */
-				foreach ($employerSearch->getEntities() as $entities) {
-					if ($entities->getState()>=0) {
-						//se crea la accion para la entidad del empleador
-						$action = new Action();
-						$action->setStatus('Nuevo');
-                        $procedure->addAction($action);
-                        $userSearch->addAction($action);
-                        $employerSearch->getPersonPerson()->addAction($action);
-						$action->setEmployerEntity($entities);
-                        //si el usuario ya pertenece a la entidad se asigna el tipo de accion de validar la entidad
-                        if ($entities->getState()===0){
-                            $action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VEN'),"ActionType"));
-                            $em->persist($action);
-                            //si el usuario desea inscribirse se asigna el tipo de accion para inscribir entidad
-                        }elseif($entities->getState()===1){
-                            $action->setActionTypeActionType($this->loadClassByArray(array('code'=>'IN'),"ActionType"));
-                            $em->persist($action);
-                        }
+        /** @var User $user */
+        $user = $em->getRepository("RocketSellerTwoPickBundle:User")->find($userId);
+		$employer = $user->getPersonPerson()->getEmployer();
+        $employer->setDocumentStatus($this->getDocumentStatusByCode('ALLDCP'));
+        $em->persist($employer);
+        /** @var EmployerHasEmployee $ehe */
+        foreach ($employer->getActiveEmployerHasEmployees() as $ehe) {
+            $ehe->setDocumentStatusType($this->getDocumentStatusByCode('ALLDCP'));
+            $em->persist($ehe);
+        }
+        $today = new DateTime();
+        if($user->getRealProcedure()->isEmpty()){
+            //se crea el procedure
+            $procedure = new RealProcedure();
+            $procedure->setProcedureTypeProcedureType($this->getProcedureTypeByCode('REE'));//setting the procedure type
+            $employer->addRealProcedure($procedure);//adding the realProcedure to the employer
+            $procedure->setCreatedAt($today);//setting the createAt Date
+            $procedure->setProcedureStatus($this->getStatusByStatusCode('DCPE'));//setting the initial status Disable
+            $procedure->setBackOfficeDate(null);//setting the backofice start Date
+            $procedure->setFinishedAt(null);
+            $procedure->setPriority(0);//setting the default priority
+            $user->addRealProcedure($procedure);//adding the realProcedure to the user
+            $ree = $procedure;
+            //se crea el procedure
+            $procedure = new RealProcedure();
+            $procedure->setProcedureTypeProcedureType($this->getProcedureTypeByCode('VAC'));//setting the procedure type
+            $employer->addRealProcedure($procedure);//adding the realProcedure to the employer
+            $procedure->setCreatedAt($today);//setting the createAt Date
+            $procedure->setProcedureStatus($this->getStatusByStatusCode('DIS'));//setting the initial status Disable
+            $procedure->setBackOfficeDate(null);//setting the backofice start Date
+            $procedure->setFinishedAt(null);
+            $procedure->setPriority(0);//setting the default priority
+            $user->addRealProcedure($procedure);//adding the realProcedure to the user
+            $vac = $procedure;
+        }else{
+            if($user->getProceduresByType($this->getProcedureTypeByCode('REE'))->count()==1){
+                $ree = $user->getProceduresByType($this->getProcedureTypeByCode('REE'))->first();
+            }elseif($user->getProceduresByType($this->getProcedureTypeByCode('REE'))->count()>1){
+                return false;
+            }else{
+                $procedure = new RealProcedure();
+                $procedure->setProcedureTypeProcedureType($this->getProcedureTypeByCode('REE'));//setting the procedure type
+                $employer->addRealProcedure($procedure);//adding the realProcedure to the employer
+                $procedure->setCreatedAt($today);//setting the createAt Date
+                $procedure->setProcedureStatus($this->getStatusByStatusCode('DCPE'));//setting the initial status Disable
+                $procedure->setBackOfficeDate(null);//setting the backofice start Date
+                $procedure->setFinishedAt(null);
+                $procedure->setPriority(0);//setting the default priority
+                $user->addRealProcedure($procedure);//adding the realProcedure to the user
+                $ree = $procedure;
+            }
+            if($user->getProceduresByType($this->getProcedureTypeByCode('VAC'))->count()==1){
+                $vac = $user->getProceduresByType($this->getProcedureTypeByCode('VAC'))->first();
+            }elseif($user->getProceduresByType($this->getProcedureTypeByCode('VAC'))->count()>1){
+                return false;
+            }else{
+                $procedure = new RealProcedure();
+                $procedure->setProcedureTypeProcedureType($this->getProcedureTypeByCode('VAC'));//setting the procedure type
+                $employer->addRealProcedure($procedure);//adding the realProcedure to the employer
+                $procedure->setCreatedAt($today);//setting the createAt Date
+                $procedure->setProcedureStatus($this->getStatusByStatusCode('DIS'));//setting the initial status Disable
+                $procedure->setBackOfficeDate(null);//setting the backofice start Date
+                $procedure->setFinishedAt(null);
+                $procedure->setPriority(0);//setting the default priority
+                $user->addRealProcedure($procedure);//adding the realProcedure to the user
+                $vac = $procedure;
+            }
+        }
+        /**
+         * ╔══════════════════════════════════════════════════╗
+         * ║ Action validate employer Info                    ║
+         * ╚══════════════════════════════════════════════════╝
+         */
+        if($ree->getActionsByPersonAndActionType($user->getPersonPerson(),$this->getActionTypeByActionTypeCode('VER'))->first()){
+            $action = $ree->getActionsByPersonAndActionType($user->getPersonPerson(),$this->getActionTypeByActionTypeCode('VER'))->first();
+        }else{
+            if ($user->getPersonPerson()->getEmployee()) {//if user is also a employee
+                $person = $user->getPersonPerson();
+                $action = new Action();
+                $ree->addAction($action);//adding the action to the procedure
+                $employer->getPersonPerson()->addAction($action);//adding the action to the employerPerson
+                $user->addAction($action);//adding the action to the user
+                $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VER'));//setting the actionType validate employer info
+                if($person->getActionsByActionType($this->getActionTypeByActionTypeCode('VEE'))->first()){
+                    if($person->getActionsByActionType($this->getActionTypeByActionTypeCode('VEE'))->first()->getActionStatusCode()=='FIN'){
+                        $action->setActionStatus($this->getStatusByStatusCode('FIN'));//setting the initial state disable
+                    }else{
+                        $action->setActionStatus($this->getStatusByStatusCode('CON'));//setting the initial state disable
                     }
-
-				}
-				//se obtienen todos los emleados del empleador
-				/** @var EmployerHasEmployee $employerHasEmployee */
-				foreach ($employerSearch->getEmployerHasEmployees() as $employerHasEmployee) {
-					if ($employerHasEmployee->getState()>=2){
-						//si el empleado no tiene acciones creadas es decir no es empleado de algun otro empleador
-						if ($employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getAction()->isEmpty()){
-							//se crea la accion para validar la informacion del empleado
-							$action = new Action();
-							$action->setStatus('Nuevo');
-							$procedure->addAction($action);
-                            $userSearch->addAction($action);
-                            $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($action);
-							$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VEE'),"ActionType"));
-							$em->persist($action);
-
-							//se crea la accion para validar documentos y generar contrato
-							$action = new Action();
-							$action->setStatus('Nuevo');
-                            $procedure->addAction($action);
-                            $userSearch->addAction($action);
-                            $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($action);
-							$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VDC'),"ActionType"));
-							$em->persist($action);
-
-							//se obtienen las entidades del empleado
-							/** @var EmployeeHasEntity $employeeHasEntity */
-							foreach ($employerHasEmployee->getEmployeeEmployee()->getEntities() as $employeeHasEntity) {
-								if ($employeeHasEntity->getState()>=0) {
-									//se crea a accion para las entidades del empleado
-									$action = new Action();
-									$action->setStatus('Nuevo');
-                                    $procedure->addAction($action);
-                                    $userSearch->addAction($action);
-                                    $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($action);
-									$action->setEmployeeEntity($employeeHasEntity);
-
-									//si el usuario ya pertenece a la entidad se asigna el tipo de accion de validar la entidad
-									if ($employeeHasEntity->getState()===0){
-										$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VEN'),"ActionType"));
-										$em->persist($action);
-										//si el usuario desea inscribirse se asigna el tipo de accion para inscribir entidad
-									}elseif($employeeHasEntity->getState()===1){
-										$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'IN'),"ActionType"));
-										$em->persist($action);
-									}
-								}
-							}
-							//si el empleado es antiguo (ya inicio labores) se crea el tramite de validar contrato
-							if($employerHasEmployee->getLegalFF()==1){
-								$actionV = new Action();
-								$actionV->setStatus('Nuevo');
-                                $procedure->addAction($actionV);
-                                $userSearch->addAction($actionV);
-                                $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($actionV);
-								$actionV->setActionTypeActionType($this->loadClassByArray(array('code'=>'VC'),"ActionType"));
-								$em->persist($actionV);
-								//se agrega la accion al procedimiento
-								$action->getRealProcedureRealProcedure()->addAction($actionV);
-							}
-                        //si el empleado ya es empleado de alguien mas solo se validan las entidades ya existentes
-						}else{
-							//se crea la accion de informacion del empleado validada
-							$action = new Action();
-							$action->setStatus('Completado');
-                            $procedure->addAction($action);
-                            $userSearch->addAction($action);
-                            $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($action);
-							$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VEE'),"ActionType"));
-							$em->persist($action);
-
-							//se crea la accion para validar documentos y generar contrato
-							$action = new Action();
-							$action->setStatus('Nuevo');
-                            $procedure->addAction($action);
-                            $userSearch->addAction($action);
-                            $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($action);
-							$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VDC'),"ActionType"));
-							$em->persist($action);
-
-                            //si el empleado ya es empleado de alguien se crean los tramites ya completados
-							foreach ($employerHasEmployee->getEmployeeEmployee()->getEntities() as $employeeHasEntity) {
-								if ($employeeHasEntity->getState()>=0) {
-									//se crea a accion para las entidades del empleado
-									$action = new Action();
-									$action->setStatus('Completado');
-                                    $procedure->addAction($action);
-                                    $userSearch->addAction($action);
-                                    $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($action);
-									$action->setEmployeeEntity($employeeHasEntity);
-
-									//si el usuario ya pertenece a la entidad se asigna el tipo de accion de validar la entidad
-									if ($employeeHasEntity->getState()===0){
-										$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VEN'),"ActionType"));
-										$em->persist($action);
-										//si el usuario desea inscribirse se asigna el tipo de accion para inscribir entidad
-									}elseif($employeeHasEntity->getState()===1){
-										$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'IN'),"ActionType"));
-										$em->persist($action);
-									}
-									//se agrega la accion al procedimiento
-									$procedure->addAction($action);
-								}
-							}
-							//si el empleado es antiguo (ya inicio labores) se crea el tramite de validar contrato
-							if($employerHasEmployee->getLegalFF()==1){
-								$action = new Action();
-								$action->setStatus('Nuevo');
-                                $procedure->addAction($action);
-                                $userSearch->addAction($action);
-                                $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($action);
-								$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VC'),"ActionType"));
-								$em->persist($action);
-							}
-						}
-					}
-				}
-                $em->flush();
-				$em2->flush();
-                break;
-            case 2:
-
-                break;
-            case 3:
-                break;
-			// registro empleado
-            case 4:
-				/** @var EmployerHasEmployee $employerHasEmployee */
-				foreach ($employerSearch->getEmployerHasEmployees() as $employerHasEmployee) {
-					if ($employerHasEmployee->getState()>2){
-						//si el empleado no tiene acciones creadas es decir no es empleado de algun otro empleador
-						if ($employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getAction()->isEmpty()) {
-							//se crea la accion para validar la informacion del empleado
-							$action = new Action();
-							$action->setStatus('Nuevo');
-							$action->setRealProcedureRealProcedure($procedure);
-							$action->setActionTypeActionType($this->loadClassByArray(array('code' => 'VEE'), "ActionType"));
-							$action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
-							$action->setUserUser($userSearch);
-							$em->persist($action);
-							$em->flush();
-							//se agrega la accion al procedimiento
-							$procedure->addAction($action);
-
-							$action = new Action();
-							$action->setStatus('Nuevo');
-							$action->setRealProcedureRealProcedure($procedure);
-							$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VDC'),"ActionType"));
-							$action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
-							$action->setUserUser($userSearch);
-							$em->persist($action);
-							$em->flush();
-							//se agrega la accion al procedimiento
-							$procedure->addAction($action);
-
-							//se obtienen las entidades del empleado
-							/** @var EmployeeHasEntity $employeeHasEntity */
-							foreach ($employerHasEmployee->getEmployeeEmployee()->getEntities() as $employeeHasEntity) {
-								//se crea a accion para las entidades del empleado
-								$action = new Action();
-								$action->setStatus('Nuevo');
-								$action->setRealProcedureRealProcedure($procedure);
-								$action->setEntityEntity($employeeHasEntity->getEntityEntity());
-								//si el usuario ya pertenece a la entidad se asigna el tipo de accion de validar la entidad
-								if ($employeeHasEntity->getState() === 0) {
-									$action->setActionTypeActionType($this->loadClassByArray(array('code' => 'VEN'), "ActionType"));
-									$action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
-									$action->setUserUser($userSearch);
-									$em->persist($action);
-									$em->flush();
-									//si el usuario desea inscribirse se asigna el tipo de accion para inscribir entidad
-								} elseif ($employeeHasEntity->getState() === 1) {
-									$action->setActionTypeActionType($this->loadClassByArray(array('code' => 'IN'), "ActionType"));
-									$action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
-									$action->setUserUser($userSearch);
-									$em->persist($action);
-									$em->flush();
-								}
-								//se agrega la accion al procedimiento
-								$procedure->addAction($action);
-							}
-						}
-					}
-
-				}
-                break;
-            default:
-				$em2->remove($procedure);
-				$em2->flush();
-                break;
+                }else{
+                    $action->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the Action Status to NEW
+                }
+                $action->setUpdatedAt();//setting the action updatedAt Date
+                $action->setCreatedAt($today);//setting the Action createrAt Date
+                $em->persist($action);
+            } else {
+                $action = new Action();
+                $ree->addAction($action);//adding the action to the procedure
+                $employer->getPersonPerson()->addAction($action);//adding the action to the employerPerson
+                $user->addAction($action);//adding the action to the user
+                $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VER'));//setting the actionType validate employer info
+                $action->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the Action Status to NEW
+                $action->setUpdatedAt();//setting the action updatedAt Date
+                $action->setCreatedAt($today);//setting the Action createrAt Date
+                $em->persist($action);
+            }
+        }
+        /**
+         * ╔══════════════════════════════════════════════════╗
+         * ║ Action validate employer Document                ║
+         * ╚══════════════════════════════════════════════════╝
+         */
+        if($ree->getActionsByPersonAndActionType($user->getPersonPerson(),$this->getActionTypeByActionTypeCode('VDDE'))->first()){
+            $action = $ree->getActionsByPersonAndActionType($user->getPersonPerson(),$this->getActionTypeByActionTypeCode('VDDE'))->first();
+        }else{
+            if ($user->getPersonPerson()->getEmployee()) {//if user is also a employee
+                $person = $user->getPersonPerson();
+                $action = new Action();
+                $ree->addAction($action);//adding the action to the procedure
+                $employer->getPersonPerson()->addAction($action);//adding the action to the employerPerson
+                $user->addAction($action);//adding the action to the user
+                $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VDDE'));//setting the actionType validate employer Document
+                if($person->getActionsByActionType($this->getActionTypeByActionTypeCode('VDD'))->first()){
+                    if($person->getActionsByActionType($this->getActionTypeByActionTypeCode('VDD'))->first()->getActionStatusCode()=='FIN'){
+                        $action->setActionStatus($this->getStatusByStatusCode('FIN'));//setting the initial state disable
+                    }else{
+                        $action->setActionStatus($this->getStatusByStatusCode('CON'));//setting the initial state disable
+                    }
+                }else{
+                    $action->setActionStatus($this->getStatusByStatusCode('DCPE'));//setting the Action Status to NEW
+                }
+                $action->setUpdatedAt();//setting the action updatedAt Date
+                $action->setCreatedAt($today);//setting the Action createrAt Date
+                $em->persist($action);
+            } else {
+                $action = new Action();
+                $ree->addAction($action);//adding the action to the procedure
+                $employer->getPersonPerson()->addAction($action);//adding the action to the employerPerson
+                $user->addAction($action);//adding the action to the user
+                $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VDDE'));//setting the actionType validate employer Document
+                $action->setActionStatus($this->getStatusByStatusCode('DCPE'));//setting the Action Status to NEW
+                $action->setUpdatedAt();//setting the action updatedAt Date
+                $action->setCreatedAt($today);//setting the Action createrAt Date
+                $em->persist($action);
+            }
+        }
+        /**
+         * ╔══════════════════════════════════════════════════╗
+         * ║ Action validate employer RUT                     ║
+         * ╚══════════════════════════════════════════════════╝
+         */
+        if($ree->getActionsByPersonAndActionType($user->getPersonPerson(),$this->getActionTypeByActionTypeCode('VRTE'))->first()){
+            $action = $ree->getActionsByPersonAndActionType($user->getPersonPerson(),$this->getActionTypeByActionTypeCode('VRTE'))->first();
+        }else{
+            if ($user->getPersonPerson()->getEmployee()) {//if user is also a employee
+                $person = $user->getPersonPerson();
+                $action = new Action();
+                $ree->addAction($action);//adding the action to the procedure
+                $employer->getPersonPerson()->addAction($action);//adding the action to the employerPerson
+                $user->addAction($action);//adding the action to the user
+                $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VRTE'));//setting the actionType validate employer RUt
+                if($person->getActionsByActionType($this->getActionTypeByActionTypeCode('VRT'))->first()){
+                    if($person->getActionsByActionType($this->getActionTypeByActionTypeCode('VRT'))->first()->getActionStatusCode()=='FIN'){
+                        $action->setActionStatus($this->getStatusByStatusCode('FIN'));//setting the initial state disable
+                    }else{
+                        $action->setActionStatus($this->getStatusByStatusCode('CON'));//setting the initial state disable
+                    }
+                }else{
+                    $action->setActionStatus($this->getStatusByStatusCode('DCPE'));//setting the Action Status to NEW
+                }
+                $action->setUpdatedAt();//setting the action updatedAt Date
+                $action->setCreatedAt($today);//setting the Action createrAt Date
+                $em->persist($action);
+            } else {
+                $action = new Action();
+                $ree->addAction($action);//adding the action to the procedure
+                $employer->getPersonPerson()->addAction($action);//adding the action to the employerPerson
+                $user->addAction($action);//adding the action to the user
+                $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VRTE'));//setting the actionType validate employer RUT
+                $action->setActionStatus($this->getStatusByStatusCode('DCPE'));//setting the Action Status to NEW
+                $action->setUpdatedAt();//setting the action updatedAt Date
+                $action->setCreatedAt($today);//setting the Action createrAt Date
+                $em->persist($action);
+            }
+        }
+        /**
+         * ╔══════════════════════════════════════════════════╗
+         * ║ Action validate employer mandatory               ║
+         * ╚══════════════════════════════════════════════════╝
+         */
+        if($ree->getActionsByPersonAndActionType($user->getPersonPerson(),$this->getActionTypeByActionTypeCode('VM'))->first()){
+            $action = $ree->getActionsByPersonAndActionType($user->getPersonPerson(),$this->getActionTypeByActionTypeCode('VM'))->first();
+        }else{
+            $action = new Action();
+            $ree->addAction($action);//adding the action to the procedure
+            $employer->getPersonPerson()->addAction($action);//adding the action to the employerPerson
+            $user->addAction($action);//adding the action to the user
+            $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VM'));//setting the actionType validate employer mandatory
+            $action->setActionStatus($this->getStatusByStatusCode('DCPE'));//setting the Action Status to NEW
+            $action->setUpdatedAt();//setting the action updatedAt Date
+            $action->setCreatedAt($today);//setting the Action createrAt Date
+            $em->persist($action);
         }
 
-    	return true;
+        /**
+         * ╔══════════════════════════════════════════════════╗
+         * ║ Employer Entities Actions                        ║
+         * ╚══════════════════════════════════════════════════╝
+         */
+        /** @var EmployerHasEntity $employerHasEntity */
+        foreach ($employer->getEntities() as $employerHasEntity) {//crossing employerHasEntities to crreate actions for each one
+            if($ree->getActionByEmployerHasEntity($employerHasEntity)->first()){
+                $action = $ree->getActionByEmployerHasEntity($employerHasEntity)->first();
+            }else{
+                $action = new Action();
+                $ree->addAction($action);//adding the action to the procedure
+                $employer->getPersonPerson()->addAction($action);//adding the action to the employerPerson
+                $user->addAction($action);//adding the action to the user
+                if ($employerHasEntity->getState() == 0) {//validate entity
+                    $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VENE'));//setting actionType to validate entity
+                } elseif ($employerHasEntity->getState() == 1) {//subscribe entity
+                    $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('INE'));//setting actionType to validate entity
+                }
+                $action->setEmployerEntity($employerHasEntity);
+                $action->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the action status to new
+                $action->setUpdatedAt();//setting the action updatedAt Date
+                $action->setCreatedAt($today);//setting the Action createrAt Date
+                $em->persist($action);
+            }
+        }
+        /** @var EmployerHasEmployee $ehe */
+        foreach ($employer->getActiveEmployerHasEmployees() as $ehe){
+            if($ehe->getEmployerEmployer()->getPersonPerson() == $ehe->getEmployeeEmployee()->getPersonPerson()){
+                $ehe->setState(-2);//setting the state of error
+                $em->persist($ehe);
+                return false;
+            }
+            $ePerson = $ehe->getEmployeeEmployee()->getPersonPerson();
+            if($ree->getActionsByPerson($ePerson)->count()==0){//action has not been created
+                if($ePerson->getAction()->count()>0){//its employee or employer of someone else or actions has been created before
+                    $ehes = $em->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")->findBy(array('employeeEmployee'=>$ePerson->getEmployee()));
+                    $isEmployeeOf = 0;
+                    foreach ($ehes as $count){
+                        $isEmployeeOf++;
+                    }
+                    if($ePerson->getEmployer()){//its also a employer
+                        if($ePerson->getActionsByActionType($this->getActionTypeByActionTypeCode('VEE'))->count()==1){
+                            $action = $ePerson->getActionsByActionType($this->getActionTypeByActionTypeCode('VEE'))->first();
+                        }elseif($ePerson->getActionsByActionType($this->getActionTypeByActionTypeCode('VEE'))->count()>1){
+                            return false;
+                        }elseif($ePerson->getActionsByActionType($this->getActionTypeByActionTypeCode('VEE'))->count()==0){
+                            if($ePerson->getActionsByActionType($this->getActionTypeByActionTypeCode('VER'))->count()==1){
+                                $action = new Action();
+                                $ree->addAction($action);//adding the action to the procedure
+                                $ePerson->addAction($action);//adding the action to the employerPerson
+                                $user->addAction($action);//adding the action to the user
+                                $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VEE'));//setting actionType to validate info
+                                $action->setActionStatus($this->getStatusByStatusCode('CON'));//setting the action status to new
+                                $action->setUpdatedAt();//setting the action updatedAt Date
+                                $action->setCreatedAt($today);//setting the Action createrAt Date
+                                $em->persist($action);
+                            }else{
+                                $action = new Action();
+                                $ree->addAction($action);//adding the action to the procedure
+                                $ePerson->addAction($action);//adding the action to the employerPerson
+                                $user->addAction($action);//adding the action to the user
+                                $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VEE'));//setting actionType to validate info
+                                $action->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the action status to new
+                                $action->setUpdatedAt();//setting the action updatedAt Date
+                                $action->setCreatedAt($today);//setting the Action createrAt Date
+                                $em->persist($action);
+                            }
+                        }
+                        if($ePerson->getActionsByActionType($this->getActionTypeByActionTypeCode('VDD'))->count()==1){
+                            $action = $ePerson->getActionsByActionType($this->getActionTypeByActionTypeCode('VDD'))->first();
+                        }elseif($ePerson->getActionsByActionType($this->getActionTypeByActionTypeCode('VDD'))->count()>1){
+                            return false;
+                        }elseif($ePerson->getActionsByActionType($this->getActionTypeByActionTypeCode('VDD'))->count()==0){
+                            if($ePerson->getActionsByActionType($this->getActionTypeByActionTypeCode('VDDE'))->count()==1){
+                                $action = new Action();
+                                $ree->addAction($action);//adding the action to the procedure
+                                $ePerson->addAction($action);//adding the action to the employerPerson
+                                $user->addAction($action);//adding the action to the user
+                                $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VDD'));//setting actionType to validate doc
+                                $action->setActionStatus($this->getStatusByStatusCode('CON'));//setting the action status to new
+                                $action->setUpdatedAt();//setting the action updatedAt Date
+                                $action->setCreatedAt($today);//setting the Action createrAt Date
+                                $em->persist($action);
+                            }else{
+                                $action = new Action();
+                                $ree->addAction($action);//adding the action to the procedure
+                                $ePerson->addAction($action);//adding the action to the employerPerson
+                                $user->addAction($action);//adding the action to the user
+                                $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VDD'));//setting actionType to validate doc
+                                $action->setActionStatus($this->getStatusByStatusCode('DCPE'));//setting the action status to new
+                                $action->setUpdatedAt();//setting the action updatedAt Date
+                                $action->setCreatedAt($today);//setting the Action createrAt Date
+                                $em->persist($action);
+                            }
+                        }
+                        $action = new Action();
+                        $ree->addAction($action);//adding the action to the procedure
+                        $ePerson->addAction($action);//adding the action to the employerPerson
+                        $user->addAction($action);//adding the action to the user
+                        $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VCAT'));//setting actionType to validate doc
+                        $action->setActionStatus($this->getStatusByStatusCode('DCPE'));//setting the action status to new
+                        $action->setUpdatedAt();//setting the action updatedAt Date
+                        $action->setCreatedAt($today);//setting the Action createrAt Date
+                        $em->persist($action);
+                        /** @var EmployeeHasEntity $employeeHasEntity */
+                        foreach ($ehe->getEmployeeEmployee()->getEntities() as $employeeHasEntity) {
+                            if($ePerson->getActionByEmployeeHasEntity($employeeHasEntity)->count()==1){
+                                $action = $ePerson->getActionByEmployeeHasEntity($employeeHasEntity)->first();
+                            }elseif($ePerson->getActionByEmployeeHasEntity($employeeHasEntity)->count()>1){
+                                return false;
+                            }elseif($ePerson->getActionByEmployeeHasEntity($employeeHasEntity)->count()==0){
+                                if($employeeHasEntity->getState()!=-1){
+                                    $action = new Action();
+                                    $ree->addAction($action);//adding the action to the procedure
+                                    $ePerson->addAction($action);//adding the action to the employerPerson
+                                    $user->addAction($action);//adding the action to the user
+                                    if($employeeHasEntity->getState()==0){
+                                        $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VEN'));//setting actionType to validate entity
+                                    }elseif($employeeHasEntity->getState()==1){
+                                        $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('IN'));//setting actionType to validate entity
+                                    }
+                                    $action->setEmployeeEntity($employeeHasEntity);
+                                    $action->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the action status to new
+                                    $action->setUpdatedAt();//setting the action updatedAt Date
+                                    $action->setCreatedAt($today);//setting the Action createrAt Date
+                                    $em->persist($action);
+                                }
+                            }
+                        }
+                    }else{
+                        if($isEmployeeOf>1){
+                            if($ePerson->getActionsByActionType($this->getActionTypeByActionTypeCode('VEE'))->count()==1){
+                                $action = $ePerson->getActionsByActionType($this->getActionTypeByActionTypeCode('VEE'))->first();
+                            }else{
+                                return false;
+                            }
+                            if($ePerson->getActionsByActionType($this->getActionTypeByActionTypeCode('VDD'))->count()==1){
+                                $action = $ePerson->getActionsByActionType($this->getActionTypeByActionTypeCode('VDD'))->first();
+                            }else{
+                                return false;
+                            }
+                            $action = new Action();
+                            $ree->addAction($action);//adding the action to the procedure
+                            $ePerson->addAction($action);//adding the action to the employerPerson
+                            $user->addAction($action);//adding the action to the user
+                            $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VCAT'));//setting actionType to validate doc
+                            $action->setActionStatus($this->getStatusByStatusCode('DCPE'));//setting the action status to new
+                            $action->setUpdatedAt();//setting the action updatedAt Date
+                            $action->setCreatedAt($today);//setting the Action createrAt Date
+                            $em->persist($action);
+                            foreach ($ehe->getEmployeeEmployee()->getEntities() as $employeeHasEntity) {
+                                if($ePerson->getActionByEmployeeHasEntity($employeeHasEntity)->count()==1) {
+                                    $action = $ePerson->getActionByEmployeeHasEntity($employeeHasEntity)->first();
+                                }else{
+                                    return false;
+                                }
+                            }
+                        }else{
+                            return false;
+                        }
+                    }
+                }else{
+                    $action = new Action();
+                    $ree->addAction($action);//adding the action to the procedure
+                    $ePerson->addAction($action);//adding the action to the employerPerson
+                    $user->addAction($action);//adding the action to the user
+                    $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VEE'));//setting actionType to validate info
+                    $action->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the action status to new
+                    $action->setUpdatedAt();//setting the action updatedAt Date
+                    $action->setCreatedAt($today);//setting the Action createrAt Date
+                    $em->persist($action);
+                    $action = new Action();
+                    $ree->addAction($action);//adding the action to the procedure
+                    $ePerson->addAction($action);//adding the action to the employerPerson
+                    $user->addAction($action);//adding the action to the user
+                    $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VDD'));//setting actionType to validate docs
+                    $action->setActionStatus($this->getStatusByStatusCode('DCPE'));//setting the action status to new
+                    $action->setUpdatedAt();//setting the action updatedAt Date
+                    $action->setCreatedAt($today);//setting the Action createrAt Date
+                    $em->persist($action);
+                    $action = new Action();
+                    $ree->addAction($action);//adding the action to the procedure
+                    $ePerson->addAction($action);//adding the action to the employerPerson
+                    $user->addAction($action);//adding the action to the user
+                    $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VCAT'));//setting actionType to validate doc
+                    $action->setActionStatus($this->getStatusByStatusCode('DCPE'));//setting the action status to new
+                    $action->setUpdatedAt();//setting the action updatedAt Date
+                    $action->setCreatedAt($today);//setting the Action createrAt Date
+                    $em->persist($action);
+                    /** @var EmployeeHasEntity $employeeHasEntity */
+                    foreach ($ehe->getEmployeeEmployee()->getEntities() as $employeeHasEntity) {
+                        if($ePerson->getActionByEmployeeHasEntity($employeeHasEntity)->count()==1){
+                            $action = $ePerson->getActionByEmployeeHasEntity($employeeHasEntity)->first();
+                        }elseif($ePerson->getActionByEmployeeHasEntity($employeeHasEntity)->count()>1){
+                            return false;
+                        }elseif($ePerson->getActionByEmployeeHasEntity($employeeHasEntity)->count()==0){
+                            if($employeeHasEntity->getState()!=-1) {
+                                $action = new Action();
+                                $ree->addAction($action);//adding the action to the procedure
+                                $ePerson->addAction($action);//adding the action to the employerPerson
+                                $user->addAction($action);//adding the action to the user
+                                if ($employeeHasEntity->getState() == 0) {
+                                    $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VEN'));//setting actionType to validate entity
+                                } elseif ($employeeHasEntity->getState() == 1) {
+                                    $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('IN'));//setting actionType to validate entity
+                                }
+                                $action->setEmployeeEntity($employeeHasEntity);
+                                $action->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the action status to new
+                                $action->setUpdatedAt();//setting the action updatedAt Date
+                                $action->setCreatedAt($today);//setting the Action createrAt Date
+                                $em->persist($action);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        $em->persist($ree);
+        $em->flush();
+
+//        switch(){
+//			// registro empleador y empleados
+//            case 1:
+//				// se crea la accion para validar la informacion registrada por el empleador
+//				$action = new Action();
+//				$action->setStatus('Nuevo');
+//				$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VER'),"ActionType"));
+//                $procedure->addAction($action);
+//                $employerSearch->getPersonPerson()->addAction($action);
+//                $userSearch->addAction($action);
+//				$em->persist($action);
+//
+//				// se crea la accion para validar documentos del empleador
+//				$action = new Action();
+//				$action->setStatus('Nuevo');
+//				$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VDC'),"ActionType"));
+//                $procedure->addAction($action);
+//                $employerSearch->getPersonPerson()->addAction($action);
+//                $userSearch->addAction($action);
+//				$em->persist($action);
+//
+//				$action = new Action();
+//				$action->setStatus('Nuevo');
+//				$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VM'),"ActionType"));
+//                $procedure->addAction($action);
+//                $employerSearch->getPersonPerson()->addAction($action);
+//                $userSearch->addAction($action);
+//				$em->persist($action);
+//
+//				// se obtienen las entidades del empleador
+//				/** @var EmployerHasEntity $entities */
+//				foreach ($employerSearch->getEntities() as $entities) {
+//					if ($entities->getState()>=0) {
+//						//se crea la accion para la entidad del empleador
+//						$action = new Action();
+//						$action->setStatus('Nuevo');
+//                        $procedure->addAction($action);
+//                        $userSearch->addAction($action);
+//                        $employerSearch->getPersonPerson()->addAction($action);
+//						$action->setEmployerEntity($entities);
+//                        //si el usuario ya pertenece a la entidad se asigna el tipo de accion de validar la entidad
+//                        if ($entities->getState()===0){
+//                            $action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VEN'),"ActionType"));
+//                            $em->persist($action);
+//                            //si el usuario desea inscribirse se asigna el tipo de accion para inscribir entidad
+//                        }elseif($entities->getState()===1){
+//                            $action->setActionTypeActionType($this->loadClassByArray(array('code'=>'IN'),"ActionType"));
+//                            $em->persist($action);
+//                        }
+//                    }
+//
+//				}
+//				//se obtienen todos los emleados del empleador
+//				/** @var EmployerHasEmployee $employerHasEmployee */
+//				foreach ($employerSearch->getEmployerHasEmployees() as $employerHasEmployee) {
+//					if ($employerHasEmployee->getState()>=2){
+//						//si el empleado no tiene acciones creadas es decir no es empleado de algun otro empleador
+//						if ($employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getAction()->isEmpty()){
+//							//se crea la accion para validar la informacion del empleado
+//							$action = new Action();
+//							$action->setStatus('Nuevo');
+//							$procedure->addAction($action);
+//                            $userSearch->addAction($action);
+//                            $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($action);
+//							$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VEE'),"ActionType"));
+//							$em->persist($action);
+//
+//							//se crea la accion para validar documentos y generar contrato
+//							$action = new Action();
+//							$action->setStatus('Nuevo');
+//                            $procedure->addAction($action);
+//                            $userSearch->addAction($action);
+//                            $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($action);
+//							$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VDC'),"ActionType"));
+//							$em->persist($action);
+//
+//							//se obtienen las entidades del empleado
+//							/** @var EmployeeHasEntity $employeeHasEntity */
+//							foreach ($employerHasEmployee->getEmployeeEmployee()->getEntities() as $employeeHasEntity) {
+//								if ($employeeHasEntity->getState()>=0) {
+//									//se crea a accion para las entidades del empleado
+//									$action = new Action();
+//									$action->setStatus('Nuevo');
+//                                    $procedure->addAction($action);
+//                                    $userSearch->addAction($action);
+//                                    $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($action);
+//									$action->setEmployeeEntity($employeeHasEntity);
+//
+//									//si el usuario ya pertenece a la entidad se asigna el tipo de accion de validar la entidad
+//									if ($employeeHasEntity->getState()===0){
+//										$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VEN'),"ActionType"));
+//										$em->persist($action);
+//										//si el usuario desea inscribirse se asigna el tipo de accion para inscribir entidad
+//									}elseif($employeeHasEntity->getState()===1){
+//										$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'IN'),"ActionType"));
+//										$em->persist($action);
+//									}
+//								}
+//							}
+//							//si el empleado es antiguo (ya inicio labores) se crea el tramite de validar contrato
+//							if($employerHasEmployee->getLegalFF()==1){
+//								$actionV = new Action();
+//								$actionV->setStatus('Nuevo');
+//                                $procedure->addAction($actionV);
+//                                $userSearch->addAction($actionV);
+//                                $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($actionV);
+//								$actionV->setActionTypeActionType($this->loadClassByArray(array('code'=>'VC'),"ActionType"));
+//								$em->persist($actionV);
+//								//se agrega la accion al procedimiento
+//								$action->getRealProcedureRealProcedure()->addAction($actionV);
+//							}
+//                        //si el empleado ya es empleado de alguien mas solo se validan las entidades ya existentes
+//						}else{
+//							//se crea la accion de informacion del empleado validada
+//							$action = new Action();
+//							$action->setStatus('Completado');
+//                            $procedure->addAction($action);
+//                            $userSearch->addAction($action);
+//                            $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($action);
+//							$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VEE'),"ActionType"));
+//							$em->persist($action);
+//
+//							//se crea la accion para validar documentos y generar contrato
+//							$action = new Action();
+//							$action->setStatus('Nuevo');
+//                            $procedure->addAction($action);
+//                            $userSearch->addAction($action);
+//                            $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($action);
+//							$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VDC'),"ActionType"));
+//							$em->persist($action);
+//
+//                            //si el empleado ya es empleado de alguien se crean los tramites ya completados
+//							foreach ($employerHasEmployee->getEmployeeEmployee()->getEntities() as $employeeHasEntity) {
+//								if ($employeeHasEntity->getState()>=0) {
+//									//se crea a accion para las entidades del empleado
+//									$action = new Action();
+//									$action->setStatus('Completado');
+//                                    $procedure->addAction($action);
+//                                    $userSearch->addAction($action);
+//                                    $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($action);
+//									$action->setEmployeeEntity($employeeHasEntity);
+//
+//									//si el usuario ya pertenece a la entidad se asigna el tipo de accion de validar la entidad
+//									if ($employeeHasEntity->getState()===0){
+//										$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VEN'),"ActionType"));
+//										$em->persist($action);
+//										//si el usuario desea inscribirse se asigna el tipo de accion para inscribir entidad
+//									}elseif($employeeHasEntity->getState()===1){
+//										$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'IN'),"ActionType"));
+//										$em->persist($action);
+//									}
+//									//se agrega la accion al procedimiento
+//									$procedure->addAction($action);
+//								}
+//							}
+//							//si el empleado es antiguo (ya inicio labores) se crea el tramite de validar contrato
+//							if($employerHasEmployee->getLegalFF()==1){
+//								$action = new Action();
+//								$action->setStatus('Nuevo');
+//                                $procedure->addAction($action);
+//                                $userSearch->addAction($action);
+//                                $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($action);
+//								$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VC'),"ActionType"));
+//								$em->persist($action);
+//							}
+//						}
+//					}
+//				}
+//                $em->flush();
+//				$em2->flush();
+//                break;
+//            case 2:
+//
+//                break;
+//            case 3:
+//                break;
+//			// registro empleado
+//            case 4:
+//				/** @var EmployerHasEmployee $employerHasEmployee */
+//				foreach ($employerSearch->getEmployerHasEmployees() as $employerHasEmployee) {
+//					if ($employerHasEmployee->getState()>2){
+//						//si el empleado no tiene acciones creadas es decir no es empleado de algun otro empleador
+//						if ($employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getAction()->isEmpty()) {
+//							//se crea la accion para validar la informacion del empleado
+//							$action = new Action();
+//							$action->setStatus('Nuevo');
+//							$action->setRealProcedureRealProcedure($procedure);
+//							$action->setActionTypeActionType($this->loadClassByArray(array('code' => 'VEE'), "ActionType"));
+//							$action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
+//							$action->setUserUser($userSearch);
+//							$em->persist($action);
+//							$em->flush();
+//							//se agrega la accion al procedimiento
+//							$procedure->addAction($action);
+//
+//							$action = new Action();
+//							$action->setStatus('Nuevo');
+//							$action->setRealProcedureRealProcedure($procedure);
+//							$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VDC'),"ActionType"));
+//							$action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
+//							$action->setUserUser($userSearch);
+//							$em->persist($action);
+//							$em->flush();
+//							//se agrega la accion al procedimiento
+//							$procedure->addAction($action);
+//
+//							//se obtienen las entidades del empleado
+//							/** @var EmployeeHasEntity $employeeHasEntity */
+//							foreach ($employerHasEmployee->getEmployeeEmployee()->getEntities() as $employeeHasEntity) {
+//								//se crea a accion para las entidades del empleado
+//								$action = new Action();
+//								$action->setStatus('Nuevo');
+//								$action->setRealProcedureRealProcedure($procedure);
+//								$action->setEntityEntity($employeeHasEntity->getEntityEntity());
+//								//si el usuario ya pertenece a la entidad se asigna el tipo de accion de validar la entidad
+//								if ($employeeHasEntity->getState() === 0) {
+//									$action->setActionTypeActionType($this->loadClassByArray(array('code' => 'VEN'), "ActionType"));
+//									$action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
+//									$action->setUserUser($userSearch);
+//									$em->persist($action);
+//									$em->flush();
+//									//si el usuario desea inscribirse se asigna el tipo de accion para inscribir entidad
+//								} elseif ($employeeHasEntity->getState() === 1) {
+//									$action->setActionTypeActionType($this->loadClassByArray(array('code' => 'IN'), "ActionType"));
+//									$action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
+//									$action->setUserUser($userSearch);
+//									$em->persist($action);
+//									$em->flush();
+//								}
+//								//se agrega la accion al procedimiento
+//								$procedure->addAction($action);
+//							}
+//						}
+//					}
+//
+//				}
+//                break;
+//            default:
+//				$em2->remove($procedure);
+//				$em2->flush();
+//                break;
+//        }
+        return true;
     }
+
+
+
 
     /**
      * estructura de tramite para generar vueltas y tramites
@@ -812,6 +3648,9 @@ class ProcedureController extends Controller
     	$em->flush();
     	return $this->redirectToRoute('show_procedure', array('procedureId'=>$procedureId), 301);
     }
+
+
+    //todo old function test an remove Andres
     public function changeErrorStatusAction($procedureId,$actionError,$status)
     {	
     	
@@ -828,11 +3667,9 @@ class ProcedureController extends Controller
     	}
     	return $this->redirectToRoute('show_procedure', array('procedureId'=>$procedureId), 301);
     }
-    /**
-     * hace un query de la clase para instanciarla
-     * @param  [type] $parameter id que desea pasar
-     * @param  [type] $entity    entidad a la cual hace referencia
-     */
+
+
+
     public function loadClassById($parameter, $entity)
     {
 		$loadedClass = $this->getdoctrine()
@@ -840,74 +3677,13 @@ class ProcedureController extends Controller
 		->find($parameter);
 		return $loadedClass;
     }
-    /**
-     * hace un query de la clase para instanciarla
-     * @param  [type] $array  array de parametros que desea pasar
-     * @param  [type] $entity entidad a la cual hace referencia
-     */
+
     public function loadClassByArray($array, $entity)
     {
 		$loadedClass = $this->getdoctrine()
 		->getRepository('RocketSellerTwoPickBundle:'.$entity)
 		->findOneBy($array);
 		return $loadedClass;
-    }
-    /**
-     * metodo que llama el metodo validate con las variables inicializadas
-     * tambien se describe la estructura que debe de tener el array de employees
-     */
-    public function testValidateAction()
-    {
-    		$id_employer =26;
-    		$id_procedure_type = 3;
-    		$priority = 1;
-    		$id_user = 1;
-    		$id_contrato = 1; //preguntar para que el contrato?
-    		$employees = array(
-    			array(
-    				'id_employee' => 4,
-    				'id_contrato' => 1,
-	    			'docs'  =>	array(
-		    					'id_doc1' => 'documento 1',
-		    					'id_doc2' => 2
-		    					),
-	    			"entities" => array(
-			    				array(
-				    					'id_entity' => 61,
-				    					'id_action_type' => 5,
-				    					),
-			    				array(
-				    					'id_entity' => 62,
-				    					'id_action_type' => 7,
-				    					)
-		    				)
-    				),
-    			array(
-    				'id_employee' => 5,
-    				'id_contrato' => 2,
-	    			'docs'  =>	array(
-		    					'id_doc1' => 'documento 1',
-		    					'id_doc2' => 2
-		    					),
-	    			"entities" => array(
-				    				array(
-					    					'id_entity' => 63,
-					    					'id_action_type' => 5,
-					    					),
-				    				array(
-					    					'id_entity' => 65,
-					    					'id_action_type' => 6,
-					    					)
-			    				)
-		    				)
-    			);
-    		//$procedures = $this->validateAction($id_employer, $id_procedure_type, $priority, $id_user, $employees);
-	        $procedure = $this->procedureAction($id_employer, $id_procedure_type);
-	        return $this->render('RocketSellerTwoPickBundle:BackOffice:procedure.html.twig',
-            array(
-            		'procedures' => $procedures
-            	));
-
     }
 
 }

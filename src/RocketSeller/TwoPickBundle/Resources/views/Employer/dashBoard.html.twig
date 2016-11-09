@@ -10,6 +10,9 @@
             {{ modal(16) }}
         {% endif %}
     {% endfor %}
+    {% if welcome  %}
+        {{ modal(18) }}
+    {% endif %}
     {{ modal(24) }}
     {{ modal(17) }}
 {% endblock %}
@@ -363,6 +366,9 @@
                 width: 100%;
             }
 
+            .modal-responsive {
+                padding: 0 20px !important;
+            }
             .form-group {
                 text-align: center;
             }
@@ -584,16 +590,16 @@
         window.Intercom("trackEvent", "show-dashboard");
     </script>
     <title>{% block title %}Tu tablero de control - Symplifica{% endblock %}</title>
-    {% for eHE in user.employer.employerHasEmployees %}
-        {% if ready is defined %}
-
-            {#<h5>{{ user.idPerson }}</h5>#}
-            {#<h1>{{  ready[eHE.idEmployerHasEmployee] }}</h1>#}
-            {% if ready[eHE.idEmployerHasEmployee] == 2 %}
+    {% for eHE in user.employer.activeEmployerHasEmployees %}
+        {% if ready[eHE.idEmployerHasEmployee] is defined and ready[eHE.idEmployerHasEmployee] %}
                 {% from '@RocketSellerTwoPick/modal_templates/modal_picker.twig' import modal %}
                 {% set name = eHE.employeeEmployee.personPerson.fullName %}
                 {{ modal(6,'',name) }}
-            {% endif %}
+        {% endif %}
+        {% if validated[eHE.idEmployerHasEmployee] is defined and validated[eHE.idEmployerHasEmployee] %}
+            {% from '@RocketSellerTwoPick/modal_templates/modal_picker.twig' import modal %}
+            {% set name = eHE.employeeEmployee.personPerson.fullName %}
+            {{ modal(19,'',name) }}
         {% endif %}
     {% endfor %}
     {% if notifications is defined %}
@@ -796,9 +802,14 @@
     <script>
         $(document).ready(function () {
             try {
-                showModal(15);
                 showModal(6);
-                showModal(23);
+                showModal(15);
+                showModal(16);
+                showModal(18);
+                showModal(19);
+
+//                showModal(23);
+//                showModal2();
             }catch(e){
 
             }

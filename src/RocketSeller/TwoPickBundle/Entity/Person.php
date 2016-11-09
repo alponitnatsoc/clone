@@ -1115,6 +1115,37 @@ class Person
     }
 
     /**
+     * @param $employerHasEntity
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActionByEmployerHasEntity($employerHasEntity){
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('employerEntity',$employerHasEntity));
+        return $this->action->matching($criteria);
+    }
+
+    /**
+     * @param $employeeHasEntity
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActionByEmployeeHasEntity($employeeHasEntity){
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('employeeEntity',$employeeHasEntity));
+        return $this->action->matching($criteria);
+    }
+
+    /**
+     * @param string $id
+     * @return RocketSellerTwoPickBundle:Action
+     */
+    public function getActionById($id)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('idAction',intval($id)));
+        return $this->action->matching($criteria)->first();
+    }
+
+    /**
      * @param $actionStatus
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -1136,15 +1167,4 @@ class Person
         return $this->action->matching($criteria);
     }
 
-
-    /**
-     * Get NotificationByDocumentType
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getNotificationByDocumentType($documentType)
-    {
-        $criteria = Criteria::create()
-            ->where(Criteria::expr()->eq("documentTypeDocumentType",$documentType));
-        return $this->notifications->matching($criteria);
-    }
 }

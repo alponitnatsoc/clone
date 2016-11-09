@@ -9,6 +9,7 @@ use RocketSeller\TwoPickBundle\Entity\Configuration;
 use RocketSeller\TwoPickBundle\Entity\Document;
 use RocketSeller\TwoPickBundle\Entity\DocumentType;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\Log;
 use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Person;
@@ -21,6 +22,7 @@ use RocketSeller\TwoPickBundle\Form\MediaForm;
 use RocketSeller\TwoPickBundle\Form\MultFileForm;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sonata\Bundle\DemoBundle\Model\MediaPreview;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Application\Sonata\MediaBundle\Entity\Media;
@@ -160,10 +162,11 @@ use EmployerMethodsTrait;
      * @param Integer $entityId id of the row from the entitytype table
      * @param String $docCode unique code of the documentType
      * @param Integer $idNotification id of the notification to change status
+     *  @param Integer $idProcedure id of the realProcedure
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
-    public function addDocAction($entityType, $entityId, $docCode, $idNotification, Request $request)
+    public function addDocAction($entityType, $entityId, $docCode, $idNotification,$idProcedure=null, Request $request)
     {
         // setting the document types alowed by the application
         $fileTypePermitted = array(
@@ -185,17 +188,29 @@ use EmployerMethodsTrait;
         $form2->handleRequest($request);
         if($form2->isValid()) {
             $this->joinDocument($form2->get('files')->getData(),$document,$notification,$entityType,$entityId);
-            return $this->redirectToRoute('show_dashboard');
+            if($this->isGranted('ROLE_BACK_OFFICE')){
+                return new RedirectResponse($this->generateUrl('show_procedure',array('procedureId'=>$idProcedure)));
+            }else{
+                return $this->redirectToRoute('show_dashboard');
+            }
         }
         $form = $this->createForm(new DocumentRegistration(), $document);
         $form->handleRequest($request);
         if ($form->isValid()) {
             if (in_array($document->getMediaMedia()->getContentType(), $fileTypePermitted)) {
                 $this->persitDocument($document ,$notification);
-                return $this->redirectToRoute('show_dashboard');
+                if($this->isGranted('ROLE_BACK_OFFICE')){
+                    return new RedirectResponse($this->generateUrl('show_procedure',array('procedureId'=>$idProcedure)));
+                }else{
+                    return $this->redirectToRoute('show_dashboard');
+                }
             } else {
                 $this->addFlash('fail_format', 'NVF');
-                return $this->redirectToRoute('show_dashboard');
+                if($this->isGranted('ROLE_BACK_OFFICE')){
+                    return new RedirectResponse($this->generateUrl('show_procedure',array('procedureId'=>$idProcedure)));
+                }else{
+                    return $this->redirectToRoute('show_dashboard');
+                }
             }
         }
 
@@ -209,6 +224,7 @@ use EmployerMethodsTrait;
                 "idNotification" => $idNotification,
                 'personName' => $personName,
                 "documentName" => $documentType->getName(),
+                'idProcedure' =>$idProcedure
             )
         );
     }
@@ -293,8 +309,9 @@ use EmployerMethodsTrait;
         $em->flush();
         $request = $this->container->get('request');
         $request->setMethod("GET");
-        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:EmployerRest:getEmployerDocumentsState', array('idUser' => $this->getUser()->getId()), array('_format' => 'json'));
-        $responsePaymentsMethods = json_decode($insertionAnswer->getContent(), true);
+//        $user = $em->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('personPerson'=>$notification->getPersonPerson()));
+//        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:EmployerRest:getEmployerDocumentsState', array('idUser' => $user->getId()), array('_format' => 'json'));
+//        $responsePaymentsMethods = json_decode($insertionAnswer->getContent(), true);
     }
 
     public function verifyDocument($entityType, $entityId, $docCode, $idNotification){
@@ -311,7 +328,9 @@ use EmployerMethodsTrait;
         //switching between entities
         switch ($entityType){
             case "Person":
-                $corrected = false;
+                $docDoc = false;
+                $rurRut = false;
+                $regReg = false;
                 /** @var Person $person */
                 $person = $em->getRepository("RocketSellerTwoPickBundle:Person")->find($entityId);
                 $name = $person->getFullName();
@@ -320,7 +339,7 @@ use EmployerMethodsTrait;
                     case "CC":
                         if($person->getDocumentDocument()){
                             $document = $person->getDocumentDocument();
-                            $corrected = true;
+                            $docDoc = true;
                             if($document->getMediaMedia()){
                                 /** @var Media $media */
                                 $media = $document->getMediaMedia();
@@ -343,11 +362,54 @@ use EmployerMethodsTrait;
                             $document->setStatus(0);
                             $person->setDocumentDocument($document);
                         }
+                        if($docDoc){
+                            $vdde = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VDDE'));
+                            $vdd = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VDD'));
+                            $actionE = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$person,'actionTypeActionType'=>$vdde));
+                            $actionEe = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$person,'actionTypeActionType'=>$vdd));
+                            if($actionE){
+                                $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'CORT'));
+                                $log = new Log($this->getUser(),"Action","ActionStatus",$actionE->getIdAction(),$actionE->getActionStatus(),$actionStatus,"Se corrigió un documento");
+                                $actionE->setActionStatus($actionStatus);
+                                $actionE->setUpdatedAt();
+                                $em->persist($log);
+                                $em->persist($actionE);
+                            }
+                            if($actionEe){
+                                $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'CORT'));
+                                $log = new Log($this->getUser(),"Action","ActionStatus",$actionEe->getIdAction(),$actionEe->getActionStatus(),$actionStatus,"Se corrigió un documento");
+                                $actionEe->setActionStatus($actionStatus);
+                                $actionEe->setUpdatedAt();
+                                $em->persist($log);
+                                $em->persist($actionEe);
+                            }
+                        }else{
+                            $vdde = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VDDE'));
+                            $vdd = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VDD'));
+                            $actionE = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$person,'actionTypeActionType'=>$vdde));
+                            $actionEe = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$person,'actionTypeActionType'=>$vdd));
+                            if($actionE){
+                                $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'NEW'));
+                                $log = new Log($this->getUser(),"Action","ActionStatus",$actionE->getIdAction(),$actionE->getActionStatus(),$actionStatus,"Se subió un documento");
+                                $actionE->setActionStatus($actionStatus);
+                                $actionE->setUpdatedAt();
+                                $em->persist($log);
+                                $em->persist($actionE);
+                            }
+                            if($actionEe){
+                                $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'NEW'));
+                                $log = new Log($this->getUser(),"Action","ActionStatus",$actionEe->getIdAction(),$actionEe->getActionStatus(),$actionStatus,"Se subió un documento");
+                                $actionEe->setActionStatus($actionStatus);
+                                $actionEe->setUpdatedAt();
+                                $em->persist($log);
+                                $em->persist($actionEe);
+                            }
+                        }
                         break;
                     case "RUT":
                         if($person->getRutDocument()){
                             $document = $person->getRutDocument();
-                            $corrected = true;
+                            $rurRut = true;
                             if($document->getMediaMedia()){
                                 /** @var Media $media */
                                 $media = $document->getMediaMedia();
@@ -369,11 +431,54 @@ use EmployerMethodsTrait;
                             $document->setStatus(0);
                             $person->setRutDocument($document);
                         }
+                        if($rurRut){
+                            $vrte = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VRTE'));
+                            $vrt = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VRT'));
+                            $actionE = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$person,'actionTypeActionType'=>$vrte));
+                            $actionEe = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$person,'actionTypeActionType'=>$vrt));
+                            if($actionE){
+                                $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'CORT'));
+                                $log = new Log($this->getUser(),"Action","ActionStatus",$actionE->getIdAction(),$actionE->getActionStatus(),$actionStatus,"Se corrigió un RUT");
+                                $actionE->setActionStatus($actionStatus);
+                                $actionE->setUpdatedAt();
+                                $em->persist($log);
+                                $em->persist($actionE);
+                            }
+                            if($actionEe){
+                                $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'CORT'));
+                                $log = new Log($this->getUser(),"Action","ActionStatus",$actionEe->getIdAction(),$actionEe->getActionStatus(),$actionStatus,"Se corrigió un RUT");
+                                $actionEe->setActionStatus($actionStatus);
+                                $actionEe->setUpdatedAt();
+                                $em->persist($log);
+                                $em->persist($actionEe);
+                            }
+                        }else{
+                            $vrte = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VRTE'));
+                            $vrt = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VRT'));
+                            $actionE = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$person,'actionTypeActionType'=>$vrte));
+                            $actionEe = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$person,'actionTypeActionType'=>$vrt));
+                            if($actionE){
+                                $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'NEW'));
+                                $log = new Log($this->getUser(),"Action","ActionStatus",$actionE->getIdAction(),$actionE->getActionStatus(),$actionStatus,"Se subió un RUT");
+                                $actionE->setActionStatus($actionStatus);
+                                $actionE->setUpdatedAt();
+                                $em->persist($log);
+                                $em->persist($actionE);
+                            }
+                            if($actionEe){
+                                $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'NEW'));
+                                $log = new Log($this->getUser(),"Action","ActionStatus",$actionEe->getIdAction(),$actionEe->getActionStatus(),$actionStatus,"Sesubió un RUT");
+                                $actionEe->setActionStatus($actionStatus);
+                                $actionEe->setUpdatedAt();
+                                $em->persist($log);
+                                $em->persist($actionEe);
+                            }
+                        }
                         break;
                     case "RCDN":
                         if($person->getBirthRegDocument()){
                             $document = $person->getBirthRegDocument();
-                            $corrected = true;
+                            $regReg = true;
                             if($document->getMediaMedia()){
                                 /** @var Media $media */
                                 $media = $document->getMediaMedia();
@@ -395,11 +500,54 @@ use EmployerMethodsTrait;
                             $document->setStatus(0);
                             $person->setBirthRegDocument($document);
                         }
+                        if($regReg){
+                            $vrce = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VRCE'));
+                            $vrc = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VRC'));
+                            $actionE = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$person,'actionTypeActionType'=>$vrce));
+                            $actionEe = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$person,'actionTypeActionType'=>$vrc));
+                            if($actionE){
+                                $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'CORT'));
+                                $log = new Log($this->getUser(),"Action","ActionStatus",$actionE->getIdAction(),$actionE->getActionStatus(),$actionStatus,"Se corrigió un registro civil");
+                                $actionE->setActionStatus($actionStatus);
+                                $actionE->setUpdatedAt();
+                                $em->persist($log);
+                                $em->persist($actionE);
+                            }
+                            if($actionEe){
+                                $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'CORT'));
+                                $log = new Log($this->getUser(),"Action","ActionStatus",$actionEe->getIdAction(),$actionEe->getActionStatus(),$actionStatus,"Se corrigió un registro civil");
+                                $actionEe->setActionStatus($actionStatus);
+                                $actionEe->setUpdatedAt();
+                                $em->persist($log);
+                                $em->persist($actionEe);
+                            }
+                        }else{
+                            $vrce = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VRCE'));
+                            $vrc = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VRC'));
+                            $actionE = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$person,'actionTypeActionType'=>$vrce));
+                            $actionEe = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$person,'actionTypeActionType'=>$vrc));
+                            if($actionE){
+                                $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'NEW'));
+                                $log = new Log($this->getUser(),"Action","ActionStatus",$actionE->getIdAction(),$actionE->getActionStatus(),$actionStatus,"Se subió un registro civil");
+                                $actionE->setActionStatus($actionStatus);
+                                $actionE->setUpdatedAt();
+                                $em->persist($log);
+                                $em->persist($actionE);
+                            }
+                            if($actionEe){
+                                $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'NEW'));
+                                $log = new Log($this->getUser(),"Action","ActionStatus",$actionEe->getIdAction(),$actionEe->getActionStatus(),$actionStatus,"Se subió un registro civil");
+                                $actionEe->setActionStatus($actionStatus);
+                                $actionEe->setUpdatedAt();
+                                $em->persist($log);
+                                $em->persist($actionEe);
+                            }
+                        }
                         break;
                     case "TI":
                         if($person->getDocumentDocument()){
                             $document = $person->getDocumentDocument();
-                            $corrected = true;
+                            $docDoc = true;
                             if($document->getMediaMedia()){
                                 /** @var Media $media */
                                 $media = $document->getMediaMedia();
@@ -421,75 +569,188 @@ use EmployerMethodsTrait;
                             $document->setStatus(0);
                             $person->setDocumentDocument($document);
                         }
-                        break;
-		                case "CE":
-			                if($person->getDocumentDocument()){
-				                $document = $person->getDocumentDocument();
-				                if($document->getMediaMedia()){
-					                /** @var Media $media */
-					                $media = $document->getMediaMedia();
-					                if($media->getProviderName()){
-						                $provider = $this->get($media->getProviderName());
-						                $provider->removeThumbnails($media);
-					                }
-					                $em->remove($em->getRepository('\Application\Sonata\MediaBundle\Entity\Media')->find($media->getId()));
-					                $em->remove($em->getRepository('ApplicationSonataMediaBundle:Media')->find($media->getId()));
-					                $em->flush();
-				                }
-				                $document->setName($documentType->getName());
-				                $document->setDocumentTypeDocumentType($documentType);
-				                $document->setStatus(0);
-			                }else{
-				                $document = new Document();
-				                $document->setName($documentType->getName());
-				                $document->setDocumentTypeDocumentType($documentType);
-				                $document->setStatus(0);
-				                $person->setDocumentDocument($document);
-			                }
-			                break;
-	                case "PASAPORTE":
-		                if($person->getDocumentDocument()){
-			                $document = $person->getDocumentDocument();
-			                if($document->getMediaMedia()){
-				                /** @var Media $media */
-				                $media = $document->getMediaMedia();
-				                if($media->getProviderName()){
-					                $provider = $this->get($media->getProviderName());
-					                $provider->removeThumbnails($media);
-				                }
-				                $em->remove($em->getRepository('\Application\Sonata\MediaBundle\Entity\Media')->find($media->getId()));
-				                $em->remove($em->getRepository('ApplicationSonataMediaBundle:Media')->find($media->getId()));
-				                $em->flush();
-			                }
-			                $document->setName($documentType->getName());
-			                $document->setDocumentTypeDocumentType($documentType);
-			                $document->setStatus(0);
-		                }else{
-			                $document = new Document();
-			                $document->setName($documentType->getName());
-			                $document->setDocumentTypeDocumentType($documentType);
-			                $document->setStatus(0);
-			                $person->setDocumentDocument($document);
-		                }
-		                break;
-                }
-                if($corrected){
-                    /** @var User $user */
-                    $user= $this->getUser();
-                    if($user->getPersonPerson()->getIdPerson()==$notification->getPersonPerson()->getIdPerson()){
-                        $actions = $em->getRepository('RocketSellerTwoPickBundle:Action')->findBy(array(
-                            'userUser'=>$user,
-                            'personPerson'=>$person
-                        ));
-                        /** @var Action $action */
-                        foreach ($actions as $action){
-                            if($action->getStatus()=='Error'){
-                                $action->setStatus('Corregido');
-                                $em->persist($action);
+                        if($docDoc){
+                            $vdde = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VDDE'));
+                            $vdd = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VDD'));
+                            $actionE = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$person,'actionTypeActionType'=>$vdde));
+                            $actionEe = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$person,'actionTypeActionType'=>$vdd));
+                            if($actionE){
+                                $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'CORT'));
+                                $log = new Log($this->getUser(),"Action","ActionStatus",$actionE->getIdAction(),$actionE->getActionStatus(),$actionStatus,"Se corrigió un documento");
+                                $actionE->setActionStatus($actionStatus);
+                                $actionE->setUpdatedAt();
+                                $em->persist($log);
+                                $em->persist($actionE);
+                            }
+                            if($actionEe){
+                                $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'CORT'));
+                                $log = new Log($this->getUser(),"Action","ActionStatus",$actionEe->getIdAction(),$actionEe->getActionStatus(),$actionStatus,"Se corrigió un documento");
+                                $actionEe->setActionStatus($actionStatus);
+                                $actionEe->setUpdatedAt();
+                                $em->persist($log);
+                                $em->persist($actionEe);
+                            }
+                        }else{
+                            $vdde = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VDDE'));
+                            $vdd = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VDD'));
+                            $actionE = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$person,'actionTypeActionType'=>$vdde));
+                            $actionEe = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$person,'actionTypeActionType'=>$vdd));
+                            if($actionE){
+                                $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'NEW'));
+                                $log = new Log($this->getUser(),"Action","ActionStatus",$actionE->getIdAction(),$actionE->getActionStatus(),$actionStatus,"Se subió un documento");
+                                $actionE->setActionStatus($actionStatus);
+                                $actionE->setUpdatedAt();
+                                $em->persist($log);
+                                $em->persist($actionE);
+                            }
+                            if($actionEe){
+                                $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'NEW'));
+                                $log = new Log($this->getUser(),"Action","ActionStatus",$actionEe->getIdAction(),$actionEe->getActionStatus(),$actionStatus,"Se subió un documento");
+                                $actionEe->setActionStatus($actionStatus);
+                                $actionEe->setUpdatedAt();
+                                $em->persist($log);
+                                $em->persist($actionEe);
                             }
                         }
-                    }
-
+                        break;
+                    case "CE":
+                        if($person->getDocumentDocument()){
+                            $document = $person->getDocumentDocument();
+                            $docDoc=true;
+                            if($document->getMediaMedia()){
+                                /** @var Media $media */
+                                $media = $document->getMediaMedia();
+                                if($media->getProviderName()){
+                                    $provider = $this->get($media->getProviderName());
+                                    $provider->removeThumbnails($media);
+                                }
+                                $em->remove($em->getRepository('\Application\Sonata\MediaBundle\Entity\Media')->find($media->getId()));
+                                $em->remove($em->getRepository('ApplicationSonataMediaBundle:Media')->find($media->getId()));
+                                $em->flush();
+                            }
+                            $document->setName($documentType->getName());
+                            $document->setDocumentTypeDocumentType($documentType);
+                            $document->setStatus(0);
+                        }else{
+                            $document = new Document();
+                            $document->setName($documentType->getName());
+                            $document->setDocumentTypeDocumentType($documentType);
+                            $document->setStatus(0);
+                            $person->setDocumentDocument($document);
+                        }
+                        if($docDoc){
+                            $vdde = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VDDE'));
+                            $vdd = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VDD'));
+                            $actionE = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$person,'actionTypeActionType'=>$vdde));
+                            $actionEe = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$person,'actionTypeActionType'=>$vdd));
+                            if($actionE){
+                                $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'CORT'));
+                                $log = new Log($this->getUser(),"Action","ActionStatus",$actionE->getIdAction(),$actionE->getActionStatus(),$actionStatus,"Se corrigió un documento");
+                                $actionE->setActionStatus($actionStatus);
+                                $actionE->setUpdatedAt();
+                                $em->persist($log);
+                                $em->persist($actionE);
+                            }
+                            if($actionEe){
+                                $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'CORT'));
+                                $log = new Log($this->getUser(),"Action","ActionStatus",$actionEe->getIdAction(),$actionEe->getActionStatus(),$actionStatus,"Se corrigió un documento");
+                                $actionEe->setActionStatus($actionStatus);
+                                $actionEe->setUpdatedAt();
+                                $em->persist($log);
+                                $em->persist($actionEe);
+                            }
+                        }else{
+                            $vdde = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VDDE'));
+                            $vdd = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VDD'));
+                            $actionE = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$person,'actionTypeActionType'=>$vdde));
+                            $actionEe = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$person,'actionTypeActionType'=>$vdd));
+                            if($actionE){
+                                $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'NEW'));
+                                $log = new Log($this->getUser(),"Action","ActionStatus",$actionE->getIdAction(),$actionE->getActionStatus(),$actionStatus,"Se subió un documento");
+                                $actionE->setActionStatus($actionStatus);
+                                $actionE->setUpdatedAt();
+                                $em->persist($log);
+                                $em->persist($actionE);
+                            }
+                            if($actionEe){
+                                $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'NEW'));
+                                $log = new Log($this->getUser(),"Action","ActionStatus",$actionEe->getIdAction(),$actionEe->getActionStatus(),$actionStatus,"Se subió un documento");
+                                $actionEe->setActionStatus($actionStatus);
+                                $actionEe->setUpdatedAt();
+                                $em->persist($log);
+                                $em->persist($actionEe);
+                            }
+                        }
+                        break;
+                    case "PASAPORTE":
+                        if($person->getDocumentDocument()){
+                            $document = $person->getDocumentDocument();
+                            $docDoc=true;
+                            if($document->getMediaMedia()){
+                                /** @var Media $media */
+                                $media = $document->getMediaMedia();
+                                if($media->getProviderName()){
+                                    $provider = $this->get($media->getProviderName());
+                                    $provider->removeThumbnails($media);
+                                }
+                                $em->remove($em->getRepository('\Application\Sonata\MediaBundle\Entity\Media')->find($media->getId()));
+                                $em->remove($em->getRepository('ApplicationSonataMediaBundle:Media')->find($media->getId()));
+                                $em->flush();
+                            }
+                            $document->setName($documentType->getName());
+                            $document->setDocumentTypeDocumentType($documentType);
+                            $document->setStatus(0);
+                        }else{
+                            $document = new Document();
+                            $document->setName($documentType->getName());
+                            $document->setDocumentTypeDocumentType($documentType);
+                            $document->setStatus(0);
+                            $person->setDocumentDocument($document);
+                        }
+                        if($docDoc){
+                            $vdde = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VDDE'));
+                            $vdd = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VDD'));
+                            $actionE = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$person,'actionTypeActionType'=>$vdde));
+                            $actionEe = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$person,'actionTypeActionType'=>$vdd));
+                            if($actionE){
+                                $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'CORT'));
+                                $log = new Log($this->getUser(),"Action","ActionStatus",$actionE->getIdAction(),$actionE->getActionStatus(),$actionStatus,"Se corrigió un documento");
+                                $actionE->setActionStatus($actionStatus);
+                                $actionE->setUpdatedAt();
+                                $em->persist($log);
+                                $em->persist($actionE);
+                            }
+                            if($actionEe){
+                                $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'CORT'));
+                                $log = new Log($this->getUser(),"Action","ActionStatus",$actionEe->getIdAction(),$actionEe->getActionStatus(),$actionStatus,"Se corrigió un documento");
+                                $actionEe->setActionStatus($actionStatus);
+                                $actionEe->setUpdatedAt();
+                                $em->persist($log);
+                                $em->persist($actionEe);
+                            }
+                        }else{
+                            $vdde = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VDDE'));
+                            $vdd = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VDD'));
+                            $actionE = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$person,'actionTypeActionType'=>$vdde));
+                            $actionEe = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$person,'actionTypeActionType'=>$vdd));
+                            if($actionE){
+                                $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'NEW'));
+                                $log = new Log($this->getUser(),"Action","ActionStatus",$actionE->getIdAction(),$actionE->getActionStatus(),$actionStatus,"Se subió un documento");
+                                $actionE->setActionStatus($actionStatus);
+                                $actionE->setUpdatedAt();
+                                $em->persist($log);
+                                $em->persist($actionE);
+                            }
+                            if($actionEe){
+                                $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'NEW'));
+                                $log = new Log($this->getUser(),"Action","ActionStatus",$actionEe->getIdAction(),$actionEe->getActionStatus(),$actionStatus,"Se subió un documento");
+                                $actionEe->setActionStatus($actionStatus);
+                                $actionEe->setUpdatedAt();
+                                $em->persist($log);
+                                $em->persist($actionEe);
+                            }
+                        }
+                        break;
                 }
                 $em->persist($person);
                 break;
@@ -523,22 +784,27 @@ use EmployerMethodsTrait;
                     $employer->setMandatoryDocument($document);
                 }
                 if($corrected){
-                    /** @var User $user */
-                    $user= $this->getUser();
-                    if($user->getPersonPerson()->getIdPerson()==$notification->getPersonPerson()->getIdPerson()){
-                        $actions = $em->getRepository('RocketSellerTwoPickBundle:Action')->findBy(array(
-                            'userUser'=>$user,
-                            'personPerson'=>$employer->getPersonPerson()
-                        ));
-                        /** @var Action $action */
-                        foreach ($actions as $action){
-                            if($action->getStatus()=='Error'){
-                                $action->setStatus('Corregido');
-                                $em->persist($action);
-                            }
-                        }
+                    $vm = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VM'));
+                    $actionE = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$employer->getPersonPerson(),'actionTypeActionType'=>$vm));
+                    if($actionE){
+                        $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'CORT'));
+                        $log = new Log($this->getUser(),"Action","ActionStatus",$actionE->getIdAction(),$actionE->getActionStatus(),$actionStatus,"Se corrigió un mandato");
+                        $actionE->setActionStatus($actionStatus);
+                        $actionE->setUpdatedAt();
+                        $em->persist($log);
+                        $em->persist($actionE);
                     }
-
+                }else{
+                    $vm = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VM'));
+                    $actionE = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$employer->getPersonPerson(),'actionTypeActionType'=>$vm));
+                    if($actionE){
+                        $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'NEW'));
+                        $log = new Log($this->getUser(),"Action","ActionStatus",$actionE->getIdAction(),$actionE->getActionStatus(),$actionStatus,"Se subió un mandato");
+                        $actionE->setActionStatus($actionStatus);
+                        $actionE->setUpdatedAt();
+                        $em->persist($log);
+                        $em->persist($actionE);
+                    }
                 }
                 $em->persist($employer);
                 break;
@@ -557,8 +823,8 @@ use EmployerMethodsTrait;
                             $provider = $this->get($media->getProviderName());
                             $provider->removeThumbnails($media);
                         }
-                        $em->remove($em->getRepository('\Application\Sonata\MediaBundle\Entity\Media')->find($media->getId()));
                         $em->remove($em->getRepository('ApplicationSonataMediaBundle:Media')->find($media->getId()));
+                        $em->remove($em->getRepository('\Application\Sonata\MediaBundle\Entity\Media')->find($media->getId()));
                         $em->flush();
                     }
                     $document->setName($documentType->getName());
@@ -570,6 +836,31 @@ use EmployerMethodsTrait;
                     $document->setDocumentTypeDocumentType($documentType);
                     $document->setStatus(0);
                     $eHE->setAuthDocument($document);
+                }
+                if($corrected){
+                    $vcat = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VCAT'));
+                    $user = $em->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('personPerson'=>$eHE->getEmployerEmployer()->getPersonPerson()));
+                    $action = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$eHE->getEmployeeEmployee()->getPersonPerson(),'userUser'=>$user,'actionTypeActionType'=>$vcat));
+                    if($action){
+                        $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'CORT'));
+                        $log = new Log($this->getUser(),"Action","ActionStatus",$action->getIdAction(),$action->getActionStatus(),$actionStatus,"Se corrigió una carta de autorización");
+                        $action->setActionStatus($actionStatus);
+                        $action->setUpdatedAt();
+                        $em->persist($log);
+                        $em->persist($action);
+                    }
+                }else{
+                    $vcat = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VCAT'));
+                    $user = $em->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('personPerson'=>$eHE->getEmployerEmployer()->getPersonPerson()));
+                    $action = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$eHE->getEmployeeEmployee()->getPersonPerson(),'userUser'=>$user,'actionTypeActionType'=>$vcat));
+                    if($action){
+                        $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'NEW'));
+                        $log = new Log($this->getUser(),"Action","ActionStatus",$action->getIdAction(),$action->getActionStatus(),$actionStatus,"Se subió una carta de autorización");
+                        $action->setActionStatus($actionStatus);
+                        $action->setUpdatedAt();
+                        $em->persist($log);
+                        $em->persist($action);
+                    }
                 }
                 $em->persist($eHE);
                 break;
@@ -604,6 +895,31 @@ use EmployerMethodsTrait;
                     $document->setStatus(0);
                     $contract->setDocumentDocument($document);
                     $contract->setBackStatus(1);
+                }
+                if($corrected){
+                    $vc = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VC'));
+                    $user = $em->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('personPerson'=>$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson()));
+                    $action = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson(),'userUser'=>$user,'actionTypeActionType'=>$vc));
+                    if($action){
+                        $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'CORT'));
+                        $log = new Log($this->getUser(),"Action","ActionStatus",$action->getIdAction(),$action->getActionStatus(),$actionStatus,"Se corrigió un contrato");
+                        $action->setActionStatus($actionStatus);
+                        $action->setUpdatedAt();
+                        $em->persist($log);
+                        $em->persist($action);
+                    }
+                }else{
+                    $vc = $em->getRepository("RocketSellerTwoPickBundle:ActionType")->findOneBy(array('code'=>'VC'));
+                    $user = $em->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('personPerson'=>$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson()));
+                    $action = $em->getRepository("RocketSellerTwoPickBundle:Action")->findOneBy(array('personPerson'=>$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson(),'userUser'=>$user,'actionTypeActionType'=>$vc));
+                    if($action){
+                        $actionStatus = $em->getRepository("RocketSellerTwoPickBundle:StatusTypes")->findOneBy(array('code'=>'NEW'));
+                        $log = new Log($this->getUser(),"Action","ActionStatus",$action->getIdAction(),$action->getActionStatus(),$actionStatus,"Se subió un contrato");
+                        $action->setActionStatus($actionStatus);
+                        $action->setUpdatedAt();
+                        $em->persist($log);
+                        $em->persist($action);
+                    }
                 }
                 $em->persist($contract);
                 break;
@@ -1143,7 +1459,7 @@ use EmployerMethodsTrait;
                 break;
             case "mandato":
                 //$id del empleador
-                $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Person');
+                $repository = $this->getDoctrine()->getManager()->getRepository('RocketSellerTwoPickBundle:Person');
                 $repositoryE = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
                 $repositoryU = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User');
                 /** @var \RocketSeller\TwoPickBundle\Entity\Employer $employer */

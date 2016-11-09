@@ -1,7 +1,7 @@
 {% block modalMessage %}
     <div class="modal fade" id="{{ modal_id| default("modal_template") }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog modal-md" role="document">
-            <div class="modal-content" {{  modal_style | default('') }}>
+            <div class="modal-content" style ="{{  modal_style | default('') }}">
                 {% if primary_modal_header is defined and primary_modal_header !="" %}
                     {{ primary_modal_header }}
                 {% endif %}

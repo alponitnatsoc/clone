@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\StringInput;
 
-class PendingDocumentsRemainderCommand extends ContainerAwareCommand
+class PendingDocumentsReminderCommand extends ContainerAwareCommand
 {
 
     private $output;
@@ -15,8 +15,8 @@ class PendingDocumentsRemainderCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-                ->setName('symplifica:pending:documents:remainder')
-                ->setDescription('Sends push notification remainding of pending documents')
+                ->setName('symplifica:pending:documents:reminder')
+                ->setDescription('Sends push notification reminding of pending documents')
                 ->setHelp('The push notifications are sent 1, 3 and 7 days after users have completed step 3
                             but have at least one document pending.')
         ;
@@ -24,11 +24,11 @@ class PendingDocumentsRemainderCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('<comment>Running Cron Task PendingDocumentsRemainder ' . date("Y/m/d h:i") . ' time_zone: ' . date_default_timezone_get() . '</comment>');
+        $output->writeln('<comment>Running Cron Task PendingDocumentsReminder ' . date("Y/m/d h:i") . ' time_zone: ' . date_default_timezone_get() . '</comment>');
         $this->output = $output;
 
         $cronService = $this->getContainer()->get('app.symplifica_chrons');
-        $response = $cronService->putPendingDocumentsRemainderAction();
+        $response = $cronService->putPendingDocumentsReminderAction();
         if ($response->getStatusCode() != 200) {
             $output->writeln('<error>Error calling service</error>');
         } else {
@@ -74,7 +74,7 @@ class PendingDocumentsRemainderCommand extends ContainerAwareCommand
 
 
         }
-        $output->writeln('<comment>Done PendingDocumentsRemainder!</comment>');
+        $output->writeln('<comment>Done PendingDocumentsReminder!</comment>');
     }
 
 }

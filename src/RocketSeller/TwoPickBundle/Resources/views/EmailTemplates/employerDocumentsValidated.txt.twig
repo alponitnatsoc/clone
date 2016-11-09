@@ -1,5 +1,5 @@
 {% trans_default_domain 'FOSUserBundle' %}
-{% block subject %}{% autoescape false %}Importante, HOY se cierran novedades{% endautoescape %}{% endblock %}
+{% block subject %}{% autoescape false %}Tus datos como empleador han sido validados{% endautoescape %}{% endblock %}
 {% block body_html %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -38,21 +38,21 @@
 
             <tr>
               <td style="padding: 10px 10px 20px 10px;">
-                <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#40c1c3; font-size: 20px;width: 90%;margin: 0 auto;">¡Hola {{ userName }}!</div>
+                  <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#40c1c3; font-size: 20px;width: 90%;margin: 0 auto;">¡Hola {{ userName }}</div>
                 <br />
-                <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#909090; font-size: 15px; width:90%;margin:0 auto"><span style="color:#13878e;font-weight:600">¡Es momento de realizar el pago a tus empleados {% if days != 2 %}y aportes a seguridad social{% endif %}!</span><br>
-                  Hoy es tu último día para reportar novedades. Si pagas de forma electrónica recuerda que la transacción puede tardar hasta tres días hábiles.<br>
-                  Paga hoy para asegurar que el dinero le llegue el {% if days == 2 %}15{% else %}25{% endif %} a tu empleado.<br>
-                  Si no tienes ningún tipo de novedad, puedes seguir con el proceso de pago.<br><br>
+                  <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#909090; font-size: 15px; width:90%;margin:0 auto"><span style="color:#13878e;font-weight:600">¡Nos encontramos haciendo el trabajo duro por ti!</span><br>
+                  Hemos validando correctamente tu información y nos encontramos realizando las afiliaciones ante las entidades de seguridad social. En un máximo de 3 días hábiles <strong>luego de validar a tus empleados</strong> podras usar nuestra plataforma.<br>
+                  Te notificaremos en cuanto todo este listo.</div><br>
+                    <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#909090; font-size: 15px; width:90%;margin:0 auto">
 
-                  <a href="https://symplifica.com/" style="text-decoration:none;width: 90%;margin: 0 auto;" target="_blank;">
-                    <div style="background:#13878e;border-radius:25px; height: 25px; font-size:14px; width: 170px; color:#FFFFFF;font-family: 'Open Sans', sans-serif; font-weight: 600; padding: 5px 0 0 0; text-align:center">
-                      Ir a Symplifica
-                    </div>
-                  </a><br />
+                        <span style="color:#13878e;font-size:12px">Recuerda que si ya te encontrabas anteriomente afiliado a alguna entidad, seguiras afiliado a esta, ya que no podemos realizar tramites de traslado.</span><br><br>
+                        <span style="color:#13878e;font-weight:600">¡Que tengas un buen día!</span><br>
+                        Equipo Symplifica
 
+                                </div>
               </td>
             </tr>
+
 
             <tr><td style="font-size: 0; line-height: 0;" height="20">&nbsp;</td></tr>
             <tr>

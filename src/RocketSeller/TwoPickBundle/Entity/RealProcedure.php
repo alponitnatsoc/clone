@@ -5,6 +5,7 @@ namespace RocketSeller\TwoPickBundle\Entity;
 use DateTime;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use RocketSeller\TwoPickBundle\RocketSellerTwoPickBundle;
 
 /**
  * RealProcedure
@@ -65,6 +66,26 @@ class RealProcedure
     private $finishedAt=null;
 
     /**
+     * @ORM\Column(name="first_error_at",type="datetime",nullable=true)
+     */
+    private $firstErrorAt=null;
+
+    /**
+     * @ORM\Column(name="error_at",type="datetime",nullable=true)
+     */
+    private $errorAt=null;
+
+    /**
+     * @ORM\Column(name="corrected_at",type="datetime", nullable=true)
+     */
+    private $correctedAt=null;
+
+    /**
+     * @ORM\Column(name="priority_updated_at",type="datetime", nullable=true)
+     */
+    private $priorityUpdatedAt=null;
+
+    /**
      * @var \RocketSeller\TwoPickBundle\Entity\ProcedureType
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\ProcedureType")
      * @ORM\JoinColumns({
@@ -103,6 +124,22 @@ class RealProcedure
      * })
      */
     private $procedureStatus;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="status", type="string",nullable=true)
+     */
+    private $status;
+
+    /**
+     * @var integer
+     *  0 - false
+     *  1 - true
+     *  2 - error
+     * @ORM\Column(name="max_time_reached", type="integer",nullable=true)
+     */
+    private $maxTimeReached = 0;
 
     /**
      * Set idProcedure
@@ -286,7 +323,6 @@ class RealProcedure
     public function setActionChangedAt($actionChangedAt)
     {
         $this->actionChangedAt = $actionChangedAt;
-
         return $this;
     }
 
@@ -334,7 +370,9 @@ class RealProcedure
     public function setPriority($priority)
     {
         $this->priority = $priority;
-
+        if($priority == 3){
+            $this->maxTimeReached = 1;
+        }
         return $this;
     }
 
@@ -415,6 +453,52 @@ class RealProcedure
         return $this->action->matching($criteria);
     }
 
+    /**
+     * @param $employerHasEntity
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActionByEmployerHasEntity($employerHasEntity){
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('employerEntity',$employerHasEntity));
+        return $this->action->matching($criteria);
+    }
+
+    /**
+     * @param $employeeHasEntity
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActionByEmployeeHasEntity($employeeHasEntity){
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('employeeEntity',$employeeHasEntity));
+        return $this->action->matching($criteria);
+    }
+
+
+    /**
+     * @param Person $person
+     * @param ActionType $actionType
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActionsByPersonAndActionType(Person $person, ActionType $actionType)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('personPerson',$person))
+            ->andWhere(Criteria::expr()->eq('actionTypeActionType',$actionType));
+        return $this->action->matching($criteria);
+    }
+
+
+    /**
+     * @param string $id
+     * @return RocketSellerTwoPickBundle:Action
+     */
+    public function getActionById($id)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('idAction',intval($id)));
+        return $this->action->matching($criteria)->first();
+    }
+
 
     /**
      * Set backOfficeDate
@@ -475,8 +559,11 @@ class RealProcedure
      */
     public function setProcedureStatus(\RocketSeller\TwoPickBundle\Entity\StatusTypes $procedureStatus = null)
     {
+        $this->status = $procedureStatus->getName();
+        $today = new DateTime();
+        if($procedureStatus->getCode()=='FIN')
+            $this->finishedAt = $today;
         $this->procedureStatus = $procedureStatus;
-
         return $this;
     }
 
@@ -498,5 +585,160 @@ class RealProcedure
     public function getProcedureTypeName()
     {
         return $this->procedureTypeProcedureType->getName();
+    }
+
+    /**
+     * Set status
+     *
+     * @param string $status
+     *
+     * @return RealProcedure
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set errorAt
+     *
+     * @param \DateTime $errorAt
+     *
+     * @return RealProcedure
+     */
+    public function setErrorAt($errorAt)
+    {
+        if($this->firstErrorAt==null)
+            $this->firstErrorAt = $errorAt;
+        $this->errorAt = $errorAt;
+        return $this;
+    }
+
+    /**
+     * Get errorAt
+     *
+     * @return \DateTime
+     */
+    public function getErrorAt()
+    {
+        return $this->errorAt;
+    }
+
+    /**
+     * Set correctedAt
+     *
+     * @param \DateTime $correctedAt
+     *
+     * @return RealProcedure
+     */
+    public function setCorrectedAt($correctedAt)
+    {
+        $this->correctedAt = $correctedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get correctedAt
+     *
+     * @return \DateTime
+     */
+    public function getCorrectedAt()
+    {
+        return $this->correctedAt;
+    }
+
+    /**
+     * Set firstErrorAt
+     *
+     * @param \DateTime $firstErrorAt
+     *
+     * @return RealProcedure
+     */
+    public function setFirstErrorAt($firstErrorAt)
+    {
+        $this->firstErrorAt = $firstErrorAt;
+
+        return $this;
+    }
+
+    /**
+     * Get firstErrorAt
+     *
+     * @return \DateTime
+     */
+    public function getFirstErrorAt()
+    {
+        return $this->firstErrorAt;
+    }
+
+    /**
+     * Set maxTimeReached
+     *
+     * @param integer $maxTimeReached
+     *
+     * @return RealProcedure
+     */
+    public function setMaxTimeReached($maxTimeReached)
+    {
+        $this->maxTimeReached = $maxTimeReached;
+
+        return $this;
+    }
+
+    /**
+     * Get maxTimeReached
+     *
+     * @return integer
+     */
+    public function getMaxTimeReached()
+    {
+        return $this->maxTimeReached;
+    }
+
+    /**
+     * Get procedureStatusCode
+     *
+     * @return string
+     */
+    public function getProcedureStatusCode()
+    {
+        return $this->getProcedureStatus()->getCode();
+    }
+
+    /**
+     * Set priorityUpdatedAt
+     *
+     * @param \DateTime $priorityUpdatedAt
+     *
+     * @return RealProcedure
+     */
+    public function setPriorityUpdatedAt($priorityUpdatedAt)
+    {
+        $this->priorityUpdatedAt = $priorityUpdatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get priorityUpdatedAt
+     *
+     * @return \DateTime
+     */
+    public function getPriorityUpdatedAt()
+    {
+        return $this->priorityUpdatedAt;
     }
 }
