@@ -3249,7 +3249,7 @@ class ActionsRestController extends FOSRestController
     {
         $notification = new Notification();
         $notification->setPersonPerson($person);
-        $notification->setStatus(1);
+        $notification->activate();
         $notification->setDocumentTypeDocumentType($documentType);
         $notification->setType('alert');
         $notification->setDescription($descripcion);

@@ -348,7 +348,7 @@ class EmployeeRestController extends FOSRestController
                     $utils = $this->get('app.symplifica_utils');
                     $notification = new Notification();
                     $notification->setPersonPerson($user->getPersonPerson());
-                    $notification->setStatus(1);
+                    $notification->activate();
                     $notification->setType('alert');
                     $notification->setDescription("Crear Cuenta DaviPlata para " . $utils->mb_capitalize($employee->getPersonPerson()->getFullName()));
                     $notification->setAccion("Crear Daviplata");
@@ -1364,7 +1364,7 @@ class EmployeeRestController extends FOSRestController
     {
         $notification = new Notification();
         $notification->setPersonPerson($person);
-        $notification->setStatus(1);
+        $notification->activate();
         $notification->setType('alert');
         $notification->setDescription($descripcion);
         $notification->setRelatedLink($url);
