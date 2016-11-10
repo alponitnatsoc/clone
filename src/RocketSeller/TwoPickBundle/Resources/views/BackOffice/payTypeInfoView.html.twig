@@ -89,6 +89,8 @@
                         <th>Cédula</th>
                         <th>Tipo de pago</th>
                         <th>Tipo de contrato</th>
+                        <th>Número de días trabajados por semana</th>
+                        <th>Frecuencia de pago</th>
                     </tr>
                     {% for ehe in ehes %}
                         {% set locIndex = loop.index - 1 %}
@@ -101,6 +103,12 @@
                                     <td> {{ ehe.employeeEmployee.personPerson.document }} </td>
                                     <td> {{ contract.payMethodpayMethod.payTypePayType.simpleName }}</td>
                                     <td> {{ contract.timeCommitmentTimeCommitment.name }}</td>
+                                    <td>
+                                        {% if contract.workableDaysMonth != 30 %}
+                                            {{ contract.workableDaysMonth / 4 }}
+                                        {% endif %}
+                                    </td>
+                                    <td> {{ contract.frequencyFrequency.name }}</td>
                                 </tr>
                         {% endfor %}
                     {% endfor %}
