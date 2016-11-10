@@ -151,7 +151,7 @@ class LiquidationRestController extends FOSRestController
             $notification->setAccion("Subir carta de renuncia");
             $notification->setDescription("Subir carta de renuncia firmada por " . $employeeName);
             $notification->setPersonPerson($employerPerson);
-            $notification->setStatus(1);
+            $notification->activate();
             $notification->setType("alert");
             $notification->setTitle("Subir carta de renuncia");
             $notification->setLiquidation($liquidation);

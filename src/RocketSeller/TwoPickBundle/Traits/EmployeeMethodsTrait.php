@@ -183,6 +183,11 @@ trait EmployeeMethodsTrait
                         return $notification;
                     break;
             }
+            if($strex[1]=='contract'){
+                /** @var EmployerHasEmployee $ehe */
+                $ehe = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->findOneBy(array('employeeEmployee'=>$person->getEmployee(),'employerEmployer'=>$owner->getEmployer()));
+                if($strex[3]==$ehe->getIdEmployerHasEmployee())return $notification;
+            }
         }
         return null;
     }
@@ -223,38 +228,38 @@ trait EmployeeMethodsTrait
                 $dUrl=null;
                 $descripcion = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
                 $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$person->getIdPerson(),'docCode'=>$docType->getDocCode()));
-                $action = "subir";
+                $action = "Subir";
                 break;
             case 'CE':
                 $dAction=null;
                 $dUrl=null;
                 $descripcion = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
                 $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$person->getIdPerson(),'docCode'=>$docType->getDocCode()));
-                $action = "subir";
+                $action = "Subir";
                 break;
             case 'PASAPORTE':
                 $dAction=null;
                 $dUrl=null;
                 $descripcion = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
                 $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$person->getIdPerson(),'docCode'=>$docType->getDocCode()));
-                $action = "subir";
+                $action = "Subir";
                 break;
             case 'TI':
                 $dAction=null;
                 $dUrl=null;
                 $descripcion = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
                 $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$person->getIdPerson(),'docCode'=>$docType->getDocCode()));
-                $action = "subir";
+                $action = "Subir";
                 break;
             case 'RUT':
                 $dAction=null;
                 $dUrl=null;
-                $action = "subir";
+                $action = "Subir";
                 $descripcion = "Subir copia del RUT de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
                 $url = $this->generateUrl("documentos_employee", array('entityType'=>'Person','entityId'=>$person->getIdPerson(),'docCode'=>'RUT'));
                 break;
             case 'MAND':
-                $action = "subir";
+                $action = "Subir";
                 $descripcion = "Subir mandato firmado de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
                 $url = $this->generateUrl("documentos_employee", array('entityType'=>'Employer','entityId'=>$person->getEmployer()->getIdEmployer(),'docCode'=>'MAND'));
                 $dUrl = $this->generateUrl("download_documents", array('id' => $person->getIdPerson(), 'ref' => "mandato", 'type' => 'pdf'));
@@ -264,9 +269,40 @@ trait EmployeeMethodsTrait
                 $employerHasEmployee = $em->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")->findOneBy(array("employeeEmployee"=>$person->getEmployee(),"employerEmployer"=>$owner->getEmployer()));
                 $dAction="Bajar";
                 $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getIdEmployerHasEmployee(), 'ref' => "aut-afiliacion-ss", 'type' => 'pdf'));
-                $action = "subir";
+                $action = "Subir";
                 $descripcion = "Subir autorización firmada de manejo de datos y afiliación de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
                 $url = $this->generateUrl("documentos_employee", array('entityType'=>'EmployerHasEmployee','entityId'=>$employerHasEmployee->getIdEmployerHasEmployee(),'docCode'=>'CAS'));
+                break;
+            case 'CTR':
+                /** @var EmployerHasEmployee $employerHasEmployee */
+                $employerHasEmployee = $em->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")->findOneBy(array("employeeEmployee"=>$person->getEmployee(),"employerEmployer"=>$owner->getEmployer()));
+                $contract = $employerHasEmployee->getActiveContract();
+                $dAction = null;
+                $dUrl = null;
+                $flag=false;
+                if($employerHasEmployee->getLegalFF()==1){
+                    $configurations=$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getConfigurations();
+                    /** @var Configuration $config */
+                    foreach ($configurations as $config) {
+                        if($config->getValue()=="PreLegal-SignedContract"){
+                            $flag=true;
+                            break;
+                        }
+                    }
+                }
+                if($employerHasEmployee->getExistentSQL()==0){
+                    $url = $this->generateUrl("view_document_contract_state", array("idEHE"=>$employerHasEmployee->getIdEmployerHasEmployee()));
+                    $descripcion = "Aviso sobre el contrato de ". $utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
+                    $action="Ver";
+                }else{
+                    $action='Subir';
+                    if(!$flag){
+                        $dAction="Bajar";
+                        $dUrl = $this->generateUrl("download_documents", array('id' => $contract->getIdContract(), 'ref' => "contrato", 'type' => 'pdf'));
+                    }
+                    $descripcion = "Subir copia del contrato de ". $utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
+                    $url = $this->generateUrl("documentos_employee", array('entityType'=>'Contract','entityId'=>$contract->getIdContract(),'docCode'=>'CTR'));
+                }
                 break;
         }
         $notification = new Notification();
