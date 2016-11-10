@@ -198,6 +198,9 @@ back_add_sql:
 complete_employee:
     path:         /backoffice/procedure/{procedureId}/complete/employee/{idEmployerHasEmployee}
     defaults:     { _controller: RocketSellerTwoPickBundle:Procedure:completeEmployee }
+generate_contract:
+    path:         /backoffice/generate/contract/{idEmployerHasEmployee}/{procedureId}
+    defaults:     { _controller: RocketSellerTwoPickBundle:Procedure:generateContract }
 
 
 validate_contract:
