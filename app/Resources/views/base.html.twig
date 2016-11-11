@@ -264,7 +264,7 @@
                 </div>
 
 
-                <div id="main" {% block classMainBase %}class="col-sm-9 clearfix"{% endblock %}>
+                <div id="main" {% block classMainBase %}class="col-sm-9 clearfix no-Padding-Col"{% endblock %}>
                     {% block main %}
                         {% if app.user.status is defined %}
                             {% set status = app.user.status %}
@@ -276,7 +276,7 @@
                                 {% if template_parameter is defined %}
                                     {{ include('@RocketSellerTwoPick/modal_templates/modal_picker.twig',{'template_parameter':template_parameter}) }}
                                 {% endif %}
-                                <div class="col-sm-12 col-xs-12 profile-Data">
+                                <div class="col-sm-12 col-xs-12 profile-Data azulclaro"> <!--azulclaro quite la clase para que no saliera, hablar con andtres para ajustar-->
                                     {% set flag = 0 %}
                                     {% set path_modal = app.request.pathInfo|split('/') %}
                                     {% if path_modal[1] =='register' %}

@@ -247,7 +247,7 @@
         </div>
     {% endfor %}
     #}
-    <div class="col-sm-12 col-md-12 align-Resp">
+    <div class="col-sm-12 col-md-12 align-Resp no-Padding-Col">
         <div id="" class="col-sm-12 col-md-12 blockStep inline">
             <div id="" class="col-md-2 col-md-12 txt-AD0" style="text-align: left;">
                 <img src="/img/block-inline.png" class="center-block">
@@ -264,10 +264,10 @@
         <div class="col-md-12 text-center">
             <br/>
             <div class="col-md-12">
-                <b style="color:#00858C;font-size: 25px;" class="x-large">Importante</b>
+                <h1 style="font-size: 25px;" class="x-large grisclarofont light">Importante</h1>
             </div>
             <div class="col-md-12">
-                <div class="center padding-top-botton-20" style="width:80%">
+                <div class="grisclarofont light center padding-top-botton-20" style="width:80%">
                   A continuación ingresarás una cuenta que utilizarás para pagar cargos que apliquen a tu gestión, entre ellos: la nómina de tu empleado
                   (si decides pagarla por este medio), los aportes a seguridad social, los costos transaccionales y la suscripción a
                   Symplifica. El pago mensual variará dependiendo de las novedades que reportes.
@@ -323,7 +323,7 @@
                           {% set producto = employeeData['product'] %}
 
                           {% if contrato.employerHasEmployeeEmployerHasEmployee.state >= 0 %}
-                              
+
                             <div class="row clearfix paddingbottom">
                                 <div class="col-xs-6 col-md-4 employee {{ employee.state>0 ?'activo':'inactivo' }}">
                                     <div class="azulmediofont nopadding {{ employee.employeeEmployee.personPerson.gender!='MAS'?'female':'male' }} ">
@@ -343,13 +343,13 @@
                                     </div>
 
                                 </div>
-                                <div class="col-xs-6 col-md-4">
+                                <div class="col-xs-6 col-md-4" align="center">
                                     <div class="btn btn-change-state-contract {{ employee.state>0 ?'on btn-grey':'off btn-orange ' }}"
                                          data-id="{{ employee.idEmployerHasEmployee }}"
                                          data-href="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}">{{ employee.state >0?'Inactivar':'Activar' }}</div>
                                 </div>
-                                <div class="col-xs-12 col-md-4 numberpay suscriptionInd"
-                                  data-id="{{ employee.idEmployerHasEmployee }}"> {{ isFreeUntil }}
+                                <div class="col-xs-12 col-md-4 numberpay suscriptionInd" data-id="{{ employee.idEmployerHasEmployee }}">
+                                    {{ isFreeUntil }}
                                 </div>
 
                             </div>

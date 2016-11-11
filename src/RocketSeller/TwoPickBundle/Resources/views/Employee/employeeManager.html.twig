@@ -48,15 +48,16 @@
     <script>
         window.Intercom("trackEvent", "manage-employee");
     </script>
-    <div class="row">
-        <div class="col-sm-12 col-xs-12 align-Resp">
+    <div>
+        <div class="col-sm-12 col-xs-12 align-Resp azulclaro">
             <div id="" class=" col-sm-12 col-xs-12 blockStep inline  nav-link" >
                 <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
                      <img src="/img/block-inline.png" class="center-block">
                 </div>
                 <div id="" class="col-md-10 col-xs-12 txt-AD1">
                     <div id="" class="text-left title-center">
-                        Empleados
+                        <span class="step">Mis empleados</span>
+                        Hasta el día de hoy
                     </div>
                 </div>
             </div>
@@ -65,14 +66,14 @@
 
     <div id="agregarNovedad"></div>
     <div class="col-xs-12" id="employees">
-        <div class="cantidadEmpleados"><h1>Mis empleados a la fecha</h1></div>
+        <div class="cantidadEmpleados"><h1 class="grisclarofont light">Mis empleados a la fecha</h1></div>
         <!--<div class="row employeesCount">
             <div class="col-md-4 col-xs-3"><p><b> {{ activeEmp }}</b><br>Empleados <br>activos</p></div>
             <div class="col-md-4 col-xs-3 division-line"><p><b> {{ inactiveEmp }} </b><br>Empleados <br>inactivos</p></div>
             <div class="col-md-4 col-xs-6"><p><b> {{ registerEmp }} </b><br>Empleados en proceso <br>de registro</p></div>
         </div>-->
         <br />
-        <div class="row">
+        <div>
             <div class="col-sm-12 col-xs-12">
 
                 {% for employee in employees %}
