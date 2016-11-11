@@ -103,36 +103,42 @@
     border-radius: 3px;
 }
 #form_expeditionDate_day{
+    padding: 0px;
     height: 20px;
     font-size: 12px;
     border: 0px;
     margin: 0px 6px 0px 2px;
 }
 #form_expeditionDate_month{
+    padding: 0px;
     height: 20px;
     font-size: 12px;
     border: 0px;
     margin: 0px 6px 0px 2px;
 }
 #form_expeditionDate_year{
+    padding: 0px;
     height: 20px;
     font-size: 12px;
     border: 0px;
     margin: 0px 6px 0px 2px;
 }
 #form_birthDate_day{
+    padding: 0px;
     height: 20px;
     font-size: 12px;
     border: 0px;
     margin: 0px 6px 0px 2px;
 }
 #form_birthDate_month{
+    padding: 0px;
     height: 20px;
     font-size: 12px;
     border: 0px;
     margin: 0px 6px 0px 2px;
 }
 #form_birthDate_year{
+    padding: 0px;
     height: 20px;
     font-size: 12px;
     border: 0px;

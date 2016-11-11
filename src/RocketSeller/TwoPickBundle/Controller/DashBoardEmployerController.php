@@ -63,6 +63,7 @@ class DashBoardEmployerController extends Controller {
             $valContract = false;
             $valid = false;
             $backval = false;
+            $fin = array();
             if($state ==1){
                 if($user->getPersonPerson()->getEmployer()->getDashboardMessage()==null){
                     $employer->setDashboardMessage($today);
@@ -89,17 +90,27 @@ class DashBoardEmployerController extends Controller {
                         if(!$valid)$valid=true;
                         $em->persist($ehe);
                     }
-                    if($ehe->getDocumentStatusType()->getDocumentStatusCode()=='BOFFFF' and $ehe->getBackofficeFinishMessageAt()==null){
+                    if($ehe->getDocumentStatusType()->getDocumentStatusCode()=='BOFFFF' and $ehe->getBackofficeFinishMessageAt()==null and $ehe->getExistentSQL()==1){
+
                         $ehe->setBackofficeFinishMessageAt($today);
                         $finished[$ehe->getIdEmployerHasEmployee().'']=true;
+                        $fin[$ehe->getIdEmployerHasEmployee()]=true;
                         if(!$backval)$backval=true;
+                        $valid=true;
                         $em->persist($ehe);
+                    }elseif($ehe->getDocumentStatusType()->getDocumentStatusCode()=='BOFFFF' and $ehe->getExistentSQL()==1){
+                        $fin[$ehe->getIdEmployerHasEmployee()]=true;
+                        $valid=true;
+                    }else{
+                        $fin[$ehe->getIdEmployerHasEmployee()]=false;
                     }
+
                 }
             }
+
             $em->flush();
 
-            if($tareas){
+            if($tareas and !$backval){
                 return $this->render('RocketSellerTwoPickBundle:Employer:dashBoard.html.twig', array(
                     'notifications' => $notifications,
                     'user' => $user->getPersonPerson(),
@@ -110,10 +121,13 @@ class DashBoardEmployerController extends Controller {
                 ));
             }else{
                 if($valid and !$backval) {
-                    return $this->render('@RocketSellerTwoPick/Employer/endvalidation.html.twig', array(
+                    return $this->render('@RocketSellerTwoPick/Employer/cleanDashboard.html.twig', array(
                         'user' => $user->getPersonPerson(),
                         'ready' => $ready,
-                        'validated' => $validated,
+                        'validated' => $valid,
+                        'backval'=>$backval,
+                        'finished'=>$finished,
+                        'fin'=>$fin,
                     ));
                 }elseif($valid and $backval){
                     return $this->render('@RocketSellerTwoPick/Employer/endvalidation.html.twig',array(
@@ -126,6 +140,7 @@ class DashBoardEmployerController extends Controller {
                     return $this->render('@RocketSellerTwoPick/Employer/endvalidation.html.twig',array(
                         'user' => $user->getPersonPerson(),
                         'ready'=>$ready,
+                        'validated'=>$validated,
                         'backval'=>$backval,
                     ));
                 }else{

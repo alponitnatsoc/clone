@@ -3249,7 +3249,7 @@ class ActionsRestController extends FOSRestController
     {
         $notification = new Notification();
         $notification->setPersonPerson($person);
-        $notification->setStatus(1);
+        $notification->activate();
         $notification->setDocumentTypeDocumentType($documentType);
         $notification->setType('alert');
         $notification->setDescription($descripcion);
@@ -3330,6 +3330,9 @@ class ActionsRestController extends FOSRestController
                                     break;
                                 }
                             }
+                            if($ehe->getExistentSQL()!=1){
+                                $finish=false;
+                            }
                             if(!$dcpe){
                                 $atLeastOne = true;
                                 break;
@@ -3390,7 +3393,9 @@ class ActionsRestController extends FOSRestController
                                     $procedure->setProcedureStatus($this->getActionStatusByStatusCode('FIN'));
                                     foreach ($procedure->getEmployerEmployer()->getEmployerHasEmployees() as $ehe){
                                         $ehe->setDocumentStatusType($this->getDocumentStatusByCode('BOFFFF'));
+                                        if($ehe->getAllDocsReadyMessageAt()==null)
                                         $ehe->setAllEmployeeDocsReadyAt(new DateTime());
+                                        if($ehe->getDateFinished()==null)
                                         $ehe->setDateFinished(new DateTime());
                                         $this->getDoctrine()->getManager()->persist($ehe);
                                     }
