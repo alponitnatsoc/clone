@@ -115,23 +115,23 @@ class Employer
      */
     private $status=null;
 
-		/**
-		 * -1 - Success
-		 * -2 - Employer was registered before PilaBot
-		 * Anything else, active transaction id
-		 * @ORM\Column(type="integer", nullable=TRUE)
-		 */
-		private $existentPila;
+    /**
+     * -1 - Success
+     * -2 - Employer was registered before PilaBot
+     * Anything else, active transaction id
+     * @ORM\Column(type="integer", nullable=TRUE)
+     */
+    private $existentPila;
 
 
-		/**
-		 * @ORM\ManyToMany(targetEntity="Transaction", cascade={"persist"})
-		 * @ORM\JoinTable(name="employer_has_transactions",
-		 *      joinColumns={ @ORM\JoinColumn(name="employer_id_employer", referencedColumnName="id_employer")},
-		 *      inverseJoinColumns={@ORM\JoinColumn(name="transaction_id_transaction", referencedColumnName="id_transaction")}
-		 *      )
-		 */
-		private $transactions;
+    /**
+     * @ORM\ManyToMany(targetEntity="Transaction", cascade={"persist"})
+     * @ORM\JoinTable(name="employer_has_transactions",
+     *      joinColumns={ @ORM\JoinColumn(name="employer_id_employer", referencedColumnName="id_employer")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="transaction_id_transaction", referencedColumnName="id_transaction")}
+     *      )
+     */
+    private $transactions;
 
     /**
      * @ORM\Column(name="info_validated_at",type="datetime", nullable=true)

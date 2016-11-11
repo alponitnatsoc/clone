@@ -869,18 +869,31 @@ trait EmployeeMethodsTrait
     {
         try{
             $em = $this->getDoctrine()->getManager();
+            $today = new DateTime();
             if($procedure->getProcedureStatusCode()=='FIN'){
                 $procedure->getEmployerEmployer()->setDocumentStatus($this->getDocumentStatusByCode('BOFFFF'));
+                if($procedure->getEmployerEmployer()->getDashboardMessage()==null)$procedure->getEmployerEmployer()->setDashboardMessage($today);
+                if($procedure->getEmployerEmployer()->getAllDocsReadyAt()==null)$procedure->getEmployerEmployer()->setAllDocsReadyAt($today);
                 $em->persist($procedure->getEmployerEmployer());
                 /** @var EmployerHasEmployee $ehe */
                 foreach ($procedure->getEmployerEmployer()->getActiveEmployerHasEmployees() as $ehe) {
-                    $ehe->setDocumentStatusType($this->getDocumentStatusByCode('BOFFFF'));
-                    $em->persist($ehe);
+                    if($ehe->getExistentSQL()==1){
+                        if($ehe->getLegalFF()==null)$ehe->setLegalFF(0);
+                        if($ehe->getDateDocumentsUploaded()==null)$ehe->setDateDocumentsUploaded($today);
+                        if($ehe->getAllDocsReadyMessageAt()==null)$ehe->setAllDocsReadyMessageAt($today);
+                        if($ehe->getAllDocsValidatedMessageAt()==null)$ehe->setAllDocsValidatedMessageAt($today);
+                        if($ehe->getDateRegisterToSQL()==null)$ehe->setDateRegisterToSQL($today);
+                        if($ehe->getInfoValidatedAt()==null)$ehe->setInfoValidatedAt($today);
+                        if($ehe->getDateFinished()==null)$ehe->setDateFinished($today);
+                        if($ehe->getAllEmployeeDocsReadyAt()==null)$ehe->setAllEmployeeDocsReadyAt($today);
+                        if($ehe->getState()<4)$ehe->setState(4);
+                        $ehe->setDocumentStatusType($this->getDocumentStatusByCode('BOFFFF'));
+                        $em->persist($ehe);
+                    }
                 }
             }else{
                 $this->checkEmployerInfoActions($procedure);
                 $this->checkEmployeeInfoActions($procedure);
-                $today = new DateTime();
                 $employer = $procedure->getEmployerEmployer();
                 $employerHasEmployees = $employer->getActiveEmployerHasEmployees();
                 if($employer->getAllDocsReadyAt()==null){

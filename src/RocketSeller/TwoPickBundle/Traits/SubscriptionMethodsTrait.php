@@ -240,7 +240,7 @@ trait SubscriptionMethodsTrait
 		            "employee_id" => $eHE->getIdEmployerHasEmployee(),
 		            "pending_days" => $actContract->getHolidayDebt(),
 	            ));
-	            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddPendingVacationDays', array('_format' => 'json'));
+	            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddPendingVacationDays', array('request' => $request ),  array('_format' => 'json'));
 	            if ($insertionAnswer->getStatusCode() != 200) {
 		            return false;
 	            }
