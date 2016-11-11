@@ -343,7 +343,7 @@ class HighTechRestController extends FOSRestController
                 $request = new Request();
                 $request->setMethod("POST");
                 $request->request->add(array(
-                    "idUser" => $rejectedPurchaseOrderDescription->getPurchaseOrders()->getIdUser(),
+	                  "idUser" => $pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser(),
                     "title" => $title,
                     "message" => $message,
                     "longMessage" => $longMessage
