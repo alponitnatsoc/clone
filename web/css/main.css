@@ -41,6 +41,11 @@
 .btn-grisBorde:focus{color:#757575;outline:0!important}
 .btn-grisBorde.disabled{opacity:.5;background:#df8728;color:#efc394}
 /*boton*/
+.divFix {
+  clear: both;
+  height: auto;
+  overflow: hidden;
+}
 /*registro cabeza*/
   .cabezoteBase {
     padding-top: 50px;
