@@ -1519,7 +1519,7 @@ class BackOfficeController extends Controller
 	public function addToSQLPendingVacationsAction($idEmployerHasEmployee,$pendingDays){
 
 		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
-		
+
 		$request = $this->container->get('request');
 		$request->setMethod("POST");
 		$request->request->add(array(
@@ -1531,50 +1531,50 @@ class BackOfficeController extends Controller
 
 		return $this->redirectToRoute('back_office');
 	}
-	
+
 	public function eheEntitiesViewAction(){
 		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
-		
+
 		$criteria = new \Doctrine\Common\Collections\Criteria();
 		$criteria->where($criteria->expr()->gt('state', 3));
-		
+
 		$em = $this->getDoctrine()->getManager();
 		$eheRepo = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
 		$filteredEheRepo = $eheRepo->matching($criteria);
-		
+
 		return $this->render('RocketSellerTwoPickBundle:BackOffice:entitiesView.html.twig', array('ehes' => $filteredEheRepo));
-		
+
 	}
-	
+
 	public function notPaidViewAction(){
 		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
-		
+
 		$product = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:Product')->findOneBy(array("simpleName"=>"PN"));
 		$product2 = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:Product')->findOneBy(array("simpleName"=>"PP"));
-		
+
 		$podNomina = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')->findBy(array("productProduct"=>$product->getIdProduct()));
 		$podPila = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')->findBy(array("productProduct"=>$product2->getIdProduct()));
-		
+
 		//Now Pod has all the products nomina on the database.
 		return $this->render('RocketSellerTwoPickBundle:BackOffice:payState.html.twig', array('podsN' => $podNomina, 'podsP' => $podPila));
 	}
-	
+
 	public function payTypeInfoViewAction()
 	{
 		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
-		
+
 		$criteria = new \Doctrine\Common\Collections\Criteria();
 		$criteria->where($criteria->expr()->gt('state', 3));
-		
+
 		$em = $this->getDoctrine()->getManager();
 		$eheRepo = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
 		$filteredEheRepo = $eheRepo->matching($criteria);
-		
+
 		$userRepo = $em->getRepository('RocketSellerTwoPickBundle:User');
 		$personRepo = $em->getRepository('RocketSellerTwoPickBundle:Person');
-		
+
 		$userArray = array();
-		
+
 		/** @var EmployerHasEmployee $ehe */
 		foreach ($filteredEheRepo as $ehe) {
 			$personId = $ehe->getEmployerEmployer()->getPersonPerson()->getIdPerson();
@@ -1583,15 +1583,15 @@ class BackOfficeController extends Controller
 			$userFound = $userRepo->findOneBy(array('personPerson' => $personFound));
 			array_push($userArray, $userFound->getEmail());
 		}
-		
+
 		return $this->render('RocketSellerTwoPickBundle:BackOffice:payTypeInfoView.html.twig', array('ehes' => $filteredEheRepo, 'usersEmail' => $userArray));
 	}
-	
+
 	public function checkPilaOperatorStateAction(){
 		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
-		
+
 		$users = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User')->findAll();
-		
+
 		$employers = array();
 		foreach ($users as $user){
 			//If the user is already on the stage where it should be added to pila Operator
@@ -1599,39 +1599,39 @@ class BackOfficeController extends Controller
 				array_push($employers, $user->getPersonPerson()->getEmployer());
 			}
 		}
-		
+
 		return $this->render('RocketSellerTwoPickBundle:BackOffice:pilaOperatorState.html.twig', array('employers' => $employers));
 	}
 
 	public function updateStateRegistrationPilaOperatorAction($idEmployer){
 		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
-		
+
 		$em = $this->getDoctrine()->getManager();
-		
+
 		$employerRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Employer");
 		/** @var Employer $employer */
 		$employer = $employerRepo->find($idEmployer);
-		
+
 		$request = $this->container->get('request');
 		$request->setMethod("POST");
 		$request->request->add(array(
 			"radicateNumber" => $employer->getRadicatedNumberPila(),
 		));
-		
+
 		$answer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postCheckStateRegisterEmployerPilaOperator', array('request'=>$request), array('_format' => 'json'));
-		
+
 		return $this->redirectToRoute('back_pila_operator_state_view');
 	}
-	
+
 	public function exportPilaOperatorAfiliationErrorAction($idTransaction){
 		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
-		
+
 		/** @var Transaction $transaction */
 		$transaction = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Transaction")->find($idTransaction);
-		
+
 		$utils = $this->get('app.symplifica_utils');
 		$filePath = $utils->getDocumentPath($transaction->getTransactionState()->getDocument());
-		
+
 		header("Content-disposition: attachment; filename=$filePath");
     header('Content-type: application/zip');
     header('Expires: 0');
@@ -1643,77 +1643,77 @@ class BackOfficeController extends Controller
     ignore_user_abort(true);
 
 	}
-	
+
 	public function fixPODPilaAction(){
 		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
-		
+
 		$em=$this->getDoctrine()->getManager();
-		
+
 		$payrolls = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll")->findBy(array("period" => 4, "month" => 10, "year" => 2016, "paid" => 1));
 		$pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array("idNovoPay" => "P1"));
 		$product = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product")->findOneBy(array("simpleName" => "PP"));
-		
+
 		foreach($payrolls as $payroll){
 			$pilaPOD = $payroll->getPila();
-			
+
 			if($pilaPOD->getProductProduct() == NULL){
-				
+
 				$pilaPOD->setPurchaseOrdersStatus($pos);
 				$pilaPOD->setProductProduct($product);
 				$pilaPOD->setDescription("Pago de Aportes a Seguridad Social mes Octubre");
-				
+
 				$poList = $payroll->getPurchaseOrdersDescription();
-				
+
 				/** @var PurchaseOrdersDescription $singlePod */
 				foreach ($poList as $singlePod){
 					$pilaPOD->setPurchaseOrders($singlePod->getPurchaseOrders());
 					break;
 				}
-				
+
 				$totalValue = 0;
 				$payrollsPila = $pilaPOD->getPayrollsPila();
-				
+
 				/** @var Payroll $singlePayroll */
 				foreach ($payrollsPila as $singlePayroll){
 					$pilaDetails = $singlePayroll->getPilaDetails();
-					
+
 					/** @var PilaDetail $singleDetail */
 					foreach ($pilaDetails as $singleDetail){
 						$totalValue = $totalValue + $singleDetail->getSqlValueCia() + $singleDetail->getSqlValueEmp();
 					}
 				}
-				
+
 				$pilaPOD->setValue($totalValue);
 				$em->persist($pilaPOD);
 				$em->flush();
 			}
 		}
-		
+
 		return $this->redirectToRoute('back_office');
 	}
-	
+
 	public function addEmployerToEnlaceOperativoBackAction($idEmployer){
 		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
-		
+
 		$em=$this->getDoctrine()->getManager();
-		
+
 		$employer = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer')->find($idEmployer);
-		
+
 		if($employer->getExistentPila() == NULL && $employer->getIdHighTech() != NULL){
-			
+
 			$request = $this->container->get('request');
 			$request->setMethod("POST");
 			$request->request->add(array(
 				"GSCAccount" => $employer->getIdHighTech()
 			));
-			
+
 			$transactionType = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:TransactionType')->findOneBy(array('code' => 'IPil'));
-			
+
 			$transaction = new Transaction();
 			$transaction->setTransactionType($transactionType);
-			
+
 			$pilaRegistrationAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postRegisterEmployerToPilaOperator', array('_format' => 'json'));
-			
+
 			if($pilaRegistrationAnswer->getStatusCode() == 200){
 				//Received succesfully
 				$radicatedNumber = json_decode($pilaRegistrationAnswer->getContent(), true)["numeroRadicado"];
@@ -1724,41 +1724,41 @@ class BackOfficeController extends Controller
 				//If some kind of error
 				$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'InsPil-ErrSer'));
 			}
-			
+
 			$transaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
 			$em->persist($transaction);
 			$em->flush();
 			$employer->setExistentPila($transaction->getIdTransaction());
 			$employer->addTransaction($transaction);
-			
+
 			$em->persist($employer);
 			$em->flush();
-			
+
 		}
-		
+
 		return $this->redirectToRoute('back_office');
 	}
-	
+
 	public function sendPlanillaFileToEnlaceOperativoBackAction(){
 		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
-		
+
 		$request = $this->container->get('request');
 		$conta = 0;
-		
+
 		$em=$this->getDoctrine()->getManager();
-		
+
 		$payrolls = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll")->findBy(array("period" => 4, "month" => 10, "year" => 2016, "paid" => 1));
-		
+
 		foreach($payrolls as $payroll){
 			$podPila = $payroll->getPila();
-			
+
 			if($podPila->getUploadedFile() == NULL){
-				
+
 				$payrollsPila = $podPila->getPayrollsPila();
 				$haveNovelties = false;
-				
+
 				$payrollRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
-				
+
 				/** @var Payroll $payrollPila */
 				foreach ( $payrollsPila as $payrollPila ){
 					if( count($payrollPila->getNovelties()) > 0){
@@ -1776,16 +1776,16 @@ class BackOfficeController extends Controller
 						}
 					}
 				}
-				
+
 				$transactionType = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:TransactionType')->findOneBy(array('code' => 'CPla'));
-				
+
 				$transaction = new Transaction();
 				$transaction->setTransactionType($transactionType);
-				
+
 				if($haveNovelties == false) {
 					$request->setMethod("GET");
 					$insertionAnswerTextFile = $this->forward('RocketSellerTwoPickBundle:PilaPlainTextRest:getMonthlyPlainText', array('podId' => $podPila->getIdPurchaseOrdersDescription(), 'download' => 'generate'), array('_format' => 'json'));
-					
+
 					$request->setMethod("POST");
 					$request->request->add(array(
 						"GSCAccount" => $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getIdHighTech(),
@@ -1805,7 +1805,7 @@ class BackOfficeController extends Controller
 				else {
 					$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-ErrNov'));
 				}
-				
+
 				$em = $this->getDoctrine()->getManager();
 				$transaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
 				$em->persist($transaction);
@@ -1814,39 +1814,59 @@ class BackOfficeController extends Controller
 				$podPila->addTransaction($transaction);
 				$em->persist($podPila);
 				$em->flush();
-				
+
 				$conta = $conta + 1;
-				
+
 			}
-			
+
 			if($conta == 10){
 				return $this->redirectToRoute('back_office');
 			}
 		}
-		
+
 		return $this->redirectToRoute('back_office');
 	}
-	
+
 	public function highTechCheckAction(){
-		
+
 		$empRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User')->findAll();
-		
+
 		/** @var User $sE */
 		foreach ($empRepo as $sE){
-			
+
 			try{
 				$answ = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getClientListPaymentMethods', array("idUser" => $sE->getId()));
 			}catch(Exception $e){
 				continue;
 			}
-			
+
 			if($answ->getStatusCode() != 404){
 				$cA = json_decode($answ->getContent(), true );
-				
+
 				var_dump($sE->getPersonPerson()->getFullName());
 				var_dump($cA);
 				var_dump("-------------");
 			}
 		}
 	}
+
+
+    public function fixNotificationPayNotificationIdAction(){
+		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+
+        $notifications = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Notification")->findAll();
+        $em = $this->getDoctrine()->getManager();
+
+        foreach ($notifications as $notification) {
+            $relatedLink = $notification->getRelatedLink();
+            if(strpos($relatedLink, "/payroll") == 0 &&
+                ($notification->getAccion() == "pagar" || $notification->getAccion() == "Pagar"))
+            {
+                $notification->setRelatedLink("/payroll/" . $notification->getId());
+                $em->persist($notification);
+                $em->flush();
+            }
+        }
+        return $this->redirectToRoute('back_office');
+    }
 }

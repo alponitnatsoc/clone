@@ -859,6 +859,14 @@ class ProcedureController extends Controller
             if($ehe->getExistentSQL()==1){
                 $atLeastOne = true;
                 $ehe->setDocumentStatusType($this->getDocumentStatusByCode('BOFFFF'));
+                if($ehe->getLegalFF()==null)$ehe->setLegalFF(0);
+                if($ehe->getDateDocumentsUploaded()==null)$ehe->setDateDocumentsUploaded($today);
+                if($ehe->getAllDocsReadyMessageAt()==null)$ehe->setAllDocsReadyMessageAt($today);
+                if($ehe->getAllDocsValidatedMessageAt()==null)$ehe->setAllDocsValidatedMessageAt($today);
+                if($ehe->getDateRegisterToSQL()==null)$ehe->setDateRegisterToSQL($today);
+                if($ehe->getInfoValidatedAt()==null)$ehe->setInfoValidatedAt($today);
+                if($ehe->getDateFinished()==null)$ehe->setDateFinished($today);
+                if($ehe->getAllEmployeeDocsReadyAt()==null)$ehe->setAllEmployeeDocsReadyAt($today);
                 if($ehe->getState()<4)$ehe->setState(4);
                 $em->persist($ehe);
                 $em->flush();
@@ -2204,6 +2212,9 @@ class ProcedureController extends Controller
                                 $atLeastOne = true;
                                 break;
                             }
+                            if($ehe->getExistentSQL()!=1){
+                                $finish=false;
+                            }
                         }
                         if($atLeastOne){
                             foreach ($procedure->getAction() as $action) {
@@ -2754,7 +2765,7 @@ class ProcedureController extends Controller
             $procedure = $this->loadClassById($procedureId,'RealProcedure');
             if($this->checkActionCompletion($employerHasEmployee,$procedure)){
                 $employerHasEmployee->setState(4);
-                $employerHasEmployee->setDocumentStatusType($this->getDocumentStatusByCode('BOFFMS'));
+                $employerHasEmployee->setDocumentStatusType($this->getDocumentStatusByCode('BOFFFF'));
                 $employerHasEmployee->setDateFinished(new DateTime());
                 $em->persist($employerHasEmployee);
                 $em->flush();
