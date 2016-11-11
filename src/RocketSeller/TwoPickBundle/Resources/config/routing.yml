@@ -248,3 +248,6 @@ back_load_files_enlace_operativo:
 back_check_banks:
     path:         /backoffice/check/banks/ht
     defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:highTechCheck }
+back_fix_notifications_pay_notificationid:
+    path:         /backoffice/fix/notifications/pay/notificationid
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:fixNotificationPayNotificationId }

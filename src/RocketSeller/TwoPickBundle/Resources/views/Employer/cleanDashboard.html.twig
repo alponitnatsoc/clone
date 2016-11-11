@@ -19,13 +19,12 @@
                     {{ modal(6,'',name) }}
                 {% endif %}
             {% endfor %}
-            {% if validated is defined %}
+            {% if validated is defined and validated==false %}
                 <div class="casiValidado">
                     <h1 class="azulclarofont light centrar">Estas en proceso de validación</h1>
                     <p class="light grisclarofont">Ya estas cerca de poder gestionar tus empleados, te notificaremos cuando estes listo.</p>
                 </div>
-            {% endif %}
-            {% if allDocs is defined %}
+            {% else %}
                 <div id="fechas">
                     <h1 class="grisclarofont light centrar">Ten en cuenta las siguientes fechas :</h1><br>
                     <div class="fechasclave">

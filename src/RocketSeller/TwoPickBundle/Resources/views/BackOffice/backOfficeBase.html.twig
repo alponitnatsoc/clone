@@ -79,7 +79,6 @@
             <a class="notAjax" href="{{ path('show_base_users_register') }}" >Base Usuarios Registros </a>
         </div>
 
-
     {% endblock %}
     {% block content_style %} style="width: 98%"{% endblock %}
     {% block classSideBarBase %}class="col-sm-2"{% endblock %}
@@ -95,7 +94,108 @@
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
                 integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
                 crossorigin="anonymous"></script>
-        {# <script src="{{ asset('public/js/noUiSlider.8.2.1/nouislider.min.js') }}"></script>#}
+        <script>
+            jQuery(document).ready(function () {
+                if (!jsLoader(location.href)) {
+                    $("#main").find("a").not(".notAjax").on("click", function (e) {
+                        e.preventDefault();
+                        var href = $(this).attr('href');
+                        history.pushState({}, '', href);
+                        sendAjax(href);
+                    });
+                } else {
+
+                }
+                $(window).on("popstate", function (e) {
+                    sendAjax(location.href);
+                });
+                $(window).keydown(function (event) {
+                    if (event.keyCode == 13) {
+                        event.preventDefault();
+                        return false;
+                    }
+                });
+                // Simple ajax url manager
+                var redirector = getParameterByName('redirector');
+                //console.log(redirector);
+                if (redirector) {
+                    sendAjax(redirector);
+                }
+                $.getScript("{{ asset('public/js/remaind.js') }}").done(function () {
+                    startReminder();
+                });
+                //                  addNoClick();
+            });
+            function getParameterByName(name) {
+                name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+                var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                        results = regex.exec(location.search);
+                return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+            }
+            function errorHandleTry(data) {
+                if (typeof data.responseJSON != 'undefined') {
+                    if (typeof data.responseJSON["url"] != 'undefined') {
+                        window.location.href = data.responseJSON["url"];
+                        data = false;
+                    }
+                }
+                return data;
+            }
+            function sendAjax(url, form) {
+                if (url == "") {
+                    return false;
+                }
+                $.ajax({
+                    url: url,
+                    type: $(form).attr('method'),
+                    data: $(form).serializeArray(),
+                    statusCode: {
+                        500: function () {
+                            $("#errorModal").modal("show");
+                        }
+                    }
+                }).done(function (data) {
+                    window.scrollTo(0, 0);
+                    if (data["url"] != null) {
+                        console.log(data["url"]);
+                        sendAjax(data["url"]);
+                    } else {
+                        $('#main').replaceWith(
+                                // ... with the returned one from the AJAX response.
+                                $(data).find('#main'));
+                        addClick();
+                        if (!jsLoader(url)) {
+                            addSumbit();
+                        }
+                        // This thing is not working, we should check this later
+                        //var currentPage = document.location;
+                        //document.location = currentPage + "?redirector=" + url;
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    if (jqXHR == errorHandleTry(jqXHR)) {
+                        $("#errorModal").modal("show");
+                    }
+                });
+            }
+            function jsLoader(url) {
+                if (typeof url !== 'undefined') {
+                    if (url.indexOf("/backoffice/procedure/") !== -1) {
+                        $.getScript("{{ asset('public/js/vendor/procedures.js') }}").done(function () {
+                            startProcedure();
+                        });
+
+                        return true;
+                    } else if (url.indexOf("/daviplata/") !== -1) {
+                        $.getScript("{{ asset('public/js/daviplata.js') }}").done(function () {
+                            startDaviplata();
+                        });
+
+                        return true;
+                    }
+                }
+            }
+        </script>
+
     {% endblock %}
     {% block UserLogin %}
     {% endblock %}
@@ -106,6 +206,32 @@
         <span id="logout" style="display: inline">
             <a class="notAjax" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
         </span>
+        <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog modal-md" role="document">
+                <div class="modal-content">
+                    <div class="modal-body" style="padding: 0">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                                style="position: absolute; right: 15px; top: 7px;z-index: 100; color: #fff;"><span
+                                    aria-hidden="true" style="color: white">&times;</span></button>
+                        <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0; padding: 7px;">
+                            <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">¡Oops!</div>
+                        </div>
+                        <div class="row-fluid clearfix" style="padding: 30px 15px;">
+                            <div class="row">
+                                <div class="col-md-10 col-md-push-1" style="font-size: 16px;">
+                                    Perdón, algo salió mal. Nuestro equipo esta buscando una solución, dale cerrar para continuar.
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 30px;">
+                                <div class="col-xs-12 text-center">
+                                    <button type="button" class="btn btnPrevious" data-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     {% endblock %}
 
     {% block fos_user_content %}
