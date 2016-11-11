@@ -1164,25 +1164,25 @@ filename = "certificadoLaboral.pdf"'
         $form = $this->createFormBuilder()
                 ->setAction($this->generateUrl('daviplata_guide', array("payMethodId" => $payMethodId, "idNotification" => $idNotification), array('format' => 'json')))
                 ->setMethod('POST')
-                ->add('create', 'submit', array('label' => 'Ir a Daviplata'))
+                //->add('create', 'submit', array('label' => 'Ir a Daviplata'))
                 ->add("cellphone", "number", array('label' => "Número Celular"))
-                ->add('save', 'submit', array('label' => 'Guardar Daviplata'))
-                ->add('discard', 'submit', array('label' => 'Descartar notificación'))
+                ->add('save', 'submit', array('label' => 'Guardar Cuenta'))
+                //->add('discard', 'submit', array('label' => 'Descartar notificación'))
                 ->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
 
-            if ($form->get("discard")->isClicked()) {
+            /*if ($form->get("discard")->isClicked()) {
                 $notifRepo = $em->getRepository("RocketSellerTwoPickBundle:Notification");
-                /** @var Notification $notification */
+                
                 $notification = $notifRepo->find($idNotification);
                 $notification->setStatus(-1);
                 $em->persist($notification);
                 $em->flush();
 
                 return $this->redirectToRoute("show_dashboard");
-            }
-            if ($form->get("cellphone")->getData() != 0) {
+            }*/
+            if ($form->get("cellphone")->getData() != 0 && floor(log($form->get("cellphone")->getData(), 10) + 1) == 10 ) {
                 $methodRepo = $em->getRepository("RocketSellerTwoPickBundle:PayMethod");
                 /** @var \RocketSeller\TwoPickBundle\Entity\PayMethod $paym */
                 $paym = $methodRepo->find($payMethodId);
@@ -1194,15 +1194,24 @@ filename = "certificadoLaboral.pdf"'
                 }
                 $paym->setCellPhone($form->get("cellphone")->getData());
                 $em->persist($paym);
+	
+		            $notifRepo = $em->getRepository("RocketSellerTwoPickBundle:Notification");
+		
+		            $notification = $notifRepo->find($idNotification);
+		            $notification->setStatus(-1);
+		            $em->persist($notification);
+		            
                 $em->flush();
 
+                return $this->redirectToRoute("show_dashboard");
+            }
+            else{
+            	  return false;
+            }
+            /*if ($form->get("create")->isClicked()) {
                 return $this->render('RocketSellerTwoPickBundle:Daviplata:daviplata.html.twig', array('form' => $form->createView())
                 );
-            }
-            if ($form->get("create")->isClicked()) {
-                return $this->render('RocketSellerTwoPickBundle:Daviplata:daviplata.html.twig', array('form' => $form->createView())
-                );
-            }
+            }*/
         }
 
         return $this->render('RocketSellerTwoPickBundle:Daviplata:daviplata.html.twig', array('form' => $form->createView())
