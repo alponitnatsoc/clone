@@ -372,5 +372,173 @@ class NotificationRestController extends FOSRestController
         $view->setStatusCode(200);
         return $view;
     }
+
+    /**
+     * fast correct notifications
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "correct the upload document notifications.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *   }
+     * )
+     * @return View
+     */
+    public function postFastCorrectNotificationsAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $response = 'START'.'<br>';
+        /** @var Notification $notification */
+        foreach ($em->getRepository("RocketSellerTwoPickBundle:Notification")->findAll() as $notification) {
+            $response .= 'NOTIFICATION_ID: '.$notification->getId();
+            if($notification->getDocumentTypeDocumentType()!= null){
+                $response .=' DOCUMENT_TYPE: '.$notification->getDocumentTypeDocumentType()->getDocCode();
+                switch($notification->getDocumentTypeDocumentType()->getDocCode()){
+                    case 'CC':
+                    case 'TI':
+                    case 'PASAPORTE':
+                    case 'CE':
+                        if($notification->getAccion()=='subir')$notification->setAccion('Subir');
+                        if($notification->getAccion()=='bajar')$notification->setAccion('Bajar');
+                        if($notification->getDownloadAction()=='subir')$notification->setDownloadAction('Subir');
+                        if($notification->getDownloadAction()=='bajar')$notification->setDownloadAction('Bajar');
+                        /** @var Person $person */
+                        $person = $em->getRepository('RocketSellerTwoPickBundle:Person')->find(intval(explode('/',$notification->getRelatedLink())[4].''));
+                        $response .=' PERSON_ID: '.$person->getIdPerson();
+                        if($person->getDocumentDocument()){
+                            if(!$person->getDocumentDocument()->getMediaMedia()){
+                                $notification->activate();
+                                $response .=' STATUS: ENABLED'.'<br>';
+                            }else{
+                                $notification->disable();
+                                $response .=' STATUS: DISABLED'.'<br>';
+                            }
+                        }else{
+                            $notification->activate();
+                            $response .=' STATUS: ENABLED'.'<br>';
+                        }
+                        $em->persist($notification);
+                        break;
+                    case 'RUT':
+                        if($notification->getAccion()=='subir')$notification->setAccion('Subir');
+                        if($notification->getAccion()=='bajar')$notification->setAccion('Bajar');
+                        if($notification->getDownloadAction()=='subir')$notification->setDownloadAction('Subir');
+                        if($notification->getDownloadAction()=='bajar')$notification->setDownloadAction('Bajar');
+                        /** @var Person $person */
+                        $person = $em->getRepository('RocketSellerTwoPickBundle:Person')->find(intval(explode('/',$notification->getRelatedLink())[4].''));
+                        $response .=' PERSON_ID: '.$person->getIdPerson();
+                        if($person->getRutDocument()){
+                            if(!$person->getRutDocument()->getMediaMedia()){
+                                $notification->activate();
+                                $response .=' STATUS: ENABLED'.'<br>';
+                            }else{
+                                $notification->disable();
+                                $response .=' STATUS: DISABLED'.'<br>';
+                            }
+                        }else{
+                            $notification->activate();
+                            $response .=' STATUS: ENABLED'.'<br>';
+                        }
+                        $em->persist($notification);
+                        break;
+                    case 'MAND':
+                        if($notification->getAccion()=='subir')$notification->setAccion('Subir');
+                        if($notification->getAccion()=='bajar')$notification->setAccion('Bajar');
+                        if($notification->getDownloadAction()=='subir')$notification->setDownloadAction('Subir');
+                        if($notification->getDownloadAction()=='bajar')$notification->setDownloadAction('Bajar');
+                        /** @var Employer $employer */
+                        $employer = $em->getRepository('RocketSellerTwoPickBundle:Employer')->find(intval(explode('/',$notification->getRelatedLink())[4].''));
+                        $response .=' EMPLOYER_ID: '.$employer->getIdEmployer();
+                        if($employer->getMandatoryDocument()){
+                            if(!$employer->getMandatoryDocument()->getMediaMedia()){
+                                $notification->activate();
+                                $response .=' STATUS: ENABLED'.'<br>';
+                            }else{
+                                $notification->disable();
+                                $response .=' STATUS: DISABLED'.'<br>';
+                            }
+                        }else{
+                            $notification->activate();
+                            $response .=' STATUS: ENABLED'.'<br>';
+                        }
+                        $em->persist($notification);
+                        break;
+                    case 'CAS':
+                        if($notification->getAccion()=='subir')$notification->setAccion('Subir');
+                        if($notification->getAccion()=='bajar')$notification->setAccion('Bajar');
+                        if($notification->getDownloadAction()=='subir')$notification->setDownloadAction('Subir');
+                        if($notification->getDownloadAction()=='bajar')$notification->setDownloadAction('Bajar');
+                        /** @var EmployerHasEmployee $ehe */
+                        $ehe = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->find(intval(explode('/',$notification->getRelatedLink())[4].''));
+                        $response .=' EMPLOYER_HAS_EMPLOYEE_ID: '.$ehe->getIdEmployerHasEmployee();
+                        if($ehe->getAuthDocument()){
+                            if(!$ehe->getAuthDocument()->getMediaMedia()){
+                                $notification->activate();
+                                $response .=' STATUS: ENABLED'.'<br>';
+                            }else{
+                                $notification->disable();
+                                $response .=' STATUS: DISABLED'.'<br>';
+                            }
+                        }else{
+                            $notification->activate();
+                            $response .=' STATUS: ENABLED'.'<br>';
+                        }
+                        $em->persist($notification);
+                        break;
+                    case 'CTR':
+                        if($notification->getAccion()=='subir')$notification->setAccion('Subir');
+                        if($notification->getAccion()=='bajar')$notification->setAccion('Bajar');
+                        if($notification->getDownloadAction()=='subir')$notification->setDownloadAction('Subir');
+                        if($notification->getDownloadAction()=='bajar')$notification->setDownloadAction('Bajar');
+                        if($notification->getAccion()!='Ver'){
+                            /** @var Contract $contract */
+                            $contract = $em->getRepository('RocketSellerTwoPickBundle:Contract')->find(intval(explode('/',$notification->getRelatedLink())[4].''));
+                            $response .=' CONTRACT_ID: '.$contract->getIdContract();
+                            if($contract->getEmployerHasEmployeeEmployerHasEmployee()->getExistentSQL()==1){
+                                if($contract->getDocumentDocument()){
+                                    if(!$contract->getDocumentDocument()->getMediaMedia()){
+                                        $notification->activate();
+                                        $response .=' STATUS: ENABLED'.'<br>';
+                                    }else{
+                                        $notification->disable();
+                                        $response .=' STATUS: DISABLED'.'<br>';
+                                    }
+                                }else{
+                                    $notification->activate();
+                                    $response .=' STATUS: ENABLED'.'<br>';
+                                }
+                            }else{
+                                $response .=' EHE_ID: '.$contract->getEmployerHasEmployeeEmployerHasEmployee()->getIdEmployerHasEmployee();
+                                $response .=' EHE_SQL: '.$contract->getEmployerHasEmployeeEmployerHasEmployee()->getExistentSQL();
+                                $notification->disable();
+                                $response .=' STATUS: DISABLED'.'<br>';
+                            }
+                        }else{
+                            /** @var EmployerHasEmployee $ehe */
+                            $ehe = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->find(intval(explode('/',$notification->getRelatedLink())[3].''));
+                            $response .=' EHE_ID: '.$ehe->getIdEmployerHasEmployee();
+                            $response .=' EHE_SQL: '.$ehe->getExistentSQL();
+                            if($ehe->getExistentSQL()==0){
+                                $notification->activate();
+                                $response .=' STATUS: ENABLED'.'<br>';
+                            }else{
+                                $notification->disable();
+                                $response .=' STATUS: DISABLED'.'<br>';
+                            }
+                        }
+                        $em->persist($notification);
+                        break;
+                }
+            }
+        }
+        $em->flush();
+        $view = View::create();
+        $view->setStatusCode(200);
+        $view->setData($response);
+        return $view;
+    }
 }
 ?>

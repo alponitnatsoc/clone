@@ -116,7 +116,7 @@ class EmployerHasEmployee
     private $documentStatusType;
 
     /**
-     * @ORM\Column(type="string", length=50, nullable=TRUE)
+     * @ORM\Column(type="string", nullable=TRUE)
      */
     private $documentStatus = null;
 

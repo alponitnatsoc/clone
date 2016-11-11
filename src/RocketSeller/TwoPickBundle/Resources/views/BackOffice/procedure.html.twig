@@ -27,32 +27,44 @@
 			cursor: pointer;
 			-webkit-user-select: none;
 		}
-		select[name="formEmployeeStartDate{{ ehe.idEmployerHasEmployee}}[startDate][day]"]{
+		select[id="formWorkplaceEmployee{{ ehe.idEmployerHasEmployee }}_workplace"]{
+			padding: 0;
 			border: none;
 			box-shadow: none;
 			height: 22px;
 		}
-		select[name="formEmployeeStartDate{{ ehe.idEmployerHasEmployee}}[startDate][month]"]{
+		select[id="formEmployeeStartDate{{ ehe.idEmployerHasEmployee}}_startDate_day"]{
+			padding: 0;
 			border: none;
 			box-shadow: none;
 			height: 22px;
 		}
-		select[name="formEmployeeStartDate{{ ehe.idEmployerHasEmployee}}[startDate][year]"]{
+		select[id="formEmployeeStartDate{{ ehe.idEmployerHasEmployee}}_startDate_month"]{
+			padding: 0;
 			border: none;
 			box-shadow: none;
 			height: 22px;
 		}
-		select[name="formEmployeeEndDate{{ ehe.idEmployerHasEmployee}}[endDate][day]"]{
+		select[id="formEmployeeStartDate{{ ehe.idEmployerHasEmployee}}_startDate_year"]{
+			padding: 0;
 			border: none;
 			box-shadow: none;
 			height: 22px;
 		}
-		select[name="formEmployeeEndDate{{ ehe.idEmployerHasEmployee}}[endDate][month]"]{
+		select[id="formEmployeeEndDate{{ ehe.idEmployerHasEmployee}}_endDate_day"]{
+			padding: 0;
 			border: none;
 			box-shadow: none;
 			height: 22px;
 		}
-		select[name="formEmployeeEndDate{{ ehe.idEmployerHasEmployee}}[endDate][year]"]{
+		select[id="formEmployeeEndDate{{ ehe.idEmployerHasEmployee}}_endDate_month"]{
+			padding: 0;
+			border: none;
+			box-shadow: none;
+			height: 22px;
+		}
+		select[id="formEmployeeEndDate{{ ehe.idEmployerHasEmployee}}_endDate_year"]{
+			padding: 0;
 			border: none;
 			box-shadow: none;
 			height: 22px;
@@ -63,38 +75,44 @@
 			cursor: pointer;
 			-webkit-user-select: none;
 		}
-		#formInfoEmployee{{ ehe.idEmployerHasEmployee }}_expeditionDate_day{
-			height: 30px;
+		select[id="formInfoEmployee{{ ehe.idEmployerHasEmployee }}_expeditionDate_day"]{
+			padding: 0;
+			height: 20px;
 			font-size: 12px;
 			border: 0px;
 			margin: 0px 6px 0px 2px;
 		}
-		#formInfoEmployee{{ ehe.idEmployerHasEmployee }}_expeditionDate_month{
-			height: 30px;
+		select[id="formInfoEmployee{{ ehe.idEmployerHasEmployee }}_expeditionDate_month"]{
+			padding: 0;
+			height: 20px;
 			font-size: 12px;
 			border: 0px;
 			margin: 0px 6px 0px 2px;
 		}
-		#formInfoEmployee{{ ehe.idEmployerHasEmployee }}_expeditionDate_year{
-			height: 30px;
+		select[id="formInfoEmployee{{ ehe.idEmployerHasEmployee }}_expeditionDate_year"]{
+			padding: 0;
+			height: 20px;
 			font-size: 12px;
 			border: 0px;
 			margin: 0px 6px 0px 2px;
 		}
-		#formInfoEmployee{{ ehe.idEmployerHasEmployee }}_birthDate_day{
-			height: 30px;
+		select[id="formInfoEmployee{{ ehe.idEmployerHasEmployee }}_birthDate_day"]{
+			padding: 0;
+			height: 20px;
 			font-size: 12px;
 			border: 0px;
 			margin: 0px 6px 0px 2px;
 		}
-		#formInfoEmployee{{ ehe.idEmployerHasEmployee }}_birthDate_month{
-			height: 30px;
+		select[id="formInfoEmployee{{ ehe.idEmployerHasEmployee }}_birthDate_month"]{
+			padding: 0;
+			height: 20px;
 			font-size: 12px;
 			border: 0px;
 			margin: 0px 6px 0px 2px;
 		}
-		#formInfoEmployee{{ ehe.idEmployerHasEmployee }}_birthDate_year{
-			height: 30px;
+		select[id="formInfoEmployee{{ ehe.idEmployerHasEmployee }}_birthDate_year"]{
+			padding: 0;
+			height: 20px;
 			font-size: 12px;
 			border: 0px;
 			margin: 0px 6px 0px 2px;
@@ -209,6 +227,53 @@
 
 				});
 			});
+			$("form[id='form_employer_info']").on("click",function () {
+				$("input",this).on("change",function () {
+					$("#validate_info_employer_btn").hide();
+					$("#validate_info_employer_save").show();
+				});
+				$("select",this).on("change",function () {
+					$("#validate_info_employer_btn").hide();
+					$("#validate_info_employer_save").show();
+				});
+			});
+			{% set var = 1 %}
+			{% for formE in formEmployerEntities %}
+			$("form[id='form_employer_entity_{{ var }}']").on("click",function () {
+				$("input",this).on("change",function () {
+					$("#validate_employer_entity_{{ var }}_btn").hide();
+				});
+				$("select",this).on("change",function () {
+					$("#validate_employer_entity_{{ var }}_btn").hide();
+				});
+			});
+			{% set var = var + 1 %}
+			{% endfor %}
+			{% for ehe in employerHasEmployees %}
+				$("form[name='formInfoEmployee{{ ehe.idEmployerHasEmployee }}']").on("click",function () {
+					$("input",this).on("change",function () {
+						$("#validate_employee_info_{{ ehe.idEmployerHasEmployee }}").hide();
+						$("#save_info_employee_{{ ehe.idEmployerHasEmployee }}").show();
+					});
+					$("select",this).on("change",function () {
+						$("#validate_employee_info_{{ ehe.idEmployerHasEmployee }}").hide();
+						$("#save_info_employee_{{ ehe.idEmployerHasEmployee }}").show();
+					});
+				});
+			{% set var = 1 %}
+				{% for formE in formEmployeesEntities[ehe.idEmployerHasEmployee] %}
+					$("form[id='entity_employee_{{ ehe.idEmployerHasEmployee }}_{{ var }}']").on("click",function () {
+						$("input",this).on("change",function () {
+							$("#employee_entity_{{ ehe.idEmployerHasEmployee }}_{{ var }}").hide();
+						});
+						$("select",this).on("change",function () {
+							$("#employee_entity_{{ ehe.idEmployerHasEmployee }}_{{ var }}").hide();
+						});
+					});
+				{% set var = var + 1 %}
+				{% endfor %}
+			{% endfor %}
+
 		});
 	</script>
 	<!--Div where documents modal is rendered-->
@@ -346,7 +411,7 @@
 										Datos del Empleador
 									</div>
 									<div style="border: 3px solid #525659;margin-right: 6px; height: 480px; padding: 20px 0">
-										{{ form_start(formDocument) }}
+										{{ form_start(formDocument,{"attr":{'id':'form_employer_info'}}) }}
 										<div class="col-md-15 row-content " style="margin-top: 30px">
 											<div class="col-md-5 no-padding">
 												{{ form_label(formDocument.document) }}
@@ -485,9 +550,10 @@
 											Activar Tramite
 										</a>
 									{% else %}
-										<a class="btn-backoffice notAjax" href="{{ path('finish_action',{'actionId':action_employer.idAction}) }}">
+										<a id="validate_info_employer_btn" class="btn-backoffice notAjax" href="{{ path('finish_action',{'actionId':action_employer.idAction}) }}">
 											Validar Información
 										</a>
+										<h1 id="validate_info_employer_save" style="display: none; color: black;font-weight: 600;font-size: 16px">Guarde los cambios para poder validar la información</h1>
 									{% endif %}
 								</div>
 								<!--validate employer action end-->
@@ -846,6 +912,7 @@
 						<td colspan="4">
 							<div class="back-section col-md-12">
 								<!--Form employer entity action begin-->
+								{% set var = 1 %}
 								{% for formE in formEmployerEntities %}
 									{% set action_employer = procedure.actionById(formE['actionId'].vars['data']) %}
 									<div class="col-md-6" style="padding: 0px;margin: 0px;">
@@ -853,7 +920,7 @@
 											Datos de la entidad
 										</div>
 										<div style="border: 3px solid #525659;margin-right: 1.3%;height: 160px;overflow: hidden;">
-											{{ form_start(formE) }}
+											{{ form_start(formE,{'attr':{'id':('form_employer_entity_' ~ var)}}) }}
 											<div class="col-md-15 row-content " style="margin-top: 30px">
 												<div class="col-md-5 no-padding">
 													{{ form_label(formE.name) }}
@@ -876,7 +943,7 @@
 												<div class="col-md-15 row-content text-center">
 													<div class="col-md-15">
 													{{ form_widget(formE.edit) }}
-													<a class="btn-backoffice notAjax" href="{{ path('finish_action',{'actionId':action_employer.idAction}) }}" style="padding: 1px 10px; margin-top:6px;">
+													<a id="validate_employer_entity_{{ var }}_btn" class="btn-backoffice notAjax" href="{{ path('finish_action',{'actionId':action_employer.idAction}) }}" style="padding: 1px 10px; margin-top:6px;">
 														{% if action_employer.employerEntity.state == 0 %}
 															Entidad Validada
 														{% else %}
@@ -897,6 +964,7 @@
 											{{ form_end(formE) }}
 										</div>
 									</div>
+									{% set var = var + 1 %}
 								{% endfor %}
 							</div>
 						</td>
@@ -1072,6 +1140,11 @@
 		</div>
 		<div class="col-md-12">
 			<div class="row">
+				{% for success_message in app.session.flashBag.get('employee_contract_successfully')%}
+					<div class="alert alert-success semi-italic" for="alert">
+						{{ success_message }}
+					</div>
+				{% endfor %}
 				{% for success_message in app.session.flashBag.get('employee_ended_successfully')%}
 					<div class="alert alert-success semi-italic" for="alert">
 						{{ success_message }}
@@ -1456,7 +1529,8 @@
 													Activar Tramite
 												</a>
 											{% else %}
-												<a class="btn-backoffice notAjax" href="{{ path('finish_action',{'actionId':action_employee.idAction}) }}">
+												<h1 id="save_info_employee_{{ employerHasEmployee.idEmployerHasEmployee }}" style="display: none; color: black;font-weight: 600;font-size: 16px">Guarde los cambios para poder validar la información</h1>
+												<a id="validate_employee_info_{{ employerHasEmployee.idEmployerHasEmployee }}" class="btn-backoffice notAjax" href="{{ path('finish_action',{'actionId':action_employee.idAction}) }}">
 													Validar Información
 												</a>
 											{% endif %}
@@ -1893,6 +1967,7 @@
 							<td colspan="4">
 								<div class="back-section col-md-12" style="margin: 0px">
 									<!--Form employer entity action begin-->
+									{% set var = 1 %}
 									{% for formE in formEmployeesEntities[employerHasEmployee.idEmployerHasEmployee] %}
 										{% set action_employee = employerHasEmployee.employeeEmployee.PersonPerson.actionById(formE['actionId'].vars['data']) %}
 										<div class="col-md-6" style="padding: 0px;margin: 10px 0px 10px 0px;">
@@ -1900,7 +1975,7 @@
 												Datos de la entidad
 											</div>
 											<div style="border: 3px solid #525659;margin-right: 1.3%;height: 160px;overflow: hidden;">
-												{{ form_start(formE) }}
+												{{ form_start(formE,{'attr':{'id':('entity_employee_' ~ employerHasEmployee.idEmployerHasEmployee ~ '_' ~ var)}}) }}
 												<div class="col-md-15 row-content " style="margin-top: 30px">
 													<div class="col-md-5 no-padding">
 														{{ form_label(formE.name) }}
@@ -1923,7 +1998,7 @@
 													<div class="col-md-15 row-content text-center">
 														<div class="col-md-15">
 															{{ form_widget(formE.edit) }}
-															<a class="btn-backoffice notAjax" href="{{ path('finish_action',{'actionId':action_employee.idAction}) }}" style="padding: 1px 10px; margin-top:6px;">
+															<a id="employee_entity_{{ employerHasEmployee.idEmployerHasEmployee }}_{{ var }}" class="btn-backoffice notAjax" href="{{ path('finish_action',{'actionId':action_employee.idAction}) }}" style="padding: 1px 10px; margin-top:6px;">
 																{% if action_employee.employeeEntity.state == 0 %}
 																	Entidad Validada
 																{% else %}
@@ -1946,6 +2021,7 @@
 												{{ form_end(formE) }}
 											</div>
 										</div>
+										{% set var = var + 1 %}
 									{% endfor %}
 								</div>
 							</td>
@@ -1970,6 +2046,9 @@
 										{% endif %}
 										{% if employerHasEmployee.existentSQL == 1 and employerHasEmployee.state < 4 %}
 										<a class="btn-backoffice-upload notAjax" style="margin-top: 1%" href="{{ path('complete_employee',{'idEmployerHasEmployee':employerHasEmployee.idEmployerHasEmployee,'procedureId':procedure.idProcedure })}}"> Terminar proceso </a>
+										{% endif %}
+										{% if employerHasEmployee.existentSQL == 1 %}
+											<a class="btn-backoffice-upload notAjax" style="margin-top: 1%" href="{{ path('generate_contract',{'idEmployerHasEmployee':employerHasEmployee.idEmployerHasEmployee,'procedureId':procedure.idProcedure}) }}">Generar Notificación contrato</a>
 										{% endif %}
 									{% endif %}
 								</div>

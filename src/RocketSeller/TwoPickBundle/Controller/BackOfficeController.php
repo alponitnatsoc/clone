@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use RocketSeller\TwoPickBundle\Entity\Configuration;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\Document;
 use RocketSeller\TwoPickBundle\Entity\Employee;
@@ -10,6 +11,7 @@ use RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
+use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\PilaDetail;
@@ -498,9 +500,6 @@ class BackOfficeController extends Controller
             $em->flush();
             $this->addFlash("employee_added_to_sql", 'Exito al agregar el empleado a SQL');
             try {
-                $em = $this->getDoctrine()->getManager();
-                /** @var EmployerHasEmployee $employerHasEmployee */
-                $employerHasEmployee = $this->loadClassById($idEmployerHasEmployee,'EmployerHasEmployee');
                 /** @var RealProcedure $procedure */
                 $procedure = $this->loadClassById($procedureId,'RealProcedure');
                 if($this->checkActionCompletion($employerHasEmployee,$procedure)){
@@ -511,7 +510,6 @@ class BackOfficeController extends Controller
                     $em->flush();
                     $smailer = $this->get('symplifica.mailer.twig_swift');
                     $smailer->sendBackValidatedMessage($procedure->getUserUser(),$employerHasEmployee);
-                    $this->addFlash("employee_ended_successfully", 'Éxito al dar de alta al empleado');
                     $contracts = $employerHasEmployee->getContracts();
                     /** @var Contract $contract */
                     foreach ($contracts as $contract) {
@@ -536,7 +534,48 @@ class BackOfficeController extends Controller
                             break;
                         }
                     }
-
+                    if($this->getNotificationByPersonAndOwnerAndDocumentType($procedure->getUserUser()->getPersonPerson(),$employerHasEmployee->getEmployeeEmployee()->getPersonPerson(),$this->getDocumentTypeByCode('CTR'))!= null){
+                        /** @var Notification $notification */
+                        $notification=$this->getNotificationByPersonAndOwnerAndDocumentType($procedure->getUserUser()->getPersonPerson(),$employerHasEmployee->getEmployeeEmployee()->getPersonPerson(),$this->getDocumentTypeByCode('CTR'));
+                        if($notification->getAccion()=='Ver') {
+                            /** @var EmployerHasEmployee $ehe */
+                            $ehe = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->find(intval(explode('/', $notification->getRelatedLink())[3]));
+                            if ($ehe != null and $ehe == $employerHasEmployee) {
+                                if ($ehe->getExistentSQL() == 1) {
+                                    /** @var Person $person */
+                                    $person=$ehe->getEmployeeEmployee()->getPersonPerson();
+                                    $contract = $ehe->getActiveContract();
+                                    $flag = false;
+                                    if ($ehe->getLegalFF() == 1) {
+                                        $configurations = $ehe->getEmployeeEmployee()->getPersonPerson()->getConfigurations();
+                                        /** @var Configuration $config */
+                                        foreach ($configurations as $config) {
+                                            if ($config->getValue() == "PreLegal-SignedContract") {
+                                                $flag = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    $utils = $this->get('app.symplifica_utils');
+                                    $notification->setAccion('Subir');
+                                    if (!$flag) {
+                                        $notification->setDownloadAction("Bajar");
+                                        $notification->setDownloadLink($this->generateUrl("download_documents", array('id' => $contract->getIdContract(), 'ref' => "contrato", 'type' => 'pdf')));
+                                    }
+                                    $notification->setDescription("Subir copia del contrato de " . $utils->mb_capitalize(explode(" ", $person->getNames())[0] . " " . $person->getLastName1()));
+                                    $notification->setRelatedLink($this->generateUrl("documentos_employee", array('entityType' => 'Contract', 'entityId' => $contract->getIdContract(), 'docCode' => 'CTR')));
+                                    $notification->activate();
+                                }
+                            }
+                        }
+                    }else{
+                        $notification = $this->createNotificationByDocType($employerHasEmployee->getEmployerEmployer()->getPersonPerson(),$employerHasEmployee->getEmployeeEmployee()->getPersonPerson(),$this->getDocumentTypeByCode('CTR'));
+                    }
+                    $notification->activate();
+                    $em->persist($notification);
+                    $em->flush();
+                    $this->addFlash("employee_contract_successfully", 'Éxito al generar la notificación del contrato');
+                    $this->addFlash("employee_ended_successfully", 'Éxito al dar de alta al empleado');
                     return $this->redirectToRoute('show_procedure', array('procedureId'=>$procedureId), 301);
                 }else{
                     $this->addFlash("employee_ended_faild", 'No se han terminado todos los tramites para este empleado.');

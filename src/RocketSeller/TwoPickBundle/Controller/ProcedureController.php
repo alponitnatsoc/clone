@@ -659,7 +659,7 @@ class ProcedureController extends Controller
                 ))
                 ->add('email','text',array('label'=>'Correo:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
                 ->add('phone','text',array('label'=>'Telefono/Celular:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
-                ->add('edit', 'submit', array('label' => 'Editar','attr'=>array('class'=>'form-button')))
+                ->add('edit', 'submit', array('label' => 'Guardar','attr'=>array('class'=>'form-button')))
                 ->getForm();
         }else{
             $formDocument = $this->createFormBuilder()
@@ -734,7 +734,7 @@ class ProcedureController extends Controller
                                 0 => 'Validar entidad',
                                 1 => 'Inscribir Entidad',
                             )))
-                        ->add('edit', 'submit', array('label' => 'Editar','attr'=>array('class'=>'form-button')))
+                        ->add('edit', 'submit', array('label' => 'Guardar','attr'=>array('class'=>'form-button')))
                         ->getForm();
                     $formEmployerEntities['name']->setData($action->getEmployerEntity()->getEntityEntity());
                 }else{
@@ -758,7 +758,7 @@ class ProcedureController extends Controller
                                 0 => 'Validar entidad',
                                 1 => 'Inscribir Entidad',
                             )))
-                        ->add('edit', 'submit', array('label' => 'Editar','attr'=>array('class'=>'form-button')))
+                        ->add('edit', 'submit', array('label' => 'Guardar','attr'=>array('class'=>'form-button')))
                         ->getForm();
                     $formEmployerEntities['name']->setData($action->getEmployerEntity()->getEntityEntity());
                 }
@@ -1029,7 +1029,7 @@ class ProcedureController extends Controller
                                 'FEM' => 'Femenino'
                             ),
                         ))
-                        ->add('edit', 'submit', array('label' => 'Editar','attr'=>array('class'=>'form-button')))
+                        ->add('edit', 'submit', array('label' => 'Guardar','attr'=>array('class'=>'form-button')))
                         ->getForm();
                 }else{
                     $form = $this->get('form.factory')->createNamedBuilder('formInfoEmployee'.$ehe->getIdEmployerHasEmployee())
@@ -1181,7 +1181,7 @@ class ProcedureController extends Controller
                         'placeholder' => 'Seleccionar una opción',
                         'required' => true
                     ))
-                    ->add('edit', 'submit', array('label' => 'Editar','attr'=>array('class'=>'form-button')))
+                    ->add('edit', 'submit', array('label' => 'Guardar','attr'=>array('class'=>'form-button')))
                     ->getForm();
                 $formSD = $this->get('form.factory')->createNamedBuilder('formEmployeeStartDate'.$ehe->getIdEmployerHasEmployee())
                     ->add('startDate', 'date', array('label'=>'Fecha de inicio del contrato:','required'=>true,'disabled'=>false,
@@ -1190,7 +1190,7 @@ class ProcedureController extends Controller
                         ),
                         'years' => range(intval($today->format("Y"))+1,intval($ehe->getActiveContract()->getStartDate()->format("Y")))
                     ))
-                    ->add('edit', 'submit', array('label' => 'Editar','attr'=>array('class'=>'form-button')))
+                    ->add('edit', 'submit', array('label' => 'Guardar','attr'=>array('class'=>'form-button')))
                     ->getForm();
                 if($ehe->getActiveContract()->getEndDate()!= null){
                     $formED = $this->get('form.factory')->createNamedBuilder('formEmployeeEndDate'.$ehe->getIdEmployerHasEmployee())
@@ -1200,7 +1200,7 @@ class ProcedureController extends Controller
                             ),
                             'years' => range(intval($today->format("Y"))+3,intval($ehe->getActiveContract()->getEndDate()->format("Y")))
                         ))
-                        ->add('edit', 'submit', array('label' => 'Editar','attr'=>array('class'=>'form-button')))
+                        ->add('edit', 'submit', array('label' => 'Guardar','attr'=>array('class'=>'form-button')))
                         ->getForm();
                 }
             }else{
@@ -2009,7 +2009,7 @@ class ProcedureController extends Controller
             $action->addActionErrorActionError($actionError);
             $actionError->setStatus("unresolved");
             $actionError->setDescription("Se encontro un error en el documento");
-            $notification->setStatus(1);
+            $notification->activate();
             $em->persist($notification);
             $em->persist($actionError);
             $em->persist($action);
@@ -2084,6 +2084,56 @@ class ProcedureController extends Controller
             $this->createNotFoundException("No se encontro el elemento");
         }
         return $this->redirectToRoute('show_procedure', array('procedureId'=>$action->getRealProcedureRealProcedure()->getIdProcedure()), 301);
+    }
+
+    public function generateContractAction($idEmployerHasEmployee,$procedureId){
+        $em = $this->getDoctrine()->getManager();
+        /** @var RealProcedure $procedure */
+        $procedure = $em->getRepository('RocketSellerTwoPickBundle:RealProcedure')->find($procedureId);
+        /** @var EmployerHasEmployee $employerHasEmployee */
+        $employerHasEmployee = $this->loadClassById($idEmployerHasEmployee,"EmployerHasEmployee");
+        if($this->getNotificationByPersonAndOwnerAndDocumentType($procedure->getUserUser()->getPersonPerson(),$employerHasEmployee->getEmployeeEmployee()->getPersonPerson(),$this->getDocumentTypeByCode('CTR'))!= null){
+            /** @var Notification $notification */
+            $notification=$this->getNotificationByPersonAndOwnerAndDocumentType($procedure->getUserUser()->getPersonPerson(),$employerHasEmployee->getEmployeeEmployee()->getPersonPerson(),$this->getDocumentTypeByCode('CTR'));
+            if($notification->getAccion()=='Ver') {
+                /** @var EmployerHasEmployee $ehe */
+                $ehe = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->find(intval(explode('/', $notification->getRelatedLink())[3]));
+                if ($ehe != null and $ehe == $employerHasEmployee) {
+                    if ($ehe->getExistentSQL() == 1) {
+                        /** @var Person $person */
+                        $person=$ehe->getEmployeeEmployee()->getPersonPerson();
+                        $contract = $ehe->getActiveContract();
+                        $flag = false;
+                        if ($ehe->getLegalFF() == 1) {
+                            $configurations = $ehe->getEmployeeEmployee()->getPersonPerson()->getConfigurations();
+                            /** @var Configuration $config */
+                            foreach ($configurations as $config) {
+                                if ($config->getValue() == "PreLegal-SignedContract") {
+                                    $flag = true;
+                                    break;
+                                }
+                            }
+                        }
+                        $utils = $this->get('app.symplifica_utils');
+                        $notification->setAccion('Subir');
+                        if (!$flag) {
+                            $notification->setDownloadAction("Bajar");
+                            $notification->setDownloadLink($this->generateUrl("download_documents", array('id' => $contract->getIdContract(), 'ref' => "contrato", 'type' => 'pdf')));
+                        }
+                        $notification->setDescription("Subir copia del contrato de " . $utils->mb_capitalize(explode(" ", $person->getNames())[0] . " " . $person->getLastName1()));
+                        $notification->setRelatedLink($this->generateUrl("documentos_employee", array('entityType' => 'Contract', 'entityId' => $contract->getIdContract(), 'docCode' => 'CTR')));
+                        $notification->activate();
+                    }
+                }
+            }
+        }else{
+            $notification = $this->createNotificationByDocType($employerHasEmployee->getEmployerEmployer()->getPersonPerson(),$employerHasEmployee->getEmployeeEmployee()->getPersonPerson(),$this->getDocumentTypeByCode('CTR'));
+        }
+        $notification->activate();
+        $em->persist($notification);
+        $em->flush();
+        $this->addFlash("employee_ended_successfully", 'Éxito al generar la notificación del contrato');
+        return $this->redirectToRoute('show_procedure', array('procedureId'=>$procedureId), 301);
     }
 
     // --------------------Controller Functions-------------------------
