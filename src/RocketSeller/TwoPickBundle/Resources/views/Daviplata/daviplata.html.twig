@@ -9,18 +9,32 @@
                 <br/>
                 <br/>
                 <div class="textoda">
-                    <h2 class="h2">¿Cómo creo una cuenta en Daviplata para mi empleado?</h2>
-                    <br/>
-                    <p style="text-align:left">Para crear la cuenta Daviplata te ofrecemos dos opciones:<br><br>
-                    &#10148; Da clic en el botón del video y sigue las instrucciones<br>
-                    &#10148; Da clic en Ir a Daviplata y sigue el paso a paso<br><br>
-                    <span class="spanRecuerda"><strong>Recuerda que:</strong><br> Es importante registrar el número para hacer la transferencia a tu empleado.</span></p><br><br>
+                    <h2 style="font-size:25px" class="light azulmediofont">¿Cómo creo una cuenta en Daviplata para mi empleado?</h2>
+                    <p class="light grisclarofont">Sigue las instrucciones en los siguientes videos:</p>
                 </div>
-                  <div style="text-align: center;margin: 30px auto;width: 70%;">
-                    <div>
+                  <div style="text-align: center;">
+                    <div class="videoCont">
+                      <div class="divFix">
+                        <div class="col-md-6">
+                        <iframe width="100%" height="auto" src="https://www.youtube.com/embed/tZ8zXHao75M" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                        <div class="col-md-6">
+                          <iframe width="100%" height="auto" src="https://www.youtube.com/embed/2An52p799Fk" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                      </div>
+                      <div class="light grisclarofont" style="margin:15px 0">
+                        <p style="font-size:17px">O sigue el paso a paso haciendo clic
+                        <a href="https://daviplata.com/wps/portal/daviplata/Home/ComoActivarse/!ut/p/b1/04_Sj9Q1MTcyNDQysTDTj9CPykssy0xPLMnMz0vMAfGjzOKNLQJN_LycjHydQ11cDRwDvQ1MXUMNvdydjIEKIoEKDHAARwNC-sP1o8BKTNw9fQxdzQIczQJC3AwczdxcPY18jY3cHY2hCvBY4eeRn5uqnxuVY-mp66gIAPU3Hes!/dl4/d5/L2dBISEvZ0FBIS9nQSEh/">
+                          <strong class="azulmediofont">AQUÍ</strong></a></p>
+                      </div>
+                      <div class="spanRecuerda">
+                        <span><strong>Recuerda que:</strong><br> Es importante registrar el número para hacer la transferencia a tu empleado.</span>
+                      </div>
+                    </div>
+                    <div class="activarCuenta">
                       {% if form.cellphone is defined %}
                           <div id="step2">
-                              <p class="p">Ahora debes escribir el número que registraste en Daviplata para guardarlo en Symplifica</p>
+                              <p class="spanRecuerda">Ahora debes escribir el número que registraste en Daviplata para guardarlo en Symplifica</p>
                               {{ form_row(form.cellphone) }}
                               {{ form_row(form.save) }}
                           </div>
@@ -37,31 +51,30 @@
                           </div>
                       {% endif %}
                   </div>
-                  <div>
-                    <button id="btn-video" style="width:100%" class="btn btn-default buttond">
-                      <span id="davimoda">Ver video</span>
-                    </button>
-                    <a href="{{ path('show_dashboard') }}" class="notAjax"><button style="margin: 55px 0 0 0;" class="btn btn-grey buttond">
-                      <span id="davimoda">Hacerlo más tarde<span/>
-                    </button></a>
-                  </div>
+                    <div>
+                      <a href="{{ path('show_dashboard') }}" class="notAjax btn btn-grisBorde buttond">
+                        Hacerlo más tarde</a>
+                      <button id="btn-video" class="btn btn-azul buttond">
+                        Activar Cuenta
+                      </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!--modal daviplata-->
+    <!--modal daviplata
 
         <div id="triggermoda" class="modalito">
 
-          <!-- Modal content -->
+        -- Modal content --
           <div class="modal-contenido">
             <span class="close1" style="color:#FFF;font-weight:bold;text-align:right;padding: 5px 20px 5px 0;font-size:30px;cursor:pointer">×</span>
             <iframe width="100%" height="95%" src="https://www.youtube.com/embed/2An52p799Fk" frameborder="0" allowfullscreen></iframe>
           </div>
 
         </div>
-    <!--fin modal daviplata-->
+  fin modal daviplata-->
     <script>
             // Get the modal
             var moda = document.getElementById('triggermoda');
