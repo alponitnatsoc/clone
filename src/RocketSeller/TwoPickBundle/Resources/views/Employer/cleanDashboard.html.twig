@@ -3,13 +3,20 @@
 
 <link rel="stylesheet" type="text/css" href="{{ asset('../css/pantallas.css') }}"/>
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700" rel="stylesheet" type="text/css">
-
-<div id="cont-succesdocs">
-        <div id="title-siccesdocs">
-            <img src="../img/perfecto.png"/>
-            <h1 class="azuloscurofont bold">¡{{ user.fullName }}!</h1>
-            <h2 class="h2 light grisclarofont">No tienes tareas pendientes</h2>
+<div class="col-sm-12 col-xs-12 align-Resp no-Padding-Col azulclaro">
+    <div id="" class="col-sm-12 col-xs-12 blockStep inline  nav-link">
+        <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+             <img src="/img/dash.png" class="center-block">
         </div>
+        <div id="" class="col-md-10 col-xs-12">
+            <div id="" class="text-left">
+                <h1 style="color:#FFF;margin:25px 0 0;font-size:25px" class="bold">¡Bienvenido {{ app.user.getPersonPerson().getNames() }}!</h1>
+                <span clas="light" style="color:#FFF;margin:0;font-weight:100;font-size:20px">No tienes tareas pendientes</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="cont-succesdocs">
 
         <div id="texto-succesdocs">
             {% for eHE in user.employer.activeEmployerHasEmployees %}
@@ -20,9 +27,16 @@
                 {% endif %}
             {% endfor %}
             {% if validated is defined and validated==false %}
-                <div class="casiValidado">
-                    <h1 class="azulclarofont light centrar">Estas en proceso de validación</h1>
-                    <p class="light grisclarofont">Ya estas cerca de poder gestionar tus empleados, te notificaremos cuando estes listo.</p>
+                <div id="cont-succesdocs">
+                    <div id="texto-succesdocs">
+                        <div id="pagoadelantado">
+                            <div id="contenidopagoadelando">
+                                <img src="{{ asset('/public/img/home/icon8.png') }}" width="80px" height="auto">
+                                <h1 class="azulclarofont bold centrar">Estas en proceso de validación</h1>
+                                <p class="light grisclarofont">Ya estas cerca de poder gestionar tus empleados, te notificaremos cuando estes listo.</strong></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             {% else %}
                 <div id="fechas">

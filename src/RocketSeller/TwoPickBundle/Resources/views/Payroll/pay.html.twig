@@ -47,11 +47,12 @@
     <script>
         window.Intercom("trackEvent", "payroll");
     </script>
+
     <!-- INTERCOM SESSION END-->
     {% if flagAtLeastOne == "true" or dataNomina!=null or debt|length != 0  %}
         {% if dataNomina or debt|length > 0 %}
 
-            <div class="col-sm-12 col-xs-12 align-Resp">
+            <!-- <div class="col-sm-12 col-xs-12 align-Resp">
                 <a id="" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" href="/register/edit">
                     <div id="" class="col-md-2 col-xs-2 txt-AD0" style="text-align: left;">
                         <img src="/img/block-inline.png" class="center-block">
@@ -68,6 +69,28 @@
                         </div>
                     </div>
                 </a>
+            </div> -->
+            <div>
+                <div class="col-sm-12 col-xs-12 align-Resp azulclaro">
+                    <div id="" class=" col-sm-12 col-xs-12 blockStep inline  nav-link" >
+                        <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+                             <img src="/img/block-inline.png" class="center-block">
+                        </div>
+                        <div id="" class="col-md-10 col-xs-12">
+                            <div id="" class="text-left">
+                                <h1 style="color:#FFF;margin:25px 0 0;font-size:25px" class="bold">Pago a empleados</h1>
+                                <span clas="light" style="color:#FFF;margin:0;font-weight:100;font-size:20px">
+                                  {% if "now"|date('j') <= 15%}
+                                      {% set quincena = '(1ª Quincena)' %}
+                                  {% else %}
+                                      {% set quincena = '(2ª Quincena)' %}
+                                  {% endif %}
+                                  <p>{{ "now"|date('F')|trans }} {{ "now"|date('Y') }}  {{ quincena }} </p>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <link rel="stylesheet" type="text/css" href="{{ asset('css/public/pagospage.css') }}"/>
@@ -118,7 +141,7 @@
                                                 {% if data.payroll_payroll.sql_novelties|length > 0 %}
                                                     {% set novelties = data.payroll_payroll.sql_novelties %}
                                                     {% for novelty in novelties if (novelty.novelty_type_novelty_type.payroll_code == 1 and novelty.sql_nov_consec != "") %}
-                                                        Días trabajados al mes: <span class="diasMes">{{ novelty.units }}</span>
+                                                        Días trabajados este mes: <span class="diasMes">{{ novelty.units }}</span>
                                                         <a class="notAjax workedDays btn-xs" href="/novelty/workableDays/{{ novelty.id_novelty }}">
                                                             <span class="editarDias">&#10095; Editar</span></a>
                                                     {% endfor %}
@@ -506,6 +529,21 @@
 
         {% else %}
             <link rel="stylesheet" type="text/css" href="{{ asset('/../css/pantallas.css') }}"/>
+            <div>
+                <div class="col-sm-12 col-xs-12 align-Resp azulclaro">
+                    <div id="" class=" col-sm-12 col-xs-12 blockStep inline  nav-link" >
+                        <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+                             <img src="/img/block-inline.png" class="center-block">
+                        </div>
+                        <div id="" class="col-md-10 col-xs-12">
+                            <div id="" class="text-left">
+                                <h1 style="color:#FFF;margin:25px 0 0;font-size:25px" class="bold">Pago a empleados</h1>
+                                <span clas="light" style="color:#FFF;margin:0;font-weight:100;font-size:20px">No tienes pagos pendientes</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div style="clear: both;height: 60px;"></div>
             <div id="cont-succesdocs">
               <div id="texto-succesdocs">
@@ -527,6 +565,21 @@
 
     {% else %}
         <link rel="stylesheet" type="text/css" href="{{ asset('/../css/pantallas.css') }}"/>
+        <div>
+            <div class="col-sm-12 col-xs-12 align-Resp azulclaro">
+                <div id="" class=" col-sm-12 col-xs-12 blockStep inline  nav-link" >
+                    <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+                         <img src="/img/block-inline.png" class="center-block">
+                    </div>
+                    <div id="" class="col-md-10 col-xs-12">
+                        <div id="" class="text-left">
+                            <h1 style="color:#FFF;margin:25px 0 0;font-size:25px" class="bold">Pago a empleados</h1>
+                            <span clas="light" style="color:#FFF;margin:0;font-weight:100;font-size:20px">No tienes pagos pendientes</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div style="clear: both;height: 60px;"></div>
         <div id="cont-succesdocs">
             <div id="texto-succesdocs">

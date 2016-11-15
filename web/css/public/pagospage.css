@@ -9,7 +9,7 @@
 .naranja {background: #FD9224}
 .azuloscuro {background: #3c4b5a}
 .azulmedio {background: #00838c}
-.azulclaro {background: #00cccb}
+.azulclaro {background: #33d7d6} /*00cccb*/
 
 .light-italic {font-family: 'Open Sans', sans-serif;font-weight: 300;font-style:italic}
 .light {font-family: 'Open Sans', sans-serif;font-weight: 300}
@@ -62,7 +62,7 @@
   padding: 0 15px;
 }
 .numerodias {
-  background: #34d3d1;
+  background: #c4c4c4;
   padding: 10px 15px;
 }
 .diasMes {
@@ -85,7 +85,7 @@
   padding: 10px 0 0 0;
   height: auto;
   overflow: hidden;
-  color: #FFF;
+  color: #797979;
   font-size: 17px
 }
 .moraNomina {
@@ -95,13 +95,13 @@
   border-left: 5px solid #fd5c5c;
 }
 .nominaBorder {
-  border-left: 5px solid #34d3d1;
+  border-left: 5px solid #dbdbdb;
 }
 .aportesBorder {
   border-left: 5px solid #4c4c4c;
 }
 .nominaBack {
-  background: #00858C;
+  background: #dbdbdb;
 }
 
 .tittle-pay-aportes {
