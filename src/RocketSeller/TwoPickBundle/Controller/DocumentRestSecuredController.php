@@ -346,34 +346,15 @@ class DocumentRestSecuredController extends FOSRestController
             ->findOneBy(array('personPerson' => $notification->getPersonPerson()));
 
         $em = $this->getDoctrine()->getManager();
-
-        foreach ($this->allDocumentsReady($user) as $docStat ) {
-
-            $eHE  = $this->getDoctrine()
-                    ->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')
-                    ->find($docStat['idEHE']);
-
-            // Se envia el Email diahabil y se muestra el modal de documentos en validación
-            if( $docStat['docStatus'] == 2) {
-                $pushNotificationService = $this->get('app.symplifica_push_notification');
-                $pushNotificationService->sendMessageValidatingDocuments($this->getUser()->getId());
-                $eHE->setDocumentStatus(3);
-                $em->persist($eHE);
-                $em->flush();
-            } elseif ($docStat['docStatus'] == 3) {
-                //TODO
-            }
-
-            //si el usuario no tiene tareas pendientes y algun empleado fue completamente validado por backoffice
-            if($docStat['docStatus'] == 13) {
-                //TODO
-            }
-
-            if($docStat['docStatus'] == 11) {
-                //TODO
-            }
-            if($docStat['docStatus'] > 13) {
-                //TODO
+        $state = $this->allDocumentsReady($user);
+        $today = new \DateTime();
+        if($state == 1) {
+            foreach ($user->getPersonPerson()->getEmployer()->getActiveEmployerHasEmployees() as $ehE) {
+                if($ehE->getAllDocsReadyMessageAt() == null && $ehE->getDateDocumentsUploaded() != null && $ehE->getDocumentStatusType()->getDocumentStatusCode() == 'ALDCIV') {
+                    $pushNotificationService = $this->get('app.symplifica_push_notification');
+                    $pushNotificationService->sendMessageValidatingDocuments($this->getUser()->getId());
+                    $ehE->setAllDocsReadyMessageAt($today);
+                }
             }
         }
 
