@@ -55,7 +55,7 @@ class PublicController extends Controller
         $user=$this->getUser();
         if (empty($user)) {
             $form = $this->createFormBuilder()
-                ->add('save', 'submit', array('label' => '¡Iniciar regístro ahora!'))
+                ->add('save', 'submit', array('label' => '¡Quiero mis $150.000!'))
                 ->getForm();
             $form->handleRequest($request);
 
@@ -98,7 +98,7 @@ class PublicController extends Controller
             "breadcrumbs" => array("Inicio" => "/", "Beneficios" => "")
         ));
     }
-	
+
     public function preciosAction() {
         return $this->render('RocketSellerTwoPickBundle:Public:precios.html.twig', array(
             "breadcrumbs" => array("Inicio" => "/", "Precios" => "")
@@ -119,9 +119,9 @@ class PublicController extends Controller
         return $this->render('RocketSellerTwoPickBundle:Public:blog.html.twig');
     }
 
-    
+
     public function contactenosAction(Request $request) {
-        
+
         $form = $this->createForm(new ContactType('','',''), array('method'=> 'POST'));
         $form->handleRequest($request);
         if ($request->getMethod() == 'POST') {
@@ -152,7 +152,7 @@ class PublicController extends Controller
                 }else{
                     $this->addFlash('fail','Ocurrio un error');
                 }
-                
+
                 return $this->redirect($this->generateUrl('contactenos'));
             }
         }
