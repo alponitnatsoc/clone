@@ -1,25 +1,33 @@
 {% extends "::base.html.twig" %}
 {% block fos_user_content %}
+    <div class="col-sm-12 col-xs-12 align-Resp no-Padding-Col azulclaro">
+        <div id="" class="col-sm-12 col-xs-12 blockStep inline  nav-link">
+            <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+                 <img src="{{ asset('public/img/home/account.png') }}" class="center-block">
+            </div>
+            <div id="" class="col-md-10 col-xs-12">
+                <div id="" class="text-left">
+                    <h1 style="color:#FFF;margin:25px 0 0;font-size:25px" class="bold">Mi cuenta</h1>
+                    <span clas="light" style="color:#FFF;margin:0;font-weight:100;font-size:20px">Esta es tu información más relevante</span>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="col-sm-12 col-xs-12">
-
         <div class="col-sm-12 col-xs-12 center">
             <div class="row">
-              <div class="headmicuenta">
-                <img src="{{ asset('public/img/home/account.png') }}" width="80">
-                <h3 class="miCuenta">Mi cuenta</h3>
-              </div>
                 <br />
                 <div class="col-sm-12 center">
-                    <div id="basicDataTab" class="tab-pane fade in active col-sm-12 col-xs-12 contain-info-tab">
+                    <div id="basicDataTab" class="tab-pane fade in active col-sm-12 col-xs-12">
                         {{ form_start(form) }}
                             <div class="col-sm-12" id="formErrors">
                                 <div id="dataSuccessEmail">Los datos fueron actualizados exitosamente.</div>
                                 <div id="dataFailEmail">Hubo un problema guardando los datos intenta más tarde</div>
                             </div>
                             <div class="col-sm-12" id="showData">
-                                <h5><strong>{{ form.documentType.vars.value }} {{ form.document.vars.value|number_format(0) }}</strong></h5>
-                                <h5>{{ form.name.vars.value }} {{ form.lastName1.vars.value }} {{ form.lastName2.vars.value }}</h5>
-                                <h5 id="emailValue">{{ form.email.vars.value }}</h5>
+                                <h4 class="grisoscurofont light" style="margin-bottom:0">{{ form.name.vars.value }} {{ form.lastName1.vars.value }} {{ form.lastName2.vars.value }}</h4>
+                                <p class="grisoscurofont bold">{{ form.documentType.vars.value }} {{ form.document.vars.value|number_format(0) }}</p>
+                                <h5 id="emailValue" class="light grisclarofont">{{ form.email.vars.value }}</h5>
                             </div>
                             <div class="col-lg-5 input-group" style="margin: 10px; display: inline-block;" id="editData">
                                 {{ form_widget(form.email) }}
@@ -49,7 +57,7 @@
 
 
             <div class="row" style="margin-bottom: 70px;">
-                <h3 style="color: #5D5D5D;font-weight: 600;">Medios de pago</h3>
+                <h3 class="light grisclarofont">Medios de pago</h3>
                 <div class="col-sm-12 center">
                     <div class="col-sm-12 col-xs-12">
                         {% if (payMethods['creditCards'] is defined) %}
@@ -83,7 +91,7 @@
                         {% if (payMethods['bankAccounts'] is defined) %}
                         <div class="row panel panel-default table-responsive" id="bankAccounts">
                             <!-- Default panel contents -->
-                            <div class="cuentas-heading center" style="background: #3c4b5f;color: #FFF;font-weight: 600;">Cuentas bancarias</div>
+                            <div class="cuentas-heading center" style="background: #dbdbdb;color: #5d5d5d;font-weight: 600;">Cuentas bancarias</div>
                             <!-- Table -->
                             <div class="table table-bordered ">
                                 <div>
@@ -122,11 +130,11 @@
 
             <style>
             .service-days {
-              background-color: #1fcecb;
+              background-color: #dbdbdb;
               margin: 0 auto;
               width: 300px;
               padding: 15px 10px;
-              color: #fff;
+              color: #5D5D5D;
               text-align: center;
               border-radius: 5px;
             }
@@ -147,7 +155,7 @@
             }
             </style>
             <div class="row" style="margin-bottom: 70px;">
-                <h3 style="color:#5D5D5D;font-weight: 600;">Facturación</h3>
+                <h3 class="light grisclarofont">Facturación</h3>
                 <div class="col-sm-12 center">
                     <div class="col-sm-12 col-xs-12 center">
                         <div class="row">
@@ -173,7 +181,7 @@
                           {% if eHEToSend.partialTime + eHEToSend.fullTime > 0 %}
                             <div class="row panel panel-default table-responsive" style="margin: 30px 0 0 0;">
                                 <!-- Default panel contents -->
-                                <div class="panel-heading center" style="background: #3c4b5f;color: #FFF;font-weight: 600;">Fecha de próxima facturación</div>
+                                <div class="panel-heading center" style="background: #dbdbdb;color: #5d5d5d;font-weight: 600;">Fecha de próxima facturación</div>
                                 <!-- Table -->
                                 <div class="table table-bordered ">
                                     <div>
@@ -220,7 +228,7 @@
             }
             </style>
             <div class="row">
-                <h3 style="color: #5D5D5D;font-weight: 600;">Facturas emitidas</h3>
+                <h3 class="light grisclarofont">Facturas emitidas</h3>
                 <div class="col-sm-12 center">
                     <div class="col-sm-12 col-xs-12 table-responsive">
                         <table class="record_properties table table-bordered">

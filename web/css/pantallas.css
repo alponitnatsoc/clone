@@ -132,7 +132,7 @@ a {text-decoration: none}
 	font-size: 20px}
 
 #pagoadelantado {
-	background: #fbfbfb;;
+	background: #FFF;
 	border-radius: 5px
 	}
 #contenidopagoadelando {
@@ -164,7 +164,7 @@ a {text-decoration: none}
 
 	@media only screen and (max-width: 1200px) {
 		#cont-succesdocs {
-			width:100%;
+			width:90%;
 		}
 	}
 @media only screen and (max-width: 1024px) {
