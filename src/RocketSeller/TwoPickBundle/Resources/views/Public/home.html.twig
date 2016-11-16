@@ -326,6 +326,7 @@ de empleados que quieras administrar</h4>
 			</section>
 			<!--seccion de logos del min-->
 
+
 		<!--seccion de logos de quienes hablan de nostros-->
 		<section class="section group" style="margin-bottom: 60px">
 			<h2 class="light grisclarofont minH2">Quienes estan hablando de nosotros</h2><br /><br />
@@ -350,6 +351,7 @@ de empleados que quieras administrar</h4>
 		</section>
 		<!--seccion de logos de quienes hablan de nostros-->
 
+
 		<!-- Modal campaña 150k  -->
 		<div class="modal fade" id="150kCampaign" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
 			<div class="modal-dialog" role="document">
@@ -363,7 +365,7 @@ de empleados que quieras administrar</h4>
 						<div id="campañaDesc" style="background: #fd9224;color: #FFF;">
 							<h1 class="bold">y recibe $150.000*</h1>
 							<p class="back light" style="margin-bottom: 15px;padding: 20px;background: #ea8b2a;">
-								Inicia tu registro hoy mediante un pago electrónico y te daremos
+								Regístrate hoy en Symplifica y si pagas el salario de tu empleada por medios electrónicos te regalamos
 								<strong>$150.000 pesos para pagar el sueldo de tu empleada*</strong>
 							</p>
 						</div>
@@ -473,14 +475,14 @@ $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.mi
 	$('#formemail').attr('oninvalid', 'setCustomValidity("El correo escrito no es valido")');
 	$('#formemail').attr('oninput', "setCustomValidity('')");
 
-	/*var counter = 0;
+	var counter = 0;
 	var interval = setInterval(function() {
 		counter++;
 		if (counter == 10) {
 			$("#150kCampaign").modal("show");
 			clearInterval(interval);
 		}
-	}, 1000);*/
+	}, 1000);
 
 
 	$("form[name='form']").on('submit',function (e) {

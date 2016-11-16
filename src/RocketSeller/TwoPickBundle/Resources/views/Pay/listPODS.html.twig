@@ -3,6 +3,21 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('css/public/pagospage.css') }}"/>
 <link rel="stylesheet" type="text/css" href="{{ asset('css/public/estadoPago.css') }}"/>
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700' rel='stylesheet' type='text/css'>
+    <div>
+        <div class="col-sm-12 col-xs-12 align-Resp azulclaro">
+            <div id="" class=" col-sm-12 col-xs-12 blockStep inline  nav-link" >
+                <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+                     <img src="/img/block-inline.png" class="center-block">
+                </div>
+                <div id="" class="col-md-10 col-xs-12">
+                    <div id="" class="text-left">
+                        <h1 style="color:#FFF;margin:25px 0 0;font-size:25px" class="bold">¡Hola {{ app.user.getPersonPerson().getNames() }}!</h1>
+                        <span clas="light" style="color:#FFF;margin:0;font-weight:100;font-size:20px">Estas son tus transacciones en proceso</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     {% if pods|length >0 or pos|length >0 %}
         <div class="listpod col-sm-12">
           <div class="h1cont">

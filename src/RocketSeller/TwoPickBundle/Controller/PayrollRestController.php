@@ -537,6 +537,8 @@ class PayrollRestController extends FOSRestController
         $mandatory['society'] = true;
         $regex['payroll_type'] = '4|6|1';
         $mandatory['payroll_type'] = true;
+	     // $regex['worked_days_week'] = '([0-9])+';
+	      //$mandatory['worked_days_week'] = false;
 
         $this->validateParamters($parameters, $regex, $mandatory);
 
@@ -564,6 +566,14 @@ class PayrollRestController extends FOSRestController
         $unico['EMP_SOCIEDAD'] = $parameters['society'];
         //$unico['EMP_TIPO_SALARIO'] = 1; // Meaning monthly. SQL removed this.
         $unico['EMP_TIPO_NOMINA'] = $parameters['payroll_type'];
+	    
+	      /*if( $parameters['payroll_type'] == 6 ){
+	      	$unico['DIAS_LABOR_SEM'] = $parameters['worked_days_week'];
+	      }
+	
+		    if( $parameters['payroll_type'] == 4 ){
+			    $unico['EMP_TIP_CAL'] = 1;
+		    }*/
 
         $content[] = $unico;
         $parameters = array();
@@ -3160,6 +3170,141 @@ class PayrollRestController extends FOSRestController
 		
 		return $responseView;
 	}
-
+	
+	/**
+	 * Modifies an employee worked days per week <br/>
+	 *
+	 * @ApiDoc(
+	 *   resource = true,
+	 *   description = "Modifies an employee worked days per week",
+	 *   statusCodes = {
+	 *     200 = "OK",
+	 *     400 = "Bad Request",
+	 *     401 = "Unauthorized",
+	 *     404 = "Not Found"
+	 *   }
+	 * )
+	 *
+	 * @param Request $request.
+	 * Rest Parameters:
+	 *
+	 *   (name="employee_id", nullable=false, requirements="([0-9])+", description="Employee id, must be provided by us, and must be unique. It can't be the CC.")
+	 *   (name="worked_week_days", nullable=true, requirements="([0-9])+", description="Number of days worked on a week.")
+	 *
+	 * @return View
+	 */
+	public function postModifyEmployeeWorkedDaysWeekAction(Request $request)
+	{
+		$parameters = $request->request->all();
+		$regex = array();
+		$mandatory = array();
+		// Set all the parameters info.
+		$regex['employee_id'] = '([0-9])+';
+		$mandatory['employee_id'] = true;
+		$regex['worked_week_days'] = '([0-9])+';
+		$mandatory['worked_week_days'] = true;
+		
+		$this->validateParamters($parameters, $regex, $mandatory);
+		
+		$content = array();
+		$unico = array();
+		
+		$unico['TIPOCON'] = 3;
+		$unico['EMP_CODIGO'] = $parameters['employee_id'];
+		$unico['DIAS_LABOR_SEM'] =  $parameters['worked_week_days'];
+		
+		$content[] = $unico;
+		
+		$parameters = array();
+		$parameters['inInexCod'] = '601';
+		$parameters['clXMLSolic'] = $this->createXml($content, 601);
+		
+		/** @var View $res */
+		$responseView = $this->callApi($parameters);
+		
+		return $responseView;
+	}
+	
+	/**
+	 * Process 100 process and acumulate <br/>
+	 *
+	 * @ApiDoc(
+	 *   resource = true,
+	 *   description = "Process 100 process and acumulate",
+	 *   statusCodes = {
+	 *     200 = "OK",
+	 *     400 = "Bad Request",
+	 *     401 = "Unauthorized",
+	 *     404 = "Not Found"
+	 *   }
+	 * )
+	 *
+	 * @param Request $request.
+	 * Rest Parameters:
+	 *
+	 *    (name="year", nullable=false, requirements="([0-9])+", strict=true, description="Year of the period to be close")
+	 *    (name="month", nullable=false, requirements="([0-9])+", strict=true, description="Month of the period to be close.")
+	 *    (name="from_date", nullable=false, requirements="[0-9]{4}-[0-9]{2}-[0-9]{2}", strict=true, description="Y-m-d start of the month")
+	 *    (name="to_date", nullable=false, requirements="[0-9]{4}-[0-9]{2}-[0-9]{2}", strict=true, description="Y-m-d end of the month")
+	 *    (name="cut_date", nullable=false, requirements="[0-9]{4}-[0-9]{2}-[0-9]{2}", strict=true, description="Y-m-d end of the month")
+	 *    (name="pay_date", nullable=false, requirements="[0-9]{4}-[0-9]{2}-[0-9]{2}", strict=true, description="Y-m-d end of the month")
+	 *
+	 * @return View
+	 */
+	public function postProcessAndAcumulateAction(Request $request)
+	{
+		$parameters = $request->request->all();
+		$regex = array();
+		$mandatory = array();
+		// Set all the parameters info.
+		$regex['year'] = '([0-9])+';
+		$mandatory['year'] = true;
+		$regex['month'] = '([0-9])+';
+		$mandatory['month'] = true;
+		$regex['from_date'] = '[0-9]{4}-[0-9]{2}-[0-9]{2}';
+		$mandatory['from_date'] = true;
+		$regex['to_date'] = '[0-9]{4}-[0-9]{2}-[0-9]{2}';
+		$mandatory['to_date'] = true;
+		$regex['cut_date'] = '[0-9]{4}-[0-9]{2}-[0-9]{2}';
+		$mandatory['cut_date'] = true;
+		$regex['pay_date'] = '[0-9]{4}-[0-9]{2}-[0-9]{2}';
+		$mandatory['pay_date'] = true;
+		
+		$this->validateParamters($parameters, $regex, $mandatory);
+		
+		$content = array();
+		$unico = array();
+		
+		$unico['PAR_ANO'] = $parameters['year'];
+		$unico['PAR_MES'] = $parameters['month'];
+		$unico['PAR_PERIODO'] = 4;
+		$unico['PAR_FECHA_DESDE'] = $parameters['from_date'];
+		$unico['PAR_FECHA_HASTA'] = $parameters['to_date'];
+		$unico['PAR_FECHA_CORTE'] = $parameters['cut_date'];
+		$unico['PAR_FECHA_PAGO'] = $parameters['pay_date'];
+		$unico['PAR_EMP_CODI_INI'] = 0;
+		$unico['PAR_EMP_CODI_FIN'] = 99999;
+		$unico['PAR_TIPO_LIQ'] = 'M';
+		$unico['CERRARPROCESO100'] = 'S';
+		
+		$content[] = $unico;
+		
+		$parameters = array();
+		$parameters['inInexCod'] = '610';
+		$parameters['clXMLSolic'] = $this->createXml($content, 610);
+		
+		$unico['PAR_TIPO_LIQ'] = 'Q';
+		
+		$content[] = $unico;
+		
+		$parameters = array();
+		$parameters['inInexCod'] = '610';
+		$parameters['clXMLSolic'] = $this->createXml($content, 610);
+		
+		/** @var View $res */
+		$responseView = $this->callApi($parameters);
+		
+		return $responseView;
+	}
 
 }
