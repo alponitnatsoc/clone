@@ -548,8 +548,6 @@ class RealProcedure
         return $this->finishedAt;
     }
 
-
-
     /**
      * Set procedureStatus
      *

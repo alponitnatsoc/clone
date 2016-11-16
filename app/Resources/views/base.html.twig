@@ -276,7 +276,7 @@
                                 {% if template_parameter is defined %}
                                     {{ include('@RocketSellerTwoPick/modal_templates/modal_picker.twig',{'template_parameter':template_parameter}) }}
                                 {% endif %}
-                                <div class="col-sm-12 col-xs-12 profile-Data azulclaro"> <!--azulclaro quite la clase para que no saliera, hablar con andtres para ajustar-->
+                                <div class="col-sm-12 col-xs-12 profile-Data azulclaro" {% if app.user.legalFlag == -2 %} style="display: none" {% endif %}> <!--azulclaro quite la clase para que no saliera, hablar con andtres para ajustar-->
                                     {% set flag = 0 %}
                                     {% set path_modal = app.request.pathInfo|split('/') %}
                                     {% if path_modal[1] =='register' %}
@@ -285,12 +285,10 @@
                                         {% set flag = 0 %}
                                     {% endif %}
                                     <div id="recordardatos">
-
                                         <div class="btn btn-middleblue"
                                              id="mibotn" {% if flag == 0 %} style="display: none" {% endif %} >
                                             Recordar datos requeridos
                                         </div>
-
                                         <div id="mimoda" class="moda">
 
                                             <!-- Modal content -->
@@ -365,7 +363,7 @@
 
                                             <div class="pull-right">
                                                 {% block logout %}
-                                                  {% if app.user is defined and app.user.status>=2 %}
+                                                    {% if app.user is defined and app.user.status>=2 %}
                                                     <span id="profile" style="display: inline">
                                                         <a
                                                             {% if status < 2 %}
@@ -375,15 +373,13 @@
                                                             {% endif %}
                                                         >Mi cuenta</a>
                                                     </span> |
-                                                  {% endif %}
-                                                  {% if app.user is defined and app.user.status<2 %}
-                                                  <span id="logout" style="display: inline; margin-left:30px"><a class="notAjax" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
-                                                  </span>
-                                                  {% else %}
-                                                  <span id="logout" style="display: inline"><a class="notAjax" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
-                                                  </span>
-                                                  {% endif %}
-
+                                                    {% elseif app.user is defined and app.user.status<2 %}
+                                                        <span id="logout" style="display: inline; margin-left:30px"><a class="notAjax" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
+                                                        </span>
+                                                    {% else %}
+                                                        <span id="logout" style="display: inline"><a class="notAjax" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
+                                                        </span>
+                                                    {% endif %}
                                                 {% endblock %}
                                             </div>
                                         </div>
