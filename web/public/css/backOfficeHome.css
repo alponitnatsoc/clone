@@ -163,3 +163,14 @@ table.dataTable tbody th, table.dataTable tbody td{
     margin: 1px;
     padding: 1px;
 }
+
+thead .th1{
+    background: #d2d1d1;
+    color: black;
+    padding: 0px 0px!important;
+    margin: 0px;
+}
+
+td.highlight {
+    background-color: whitesmoke !important;
+}
