@@ -45,3 +45,6 @@ parameters:
        identificacion: CC XXX de Colombia
     route_home: 'RocketSellerTwoPickBundle:Public:home'
     route_payroll: 'RocketSellerTwoPickBundle:Payroll:pay'
+
+    twilio_id: 'AC1cbb80c722300b240bce151c107f927a'
+    twilio_token: '8dbaa85d6dd9f840f2a25b23418d78b2'
