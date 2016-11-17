@@ -276,7 +276,7 @@
                                 {% if template_parameter is defined %}
                                     {{ include('@RocketSellerTwoPick/modal_templates/modal_picker.twig',{'template_parameter':template_parameter}) }}
                                 {% endif %}
-                                <div class="col-sm-12 col-xs-12 profile-Data azulclaro" {% if app.user.legalFlag == -2 and not is_grabted('ROLE_BACKOFFICE') %} style="display: none" {% endif %}> <!--azulclaro quite la clase para que no saliera, hablar con andtres para ajustar-->
+                                <div class="col-sm-12 col-xs-12 profile-Data azulclaro" {% if app.user.legalFlag == -2 and not is_granted('ROLE_BACK_OFFICE') %} style="display: none" {% endif %}> <!--azulclaro quite la clase para que no saliera, hablar con andtres para ajustar-->
                                     {% set flag = 0 %}
                                     {% set path_modal = app.request.pathInfo|split('/') %}
                                     {% if path_modal[1] =='register' %}
