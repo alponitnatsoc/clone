@@ -193,8 +193,9 @@ border-bottom: 3px solid #794815}
 		cursor: pointer;
 	}
 	.logoCamp img {
-		width: 185px;
+		width: 155px;
 		height: auto;
+		padding-top: 35px;
 	}
 	.campanaSlideContent {
 		background: #FFF;
