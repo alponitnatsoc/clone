@@ -317,20 +317,29 @@ class ChronServerRestController extends FOSRestController
         $userRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
         $users = $userRepo->findAll();
         $resultUsers = array();
+        $message = "Hola, es tiempo de reportar novedades y pagar";
+        $longMessage = "¡Hola! Es momento de reportar novedades y pagar la quincena de tu empleado. Da clic para entrar";
+        if($period == 4) {
+            $longMessage = "¡Hola! Es momento de reportar novedades de este periodo y realizar los pagos de seguridad social y sueldo. Da clic para entrar";
+        }
+        if($isLastPayDay) {
+            $message = "¡Último día! Realiza el pago a tu empleado";
+            $longMessage = "¡Importante! Hoy es el último día para realizar el pago a tu empleado y reportar las novedades de este período. Entra ya haciendo clic";
+
+        }
         foreach ($users as $user) {
             if($user->getStatus() < 2) continue;
 
             /** @var EmployerHasEmployee $eHE */
             foreach ($user->getPersonPerson()->getEmployer()->getEmployerHasEmployees() as $eHE ){
                 if($eHE->getState() < 4) continue;
-                if($eHE->getActiveContract()) {
-                    $contract = $eHE->getActiveContract();
+                $contract = $eHE->getActiveContract();
+                if($contract) {
                     $activPayroll = $contract->getActivePayroll();
                     if($activPayroll && $activPayroll->getPeriod() == $period &&
                        $activPayroll->getYear() == $currYear &&
                        $activPayroll->getMonth() == $currMonth) {
                         $title = "Symplifica";
-
                         $request = new Request();
                         $request->setMethod("POST");
                         $request->request->add(array(
@@ -343,18 +352,37 @@ class ChronServerRestController extends FOSRestController
                         $pushNotificationService = $this->get('app.symplifica_push_notification');
                         $result = $pushNotificationService->postPushNotificationAction($request);
                         $collect = $result->getData();
-
+                        $isEfectivo = false;
+                        if($contract->getPayMethodPayMethod()->getPayTypePayType()->getSimpleName() == "EFE") {
+                            $isEfectivo = true;
+                        }
                         $smailer = $this->get('symplifica.mailer.twig_swift');
                         if ($period == 2) {
-                            $send=$smailer->sendEmailByTypeMessage(array('emailType'=>'lastReminderPay',
-                                                                     'toEmail'=>$user->getEmail(),
-                                                                     'userName'=>$user->getPersonPerson()->getFullName(),
-                                                                     'days'=>2));
+                            if($isLastPayDay) {
+                                $send = $smailer->sendEmailByTypeMessage(array('emailType' => 'lastReminderPay',
+                                    'toEmail' => $user->getEmail(),
+                                    'userName' => $user->getPersonPerson()->getFullName(),
+                                    'days' => 2));
+                            } else {
+                                $send = $smailer->sendEmailByTypeMessage(array('emailType' => 'reminderPay',
+                                    'toEmail' => $user->getEmail(),
+                                    'userName' => $user->getPersonPerson()->getFullName(),
+                                    'isEfectivo' => $isEfectivo,
+                                    'days' => 2));
+                            }
                         } elseif ($period == 4) {
-                            $send=$smailer->sendEmailByTypeMessage(array('emailType'=>'lastReminderPay',
-                                                                     'toEmail'=>$user->getEmail(),
-                                                                     'userName'=>$user->getPersonPerson()->getFullName(),
-                                                                     'days'=>3));
+                            if($isLastPayDay) {
+                                $send = $smailer->sendEmailByTypeMessage(array('emailType' => 'lastReminderPay',
+                                    'toEmail' => $user->getEmail(),
+                                    'userName' => $user->getPersonPerson()->getFullName(),
+                                    'days' => 3));
+                            } else {
+                                $send = $smailer->sendEmailByTypeMessage(array('emailType' => 'reminderPay',
+                                    'toEmail' => $user->getEmail(),
+                                    'userName' => $user->getPersonPerson()->getFullName(),
+                                    'isEfectivo' => $isEfectivo,
+                                    'days' => 3));
+                            }
                         }
                         $resultUsers[] = array('userId' => $user->getId(), 'resultPush' => $collect, 'resultMail' => $send);
                         break;
