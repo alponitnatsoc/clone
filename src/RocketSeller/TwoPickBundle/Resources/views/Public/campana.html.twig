@@ -96,7 +96,8 @@
             background: #3e6e73;
             border: none;
             width: 90%;
-            color: #FFF
+            color: #FFF;
+            font-size: 15px;
         }
 
         #form .terms {
@@ -365,7 +366,7 @@
                   <div id="campañaDesc" class="bar block tada animated">
                       <h1 class="bold">y recibe $150.000*</h1>
                       <p class="back light">
-                          Regístrate y si pagas el salario por medios electrónicos te regalaremos
+                          Regístrate hoy en Symplifica y si pagas el salario de tu empleada por medios electrónicos te regalamos
                           <strong>$150.000 pesos para pagar el sueldo de tu empleada*</strong>
                       </p>
                   </div>
@@ -380,7 +381,7 @@
                         <!--<input class="info buttonf" type="submit" value="¡Quiero más información!">-->
                         {{ form_widget(form.save, { 'attr': {'class': 'start buttonf'}}) }}
                     {{ form_end(form) }}<br />
-                    <a href="#openModal" id="terminos"><input class="terms buttonf" type="submit" value="Terminos y condiciones"></a>
+                    <a href="#openModal" id="terminos"><input class="terms buttonf" type="submit" value="Términos y condiciones"></a>
                     <div class="postClic light" hidden=""><!--este es el div que apareceria si dan clic en ¡Quiero más información!-->
                       Muy pronto uno de nuestros asesores expertos se contactará contigo para darte toda la información que necesitas.<br />
                       <strong class="bold azulclarofont">¡Que tengas un buen día!</strong>
@@ -451,7 +452,7 @@
                         el primer abono de $75.000 a los pagos del trabajador en el último período del mes siguiente, y el segundo pago de $75.000 en
                         el último período del mes inmediatamente posterior a ese.<br /><br />
                         8). Para poder recibir el premio es necesario realizar el registro en Symplifica.com con un método de transferencia electrónica
-                         para realizar los pagos de nómina (Cuenta de ahorros, Daviplata o tarjeta de crédito). Es decir, si se realizaran los pagos de
+                         para realizar los pagos de nómina (Cuenta de ahorros o Daviplata). Es decir, si se realizaran los pagos de
                          nómina al empleado en efectivo, no aplicará la promoción en curso.<br /><br />
                         9). Los $75.000 de cada mes deben ser gastados en su totalidad en el mes correspondiente, ya que no se podrán acumular saldos
                          para el segundo mes, ni para los meses siguientes.<br /><br />
@@ -462,7 +463,7 @@
                          de $150.000 como descuento en los pagos del primer trabajador registrado.<br /><br />
                         12). Promoción válida sólo para Colombia, y aplica solo para aquellas ciudades donde symplifica pueda hacer afiliaciones a las entidades de seguridad social.<br /><br />
                         13). El premio no puede ser cambiado por dinero en efectivo o algún otro elemento.<br /><br />
-                        14). l Usuario acogerse a esta promoción, no implica permanencia mínima. El Usuario podrá cancelar su suscripción en cualquier
+                        14). Al Usuario acogerse a esta promoción, no implica permanencia mínima. El Usuario podrá cancelar su suscripción en cualquier
                         momento, inactivando todos los trabajadores que tenga registrados en SYMPLIFICA, a través de la Plataforma. No obstante, se aclara
                         que, si el Usuario inactiva en la Plataforma al trabajador a cuyos pagos aplica la promoción, durante alguno de los meses en que le
                          habría correspondido el abono de hasta $75.000 por parte de SYMPLIFICA, el Usuario no tendrá derecho a recibir esas sumas en efectivo
@@ -624,5 +625,16 @@
     sr.reveal( ".box", { reset: true, viewOffset: { top: 100 } }, 100 );
 
 </script>
+
+<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+<script>
+    (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+            function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+        e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+        e.src='//www.google-analytics.com/analytics.js';
+        r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+    ga('create','UA-70850811-3','auto');ga('send','pageview');
+</script>
+<!-- End Google Analytics -->
 
 </html>

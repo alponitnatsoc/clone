@@ -142,6 +142,7 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                  * string toEmail
                  * int days
                  * string userName
+                 * boolean isEfectivo
                  */
                 $template = $this->parameters['template']['remindNovelty'];
                 return $this->sendMessage($template,$context,$teamFromEmail, $context['toEmail']);
