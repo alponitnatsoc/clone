@@ -308,7 +308,7 @@ class ChronServerRestController extends FOSRestController
      *
      * @return View
      */
-    public function putPaymentReminderAction($message, $longMessage, $period) {
+    public function putPaymentReminderAction($isLastPayDay, $period) {
 
         $now = new \DateTime('now');
         $currMonth = $now->format('m');
