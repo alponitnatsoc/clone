@@ -32,7 +32,7 @@
                                 {% if "now"|date('Y-m-d') == pod.purchaseOrders.dateCreated|date_modify("+3 days")|date('Y-m-d')  %}
                                     <tr bgcolor="#FFFF00">
                                 {% elseif "now"|date('Y-m-d') > pod.purchaseOrders.dateCreated|date_modify("+3 days")|date('Y-m-d') %}
-                                    <tr bgcolor="#FF0000">>
+                                    <tr bgcolor="#FF0000">
                                 {% endif %}
                             {% else %}
                                 <tr>
@@ -113,7 +113,7 @@
                             {% if "now"|date('Y-m-d') == podP.purchaseOrders.dateCreated|date_modify("+3 days")|date('Y-m-d')  %}
                                 <tr bgcolor="#FFFF00">
                             {% elseif "now"|date('Y-m-d') > podP.purchaseOrders.dateCreated|date_modify("+3 days")|date('Y-m-d') %}
-                                <tr bgcolor="#FF0000">>
+                                <tr bgcolor="#FF0000">
                             {% endif %}
                         {% else %}
                             <tr>

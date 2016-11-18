@@ -1,4 +1,4 @@
-    {% extends "::base.html.twig" %}
+{% extends "::base.html.twig" %}
 
     {% block title %}back office{% endblock %}
 
@@ -40,15 +40,15 @@
         <div class="{% if app.request.get('_route') == 'show_procedures' %}activeMenu{% endif %} well well-lg">
             <a class="notAjax" href="{{ path('show_procedures') }}">Tramites</a>
         </div>
-        <div class="{% if app.request.get('_route') == 'show_request' %}activeMenu{% endif %} well well-lg">
-            <a class="notAjax" href="{{ path('show_request') }}">Consulta</a>
-        </div>
-        <div class="{% if app.request.get('_route') == 'legal_ass' %}activeMenu{% endif %} well well-lg">
-            <a class="notAjax" href="{{ path('legal_ass') }}">Asistencia Legal</a>
-        </div>
-        <div class="{% if app.request.get('_route') == 'register_express' %}activeMenu{% endif %} well well-lg">
-            <a class="notAjax" href="{{ path('register_express') }}">Registro Express</a>
-        </div>
+        {#<div class="{% if app.request.get('_route') == 'show_request' %}activeMenu{% endif %} well well-lg">#}
+            {#<a class="notAjax" href="{{ path('show_request') }}">Consulta</a>#}
+        {#</div>#}
+        {#<div class="{% if app.request.get('_route') == 'legal_ass' %}activeMenu{% endif %} well well-lg">#}
+            {#<a class="notAjax" href="{{ path('legal_ass') }}">Asistencia Legal</a>#}
+        {#</div>#}
+        {#<div class="{% if app.request.get('_route') == 'register_express' %}activeMenu{% endif %} well well-lg">#}
+            {#<a class="notAjax" href="{{ path('register_express') }}">Registro Express</a>#}
+        {#</div>#}
         <div class="{% if app.request.get('_route') == 'show_pilas' %}activeMenu{% endif %} well well-lg">
             <a class="notAjax" href="{{ path('show_pilas') }}" >Pila</a>
         </div>
