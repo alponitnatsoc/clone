@@ -475,14 +475,14 @@ $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.mi
 	$('#formemail').attr('oninvalid', 'setCustomValidity("El correo escrito no es valido")');
 	$('#formemail').attr('oninput', "setCustomValidity('')");
 
-	var counter = 0;
+	/*var counter = 0;
 	var interval = setInterval(function() {
 		counter++;
 		if (counter == 10) {
 			$("#150kCampaign").modal("show");
 			clearInterval(interval);
 		}
-	}, 1000);
+	}, 1000);*/
 
 
 	$("form[name='form']").on('submit',function (e) {
