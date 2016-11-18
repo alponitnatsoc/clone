@@ -3,65 +3,74 @@
 {% block title %}Pila{% endblock %}
 
 {% block fos_user_content %}
-    <div id="main" class="col-sm-15">
-        <div class="col-md-12">
-            <div class="panel panel-title">
-                BackOffice Pila
-            </div>
-        <br>
-        <div class="panel panel-default">
-            <div class="panel-heading">
+    <div id="main">
+        <div class="back-panel-title">
+            Pilas
+        </div>
+        <div class="back-panel">
+            <div class="backoffice-headding">
                 <h4>Información de las pilas</h4>
             </div>
-            <table class="table">
+            <table id="table-pilas" class="table table-striped table-bordered" cellspacing="0" width="100%">
                 <thead>
+                <tr>
+                    <th style="width: 10%">Empleador</th>
+                    <th style="width: 10%">Cedula</th>
+                    <th style="width: 10%">Mes Pila</th>
+                    <th style="width: 10%">Tipo</th>
+                    <th style="width: 10%">Valor</th>
+                    <th style="width: 30%">Número de planilla</th>
+                    <th style="width: 10%">Estado carga</th>
+                    <th style="width: 10%">Archivo de pila</th>
+                </tr>
+                <tr>
+                    <th class="th1" style="width: 10%">Empleador</th>
+                    <th class="th1" style="width: 10%">Cedula</th>
+                    <th class="th1" style="width: 10%">Mes Pila</th>
+                    <th class="th1" style="width: 10%">Tipo de Pila</th>
+                    <th class="th1" style="width: 10%">Valor de la Pila</th>
+                    <th class="th1" style="width: 30%">Número de planilla</th>
+                    <th class="th1" style="width: 10%">Estado carga</th>
+                    <th class="th1" style="width: 10%">Archivo de pila</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for pila in pilas %}
+                    {% set index = loop.index0 %}
+                    {% set fileType =  tipoPlanilla[index] %}
+                    {% set fileStoredName = pila.enlaceOperativoFileName %}
+                    {% set idFileName = "fileName" ~ pila.idPurchaseOrdersDescription  %}
+                    {% set idFileNameButton = pila.idPurchaseOrdersDescription  %}
                     <tr>
-                        <th style="vertical-align: middle" rowspan="2">Empleador</th>
-                        <th style="vertical-align: middle" rowspan="2">Cedula</th>
-                        <th style="..." rowspan="3">Mes Pila</th>
-                        <th style="vertical-align: middle" rowspan="2">Tipo de Pila</th>
-                        <th style="..." rowspan="2">Valor de la Pila</th>
-                        <th style="vertical-align: middle" rowspan="2">Número de planilla</th>
-                        <th style="vertical-align: middle" rowspan="2">Estado carga de planilla</th>
-                        <th style="vertical-align: middle" rowspan="2">Archivo de pila</th>
-                    </tr>
-                    <tbody>
-                    {% for pila in pilas %}
-                        {% set index = loop.index0 %}
-                        {% set fileType =  tipoPlanilla[index] %}
-                        {% set fileStoredName = pila.enlaceOperativoFileName %}
-                        {% set idFileName = "fileName" ~ pila.idPurchaseOrdersDescription  %}
-                        {% set idFileNameButton = pila.idPurchaseOrdersDescription  %}
-                        <tr>
-                          <td style="vertical-align: middle">{{ pila.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.fullName }}</td>
-                          <td style="vertical-align: middle">{{ pila.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.document }}</td>
-                          <td style="vertical-align: middle">{{ utils.month_number_to_name(pila.payrollsPila[0].month) }}</td>
-                          <td style="vertical-align: middle">Id: {{ pila.idPurchaseOrdersDescription }} - Tipo: {{ fileType }}</td>
-                          <td style="vertical-align: middle">$ {{ pila.value|number_format(0) }} </td>
-                          <td style="vertical-align: middle"> <input id= {{idFileName}} value= "{{ fileStoredName }}" size="10"></input> <button id= {{idFileNameButton}} class="saveId">Guardar Sin Aprobar</button><button id= {{idFileNameButton}} class="okId">Guardar y Aprobar</button></td>
-                          <td style="vertical-align: middle">
-                              {% if pila.uploadedFile == NULL %}
-                                  El usuario no ha pagado aún
-                              {% elseif pila.uploadedFile == -1 %}
-                                  La planilla subió sin errores ni advertencias
-                              {% elseif pila.uploadedFile == -2 %}
-                                  Operaciones no ha aprobado la planilla
-                              {% elseif pila.uploadedFile > 0 %}
+                        <td style="vertical-align: middle">{{ pila.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.fullName }}</td>
+                        <td style="vertical-align: middle">{{ pila.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.document }}</td>
+                        <td style="vertical-align: middle">{{ utils.month_number_to_name(pila.payrollsPila[0].month) }}</td>
+                        <td style="vertical-align: middle">Id: {{ pila.idPurchaseOrdersDescription }} - Tipo: {{ fileType }}</td>
+                        <td style="vertical-align: middle">$ {{ pila.value|number_format(0) }} </td>
+                        <td style="vertical-align: middle;"> <input id= {{idFileName}} value="{{ fileStoredName }}" size="10"></input> <div style="display: inline-block"><button id= {{idFileNameButton}} class="saveId">Guardar Sin Aprobar</button><button id= {{idFileNameButton}} class="okId">Guardar y Aprobar</button></div></td>
+                        <td style="vertical-align: middle">
+                            {% if pila.uploadedFile == NULL %}
+                                El usuario no ha pagado aún
+                            {% elseif pila.uploadedFile == -1 %}
+                                La planilla subió sin errores ni advertencias
+                            {% elseif pila.uploadedFile == -2 %}
+                                Operaciones no ha aprobado la planilla
+                            {% elseif pila.uploadedFile > 0 %}
                                 {% for trans in pila.transactions %}
                                     {% if trans.idTransaction ==  pila.uploadedFile %}
-                                       {{ trans.purchaseOrdersStatus.name }}
+                                        {{ trans.purchaseOrdersStatus.name }}
                                     {% endif %}
                                 {% endfor %}
-                              {% endif %}
-                          </td>
-                          <td style="vertical-align: middle"> <button type"button" onclick="location.href = '/api/public/v1/secured/monthlies/{{pila.idPurchaseOrdersDescription}}/plains/download/text';">Generar Archivo</button></td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </thead>
+                            {% endif %}
+                        </td>
+                        <td style="vertical-align: middle"> <button type"button" onclick="location.href = '/api/public/v1/secured/monthlies/{{pila.idPurchaseOrdersDescription}}/plains/download/text';">Generar Archivo</button></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+
             </table>
         </div>
-        </div>
+    </div>
     </div>
 {% endblock %}
 
@@ -69,27 +78,49 @@
     {{ parent() }}
 
     <script type="text/javascript">
-    $(document).ready(function () {
-        $(".saveId").on("click", function() {
-            var idToRetrieve = $(this).attr("id");
-            var valToStoreFrom = "fileName" + idToRetrieve;
-            var valToStore = $("#" + valToStoreFrom).val();
+        $(document).ready(function () {
+            // Setup - add a text input to each footer cell
+            $('#table-pilas .th1').each( function () {
+                var title = $(this).text();
+                $(this).html('<input type="text" placeholder="Buscar" style="width: 75%;margin: 1px 2px;padding: 1px 5px;color:black"/>' );
+            });
 
-            if(valToStore != ""){
-              location.href = "/backoffice/planilla/persista/"+valToStore+"/"+idToRetrieve+"/notok";
-            }
+            // DataTable
+            var table = $('#table-pilas').DataTable();
+
+
+            // Apply the search
+            table.columns().every( function () {
+                var that = this;
+                $( 'input', this.header() ).on( 'keyup change', function () {
+                    if (that.search() !== this.value ) {
+                        that
+                                .search( this.value )
+                                .draw();
+                    }
+                } );
+            } );
+
+            $(".saveId").on("click", function() {
+                var idToRetrieve = $(this).attr("id");
+                var valToStoreFrom = "fileName" + idToRetrieve;
+                var valToStore = $("#" + valToStoreFrom).val();
+
+                if(valToStore != ""){
+                    location.href = "/backoffice/planilla/persista/"+valToStore+"/"+idToRetrieve+"/notok";
+                }
+            });
+
+            $(".okId").on("click", function() {
+                var idToRetrieve = $(this).attr("id");
+                var valToStoreFrom = "fileName" + idToRetrieve;
+                var valToStore = $("#" + valToStoreFrom).val();
+
+                if(valToStore != ""){
+                    location.href = "/backoffice/planilla/persista/"+valToStore+"/"+idToRetrieve+"/ok";
+                }
+            });
         });
-
-        $(".okId").on("click", function() {
-            var idToRetrieve = $(this).attr("id");
-            var valToStoreFrom = "fileName" + idToRetrieve;
-            var valToStore = $("#" + valToStoreFrom).val();
-
-            if(valToStore != ""){
-                location.href = "/backoffice/planilla/persista/"+valToStore+"/"+idToRetrieve+"/ok";
-            }
-        });
-    });
     </script>
 
 {% endblock %}

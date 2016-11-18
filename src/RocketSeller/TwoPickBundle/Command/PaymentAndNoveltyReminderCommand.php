@@ -16,9 +16,9 @@ class PaymentAndNoveltyReminderCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-                ->setName('symplifica:payment:novelty:reminder')
-                ->setDescription('Sends push notification and mail reminding payments due day')
-                ->setHelp('The push notifications are sent
+            ->setName('symplifica:payment:novelty:reminder')
+            ->setDescription('Sends push notification and mail reminding payments due day')
+            ->setHelp('The push notifications are sent
                             -Report Novleties reminder: 5 days business days before 12.
                             -Last day of pay reminder: 12.
                             -Report Novleties reminder: 5 days business days before 25.
@@ -43,19 +43,15 @@ class PaymentAndNoveltyReminderCommand extends ContainerAwareCommand
         $dateString = $currYear . '-' . $currMonth . '-12';
         $fivebusinessDaysBefore12 = $utils->getWorkableDaysToDateAction($dateString, -5);
         if($fivebusinessDaysBefore12 == $now->format("Y-m-d")) {
-            $response = $cronService->putPaymentReminderAction("Hola, es tiempo de reportar novedades y pagar",
-                                                    "¡Hola! Es momento de reportar novedades y pagar la quincena de tu empleado. Da clic para entrar",
-                                                    2);
-           $output->writeln("5 días hábiles antes del 12");
-           $this->printResponse($response, $output);
+            $response = $cronService->putPaymentReminderAction(false, 2);
+            $output->writeln("5 días hábiles antes del 12");
+            $this->printResponse($response, $output);
         }
 
         $dateString = $currYear . '-' . $currMonth . '-12';
         // $fourbusinessDaysBefore15 = $utils->getWorkableDaysToDateAction($dateString, 0);
         if($dateString == $now->format("Y-m-d")) {
-            $response = $cronService->putPaymentReminderAction("¡Último día! Realiza el pago a tu empleado",
-                                                    "¡Importante! Hoy es el último día para realizar el pago a tu empleado y reportar las novedades de este período. Entra ya haciendo clic",
-                                                    2);
+            $response = $cronService->putPaymentReminderAction(true, 2);
             $output->writeln("ultimo día de pago - dia 12");
             $this->printResponse($response, $output);
         }
@@ -63,9 +59,7 @@ class PaymentAndNoveltyReminderCommand extends ContainerAwareCommand
         $dateString = $currYear . '-' . $currMonth . '-25';
         $fivebusinessDaysBefore25 = $utils->getWorkableDaysToDateAction($dateString, -5);
         if($fivebusinessDaysBefore25 == $now->format("Y-m-d")) {
-            $response = $cronService->putPaymentReminderAction("Hola, es tiempo de reportar novedades y pagar",
-                                                    "¡Hola! Es momento de reportar novedades de este periodo y realizar los pagos de seguridad social y sueldo. Da clic para entrar",
-                                                    4);
+            $response = $cronService->putPaymentReminderAction(false, 4);
             $output->writeln("5 días hábiles antes del 25");
             $this->printResponse($response, $output);
         }
@@ -73,9 +67,7 @@ class PaymentAndNoveltyReminderCommand extends ContainerAwareCommand
         $dateString = $currYear . '-' . $currMonth . '-25';
         // $fourbusinessDaysBefore25 = $utils->getWorkableDaysToDateAction($dateString, -4);
         if($dateString == $now->format("Y-m-d")) {
-            $response = $cronService->putPaymentReminderAction("¡Último día! Realiza el pago a tu empleado",
-                                                    "¡Importante! Hoy es el último día para realizar el pago a tu empleado y reportar las novedades de este período. Entra ya haciendo clic",
-                                                    4);
+            $response = $cronService->putPaymentReminderAction(true, 4);
             $output->writeln("ulitmo día de pago - dia 25");
             $this->printResponse($response, $output);
         }

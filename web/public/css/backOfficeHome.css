@@ -1,10 +1,14 @@
 .back-panel-title {
-    margin: 0px 0px 10px 5px;
+    margin: 0px 0px 10px 0px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.28);
     border-radius: 0px 0px 40px 40px;
     clear: both;
-    padding: 3px 0px 13px 25px;
+    padding: 0px 0px 11px 24px;
     font-weight: bold;
+    background: #33d7d6;
+    color: white;
+    font-weight: 600;
+    font-size: 18px;
 }
 
 .backoffice-headding {
@@ -52,13 +56,24 @@
 a:focus, a:hover {
     color: rgb(98, 212, 0);
     text-decoration: underline;
-    font-weight: 4000;
+    font-weight: 400;
 }
 
 .back-link {
     color: #2b7375;
     text-decoration: none;
     font-weight: bolder;
+}
+
+.back-content{
+    width: 33%;
+    display: inline-block;
+}
+
+.back-panel-body {
+    border: 1px solid #0d3031;
+    padding: 15px;
+    font-family: "Open Sans",Helvetica,Arial;
 }
 
 .btn-back {
@@ -127,4 +142,35 @@ label {
     border: 1px solid #0e4144;
     clear: both;
     font-size: 12px;
+}
+
+.dataTables_length, .dataTables_filter{
+    margin: 5px 10px;
+}
+
+table.dataTable tbody th, table.dataTable tbody td{
+    padding: 0px 5px;
+}
+
+.dataTables_paginate{
+    font-size: 14px;
+    display: inline-flex;
+    font-weight: 600;
+}
+
+.paginate_button{
+    background-color: white;
+    margin: 1px;
+    padding: 1px;
+}
+
+thead .th1{
+    background: #d2d1d1;
+    color: black;
+    padding: 0px 0px!important;
+    margin: 0px;
+}
+
+td.highlight {
+    background-color: whitesmoke !important;
 }

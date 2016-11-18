@@ -1511,7 +1511,7 @@ class BackOfficeController extends Controller
 		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
 
 		$em = $this->getDoctrine()->getManager();
-		$procedureRepo = $em->getRepository('RocketSellerTwoPickBundle:RealProcedure')->findAll();
+		$procedureRepo = $em->getRepository('RocketSellerTwoPickBundle:RealProcedure')->findBy(array('procedureTypeProcedureType'=>$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:ProcedureType')->findOneBy(array('code'=>'REE'))));
 
 		return $this->render('RocketSellerTwoPickBundle:BackOffice:backOfficeStatus.html.twig',array('procedures'=>$procedureRepo));
 	}

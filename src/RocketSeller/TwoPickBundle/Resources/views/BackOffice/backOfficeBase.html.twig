@@ -1,4 +1,4 @@
-    {% extends "::base.html.twig" %}
+{% extends "::base.html.twig" %}
 
     {% block title %}back office{% endblock %}
 
@@ -15,6 +15,7 @@
         <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700' rel='stylesheet' type='text/css'>
         <link href='//cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/6.0.16/css/bootstrap-slider.min.css'
               rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" type="text/css">
         <link rel="stylesheet" href="{{ asset('css/bootstrap-theme.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/main.css') }}">
         <link rel="stylesheet" href="{{ asset('public/css/noUiSlider.8.2.1/nouislider.min.css') }}">
@@ -39,15 +40,15 @@
         <div class="{% if app.request.get('_route') == 'show_procedures' %}activeMenu{% endif %} well well-lg">
             <a class="notAjax" href="{{ path('show_procedures') }}">Tramites</a>
         </div>
-        <div class="{% if app.request.get('_route') == 'show_request' %}activeMenu{% endif %} well well-lg">
-            <a class="notAjax" href="{{ path('show_request') }}">Consulta</a>
-        </div>
-        <div class="{% if app.request.get('_route') == 'legal_ass' %}activeMenu{% endif %} well well-lg">
-            <a class="notAjax" href="{{ path('legal_ass') }}">Asistencia Legal</a>
-        </div>
-        <div class="{% if app.request.get('_route') == 'register_express' %}activeMenu{% endif %} well well-lg">
-            <a class="notAjax" href="{{ path('register_express') }}">Registro Express</a>
-        </div>
+        {#<div class="{% if app.request.get('_route') == 'show_request' %}activeMenu{% endif %} well well-lg">#}
+            {#<a class="notAjax" href="{{ path('show_request') }}">Consulta</a>#}
+        {#</div>#}
+        {#<div class="{% if app.request.get('_route') == 'legal_ass' %}activeMenu{% endif %} well well-lg">#}
+            {#<a class="notAjax" href="{{ path('legal_ass') }}">Asistencia Legal</a>#}
+        {#</div>#}
+        {#<div class="{% if app.request.get('_route') == 'register_express' %}activeMenu{% endif %} well well-lg">#}
+            {#<a class="notAjax" href="{{ path('register_express') }}">Registro Express</a>#}
+        {#</div>#}
         <div class="{% if app.request.get('_route') == 'show_pilas' %}activeMenu{% endif %} well well-lg">
             <a class="notAjax" href="{{ path('show_pilas') }}" >Pila</a>
         </div>
@@ -94,6 +95,7 @@
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
                 integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
                 crossorigin="anonymous"></script>
+        <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
         <script>
             jQuery(document).ready(function () {
                 if (!jsLoader(location.href)) {
