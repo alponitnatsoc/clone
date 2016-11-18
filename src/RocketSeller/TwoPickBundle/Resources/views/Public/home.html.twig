@@ -67,11 +67,49 @@
             </div>
         </header>
 
+				<!--slide lateral informacion de campaña-->
+					<div id="campanaSlide">
+						<div class="campanaSlideContent" align="center">
+							<div class="cerrarSlide azulmedio bold">
+								X
+							</div>
+							<div class="logoCamp">
+								<img alt="Symplifica" src="{{ asset('public/img/landing/sello.png') }}">
+							</div>
+						</div>
+						<div>
+							<img alt="Symplifica" src="{{ asset('public/img/landing/nube.png') }}" height="130" width="auto">
+						</div>
+						<div id="campanaTitle">
+							<h2 class="bold azuloscurofont">Gestiona de forma sencilla</h2>
+							<h3 class="light azulmediofont" style="margin-top:0;color:#FFF">a los empleados de tu hogar</h3>
+						</div>
+						<div id="campanaDesc" class="azuloscuro" style="color: #FFF;">
+							<h1 class="bold">y ahorra $150.000*</h1>
+							<p class="light azulmedio" style="margin-bottom: 15px;padding: 20px;">
+								Regístrate hoy en Symplifica y si pagas el salario de tu empleada por un medio electrónicos te regalamos
+								<strong>$150.000 pesos para pagar el sueldo de tu empleada*</strong>
+							</p>
+						</div>
+						<div><a class="btn notAjax" id="campanaBtn" style="text-transform: uppercase;background:#fd5c5c;color:#FFF">¡Iniciar registro ahora!</a></div>
+						<br />
+						<span id="terminosBtn">&#10095; Ver términos y condiciones</span>
+					</div>
+				<!--slide lateral informacion de campaña-->
+
          <!--------------------beneficios-------------------------->
         <section>
-					<div class="titleSec">
-						<h2 class="light grisclarofont">Soluciona cada mes, en un solo lugar todo lo relacionado a la gestión de tus empleados </h2>
+					<div class="bannerPromos section group btnBanner">
+						<div class="col span_1_of_2 promo1">
+							<img src="{{ asset('public/img/home/ahorrar.png') }}" alt="">
+						</div>
+						<div class="col span_1_of_2 promo2">
+							<img src="{{ asset('public/img/home/clicAhorrar.png') }}" alt="">
+						</div>
 					</div>
+					<!-- <div class="titleSec">
+						<h2 class="light grisclarofont">Soluciona cada mes, en un solo lugar todo lo relacionado a la gestión de tus empleados </h2>
+					</div> -->
         	<div id="beneficios" class="section group">
 
                 <div class="col span_1_of_4 beneficios">
@@ -326,6 +364,7 @@ de empleados que quieras administrar</h4>
 			</section>
 			<!--seccion de logos del min-->
 
+
 		<!--seccion de logos de quienes hablan de nostros-->
 		<section class="section group" style="margin-bottom: 60px">
 			<h2 class="light grisclarofont minH2">Están hablando de nosotros:</h2><br /><br />
@@ -350,24 +389,77 @@ de empleados que quieras administrar</h4>
 		</section>
 		<!--seccion de logos de quienes hablan de nostros-->
 
+
 		<!-- Modal campaña 150k  -->
 		<div class="modal fade" id="150kCampaign" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-body" align="center">
-						<span><img alt="Symplifica" src="{{ asset('public/img/landing/sello.png') }}"></span>
-						<div id="campañaTitle">
-							<h2 class="bold azulmediofont">Gestiona de forma sencilla</h2>
-							<h3 class="light azulmediofont" style="margin-top:0;">a los empleados de tu hogar</h3>
+						<div id="secterms">
+								<div id="terminosText">
+									<h4 class="bold azulmediofont">Términos y Condiciones de la Promoción “Hacer las Cosas Bien Paga”</h4><br />
+									<p>
+										<strong>SYMPLIFICA</strong> entregará un premio de valor equivalente hasta ciento cincuenta mil pesos ($150.000),
+										a los clientes que completen el registro de al menos un (1) empleado entre el 15 de noviembre de 2016 y el 30 de
+										noviembre de 2016 (o hasta agotar existencias, lo que ocurra primero).  El valor máximo de $150.000 será aplicado
+										como descuento en el pago de la nómina y/o seguridad social de uno de tu(s) empleado(s), siempre y cuando se cumplan
+										 los siguientes Términos y Condiciones:<br /><br />
+
+										1). Promoción válida para clientes que completen el registro de al menos un (1) empleado entre el 15 de noviembre de
+										2016 y el 30 de noviembre de 2016, o hasta agotar existencias lo que ocurra primero. En caso de agotar existencias
+										antes del 30 de noviembre de 2016, SYMPLIFICA dará aviso de la terminación de la promoción a través de sus redes sociales.<br /><br />
+										2). Se debe completar el registro del trabajador en la Plataforma, incluyendo todos los documentos solicitados, en las
+										fechas establecidas.<br /><br />
+										3). Solo aplica para nuevos Usuarios de SYMPLIFICA, o para aquellos usuarios que completen el registro de un (1) nuevo
+										empleado durante las fechas establecidas.<br /><br />
+
+										4). Para poder registrarse, el Usuario debe tener una cuenta bancaria a su nombre en alguna de las entidades habilitadas en
+										la Plataforma para los pagos.<br /><br />
+
+										5). El premio de valor de hasta $150.000 se dividirá en dos cuotas mensuales de $75.000, que SYMPLIFICA abonará
+										al total a pagar por el Usuario en concepto de nómina o de seguridad social de uno (1) de sus trabajadores, en
+										la segunda quincena o último período de los respectivos meses, siempre y cuando: (i) el Usuario no pague la nómina
+										 de su(s) trabajador(es) en efectivo; (ii) y los valores a pagar en la segunda quincena del respectivo mes sean de
+										 mínimo $75.000; en caso de que el valor total a pagar en la segunda quincena del mes en concepto de nómina o seguridad
+										 social del trabajador registrado por el Usuario, sea inferior a $75.000, SYMPLIFICA únicamente abonará dicho valor inferior
+											al pago del respectivo mes. El Usuario no tendrá derecho a reclamar en los meses siguientes la diferencia entre los $75.000
+											 y el valor abonado por SYMPLIFICA.<br /><br />
+										6) .Si la nómina del empleado registrado es quincenal, el descuento se aplicará a la quincena correspondiente a final del mes.<br /><br />
+										7). Para los Usuarios que completen el registro de al menos un (1) trabajador nuevo en la Plataforma, incluyendo todos los
+										documentos solicitados, antes del día 20 del mes, SYMPLIFICA realizará el primer abono de $75.000 a los pagos del trabajador
+										en el último período de ese mismo mes, y el segundo pago de $75.000 en el último período del mes inmediatamente siguiente.
+										Para los Usuarios que completen el registro mencionado, el día 20 o siguientes del mes, SYMPLIFICA realizará
+										el primer abono de $75.000 a los pagos del trabajador en el último período del mes siguiente, y el segundo pago de $75.000 en
+										el último período del mes inmediatamente posterior a ese.<br /><br />
+										8). Para poder recibir el premio es necesario realizar el registro en Symplifica.com con un método de transferencia electrónica
+										 para realizar los pagos de nómina (Cuenta de ahorros o Daviplata). Es decir, si se realizaran los pagos de
+										 nómina al empleado en efectivo, no aplicará la promoción en curso.<br /><br />
+										9). Los $75.000 de cada mes deben ser gastados en su totalidad en el mes correspondiente, ya que no se podrán acumular saldos
+										 para el segundo mes, ni para los meses siguientes.<br /><br />
+										10). Esta promoción solo aplica para el registro de empleados domésticos (Empleada doméstica, niñera, conductor, mayordomo de
+										finca de recreo, enfermera de adulto mayor).<br /><br />
+										11). El premio es por empleador, independientemente del número de trabajadores registrados. Es decir, el empleador que complete
+										el registro de más de un trabajador en las fechas de vigencia de la promoción, únicamente tendrá derecho a recibir un valor máximo
+										 de $150.000 como descuento en los pagos del primer trabajador registrado.<br /><br />
+										12). Promoción válida sólo para Colombia, y aplica solo para aquellas ciudades donde symplifica pueda hacer afiliaciones a las entidades de seguridad social.<br /><br />
+										13). El premio no puede ser cambiado por dinero en efectivo o algún otro elemento.<br /><br />
+										14). Al Usuario acogerse a esta promoción, no implica permanencia mínima. El Usuario podrá cancelar su suscripción en cualquier
+										momento, inactivando todos los trabajadores que tenga registrados en SYMPLIFICA, a través de la Plataforma. No obstante, se aclara
+										que, si el Usuario inactiva en la Plataforma al trabajador a cuyos pagos aplica la promoción, durante alguno de los meses en que le
+										 habría correspondido el abono de hasta $75.000 por parte de SYMPLIFICA, el Usuario no tendrá derecho a recibir esas sumas en efectivo
+											ni de ninguna otra forma, ni como descuento en los pagos de ningún otro de sus trabajadores.<br /><br />
+										15). Aplican restricciones; promoción no válida para la afiliación de trabajadores de tiempo parcial bajo el régimen contributivo.<br /><br />
+										16). Las demás condiciones de los Términos y Condiciones generales de SYMPLIFICA, incluyendo las restricciones para el acceso a
+										los servicios de SYMPLIFICA y los servicios excluidos de la Plataforma, aplicarán también para los Usuarios que se beneficien
+										de esta Promoción. Al registrarse, Usted está indicando su aceptación tanto a estos Términos y Condiciones especiales de la Promoción
+										 “Hacer las Cosas Bien Paga”, como a los Términos y Condiciones generales de SYMPLIFICA; no obstante, en caso de alguna diferencia o
+										 contradicción entre estos Términos y Condiciones especiales y los Términos y Condiciones generales de SYMPLIFICA, primará lo
+										 establecido en los Términos y Condiciones especiales de la Promoción “Hacer las Cosas Bien Paga”para los Usuarios que se hayan
+										 registrado bajo dicha promoción y aún la tengan vigente.
+
+									</p>
+								</div>
 						</div>
-						<div id="campañaDesc" style="background: #fd9224;color: #FFF;">
-							<h1 class="bold">y recibe $150.000*</h1>
-							<p class="back light" style="margin-bottom: 15px;padding: 20px;background: #ea8b2a;">
-								Regístrate hoy en Symplifica y si pagas el salario de tu empleada por medios electrónicos te regalamos
-								<strong>$150.000 pesos para pagar el sueldo de tu empleada*</strong>
-							</p>
-						</div>
-						<div><a class="btn azulmedio notAjax" href="{{ path('real_landing') }}" style="color:#FFF">Dime más</a></div>
 					</div>
 					<a href="#"><div data-dismiss="modal" class="modal-footer" style="background:#e0e0e0;text-align: center;border-radius: 10px;">
 						Cerrar
@@ -421,6 +513,23 @@ de empleados que quieras administrar</h4>
 <script type="text/javascript" src="{{ asset('public/js/home/bootstrap-slider.js') }}"></script>
 <script type="text/javascript">
 
+$(document).ready(function(){
+    $(".btnBanner").click(function(){
+        $("#campanaSlide").animate({left: '0px'}, "slow");
+    });
+		$(".cerrarSlide").click(function(){
+				$("#campanaSlide").animate({left: '-2500px'}, "slow");
+		});
+		$("#terminosBtn").click(function(){
+        $("#150kCampaign").modal("show");
+    });
+});
+
+$('#campanaBtn').click(function(){
+	$("#campanaSlide").animate({left: '-2500px'}, "slow");
+	$("#formfirstname").focus();
+});
+
 $('#pausar').click(function(){
  document.getElementById('video1').pause();
 });
@@ -473,14 +582,14 @@ $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.mi
 	$('#formemail').attr('oninvalid', 'setCustomValidity("El correo escrito no es valido")');
 	$('#formemail').attr('oninput', "setCustomValidity('')");
 
-	/*var counter = 0;
-	var interval = setInterval(function() {
-		counter++;
-		if (counter == 10) {
-			$("#150kCampaign").modal("show");
-			clearInterval(interval);
-		}
-	}, 1000);*/
+	// var counter = 0;
+	// var interval = setInterval(function() {
+	// 	counter++;
+	// 	if (counter == 10) {
+	// 		$("#150kCampaign").modal("show");
+	// 		clearInterval(interval);
+	// 	}
+	// }, 1000);
 
 
 	$("form[name='form']").on('submit',function (e) {
