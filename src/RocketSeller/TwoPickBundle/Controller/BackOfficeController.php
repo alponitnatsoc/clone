@@ -584,7 +584,7 @@ class BackOfficeController extends Controller
                         $this->addFlash("employee_contract_successfully", 'Éxito al generar la notificación del contrato');
                     }
                     /** @var RealProcedure $vac */
-                    $vac=$procedure->getUserUser()->getProceduresByType($this->getProcedureTypeByCode('VAC'));
+                    $vac=$procedure->getUserUser()->getProceduresByType($this->getProcedureTypeByCode('VAC'))->first();
                     $vac->setProcedureStatus($this->getStatusByStatusCode('NEW'));
                     /** @var EmployerHasEntity $employerHasEntity */
                     foreach ($procedure->getEmployerEmployer()->getEntities() as $employerHasEntity) {
