@@ -2573,6 +2573,11 @@ class ProcedureController extends Controller
                                             $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getBackOfficeDate()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
                                         }
                                     }else{//if no errors
+                                        if($procedure->getBackOfficeDate()==null){
+                                            $procedure->setBackOfficeDate($today);
+                                            $this->getDoctrine()->getManager()->persist($procedure);
+                                            $this->getDoctrine()->getManager()->flush();
+                                        }
                                         //if no errors datestart is backofficeDate
                                         $response = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysBetweenDates',array('dateStart'=>$procedure->getBackOfficeDate()->format("Y-m-d"),'dateEnd'=>$today->format("Y-m-d")), array('_format' => 'json'));
                                     }
