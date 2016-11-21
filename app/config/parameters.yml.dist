@@ -17,6 +17,8 @@ parameters:
     mailer_port: ~
     mailer_encrypt: ~
     ambiente: desarrollo
+    # Only for development purposes
+    # mailer_delivery: algo@algo.com
 
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt

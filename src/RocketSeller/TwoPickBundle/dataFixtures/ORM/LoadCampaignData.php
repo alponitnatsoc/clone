@@ -18,12 +18,12 @@ class LoadCampaignData extends AbstractFixture implements OrderedFixtureInterfac
 
         $clientBeta= new Campaign();
         $clientBeta->setDescription("150k");
-	      $clientBeta->setEnabled(0);
-	      $clientBeta->setStock(200);
-        $clientBeta->setDateStart(new \DateTime("2016-11-15 00:00:00"));
-        $clientBeta->setDateEnd(new \DateTime("2016-11-30 00:00:00"));
+        $clientBeta->setEnabled(0);
+        $clientBeta->setStock(200);
+        $clientBeta->setDateStart(new \DateTime('2016-11-15 00:00:00'));
+        $clientBeta->setDateEnd(new \DateTime('2016-11-30 00:00:00'));
         $manager->persist($clientBeta);
-	    
+
         $manager->flush();
     }
     public function getOrder()
