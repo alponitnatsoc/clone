@@ -24,7 +24,6 @@ class LoadCampaignData extends AbstractFixture implements OrderedFixtureInterfac
         $clientBeta->setDateEnd(new \DateTime('2016-11-30 00:00:00'));
         $manager->persist($clientBeta);
 
-
         $manager->flush();
     }
     public function getOrder()

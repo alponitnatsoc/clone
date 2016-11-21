@@ -2931,8 +2931,6 @@ class ProcedureController extends Controller
             $procedure->setFinishedAt(null);
             $procedure->setPriority(0);//setting the default priority
             $user->addRealProcedure($procedure);//adding the realProcedure to the user
-            $em->persist($procedure);
-            $em->flush();
             $ree = $procedure;
             //se crea el procedure
             $procedure = new RealProcedure();
@@ -2944,8 +2942,6 @@ class ProcedureController extends Controller
             $procedure->setFinishedAt(null);
             $procedure->setPriority(0);//setting the default priority
             $user->addRealProcedure($procedure);//adding the realProcedure to the user
-            $em->persist($procedure);
-            $em->flush();
             $vac = $procedure;
         }else{
             if($user->getProceduresByType($this->getProcedureTypeByCode('REE'))->count()==1){
@@ -2962,8 +2958,6 @@ class ProcedureController extends Controller
                 $procedure->setFinishedAt(null);
                 $procedure->setPriority(0);//setting the default priority
                 $user->addRealProcedure($procedure);//adding the realProcedure to the user
-                $em->persist($procedure);
-                $em->flush();
                 $ree = $procedure;
             }
             if($user->getProceduresByType($this->getProcedureTypeByCode('VAC'))->count()==1){
@@ -2980,8 +2974,6 @@ class ProcedureController extends Controller
                 $procedure->setFinishedAt(null);
                 $procedure->setPriority(0);//setting the default priority
                 $user->addRealProcedure($procedure);//adding the realProcedure to the user
-                $em->persist($procedure);
-                $em->flush();
                 $vac = $procedure;
             }
         }

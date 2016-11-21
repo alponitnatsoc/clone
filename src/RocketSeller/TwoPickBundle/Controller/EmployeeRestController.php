@@ -2136,6 +2136,60 @@ class EmployeeRestController extends FOSRestController
     }
 
     /**
+     * Update employee vacations debts in active contract.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Update employee vacations debts in active contract.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     * @RequestParam(name="start_index", nullable=false, strict=true, description="start_index.")
+     * @RequestParam(name="end_index", nullable=false, strict=true, description="end_index.")
+     *
+     * @return View
+     */
+    public function postVacationsDebtUpdateAction(ParamFetcher $paramFetcher)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $response = 'START'.'<br>';
+        $start = $paramFetcher->get('start_index');
+        $end = $paramFetcher->get('end_index');
+        $eHEs = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->findAll();
+        $count = 1;
+        /** @var EmployerHasEmployee $eHE */
+        foreach ($eHEs as $eHE) {
+            if($count >= $start and $count <= $end){
+                if($eHE->getLegalFF() == 0){
+                    /** @var Contract $contract */
+                    $contract = $eHE->getActiveContract();
+                    if($contract){
+                        $start_date = $contract->getStartDate();
+                        $end_date = $contract->getEndDate();
+                    }
+                }
+                if($count % 10 == 0){
+                    $response .= 'GROUP FROM ' . ( $count - 10 ) . ' TO ' . $count . ' FLUSHED' . '<br>';
+                    $em->flush();
+                }
+            }
+            $count++;
+        }
+        if($count <= $end and $count % 10 != 0 ){
+            $response .= 'GROUP FROM ' . ( $count - ( $count % 10 ) ) . ' TO ' . ( $count - 1 ) . ' FLUSHED' . '<br>';
+            $em->flush();
+        }
+        $view = $view = View::create($response);
+        $view->setStatusCode(200);
+        return $view;
+    }
+
+    /**
      * Create a Person from the submitted data.<br/>
      *
      * @ApiDoc(
