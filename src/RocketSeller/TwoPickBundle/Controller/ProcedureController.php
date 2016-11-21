@@ -2908,10 +2908,10 @@ class ProcedureController extends Controller
      */
     public function procedureAction($userId)
     {
-    	$em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         /** @var User $user */
         $user = $em->getRepository("RocketSellerTwoPickBundle:User")->find($userId);
-		$employer = $user->getPersonPerson()->getEmployer();
+        $employer = $user->getPersonPerson()->getEmployer();
         $employer->setDocumentStatus($this->getDocumentStatusByCode('ALLDCP'));
         $em->persist($employer);
         /** @var EmployerHasEmployee $ehe */
@@ -3023,6 +3023,7 @@ class ProcedureController extends Controller
                 $action->setCreatedAt($today);//setting the Action createrAt Date
                 $em->persist($action);
             }
+            $em->flush();
         }
         /**
          * ╔══════════════════════════════════════════════════╗
@@ -3062,6 +3063,7 @@ class ProcedureController extends Controller
                 $action->setCreatedAt($today);//setting the Action createrAt Date
                 $em->persist($action);
             }
+            $em->flush();
         }
         /**
          * ╔══════════════════════════════════════════════════╗
@@ -3101,6 +3103,7 @@ class ProcedureController extends Controller
                 $action->setCreatedAt($today);//setting the Action createrAt Date
                 $em->persist($action);
             }
+            $em->flush();
         }
         /**
          * ╔══════════════════════════════════════════════════╗
@@ -3119,6 +3122,7 @@ class ProcedureController extends Controller
             $action->setUpdatedAt();//setting the action updatedAt Date
             $action->setCreatedAt($today);//setting the Action createrAt Date
             $em->persist($action);
+            $em->flush();
         }
 
         /**
@@ -3162,6 +3166,7 @@ class ProcedureController extends Controller
                     $em->persist($action);
                 }
             }
+            $em->flush();
         }
         /** @var EmployerHasEmployee $ehe */
         foreach ($employer->getActiveEmployerHasEmployees() as $ehe){
@@ -3205,6 +3210,7 @@ class ProcedureController extends Controller
                                 $action->setCreatedAt($today);//setting the Action createrAt Date
                                 $em->persist($action);
                             }
+                            $em->flush();
                         }
                         if($ePerson->getActionsByActionType($this->getActionTypeByActionTypeCode('VDD'))->count()==1){
                             $action = $ePerson->getActionsByActionType($this->getActionTypeByActionTypeCode('VDD'))->first();
@@ -3232,6 +3238,7 @@ class ProcedureController extends Controller
                                 $action->setCreatedAt($today);//setting the Action createrAt Date
                                 $em->persist($action);
                             }
+                            $em->flush();
                         }
                         if($ree->getActionsByPersonAndActionType($ePerson,$this->getActionTypeByActionTypeCode('VCAT'))->count()==0){
                             $action = new Action();
@@ -3243,6 +3250,7 @@ class ProcedureController extends Controller
                             $action->setUpdatedAt();//setting the action updatedAt Date
                             $action->setCreatedAt($today);//setting the Action createrAt Date
                             $em->persist($action);
+                            $em->flush();
                         }
                         if($vac->getActionsByPersonAndActionType($ePerson,$this->getActionTypeByActionTypeCode('VC'))->count()==0){
                             $action = new Action();
@@ -3254,6 +3262,7 @@ class ProcedureController extends Controller
                             $action->setUpdatedAt();//setting the action updatedAt Date
                             $action->setCreatedAt($today);//setting the Action createrAt Date
                             $em->persist($action);
+                            $em->flush();
                         }
                         /** @var EmployeeHasEntity $employeeHasEntity */
                         foreach ($ehe->getEmployeeEmployee()->getEntities() as $employeeHasEntity) {
@@ -3282,6 +3291,7 @@ class ProcedureController extends Controller
                                         $action->setUpdatedAt();//setting the action updatedAt Date
                                         $action->setCreatedAt($today);//setting the Action createrAt Date
                                         $em->persist($action);
+                                        $em->flush();
                                     }elseif($employeeHasEntity->getState()==1){
                                         $action = new Action();
                                         $ree->addAction($action);//adding the action to the procedure
@@ -3303,6 +3313,7 @@ class ProcedureController extends Controller
                                         $action->setUpdatedAt();//setting the action updatedAt Date
                                         $action->setCreatedAt($today);//setting the Action createrAt Date
                                         $em->persist($action);
+                                        $em->flush();
                                     }
 
                                 }
@@ -3330,6 +3341,7 @@ class ProcedureController extends Controller
                                 $action->setUpdatedAt();//setting the action updatedAt Date
                                 $action->setCreatedAt($today);//setting the Action createrAt Date
                                 $em->persist($action);
+                                $em->flush();
                             }
                             if($vac->getActionsByPersonAndActionType($ePerson,$this->getActionTypeByActionTypeCode('VC'))->count()==0){
                                 $action = new Action();
@@ -3341,6 +3353,7 @@ class ProcedureController extends Controller
                                 $action->setUpdatedAt();//setting the action updatedAt Date
                                 $action->setCreatedAt($today);//setting the Action createrAt Date
                                 $em->persist($action);
+                                $em->flush();
                             }
                             foreach ($ehe->getEmployeeEmployee()->getEntities() as $employeeHasEntity) {
                                 if($ePerson->getActionByEmployeeHasEntity($employeeHasEntity)->count()==1) {
@@ -3363,6 +3376,7 @@ class ProcedureController extends Controller
                     $action->setUpdatedAt();//setting the action updatedAt Date
                     $action->setCreatedAt($today);//setting the Action createrAt Date
                     $em->persist($action);
+                    $em->flush();
                     $action = new Action();
                     $ree->addAction($action);//adding the action to the procedure
                     $ePerson->addAction($action);//adding the action to the employerPerson
@@ -3372,6 +3386,7 @@ class ProcedureController extends Controller
                     $action->setUpdatedAt();//setting the action updatedAt Date
                     $action->setCreatedAt($today);//setting the Action createrAt Date
                     $em->persist($action);
+                    $em->flush();
                     $action = new Action();
                     $ree->addAction($action);//adding the action to the procedure
                     $ePerson->addAction($action);//adding the action to the employerPerson
@@ -3381,6 +3396,7 @@ class ProcedureController extends Controller
                     $action->setUpdatedAt();//setting the action updatedAt Date
                     $action->setCreatedAt($today);//setting the Action createrAt Date
                     $em->persist($action);
+                    $em->flush();
                     $action = new Action();
                     $vac->addAction($action);//adding the action to the procedure
                     $ePerson->addAction($action);//adding the action to the employerPerson
@@ -3390,6 +3406,7 @@ class ProcedureController extends Controller
                     $action->setUpdatedAt();//setting the action updatedAt Date
                     $action->setCreatedAt($today);//setting the Action createrAt Date
                     $em->persist($action);
+                    $em->flush();
                     /** @var EmployeeHasEntity $employeeHasEntity */
                     foreach ($ehe->getEmployeeEmployee()->getEntities() as $employeeHasEntity) {
                         if($ePerson->getActionByEmployeeHasEntity($employeeHasEntity)->count()==1){
@@ -3419,6 +3436,7 @@ class ProcedureController extends Controller
                                     $action->setUpdatedAt();//setting the action updatedAt Date
                                     $action->setCreatedAt($today);//setting the Action createrAt Date
                                     $em->persist($action);
+                                    $em->flush();
                                 }elseif($employeeHasEntity->getState()==1){
                                     $action = new Action();
                                     $ree->addAction($action);//adding the action to the procedure
@@ -3440,6 +3458,7 @@ class ProcedureController extends Controller
                                     $action->setUpdatedAt();//setting the action updatedAt Date
                                     $action->setCreatedAt($today);//setting the Action createrAt Date
                                     $em->persist($action);
+                                    $em->flush();
                                 }
                             }
                         }
