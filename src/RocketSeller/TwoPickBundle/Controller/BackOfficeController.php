@@ -571,10 +571,73 @@ class BackOfficeController extends Controller
                     }else{
                         $notification = $this->createNotificationByDocType($employerHasEmployee->getEmployerEmployer()->getPersonPerson(),$employerHasEmployee->getEmployeeEmployee()->getPersonPerson(),$this->getDocumentTypeByCode('CTR'));
                     }
-                    $notification->activate();
+                    if($employerHasEmployee->getActiveContract()->getDocumentDocument()){
+                        if($employerHasEmployee->getActiveContract()->getDocumentDocument()->getMediaMedia()){
+                            $notification->disable();
+                            $this->addFlash("employee_contract_successfully", 'El empleado ya habia subido el contrato');
+                        }else{
+                            $notification->activate();
+                            $this->addFlash("employee_contract_successfully", 'Éxito al generar la notificación del contrato');
+                        }
+                    }else{
+                        $notification->activate();
+                        $this->addFlash("employee_contract_successfully", 'Éxito al generar la notificación del contrato');
+                    }
+                    /** @var RealProcedure $vac */
+                    $vac=$procedure->getUserUser()->getProceduresByType($this->getProcedureTypeByCode('VAC'))->first();
+                    $vac->setProcedureStatus($this->getStatusByStatusCode('NEW'));
+                    /** @var EmployerHasEntity $employerHasEntity */
+                    foreach ($procedure->getEmployerEmployer()->getEntities() as $employerHasEntity) {
+                        if(!$vac->getActionByEmployerHasEntity($employerHasEntity)->first()){
+                            $tempAction = new Action();
+                            $vac->addAction($tempAction);//adding the action to the procedure
+                            $procedure->getUserUser()->getPersonPerson()->addAction($tempAction);//adding the action to the employerPerson
+                            $vac->getUserUser()->addAction($tempAction);//adding the action to the user
+                            $tempAction->setActionTypeActionType($this->getActionTypeByActionTypeCode('SDE'));//setting actionType to validate entity
+                            $tempAction->setEmployerEntity($employerHasEntity);
+
+                            if($employerHasEntity->getState()==1){
+                                $tempAction->setActionStatus($this->getStatusByStatusCode('NEW'));
+                            }else{
+                                $tempAction->setActionStatus($this->getStatusByStatusCode('DIS'));
+                            }
+                            $tempAction->setUpdatedAt();//setting the action updatedAt Date
+                            $tempAction->setCreatedAt(new DateTime());//setting the Action createrAt Date
+                            $em->persist($tempAction);
+                        }
+                    }
+                    /** @var EmployeeHasEntity $employeeEntity */
+                    foreach ($employerHasEmployee->getEmployeeEmployee()->getEntities() as $employeeEntity) {
+                        if(!$vac->getActionByEmployeeHasEntity($employeeEntity)->first()){
+                            $tempAction = new Action();
+                            $vac->addAction($tempAction);//adding the action to the procedure
+                            $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($tempAction);//adding the action to the employerPerson
+                            $vac->getUserUser()->addAction($tempAction);//adding the action to the user
+                            $tempAction->setActionTypeActionType($this->getActionTypeByActionTypeCode('SDE'));//setting actionType to validate entity
+                            $tempAction->setEmployeeEntity($employeeEntity);
+                            if($employerHasEntity->getState()==1){
+                                $tempAction->setActionStatus($this->getStatusByStatusCode('NEW'));
+                            }else{
+                                $tempAction->setActionStatus($this->getStatusByStatusCode('DIS'));
+                            }
+                            $tempAction->setUpdatedAt();//setting the action updatedAt Date
+                            $tempAction->setCreatedAt(new DateTime());//setting the Action createrAt Date
+                            $em->persist($tempAction);
+                        }
+                    }
+                    if(!$vac->getActionsByPersonAndActionType($employerHasEmployee->getEmployeeEmployee()->getPersonPerson(),$this->getActionTypeByActionTypeCode('VC'))->first()){
+                        $tempAction = new Action();
+                        $vac->addAction($tempAction);//adding the action to the procedure
+                        $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->addAction($tempAction);//adding the action to the employerPerson
+                        $vac->getUserUser()->addAction($tempAction);//adding the action to the user
+                        $tempAction->setActionTypeActionType($this->getActionTypeByActionTypeCode('vc'));//setting actionType to validate entity
+                        $tempAction->setActionStatus($this->getStatusByStatusCode('NEW'));
+                        $tempAction->setUpdatedAt();//setting the action updatedAt Date
+                        $tempAction->setCreatedAt(new DateTime());//setting the Action createrAt Date
+                        $em->persist($tempAction);
+                    }
                     $em->persist($notification);
                     $em->flush();
-                    $this->addFlash("employee_contract_successfully", 'Éxito al generar la notificación del contrato');
                     $this->addFlash("employee_ended_successfully", 'Éxito al dar de alta al empleado');
                     return $this->redirectToRoute('show_procedure', array('procedureId'=>$procedureId), 301);
                 }else{
