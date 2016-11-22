@@ -257,3 +257,6 @@ back_set_referidos_code:
 back_set_referidos_code_allready_in_promocode:
     path:         /backoffice/set/referidos/code/allready/in/promocode
     defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:setReferidosCodeActionAlreadyInPromoCode }
+back_personal_info_view:
+    path:         /backoffice/personal/info/view
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:personalInfoView }
