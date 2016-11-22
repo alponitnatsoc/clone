@@ -14,6 +14,7 @@ use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Person;
+use RocketSeller\TwoPickBundle\Entity\Phone;
 use RocketSeller\TwoPickBundle\Entity\PilaDetail;
 use RocketSeller\TwoPickBundle\Entity\PromotionCode;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
@@ -1638,7 +1639,7 @@ class BackOfficeController extends Controller
 		$personRepo = $em->getRepository('RocketSellerTwoPickBundle:Person');
 
 		$userArray = array();
-
+		
 		/** @var EmployerHasEmployee $ehe */
 		foreach ($filteredEheRepo as $ehe) {
 			$personId = $ehe->getEmployerEmployer()->getPersonPerson()->getIdPerson();
@@ -2018,4 +2019,38 @@ class BackOfficeController extends Controller
         $em->flush();
         return $this->redirectToRoute('back_office');
     }
+	
+		public function personalInfoViewAction()
+		{
+			$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+			
+			$criteria = new \Doctrine\Common\Collections\Criteria();
+			$criteria->where($criteria->expr()->gt('state', 2));
+			
+			$em = $this->getDoctrine()->getManager();
+			$eheRepo = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
+			$filteredEheRepo = $eheRepo->matching($criteria);
+			
+			$userRepo = $em->getRepository('RocketSellerTwoPickBundle:User');
+			$personRepo = $em->getRepository('RocketSellerTwoPickBundle:Person');
+			
+			$userArray = array();
+			$phoneArray = array();
+			
+			/** @var EmployerHasEmployee $ehe */
+			foreach ($filteredEheRepo as $ehe) {
+				$personId = $ehe->getEmployerEmployer()->getPersonPerson()->getIdPerson();
+				$personFound = $personRepo->find($personId);
+				
+				/** @var User $userFound */
+				$userFound = $userRepo->findOneBy(array('personPerson' => $personFound));
+				array_push($userArray, $userFound->getEmail());
+				
+				/** @var Phone $personP */
+				$personP = $personFound->getPhones()->first();
+				array_push($phoneArray, $personP ? $personP->getPhoneNumber(): "");
+			}
+			
+			return $this->render('RocketSellerTwoPickBundle:BackOffice:personalInfoView.html.twig', array('ehes' => $filteredEheRepo, 'usersEmail' => $userArray, 'usersPhone' => $phoneArray));
+		}
 }
