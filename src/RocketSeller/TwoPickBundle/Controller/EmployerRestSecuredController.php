@@ -16,11 +16,11 @@ use Symfony\Component\Validator\ConstraintViolationList;
 class EmployerRestSecuredController extends FOSRestController
 {
     /**
-     * Edit a Beneficiary from the submitted data.<br/>
+     * Returns the information of an authenticated user.<br/>
      *
      * @ApiDoc(
      *   resource = true,
-     *   description = "Creates a new person from the submitted data.",
+     *   description = "Returns the information of an authenticated user.",
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     404 = "Returned when the requested Ids don't exist"
@@ -39,7 +39,9 @@ class EmployerRestSecuredController extends FOSRestController
         }
 
         return $view->setStatusCode(200)->setData(array('data'=>$realUser->getPersonPerson(),
-                                                        'idUser'=>$realUser->getId(), 'dataCreditStatus' => $realUser->getDataCreditStatus()));
+                                                        'idUser'=>$realUser->getId(),
+                                                        'dataCreditStatus' => $realUser->getDataCreditStatus(),
+                                                        'referidosCode' => $realUser->getCode()));
     }
     /**
      * Obtener las notificaciones activas del usuario
