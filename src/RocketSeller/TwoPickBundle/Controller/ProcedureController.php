@@ -2935,10 +2935,10 @@ class ProcedureController extends Controller
      */
     public function procedureAction($userId)
     {
-    	$em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         /** @var User $user */
         $user = $em->getRepository("RocketSellerTwoPickBundle:User")->find($userId);
-		$employer = $user->getPersonPerson()->getEmployer();
+        $employer = $user->getPersonPerson()->getEmployer();
         $employer->setDocumentStatus($this->getDocumentStatusByCode('ALLDCP'));
         $em->persist($employer);
         /** @var EmployerHasEmployee $ehe */

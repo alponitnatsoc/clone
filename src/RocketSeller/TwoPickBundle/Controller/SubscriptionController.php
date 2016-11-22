@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use RocketSeller\TwoPickBundle\Entity\PromotionCode;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use RocketSeller\TwoPickBundle\Form\PagoMembresiaForm;
 use RocketSeller\TwoPickBundle\Entity\Bank;
@@ -422,6 +423,7 @@ class SubscriptionController extends Controller
                             $request->request->set('expiry_date_month', strlen($pagoMembresia['expiry_month']) < 2 ? '0' . $pagoMembresia['expiry_month'] : $pagoMembresia['expiry_month']);
                             $request->request->set('cvv', $pagoMembresia['cvv']);
                             $request->request->set('name_on_card', $pagoMembresia['name_on_card']);
+	                          $request->request->set('userId', $user->getId());
                             $postAddCreditCard = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddCreditCard', array('request' => $request), array('_format' => 'json'));
                             if ($postAddCreditCard->getStatusCode() != Response::HTTP_CREATED) {
                                 return $this->redirectToRoute("subscription_error");
@@ -501,8 +503,28 @@ class SubscriptionController extends Controller
 
     public function suscripcionSuccessAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
+        $promoTypeRef = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCodeType")->find(6);
+        /** @var User $user */
+        $user = $this->getUser();
+        if(!$user->getPromoCodeClaimedByRefirodor()) {
+            /** @var PromotionCode $promoCode */
+            foreach ($user->getPromoCodes() as $promoCode) {
+                if ($promoCode->getPromotionCodeTypePromotionCodeType() == $promoTypeRef) {
+                    /** @var User $userReferidor */
+                    $userReferidor = $promoCode->getUserUser();
+                    $userReferidor->setIsFree($userReferidor->getIsFree() + 3);
+                    $em->persist($userReferidor);
+                    $user->setPromoCodeClaimedByReferidor(true);
+                    $em->persist($user);
+                    $em->flush();
+                    break;
+                }
+            }
+        }
+
         return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionSuccess.html.twig', array(
-            'user' => $this->getUser(),
+            'user' => $user,
             'date' => \date('Y-m-d')
         ));
     }

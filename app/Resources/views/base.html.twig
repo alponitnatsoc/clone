@@ -365,14 +365,9 @@
                                                 {% block logout %}
                                                     {% if app.user is defined and app.user.status>=2 %}
                                                     <span id="profile" style="display: inline">
-                                                        <a
-                                                            {% if status < 2 %}
-                                                                class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="bottom" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad"
-                                                            {% else %}
-                                                                class="notAjax" href=" {{ path('show_user') }}"
-                                                            {% endif %}
-                                                        >Mi cuenta</a>
-                                                    </span> |
+                                                        <a class="notAjax" href=" {{ path('show_user') }}">Mi cuenta</a>
+                                                    </span>| <span id="logout" style="display: inline"><a class="notAjax" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
+                                                    </span>
                                                     {% elseif app.user is defined and app.user.status<2 %}
                                                         <span id="logout" style="display: inline; margin-left:30px"><a class="notAjax" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
                                                         </span>
