@@ -595,7 +595,6 @@ class BackOfficeController extends Controller
                             $vac->getUserUser()->addAction($tempAction);//adding the action to the user
                             $tempAction->setActionTypeActionType($this->getActionTypeByActionTypeCode('SDE'));//setting actionType to validate entity
                             $tempAction->setEmployerEntity($employerHasEntity);
-
                             if($employerHasEntity->getState()==1){
                                 $tempAction->setActionStatus($this->getStatusByStatusCode('NEW'));
                             }else{
@@ -604,6 +603,17 @@ class BackOfficeController extends Controller
                             $tempAction->setUpdatedAt();//setting the action updatedAt Date
                             $tempAction->setCreatedAt(new DateTime());//setting the Action createrAt Date
                             $em->persist($tempAction);
+                            $em->flush();
+                        }else{
+                            $tempAction = $vac->getActionByEmployerHasEntity($employerHasEntity)->first();
+                            if($employerHasEntity->getState()==1){
+                                $tempAction->setActionStatus($this->getStatusByStatusCode('NEW'));
+                            }else{
+                                $tempAction->setActionStatus($this->getStatusByStatusCode('DIS'));
+                            }
+                            $tempAction->setUpdatedAt();//setting the action updatedAt Date
+                            $em->persist($tempAction);
+                            $em->flush();
                         }
                     }
                     /** @var EmployeeHasEntity $employeeEntity */
@@ -623,6 +633,17 @@ class BackOfficeController extends Controller
                             $tempAction->setUpdatedAt();//setting the action updatedAt Date
                             $tempAction->setCreatedAt(new DateTime());//setting the Action createrAt Date
                             $em->persist($tempAction);
+                            $em->flush();
+                        }else{
+                            $tempAction = $vac->getActionByEmployeeHasEntity($employeeEntity)->first();
+                            if($employerHasEntity->getState()==1){
+                                $tempAction->setActionStatus($this->getStatusByStatusCode('NEW'));
+                            }else{
+                                $tempAction->setActionStatus($this->getStatusByStatusCode('DIS'));
+                            }
+                            $tempAction->setUpdatedAt();//setting the action updatedAt Date
+                            $em->persist($tempAction);
+                            $em->flush();
                         }
                     }
                     if(!$vac->getActionsByPersonAndActionType($employerHasEmployee->getEmployeeEmployee()->getPersonPerson(),$this->getActionTypeByActionTypeCode('VC'))->first()){
@@ -635,6 +656,13 @@ class BackOfficeController extends Controller
                         $tempAction->setUpdatedAt();//setting the action updatedAt Date
                         $tempAction->setCreatedAt(new DateTime());//setting the Action createrAt Date
                         $em->persist($tempAction);
+                        $em->flush();
+                    }else{
+                        $tempAction = $vac->getActionsByPersonAndActionType($employerHasEmployee->getEmployeeEmployee()->getPersonPerson(),$this->getActionTypeByActionTypeCode('VC'))->first();
+                        $tempAction->setActionStatus($this->getStatusByStatusCode('NEW'));
+                        $tempAction->setUpdatedAt();//setting the action updatedAt Date
+                        $em->persist($tempAction);
+                        $em->flush();
                     }
                     $em->persist($notification);
                     $em->flush();
