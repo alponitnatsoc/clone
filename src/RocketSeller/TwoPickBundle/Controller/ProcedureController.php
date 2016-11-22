@@ -2513,7 +2513,7 @@ class ProcedureController extends Controller
                             if ($tempo->getStatusCode() == 200) {
                                 $days = json_decode($tempo->getContent(),true)["days"];
                                 //if time in days > 3 time is exceeded and all the actions will have priority 2
-                                if($days = 3){
+                                if(intval($days) >= 3){
                                     //flag to much time to notice time was exceeded
                                     $toMuchTime = true;
                                 }
@@ -3058,7 +3058,15 @@ class ProcedureController extends Controller
                 $employer->getPersonPerson()->addAction($action);//adding the action to the employerPerson
                 $user->addAction($action);//adding the action to the user
                 $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VDDE'));//setting the actionType validate employer Document
-                $action->setActionStatus($this->getStatusByStatusCode('DCPE'));//setting the Action Status to NEW
+                if($employer->getPersonPerson()->getDocumentDocument()){
+                    if($employer->getPersonPerson()->getDocumentDocument()->getMediaMedia()){
+                        $action->setActionStatus($this->getStatusByStatusCode('NEW'));
+                    }else{
+                        $action->setActionStatus($this->getStatusByStatusCode('DCPE'));
+                    }
+                }else{
+                    $action->setActionStatus($this->getStatusByStatusCode('DCPE'));
+                }
                 $action->setUpdatedAt();//setting the action updatedAt Date
                 $action->setCreatedAt($today);//setting the Action createrAt Date
                 $em->persist($action);
@@ -3098,7 +3106,15 @@ class ProcedureController extends Controller
                 $employer->getPersonPerson()->addAction($action);//adding the action to the employerPerson
                 $user->addAction($action);//adding the action to the user
                 $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VRTE'));//setting the actionType validate employer RUT
-                $action->setActionStatus($this->getStatusByStatusCode('DCPE'));//setting the Action Status to NEW
+                if($employer->getPersonPerson()->getRutDocument()){
+                    if($employer->getPersonPerson()->getRutDocument()->getMediaMedia()){
+                        $action->setActionStatus($this->getStatusByStatusCode('NEW'));
+                    }else{
+                        $action->setActionStatus($this->getStatusByStatusCode('DCPE'));
+                    }
+                }else{
+                    $action->setActionStatus($this->getStatusByStatusCode('DCPE'));
+                }
                 $action->setUpdatedAt();//setting the action updatedAt Date
                 $action->setCreatedAt($today);//setting the Action createrAt Date
                 $em->persist($action);
@@ -3118,7 +3134,15 @@ class ProcedureController extends Controller
             $employer->getPersonPerson()->addAction($action);//adding the action to the employerPerson
             $user->addAction($action);//adding the action to the user
             $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VM'));//setting the actionType validate employer mandatory
-            $action->setActionStatus($this->getStatusByStatusCode('DCPE'));//setting the Action Status to NEW
+            if($employer->getMandatoryDocument()){
+                if($employer->getMandatoryDocument()->getMediaMedia()){
+                    $action->setActionStatus($this->getStatusByStatusCode('NEW'));
+                }else{
+                    $action->setActionStatus($this->getStatusByStatusCode('DCPE'));
+                }
+            }else{
+                $action->setActionStatus($this->getStatusByStatusCode('DCPE'));
+            }
             $action->setUpdatedAt();//setting the action updatedAt Date
             $action->setCreatedAt($today);//setting the Action createrAt Date
             $em->persist($action);
@@ -3152,19 +3176,29 @@ class ProcedureController extends Controller
             }
             if($vac->getActionByEmployerHasEntity($employerHasEntity)->first()){
                 $action = $vac->getActionByEmployerHasEntity($employerHasEntity)->first();
-            }else{
+                $action->setEmployerEntity($employerHasEntity);
                 if ($employerHasEntity->getState() == 1) {//validate entity
-                    $action = new Action();
-                    $vac->addAction($action);//adding the action to the procedure
-                    $employer->getPersonPerson()->addAction($action);//adding the action to the employerPerson
-                    $user->addAction($action);//adding the action to the user
-                    $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('SDE'));//setting actionType to validate entity
-                    $action->setEmployerEntity($employerHasEntity);
                     $action->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the action status to new
-                    $action->setUpdatedAt();//setting the action updatedAt Date
-                    $action->setCreatedAt($today);//setting the Action createrAt Date
-                    $em->persist($action);
+                }else{
+                    $action->setActionStatus($this->getStatusByStatusCode('DIS'));
                 }
+                $action->setUpdatedAt();//setting the action updatedAt Date
+                $em->persist($action);
+            }else{
+                $action = new Action();
+                $vac->addAction($action);//adding the action to the procedure
+                $employer->getPersonPerson()->addAction($action);//adding the action to the employerPerson
+                $user->addAction($action);//adding the action to the user
+                $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('SDE'));//setting actionType to validate entity
+                $action->setEmployerEntity($employerHasEntity);
+                if ($employerHasEntity->getState() == 1) {//validate entity
+                    $action->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the action status to new
+                }else{
+                    $action->setActionStatus($this->getStatusByStatusCode('DIS'));
+                }
+                $action->setUpdatedAt();//setting the action updatedAt Date
+                $action->setCreatedAt($today);//setting the Action createrAt Date
+                $em->persist($action);
             }
             $em->flush();
         }
@@ -3233,7 +3267,15 @@ class ProcedureController extends Controller
                                 $ePerson->addAction($action);//adding the action to the employerPerson
                                 $user->addAction($action);//adding the action to the user
                                 $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VDD'));//setting actionType to validate doc
-                                $action->setActionStatus($this->getStatusByStatusCode('DCPE'));//setting the action status to new
+                                if($ePerson->getDocumentDocument()){
+                                    if($ePerson->getDocumentDocument()->getMediaMedia()){
+                                        $action->setActionStatus($this->getStatusByStatusCode('NEW'));
+                                    }else{
+                                        $action->setActionStatus($this->getStatusByStatusCode('DCPE'));
+                                    }
+                                }else{
+                                    $action->setActionStatus($this->getStatusByStatusCode('DCPE'));
+                                }
                                 $action->setUpdatedAt();//setting the action updatedAt Date
                                 $action->setCreatedAt($today);//setting the Action createrAt Date
                                 $em->persist($action);
@@ -3246,7 +3288,15 @@ class ProcedureController extends Controller
                             $ePerson->addAction($action);//adding the action to the employerPerson
                             $user->addAction($action);//adding the action to the user
                             $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VCAT'));//setting actionType to validate doc
-                            $action->setActionStatus($this->getStatusByStatusCode('DCPE'));//setting the action status to new
+                            if($ehe->getAuthDocument()){
+                                if($ehe->getAuthDocument()->getMediaMedia()){
+                                    $action->setActionStatus($this->getStatusByStatusCode('NEW'));
+                                }else{
+                                    $action->setActionStatus($this->getStatusByStatusCode('DCPE'));
+                                }
+                            }else{
+                                $action->setActionStatus($this->getStatusByStatusCode('DCPE'));
+                            }
                             $action->setUpdatedAt();//setting the action updatedAt Date
                             $action->setCreatedAt($today);//setting the Action createrAt Date
                             $em->persist($action);
@@ -3258,6 +3308,15 @@ class ProcedureController extends Controller
                             $ePerson->addAction($action);//adding the action to the employerPerson
                             $user->addAction($action);//adding the action to the user
                             $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VC'));//setting actionType to validate Contract
+                            if($ehe->getActiveContract()->getDocumentDocument()){
+                                if($ehe->getActiveContract()->getDocumentDocument()->getMediaMedia()){
+                                    $action->setActionStatus($this->getStatusByStatusCode('NEW'));
+                                }else{
+                                    $action->setActionStatus($this->getStatusByStatusCode('DCPE'));
+                                }
+                            }else{
+                                $action->setActionStatus($this->getStatusByStatusCode('DCPE'));
+                            }
                             $action->setActionStatus($this->getStatusByStatusCode('DCPE'));//setting the action status to new
                             $action->setUpdatedAt();//setting the action updatedAt Date
                             $action->setCreatedAt($today);//setting the Action createrAt Date
@@ -3266,8 +3325,17 @@ class ProcedureController extends Controller
                         }
                         /** @var EmployeeHasEntity $employeeHasEntity */
                         foreach ($ehe->getEmployeeEmployee()->getEntities() as $employeeHasEntity) {
-                            if($ePerson->getActionByEmployeeHasEntity($employeeHasEntity)->count()>1){
+                            if($ePerson->getActionByEmployeeHasEntity($employeeHasEntity)->count()==1){
                                 $action = $ePerson->getActionByEmployeeHasEntity($employeeHasEntity)->first();
+                                $action->setEmployeeEntity($employeeHasEntity);
+                                if($employeeHasEntity->getState()==1){
+                                    $action->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the action status to new
+                                }else{
+                                    $action->setActionStatus($this->getStatusByStatusCode('DIS'));//setting the action status to new
+                                }
+                                $action->setUpdatedAt();//setting the action updatedAt Date
+                                $em->persist($action);
+                                $em->flush();
                             }elseif($ePerson->getActionByEmployeeHasEntity($employeeHasEntity)->count()==0){
                                 if($employeeHasEntity->getState()!=-1){
                                     if($employeeHasEntity->getState()==0){
@@ -3337,7 +3405,15 @@ class ProcedureController extends Controller
                                 $ePerson->addAction($action);//adding the action to the employerPerson
                                 $user->addAction($action);//adding the action to the user
                                 $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VCAT'));//setting actionType to validate doc
-                                $action->setActionStatus($this->getStatusByStatusCode('DCPE'));//setting the action status to new
+                                if($ehe->getAuthDocument()){
+                                    if($ehe->getAuthDocument()->getMediaMedia()){
+                                        $action->setActionStatus($this->getStatusByStatusCode('NEW'));
+                                    }else{
+                                        $action->setActionStatus($this->getStatusByStatusCode('DCPE'));
+                                    }
+                                }else{
+                                    $action->setActionStatus($this->getStatusByStatusCode('DCPE'));
+                                }
                                 $action->setUpdatedAt();//setting the action updatedAt Date
                                 $action->setCreatedAt($today);//setting the Action createrAt Date
                                 $em->persist($action);
@@ -3349,7 +3425,15 @@ class ProcedureController extends Controller
                                 $ePerson->addAction($action);//adding the action to the employerPerson
                                 $user->addAction($action);//adding the action to the user
                                 $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VC'));//setting actionType to validate Contract
-                                $action->setActionStatus($this->getStatusByStatusCode('DCPE'));//setting the action status to new
+                                if($ehe->getActiveContract()->getDocumentDocument()){
+                                    if($ehe->getActiveContract()->getDocumentDocument()->getMediaMedia()){
+                                        $action->setActionStatus($this->getStatusByStatusCode('NEW'));
+                                    }else{
+                                        $action->setActionStatus($this->getStatusByStatusCode('DCPE'));
+                                    }
+                                }else{
+                                    $action->setActionStatus($this->getStatusByStatusCode('DCPE'));
+                                }
                                 $action->setUpdatedAt();//setting the action updatedAt Date
                                 $action->setCreatedAt($today);//setting the Action createrAt Date
                                 $em->persist($action);
@@ -3358,6 +3442,15 @@ class ProcedureController extends Controller
                             foreach ($ehe->getEmployeeEmployee()->getEntities() as $employeeHasEntity) {
                                 if($ePerson->getActionByEmployeeHasEntity($employeeHasEntity)->count()==1) {
                                     $action = $ePerson->getActionByEmployeeHasEntity($employeeHasEntity)->first();
+                                    $action->setEmployeeEntity($employeeHasEntity);
+                                    if($employeeHasEntity->getState()==1){
+                                        $action->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the action status to new
+                                    }else{
+                                        $action->setActionStatus($this->getStatusByStatusCode('DIS'));//setting the action status to new
+                                    }
+                                    $action->setUpdatedAt();//setting the action updatedAt Date
+                                    $em->persist($action);
+                                    $em->flush();
                                 }else{
                                     return false;
                                 }
@@ -3382,7 +3475,15 @@ class ProcedureController extends Controller
                     $ePerson->addAction($action);//adding the action to the employerPerson
                     $user->addAction($action);//adding the action to the user
                     $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VDD'));//setting actionType to validate docs
-                    $action->setActionStatus($this->getStatusByStatusCode('DCPE'));//setting the action status to new
+                    if($ePerson->getDocumentDocument()){
+                        if($ePerson->getDocumentDocument()->getMediaMedia()){
+                            $action->setActionStatus($this->getStatusByStatusCode('NEW'));
+                        }else{
+                            $action->setActionStatus($this->getStatusByStatusCode('DCPE'));
+                        }
+                    }else{
+                        $action->setActionStatus($this->getStatusByStatusCode('DCPE'));
+                    }
                     $action->setUpdatedAt();//setting the action updatedAt Date
                     $action->setCreatedAt($today);//setting the Action createrAt Date
                     $em->persist($action);
@@ -3392,7 +3493,15 @@ class ProcedureController extends Controller
                     $ePerson->addAction($action);//adding the action to the employerPerson
                     $user->addAction($action);//adding the action to the user
                     $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VCAT'));//setting actionType to validate doc
-                    $action->setActionStatus($this->getStatusByStatusCode('DCPE'));//setting the action status to new
+                    if($ehe->getAuthDocument()){
+                        if($ehe->getAuthDocument()->getMediaMedia()){
+                            $action->setActionStatus($this->getStatusByStatusCode('NEW'));
+                        }else{
+                            $action->setActionStatus($this->getStatusByStatusCode('DCPE'));
+                        }
+                    }else{
+                        $action->setActionStatus($this->getStatusByStatusCode('DCPE'));
+                    }
                     $action->setUpdatedAt();//setting the action updatedAt Date
                     $action->setCreatedAt($today);//setting the Action createrAt Date
                     $em->persist($action);
@@ -3402,7 +3511,15 @@ class ProcedureController extends Controller
                     $ePerson->addAction($action);//adding the action to the employerPerson
                     $user->addAction($action);//adding the action to the user
                     $action->setActionTypeActionType($this->getActionTypeByActionTypeCode('VC'));//setting actionType to validate Contract
-                    $action->setActionStatus($this->getStatusByStatusCode('DCPE'));//setting the action status to new
+                    if($ehe->getActiveContract()->getDocumentDocument()){
+                        if($ehe->getActiveContract()->getDocumentDocument()->getMediaMedia()){
+                            $action->setActionStatus($this->getStatusByStatusCode('NEW'));
+                        }else{
+                            $action->setActionStatus($this->getStatusByStatusCode('DCPE'));
+                        }
+                    }else{
+                        $action->setActionStatus($this->getStatusByStatusCode('DCPE'));
+                    }
                     $action->setUpdatedAt();//setting the action updatedAt Date
                     $action->setCreatedAt($today);//setting the Action createrAt Date
                     $em->persist($action);
@@ -3411,6 +3528,15 @@ class ProcedureController extends Controller
                     foreach ($ehe->getEmployeeEmployee()->getEntities() as $employeeHasEntity) {
                         if($ePerson->getActionByEmployeeHasEntity($employeeHasEntity)->count()==1){
                             $action = $ePerson->getActionByEmployeeHasEntity($employeeHasEntity)->first();
+                            $action->setEmployeeEntity($employeeHasEntity);
+                            if($employeeHasEntity->getState()==1){
+                                $action->setActionStatus($this->getStatusByStatusCode('NEW'));//setting the action status to new
+                            }else{
+                                $action->setActionStatus($this->getStatusByStatusCode('DIS'));//setting the action status to new
+                            }
+                            $action->setUpdatedAt();//setting the action updatedAt Date
+                            $em->persist($action);
+                            $em->flush();
                         }elseif($ePerson->getActionByEmployeeHasEntity($employeeHasEntity)->count()>1){
                             return false;
                         }elseif($ePerson->getActionByEmployeeHasEntity($employeeHasEntity)->count()==0){
