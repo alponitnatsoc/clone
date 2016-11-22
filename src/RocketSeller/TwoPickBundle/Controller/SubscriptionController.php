@@ -513,7 +513,7 @@ class SubscriptionController extends Controller
                 if ($promoCode->getPromotionCodeTypePromotionCodeType() == $promoTypeRef) {
                     /** @var User $userReferidor */
                     $userReferidor = $promoCode->getUserUser();
-                    $userReferidor->setIsFree($userReferidor->getIsFree() + 1);
+                    $userReferidor->setIsFree($userReferidor->getIsFree() + 3);
                     $em->persist($userReferidor);
                     $user->setPromoCodeClaimedByReferidor(true);
                     $em->persist($user);
