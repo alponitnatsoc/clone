@@ -271,9 +271,9 @@ class User extends BaseUser
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
-    private $promoCodeClaimedByRefirodor;
+    private $promoCodeClaimedByReferidor;
 
     /**
      * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\Log", mappedBy="userUser",cascade={"persist"})
@@ -1194,26 +1194,26 @@ class User extends BaseUser
     }
 
     /**
-     * Set promoCodeClaimedByRefirodor
+     * Set promoCodeClaimedByReferidor
      *
-     * @param boolean $promoCodeClaimedByRefirodor
+     * @param boolean $promoCodeClaimedByReferidor
      *
      * @return User
      */
-    public function setPromoCodeClaimedByRefirodor($promoCodeClaimedByRefirodor)
+    public function setPromoCodeClaimedByReferidor($promoCodeClaimedByReferidor)
     {
-        $this->promoCodeClaimedByRefirodor = $promoCodeClaimedByRefirodor;
+        $this->promoCodeClaimedByReferidor = $promoCodeClaimedByReferidor;
 
         return $this;
     }
 
     /**
-     * Get promoCodeClaimedByRefirodor
+     * Get promoCodeClaimedByReferidor
      *
      * @return boolean
      */
-    public function getPromoCodeClaimedByRefirodor()
+    public function getPromoCodeClaimedByReferidor()
     {
-        return $this->promoCodeClaimedByRefirodor;
+        return $this->promoCodeClaimedByReferidor;
     }
 }

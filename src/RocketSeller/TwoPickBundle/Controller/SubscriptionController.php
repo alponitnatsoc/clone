@@ -514,7 +514,7 @@ class SubscriptionController extends Controller
                     $userReferidor = $promoCode->getUserUser();
                     $userReferidor->setIsFree($userReferidor->getIsFree() + 1);
                     $em->persist($userReferidor);
-                    $user->setPromoCodeClaimedByRefirodor(true);
+                    $user->setPromoCodeClaimedByReferidor(true);
                     $em->persist($user);
                     $em->flush();
                     break;
