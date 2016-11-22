@@ -251,3 +251,6 @@ back_check_banks:
 back_fix_notifications_pay_notificationid:
     path:         /backoffice/fix/notifications/pay/notificationid
     defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:fixNotificationPayNotificationId }
+back_personal_info_view:
+    path:         /backoffice/personal/info/view
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:personalInfoView }
