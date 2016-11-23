@@ -2027,7 +2027,6 @@ class BackOfficeController extends Controller
                 if(array_key_exists($utils->mb_normalize($refCode),$mapaIndicesCode)) {
                     $num = $mapaIndicesCode[$utils->mb_normalize($refCode)]++;
                     $refCode .= $num;
-                    dump($refCode);
                 } else {
                     $mapaIndicesCode[$utils->mb_normalize($refCode)] = 1;
                 }
