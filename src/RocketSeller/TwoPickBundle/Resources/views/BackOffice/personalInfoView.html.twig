@@ -20,6 +20,7 @@
                         <th>Cédula</th>
                         <th>Correo Empleador</th>
                         <th>Celular Empleador</th>
+                        <th>Código Empleador</th>
                     </tr>
                     {% for ehe in ehes %}
                         {% set locIndex = loop.index - 1 %}
@@ -29,6 +30,7 @@
                                     <td> {{ ehe.employerEmployer.personPerson.document }} </td>
                                     <td> {{ usersEmail[locIndex] }} </td>
                                     <td> {{ usersPhone[locIndex] }} </td>
+                                    <td> {{ usersCode[locIndex] }} </td>
                                 </tr>
                         {% endfor %}
                     {% endfor %}
