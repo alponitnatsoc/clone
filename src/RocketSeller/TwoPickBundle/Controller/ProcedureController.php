@@ -2540,7 +2540,7 @@ class ProcedureController extends Controller
                             if ($tempo->getStatusCode() == 200) {
                                 $days = json_decode($tempo->getContent(),true)["days"];
                                 //if time in days > 3 time is exceeded and all the actions will have priority 2
-                                if($days = 3){
+                                if(intval($days) >= 3){
                                     //flag to much time to notice time was exceeded
                                     $toMuchTime = true;
                                 }
