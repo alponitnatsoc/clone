@@ -184,6 +184,8 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
     <script>
-
+        $('#formPay').one('submit', function() {
+            $(this).find('input[type="submit"]').attr('disabled','disabled');
+        });
     </script>
 {% endblock %}
