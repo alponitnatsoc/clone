@@ -2164,25 +2164,105 @@ class EmployeeRestController extends FOSRestController
         $count = 1;
         /** @var EmployerHasEmployee $eHE */
         foreach ($eHEs as $eHE) {
-            if($count >= $start and $count <= $end){
-                if($eHE->getLegalFF() == 0){
-                    /** @var Contract $contract */
-                    $contract = $eHE->getActiveContract();
-                    if($contract){
-                        $start_date = $contract->getStartDate();
-                        $end_date = $contract->getEndDate();
+            if($eHE->getState()>=4){
+                if($count >= $start and $count <= $end){
+                    if($eHE->getLegalFF() == 0){//New employees
+                        /** @var Contract $contract */
+                        $contract = $eHE->getActiveContract();//Active Contracts
+                        if($contract){
+                            $start_date = $contract->getStartDate();
+                            $end_date = $contract->getEndDate();
+                            $today = new DateTime();
+                            if(!$end_date<=$today){
+
+                                $day = intval($start_date->format('d'));
+                                $month = intval($start_date->format('m'));
+                                $year = intval($start_date->format('Y'));
+
+                                $response.= 'EHE: ' . $eHE->getIdEmployerHasEmployee() . ' (' . $day . '-' . $month . '-'.$year.').<br>';
+
+                                $fullTime = false;
+                                if($contract->getTimeCommitmentTimeCommitment()->getCode() == 'TC'){//Full time
+                                    $fullTime = true;
+                                }
+
+                                $monthly = false;
+                                if($contract->getFrequencyFrequency()->getPayrollCode()=='M'){//Monthly payment
+                                    $monthly = true;
+                                }
+                                $payrolls = $contract->getPayrolls();
+                                $vacationDebt = 0.0;
+                                /** @var Payroll $payroll */
+                                foreach ($payrolls as $payroll) {
+                                    $novelties = $payroll->getSqlNovelties();
+                                    $workableDays = 0;
+                                    $notPaidDays = 0;
+                                    $minusVacations = 0;
+                                    /** @var Novelty $novelty */
+                                    foreach ($novelties as $novelty) {
+                                        if($novelty->getNoveltyTypeNoveltyType()!= null){
+                                            if(intval($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == 1)){//Salary novelty type
+                                                if($novelty->getUnits() != null)
+                                                    $workableDays += intval($novelty->getUnits());
+                                            }
+                                            if(intval($novelty->getNoveltyTypeNoveltyType()->getPayrollCode()) == 3120 or intval($novelty->getNoveltyTypeNoveltyType()->getPayrollCode()) == 3125){//Suspension or unpaid novelty
+                                                if($novelty->getUnits() != null)
+                                                    $notPaidDays += intval($novelty->getUnits());
+                                            }
+                                            if(intval($novelty->getNoveltyTypeNoveltyType()->getPayrollCode()) == 145){
+                                                if($novelty->getUnits() != null)
+                                                    $minusVacations += inval($novelty->getUnits());
+                                            }
+                                        }
+                                    }
+                                    if($payroll->getPeriod()==4){
+                                        $payrollDate = new DateTime( $payroll->getYear().'-'.$payroll->getMonth().'-26 00:00:00');
+                                    }else{
+                                        $payrollDate = new DateTime( $payroll->getYear().'-'.$payroll->getMonth().'-13 00:00:00');
+                                    }
+                                    if($today->format('m')==1){
+                                        $vacMonth = new DateTime($today->format('y').'-12-30 00:00:00');
+                                    }else{
+                                        $vacMonth = new DateTime($today->format('y').'-'.(intval($today->format('m'))-1).'-30 00:00:00');
+                                    }
+                                    if($payrollDate<$vacMonth){
+                                        $vacationDebt += ((($workableDays-$notPaidDays)/720)*30)-$minusVacations;
+                                    }
+//                                    $response.= 'PAYROLL: ' . $payroll->getIdPayroll() . ' PERIOD: ' . $payroll->getPeriod() . ' ' . $payroll->getYear() . '-' . $payroll->getMonth() . ' WORKABLE DAYS: ' . $workableDays . ' UNPAID DAYS: ' . $notPaidDays . ' PAID_VACATIONS: ' . $minusVacations . '<br>';
+                                    if($fullTime and $monthly){
+
+                                    }elseif($fullTime and !$monthly){
+
+                                    }elseif(!$fullTime and $monthly){
+
+                                    }elseif(!$fullTime and !$monthly){
+
+                                    }
+                                }
+                                $response.= 'VACATIONS: ' . $vacationDebt . '<br>';
+                            }else{
+
+                            }
+                        }
+                    }
+                    if($count % 30 == 0){
+                        $response .= '<br>GROUP FROM ' . ( $count - 30 ) . ' TO ' . $count . ' FLUSHED' . '<br><br>';
+                        $em->flush();
+                        $em->clear();
+                    }
+                    if($count % 30 != 0 and $count== $end){
+                        $response .= '<br>GROUP FROM ' . ( $count - ( $count % 30 ) ) . ' TO ' . ( $count ) . ' FLUSHED' . '<br><br>';
+                        $em->flush();
+                        $em->clear();
                     }
                 }
-                if($count % 10 == 0){
-                    $response .= 'GROUP FROM ' . ( $count - 10 ) . ' TO ' . $count . ' FLUSHED' . '<br>';
-                    $em->flush();
-                }
+                $count++;
             }
-            $count++;
         }
-        if($count <= $end and $count % 10 != 0 ){
-            $response .= 'GROUP FROM ' . ( $count - ( $count % 10 ) ) . ' TO ' . ( $count - 1 ) . ' FLUSHED' . '<br>';
+        if($count <= $end and $count % 30 != 0 ){
+            $response .= '<br>GROUP FROM ' . ( $count - ( $count % 30 ) ) . ' TO ' . ( $count - 1 ) . ' FLUSHED' . '<br><br>';
             $em->flush();
+            $em->clear();
         }
         $view = $view = View::create($response);
         $view->setStatusCode(200);

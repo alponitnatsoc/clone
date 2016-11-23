@@ -3867,9 +3867,6 @@ class ProcedureController extends Controller
         return true;
     }
 
-
-
-
     /**
      * estructura de tramite para generar vueltas y tramites
      * @param  $id $id_employer       id del empleador que genera el tramite
