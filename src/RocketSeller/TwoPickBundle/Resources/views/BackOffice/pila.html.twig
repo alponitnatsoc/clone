@@ -42,35 +42,35 @@
                     {% set idFileName = "fileName" ~ pila.idPurchaseOrdersDescription  %}
                     {% set idFileNameButton = pila.idPurchaseOrdersDescription  %}
                     <tr>
-                        <td style="vertical-align: middle">{{ pila.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.fullName }}</td>
-                        <td style="vertical-align: middle">{{ pila.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.document }}</td>
-                        <td style="vertical-align: middle">{{ utils.month_number_to_name(pila.payrollsPila[0].month) }}</td>
-                        <td style="vertical-align: middle">Id: {{ pila.idPurchaseOrdersDescription }} - Tipo: {{ fileType }}</td>
-                        <td style="vertical-align: middle">$ {{ pila.value|number_format(0) }} </td>
-                        <td style="vertical-align: middle;"> <input id= {{idFileName}} value="{{ fileStoredName }}" size="10"></input> <div style="display: inline-block"><button id= {{idFileNameButton}} class="saveId">Guardar Sin Aprobar</button><button id= {{idFileNameButton}} class="okId">Guardar y Aprobar</button></div></td>
-                        <td style="vertical-align: middle">
-                            {% if pila.uploadedFile == NULL %}
-                                El usuario no ha pagado aún
-                            {% elseif pila.uploadedFile == -1 %}
-                                La planilla subió sin errores ni advertencias
-                            {% elseif pila.uploadedFile == -2 %}
-                                Operaciones no ha aprobado la planilla
-                            {% elseif pila.uploadedFile > 0 %}
-                                {% for trans in pila.transactions %}
-                                    {% if trans.idTransaction ==  pila.uploadedFile %}
-                                        {{ trans.purchaseOrdersStatus.name }}
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                        </td>
-                        <td style="vertical-align: middle"> <button type"button" onclick="location.href = '/api/public/v1/secured/monthlies/{{pila.idPurchaseOrdersDescription}}/plains/download/text';">Generar Archivo</button></td>
+                      <td style="vertical-align: middle">{{ pila.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.fullName }}</td>
+                      <td style="vertical-align: middle">{{ pila.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.document }}</td>
+                      <td style="vertical-align: middle">{{ utils.month_number_to_name(pila.payrollsPila[0].month) }}</td>
+                      <td style="vertical-align: middle">Id: {{ pila.idPurchaseOrdersDescription }} - Tipo: {{ fileType }}</td>
+                      <td style="vertical-align: middle">$ {{ pila.value|number_format(0) }} </td>
+                      <td style="vertical-align: middle;"> <input id= {{idFileName}} value="{{ fileStoredName }}" size="10"></input> <div style="display: inline-block"><button id= {{idFileNameButton}} class="saveId">Guardar Sin Aprobar</button><button id= {{idFileNameButton}} class="okId">Guardar y Aprobar</button></div></td>
+                      <td style="vertical-align: middle">
+                          {% if pila.uploadedFile == NULL %}
+                              El usuario no ha pagado aún
+                          {% elseif pila.uploadedFile == -1 %}
+                              La planilla subió sin errores ni advertencias
+                          {% elseif pila.uploadedFile == -2 %}
+                              Operaciones no ha aprobado la planilla
+                          {% elseif pila.uploadedFile > 0 %}
+                            {% for trans in pila.transactions %}
+                                {% if trans.idTransaction ==  pila.uploadedFile %}
+                                   {{ trans.purchaseOrdersStatus.name }}
+                                {% endif %}
+                            {% endfor %}
+                          {% endif %}
+                      </td>
+                      <td style="vertical-align: middle"> <button type"button" onclick="location.href = '/api/public/v1/secured/monthlies/{{pila.idPurchaseOrdersDescription}}/plains/download/text';">Generar Archivo</button></td>
                     </tr>
                 {% endfor %}
                 </tbody>
 
             </table>
         </div>
-    </div>
+        </div>
     </div>
 {% endblock %}
 
@@ -78,49 +78,49 @@
     {{ parent() }}
 
     <script type="text/javascript">
-        $(document).ready(function () {
-            // Setup - add a text input to each footer cell
-            $('#table-pilas .th1').each( function () {
-                var title = $(this).text();
-                $(this).html('<input type="text" placeholder="Buscar" style="width: 75%;margin: 1px 2px;padding: 1px 5px;color:black"/>' );
-            });
-
-            // DataTable
-            var table = $('#table-pilas').DataTable();
-
-
-            // Apply the search
-            table.columns().every( function () {
-                var that = this;
-                $( 'input', this.header() ).on( 'keyup change', function () {
-                    if (that.search() !== this.value ) {
-                        that
-                                .search( this.value )
-                                .draw();
-                    }
-                } );
-            } );
-
-            $(".saveId").on("click", function() {
-                var idToRetrieve = $(this).attr("id");
-                var valToStoreFrom = "fileName" + idToRetrieve;
-                var valToStore = $("#" + valToStoreFrom).val();
-
-                if(valToStore != ""){
-                    location.href = "/backoffice/planilla/persista/"+valToStore+"/"+idToRetrieve+"/notok";
-                }
-            });
-
-            $(".okId").on("click", function() {
-                var idToRetrieve = $(this).attr("id");
-                var valToStoreFrom = "fileName" + idToRetrieve;
-                var valToStore = $("#" + valToStoreFrom).val();
-
-                if(valToStore != ""){
-                    location.href = "/backoffice/planilla/persista/"+valToStore+"/"+idToRetrieve+"/ok";
-                }
-            });
+    $(document).ready(function () {
+        // Setup - add a text input to each footer cell
+        $('#table-pilas .th1').each( function () {
+            var title = $(this).text();
+            $(this).html('<input type="text" placeholder="Buscar" style="width: 75%;margin: 1px 2px;padding: 1px 5px;color:black"/>' );
         });
+
+        // DataTable
+        var table = $('#table-pilas').DataTable();
+
+
+        // Apply the search
+        table.columns().every( function () {
+            var that = this;
+            $( 'input', this.header() ).on( 'keyup change', function () {
+                if (that.search() !== this.value ) {
+                    that
+                    .search( this.value )
+                    .draw();
+                }
+            } );
+        } );
+
+        $(".saveId").on("click", function() {
+            var idToRetrieve = $(this).attr("id");
+            var valToStoreFrom = "fileName" + idToRetrieve;
+            var valToStore = $("#" + valToStoreFrom).val();
+
+            if(valToStore != ""){
+              location.href = "/backoffice/planilla/persista/"+valToStore+"/"+idToRetrieve+"/notok";
+            }
+        });
+
+        $(".okId").on("click", function() {
+            var idToRetrieve = $(this).attr("id");
+            var valToStoreFrom = "fileName" + idToRetrieve;
+            var valToStore = $("#" + valToStoreFrom).val();
+
+            if(valToStore != ""){
+                location.href = "/backoffice/planilla/persista/"+valToStore+"/"+idToRetrieve+"/ok";
+            }
+        });
+    });
     </script>
 
 {% endblock %}

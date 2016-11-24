@@ -201,9 +201,9 @@ class ChronServerRestController extends FOSRestController
                 $arrEmployerHasEmployee = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")
                                 ->findBy(array("employerEmployer" => $employer));
                 $hasDocumentsPending = false;
+                /** @var EmployerHasEmployee $employerHasEmployee */
                 foreach ($arrEmployerHasEmployee as $employerHasEmployee) {
-                    //TODO cambiar cuando me diga andres que ya está la tabla de los document status
-                    if($employerHasEmployee->getDocumentStatus() < 2) {
+                    if($employerHasEmployee->getDateDocumentsUploaded() == null) {
                         $hasDocumentsPending = true;
                         break;
                     }

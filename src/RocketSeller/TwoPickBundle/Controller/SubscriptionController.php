@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use RocketSeller\TwoPickBundle\Entity\PromotionCode;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use RocketSeller\TwoPickBundle\Form\PagoMembresiaForm;
 use RocketSeller\TwoPickBundle\Entity\Bank;
@@ -502,8 +503,28 @@ class SubscriptionController extends Controller
 
     public function suscripcionSuccessAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
+        $promoTypeRef = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCodeType")->find(6);
+        /** @var User $user */
+        $user = $this->getUser();
+        if(!$user->getPromoCodeClaimedByRefirodor()) {
+            /** @var PromotionCode $promoCode */
+            foreach ($user->getPromoCodes() as $promoCode) {
+                if ($promoCode->getPromotionCodeTypePromotionCodeType() == $promoTypeRef) {
+                    /** @var User $userReferidor */
+                    $userReferidor = $promoCode->getUserUser();
+                    $userReferidor->setIsFree($userReferidor->getIsFree() + 3);
+                    $em->persist($userReferidor);
+                    $user->setPromoCodeClaimedByReferidor(true);
+                    $em->persist($user);
+                    $em->flush();
+                    break;
+                }
+            }
+        }
+
         return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionSuccess.html.twig', array(
-            'user' => $this->getUser(),
+            'user' => $user,
             'date' => \date('Y-m-d')
         ));
     }

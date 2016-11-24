@@ -91,7 +91,6 @@ class DashBoardEmployerController extends Controller {
                         $em->persist($ehe);
                     }
                     if($ehe->getDocumentStatusType()->getDocumentStatusCode()=='BOFFFF' and $ehe->getBackofficeFinishMessageAt()==null and $ehe->getExistentSQL()==1){
-
                         $ehe->setBackofficeFinishMessageAt($today);
                         $finished[$ehe->getIdEmployerHasEmployee().'']=true;
                         $fin[$ehe->getIdEmployerHasEmployee()]=true;

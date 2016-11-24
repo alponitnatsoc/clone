@@ -32,6 +32,7 @@ use RocketSeller\TwoPickBundle\Entity\Action;
 use RocketSeller\TwoPickBundle\Traits\SubscriptionMethodsTrait;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use DateTime;
+use Doctrine\ORM\QueryBuilder;
 
 
 class BackOfficeController extends Controller
@@ -1961,38 +1962,126 @@ class BackOfficeController extends Controller
         }
         return $this->redirectToRoute('back_office');
     }
+
+    public function setReferidosCodeActionAlreadyInPromoCodeAction() {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+
+        $usersRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+        $promoCodeRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCode");
+        $em = $this->getDoctrine()->getManager();
+        $file = fopen('public/docs/referidos.csv', 'r');
+        $codes = array();
+        while (($line = fgetcsv($file)) !== FALSE) {
+            $codes[$line[0]] = $line[1];
+            /** @var User $user */
+            $user = $usersRepo->findOneBy(array('username' => $line[0]));
+            if($user) {
+                $user->setCode($line[1]);
+                $em->persist($user);
+                /** @var PromotionCode $promoCode */
+                $promoCode = $promoCodeRepo->findOneBy(array('code' => $line[1]));
+                $promoCode->setUserUser($user);
+            }
+        }
+        $em->flush();
+        fclose($file);
+        return $this->redirectToRoute('back_office');
+    }
+
+    public function setReferidosCodeAction() {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+
+        $file = fopen('public/docs/referidos.csv', 'r');
+        $codes = array();
+        $mapaIndicesCode = array();
+        /* @var $utils UtilsController */
+        $utils = $this->get('app.symplifica_utils');
+        while (($line = fgetcsv($file)) !== FALSE) {
+            $codes[$line[0]] = $line[1];
+            $mapaIndicesCode[$utils->mb_normalize($line[1])] = 1;
+        }
+        fclose($file);
+
+        $usersRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+        $promoTypeRef = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCodeType")->find(6);
+        $em = $this->getDoctrine()->getManager();
+
+        $users = $usersRepo->findAll();
+
+        $cont = 0;
+        /** @var User $user */
+        foreach ($users as $user) {
+            if(array_key_exists($user->getUsername(), $codes)) {
+                continue;
+            } else {
+                $names = explode(' ', $user->getPersonPerson()->getNames());
+                $userFirstName = $utils->normalizeAccentedChars($names[0]);
+                $lastNames = explode(' ', $user->getPersonPerson()->getLastName1());
+                $userLastName = $utils->normalizeAccentedChars($lastNames[0]);
+                $userFirstName = $utils->mb_normalize($userFirstName);
+                $userLastName = $utils->mb_capitalize($utils->mb_normalize($userLastName));
+
+                $refCode = $userFirstName . $userLastName;
+                if($refCode == '') continue;
+
+                if(array_key_exists($utils->mb_normalize($refCode),$mapaIndicesCode)) {
+                    $num = $mapaIndicesCode[$utils->mb_normalize($refCode)]++;
+                    $refCode .= $num;
+                } else {
+                    $mapaIndicesCode[$utils->mb_normalize($refCode)] = 1;
+                }
+                $user->setCode($refCode);
+                $em->persist($user);
+
+                /** @var PromotionCode $promoCode */
+                $promoCode = new PromotionCode();
+                $promoCode->setCode($refCode);
+                $promoCode->setPromotionCodeTypePromotionCodeType($promoTypeRef);
+                $promoCode->setUserUser($user);
+                $em->persist($promoCode);
+                if($cont++ % 100 == 0)
+                    $em->flush();
+            }
+        }
+        $em->flush();
+        return $this->redirectToRoute('back_office');
+    }
 	
-	public function personalInfoViewAction()
-	{
-		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
-		
-		$criteria = new \Doctrine\Common\Collections\Criteria();
-		$criteria->where($criteria->expr()->gt('state', 2));
-		
-		$em = $this->getDoctrine()->getManager();
-		$eheRepo = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
-		$filteredEheRepo = $eheRepo->matching($criteria);
-		
-		$userRepo = $em->getRepository('RocketSellerTwoPickBundle:User');
-		$personRepo = $em->getRepository('RocketSellerTwoPickBundle:Person');
-		
-		$userArray = array();
-		$phoneArray = array();
-		
-		/** @var EmployerHasEmployee $ehe */
-		foreach ($filteredEheRepo as $ehe) {
-			$personId = $ehe->getEmployerEmployer()->getPersonPerson()->getIdPerson();
-			$personFound = $personRepo->find($personId);
+		public function personalInfoViewAction()
+		{
+			$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
 			
-			/** @var User $userFound */
-			$userFound = $userRepo->findOneBy(array('personPerson' => $personFound));
-			array_push($userArray, $userFound->getEmail());
+			$criteria = new \Doctrine\Common\Collections\Criteria();
+			$criteria->where($criteria->expr()->gt('state', 2));
 			
-			/** @var Phone $personP */
-			$personP = $personFound->getPhones()->first();
-			array_push($phoneArray, $personP ? $personP->getPhoneNumber(): "");
+			$em = $this->getDoctrine()->getManager();
+			$eheRepo = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
+			$filteredEheRepo = $eheRepo->matching($criteria);
+			
+			$userRepo = $em->getRepository('RocketSellerTwoPickBundle:User');
+			$personRepo = $em->getRepository('RocketSellerTwoPickBundle:Person');
+			
+			$userArray = array();
+			$phoneArray = array();
+            $codeArray = array();
+			
+			/** @var EmployerHasEmployee $ehe */
+			foreach ($filteredEheRepo as $ehe) {
+				$personId = $ehe->getEmployerEmployer()->getPersonPerson()->getIdPerson();
+				$personFound = $personRepo->find($personId);
+				
+				/** @var User $userFound */
+				$userFound = $userRepo->findOneBy(array('personPerson' => $personFound));
+				array_push($userArray, $userFound->getEmail());
+
+                array_push($codeArray, $userFound->getCode());
+
+				/** @var Phone $personP */
+				$personP = $personFound->getPhones()->first();
+				array_push($phoneArray, $personP ? $personP->getPhoneNumber(): "");
+                
+			}
+			
+			return $this->render('RocketSellerTwoPickBundle:BackOffice:perso nalInfoView.html.twig', array('ehes' => $filteredEheRepo, 'usersEmail' => $userArray, 'usersPhone' => $phoneArray, 'usersCode' => $codeArray));
 		}
-		
-		return $this->render('RocketSellerTwoPickBundle:BackOffice:personalInfoView.html.twig', array('ehes' => $filteredEheRepo, 'usersEmail' => $userArray, 'usersPhone' => $phoneArray));
-	}
 }

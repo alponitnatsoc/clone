@@ -237,16 +237,27 @@ class PayrollController extends Controller
             $user = $this->getUser();
             $userPerson = $user->getPersonPerson();
             $payrollToPay = $request->request->all();
+
             if (count($payrollToPay) == 0) {
                 //por seguridad se verifica que exista por lo menos un item a pagar
                 return $this->redirectToRoute("payroll");
             }
-            $realtoPay=array();
 
+            $poStatusProcesando = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')
+                ->findOneBy(array('idNovoPay' => 'S2'));
+
+            $realtoPay=array();
             $paymethodid=$payrollToPay["paymentMethod"];
             unset($payrollToPay["paymentMethod"]);
             foreach ($payrollToPay as $key=>$value ) {
                 $realtoPay[]=$key;
+
+                /** @var PurchaseOrdersDescription $pod */
+                $pod = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')
+                    ->find($key);
+                if($pod->getPurchaseOrders()->getPurchaseOrdersStatus() == $poStatusProcesando) {
+                    return $this->redirectToRoute("payroll");
+                }
             }
 
             $request->setMethod("POST");

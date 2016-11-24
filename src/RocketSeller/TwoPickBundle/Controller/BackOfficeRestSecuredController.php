@@ -3,6 +3,7 @@ namespace RocketSeller\TwoPickBundle\Controller;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
+use RocketSeller\TwoPickBundle\Entity\Pay;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use Symfony\Component\HttpFoundation\Request;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -142,9 +143,33 @@ class BackOfficeRestSecuredController extends FOSRestController
     if ($answer->getStatusCode() != 200) {
         $message = "not so good man";
     } else {
-      $message = "all good man";
+        $radicatedNumber = json_decode($answer->getContent(), true)["numeroRadicado"];
+
+        $message = "all good man";
         $pod->setPurchaseOrdersStatus($devolutionState);
         $em->persist($pod);
+
+        $productDevolucion = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product")
+            ->findOneBy(array('simpleName' => 'DEV'));
+        $estatusAprobado = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")
+            ->findOneBy(array('idNovoPay' => '00'));
+
+        /** @var PurchaseOrdersDescription $podDevolucion */
+        $podDevolucion = new PurchaseOrdersDescription();
+        $podDevolucion->setValue($pod->getValue());
+        $podDevolucion->setProductProduct($productDevolucion);
+        $podDevolucion->setPurchaseOrdersStatus($estatusAprobado);
+        $podDevolucion->setDescription('Devolución de '. $pod->getProductProduct()->getSimpleName() .
+                                        ' pod: ' . $pod->getIdPurchaseOrdersDescription());
+        $em->persist($podDevolucion);
+
+        /** @var Pay $pay */
+        $pay = new Pay();
+        $pay->setIdDispercionNovo($radicatedNumber);
+        $pay->setPurchaseOrdersDescription($podDevolucion);
+        $pay->setUserIdUser($user);
+        $em->persist($pay);
+
         $em->flush();
     }
 

@@ -47,11 +47,12 @@
     <script>
         window.Intercom("trackEvent", "payroll");
     </script>
+
     <!-- INTERCOM SESSION END-->
     {% if flagAtLeastOne == "true" or dataNomina!=null or debt|length != 0  %}
         {% if dataNomina or debt|length > 0 %}
 
-            <div class="col-sm-12 col-xs-12 align-Resp">
+            <!-- <div class="col-sm-12 col-xs-12 align-Resp">
                 <a id="" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" href="/register/edit">
                     <div id="" class="col-md-2 col-xs-2 txt-AD0" style="text-align: left;">
                         <img src="/img/block-inline.png" class="center-block">
@@ -68,6 +69,28 @@
                         </div>
                     </div>
                 </a>
+            </div> -->
+            <div>
+                <div class="col-sm-12 col-xs-12 align-Resp azulclaro">
+                    <div id="" class=" col-sm-12 col-xs-12 blockStep inline  nav-link" >
+                        <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+                             <img src="/img/block-inline.png" class="center-block">
+                        </div>
+                        <div id="" class="col-md-10 col-xs-12">
+                            <div id="" class="text-left">
+                                <h1 style="color:#FFF;margin:25px 0 0;font-size:25px" class="bold">Pago a empleados</h1>
+                                <span clas="light" style="color:#FFF;margin:0;font-weight:100;font-size:20px">
+                                  {% if "now"|date('j') <= 15%}
+                                      {% set quincena = '(1ª Quincena)' %}
+                                  {% else %}
+                                      {% set quincena = '(2ª Quincena)' %}
+                                  {% endif %}
+                                  <p>{{ "now"|date('F')|trans }} {{ "now"|date('Y') }}  {{ quincena }} </p>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <link rel="stylesheet" type="text/css" href="{{ asset('css/public/pagospage.css') }}"/>
@@ -80,15 +103,19 @@
                 <form method="post" action="{{ path('payroll_calculate') }}" id="form_calculate">
                     {% set pilaData=null %}
                     <div id="cont-payment">
-                      <div class="deuda light grisclarofont">
-                          <div align="center" colspan="4">Pago de nómina</div>
-                      </div>
+                      {% set titleIndex = false %}
                         {% for data in dataNomina %}
                             {% if data.payroll_payroll != null %}
                                 {% set employee = data.payroll_payroll.contract_contract.employer_has_employee_employer_has_employee.employee_employee.person_person %}
                                 {% set payType = data.payroll_payroll.contract_contract.pay_method_pay_method.pay_type_pay_type.payroll_code %}
                                 {% set employeeName = employee.names ~' '~ employee.last_name1 %}
                                 {% set id_payroll = data.payroll_payroll.id_payroll %}
+                                {% if titleIndex == false %}
+                                  <div class="deuda light grisclarofont">
+                                      <div align="center" colspan="4">Pago de nómina</div>
+                                  </div>
+                                  {% set titleIndex = true %}
+                                {% endif %}
                                 <div class="borderclass">
                                     <div class="tittle-pay nominaBack">
                                         <div class="pagoforma">
@@ -118,7 +145,7 @@
                                                 {% if data.payroll_payroll.sql_novelties|length > 0 %}
                                                     {% set novelties = data.payroll_payroll.sql_novelties %}
                                                     {% for novelty in novelties if (novelty.novelty_type_novelty_type.payroll_code == 1 and novelty.sql_nov_consec != "") %}
-                                                        Días trabajados al mes: <span class="diasMes">{{ novelty.units }}</span>
+                                                        Días trabajados este mes: <span class="diasMes">{{ novelty.units }}</span>
                                                         <a class="notAjax workedDays btn-xs" href="/novelty/workableDays/{{ novelty.id_novelty }}">
                                                             <span class="editarDias">&#10095; Editar</span></a>
                                                     {% endfor %}
@@ -226,9 +253,13 @@
                             {% endif %}
                         {% endfor %}
                         {% if pilaData!=null %}
+                            {% set titleIndexPila = false %}
                             {% for dataPila in pilaData %}
                                 <div class="deuda light grisclarofont">
-                                    <div align="center" colspan="4">Pago de aportes</div>
+                                    {% if titleIndexPila == false %}
+                                      <div align="center" colspan="4">Pago de aportes</div>
+                                      {% set titleIndexPila = true %}
+                                    {% endif %}
                                     {% set payrolls = dataPila.payrolls_pila %}
                                 </div>
                                 <div class="borderclass">
@@ -272,14 +303,18 @@
                             <div align="center" colspan="4"> Nominas en deuda</div>
                         </div>-->
                         {% endif %}
+                        {% set titleIndexDebt = false %}
                         {% for po in debt %}
                             {% set pods = po.purchase_order_descriptions %}
                             {% set pilaData=null %}
                             {% for data in pods %}
                                 {% if data.product_product.simple_name == "PN" %}
-                                <div class="deuda light grisclarofont">
-                                    <div align="center" colspan="4">Nóminas Pendientes</div>
-                                </div>
+                                {% if titleIndexDebt == false %}
+                                  <div class="deuda light grisclarofont">
+                                      <div align="center" colspan="4">Nóminas Pendientes</div>
+                                  </div>
+                                  {% set titleIndexDebt = true %}
+                                {% endif %}
                                     <div class="borderclass">
                                         <div class="tittle-pay moraNomina">
                                             {% set employee = data.payroll_payroll.contract_contract.employer_has_employee_employer_has_employee.employee_employee.person_person %}
@@ -506,6 +541,21 @@
 
         {% else %}
             <link rel="stylesheet" type="text/css" href="{{ asset('/../css/pantallas.css') }}"/>
+            <div>
+                <div class="col-sm-12 col-xs-12 align-Resp azulclaro">
+                    <div id="" class=" col-sm-12 col-xs-12 blockStep inline  nav-link" >
+                        <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+                             <img src="/img/block-inline.png" class="center-block">
+                        </div>
+                        <div id="" class="col-md-10 col-xs-12">
+                            <div id="" class="text-left">
+                                <h1 style="color:#FFF;margin:25px 0 0;font-size:25px" class="bold">Pago a empleados</h1>
+                                <span clas="light" style="color:#FFF;margin:0;font-weight:100;font-size:20px">No tienes pagos pendientes</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div style="clear: both;height: 60px;"></div>
             <div id="cont-succesdocs">
               <div id="texto-succesdocs">
@@ -527,6 +577,21 @@
 
     {% else %}
         <link rel="stylesheet" type="text/css" href="{{ asset('/../css/pantallas.css') }}"/>
+        <div>
+            <div class="col-sm-12 col-xs-12 align-Resp azulclaro">
+                <div id="" class=" col-sm-12 col-xs-12 blockStep inline  nav-link" >
+                    <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+                         <img src="/img/block-inline.png" class="center-block">
+                    </div>
+                    <div id="" class="col-md-10 col-xs-12">
+                        <div id="" class="text-left">
+                            <h1 style="color:#FFF;margin:25px 0 0;font-size:25px" class="bold">Pago a empleados</h1>
+                            <span clas="light" style="color:#FFF;margin:0;font-weight:100;font-size:20px">No tienes pagos pendientes</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div style="clear: both;height: 60px;"></div>
         <div id="cont-succesdocs">
             <div id="texto-succesdocs">

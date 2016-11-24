@@ -2,10 +2,24 @@
 {% block title %}Symplifica - Configuración inicial{% endblock %}
 {% block header %}{% endblock header %}
 {% block fos_user_content %}
-    <div class="col-sm-12 col-xs-12 block-Data">
+    <!-- <div class="col-sm-12 col-xs-12 block-Data">
         <h1>Symplifícate</h1>
         <span style="color: #969696;">Configura tu perfil para que nuestra herramienta haga el trabajo por ti. <br />
           <strong>Completa los 3 pasos y estarás listo para usar Symplifica.</strong></span>
+    </div> -->
+    <div class="col-sm-12 col-xs-12 align-Resp no-Padding-Col azulclaro">
+        <div id="" class="col-sm-12 col-xs-12 blockStep inline  nav-link">
+            <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+                 <img src="/img/block-inline-good.png" class="center-block">
+            </div>
+            <div id="" class="col-md-10 col-xs-12">
+                <div id="" class="text-left">
+                    <h1 style="color:#FFF;margin:15px 0 0;font-weight:600;font-size:25px">Symplifica</h1>
+                    <span style="font-weight:100;color:#FFF;font-size:15px">Configura tu perfil para que nuestra herramienta haga el trabajo por ti. <br />
+                      <strong>Completa los 3 pasos y estarás listo para usar Symplifica.</strong></span>
+                </div>
+            </div>
+        </div>
     </div>
     {% set anteriorListo = true %}
     {% for step in steps %}
@@ -17,6 +31,7 @@
                 </a>
             </div>
         {% else %}
+        <div class="col-sm-12 col-xs-12">
             <div id='' class='col-sm-12 col-xs-12'>
                 <a id='' class='btn col-sm-12 col-xs-12 blockStep {{ (step.class is defined)? step.class: '' }} {% if (step.url=="") %} blocked {% else %}{% if step.state!=100 %} active {% else %} complete {% endif %} {% endif %} nav-link' href="{{step.url}}">
                     <div id='' class='col-md-2 col-xs-12 txt-AD0' style="text-align: left;">
@@ -39,6 +54,7 @@
                     {% endif %}
                 </div>
             </a>
+          </div>
         </div>
     {% endif %}
 

@@ -81,11 +81,43 @@
           padding: 60px 0;
           border-radius: 5px;
         }
+
+        @media only screen and (max-width: 600px) {
+          #headInfo {width: 90%}
+        }
     </style>
 {% endblock stylesheet %}
 {% block fos_user_content %}
 
-    <div class="media">
+    <div class="col-sm-12 col-xs-12 align-Resp no-Padding-Col azulclaro">
+      {% if result== 'e' %}
+          <div id="" class="col-sm-12 col-xs-12 blockStep inline  nav-link">
+              <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+                   <img src="{{ asset('public/img/home/payfail.png') }}" class="center-block">
+              </div>
+              <div id="" class="col-md-10 col-xs-12">
+                  <div id="" class="text-left">
+                      <h1 style="color:#FFF;margin:25px 0 0;font-size:25px" class="bold">Orden de pago fallida</h1>
+                      <span clas="light" style="color:#FFF;margin:0;font-weight:100;font-size:20px">Hubo un problema con tu orden de pago</span>
+                  </div>
+              </div>
+          </div>
+        {% else %}
+        <div id="" class="col-sm-12 col-xs-12 blockStep inline  nav-link">
+            <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+                 <img src="{{ asset('public/img/home/paysucc.png') }}" class="center-block">
+            </div>
+            <div id="" class="col-md-10 col-xs-12">
+                <div id="" class="text-left">
+                    <h1 style="color:#FFF;margin:25px 0 0;font-size:25px" class="bold">Orden de pago exitosa</h1>
+                    <span clas="light" style="color:#FFF;margin:0;font-weight:100;font-size:20px">Recibimos tu orden de pago</span>
+                </div>
+            </div>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- <div class="media">
         {% if result== 'e' %}
             <div class="media-left">
                 <span class="glyphicon glyphicon-remove-circle fa-2x"></span>
@@ -101,7 +133,7 @@
                 <h4 class="media-heading" style="padding: 5px 0 0 0;color: #435160;font-size:24px">Orden de pago exitosa</h4>
             </div>
         {% endif %}
-    </div>
+    </div> -->
     <div>
         {% if result== 'e' %}
         <div class="text-center">
@@ -134,17 +166,17 @@
                 <ul>
                     {% for pods in po.purchaseOrderDescriptions %}
                         <li class="left light">{{ pods.description }}</li> <!--falta variable empleado-->
-                        <li class="right light">${{ pods.value|number_format(0, '.', ',')  }}</li>
+                        <li class="right bold">${{ pods.value|number_format(0, '.', ',')  }}</li>
                     {% endfor %}
                 </ul>
                 {% endif %}
             </div>
             <div id="importantInfo" class="margin">
-                <h2 class="bold borderBott azulclarofont">Ten presente lo siguiente</h2>
-                <div class="faqCont">
-                    <h2 class="light grisclarofont">¿Cuándo recibirá el pago mi empleado?</h2>
+                <h2 class="light azulclarofont">Ten presente lo siguiente</h2>
+                <div>
+                    <h4 class="light grisclarofont">¿Cuándo recibirá el pago mi empleado?</h4>
                     <p class="light grisclarofont">Depende de la entidad bancaria, tu empleado recibirá el pago en un máximo de 3 días hábiles.</p>
-                    <h2 class="light grisclarofont">¿Cuándo recibiré mi factura?</h2>
+                    <h4 class="light grisclarofont">¿Cuándo recibiré mi factura?</h4>
                     <p class="light grisclarofont">Recibirás una copia en cuanto la transacción sea aprobada. Tambien podrás revisarla en cualquier momento en el histórico de pagos.</p>
                 </div>
             </div>
@@ -153,7 +185,10 @@
                 <a href="{{ url }}" class="btn btn-orange notAjax" >Descargar Factura</a>
             </div>-->
         {% endif %}
-
+        <br /><br />
+        <div class="text-center">
+            <a href="{{ path('payroll') }}" class="btn btn-orange notAjax">Terminar</a>
+        </div>
     </div>
 
 {% endblock %}
