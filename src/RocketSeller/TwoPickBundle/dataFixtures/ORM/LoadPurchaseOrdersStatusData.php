@@ -190,7 +190,7 @@ class LoadPurchaseOrdersStatusData extends AbstractFixture implements OrderedFix
 	
 		    //Estados para carga de planilla en el operador de pila
 		    $PurchaseOrdersStatusCargaPlanilla1 = new PurchaseOrdersStatus();
-		    $PurchaseOrdersStatusCargaPlanilla1->setName('Planilla no enviada');
+		    $PurchaseOrdersStatusCargaPlanilla1->setName('Planilla error al enviar');
 		    $PurchaseOrdersStatusCargaPlanilla1->setDescription('El servicio generó error al momento de intentar llamar el proceso de carga');
 		    $PurchaseOrdersStatusCargaPlanilla1->setIdNovoPay('CarPla-ErrSer');
 		    $manager->persist($PurchaseOrdersStatusCargaPlanilla1);
@@ -220,7 +220,7 @@ class LoadPurchaseOrdersStatusData extends AbstractFixture implements OrderedFix
 		    $manager->persist($PurchaseOrdersStatusCargaPlanilla6);
 	
 		    $PurchaseOrdersStatusCargaPlanilla7 = new PurchaseOrdersStatus();
-		    $PurchaseOrdersStatusCargaPlanilla7->setName('Planilla no enviada');
+		    $PurchaseOrdersStatusCargaPlanilla7->setName('Planilla no enviada, tiene novedades');
 		    $PurchaseOrdersStatusCargaPlanilla7->setDescription('Hay novedades entonces no se envia');
 		    $PurchaseOrdersStatusCargaPlanilla7->setIdNovoPay('CarPla-ErrNov');
 		    $manager->persist($PurchaseOrdersStatusCargaPlanilla7);
