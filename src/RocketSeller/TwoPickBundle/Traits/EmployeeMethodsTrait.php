@@ -1782,6 +1782,7 @@ trait EmployeeMethodsTrait
         /** @var User $user */
         $user = $realUser;
         $this->activate150KCampaign($user);
+        $em = $this->getDoctrine()->getManager();
         $effectiveDate = $user->getLastPayDate();
         $isFreeMonths = $user->getIsFree();
         if($isFreeMonths==0){
@@ -1816,12 +1817,15 @@ trait EmployeeMethodsTrait
                     $realToPay->addPurchaseOrderDescription($symplificaPOD);
                     $realToPay->setPurchaseOrdersStatus($procesingStatus);
                     $user->addPurchaseOrder($realToPay);
-                    $em = $this->getDoctrine()->getManager();
                     $em->persist($user);
                     $em->flush();
+                    break;
                 }
             }
         }
+        $eHE->setState(3);
+        $em->persist($eHE);
+        $em->flush();
 
     }
 
