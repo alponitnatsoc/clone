@@ -773,11 +773,13 @@ class HighTechRestController extends FOSRestController
 			$singleTransaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
 
 			$employer = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer')->findOneBy(array('existentPila' => $singleTransaction->getIdTransaction()));
-			$employer->setExistentPila(-1);
-
-			$em->persist($employer);
-			$em->flush();
-
+			
+			if($employer != null){
+				$employer->setExistentPila(-1);
+				
+				$em->persist($employer);
+				$em->flush();
+			}
 		}
 		else if( $parameters['registerState'] != -1 ){
 			$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'InsPil-InsRec'));
