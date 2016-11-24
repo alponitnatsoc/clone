@@ -507,7 +507,7 @@ class SubscriptionController extends Controller
         $promoTypeRef = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCodeType")->find(6);
         /** @var User $user */
         $user = $this->getUser();
-        if(!$user->getPromoCodeClaimedByRefirodor()) {
+        if(!$user->getPromoCodeClaimedByReferidor()) {
             /** @var PromotionCode $promoCode */
             foreach ($user->getPromoCodes() as $promoCode) {
                 if ($promoCode->getPromotionCodeTypePromotionCodeType() == $promoTypeRef) {

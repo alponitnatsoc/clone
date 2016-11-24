@@ -2063,6 +2063,7 @@ class BackOfficeController extends Controller
 			
 			$userArray = array();
 			$phoneArray = array();
+            $codeArray = array();
 			
 			/** @var EmployerHasEmployee $ehe */
 			foreach ($filteredEheRepo as $ehe) {
@@ -2072,12 +2073,15 @@ class BackOfficeController extends Controller
 				/** @var User $userFound */
 				$userFound = $userRepo->findOneBy(array('personPerson' => $personFound));
 				array_push($userArray, $userFound->getEmail());
-				
+
+                array_push($codeArray, $userFound->getCode());
+
 				/** @var Phone $personP */
 				$personP = $personFound->getPhones()->first();
 				array_push($phoneArray, $personP ? $personP->getPhoneNumber(): "");
+                
 			}
 			
-			return $this->render('RocketSellerTwoPickBundle:BackOffice:personalInfoView.html.twig', array('ehes' => $filteredEheRepo, 'usersEmail' => $userArray, 'usersPhone' => $phoneArray));
+			return $this->render('RocketSellerTwoPickBundle:BackOffice:perso nalInfoView.html.twig', array('ehes' => $filteredEheRepo, 'usersEmail' => $userArray, 'usersPhone' => $phoneArray, 'usersCode' => $codeArray));
 		}
 }
