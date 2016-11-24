@@ -666,4 +666,18 @@ class Action
     {
         return $this->calculatedAt;
     }
+
+    /**
+     * Set firstErrorAt
+     *
+     * @param \DateTime $firstErrorAt
+     *
+     * @return Action
+     */
+    public function setFirstErrorAt($firstErrorAt)
+    {
+        $this->firstErrorAt = $firstErrorAt;
+
+        return $this;
+    }
 }
