@@ -642,7 +642,7 @@ class PayrollRestSecuredController extends FOSRestController
 				              "GSCAccount" => $person->getEmployer()->getIdHighTech(),
 				              "FileToUpload" => json_decode($insertionAnswerTextFile->getContent(), true)['fileToSend']
 			              ));
-			              $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postUploadFileToPilaOperator', array('_format' => 'json'));
+			              $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postUploadFileToPilaOperator', array('request' => $request) , array('_format' => 'json'));
 			              if ($insertionAnswer->getStatusCode() == 200) {
 				              //Received succesfully
 				              $radicatedNumber = json_decode($insertionAnswer->getContent(), true)["numeroRadicado"];

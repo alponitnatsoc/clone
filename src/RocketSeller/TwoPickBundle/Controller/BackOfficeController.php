@@ -1884,7 +1884,7 @@ class BackOfficeController extends Controller
 						"GSCAccount" => $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getIdHighTech(),
 						"FileToUpload" => json_decode($insertionAnswerTextFile->getContent(), true)['fileToSend']
 					));
-					$insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postUploadFileToPilaOperator', array('_format' => 'json'));
+					$insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postUploadFileToPilaOperator', array('request' => $request) ,  array('_format' => 'json'));
 					if ($insertionAnswer->getStatusCode() == 200) {
 						//Received succesfully
 						$radicatedNumber = json_decode($insertionAnswer->getContent(), true)["numeroRadicado"];
@@ -2086,6 +2086,9 @@ class BackOfficeController extends Controller
 		}
 	
 	public function uploadFileUsingPilaBotAction($idPod){
+		
+		$request = new Request();
+			
 		$em = $this->getDoctrine()->getManager();
 		$podRepo = $em->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription');
 		$singlePod = $podRepo->find($idPod);
@@ -2094,74 +2097,71 @@ class BackOfficeController extends Controller
 		
 		foreach($payrolls as $payroll){
 			$podPila = $payroll->getPila();
+		
+			$payrollsPila = $podPila->getPayrollsPila();
+			$haveNovelties = false;
 			
-			if($podPila->getUploadedFile() == NULL){
-				
-				$payrollsPila = $podPila->getPayrollsPila();
-				$haveNovelties = false;
-				
-				$payrollRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
-				
-				/** @var Payroll $payrollPila */
-				foreach ( $payrollsPila as $payrollPila ){
-					if( count($payrollPila->getNovelties()) > 0){
-						$haveNovelties = true;
-						break;
-					}
-					//If is Quincenal we need to check the first payroll of the month to see If we have novelties
-					if($payrollPila->getContractContract()->getFrequencyFrequency()->getPayrollCode() == "Q"){
-						$singlePayroll = $payrollRepo->findOneBy(array('contractContract' => $payrollPila->getContractContract() , 'period' => 2 , 'year' => $payrollPila->getYear() , 'month' => $payrollPila->getMonth()) );
-						if($singlePayroll != NULL){
-							if( count($singlePayroll->getNovelties()) > 0){
-								$haveNovelties = true;
-								break;
-							}
+			$payrollRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
+			
+			/** @var Payroll $payrollPila */
+			foreach ( $payrollsPila as $payrollPila ){
+				if( count($payrollPila->getNovelties()) > 0){
+					$haveNovelties = true;
+					break;
+				}
+				//If is Quincenal we need to check the first payroll of the month to see If we have novelties
+				if($payrollPila->getContractContract()->getFrequencyFrequency()->getPayrollCode() == "Q"){
+					$singlePayroll = $payrollRepo->findOneBy(array('contractContract' => $payrollPila->getContractContract() , 'period' => 2 , 'year' => $payrollPila->getYear() , 'month' => $payrollPila->getMonth()) );
+					if($singlePayroll != NULL){
+						if( count($singlePayroll->getNovelties()) > 0){
+							$haveNovelties = true;
+							break;
 						}
 					}
 				}
-				
-				$transactionType = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:TransactionType')->findOneBy(array('code' => 'CPla'));
-				
-				$transaction = new Transaction();
-				$transaction->setTransactionType($transactionType);
-				
-				if($haveNovelties == false) {
-					$request->setMethod("GET");
-					$insertionAnswerTextFile = $this->forward('RocketSellerTwoPickBundle:PilaPlainTextRest:getMonthlyPlainText', array('podId' => $podPila->getIdPurchaseOrdersDescription(), 'download' => 'generate'), array('_format' => 'json'));
-					
-					$request->setMethod("POST");
-					$request->request->add(array(
-						"GSCAccount" => $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getIdHighTech(),
-						"FileToUpload" => json_decode($insertionAnswerTextFile->getContent(), true)['fileToSend']
-					));
-					$insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postUploadFileToPilaOperator', array('_format' => 'json'));
-					if ($insertionAnswer->getStatusCode() == 200) {
-						//Received succesfully
-						$radicatedNumber = json_decode($insertionAnswer->getContent(), true)["numeroRadicado"];
-						$transaction->setRadicatedNumber($radicatedNumber);
-						$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-PlaEnv'));
-					} else {
-						//If some kind of error
-						$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-ErrSer'));
-					}
-				}
-				else {
-					$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-ErrNov'));
-				}
-				
-				$em = $this->getDoctrine()->getManager();
-				$transaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
-				$em->persist($transaction);
-				$em->flush();
-				$podPila->setUploadedFile($transaction->getIdTransaction());
-				$podPila->addTransaction($transaction);
-				$em->persist($podPila);
-				$em->flush();
-				
 			}
+			
+			$transactionType = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:TransactionType')->findOneBy(array('code' => 'CPla'));
+			
+			$transaction = new Transaction();
+			$transaction->setTransactionType($transactionType);
+			
+			if($haveNovelties == false) {
+				$request->setMethod("GET");
+				$insertionAnswerTextFile = $this->forward('RocketSellerTwoPickBundle:PilaPlainTextRest:getMonthlyPlainText', array('podId' => $podPila->getIdPurchaseOrdersDescription(), 'download' => 'generate'), array('_format' => 'json'));
+				
+				$request->setMethod("POST");
+				$request->request->add(array(
+					"GSCAccount" => $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getIdHighTech(),
+					"FileToUpload" => json_decode($insertionAnswerTextFile->getContent(), true)['fileToSend']
+				));
+				$insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postUploadFileToPilaOperator', array('request' => $request) , array('_format' => 'json'));
+				if ($insertionAnswer->getStatusCode() == 200) {
+					//Received succesfully
+					$radicatedNumber = json_decode($insertionAnswer->getContent(), true)["numeroRadicado"];
+					$transaction->setRadicatedNumber($radicatedNumber);
+					$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-PlaEnv'));
+				} else {
+					//If some kind of error
+					$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-ErrSer'));
+				}
+			}
+			else {
+				$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-ErrNov'));
+			}
+			
+			$em = $this->getDoctrine()->getManager();
+			$transaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
+			$em->persist($transaction);
+			$em->flush();
+			$podPila->setUploadedFile($transaction->getIdTransaction());
+			$podPila->addTransaction($transaction);
+			$em->persist($podPila);
+			$em->flush();
 			
 		}
 		
+		return $this->redirectToRoute('show_pilas');
 	}
 	
 	public function downloadPlanillaLogAction($podId)

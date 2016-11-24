@@ -261,7 +261,7 @@ back_personal_info_view:
     path:         /backoffice/personal/info/view
     defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:personalInfoView }
 back_upload_planilla_file:
-    path:         /backoffice/upload/{podId}/planilla
+    path:         /backoffice/upload/{idPod}/planilla
     defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:uploadFileUsingPilaBot }
 back_download_planilla_log:
     path:         /backoffice/download/{podId}/planilla/log
