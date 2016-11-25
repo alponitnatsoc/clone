@@ -42,6 +42,10 @@ routes:
     path:     /routes
     defaults: { _controller: RocketSellerTwoPickBundle:Default:getAllRoutes }
 
+#Back Office SELLS
+sells_dashboard:
+    path:     /ventas
+    defaults: { _controller: RocketSellerTwoPickBundle:SellsBackOffice:index}
 #Back Office
 back_office:
     path:     /backoffice
@@ -260,3 +264,9 @@ back_set_referidos_code_allready_in_promocode:
 back_personal_info_view:
     path:         /backoffice/personal/info/view
     defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:personalInfoView }
+back_upload_planilla_file:
+    path:         /backoffice/upload/{idPod}/planilla
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:uploadFileUsingPilaBot }
+back_download_planilla_log:
+    path:         /backoffice/download/{podId}/planilla/log
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:downloadPlanillaLog }

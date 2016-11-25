@@ -171,7 +171,7 @@ class HighTechRestController extends FOSRestController
             $context = array(
                 'emailType'=>'succesRecollect',
                 'toEmail' => $dis->getIdUser()->getEmail(),
-                'userName' => $dis->getIdUser()->getPersonPerson()->getFullName(),
+                'userName' => $dis->getIdUser()->getPersonPerson()->getNames(),
                 'fechaRecaudo' => $date,
                 'value'=>$dis->getValue(),
                 'path'=>$path,
@@ -773,11 +773,13 @@ class HighTechRestController extends FOSRestController
 			$singleTransaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
 
 			$employer = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer')->findOneBy(array('existentPila' => $singleTransaction->getIdTransaction()));
-			$employer->setExistentPila(-1);
-
-			$em->persist($employer);
-			$em->flush();
-
+			
+			if($employer != null){
+				$employer->setExistentPila(-1);
+				
+				$em->persist($employer);
+				$em->flush();
+			}
 		}
 		else if( $parameters['registerState'] != -1 ){
 			$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'InsPil-InsRec'));

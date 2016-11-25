@@ -21,6 +21,7 @@
                     <th style="width: 10%">Valor</th>
                     <th style="width: 30%">Número de planilla</th>
                     <th style="width: 10%">Estado carga</th>
+                    <th style="width: 10%">Detalle del estado</th>
                     <th style="width: 10%">Archivo de pila</th>
                 </tr>
                 <tr>
@@ -31,6 +32,7 @@
                     <th class="th1" style="width: 10%">Valor de la Pila</th>
                     <th class="th1" style="width: 30%">Número de planilla</th>
                     <th class="th1" style="width: 10%">Estado carga</th>
+                    <th class="th1" style="width: 10%">Archivo de Errores/Advertencias</th>
                     <th class="th1" style="width: 10%">Archivo de pila</th>
                 </tr>
                 </thead>
@@ -38,38 +40,62 @@
                 {% for pila in pilas %}
                     {% set index = loop.index0 %}
                     {% set fileType =  tipoPlanilla[index] %}
-                    {% set fileStoredName = pila.enlaceOperativoFileName %}
+                    {% if pila.enlaceOperativoFileName == null %}
+                        {% set fileStoredName = "" %}
+                    {% else %}
+                        {% set fileStoredName = pila.enlaceOperativoFileName %}
+                    {% endif %}
                     {% set idFileName = "fileName" ~ pila.idPurchaseOrdersDescription  %}
                     {% set idFileNameButton = pila.idPurchaseOrdersDescription  %}
                     <tr>
-                      <td style="vertical-align: middle">{{ pila.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.fullName }}</td>
-                      <td style="vertical-align: middle">{{ pila.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.document }}</td>
-                      <td style="vertical-align: middle">{{ utils.month_number_to_name(pila.payrollsPila[0].month) }}</td>
-                      <td style="vertical-align: middle">Id: {{ pila.idPurchaseOrdersDescription }} - Tipo: {{ fileType }}</td>
-                      <td style="vertical-align: middle">$ {{ pila.value|number_format(0) }} </td>
-                      <td style="vertical-align: middle;"> <input id= {{idFileName}} value="{{ fileStoredName }}" size="10"></input> <div style="display: inline-block"><button id= {{idFileNameButton}} class="saveId">Guardar Sin Aprobar</button><button id= {{idFileNameButton}} class="okId">Guardar y Aprobar</button></div></td>
-                      <td style="vertical-align: middle">
-                          {% if pila.uploadedFile == NULL %}
-                              El usuario no ha pagado aún
-                          {% elseif pila.uploadedFile == -1 %}
-                              La planilla subió sin errores ni advertencias
-                          {% elseif pila.uploadedFile == -2 %}
-                              Operaciones no ha aprobado la planilla
-                          {% elseif pila.uploadedFile > 0 %}
-                            {% for trans in pila.transactions %}
-                                {% if trans.idTransaction ==  pila.uploadedFile %}
-                                   {{ trans.purchaseOrdersStatus.name }}
-                                {% endif %}
-                            {% endfor %}
-                          {% endif %}
-                      </td>
-                      <td style="vertical-align: middle"> <button type"button" onclick="location.href = '/api/public/v1/secured/monthlies/{{pila.idPurchaseOrdersDescription}}/plains/download/text';">Generar Archivo</button></td>
+                        <td style="vertical-align: middle">{{ pila.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.fullName }}</td>
+                        <td style="vertical-align: middle">{{ pila.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.document }}</td>
+                        <td style="vertical-align: middle">{{ utils.month_number_to_name(pila.payrollsPila[0].month) }}</td>
+                        <td style="vertical-align: middle">Id: {{ pila.idPurchaseOrdersDescription }} - Tipo: {{ fileType }}</td>
+                        <td style="vertical-align: middle">$ {{ pila.value|number_format(0) }} </td>
+                        <td style="vertical-align: middle;"> <input id= {{idFileName}} value="{{ fileStoredName }}" size="10"></input> <div style="display: inline-block"><button id= "GS{{idFileNameButton}}" class="saveId" onclick=" if( document.getElementById('{{idFileName}}').value != '') location.href = '/backoffice/planilla/persista/'+document.getElementById('{{idFileName}}').value+'/{{pila.idPurchaseOrdersDescription}}/notok';">Guardar Sin Aprobar</button><button id= "GA{{idFileNameButton}}" class="okId" onclick=" if( document.getElementById('{{idFileName}}').value != '') location.href = '/backoffice/planilla/persista/'+document.getElementById('{{idFileName}}').value+'/{{pila.idPurchaseOrdersDescription}}/ok';">Guardar y Aprobar</button></div></td>
+                        <td style="vertical-align: middle">
+                            {% if pila.uploadedFile == NULL %}
+                                El usuario no ha pagado aún
+                            {% elseif pila.uploadedFile == -1 %}
+                                La planilla subió sin errores ni advertencias
+                            {% elseif pila.uploadedFile == -2 %}
+                                Operaciones no ha aprobado la planilla
+                            {% elseif pila.uploadedFile > 0 %}
+                                {% for trans in pila.transactions %}
+                                    {% if trans.idTransaction ==  pila.uploadedFile %}
+                                        {{ trans.purchaseOrdersStatus.name }}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                        <td style="vertical-align: middle">
+                            {% if pila.uploadedFile != NULL and pila.uploadedFile > 0 %}
+                                {% for trans in pila.transactions %}
+                                    {% if trans.idTransaction ==  pila.uploadedFile and ( (trans.purchaseOrdersStatus.idNovoPay == "CarPla-PlaErr") or (trans.purchaseOrdersStatus.idNovoPay == "CarPla-PlaWar") ) %}
+                                        {% if trans.transactionState.document != NULL %}
+                                            <button id= "DI{{idFileNameButton}}" class="downloadId" onclick="location.href = '/backoffice/download/{{idFileNameButton}}/planilla/log';">Descargar imagen</button>
+                                        {% else %}
+                                            {% if pila.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.existentPila == -1 %}
+                                                Está inscrito a Enlace Operativo pero presentó un error al subir
+                                            {% elseif pila.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.existentPila != NULL %}
+                                                La inscripción a Enlace Operativo se envió pero al parecer falló
+                                            {% else %}
+                                                No está inscrito a Enlace Operativo
+                                            {% endif %}
+                                        {% endif %}
+                                    {% elseif  trans.idTransaction ==  pila.uploadedFile and  trans.purchaseOrdersStatus.idNovoPay == "CarPla-ErrSer" %}
+                                        <button id= "VE{{idFileNameButton}}" class="uploadId" onclick="location.href = '/backoffice/upload/{{idFileNameButton}}/planilla';">Volver a enviar</button>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                        <td style="vertical-align: middle"> <button type"button" onclick="location.href = '/api/public/v1/secured/monthlies/{{pila.idPurchaseOrdersDescription}}/plains/download/text';">Generar Archivo</button></td>
                     </tr>
                 {% endfor %}
                 </tbody>
 
             </table>
-        </div>
         </div>
     </div>
 {% endblock %}
@@ -101,8 +127,9 @@
             } );
         } );
 
-        $(".saveId").on("click", function() {
+        /*$(".saveId").on("click", function() {
             var idToRetrieve = $(this).attr("id");
+            idToRetrieve = idToRetrieve.substring(2);
             var valToStoreFrom = "fileName" + idToRetrieve;
             var valToStore = $("#" + valToStoreFrom).val();
 
@@ -113,13 +140,26 @@
 
         $(".okId").on("click", function() {
             var idToRetrieve = $(this).attr("id");
+            idToRetrieve = idToRetrieve.substring(2);
             var valToStoreFrom = "fileName" + idToRetrieve;
             var valToStore = $("#" + valToStoreFrom).val();
 
-            if(valToStore != ""){
-                location.href = "/backoffice/planilla/persista/"+valToStore+"/"+idToRetrieve+"/ok";
-            }
+                if(valToStore != ""){
+                    location.href = "/backoffice/planilla/persista/"+valToStore+"/"+idToRetrieve+"/ok";
+                }
         });
+
+        $(".uploadId").on("click", function() {
+            var podId = $(this).attr("id");
+            podId = podId.substring(2);
+            location.href = "/backoffice/upload/"+podId+"/planilla";
+        });
+
+        $(".downloadId").on("click", function() {
+            var podId = $(this).attr("id");
+            podId = podId.substring(2);
+            location.href = "/backoffice/download/"+podId+"/planilla/log";
+        });*/
     });
     </script>
 

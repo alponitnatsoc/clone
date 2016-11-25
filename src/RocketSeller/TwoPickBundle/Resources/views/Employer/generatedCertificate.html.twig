@@ -46,9 +46,24 @@
 {% endblock %}
 
 {% block content %}
-    <div class="center certificatesucces">
-        <div class="glyphicon glyphicon-ok-sign"></div>El certificado fue creado exitosamente.
+    <div>
+       <div class="col-sm-12 col-xs-12 align-Resp azulclaro">
+           <div id="" class=" col-sm-12 col-xs-12 blockStep inline  nav-link" >
+               <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+                    <img src="/public/img/home/paysucc.png" class="center-block">
+               </div>
+               <div id="" class="col-md-10 col-xs-12">
+                   <div id="" class="text-left">
+                       <h1 style="color:#FFF;margin:25px 0 0;font-size:25px" class="bold">¡Hola {{ app.user.getPersonPerson().getNames() }}!</h1>
+                       <span clas="light" style="color:#FFF;margin:0;font-weight:100;font-size:20px">El certificado fue creado exitosamente</span>
+                   </div>
+               </div>
+           </div>
+       </div>
     </div>
+    <!-- <div class="center certificatesucces">
+        <div class="glyphicon glyphicon-ok-sign"></div>El certificado fue creado exitosamente.
+    </div> -->
 
     <div class="center col-md-12 col-sm-12 campofechascert">
         <div class="col-md-3 col-sm-3">

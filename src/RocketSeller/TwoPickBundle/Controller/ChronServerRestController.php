@@ -361,12 +361,12 @@ class ChronServerRestController extends FOSRestController
                             if($isLastPayDay) {
                                 $send = $smailer->sendEmailByTypeMessage(array('emailType' => 'lastReminderPay',
                                     'toEmail' => $user->getEmail(),
-                                    'userName' => $user->getPersonPerson()->getFullName(),
+                                    'userName' => $user->getPersonPerson()->getNames(),
                                     'days' => 2));
                             } else {
                                 $send = $smailer->sendEmailByTypeMessage(array('emailType' => 'reminderPay',
                                     'toEmail' => $user->getEmail(),
-                                    'userName' => $user->getPersonPerson()->getFullName(),
+                                    'userName' => $user->getPersonPerson()->getNames(),
                                     'isEfectivo' => $isEfectivo,
                                     'days' => 2));
                             }
@@ -374,12 +374,12 @@ class ChronServerRestController extends FOSRestController
                             if($isLastPayDay) {
                                 $send = $smailer->sendEmailByTypeMessage(array('emailType' => 'lastReminderPay',
                                     'toEmail' => $user->getEmail(),
-                                    'userName' => $user->getPersonPerson()->getFullName(),
+                                    'userName' => $user->getPersonPerson()->getNames(),
                                     'days' => 3));
                             } else {
                                 $send = $smailer->sendEmailByTypeMessage(array('emailType' => 'reminderPay',
                                     'toEmail' => $user->getEmail(),
-                                    'userName' => $user->getPersonPerson()->getFullName(),
+                                    'userName' => $user->getPersonPerson()->getNames(),
                                     'isEfectivo' => $isEfectivo,
                                     'days' => 3));
                             }

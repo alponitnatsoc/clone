@@ -1,0 +1,29 @@
+{% extends "RocketSellerTwoPickBundle:Sells:sellsBackOfficeBase.html.twig" %}
+
+{% block fos_user_content %}
+    <div id="main" class="col-sm-10">
+        <div class="col-md-12">
+            <div class="panel panel-title">
+                Herramientas Administrativas
+            </div>
+            {% if msn is defined %}<h1>{{ msn }}</h1>{% endif%}
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script>
+    $("#form_newPWS").parent().hide();
+
+    $("#form_actionType").on("change", function(){
+        if($(this).val()=="PWS"){
+            $("#form_newPWS").parent().show();
+        }else {
+            $("#form_newPWS").parent().hide();
+        }
+    });
+</script>
+{% endblock %}
