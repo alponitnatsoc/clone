@@ -171,7 +171,7 @@ class HighTechRestController extends FOSRestController
             $context = array(
                 'emailType'=>'succesRecollect',
                 'toEmail' => $dis->getIdUser()->getEmail(),
-                'userName' => $dis->getIdUser()->getPersonPerson()->getFullName(),
+                'userName' => $dis->getIdUser()->getPersonPerson()->getNames(),
                 'fechaRecaudo' => $date,
                 'value'=>$dis->getValue(),
                 'path'=>$path,
