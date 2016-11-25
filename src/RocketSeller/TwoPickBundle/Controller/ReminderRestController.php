@@ -299,11 +299,11 @@ class ReminderRestController extends FOSRestController
                                     $context = array(
                                         'emailType'=>'daviplataReminder',
                                         'toEmail'=>$user->getEmail(),
-                                        'userName'=>$user->getPersonPerson()->getFullName(),
+                                        'userName'=>$user->getPersonPerson()->getNames(),
                                         'employeeName'=>$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName()
                                     );
                                     $send = $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
-                                    $response = $response . "- - - Usuario= ".$user->getPersonPerson()->getFullName()." Empleado: ".$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName()."<br><br>";
+                                    $response = $response . "- - - Usuario= ".$user->getPersonPerson()->getNames()." Empleado: ".$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName()."<br><br>";
                                     if($send){
                                         $enviado=true;
                                         $response = $response."- - -ENVIO EL CORREO<br><br>";
@@ -337,7 +337,7 @@ class ReminderRestController extends FOSRestController
                                     $context = array(
                                         'emailType'=>'daviplataReminder',
                                         'toEmail'=>$user->getEmail(),
-                                        'userName'=>$user->getPersonPerson()->getFullName(),
+                                        'userName'=>$user->getPersonPerson()->getNames(),
                                         'employeeName'=>$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName()
                                     );
                                     $send = $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);

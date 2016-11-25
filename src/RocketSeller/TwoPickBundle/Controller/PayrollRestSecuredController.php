@@ -888,7 +888,7 @@ class PayrollRestSecuredController extends FOSRestController
             $context=array(
                 'emailType'=>'transactionAcepted',
                 'toEmail'=>$procesingPurchaseOrder->getIdUser()->getEmail(),
-                'userName'=>$procesingPurchaseOrder->getIdUser()->getPersonPerson()->getFullName(),
+                'userName'=>$procesingPurchaseOrder->getIdUser()->getPersonPerson()->getNames(),
                 'po' => $procesingPurchaseOrder
             );
             $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
@@ -914,7 +914,7 @@ class PayrollRestSecuredController extends FOSRestController
             $context=array(
                 'emailType'=>'transactionRejected',
                 'toEmail'=>$rejectedPurchaseOrder->getIdUser()->getEmail(),
-                'userName'=>$rejectedPurchaseOrder->getIdUser()->getPersonPerson()->getFullName(),
+                'userName'=>$rejectedPurchaseOrder->getIdUser()->getPersonPerson()->getNames(),
                 'rejectionDate'=>new DateTime()
             );
             $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
