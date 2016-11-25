@@ -796,7 +796,7 @@ trait SubscriptionMethodsTrait
         ));
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClient', array('_format' => 'json'));
         if ($insertionAnswer->getStatusCode() == 406 || $insertionAnswer->getStatusCode() == 201) {
-            $request->setMethod("POST");
+            /*$request->setMethod("POST");
             $request->request->add(array(
                 "documentType" => "NIT",
                 "beneficiaryId" => "900862831",
@@ -818,7 +818,7 @@ trait SubscriptionMethodsTrait
             $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postBeneficiary', array('_format' => 'json'));
             if (!($insertionAnswer->getStatusCode() == 201 || $insertionAnswer->getStatusCode() == 406)) {
                 return false;
-            }
+            }*/
         }else{
             return false;
         }
