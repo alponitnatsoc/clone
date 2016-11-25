@@ -122,7 +122,9 @@
                 }
             } );
         } );
+    });
 
+    $(document).done(function () {
         $(".saveId").on("click", function() {
             var idToRetrieve = $(this).attr("id");
             idToRetrieve = idToRetrieve.substring(2);
@@ -130,7 +132,7 @@
             var valToStore = $("#" + valToStoreFrom).val();
 
             if(valToStore != ""){
-              location.href = "/backoffice/planilla/persista/"+valToStore+"/"+idToRetrieve+"/notok";
+                location.href = "/backoffice/planilla/persista/"+valToStore+"/"+idToRetrieve+"/notok";
             }
         });
 
@@ -140,9 +142,9 @@
             var valToStoreFrom = "fileName" + idToRetrieve;
             var valToStore = $("#" + valToStoreFrom).val();
 
-                if(valToStore != ""){
-                    location.href = "/backoffice/planilla/persista/"+valToStore+"/"+idToRetrieve+"/ok";
-                }
+            if(valToStore != ""){
+                location.href = "/backoffice/planilla/persista/"+valToStore+"/"+idToRetrieve+"/ok";
+            }
         });
 
         $(".uploadId").on("click", function() {

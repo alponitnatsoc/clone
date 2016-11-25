@@ -229,7 +229,7 @@ class PaymentMethodRestController extends FOSRestController
                 $context = array(
                     'emailType'=>'validatePayMethod',
                     'toEmail'=>$realUser->getEmail(),
-                    'userName'=>$realUser->getPersonPerson()->getFullName(),
+                    'userName'=>$realUser->getPersonPerson()->getNames(),
                     'starDate'=>new DateTime(),
                     'payMethod'=>$paramFetcher->get('pay_method')
                 );
@@ -432,13 +432,13 @@ class PaymentMethodRestController extends FOSRestController
                         'emailType'=>'failDispersion',
                         'userEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
                         'toEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
-                        'userName'=>$employerPerson->getFullName(),
+                        'userName'=>$employerPerson->getNames(),
                     );
                     $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
                     $contextBack=array(
                         'emailType'=>'regectionDispersion',
                         'userEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
-                        'userName'=>$employerPerson->getFullName(),
+                        'userName'=>$employerPerson->getNames(),
                         'rejectionDate'=>$fechaRechazo,
                         'toEmail'=> 'backOfficeSymplifica@gmail.com',
                         'phone'=>$employerPerson->getPhones()->first(),
@@ -491,13 +491,13 @@ class PaymentMethodRestController extends FOSRestController
                             'emailType'=>'failDispersion',
                             'userEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
                             'toEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
-                            'userName'=>$employerPerson->getFullName(),
+                            'userName'=>$employerPerson->getNames(),
                         );
                         $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
                         $contextBack=array(
                             'emailType'=>'regectionDispersion',
                             'userEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
-                            'userName'=>$employerPerson->getFullName(),
+                            'userName'=>$employerPerson->getNames(),
                             'rejectionDate'=>$fechaRechazo,
                             'toEmail'=> 'backOfficeSymplifica@gmail.com',
                             'phone'=>$employerPerson->getPhones()->first(),
@@ -578,13 +578,13 @@ class PaymentMethodRestController extends FOSRestController
                         'emailType'=>'failDispersion',
                         'userEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
                         'toEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
-                        'userName'=>$employerPerson->getFullName(),
+                        'userName'=>$employerPerson->getNames(),
                     );
                     $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
                     $contextBack=array(
                         'emailType'=>'regectionDispersion',
                         'userEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
-                        'userName'=>$employerPerson->getFullName(),
+                        'userName'=>$employerPerson->getNames(),
                         'rejectionDate'=>$fechaRechazo,
                         'toEmail'=> 'backOfficeSymplifica@gmail.com',
                         'phone'=>$employerPerson->getPhones()->first(),
