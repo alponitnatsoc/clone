@@ -463,9 +463,9 @@ class PayrollMethodRestController extends FOSRestController
 		      $transaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
 		      $em->persist($transaction);
 		      $em->flush();
-		      $podPila->setUploadedFile($transaction->getIdTransaction());
-		      $podPila->addTransaction($transaction);
-		      $em->persist($podPila);
+		      $singlePod->setUploadedFile($transaction->getIdTransaction());
+		      $singlePod->addTransaction($transaction);
+		      $em->persist($singlePod);
 		      $em->flush();
 	      }
 	    
