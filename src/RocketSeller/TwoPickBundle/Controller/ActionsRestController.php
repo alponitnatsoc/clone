@@ -3390,7 +3390,7 @@ class ActionsRestController extends FOSRestController
                             if(!$corrected and !$error){
                                 if($begin and !$finish){
                                     $procedure->setProcedureStatus($this->getActionStatusByStatusCode('STRT'));
-                                }elseif($finish){
+                                }elseif($finish and $procedure->getProcedureStatuscode()!='FIN'){
                                     $procedure->setProcedureStatus($this->getActionStatusByStatusCode('FIN'));
                                     foreach ($procedure->getEmployerEmployer()->getEmployerHasEmployees() as $ehe){
                                         $ehe->setDocumentStatusType($this->getDocumentStatusByCode('BOFFFF'));

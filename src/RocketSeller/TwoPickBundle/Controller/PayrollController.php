@@ -255,7 +255,7 @@ class PayrollController extends Controller
                 /** @var PurchaseOrdersDescription $pod */
                 $pod = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')
                     ->find($key);
-                if($pod->getPurchaseOrders()->getPurchaseOrdersStatus() == $poStatusProcesando) {
+	              if($pod->getPurchaseOrders()!=null && $pod->getPurchaseOrders()->getPurchaseOrdersStatus() == $poStatusProcesando) {
                     return $this->redirectToRoute("payroll");
                 }
             }
