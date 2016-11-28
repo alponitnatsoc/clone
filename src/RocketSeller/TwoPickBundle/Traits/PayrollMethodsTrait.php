@@ -315,8 +315,10 @@ trait PayrollMethodsTrait
                         $valueCia=$valueEmp=0;
                         if($pension==null){
                             $pension = new PilaDetail();
-                            $valueCia = $pension->getSqlValueCia();
-                            $valueEmp = $pension->getSqlValueEmp();
+                        }
+                        else{
+		                        $valueCia = $pension->getSqlValueCia();
+		                        $valueEmp = $pension->getSqlValueEmp();
                         }
                         $entity=$entityRepo->findOneBy(array("payroll_code"=>$value["ENT_CODIGO"]));
                         $pension->setEntityEntity($entity);
@@ -329,8 +331,10 @@ trait PayrollMethodsTrait
                         $valueCia=$valueEmp=0;
                         if($arl==null){
                             $arl = new PilaDetail();
-                            $valueCia = $arl->getSqlValueCia();
-                            $valueEmp = $arl->getSqlValueEmp();
+                        }
+                        else{
+		                        $valueCia = $arl->getSqlValueCia();
+		                        $valueEmp = $arl->getSqlValueEmp();
                         }
                         $entity=$entityRepo->findOneBy(array("payroll_code"=>$value["ENT_CODIGO"]));
                         $arl->setEntityEntity($entity);
@@ -343,8 +347,10 @@ trait PayrollMethodsTrait
                         $valueCia=$valueEmp=0;
                         if($salud==null){
                             $salud = new PilaDetail();
-                            $valueCia = $salud->getSqlValueCia();
-                            $valueEmp = $salud->getSqlValueEmp();
+                        }
+                        else{
+		                        $valueCia = $salud->getSqlValueCia();
+		                        $valueEmp = $salud->getSqlValueEmp();
                         }
                         $entity=$entityRepo->findOneBy(array("payroll_code"=>$value["ENT_CODIGO"]));
                         $salud->setEntityEntity($entity);
@@ -357,8 +363,10 @@ trait PayrollMethodsTrait
                         $valueCia=$valueEmp=0;
                         if($parafiscal==null){
                             $parafiscal = new PilaDetail();
-                            $valueCia = $parafiscal->getSqlValueCia();
-                            $valueEmp = $parafiscal->getSqlValueEmp();
+                        }
+                        else{
+		                        $valueCia = $parafiscal->getSqlValueCia();
+		                        $valueEmp = $parafiscal->getSqlValueEmp();
                         }
                         $entity=$entityRepo->findOneBy(array("payroll_code"=>$value["ENT_CODIGO"]));
                         $parafiscal->setEntityEntity($entity);
