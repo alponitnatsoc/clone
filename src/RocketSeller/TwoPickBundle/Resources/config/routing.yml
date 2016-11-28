@@ -266,3 +266,6 @@ back_upload_planilla_file:
 back_download_planilla_log:
     path:         /backoffice/download/{podId}/planilla/log
     defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:downloadPlanillaLog }
+back_fix_broken_pila_bot:
+    path:         /backoffice/fix/broken/pila/bot
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:fixBrokenPilaBot }

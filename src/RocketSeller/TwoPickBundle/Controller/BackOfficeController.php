@@ -2087,6 +2087,8 @@ class BackOfficeController extends Controller
 	
 	public function uploadFileUsingPilaBotAction($idPod){
 		
+		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+		
 		$request = new Request();
 			
 		$em = $this->getDoctrine()->getManager();
@@ -2166,6 +2168,9 @@ class BackOfficeController extends Controller
 	
 	public function downloadPlanillaLogAction($podId)
 	{
+		
+		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+		
 		$em = $this->getDoctrine()->getManager();
 		$podRepo = $em->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription');
 		$singlePod = $podRepo->find($podId);
@@ -2196,5 +2201,93 @@ class BackOfficeController extends Controller
 		ignore_user_abort(true);
 	
 		return $this->redirectToRoute('ajax', array(), 301);
+	}
+	
+	public function fixBrokenPilaBotAction(){
+		
+		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		$podRepo = $em->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription');
+		$brokenPods = $podRepo->findBy(array('enlaceOperativoFileName' => "", 'uploadedFile' => -1));
+		
+		$request = new Request();
+		
+		foreach ($brokenPods as $singlePod){
+			$payrolls = $singlePod->getPayrollsPila();
+			
+			foreach($payrolls as $index => $payroll) {
+				/** @var PurchaseOrdersDescription $podPila */
+				$podPila = $payroll->getPila();
+				
+				$payrollsPila = $podPila->getPayrollsPila();
+				$haveNovelties = false;
+				
+				$payrollRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
+				
+				/** @var Payroll $payrollPila */
+				foreach ($payrollsPila as $payrollPila) {
+					if (count($payrollPila->getNovelties()) > 0) {
+						$haveNovelties = true;
+						break;
+					}
+					//If is Quincenal we need to check the first payroll of the month to see If we have novelties
+					if ($payrollPila->getContractContract()->getFrequencyFrequency()->getPayrollCode() == "Q") {
+						$singlePayroll = $payrollRepo->findOneBy(array('contractContract' => $payrollPila->getContractContract(), 'period' => 2, 'year' => $payrollPila->getYear(), 'month' => $payrollPila->getMonth()));
+						if ($singlePayroll != NULL) {
+							if (count($singlePayroll->getNovelties()) > 0) {
+								$haveNovelties = true;
+								break;
+							}
+						}
+					}
+				}
+				
+				$transactionType = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:TransactionType')->findOneBy(array('code' => 'CPla'));
+				
+				$transaction = new Transaction();
+				$transaction->setTransactionType($transactionType);
+				
+				if ($haveNovelties == false) {
+					$request->setMethod("GET");
+					$insertionAnswerTextFile = $this->forward('RocketSellerTwoPickBundle:PilaPlainTextRest:getMonthlyPlainText', array('podId' => $podPila->getIdPurchaseOrdersDescription(), 'download' => 'generate'), array('_format' => 'json'));
+					
+					$request->setMethod("POST");
+					$request->request->add(array(
+						"GSCAccount" => $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getIdHighTech(),
+						"FileToUpload" => json_decode($insertionAnswerTextFile->getContent(), true)['fileToSend']
+					));
+					$insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postUploadFileToPilaOperator', array('request' => $request), array('_format' => 'json'));
+					if ($insertionAnswer->getStatusCode() == 200) {
+						//Received succesfully
+						$radicatedNumber = json_decode($insertionAnswer->getContent(), true)["numeroRadicado"];
+						$transaction->setRadicatedNumber($radicatedNumber);
+						$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-PlaEnv'));
+					} else {
+						//If some kind of error
+						$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-ErrSer'));
+					}
+				} else {
+					$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-ErrNov'));
+				}
+				
+				$em = $this->getDoctrine()->getManager();
+				$transaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
+				$em->persist($transaction);
+				$em->flush();
+				$podPila->setUploadedFile($transaction->getIdTransaction());
+				$podPila->addTransaction($transaction);
+				$podPila->setEnlaceOperativoFileName("NULL");
+				$em->persist($podPila);
+				$em->flush();
+				
+				if($index == 10){
+					return $this->redirectToRoute('show_pilas');
+				}
+			}
+		}
+		
+		return $this->redirectToRoute('show_pilas');
 	}
 }
