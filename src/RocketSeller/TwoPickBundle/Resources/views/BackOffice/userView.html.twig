@@ -3,198 +3,478 @@
 {% block title %}Vista Usuarios{% endblock %}
 
 {% block fos_user_content %}
-    <div id="main" class="col-sm-15">
-        <div class="col-md-12">
-            <div class="panel panel-title">
-                BackOffice Vista Usuarios
+    <div id="main">
+        <div class="back-panel-title">
+            Vista Usuarios
+        </div>
+        <div class="back-panel">
+            <div class="backoffice-headding">
+                <h4>Información de usuarios</h4>
             </div>
-            <br>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4>Información de los usuarios</h4>
-                </div>
-
+            <table class="table" style="padding: 0px; margin: 0px">
+                <tr>
+                    <th style="font-size: 20px; font-weight: 700">Empleadores</th>
+                </tr>
                 {% for user in users %}
-                    <div>
-                        {% set empPerson = user.personPerson %}
-                        <table class="table">
-                            <tr>
-                                <th>Empleador: {{ empPerson.fullName }}</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <table class="table">
-                                        <tr>
-                                            <th>Id Usuario - Id Person</th>
-                                            <th>Email</th>
-                                            <th>Estado Usuario</th>
-                                            <th>Estado Data Credito</th>
-                                            <th>SMS Validación</th>
-                                            <th>Token Confirmación</th>
-                                        </tr>
-                                        <tr>
-                                            <td>{{ user.id }} - {{ user.personPerson.idPerson }}</td>
-                                            <td>{{ user.email }}</td>
-                                            <td>{{ user.status }}</td>
-                                            <td>{{ user.dataCreditStatus }}</td>
-                                            <td>{{ user.smsCode }}</td>
-                                            <td>{% if user.confirmationToken is defined %}
-                                                    {{ user.confirmationToken }}
-                                                {% endif %}
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <table class="table">
-                                        <tr>
-                                            <th>Nombres Empleador</th>
-                                            <th>Apellidos Empleador</th>
-                                            <th>Tipo de Documento</th>
-                                            <th>Número de Documento</th>
-                                            <th>Fecha de nacimiento</th>
-                                            <th>Número Sociedad SQL</th>
-                                            <th>Id HighTech</th>
-                                            <th>Dirección Empleador</th>
-                                            <th>Telefono Empleador</th>
-                                        </tr>
-                                        <tr>
-                                            <td>{{ empPerson.names }}</td>
-                                            <td>{{ empPerson.lastName1 }} {{ empPerson.lastName2 }}</td>
-                                            <td>{{ empPerson.documentType }}</td>
-                                            <td>{{ empPerson.document }}</td>
-                                            <td>{% if empPerson.birthDate is defined %}
-                                                    {{ empPerson.birthDate|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
-                                                {% endif %}
-                                            </td>
-                                            <td>{% if user.personPerson.employer.idSqlSociety is defined %}
-                                                    {{ user.personPerson.employer.idSqlSociety }}
-                                                {% endif %}
-                                            </td>
-                                            <td>{% if user.personPerson.employer.idHighTech is defined %}
-                                                    {{ user.personPerson.employer.idHighTech }}
-                                                {% endif %}
-                                            </td>
-                                            <td>
-                                                {% if empPerson.department != null %}
-                                                    {{ empPerson.department.name }}
-                                                {% endif %}
-                                                -
-                                                {% if empPerson.city != null %}
-                                                    {{ empPerson.city.name }}
-                                                {% endif %}
-                                                -
-                                                {% if empPerson.mainAddress != null %}
-                                                    {{ empPerson.mainAddress }}
-                                                {% endif %}
-                                            </td>
-                                            <td>
-                                                {% if empPerson.phones|length > 0 %}
-                                                    {{ empPerson.phones.0.phoneNumber }}
-                                                {% endif %}
+                    {% set empPerson = user.personPerson %}
+                    <tr>
+                        <td style="padding: 18px">
+                            <div class="backoffice-headding no-padding" style="margin: 0; padding: 1px 15px; border-radius: 0px ">
+                                {{ empPerson.fullName }}
+                            </div>
+                            <table class="table no-padding" style="margin: 0px;">
+                                <tr>
+                                    <td style="padding: 0px; margin: 0px">
+                                        <table class="table" style="margin: 0px">
+                                            <tr>
+                                                <th>Id Usuario - Id Person</th>
+                                                <th>Email</th>
+                                                <th>Estado Usuario</th>
+                                                <th>Estado Data Credito</th>
+                                                <th>SMS Validación</th>
+                                                <th>Token Confirmación</th>
+                                            </tr>
+                                            <tr>
+                                                <td>{{ user.id }} - {{ user.personPerson.idPerson }}</td>
+                                                <td>{{ user.email }}</td>
+                                                <td>{{ user.status }}</td>
+                                                <td>{{ user.dataCreditStatus }}</td>
+                                                <td>{{ user.smsCode }}</td>
+                                                <td>{% if user.confirmationToken is defined %}
+                                                        {{ user.confirmationToken }}
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0px; margin: 0px">
+                                        <table class="table" style="margin: 0px">
+                                            <tr>
+                                                <th>Id Empleador</th>
+                                                <th>Nombres Empleador</th>
+                                                <th>Apellidos Empleador</th>
+                                                <th>Tipo Documento</th>
+                                                <th>Número Documento</th>
+                                                <th>Fecha de nacimiento</th>
+                                                <th>Número Sociedad SQL</th>
+                                                <th>Id HighTech</th>
+                                                <th>Dirección Empleador</th>
+                                                <th>Telefono Empleador</th>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    {% if user.personPerson.employer.idEmployer is defined %}
+                                                        {{ user.personPerson.employer.idEmployer }}
+                                                    {% endif %}
+                                                </td>
+                                                <td>{{ empPerson.names }}</td>
+                                                <td>{{ empPerson.lastName1 }} {{ empPerson.lastName2 }}</td>
+                                                <td>{{ empPerson.documentType }}</td>
+                                                <td>{{ empPerson.document }}</td>
+                                                <td>{% if empPerson.birthDate is defined %}
+                                                        {{ empPerson.birthDate|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                    {% endif %}
+                                                </td>
+                                                <td>{% if user.personPerson.employer.idSqlSociety is defined %}
+                                                        {{ user.personPerson.employer.idSqlSociety }}
+                                                    {% endif %}
+                                                </td>
+                                                <td>{% if user.personPerson.employer.idHighTech is defined %}
+                                                        {{ user.personPerson.employer.idHighTech }}
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if empPerson.department != null %}
+                                                        {{ empPerson.department.name }}
+                                                    {% endif %}
+                                                    -
+                                                    {% if empPerson.city != null %}
+                                                        {{ empPerson.city.name }}
+                                                    {% endif %}
+                                                    -
+                                                    {% if empPerson.mainAddress != null %}
+                                                        {{ empPerson.mainAddress }}
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if empPerson.phones|length > 0 %}
+                                                        {{ empPerson.phones.0.phoneNumber }}
+                                                    {% endif %}
 
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                            {% if user.personPerson.employer is defined and user.personPerson.employer.employerHasEmployees is defined %}
-
-                                {% for ehe in user.personPerson.employer.employerHasEmployees %}
-                                    <tr>
-                                        <td>
-                                            <table class="table">
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        {% if user.personPerson.employer.idEmployer is defined %}
+                                            <table class="table" style="margin: 0px">
                                                 <tr>
-                                                    <th>Id EHE</th>
-                                                    <th>Nombres Empleado</th>
-                                                    <th>Apellidos Empleado</th>
-                                                    <th>Cédula Empleado</th>
-                                                    <th>Estado</th>
-                                                    <th>Existe SQL</th>
-                                                    <th>Existe HighTech</th>
+                                                    <th>Estado Documentos</th>
+                                                    <th>Documento</th>
+                                                    <th>fecha Documento</th>
+                                                    <th>RUT</th>
+                                                    <th>Fecha RUT</th>
+                                                    <th>Mandato</th>
+                                                    <th>Fecha mandato</th>
+                                                    <th>Fecha Documentos</th>
                                                 </tr>
-                                                {% set employeePer = ehe.employeeEmployee.personPerson %}
-
                                                 <tr>
-                                                    <td>{{ ehe.idEmployerHasEmployee }}</td>
-                                                    <td>{{ employeePer.names }}</td>
-                                                    <td>{{ employeePer.lastName1 }} {{ employeePer.lastName2 }}</td>
-                                                    <td>{{ employeePer.document }}</td>
-                                                    <td>{{ ehe.state }}</td>
-                                                    <td>{% if ehe.existentSQL is defined %}
-                                                            {{ ehe.existentSQL }}
+                                                    {% set styleE = "" %}
+                                                    <td>
+                                                        {% if user.personPerson.employer.documentStatus is defined and user.personPerson.employer.documentStatus is not null and user.personPerson.employer.documentStatus.name is defined %}
+                                                            {% if user.personPerson.employer.documentStatus.documentStatusCode == 'ALLDCP' %}
+                                                                {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                            {% endif %}
+                                                            {{ user.personPerson.employer.documentStatus.name }}
+                                                        {% else %}
+                                                            {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                            No tiene
                                                         {% endif %}
                                                     </td>
-                                                    <td>{% if ehe.existentHightec is defined %}
-                                                            {{ ehe.existentHightec }}
+                                                    {% if user.personPerson.documentDocument is defined and user.personPerson.documentDocument.mediaMedia is defined %}
+                                                        {% set styleE = "" %}
+                                                    {% else %}
+                                                        {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                    {% endif %}
+                                                    <td style="{{ styleE }}">
+                                                        {% if user.personPerson.documentDocument is defined and user.personPerson.documentDocument.mediaMedia is defined %}
+                                                            OK
+                                                        {% else %}
+                                                            ERROR
+                                                        {% endif %}
+                                                    </td>
+                                                    {% if user.personPerson.documentDocument is defined and user.personPerson.documentDocument.mediaMedia is defined %}
+                                                        {% set styleE = "" %}
+                                                    {% else %}
+                                                        {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                    {% endif %}
+                                                    <td style="{{ styleE }}">
+                                                        {% if user.personPerson.documentDocument is defined and user.personPerson.documentDocument.mediaMedia is defined %}
+                                                            {{ user.personPerson.documentDocument.mediaMedia.updatedAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                        {% endif %}
+                                                    </td>
+                                                    {% if user.personPerson.rutDocument is defined and user.personPerson.rutDocument.mediaMedia is defined %}
+                                                        {% set styleE = "" %}
+                                                    {% else %}
+                                                        {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                    {% endif %}
+                                                    <td style="{{ styleE }}">
+                                                        {% if user.personPerson.rutDocument is defined and user.personPerson.rutDocument.mediaMedia is defined %}
+                                                            OK
+                                                        {% else %}
+                                                            ERROR
+                                                        {% endif %}
+                                                    </td>
+                                                    {% if user.personPerson.rutDocument is defined and user.personPerson.rutDocument.mediaMedia is defined %}
+                                                        {% set styleE = "" %}
+                                                    {% else %}
+                                                        {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                    {% endif %}
+                                                    <td style="{{ styleE }}">
+                                                        {% if user.personPerson.rutDocument is defined and user.personPerson.rutDocument.mediaMedia is defined %}
+                                                            {{ user.personPerson.rutDocument.mediaMedia.updatedAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                        {% endif %}
+                                                    </td>
+                                                    {% if user.personPerson.employer.mandatoryDocument is defined and user.personPerson.employer.mandatoryDocument.mediaMedia is defined %}
+                                                        {% set styleE = "" %}
+                                                    {% else %}
+                                                        {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                    {% endif %}
+                                                    <td style="{{ styleE }}">
+                                                        {% if user.personPerson.employer.mandatoryDocument is defined and user.personPerson.employer.mandatoryDocument.mediaMedia is defined %}
+                                                            OK
+                                                        {% else %}
+                                                            ERROR
+                                                        {% endif %}
+                                                    </td>
+                                                    {% if user.personPerson.employer.mandatoryDocument is defined and user.personPerson.employer.mandatoryDocument.mediaMedia is defined %}
+                                                        {% set styleE = "" %}
+                                                    {% else %}
+                                                        {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                    {% endif %}
+                                                    <td style="{{ styleE }}">
+                                                        {% if user.personPerson.employer.mandatoryDocument is defined and user.personPerson.employer.mandatoryDocument.mediaMedia is defined %}
+                                                            {{ user.personPerson.employer.mandatoryDocument.mediaMedia.updatedAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                        {% endif %}
+                                                    </td>
+                                                    {% if user.personPerson.employer.allDocsReadyAt is defined %}
+                                                        {% set styleE = "" %}
+                                                    {% else %}
+                                                        {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                    {% endif %}
+                                                    <td>
+                                                        {% if user.personPerson.employer.allDocsReadyAt is defined %}
+                                                            {{ user.personPerson.employer.allDocsReadyAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
                                                         {% endif %}
                                                     </td>
                                                 </tr>
-
                                             </table>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <table class="table">
-                                                <tr>
-                                                    <th>Id Contrato</th>
-                                                    <th>Frecuencia Pago</th>
-                                                    <th>Payroll Activo</th>
-                                                    <th>Dedicación de tiempo</th>
-                                                    <th>Metodo de pago</th>
-                                                    <th>Salario</th>
-                                                    <th>Fecha de Inicio de contrato</th>
-                                                    <th>Fecha de Finalización de contrato</th>
-                                                    <th>Días laborales al mes</th>
-                                                    <th>Tipo de planilla</th>
-                                                </tr>
-                                                {% for aC in ehe.contracts %}
-                                                    {% if aC.state == 1 %}
+                                            {% if  user.realProcedures|length >0 %}
+                                                <table class="table" style="margin: 0px">
+                                                    <tr>
+                                                        <th>Id RealProcedure</th>
+                                                        <th>Tipo Procedure</th>
+                                                        <th>Estado</th>
+                                                        <th>Prioridad</th>
+                                                        <th>Fecha Creación</th>
+                                                        <th>Fecha Backoffice</th>
+                                                        <th>Fecha Error</th>
+                                                        <th>Fecha Primer Error</th>
+                                                        <th>Fecha Corrección</th>
+                                                        <th>Fecha Estado</th>
+                                                        <th>Fecha Prioridad</th>
+                                                        <th>Fecha Fin</th>
+                                                        <th>Tiempo Exedido</th>
+                                                    </tr>
+                                                    {% for procedure in user.realProcedures %}
                                                         <tr>
-                                                            <td>{{ aC.idContract }}</td>
-                                                            <td>{% if aC.frequencyFrequency != NULL %}
-                                                                    {{ aC.frequencyFrequency.payrollCode }}
+                                                            <td>{{ procedure.idProcedure }}</td>
+                                                            <td>{{ procedure.procedureTypeProcedureType.code }}</td>
+                                                            <td>{{ procedure.procedureStatus.name }}</td>
+                                                            <td>{{ procedure.priority }}</td>
+                                                            <td>
+                                                                {% if procedure.createdAt is defined %}
+                                                                    {{ procedure.createdAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
                                                                 {% endif %}
                                                             </td>
-                                                            <td>{% if aC.activePayroll != NULL %}
-                                                                    {{ aC.activePayroll.period }} - {{ aC.activePayroll.month }} Paid: {{ aC.activePayroll.paid }}
+                                                            <td>
+                                                                {% if procedure.backOfficeDate is defined %}
+                                                                    {{ procedure.backOfficeDate|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
                                                                 {% endif %}
                                                             </td>
-                                                            <td> {{ aC.timeCommitmentTimeCommitment.code }}</td>
-                                                            <td>{% if aC.payMethodPayMethod != NULL %}
-                                                                    {{ aC.payMethodPayMethod.payTypePayType.simpleName }}
+                                                            <td>
+                                                                {% if procedure.errorAt is defined %}
+                                                                    {{ procedure.errorAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
                                                                 {% endif %}
                                                             </td>
-                                                            <td> {{ aC.salary }} </td>
-                                                            <td> {{ aC.startDate|date("y-m-d") }}</td>
-                                                            <td>{% if aC.endDate != NULL %}
-                                                                    {{ aC.endDate|date("y-m-d") }}
+                                                            <td>
+                                                                {% if procedure.firstErrorAt is defined %}
+                                                                    {{ procedure.firstErrorAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
                                                                 {% endif %}
                                                             </td>
-                                                            <td> {{ aC.workableDaysMonth }} </td>
-                                                            <td>{% if aC.planillaTypePlanillaType != NULL %}
-                                                                    {{ aC.planillaTypePlanillaType.code }}
+                                                            <td>
+                                                                {% if procedure.correctedAt is defined %}
+                                                                    {{ procedure.correctedAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                                {% endif %}
+                                                            </td>
+                                                            <td>
+                                                                {% if procedure.statusUpdatedAt is defined %}
+                                                                    {{ procedure.statusUpdatedAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                                {% endif %}
+                                                            </td>
+                                                            <td>
+                                                                {% if procedure.priorityUpdatedAt is defined %}
+                                                                    {{ procedure.priorityUpdatedAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                                {% endif %}
+                                                            </td>
+                                                            <td>
+                                                                {% if procedure.finishedAt is defined %}
+                                                                    {{ procedure.finishedAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                                {% endif %}
+                                                            </td>
+                                                            <td>
+                                                                {% if procedure.maxTimeReached == 1 %}
+                                                                    Si
+                                                                {% else %}
+                                                                    No
                                                                 {% endif %}
                                                             </td>
                                                         </tr>
-                                                    {% endif %}
-                                                {% endfor %}
-                                            </table>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            {% endif %}
-                        </table>
-                    </div>
-                    <br>
-                    <hr>
-                    <br>
+                                                    {% endfor %}
+                                                </table>
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% if user.personPerson.employer is defined and user.personPerson.employer.employerHasEmployees is defined %}
+                                    {% for ehe in user.personPerson.employer.employerHasEmployees %}
+                                        <tr>
+                                            <td style="padding: 0px; margin: 0px">
+                                                <table class="table" style="margin: 0px">
+                                                    <tr>
+                                                        <th>Id EHE</th>
+                                                        <th>Nombres Empleado</th>
+                                                        <th>Apellidos Empleado</th>
+                                                        <th>Cédula Empleado</th>
+                                                        <th>Estado</th>
+                                                        <th>Existe SQL</th>
+                                                        <th>Fecha SQL</th>
+                                                        <th>Existe HighTech</th>
+                                                        <th>fecha documentos</th>
+                                                    </tr>
+                                                    {% set employeePer = ehe.employeeEmployee.personPerson %}
+                                                    <tr>
+                                                        <td>{{ ehe.idEmployerHasEmployee }}</td>
+                                                        <td>{{ employeePer.names }}</td>
+                                                        <td>{{ employeePer.lastName1 }} {{ employeePer.lastName2 }}</td>
+                                                        <td>{{ employeePer.document }}</td>
+                                                        {% set styleEhe = "" %}
+                                                        {% if ehe.state == 3 %}
+                                                            {% set styleEhe = "background-color:rgba(255, 214, 0, 0.84)" %}
+                                                        {% elseif ehe.state == 4 %}
+                                                            {% set styleEhe = "background-color:rgba(177, 203, 102, 0.44)" %}
+                                                        {% elseif ehe.state == -2 %}
+                                                            {% set styleEhe = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                        {% endif %}
+                                                        <td style="{{ styleEhe }}">{{ ehe.state }}</td>
+                                                        {% set styleEhe = "" %}
+                                                        {% if ehe.existentSQL == 1 %}
+                                                            {% set styleEhe = "background-color:rgba(177, 203, 102, 0.44)" %}
+                                                        {% endif %}
+                                                        <td style="{{ styleEhe }}">{% if ehe.existentSQL is defined %}
+                                                                {{ ehe.existentSQL }}
+                                                            {% endif %}
+                                                        </td>
+                                                        <td style="{{ styleEhe }}">{% if ehe.DateRegisterToSql is defined %}
+                                                                {{ ehe.dateRegisterToSQL|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>{% if ehe.existentHightec is defined %}
+                                                                {{ ehe.existentHightec }}
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>{% if ehe.dateDocumentsUploaded is defined %}
+                                                                {{ ehe.dateDocumentsUploaded|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                            {% endif %}
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                {% if ehe.state > 2 %}
+                                                    <table class="table" style="margin: 0px">
+                                                        <tr>
+                                                            <th>Estado Documentos</th>
+                                                            <th>Documento</th>
+                                                            <th>fecha Documento</th>
+                                                            <th>Carta Autorización</th>
+                                                            <th>Fecha carta</th>
+                                                        </tr>
+                                                        <tr>
+                                                            {% set styleE = "" %}
+                                                            <td>
+                                                                {% if ehe.documentStatusType is defined and ehe.documentStatusType is not null and ehe.documentStatusType.name is defined %}
+                                                                    {% if ehe.documentStatusType.documentStatusCode == 'ALLDCP' %}
+                                                                        {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                                    {% endif %}
+                                                                    {{ ehe.documentStatusType.name }}
+                                                                {% else %}
+                                                                    {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                                    No tiene
+                                                                {% endif %}
+                                                            </td>
+                                                            {% if employeePer.documentDocument is defined and employeePer.documentDocument.mediaMedia is defined %}
+                                                                {% set styleE = "" %}
+                                                            {% else %}
+                                                                {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                            {% endif %}
+                                                            <td style="{{ styleE }}">
+                                                                {% if employeePer.documentDocument is defined and employeePer.documentDocument.mediaMedia is defined %}
+                                                                    OK
+                                                                {% else %}
+                                                                    ERROR
+                                                                {% endif %}
+                                                            </td>
+                                                            {% if employeePer.documentDocument is defined and employeePer.documentDocument.mediaMedia is defined %}
+                                                                {% set styleE = "" %}
+                                                            {% else %}
+                                                                {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                            {% endif %}
+                                                            <td style="{{ styleE }}">
+                                                                {% if employeePer.documentDocument is defined and employeePer.documentDocument.mediaMedia is defined %}
+                                                                    {% if  employeePer.documentDocument.mediaMedia.updatedAt is defined %}
+                                                                        {{ employeePer.documentDocument.mediaMedia.updatedAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                            </td>
+                                                            {% if ehe.authDocument is defined and ehe.authDocument.mediaMedia is defined %}
+                                                                {% set styleE = "" %}
+                                                            {% else %}
+                                                                {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                            {% endif %}
+                                                            <td style="{{ styleE }}">
+                                                                {% if ehe.authDocument is defined and ehe.authDocument.mediaMedia is defined %}
+                                                                    OK
+                                                                {% else %}
+                                                                    ERROR
+                                                                {% endif %}
+                                                            </td>
+                                                            {% if ehe.authDocument is defined and ehe.authDocument.mediaMedia is defined %}
+                                                                {% set styleE = "" %}
+                                                            {% else %}
+                                                                {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                            {% endif %}
+                                                            <td style="{{ styleE }}">
+                                                                {% if ehe.authDocument is defined and ehe.authDocument.mediaMedia is defined %}
+                                                                    {{ ehe.authDocument.mediaMedia.updatedAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                                {% endif %}
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 0px; margin: 0px">
+                                                <table class="table" style="margin: 0px">
+                                                    <tr>
+                                                        <th>Id Contrato</th>
+                                                        <th>Frecuencia Pago</th>
+                                                        <th>Payroll Activo</th>
+                                                        <th>Dedicación de tiempo</th>
+                                                        <th>Metodo de pago</th>
+                                                        <th>Salario</th>
+                                                        <th>Fecha de Inicio de contrato</th>
+                                                        <th>Fecha de Finalización de contrato</th>
+                                                        <th>Días laborales al mes</th>
+                                                        <th>Tipo de planilla</th>
+                                                    </tr>
+                                                    {% for aC in ehe.contracts %}
+                                                        {% if aC.state == 1 %}
+                                                            <tr>
+                                                                <td>{{ aC.idContract }}</td>
+                                                                <td>{% if aC.frequencyFrequency != NULL %}
+                                                                        {{ aC.frequencyFrequency.payrollCode }}
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td>{% if aC.activePayroll != NULL %}
+                                                                        {{ aC.activePayroll.period }} - {{ aC.activePayroll.month }} Paid: {{ aC.activePayroll.paid }}
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td> {{ aC.timeCommitmentTimeCommitment.code }}</td>
+                                                                <td>{% if aC.payMethodPayMethod != NULL %}
+                                                                        {{ aC.payMethodPayMethod.payTypePayType.simpleName }}
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td> {{ aC.salary }} </td>
+                                                                <td> {{ aC.startDate|date("y-m-d") }}</td>
+                                                                <td>{% if aC.endDate != NULL %}
+                                                                        {{ aC.endDate|date("y-m-d") }}
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td> {{ aC.workableDaysMonth }} </td>
+                                                                <td>{% if aC.planillaTypePlanillaType != NULL %}
+                                                                        {{ aC.planillaTypePlanillaType.code }}
+                                                                    {% endif %}
+                                                                </td>
+                                                            </tr>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                            </table>
+                        </td>
+                    </tr>
                 {% endfor %}
+            </table>
 
-            </div>
+            {% for user in users %}
+                <div>
+                    {% set empPerson = user.personPerson %}
+
+                </div>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}
