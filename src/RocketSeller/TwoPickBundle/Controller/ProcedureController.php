@@ -2379,7 +2379,7 @@ class ProcedureController extends Controller
                             if(!$corrected and !$error){
                                 if($begin and !$finish){
                                     $procedure->setProcedureStatus($this->getStatusByStatusCode('STRT'));
-                                }elseif($finish){
+                                }elseif($finish and $procedure->getProcedureStatuscode()!='FIN'){
                                     $procedure->setProcedureStatus($this->getStatusByStatusCode('FIN'));
                                     foreach ($procedure->getEmployerEmployer()->getEmployerHasEmployees() as $ehe){
                                         $ehe->setDocumentStatusType($this->getDocumentStatusByCode('BOFFFF'));
