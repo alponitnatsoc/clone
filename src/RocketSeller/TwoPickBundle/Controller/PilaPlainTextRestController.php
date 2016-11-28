@@ -1198,6 +1198,10 @@ class PilaPlainTextRestController extends FOSRestController
         $tipoDocumento = 'TI';
       elseif($tipoDocumento == 'NIT' || $tipoDocumento == 'nit')
         $tipoDocumento = 'NI';
+      elseif($tipoDocumento == 'PASAPORTE' || $tipoDocumento == 'pasaporte'){
+        $tipoDocumento = 'PA';
+      }
+      
 
       $documento = $emp->getPersonPerson()->getDocument();
       $digitoVer = $this->digitoVerificacion($documento);

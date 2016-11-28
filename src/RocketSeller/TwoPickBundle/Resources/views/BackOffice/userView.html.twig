@@ -25,7 +25,7 @@
                                 <td>
                                     <table class="table">
                                         <tr>
-                                            <th>Id Usuario</th>
+                                            <th>Id Usuario - Id Person</th>
                                             <th>Email</th>
                                             <th>Estado Usuario</th>
                                             <th>Estado Data Credito</th>
@@ -33,7 +33,7 @@
                                             <th>Token Confirmación</th>
                                         </tr>
                                         <tr>
-                                            <td>{{ user.id }}</td>
+                                            <td>{{ user.id }} - {{ user.personPerson.idPerson }}</td>
                                             <td>{{ user.email }}</td>
                                             <td>{{ user.status }}</td>
                                             <td>{{ user.dataCreditStatus }}</td>
@@ -52,7 +52,8 @@
                                         <tr>
                                             <th>Nombres Empleador</th>
                                             <th>Apellidos Empleador</th>
-                                            <th>Cédula</th>
+                                            <th>Tipo de Documento</th>
+                                            <th>Número de Documento</th>
                                             <th>Fecha de nacimiento</th>
                                             <th>Número Sociedad SQL</th>
                                             <th>Id HighTech</th>
@@ -62,6 +63,7 @@
                                         <tr>
                                             <td>{{ empPerson.names }}</td>
                                             <td>{{ empPerson.lastName1 }} {{ empPerson.lastName2 }}</td>
+                                            <td>{{ empPerson.documentType }}</td>
                                             <td>{{ empPerson.document }}</td>
                                             <td>{% if empPerson.birthDate is defined %}
                                                     {{ empPerson.birthDate|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
