@@ -67,6 +67,9 @@ header {
   padding: 0 25px;
   border-radius: 5px;
 }
+.contHeadForm span {
+	font-size: 11px
+}
 .contHeadForm h1 {
 	font-size: 20px;
 	text-align: right;
