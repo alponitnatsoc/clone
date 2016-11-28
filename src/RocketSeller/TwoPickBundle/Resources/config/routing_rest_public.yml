@@ -149,3 +149,7 @@ email :
     type: rest
     resource : "RocketSellerTwoPickBundle:EmailRest"
     name_prefix: api_public_
+utils :
+    type: rest
+    resource : "RocketSellerTwoPickBundle:UtilsRest"
+    name_prefix: api_public_
