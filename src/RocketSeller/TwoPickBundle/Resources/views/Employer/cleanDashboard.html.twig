@@ -39,44 +39,24 @@
                     </div>
                 </div>
             {% else %}
-                <div id="fechas">
-                    <h1 class="grisclarofont light centrar">Ten en cuenta las siguientes fechas :</h1><br>
-                    <div class="fechasclave">
-                        <p class="bold azulclarofont">Día 10 de cada mes</p>
-                        <p class="grisclarofont light">Tiempo oportuno</p>
-                        <p class="light-italic grisclarofont">para reportar novedades</p>
-                    </div>
-                    <div class="fechasclave">
-                        <p class="bold azulclarofont">Día 12 de cada mes</p>
-                        <p class="grisclarofont light">Ultimo día para</p>
-                        <p class="light-italic grisclarofont">reportar novedades</p>
-                    </div>
-                    <div class="fechasclave">
-                        <p class="bold azulclarofont">Día 15 de cada mes</p>
-                        <p class="grisclarofont light">Pago oportuno</p>
-                        <p class="grisclarofont light">de la quincena</p>
-                    </div>
-                    <div class="fechasclave">
-                        <p class="bold azulclarofont">Día 23 de cada mes</p>
-                        <p class="grisclarofont light">Tiempo oportuno</p>
-                        <p class="light-italic grisclarofont">para reportar novedades</p>
-                    </div>
-                    <div class="fechasclave">
-                        <p class="bold azulclarofont">Día 25 de cada mes</p>
-                        <p class="grisclarofont light">Ultimo día para</p>
-                        <p class="light-italic grisclarofont">reportar novedades</p>
-                    </div>
-                    <div class="fechasclave">
-                        <p class="bold azulclarofont">Día 30 de cada mes</p>
-                        <p class="grisclarofont light">Pago de nómina</p>
-                        <p class="light-italic grisclarofont">y de aportes a seguridad</p>
+            <link rel="stylesheet" type="text/css" href="{{ asset('/../css/pantallas.css') }}"/>
+            <div id="cont-succesdocs">
+              <div id="texto-succesdocs">
+                    <div id="pagoadelantado">
+                        <div id="contenidopagoadelando">
+                            <img src="{{ asset('/public/img/home/icon7.png') }}" width="70px" height="auto"><br />
+                            <h1 class="azulclarofont bold centrar">¡Felicidades!</h1>
+                            <h2 class="h2 light grisclarofont">No tienes tareas pendientes</h2>
+                            <p class="light grisclarofont">Te notificaremos las fechas oportunas para realizar aportes, pagos y tareas importantes.
+No olvides que puedes reportar novedades en cualquier momento.</p>
+                            <p class="light grisoscurofont">
+                              Hacemos el trabajo duro por ti, así que puedes estar tranquilo.
+                              <strong>¡Estás haciendo las cosas bien!</strong>
+                            </p>
+                        </div>
                     </div>
                 </div>
-                <div class="border">
-                    <p class="semi-italic azulmediofont">Puedes reportar novedades en cualquier momento.<br>
-
-                    Sugerimos los días 15 y 30 de cada mes, pero el pago de nómina lo puedes hacer en cualquier momento después del cierre.</p>
-                </div>
+            </div>
             {% endif %}
         </div>
 	</div>
