@@ -33,6 +33,7 @@ use RocketSeller\TwoPickBundle\Traits\SubscriptionMethodsTrait;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use DateTime;
 use Doctrine\ORM\QueryBuilder;
+use ZipArchive;
 
 
 class BackOfficeController extends Controller
@@ -2183,24 +2184,37 @@ class BackOfficeController extends Controller
 		$document = $singleTran->getTransactionState()->getDocument();
 		$media = $document->getMediaMedia();
 		
+		$utils = $this->get('app.symplifica_utils');
+		
 		if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference'))){
 			$docUrl = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
 		}
-		$docName = $document->getDocumentTypeDocumentType()->getName().'.'.$media->getExtension();
-		$docExportName = "Log visual HT ID $podId.zip";
 		
-		# send the file to the browser as a download
-		header("Content-disposition: attachment; filename=$docExportName");
-		header('Content-type: application/zip');
-		header('Expires: 0');
-		header('Cache-Control: must-revalidate');
-		header('Pragma: public');
-		ob_clean();
-		flush();
-		readfile($docUrl . $docName);
-		ignore_user_abort(true);
-	
+		$docName = $document->getDocumentTypeDocumentType()->getName().'.'.$media->getExtension();
+		$zip = new ZipArchive();
+		$localFile = "Log visual HT ID $podId.zip";
+		
+		if ($zip->open($localFile,ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE )=== TRUE) {
+			# loop through each file
+			$zip->addFile($docUrl,$docName);
+			# close zip
+			if($zip->close()!==TRUE)
+				echo "no permisos";
+			# send the file to the browser as a download
+			header("Content-disposition: attachment; filename=$localFile");
+			header('Content-type: application/zip');
+			header('Expires: 0');
+			header('Cache-Control: must-revalidate');
+			header('Pragma: public');
+			ob_clean();
+			flush();
+			readfile($localFile);
+			ignore_user_abort(true);
+			unlink($localFile);
+		}
+		
 		return $this->redirectToRoute('ajax', array(), 301);
+		
 	}
 	
 	public function fixBrokenPilaBotAction(){
