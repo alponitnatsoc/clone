@@ -77,7 +77,7 @@
                                             <button id= "DI{{idFileNameButton}}" class="downloadId" onclick="location.href = '/backoffice/download/{{idFileNameButton}}/planilla/log';">Descargar imagen</button>
                                         {% else %}
                                             {% if pila.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.existentPila == -1 %}
-                                                Está inscrito a Enlace Operativo pero presentó un error al subir
+                                                <button id= "VE{{idFileNameButton}}" class="uploadId" onclick="location.href = '/backoffice/upload/{{idFileNameButton}}/planilla';">Volver a enviar</button>
                                             {% elseif pila.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.existentPila != NULL %}
                                                 La inscripción a Enlace Operativo se envió pero al parecer falló
                                             {% else %}
