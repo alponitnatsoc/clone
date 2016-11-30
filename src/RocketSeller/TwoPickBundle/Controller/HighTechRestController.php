@@ -816,6 +816,7 @@ class HighTechRestController extends FOSRestController
 				$media->setProviderStatus(Media::STATUS_OK);
 				$media->setContext('person');
 				$media->setDocumentDocument($document);
+				$media->setContentType('application/zip');
 				
 				$document->setMediaMedia($media);
 				
@@ -953,6 +954,7 @@ class HighTechRestController extends FOSRestController
 			$media->setProviderStatus(Media::STATUS_OK);
 			$media->setContext('person');
 			$media->setDocumentDocument($document);
+			$media->setContentType('application/zip');
 			
 			$document->setMediaMedia($media);
 			
@@ -1014,6 +1016,7 @@ class HighTechRestController extends FOSRestController
 				$media->setProviderStatus(Media::STATUS_OK);
 				$media->setContext('person');
 				$media->setDocumentDocument($document);
+				$media->setContentType('application/zip');
 				
 				$document->setMediaMedia($media);
 				
