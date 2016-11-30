@@ -8,6 +8,17 @@ $(document).ready(function(){
     $("#terminosBtn").click(function(){
         $("#150kCampaign").modal("show");
     });
+
+    $("#esfuerzoTrigg").click(function(){
+        $("#trigger1").fadeOut("slow");
+        $("#trigger2").delay(1000);
+        $("#trigger2").fadeIn("slow");
+    });
+    $("#sendTrigg").click(function(){
+        $("#trigger2").fadeOut("slow");
+        $("#trigger3").delay(1000);
+        $("#trigger3").fadeIn("slow");
+    });
 });
 
 $('#campanaBtn').click(function(){
@@ -219,4 +230,3 @@ function funcion(){
 function stopVideo(){
     $('#mainVideoFrame').attr('src', $('#mainVideoFrame').attr('src'));
 }
-

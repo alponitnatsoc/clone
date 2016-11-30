@@ -133,13 +133,11 @@ margin-top: 5px}
 	border-bottom-left-radius: 25px;
 	border-top-left-radius: 25px}
 
-#btn-prueba:hover {background: #DA6E00;
-border-bottom: 3px solid #794815}
+#btn-prueba:hover {background: #DA6E00;}
 
 .callto:hover {background: #DA6E00;
 border-bottom: 3px solid #794815}
-.callto2:hover {background: #DA6E00;
-border-bottom: 3px solid #794815}
+.callto2:hover {background: #DA6E00;}
 
 .btn-video {
 	cursor: pointer;
@@ -171,7 +169,7 @@ border-bottom: 3px solid #794815}
 	    width: 600px;
 	    margin: 0 auto;
 	 }
-	#campanaSlide {
+	/*#campanaSlide {
 		text-align: center;
 		position: fixed;
     top: 0;
@@ -189,7 +187,7 @@ border-bottom: 3px solid #794815}
 		background: -ms-radial-gradient(center, ellipse cover, rgba(113,201,200,1) 0%, rgba(71,128,136,1) 88%, rgba(71,128,136,1) 100%);
 		background: radial-gradient(ellipse at center, rgba(113,201,200,1) 0%, rgba(71,128,136,1) 88%, rgba(71,128,136,1) 100%);
 		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#71c9c8', endColorstr='#478088', GradientType=1 );
-	}
+	}*/
 
 	#campanaSlide #terminosBtn {
 		color: #FFF;
@@ -287,10 +285,10 @@ font-weight: 100;}
 	height: 35px;
 	margin: 0 auto;
 	border-radius: 3px;
-	border-bottom:#D3731C 3px solid; color: #FFFFFF;
 	padding: 6px 12px;
 	box-sizing: border-box;
 	text-align: center;
+	color: #FFF;
 }
 video {
 	position: fixed;
