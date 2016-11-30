@@ -19,8 +19,8 @@
                     <th style="width: 10%">Mes Pila</th>
                     <th style="width: 10%">Tipo</th>
                     <th style="width: 10%">Valor</th>
-                    <th style="width: 30%">Número de planilla</th>
-                    <th style="width: 10%">Estado carga</th>
+                    <th style="width: 23%">Número de planilla</th>
+                    <th style="width: 17%">Estado carga</th>
                     <th style="width: 10%">Detalle del estado</th>
                     <th style="width: 10%">Archivo de pila</th>
                 </tr>
@@ -30,8 +30,8 @@
                     <th class="th1" style="width: 10%">Mes Pila</th>
                     <th class="th1" style="width: 10%">Tipo de Pila</th>
                     <th class="th1" style="width: 10%">Valor de la Pila</th>
-                    <th class="th1" style="width: 30%">Número de planilla</th>
-                    <th class="th1" style="width: 10%">Estado carga</th>
+                    <th class="th1" style="width: 23%">Número de planilla</th>
+                    <th class="th1" style="width: 17%">Estado carga</th>
                     <th class="th1" style="width: 10%">Archivo de Errores/Advertencias</th>
                     <th class="th1" style="width: 10%">Archivo de pila</th>
                 </tr>
@@ -53,14 +53,20 @@
                         <td style="vertical-align: middle">{{ utils.month_number_to_name(pila.payrollsPila[0].month) }}</td>
                         <td style="vertical-align: middle">Id: {{ pila.idPurchaseOrdersDescription }} - Tipo: {{ fileType }}</td>
                         <td style="vertical-align: middle">$ {{ pila.value|number_format(0) }} </td>
-                        <td style="vertical-align: middle;"> <input id= {{idFileName}} value="{{ fileStoredName }}" size="10"></input> <div style="display: inline-block"><button id= "GS{{idFileNameButton}}" class="saveId" onclick=" if( document.getElementById('{{idFileName}}').value != '') location.href = '/backoffice/planilla/persista/'+document.getElementById('{{idFileName}}').value+'/{{pila.idPurchaseOrdersDescription}}/notok';">Guardar Sin Aprobar</button><button id= "GA{{idFileNameButton}}" class="okId" onclick=" if( document.getElementById('{{idFileName}}').value != '') location.href = '/backoffice/planilla/persista/'+document.getElementById('{{idFileName}}').value+'/{{pila.idPurchaseOrdersDescription}}/ok';">Guardar y Aprobar</button></div></td>
+                        <td style="vertical-align: middle;"> <input id= {{idFileName}} value="{{ fileStoredName }}" size="10"></input> <div style="display: inline-block"><button id= "GS{{idFileNameButton}}" class="saveId" onclick=" if( document.getElementById('{{idFileName}}').value != '') location.href = '/backoffice/planilla/persista/'+document.getElementById('{{idFileName}}').value+'/{{pila.idPurchaseOrdersDescription}}/notok';">Guardar</button>
+                                {% if fileStoredName != "" %}
+                                    <button style="background-color: #ff5358" id= "GA{{idFileNameButton}}" class="okId" onclick=" if( document.getElementById('{{idFileName}}').value != '') location.href = '/backoffice/planilla/persista/'+document.getElementById('{{idFileName}}').value+'/{{pila.idPurchaseOrdersDescription}}/ok';">Enviar ({{ fileStoredName }})</button></div></td>
+                                {% endif %}
                         <td style="vertical-align: middle">
+                            {% if pila.purchaseOrdersStatus != NULL and pila.purchaseOrdersStatus.idNovoPay == "P1" %}
+                                El usuario no ha pagado aún o el recaudo falló </br></br>
+                            {% endif %}
                             {% if pila.uploadedFile == NULL %}
-                                El usuario no ha pagado aún
+                                Aún no se envia la planilla
                             {% elseif pila.uploadedFile == -1 %}
-                                La planilla subió sin errores ni advertencias
+                                La planilla subió sin errores ni advertencias / Aprobada
                             {% elseif pila.uploadedFile == -2 %}
-                                Operaciones no ha aprobado la planilla
+                                Planilla guardada pero no enviada
                             {% elseif pila.uploadedFile > 0 %}
                                 {% for trans in pila.transactions %}
                                     {% if trans.idTransaction ==  pila.uploadedFile %}
@@ -81,13 +87,17 @@
                                             {% elseif pila.payrollsPila[0].contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.existentPila != NULL %}
                                                 La inscripción a Enlace Operativo se envió pero al parecer falló
                                             {% else %}
-                                                No está inscrito a Enlace Operativo
+                                                No hay información de la inscripción del empleador a Enlace Operativo
                                             {% endif %}
                                         {% endif %}
                                     {% elseif  trans.idTransaction ==  pila.uploadedFile and  trans.purchaseOrdersStatus.idNovoPay == "CarPla-ErrSer" %}
                                         <button id= "VE{{idFileNameButton}}" class="uploadId" onclick="location.href = '/backoffice/upload/{{idFileNameButton}}/planilla';">Volver a enviar</button>
                                     {% endif %}
                                 {% endfor %}
+                            {% else %}
+                                {% if pila.purchaseOrdersStatus != NULL and pila.purchaseOrdersStatus.idNovoPay != "P1" and pila.uploadedFile == NULL and pila.enlaceOperativoFileName == NULL %}
+                                    <button id= "VE{{idFileNameButton}}" class="uploadId" onclick="location.href = '/backoffice/upload/{{idFileNameButton}}/planilla';">Cargar Planilla</button>
+                                {% endif %}
                             {% endif %}
                         </td>
                         <td style="vertical-align: middle"> <button type"button" onclick="location.href = '/api/public/v1/secured/monthlies/{{pila.idPurchaseOrdersDescription}}/plains/download/text';">Generar Archivo</button></td>
@@ -104,63 +114,29 @@
     {{ parent() }}
 
     <script type="text/javascript">
-    $(document).ready(function () {
-        // Setup - add a text input to each footer cell
-        $('#table-pilas .th1').each( function () {
-            var title = $(this).text();
-            $(this).html('<input type="text" placeholder="Buscar" style="width: 75%;margin: 1px 2px;padding: 1px 5px;color:black"/>' );
-        });
+        $(document).ready(function () {
+            // Setup - add a text input to each footer cell
+            $('#table-pilas .th1').each( function () {
+                var title = $(this).text();
+                $(this).html('<input type="text" placeholder="Buscar" style="width: 75%;margin: 1px 2px;padding: 1px 5px;color:black"/>' );
+            });
 
-        // DataTable
-        var table = $('#table-pilas').DataTable();
+            // DataTable
+            var table = $('#table-pilas').DataTable();
 
 
-        // Apply the search
-        table.columns().every( function () {
-            var that = this;
-            $( 'input', this.header() ).on( 'keyup change', function () {
-                if (that.search() !== this.value ) {
-                    that
-                    .search( this.value )
-                    .draw();
-                }
+            // Apply the search
+            table.columns().every( function () {
+                var that = this;
+                $( 'input', this.header() ).on( 'keyup change', function () {
+                    if (that.search() !== this.value ) {
+                        that
+                                .search( this.value )
+                                .draw();
+                    }
+                } );
             } );
-        } );
-
-        /*$(".saveId").on("click", function() {
-            var idToRetrieve = $(this).attr("id");
-            idToRetrieve = idToRetrieve.substring(2);
-            var valToStoreFrom = "fileName" + idToRetrieve;
-            var valToStore = $("#" + valToStoreFrom).val();
-
-            if(valToStore != ""){
-              location.href = "/backoffice/planilla/persista/"+valToStore+"/"+idToRetrieve+"/notok";
-            }
         });
-
-        $(".okId").on("click", function() {
-            var idToRetrieve = $(this).attr("id");
-            idToRetrieve = idToRetrieve.substring(2);
-            var valToStoreFrom = "fileName" + idToRetrieve;
-            var valToStore = $("#" + valToStoreFrom).val();
-
-                if(valToStore != ""){
-                    location.href = "/backoffice/planilla/persista/"+valToStore+"/"+idToRetrieve+"/ok";
-                }
-        });
-
-        $(".uploadId").on("click", function() {
-            var podId = $(this).attr("id");
-            podId = podId.substring(2);
-            location.href = "/backoffice/upload/"+podId+"/planilla";
-        });
-
-        $(".downloadId").on("click", function() {
-            var podId = $(this).attr("id");
-            podId = podId.substring(2);
-            location.href = "/backoffice/download/"+podId+"/planilla/log";
-        });*/
-    });
     </script>
 
 {% endblock %}
