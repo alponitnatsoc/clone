@@ -123,8 +123,8 @@ clear_data_after_backup:
     path:     /backoffice/clearData/{autentication}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:clearDataAfterBackup}
 user_view:
-    path:     /backoffice/userView
-    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:userView}
+    path:     /backoffice/userView/{index}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:userView, index: 0}
 employer_state:
     path:     /backoffice/show/employersState
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:userBackOfficeState}
