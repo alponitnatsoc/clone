@@ -84,7 +84,7 @@ function calculator(){
         arlProf = 0.00522;
     }
     else if (arlChoose == 4) { //enfermero
-        arlProf = 0.00522;
+        arlProf = 0.01044;
     }
     else if (arlChoose == 5) { //mayordomo
         arlProf = 0.01044;
