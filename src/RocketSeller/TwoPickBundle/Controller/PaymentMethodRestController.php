@@ -755,6 +755,7 @@ class PaymentMethodRestController extends FOSRestController
                 $employeePerson=$purchaseOrder->getIdUser()->getPersonPerson();
                 $payMethod=null;
             }else{
+                //add the other contract reference
                 $employeePerson=$payRoll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson();
                 $payMethod=$payRoll->getContractContract()->getPayMethodPayMethod();
             }
@@ -796,8 +797,11 @@ class PaymentMethodRestController extends FOSRestController
                     }
                 }
 
-            } elseif ($purchaseOrderDescription->getProductProduct()->getSimpleName() == "PN") {
-                $payType=$payMethod->getAccountTypeAccountType();
+            } elseif ($purchaseOrderDescription->getProductProduct()->getSimpleName() == "PN" || $purchaseOrderDescription->getProductProduct()->getSimpleName() == "PRM" ) {
+                if($purchaseOrderDescription->getProductProduct()->getSimpleName() == "PRM" ){
+                    $payMethod=$purchaseOrderDescription->getPrima()->getContractContract()->getPayMethodPayMethod();
+                    $employeePerson=$purchaseOrderDescription->getPrima()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson();
+                }
                 if($payMethod->getPayTypePayType()->getSimpleName()=="DAV"){
                     $accountType="DP";
                     $paymentMethodAN=$payMethod->getCellPhone();

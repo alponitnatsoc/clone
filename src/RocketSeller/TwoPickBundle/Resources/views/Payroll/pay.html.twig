@@ -309,12 +309,12 @@
                             {% set pilaData=null %}
                             {% for data in pods %}
                                 {% if data.product_product.simple_name == "PN" %}
-                                {% if titleIndexDebt == false %}
-                                  <div class="deuda light grisclarofont">
-                                      <div align="center" colspan="4">Nóminas Pendientes</div>
-                                  </div>
-                                  {% set titleIndexDebt = true %}
-                                {% endif %}
+                                    {% if titleIndexDebt == false %}
+                                      <div class="deuda light grisclarofont">
+                                          <div align="center" colspan="4">Nóminas Pendientes</div>
+                                      </div>
+                                      {% set titleIndexDebt = true %}
+                                    {% endif %}
                                     <div class="borderclass">
                                         <div class="tittle-pay moraNomina">
                                             {% set employee = data.payroll_payroll.contract_contract.employer_has_employee_employer_has_employee.employee_employee.person_person %}
@@ -424,6 +424,45 @@
                                         <div class="center" style="clear: both;background: #CCC;padding: 10px 0;">
                                             <a style="color:#5D5D5D;font-weight: 600" class="notAjax" href="">&#10093; Detalles</a>
                                         </div>-->
+                                    </div>
+                                {% elseif data.product_product.simple_name == "PRM"  %}
+                                    <div class="deuda light grisclarofont">
+                                        <div align="center" colspan="4">Pilas Pendientes por Pagar</div>
+                                    </div>
+                                    <div class="borderclass">
+
+                                        <div class="aportesFecha light">
+                                            Pila del mes a seguridad social de Diciembre
+                                            {% set payType = data.prima.contract_contract.pay_method_pay_method.pay_type_pay_type.payroll_code %}
+                                            <div class="center">
+                                                {% if payType != 'EFE' %}
+                                                    <label style="font-weight: 100;"><input type="radio" class="toPayArray"
+                                                                                            name="{{ data.id_purchase_orders_description }}"
+                                                                                            value="p-{{ data.id_purchase_orders_description }}">
+                                                        Pagar </label>
+                                                    <label style="font-weight: 100;margin-left: 15px;"><input type="radio"
+                                                                                                              class="alreadyPaid"
+                                                                                                              name="{{ data.id_purchase_orders_description }}"
+                                                                                                              value="ap-{{ data.id_purchase_orders_description }}">
+                                                        Pagaré fuera de la plataforma </label>
+                                                {% else %}
+                                                    <label style="font-weight: 100;margin-left: 15px;"><input type="radio"
+                                                                                                              class="alreadyPaid"
+                                                                                                              name="{{ data.id_purchase_orders_description }}"
+                                                                                                              value="ap-{{ data.id_purchase_orders_description }}">
+                                                        Pago en efectivo - Generar comprobante </label>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="datadesc moraNominaBorder col-sm-12">
+                                            <div class="col-sm-10 title-span pila-empl azulmediofont bold">
+
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <p>Total</p>
+                                                <h2 class="h2">${{ data.value|number_format(0, '.', ',') }}</h2>
+                                            </div>
+                                        </div>
                                     </div>
                                 {% else %}
                                     {% if data.product_product.simple_name == "PP" %}
