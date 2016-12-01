@@ -171,7 +171,7 @@ class HighTechRestController extends FOSRestController
             $context = array(
                 'emailType'=>'succesRecollect',
                 'toEmail' => $dis->getIdUser()->getEmail(),
-                'userName' => $dis->getIdUser()->getPersonPerson()->getFullName(),
+                'userName' => $dis->getIdUser()->getPersonPerson()->getNames(),
                 'fechaRecaudo' => $date,
                 'value'=>$dis->getValue(),
                 'path'=>$path,
@@ -773,11 +773,13 @@ class HighTechRestController extends FOSRestController
 			$singleTransaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
 
 			$employer = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer')->findOneBy(array('existentPila' => $singleTransaction->getIdTransaction()));
-			$employer->setExistentPila(-1);
-
-			$em->persist($employer);
-			$em->flush();
-
+			
+			if($employer != null){
+				$employer->setExistentPila(-1);
+				
+				$em->persist($employer);
+				$em->flush();
+			}
 		}
 		else if( $parameters['registerState'] != -1 ){
 			$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'InsPil-InsRec'));
@@ -814,6 +816,7 @@ class HighTechRestController extends FOSRestController
 				$media->setProviderStatus(Media::STATUS_OK);
 				$media->setContext('person');
 				$media->setDocumentDocument($document);
+				$media->setContentType('application/zip');
 				
 				$document->setMediaMedia($media);
 				
@@ -897,12 +900,15 @@ class HighTechRestController extends FOSRestController
 			$singleTransaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
 
 			$purchaseOrderDescription = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')->findOneBy(array('uploadedFile' => $singleTransaction->getIdTransaction()));
-			$purchaseOrderDescription->setUploadedFile(-1);
-			$purchaseOrderDescription->setEnlaceOperativoFileName($parameters['planillaNumber']);
-
-			$em->persist($purchaseOrderDescription);
-			$em->flush();
-
+			
+			if($purchaseOrderDescription != NULL){
+				$purchaseOrderDescription->setUploadedFile(-1);
+				$purchaseOrderDescription->setEnlaceOperativoFileName($parameters['planillaNumber']);
+				
+				$em->persist($purchaseOrderDescription);
+				$em->flush();
+			}
+			
 		}
 		elseif ( $estadoPlanilla == 0 && $errorLog != ""){
 			//This means the planilla was created succesfully but has warnings
@@ -911,7 +917,9 @@ class HighTechRestController extends FOSRestController
 			$singleTransaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
 			
 			$purchaseOrderDescription = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')->findOneBy(array('uploadedFile' => $singleTransaction->getIdTransaction()));
-			$purchaseOrderDescription->setEnlaceOperativoFileName($parameters['planillaNumber']);
+			if($purchaseOrderDescription != NULL){
+				$purchaseOrderDescription->setEnlaceOperativoFileName($parameters['planillaNumber']);
+			}
 			
 			if($singleTransaction->getTransactionState() != NULL){
 				$transactionState = $singleTransaction->getTransactionState();
@@ -923,7 +931,13 @@ class HighTechRestController extends FOSRestController
 			
 			/** @var Document $document */
 			$document = new Document();
-			$document->setName("Enlace operativo uploaded file warning " . $purchaseOrderDescription->getIdPurchaseOrdersDescription());
+			
+			if($purchaseOrderDescription != NULL){
+				$document->setName("Enlace operativo uploaded file warning " . $purchaseOrderDescription->getIdPurchaseOrdersDescription());
+			}
+			else{
+				$document->setName("Enlace operativo uploaded file warning ");
+			}
 			$document->setStatus(1);
 			$document->setDocumentTypeDocumentType($documentType);
 			
@@ -940,6 +954,7 @@ class HighTechRestController extends FOSRestController
 			$media->setProviderStatus(Media::STATUS_OK);
 			$media->setContext('person');
 			$media->setDocumentDocument($document);
+			$media->setContentType('application/zip');
 			
 			$document->setMediaMedia($media);
 			
@@ -953,7 +968,10 @@ class HighTechRestController extends FOSRestController
 			$singleTransaction->setTransactionState($transactionState);
 			$em->persist($singleTransaction);
 			
-			$em->persist($purchaseOrderDescription);
+			if($purchaseOrderDescription != NULL){
+				$em->persist($purchaseOrderDescription);
+			}
+			
 			$em->flush();
 			
 			unlink($file);
@@ -976,7 +994,12 @@ class HighTechRestController extends FOSRestController
 			if($parameters['errorLog'] != "" ) {
 				/** @var Document $document */
 				$document = new Document();
-				$document->setName("Enlace operativo upload file error " . $purchaseOrderDescription->getIdPurchaseOrdersDescription());
+				if($purchaseOrderDescription != NULL){
+					$document->setName("Enlace operativo uploaded file error " . $purchaseOrderDescription->getIdPurchaseOrdersDescription());
+				}
+				else{
+					$document->setName("Enlace operativo uploaded file error ");
+				}
 				$document->setStatus(1);
 				$document->setDocumentTypeDocumentType($documentType);
 				
@@ -993,6 +1016,7 @@ class HighTechRestController extends FOSRestController
 				$media->setProviderStatus(Media::STATUS_OK);
 				$media->setContext('person');
 				$media->setDocumentDocument($document);
+				$media->setContentType('application/zip');
 				
 				$document->setMediaMedia($media);
 				

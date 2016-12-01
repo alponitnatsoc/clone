@@ -170,12 +170,19 @@ trait SubscriptionMethodsTrait
                 $value = $actContract->getSalary() / $actContract->getWorkableDaysMonth();
                 $wokableDaysWeek = $actContract->getWorkableDaysMonth() / 4;
             }
+            
+	          if($employeePerson->getDocumentType() == "PASAPORTE"){
+	          	$employeeDocType = "PA";
+	          }else{
+	          	$employeeDocType = $employeePerson->getDocumentType();
+	          }
+	          
             $request->setMethod("POST");
             $request->request->add(array(
                 "employee_id" => $eHE->getIdEmployerHasEmployee(),
                 "last_name" => $employeePerson->getLastName1(),
                 "first_name" => $employeePerson->getNames(),
-                "document_type" => $employeePerson->getDocumentType(),
+                "document_type" => $employeeDocType,
                 "document" => $employeePerson->getDocument(),
                 "gender" => $employeePerson->getGender(),
                 "birth_date" => $employeePerson->getBirthDate()->format("d-m-Y"),
@@ -745,9 +752,16 @@ trait SubscriptionMethodsTrait
         $dateToday->setDate(1970, 01, 01); //TODO DO NOT ERASE THIS SHIT
         $request = $this->container->get('request');
         if ($employer->getIdSqlSociety() == null) {
+        	  if($person->getDocumentType() == "PASAPORTE"){
+        	  	$nitToAdd = "PA" . $person->getDocument();
+	          }
+	          else{
+	          	$nitToAdd = $person->getDocumentType().$person->getDocument();
+	          }
+	          
             $request->setMethod("POST");
             $request->request->add(array(
-                "society_nit" => $person->getDocumentType().$person->getDocument(),
+                "society_nit" => $nitToAdd,
                 "society_name" => $person->getNames(),
                 "society_start_date" => $dateToday->format("d-m-Y"),
                 "society_mail" => $user->getEmail(),
@@ -796,7 +810,7 @@ trait SubscriptionMethodsTrait
         ));
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClient', array('_format' => 'json'));
         if ($insertionAnswer->getStatusCode() == 406 || $insertionAnswer->getStatusCode() == 201) {
-            $request->setMethod("POST");
+            /*$request->setMethod("POST");
             $request->request->add(array(
                 "documentType" => "NIT",
                 "beneficiaryId" => "900862831",
@@ -818,7 +832,7 @@ trait SubscriptionMethodsTrait
             $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postBeneficiary', array('_format' => 'json'));
             if (!($insertionAnswer->getStatusCode() == 201 || $insertionAnswer->getStatusCode() == 406)) {
                 return false;
-            }
+            }*/
         }else{
             return false;
         }

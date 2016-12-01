@@ -15,7 +15,7 @@ a {text-decoration: none}
 .naranja {background: #FD9224}
 .azuloscuro {background: #3c4b5a}
 .azulmedio {background: #00838c}
-.azulclaro {background: #00cccb}
+.azulclaro {background: #33d7d6} /*00cccb*/
 
 .light-italic {font-family: 'Open Sans', sans-serif;font-weight: 300;font-style:italic}
 .light {font-family: 'Open Sans', sans-serif;font-weight: 300}
@@ -43,7 +43,8 @@ a {text-decoration: none}
 
 	#cont-succesdocs {
 	width: 800px;
-	margin: 0 auto}
+	margin: 0 auto;
+	clear: both;}
 
 #title-siccesdocs {
 	text-align: center;
@@ -131,7 +132,7 @@ a {text-decoration: none}
 	font-size: 20px}
 
 #pagoadelantado {
-	background: #fbfbfb;;
+	background: #FFF;
 	border-radius: 5px
 	}
 #contenidopagoadelando {
@@ -163,7 +164,7 @@ a {text-decoration: none}
 
 	@media only screen and (max-width: 1200px) {
 		#cont-succesdocs {
-			width:100%;
+			width:90%;
 		}
 	}
 @media only screen and (max-width: 1024px) {

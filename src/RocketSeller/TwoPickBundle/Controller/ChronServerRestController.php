@@ -201,9 +201,9 @@ class ChronServerRestController extends FOSRestController
                 $arrEmployerHasEmployee = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")
                                 ->findBy(array("employerEmployer" => $employer));
                 $hasDocumentsPending = false;
+                /** @var EmployerHasEmployee $employerHasEmployee */
                 foreach ($arrEmployerHasEmployee as $employerHasEmployee) {
-                    //TODO cambiar cuando me diga andres que ya está la tabla de los document status
-                    if($employerHasEmployee->getDocumentStatus() < 2) {
+                    if($employerHasEmployee->getDateDocumentsUploaded() == null) {
                         $hasDocumentsPending = true;
                         break;
                     }
@@ -361,12 +361,12 @@ class ChronServerRestController extends FOSRestController
                             if($isLastPayDay) {
                                 $send = $smailer->sendEmailByTypeMessage(array('emailType' => 'lastReminderPay',
                                     'toEmail' => $user->getEmail(),
-                                    'userName' => $user->getPersonPerson()->getFullName(),
+                                    'userName' => $user->getPersonPerson()->getNames(),
                                     'days' => 2));
                             } else {
                                 $send = $smailer->sendEmailByTypeMessage(array('emailType' => 'reminderPay',
                                     'toEmail' => $user->getEmail(),
-                                    'userName' => $user->getPersonPerson()->getFullName(),
+                                    'userName' => $user->getPersonPerson()->getNames(),
                                     'isEfectivo' => $isEfectivo,
                                     'days' => 2));
                             }
@@ -374,12 +374,12 @@ class ChronServerRestController extends FOSRestController
                             if($isLastPayDay) {
                                 $send = $smailer->sendEmailByTypeMessage(array('emailType' => 'lastReminderPay',
                                     'toEmail' => $user->getEmail(),
-                                    'userName' => $user->getPersonPerson()->getFullName(),
+                                    'userName' => $user->getPersonPerson()->getNames(),
                                     'days' => 3));
                             } else {
                                 $send = $smailer->sendEmailByTypeMessage(array('emailType' => 'reminderPay',
                                     'toEmail' => $user->getEmail(),
-                                    'userName' => $user->getPersonPerson()->getFullName(),
+                                    'userName' => $user->getPersonPerson()->getNames(),
                                     'isEfectivo' => $isEfectivo,
                                     'days' => 3));
                             }

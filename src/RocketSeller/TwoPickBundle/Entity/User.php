@@ -269,7 +269,11 @@ class User extends BaseUser
      */
     private $promoCodes;
 
-
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $promoCodeClaimedByReferidor;
 
     /**
      * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\Log", mappedBy="userUser",cascade={"persist"})
@@ -1187,5 +1191,29 @@ class User extends BaseUser
     public function getUserHasCampaigns()
     {
         return $this->userHasCampaigns;
+    }
+
+    /**
+     * Set promoCodeClaimedByReferidor
+     *
+     * @param boolean $promoCodeClaimedByReferidor
+     *
+     * @return User
+     */
+    public function setPromoCodeClaimedByReferidor($promoCodeClaimedByReferidor)
+    {
+        $this->promoCodeClaimedByReferidor = $promoCodeClaimedByReferidor;
+
+        return $this;
+    }
+
+    /**
+     * Get promoCodeClaimedByReferidor
+     *
+     * @return boolean
+     */
+    public function getPromoCodeClaimedByReferidor()
+    {
+        return $this->promoCodeClaimedByReferidor;
     }
 }

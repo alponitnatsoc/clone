@@ -13,7 +13,7 @@ class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
     public function load(ObjectManager $manager)
     {
         $productS1 = new Product();
-        $productS1->setName('Pago Symplifica 0 a 10');
+        $productS1->setName('Pago suscripción mensual Symplifica');
         $productS1->setDescription('El pago de symplifica que hace el usuario par adquirir los servicios básicos de 0 a 10 días');
         $productS1->setPrice(floatval('14224')); //16500/1,16=14224.13
         $productS1->setSimpleName('PS1');
@@ -22,7 +22,7 @@ class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($productS1);
 
         $productS2 = new Product();
-        $productS2->setName('Pago Symplifica 11 a 19');
+        $productS2->setName('Pago suscripción mensual Symplifica');
         $productS2->setDescription('El pago de symplifica que hace el usuario par adquirir los servicios básicos de 11 a 19 días');
         $productS2->setPrice(floatval('19397')); //21000/1,16=18103.44
         $productS2->setSimpleName('PS2');
@@ -31,7 +31,7 @@ class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($productS2);
 
         $productS3 = new Product();
-        $productS3->setName('Pago Symplifica 20 o +');
+        $productS3->setName('Pago suscripción mensual Symplifica');
         $productS3->setDescription('El pago de symplifica que hace el usuario par adquirir los servicios básicos de 20 o más días');
         $productS3->setPrice(floatval('25431')); //27500/1,16=23706.89
         $productS3->setSimpleName('PS3');
@@ -40,7 +40,7 @@ class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($productS3);
 
         $productRE = new Product();
-        $productRE->setName('Pago Registro express symplifica');
+        $productRE->setName('Pago Registro express Symplifica');
         $productRE->setDescription('El pago de symplifica que hace el usuario para adquirir los servicios de registro express');
         $productRE->setPrice(floatval('129310.35'));
         $productRE->setSimpleName('PRE');
@@ -58,7 +58,7 @@ class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($productAL);
 
         $productPN = new Product();
-        $productPN->setName('Pago Nomina');
+        $productPN->setName('Pago Nómina');
         $productPN->setDescription('Pago Nomina');
         $productPN->setPrice(null);
         $productPN->setSimpleName('PN');
@@ -67,7 +67,7 @@ class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($productPN);
 
         $productPP = new Product();
-        $productPP->setName('Pago PILA');
+        $productPP->setName('Pago a Seguridad Social');
         $productPP->setDescription('Pago PILA');
         $productPP->setPrice(null);
         $productPP->setSimpleName('PP');
@@ -76,7 +76,7 @@ class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($productPP);
 
         $productCT = new Product();
-        $productCT->setName('Costo transaccion');
+        $productCT->setName('Costo transacción');
         $productCT->setDescription('Costo transaccion');
         $productCT->setPrice("4741.37");
         $productCT->setSimpleName('CT');
@@ -85,7 +85,7 @@ class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($productCT);
 
         $productMora = new Product();
-        $productMora->setName('Mora Pila');
+        $productMora->setName('Mora aportes a Seguridad Social');
         $productMora->setDescription('Costo que paga el usuario por mora de Pila');
         $productMora->setPrice("0");
         $productMora->setSimpleName('CM');
@@ -93,7 +93,7 @@ class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($productMora);
 
         $product4x1000 = new Product();
-        $product4x1000->setName('4*1000(Cuatro por mill)');
+        $product4x1000->setName('4 x mil');
         $product4x1000->setDescription('El Impuesto que se cobrará adicional a el costo de la transaccion');
         $product4x1000->setPrice("0.004");
         $product4x1000->setSimpleName('CPM');
@@ -108,6 +108,14 @@ class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
         $productDiscount->setValidity(null);
         $manager->persist($productDiscount);
 
+        $productDevolucion = new Product();
+        $productDevolucion->setName('Devolución');
+        $productDevolucion->setDescription('Devolución de dinero al empleador');
+        $productDevolucion->setSimpleName('DEV');
+        $productDevolucion->setPrice(null);
+        $productDevolucion->setValidity(null);
+        $manager->persist($productDevolucion);
+
         $manager->flush();
 
         $this->addReference('product-type-ps1', $productS1);
@@ -121,6 +129,7 @@ class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('product-type-cm', $productMora);
         $this->addReference('product-type-4x1000', $product4x1000);
         $this->addReference('product-type-dis', $productDiscount);
+        $this->addReference('product-type-dev', $productDevolucion);
     }
 
     public function getOrder()

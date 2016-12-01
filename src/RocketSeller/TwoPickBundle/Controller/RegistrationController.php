@@ -23,6 +23,7 @@ use FOS\UserBundle\Model\UserInterface;
 use RocketSeller\TwoPickBundle\Entity\Invitation;
 use RocketSeller\TwoPickBundle\Entity\Referred;
 use RocketSeller\TwoPickBundle\Form\RegistrationExpress;
+use Doctrine\ORM\QueryBuilder;
 
 class RegistrationController extends BaseController
 {
@@ -127,11 +128,21 @@ class RegistrationController extends BaseController
             $person->addPhone($phone);
             $user->setPersonPerson($person);
             $user->setUsername($user->getEmail());
-	        
+            $refCode = $this->generateUserReferidosCode($user);
+	        $user->setCode($refCode);
+
+            $promoTypeRef = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCodeType")->find(6);
+            /** @var PromotionCode $promoCode */
+            $promoCode = new PromotionCode();
+            $promoCode->setCode($refCode);
+            $promoCode->setPromotionCodeTypePromotionCodeType($promoTypeRef);
+            $promoCode->setUserUser($user);
+            $em->persist($promoCode);
+
             $invitationCode=$form->get("creationCode")->getData();
-	          $utils = $this->get('app.symplifica_utils');
-	          $invitationCode = $utils->mb_normalize($invitationCode);
-	          
+            $utils = $this->get('app.symplifica_utils');
+            $invitationCode = $utils->mb_normalize($invitationCode);
+
             $promoCodeRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCode");
             /** @var PromotionCode $realCode */
             $realCode=$promoCodeRepo->findOneBy(array("code"=>$invitationCode));
@@ -148,6 +159,7 @@ class RegistrationController extends BaseController
                 if($realCode!=null&&$realCode->getPromotionCodeTypePromotionCodeType()->getUniqueness()=="-1"&&$realCode->getUsers()->count()==0){
                     /** @var User $user */
                     $realCode->addUser($user);
+                    dump('entre');
                     $user->setIsFree($realCode->getPromotionCodeTypePromotionCodeType()->getDuration());
                     $realCode->setStartDate(new \DateTime());
                     $endDate= new DateTime(date("Y-m-d", strtotime("+".$user->getIsFree()." month", strtotime($realCode->getStartDate()->format("Y-m-d")))));
@@ -190,6 +202,55 @@ class RegistrationController extends BaseController
             'form' => $form->createView(),
             'errorss'=>$errorss
         ));
+    }
+
+    public function generateUserReferidosCode($user) {
+        $em = $this->getDoctrine()->getManager();
+        /* @var $utils UtilsController */
+        $utils = $this->get('app.symplifica_utils');
+
+        /* @var $user User */
+        $names = explode(' ', $user->getPersonPerson()->getNames());
+        $userFirstName = $utils->normalizeAccentedChars($names[0]);
+        $lastNames = explode(' ', $user->getPersonPerson()->getLastName1());
+        $userLastName = $utils->normalizeAccentedChars($lastNames[0]);
+        $userFirstName = $utils->mb_normalize($userFirstName);
+        $userLastName = $utils->mb_capitalize($utils->mb_normalize($userLastName));
+
+        $refCode = $userFirstName . $userLastName;
+
+        /** @var QueryBuilder $query */
+        $query = $em->createQueryBuilder();
+        $query->select('U');
+        $query->from('RocketSellerTwoPickBundle:User', 'U');
+
+        $query->where($query->expr()->orX(
+            $query->expr()->like('U.code', '?1'),
+            $query->expr()->like('U.code', '?2') ) )
+            ->setParameter('1', $refCode.'%')
+            ->setParameter('2', $utils->mb_normalize($refCode).'%');
+
+        $query->orderBy("U.id", 'DESC');
+
+        $users = $query->getQuery()->getResult();
+        $num = -1;
+        if($users) {
+            $lastCode = $users[0]->getCode();
+            $num = 0;
+            $mult = 1;
+            for ($i = strlen($lastCode) - 1; $i >= 0; $i--) {
+                if ($lastCode[$i] < '0' || $lastCode[$i] > '9') {
+                    break;
+                }
+                $num += ($lastCode[$i] - '0') * $mult;
+                $mult *= 10;
+            }
+        }
+        $num++;
+        if($num != 0) {
+            $refCode .= $num;
+        }
+        return $refCode;
     }
 
      /**

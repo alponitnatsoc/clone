@@ -2183,7 +2183,6 @@ class ProcedureController extends Controller
                 $vac->getUserUser()->addAction($tempAction);//adding the action to the user
                 $tempAction->setActionTypeActionType($this->getActionTypeByActionTypeCode('SDE'));//setting actionType to validate entity
                 $tempAction->setEmployerEntity($employerHasEntity);
-
                 if($employerHasEntity->getState()==1){
                     $tempAction->setActionStatus($this->getStatusByStatusCode('NEW'));
                 }else{
@@ -3874,9 +3873,6 @@ class ProcedureController extends Controller
 //        }
         return true;
     }
-
-
-
 
     /**
      * estructura de tramite para generar vueltas y tramites

@@ -3,9 +3,8 @@
     {{ parent() }}
     <style type="text/css">
         .form-group label {
-            font-style: italic;
-    		font-weight: 100;
-    		text-transform: lowercase;
+        		font-weight: 100;
+        		text-transform: lowercase;
         }
 
 		.form-group label:first-letter {
@@ -20,27 +19,33 @@
 		}
     .ultimo {
       clear: both;
-    border: dashed 1px #CCC;
-    width: 80%;
-    border-radius: 5px;
-    margin: 62px auto 0 auto;
-    padding: 20px 40px;
+      width: 80%;
+      margin: 0 auto;
+      padding: 40px 0 0 0;
     }
 
     </style>
 {% endblock stylesheet %}
 {% block fos_user_content %}
-	<br />
+<div class="col-sm-12 col-xs-12 align-Resp no-Padding-Col azulclaro">
+    <div id="" class="col-sm-12 col-xs-12 blockStep inline  nav-link">
+        <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+             <img src="{{ asset('public/img/home/account.png') }}" class="center-block">
+        </div>
+        <div id="" class="col-md-10 col-xs-12">
+            <div id="" class="text-left">
+                <h1 style="color:#FFF;margin:25px 0 0;font-size:25px" class="bold">¡Ultimo paso!</h1>
+                <span clas="light" style="color:#FFF;margin:0;font-weight:100;font-size:20px">Estas muy cerca de terminar</span>
+            </div>
+        </div>
+    </div>
+</div>
 	<div class="row">
 		<div class="ultimo" >
 			<div>
 				<div class="media" >
-					<div class="media-left">
-						<i class="glyphicon glyphicon glyphicon-user bigIcon"></i>
-					</div>
-					<div class="media-body legalInCorrect">
-						<h4 class="media-heading" style="font-weight: bold;">¡Último paso!</h4>
-            Por tu seguridad validaremos tu identidad:<br>
+					<div class="media-body legalInCorrect grisclarofont light">
+						<h4 class="media-heading" style="font-weight: bold;">Por tu seguridad validaremos tu identidad:</h4>
             &#10148; Tienes dos intentos para responder correctamente las preguntas<br>
             &#10148; En caso de que falles da clic en la la pestaña “ayuda” a tu izquierda y te contactaremos
 					</div>
@@ -50,7 +55,7 @@
 	</div>
 	<br /><br />
 	<div class="row">
-		<div class="col-sm-10 col-sm-offset-1" >
+		<div class="col-sm-10 col-sm-offset-1 light grisclarofont">
 			{{ form_start(form) }}
 			{{ form_errors(form) }}
 			<div id="formFields">

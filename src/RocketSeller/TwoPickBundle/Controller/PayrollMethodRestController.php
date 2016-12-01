@@ -440,7 +440,7 @@ class PayrollMethodRestController extends FOSRestController
 				      "GSCAccount" => $employerArray[$index]->getIdHighTech(),
 				      "FileToUpload" => json_decode($insertionAnswerTextFile->getContent(), true)['fileToSend']
 			      ));
-			      $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postUploadFileToPilaOperator', array('_format' => 'json'));
+			      $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postUploadFileToPilaOperator', array('request' => $request) , array('_format' => 'json'));
 			      if ($insertionAnswer->getStatusCode() == 200) {
 				      //Received succesfully
 				      $radicatedNumber = json_decode($insertionAnswer->getContent(), true)["numeroRadicado"];
@@ -463,9 +463,9 @@ class PayrollMethodRestController extends FOSRestController
 		      $transaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
 		      $em->persist($transaction);
 		      $em->flush();
-		      $podPila->setUploadedFile($transaction->getIdTransaction());
-		      $podPila->addTransaction($transaction);
-		      $em->persist($podPila);
+		      $singlePod->setUploadedFile($transaction->getIdTransaction());
+		      $singlePod->addTransaction($transaction);
+		      $em->persist($singlePod);
 		      $em->flush();
 	      }
 	    

@@ -4,7 +4,30 @@
 
 {% block fos_user_content %}
 
-    <div class="col-sm-12 col-xs-12 align-Resp">
+    <div class="col-sm-12 col-xs-12 align-Resp azulclaro">
+      <a id="" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" href="/register/edit" style="margin-bottom:0;padding: 5px 5px 0 !important">
+        <div id="" class=" col-sm-12 col-xs-12 blockStep inline  nav-link" >
+            <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+                 <img src="/img/block-inline.png" class="center-block">
+            </div>
+            <div id="" class="col-md-10 col-xs-12">
+                <div id="" class="text-left">
+                    <h1 style="color:#FFF;margin:25px 0 0;font-size:25px" class="bold">Pago de empleados</h1>
+                    <span clas="light" style="color:#FFF;margin:0;font-weight:100;font-size:20px">
+                      {% if "now"|date('j') <= 15%}
+                          {% set quincena = '(1ª Quincena)' %}
+                      {% else %}
+                          {% set quincena = '(2ª Quincena)' %}
+                      {% endif %}
+                      <p>{{ "now"|date('F')|trans }} {{ "now"|date('Y') }}  {{ quincena }} </p>
+                    </span>
+                </div>
+            </div>
+          </div>
+        </a>
+    </div>
+
+    <!-- <div class="col-sm-12 col-xs-12 align-Resp">
         <a id="" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" href="/register/edit">
             <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
                 <img src="/img/block-inline.png" class="center-block">
@@ -21,7 +44,7 @@
                 </div>
             </div>
         </a>
-    </div>
+    </div> -->
 
     <div class="payroll calculate" style="clear:both">
         {% set dataNomina = toPay.purchase_order_descriptions %}
@@ -161,6 +184,8 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
     <script>
-
+        $('#formPay').one('submit', function() {
+            $(this).find('input[type="submit"]').attr('disabled','disabled');
+        });
     </script>
 {% endblock %}

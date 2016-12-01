@@ -251,6 +251,21 @@ back_check_banks:
 back_fix_notifications_pay_notificationid:
     path:         /backoffice/fix/notifications/pay/notificationid
     defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:fixNotificationPayNotificationId }
+back_set_referidos_code:
+    path:         /backoffice/set/referidos/code
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:setReferidosCode }
+back_set_referidos_code_allready_in_promocode:
+    path:         /backoffice/set/referidos/code/allready/in/promocode
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:setReferidosCodeActionAlreadyInPromoCode }
 back_personal_info_view:
     path:         /backoffice/personal/info/view
     defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:personalInfoView }
+back_upload_planilla_file:
+    path:         /backoffice/upload/{idPod}/planilla
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:uploadFileUsingPilaBot }
+back_download_planilla_log:
+    path:         /backoffice/download/{podId}/planilla/log
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:downloadPlanillaLog }
+back_fix_broken_pila_bot:
+    path:         /backoffice/fix/broken/pila/bot
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:fixBrokenPilaBot }

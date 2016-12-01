@@ -229,7 +229,7 @@ class PaymentMethodRestController extends FOSRestController
                 $context = array(
                     'emailType'=>'validatePayMethod',
                     'toEmail'=>$realUser->getEmail(),
-                    'userName'=>$realUser->getPersonPerson()->getFullName(),
+                    'userName'=>$realUser->getPersonPerson()->getNames(),
                     'starDate'=>new DateTime(),
                     'payMethod'=>$paramFetcher->get('pay_method')
                 );
@@ -432,13 +432,13 @@ class PaymentMethodRestController extends FOSRestController
                         'emailType'=>'failDispersion',
                         'userEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
                         'toEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
-                        'userName'=>$employerPerson->getFullName(),
+                        'userName'=>$employerPerson->getNames(),
                     );
                     $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
                     $contextBack=array(
                         'emailType'=>'regectionDispersion',
                         'userEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
-                        'userName'=>$employerPerson->getFullName(),
+                        'userName'=>$employerPerson->getNames(),
                         'rejectionDate'=>$fechaRechazo,
                         'toEmail'=> 'backOfficeSymplifica@gmail.com',
                         'phone'=>$employerPerson->getPhones()->first(),
@@ -491,13 +491,13 @@ class PaymentMethodRestController extends FOSRestController
                             'emailType'=>'failDispersion',
                             'userEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
                             'toEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
-                            'userName'=>$employerPerson->getFullName(),
+                            'userName'=>$employerPerson->getNames(),
                         );
                         $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
                         $contextBack=array(
                             'emailType'=>'regectionDispersion',
                             'userEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
-                            'userName'=>$employerPerson->getFullName(),
+                            'userName'=>$employerPerson->getNames(),
                             'rejectionDate'=>$fechaRechazo,
                             'toEmail'=> 'backOfficeSymplifica@gmail.com',
                             'phone'=>$employerPerson->getPhones()->first(),
@@ -578,13 +578,13 @@ class PaymentMethodRestController extends FOSRestController
                         'emailType'=>'failDispersion',
                         'userEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
                         'toEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
-                        'userName'=>$employerPerson->getFullName(),
+                        'userName'=>$employerPerson->getNames(),
                     );
                     $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
                     $contextBack=array(
                         'emailType'=>'regectionDispersion',
                         'userEmail'=>$rejectedPOD->getPurchaseOrders()->getIdUser()->getEmail(),
-                        'userName'=>$employerPerson->getFullName(),
+                        'userName'=>$employerPerson->getNames(),
                         'rejectionDate'=>$fechaRechazo,
                         'toEmail'=> 'backOfficeSymplifica@gmail.com',
                         'phone'=>$employerPerson->getPhones()->first(),
@@ -936,46 +936,20 @@ class PaymentMethodRestController extends FOSRestController
                 return array('code'=>400,'data'=>array('error' => array("Credit Card" => "No se pudo hacer el cobro a la tarjeta de Credito", "charge-rc" => $chargeRC)));
             }else{
                 //we inmidiatly disperse it to symplifica account
-
-                $request->setMethod("POST");
-                $request->request->add(array(
-                    "documentNumber" => $person->getDocument(),
-                    "beneficiaryId" => "900862831",
-                    "beneficiaryAmount" => $purchaseOrder->getValue(),
-                    "dispersionType" => "1",//this is for normal tranfer like its a payroll
-                    "chargeId" => $purchaseOrder->getIdPurchaseOrders(),
-                ));
-
-                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClientPayment',array("request"=>$request), array('_format' => 'json'));
-                if($insertionAnswer->getStatusCode()==200||$insertionAnswer->getStatusCode()==201){
-                    $radicatedNumber=substr(md5($purchaseOrder->getIdPurchaseOrders()),0,18);
-                    $purchaseOrder->setRadicatedNumber($radicatedNumber);
-                    $pOS = $pOSRepo->findOneBy(array("idNovoPay" => "00"));
-                    $purchaseOrder->setPurchaseOrdersStatus($pOS);
-                    $purchaseOrder->setDatePaid(new DateTime());
-                    $em->persist($purchaseOrder);
-                    $em->flush();
-                    $request->setMethod("POST");
-                    $request->request->add(array(
-                        "numeroRadicado" => $radicatedNumber,
-                        "estado" => "0"
-                    ));
-                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:HighTechRest:postCollectionNotification',array("request"=>$request), array('_format' => 'json'));
-                    return array('code'=>$insertionAnswer->getStatusCode(),'data'=> $insertionAnswer->getContent());
-
-                }else{
-                    //TODO-Gabriel error dispersing something really bad happended mabe
-                }
-
-            }
-
-            if($flag){
-                $pay = new Pay();
-                $pay->setUserIdUser($purchaseOrder->getIdUser());
-                $pay->setIdDispercionNovo(-1);
-                $pay->setPurchaseOrdersDescription($purchaseOrder->getPurchaseOrderDescriptions()->get(0));
-                $em->persist($pay);
-                $em->flush();
+ 	            $radicatedNumber=substr(md5($purchaseOrder->getIdPurchaseOrders()),0,18);
+              $purchaseOrder->setRadicatedNumber($radicatedNumber);
+              $pOS = $pOSRepo->findOneBy(array("idNovoPay" => "00"));
+              $purchaseOrder->setPurchaseOrdersStatus($pOS);
+              $purchaseOrder->setDatePaid(new DateTime());
+              $em->persist($purchaseOrder);
+              $em->flush();
+              $request->setMethod("POST");
+              $request->request->add(array(
+                  "numeroRadicado" => $radicatedNumber,
+                  "estado" => "0"
+              ));
+              $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:HighTechRest:postCollectionNotification',array("request"=>$request), array('_format' => 'json'));
+              return array('code'=>$insertionAnswer->getStatusCode(),'data'=> $insertionAnswer->getContent());
             }
         }else{
             $answer = json_decode($insertionAnswer->getContent(), true);
