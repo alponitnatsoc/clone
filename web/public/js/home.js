@@ -1,18 +1,26 @@
 $(document).ready(function(){
     $(".btnBanner").click(function(){
         $("#campanaSlide").animate({left: '0px'}, "slow");
+        $("#trigger2, #trigger3").fadeOut();
     });
-    $(".cerrarSlide").click(function(){
+    $(".cerrarSlide, #campanaBtn").click(function(){
         $("#campanaSlide").animate({left: '-2500px'}, "slow");
+        $("#trigger1").fadeIn();
     });
     $("#terminosBtn").click(function(){
         $("#150kCampaign").modal("show");
     });
-});
 
-$('#campanaBtn').click(function(){
-    $("#campanaSlide").animate({left: '-2500px'}, "slow");
-    $("#formfirstname").focus();
+    $("#esfuerzoTrigg").click(function(){
+        $("#trigger1").fadeOut("slow");
+        $("#trigger2").delay(1000);
+        $("#trigger2").fadeIn("slow");
+    });
+    $("#sendTrigg").click(function(){
+        $("#trigger2").fadeOut("slow");
+        $("#trigger3").delay(1000);
+        $("#trigger3").fadeIn("slow");
+    });
 });
 
 $('#pausar').click(function(){
@@ -219,4 +227,3 @@ function funcion(){
 function stopVideo(){
     $('#mainVideoFrame').attr('src', $('#mainVideoFrame').attr('src'));
 }
-

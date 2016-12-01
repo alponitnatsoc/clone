@@ -17,6 +17,7 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('public/css/home/home.css') }}"/>
 <link rel="stylesheet" type="text/css" href="{{ asset('public/css/home/home2.css') }}"/>
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700' rel='stylesheet' type='text/css'>
+<link href="https://fonts.googleapis.com/css?family=Raleway:200,700" rel="stylesheet">
 <link href="{{ asset('public/css/home/bootstrap.min.css') }}" rel="stylesheet">
 <link href="{{ asset('public/css/home/bootstrap-slider.css') }}" rel="stylesheet">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
@@ -71,47 +72,76 @@
 
 				<!--slide lateral informacion de campaña-->
 					<div id="campanaSlide">
-						<div class="campanaSlideContent" align="center">
+						<div class="campanaSlideContent2" align="center">
 							<div class="cerrarSlide azulmedio bold">
 								X
 							</div>
-							<div class="logoCamp">
-								<img alt="Symplifica" src="{{ asset('public/img/landing/sello.png') }}">
+							<img src="{{ asset('public/img/home/crown.png') }}" alt="">
+							<div class="lightRale textoPromo">
+								<h2 class="boldRale">¡Plan Cero Esfuerzos!</h3>
+								<img src="{{ asset('img/logo-white.png') }}" alt="" width="160" height="auto">
 							</div>
 						</div>
-						<div>
-							<img alt="Symplifica" src="{{ asset('public/img/landing/nube.png') }}" height="100" width="auto">
+						<div id="slideBody">
+							<div id="trigger1">
+								<div class="azulmediofont lightRale titleSlide">
+									Si no tienes tiempo pero quieres hacer las cosas bien<br />
+									<strong class="boldRale">este plan es para ti:</strong>
+								</div>
+								<div class="incluye light grisclarofont" align="left">
+									<ul>
+										<li><span class="azulmediofont">&#10003;</span> Vamos a tu casa u oficina para tomar tu registro</li>
+										<li><span class="azulmediofont">&#10003;</span> Hacemos por ti los trámites y papeleos necesarios</li>
+										<li><span class="azulmediofont">&#10003;</span> Damos una charla a tu empleada sobre beneficios con un regalo especial</li>
+										<li><span class="azulmediofont">&#10003;</span> Te damos un mes gratis de nuestra plataforma</li>
+									</ul>
+								</div>
+								<div class="azulmediofont adPLan">
+									<div class="azulmediofont light">
+										<strong>Adquiere nuestro plan</strong><br/>
+										y por $149.000 olvídate de todo
+									</div>
+									<div><a class="btn notAjax" id="esfuerzoTrigg" style="text-transform: uppercase;background:#fd5c5c;color:#FFF">¡Quiero saber más!</a></div>
+								</div>
+							</div>
+
+							<div class="formEsfuerzo" id="trigger2">
+								<div class="azulmediofont lightRale formSlide">
+									Datos para contactarte<br />
+									<form action="action_page.php">
+									  <input class="inputSLide" type="text" name="firstname" placeholder="Nombre" value="Mickey"><br />
+									  <input class="inputSLide" type="text" name="lastname" placeholder="Celular" value="Mouse"><br />
+										<input class="inputSLide" type="text" name="firstname" placeholder="Correo electrónico" value="Mickey"><br />
+										<input id="sendTrigg" class="submitPLan" type="submit" value="Enviar">
+									</form>
+								</div>
+							</div>
+
+							<div id="trigger3">
+								<div class="azulmediofont lightRale titleSlide">
+									En un momento nos comunicaremos contigo
+								</div>
+								<p class="light grisclarofont">
+									Nuestros asesores harán el trabajo duro por ti, así que relájate te llamaremos pronto.
+								</p>
+								<div><a class="btn notAjax" id="campanaBtn" style="text-transform: uppercase;background:#fd5c5c;color:#FFF">¡Entendido!</a></div>
+							</div>
 						</div>
-						<div id="campanaTitle">
-							<h2 class="bold azuloscurofont">Gestiona de forma sencilla</h2>
-							<h3 class="light azulmediofont" style="margin-top:0;color:#FFF">a los empleados de tu hogar</h3>
-						</div>
-						<div id="campanaDesc" class="azuloscuro" style="color: #FFF;">
-							<h1 class="bold">y ahorra $150.000*</h1>
-							<p class="light azulmedio" style="margin-bottom: 15px;padding: 20px;">
-								Regístrate hoy en Symplifica y si pagas el salario de tu empleada por un medio electrónicos te regalamos
-								<strong>$150.000 pesos para pagar el sueldo de tu empleada*</strong>
-							</p>
-						</div>
-						<div><a class="btn notAjax" id="campanaBtn" style="text-transform: uppercase;background:#fd5c5c;color:#FFF">¡Iniciar registro ahora!</a></div>
-						<br />
-						<span id="terminosBtn">&#10095; Ver términos y condiciones</span>
 					</div>
-				<!--slide lateral informacion de campaña-->
 
          <!--------------------beneficios-------------------------->
         <section>
-					<div class="bannerPromos section group btnBanner">
-						<div class="col span_1_of_2 promo1">
-							<img src="{{ asset('public/img/home/ahorrar.png') }}" alt="">
+					<!-- <div class="bannerPromos btnBanner" align="center">
+						<img src="{{ asset('public/img/home/crown.png') }}" alt="">
+						<div class="lightRale textoPromo">
+							<h3 class="boldRale">Plan Cero Esfuerzos</h3>
+							Formaliza a tu empleada doméstica con un clic
 						</div>
-						<div class="col span_1_of_2 promo2" onClick="ga('send', 'event', 'Formulario', 'Click');">
-							<img src="{{ asset('public/img/home/clicAhorrar.png') }}" alt="">
-						</div>
-					</div>
-					<!-- <div class="titleSec">
-						<h2 class="light grisclarofont">Soluciona cada mes, en un solo lugar todo lo relacionado a la gestión de tus empleados </h2>
+						<a><div class="callto2 rojo light">¡HAZ CLIC AQUÍ!</div></a>
 					</div> -->
+					<div class="titleSec">
+						<h2 class="light grisclarofont">Soluciona cada mes, en un solo lugar todo lo relacionado a la gestión de tus empleados </h2>
+					</div>
         	<div id="beneficios" class="section group">
 
                 <div class="col span_1_of_4 beneficios">
@@ -169,7 +199,7 @@
 										</div>
                     <h3 class="naranjafont extrabold">Dale play al video y descubre en 2 minutos</h3>
                     <p class="light">por qué deberías usar Symplifica</p>
-                    <a href="/register"><div class="callto2 naranja bold">Prueba un mes gratis</div></a>
+                    <a href="/register"><div class="callto2 naranja light">PPRUEBA UN MES GRATIS</div></a>
                 </div>
             </div>
         </section>
@@ -328,7 +358,7 @@ de empleados que quieras administrar</h4>
 
                 </div>
             </div>
-            <a href="/register"><div class="callto2 naranja bold">Prueba un mes gratis</div></a>
+            <a href="/register"><div class="callto2 naranja light">PRUEBA UN MES GRATIS</div></a>
         </section>
 
         <div id="intro-pc">
