@@ -44,7 +44,7 @@ class LoadPositionData extends AbstractFixture implements OrderedFixtureInterfac
 
         $enfermera = new Position();
         $enfermera->setName('Enfermero(a)');
-        $enfermera->setPayrollCoverageCode('1'); // Code 0.522
+        $enfermera->setPayrollCoverageCode('2'); // Code 0.522
         $enfermera->setIdentBy("e");
         $enfermera->setObligations("1. Mantener la higiene personal del paciente y los objetos de uso inherentes a cargo; 2. proporcionar los cuidados básicos y avanzados del paciente; 3. Realizar activadas fuera del hogar con el paciente; 4. vigilar y cuidar al paciente; 5. comprar los implementos que necesite el paciente.");
         $manager->persist($enfermera);

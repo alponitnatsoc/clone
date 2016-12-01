@@ -116,6 +116,11 @@ class Contract
     private $holidayDebt;
 
     /**
+     * @ORM\Column(type="date",nullable=TRUE)
+     */
+    private $holidayDebtDate;
+
+    /**
      * @ORM\OneToMany(targetEntity="WeekWorkableDays", mappedBy="contractContract", cascade={"persist"})
      */
     private $weekWorkableDays;
@@ -894,8 +899,18 @@ class Contract
     public function setHolidayDebt($holidayDebt)
     {
         $this->holidayDebt = $holidayDebt;
-
+        $this->holidayDebtDate = new \DateTime();
         return $this;
+    }
+
+    /**
+     * Get holidayDebtDate
+     *
+     * @return \DateTime
+     */
+    public function getHolidayDebtDate()
+    {
+        return $this->holidayDebtDate;
     }
 
     /**
