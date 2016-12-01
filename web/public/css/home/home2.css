@@ -175,11 +175,6 @@ border-bottom: 3px solid #794815}
 		cursor: pointer;
 		padding-bottom: 50px;
 	}
-	.logoCamp img {
-		width: 155px;
-		height: auto;
-		padding-top: 35px;
-	}
 	.campanaSlideContent {
 		background: #FFF;
 	}
@@ -260,8 +255,6 @@ border-bottom: 3px solid #794815}
 		}
 /*seccion de slide promocional*/
 /*seccion de banner promocional*/
-.promo1 {text-align: right;}
-.promo1 img, .promo2 img {height: 95px;width: auto;}
 .bannerPromos {
 	background: #21272f;
 	color: #FFF;
