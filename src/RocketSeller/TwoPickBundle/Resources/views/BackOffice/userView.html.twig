@@ -263,7 +263,7 @@
                                                     {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
                                                 {% endif %}
                                                 <td style="{{ styleE }}">
-                                                    {% if user.personPerson.rutDocument is defined and user.personPerson.rutDocument.mediaMedia is defined %}
+                                                    {% if user.personPerson.rutDocument is defined and user.personPerson.rutDocument.mediaMedia is defined and user.personPerson.rutDocument.mediMedia.updatedAt is defined %}
                                                         {{ user.personPerson.rutDocument.mediaMedia.updatedAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
                                                     {% endif %}
                                                 </td>
