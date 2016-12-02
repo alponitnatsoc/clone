@@ -3389,8 +3389,15 @@ class ActionsRestController extends FOSRestController
                             if(!$corrected and !$error){
                                 if($begin and !$finish){
                                     $procedure->setProcedureStatus($this->getActionStatusByStatusCode('STRT'));
-                                }elseif($finish and $procedure->getProcedureStatuscode()!='FIN'){
-                                    $procedure->setProcedureStatus($this->getActionStatusByStatusCode('FIN'));
+                                }elseif($finish){
+                                    $finishDate = null;
+                                    if($procedure->getFinishedAt()!= null)
+                                        $finishDate = $procedure->getFinishedAt();
+                                    if($procedure->getProcedureStatus()->getCode()!='FIN'){
+                                        $procedure->setProcedureStatus($this->getActionStatusByStatusCode('FIN'));
+                                        if($finishDate!=null)
+                                            $procedure->setFinishedAt($finishDate);
+                                    }
                                     foreach ($procedure->getEmployerEmployer()->getEmployerHasEmployees() as $ehe){
                                         $ehe->setDocumentStatusType($this->getDocumentStatusByCode('BOFFFF'));
                                         if($ehe->getAllDocsReadyMessageAt()==null)
@@ -3928,7 +3935,7 @@ class ActionsRestController extends FOSRestController
                                 $dateUploaded = $document->getMediaMedia()->getUpdatedAt();
                             }
                         }
-                        $EHE->setDateDocumentsUploaded($dateUploaded);
+                        if($EHE->getDateDocumentsUploaded()==null) $EHE->setDateDocumentsUploaded($dateUploaded);
                         $em->persist($EHE);
                         $em->flush();
                     }

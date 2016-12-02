@@ -1,9 +1,11 @@
 $(document).ready(function(){
     $(".btnBanner").click(function(){
         $("#campanaSlide").animate({left: '0px'}, "slow");
+        $("#trigger2, #trigger3").fadeOut();
     });
-    $(".cerrarSlide").click(function(){
+    $(".cerrarSlide, #campanaBtn").click(function(){
         $("#campanaSlide").animate({left: '-2500px'}, "slow");
+        $("#trigger1").fadeIn();
     });
     $("#terminosBtn").click(function(){
         $("#150kCampaign").modal("show");
@@ -19,11 +21,6 @@ $(document).ready(function(){
         $("#trigger3").delay(1000);
         $("#trigger3").fadeIn("slow");
     });
-});
-
-$('#campanaBtn').click(function(){
-    $("#campanaSlide").animate({left: '-2500px'}, "slow");
-    $("#formfirstname").focus();
 });
 
 $('#pausar').click(function(){

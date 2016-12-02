@@ -169,35 +169,11 @@ border-bottom: 3px solid #794815}
 	    width: 600px;
 	    margin: 0 auto;
 	 }
-	/*#campanaSlide {
-		text-align: center;
-		position: fixed;
-    top: 0;
-		left: -2000px;
-    z-index: 1;
-    height: 100%;
-    width: 100%;
-		padding-bottom: 100px;
-    overflow-y: scroll;
-		background: rgba(113,201,200,1);
-		background: -moz-radial-gradient(center, ellipse cover, rgba(113,201,200,1) 0%, rgba(71,128,136,1) 88%, rgba(71,128,136,1) 100%);
-		background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(113,201,200,1)), color-stop(88%, rgba(71,128,136,1)), color-stop(100%, rgba(71,128,136,1)));
-		background: -webkit-radial-gradient(center, ellipse cover, rgba(113,201,200,1) 0%, rgba(71,128,136,1) 88%, rgba(71,128,136,1) 100%);
-		background: -o-radial-gradient(center, ellipse cover, rgba(113,201,200,1) 0%, rgba(71,128,136,1) 88%, rgba(71,128,136,1) 100%);
-		background: -ms-radial-gradient(center, ellipse cover, rgba(113,201,200,1) 0%, rgba(71,128,136,1) 88%, rgba(71,128,136,1) 100%);
-		background: radial-gradient(ellipse at center, rgba(113,201,200,1) 0%, rgba(71,128,136,1) 88%, rgba(71,128,136,1) 100%);
-		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#71c9c8', endColorstr='#478088', GradientType=1 );
-	}*/
 
 	#campanaSlide #terminosBtn {
 		color: #FFF;
 		cursor: pointer;
 		padding-bottom: 50px;
-	}
-	.logoCamp img {
-		width: 155px;
-		height: auto;
-		padding-top: 35px;
 	}
 	.campanaSlideContent {
 		background: #FFF;
@@ -279,8 +255,6 @@ border-bottom: 3px solid #794815}
 		}
 /*seccion de slide promocional*/
 /*seccion de banner promocional*/
-.promo1 {text-align: right;}
-.promo1 img, .promo2 img {height: 95px;width: auto;}
 .bannerPromos {
 	background: #21272f;
 	color: #FFF;
@@ -645,6 +619,10 @@ font-weight: 100;
 	}
 
 	@media only screen and (max-width: 640px) {
+		/**/
+			#slideBody {width: 90%;margin: 0 auto;}
+			.inputSLide {width: 90%;}
+		/**/
 		#campanaDesc, #campanaTitle {width: 85%}
 		.numeros {float: left; padding: 20px 10px 0 100px;}
 		#contenido-pc p {width: 90%;}
@@ -660,7 +638,12 @@ font-weight: 100;
 		}
 
 @media only screen and (max-width: 480px) {
+	/*ceroesfuerzo*/
+	.incluye {width: 80%;}
+	.titleSlide {font-size: 20px;}
+	.adPLan {padding: 50px 15px;}
 
+	/*ceroesfuerzo*/
 	#contenido-pc p {width: 375px;}
 	.contHeadForm h1 {text-align: center}
 	.contHeadForm p {text-align: center}
@@ -705,7 +688,8 @@ font-weight: 100;
 
 
 @media only screen and (max-width: 414px) {
-	#contenido-pc p {width: 340px;}}
+	#contenido-pc p {width: 340px;}
+}
 
 @media only screen and (max-width: 375px) {
 	.inputHalf {width: 100%;}

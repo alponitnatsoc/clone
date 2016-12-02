@@ -766,12 +766,12 @@ trait EmployeeMethodsTrait
             }
             if(!$pending){
                 if($procedure->getEmployerEmployer()->getAllDocsReadyAt()!=null){
-                    $ehe->setDateDocumentsUploaded(new DateTime());
-                    $ehe->setAllEmployeeDocsReadyAt(new DateTime());
+                    if($ehe->getDateDocumentsUploaded()==null) $ehe->setDateDocumentsUploaded(new DateTime());
+                    if($ehe->getAllEmployeeDocsReadyAt()==null) $ehe->setAllEmployeeDocsReadyAt(new DateTime());
                     $this->getDoctrine()->getManager()->persist($ehe);
                     $this->getDoctrine()->getManager()->flush();
                 }else{
-                    $ehe->setAllEmployeeDocsReadyAt(new DateTime());
+                    if($ehe->getAllEmployeeDocsReadyAt()==null) $ehe->setAllEmployeeDocsReadyAt(new DateTime());
                     $this->getDoctrine()->getManager()->persist($ehe);
                     $this->getDoctrine()->getManager()->flush();
                 }
@@ -925,7 +925,7 @@ trait EmployeeMethodsTrait
                             $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEDCPE'));
                             $em->persist($ehe);
                         }elseif ($employer->getAllDocsReadyAt() != null and $ehe->getAllEmployeeDocsReadyAt() != null) {
-                            $ehe->setDateDocumentsUploaded($today);
+                            if($ehe->getDateDocumentsUploaded()==null)$ehe->setDateDocumentsUploaded($today);
                             $em->persist($ehe);
                             if($ehe->getInfoValidatedAt() != null) {
                                 if ($employer->getInfoValidatedAt() != null) {
