@@ -23,9 +23,9 @@ class SellsBackOfficeController extends Controller
             ->add('newPWS', 'text', array('label'=>"Nueva Contraseña", 'required'=>false))
             ->add('actionType', 'choice', array(
                 'choices'  => array(
-                    'Pasar Datacrédito' => 'DC',
                     'Codigo SMS' => 'SMS',
                     'Cambiar Contraseña' => "PWS",
+                    'Pasar Datacrédito' => 'DC',
                 ),
                 'choices_as_values' => true,
                 'label'=>"Acción a realizar"))
@@ -55,9 +55,14 @@ class SellsBackOfficeController extends Controller
 
             }elseif ($answer['actionType']=="SMS"){
                 $msn=" Código SMS: ".$targetUser->getSmsCode();
-            }elseif ($answer['actionType']=="DC"){
+            }elseif ($answer['actionType']=="DC"&&$this->isGranted('ROLE_SUPER_SELLS')){
                 $targetUser->setDataCreditStatus(2);
                 $userManager->updateUser($targetUser);
+            }else{
+                return $this->render('RocketSellerTwoPickBundle:Sells:administrativeActions.html.twig', array(
+                    'form' => $form->createView(),
+                    'msn'=>"No se pudo realizar la acción por falta de permisos"
+                ) );
             }
             $log = new SellLog();
             $log->setActionType($answer['actionType']);
@@ -72,9 +77,9 @@ class SellsBackOfficeController extends Controller
                 ->add('newPWS', 'text', array('label'=>"Nueva Contraseña", 'required'=>false))
                 ->add('actionType', 'choice', array(
                     'choices'  => array(
-                        'Pasar Datacrédito' => 'DC',
                         'Codigo SMS' => 'SMS',
                         'Cambiar Contraseña' => "PWS",
+                        'Pasar Datacrédito' => 'DC',
                     ),
                     'choices_as_values' => true,
                     'label'=>"Acción a realizar"))

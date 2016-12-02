@@ -158,7 +158,13 @@
         // Verifying the password.
         // We hide the requirements, until the user hits the password.
         $("#req_pass").hide();
-        $("#code_field").hide();
+        if($("#app_user_registration_form_creationCode").val()=="") {
+            $("#code_field").hide();
+            $("#codePromRef").hide();
+        } else {
+            $("#codeLink").hide();
+            $("#codPromDiv").hide();
+        }
         $('#app_user_registration_form_plainPassword').attr('oninvalid', 'setCustomValidity("Tu contraseña no cumple con nuestros parametros de seguridad")');
         $('#app_user_registration_form_plainPassword').attr('oninput', "setCustomValidity('')");
 

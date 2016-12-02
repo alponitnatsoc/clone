@@ -33,6 +33,7 @@ use RocketSeller\TwoPickBundle\Traits\SubscriptionMethodsTrait;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use DateTime;
 use Doctrine\ORM\QueryBuilder;
+use ZipArchive;
 
 
 class BackOfficeController extends Controller
@@ -1742,7 +1743,7 @@ class BackOfficeController extends Controller
 
 		$em=$this->getDoctrine()->getManager();
 
-		$payrolls = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll")->findBy(array("period" => 4, "month" => 10, "year" => 2016, "paid" => 1));
+		$payrolls = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll")->findBy(array("period" => 4, "month" => 11, "year" => 2016, "paid" => 1));
 		$pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array("idNovoPay" => "P1"));
 		$product = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product")->findOneBy(array("simpleName" => "PP"));
 
@@ -1753,7 +1754,7 @@ class BackOfficeController extends Controller
 
 				$pilaPOD->setPurchaseOrdersStatus($pos);
 				$pilaPOD->setProductProduct($product);
-				$pilaPOD->setDescription("Pago de Aportes a Seguridad Social mes Octubre");
+				$pilaPOD->setDescription("Pago de Aportes a Seguridad Social mes Noviembre");
 
 				$poList = $payroll->getPurchaseOrdersDescription();
 
@@ -1840,7 +1841,7 @@ class BackOfficeController extends Controller
 
 		$em=$this->getDoctrine()->getManager();
 
-		$payrolls = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll")->findBy(array("period" => 4, "month" => 10, "year" => 2016, "paid" => 1));
+		$payrolls = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll")->findBy(array("period" => 4, "month" => 11, "year" => 2016, "paid" => 1));
 
 		foreach($payrolls as $payroll){
 			$podPila = $payroll->getPila();
@@ -2087,6 +2088,8 @@ class BackOfficeController extends Controller
 	
 	public function uploadFileUsingPilaBotAction($idPod){
 		
+		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+		
 		$request = new Request();
 			
 		$em = $this->getDoctrine()->getManager();
@@ -2166,6 +2169,9 @@ class BackOfficeController extends Controller
 	
 	public function downloadPlanillaLogAction($podId)
 	{
+		
+		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+		
 		$em = $this->getDoctrine()->getManager();
 		$podRepo = $em->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription');
 		$singlePod = $podRepo->find($podId);
@@ -2178,23 +2184,124 @@ class BackOfficeController extends Controller
 		$document = $singleTran->getTransactionState()->getDocument();
 		$media = $document->getMediaMedia();
 		
+		$utils = $this->get('app.symplifica_utils');
+		
 		if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference'))){
 			$docUrl = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
 		}
-		$docName = $document->getDocumentTypeDocumentType()->getName().'.'.$media->getExtension();
-		$docExportName = "Log visual HT ID $podId.zip";
 		
-		# send the file to the browser as a download
-		header("Content-disposition: attachment; filename=$docExportName");
-		header('Content-type: application/zip');
-		header('Expires: 0');
-		header('Cache-Control: must-revalidate');
-		header('Pragma: public');
-		ob_clean();
-		flush();
-		readfile($docUrl . $docName);
-		ignore_user_abort(true);
-	
+		$docName = $document->getDocumentTypeDocumentType()->getName().'.'.$media->getExtension();
+		$zip = new ZipArchive();
+		$localFile = "Log visual HT ID $podId.zip";
+		
+		if ($zip->open($localFile,ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE )=== TRUE) {
+			# loop through each file
+			$zip->addFile($docUrl,$docName);
+			# close zip
+			if($zip->close()!==TRUE)
+				echo "no permisos";
+			# send the file to the browser as a download
+			header("Content-disposition: attachment; filename=$localFile");
+			header('Content-type: application/zip');
+			header('Expires: 0');
+			header('Cache-Control: must-revalidate');
+			header('Pragma: public');
+			ob_clean();
+			flush();
+			readfile($localFile);
+			ignore_user_abort(true);
+			unlink($localFile);
+		}
+		
 		return $this->redirectToRoute('ajax', array(), 301);
+		
+	}
+	
+	public function fixBrokenPilaBotAction(){
+		
+		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		$podRepo = $em->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription');
+		$brokenPods = $podRepo->findBy(array('enlaceOperativoFileName' => "", 'uploadedFile' => -1));
+		
+		$request = new Request();
+		
+		foreach ($brokenPods as $singlePod){
+			$payrolls = $singlePod->getPayrollsPila();
+			
+			foreach($payrolls as $index => $payroll) {
+				/** @var PurchaseOrdersDescription $podPila */
+				$podPila = $payroll->getPila();
+				
+				$payrollsPila = $podPila->getPayrollsPila();
+				$haveNovelties = false;
+				
+				$payrollRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
+				
+				/** @var Payroll $payrollPila */
+				foreach ($payrollsPila as $payrollPila) {
+					if (count($payrollPila->getNovelties()) > 0) {
+						$haveNovelties = true;
+						break;
+					}
+					//If is Quincenal we need to check the first payroll of the month to see If we have novelties
+					if ($payrollPila->getContractContract()->getFrequencyFrequency()->getPayrollCode() == "Q") {
+						$singlePayroll = $payrollRepo->findOneBy(array('contractContract' => $payrollPila->getContractContract(), 'period' => 2, 'year' => $payrollPila->getYear(), 'month' => $payrollPila->getMonth()));
+						if ($singlePayroll != NULL) {
+							if (count($singlePayroll->getNovelties()) > 0) {
+								$haveNovelties = true;
+								break;
+							}
+						}
+					}
+				}
+				
+				$transactionType = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:TransactionType')->findOneBy(array('code' => 'CPla'));
+				
+				$transaction = new Transaction();
+				$transaction->setTransactionType($transactionType);
+				
+				if ($haveNovelties == false) {
+					$request->setMethod("GET");
+					$insertionAnswerTextFile = $this->forward('RocketSellerTwoPickBundle:PilaPlainTextRest:getMonthlyPlainText', array('podId' => $podPila->getIdPurchaseOrdersDescription(), 'download' => 'generate'), array('_format' => 'json'));
+					
+					$request->setMethod("POST");
+					$request->request->add(array(
+						"GSCAccount" => $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getIdHighTech(),
+						"FileToUpload" => json_decode($insertionAnswerTextFile->getContent(), true)['fileToSend']
+					));
+					$insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postUploadFileToPilaOperator', array('request' => $request), array('_format' => 'json'));
+					if ($insertionAnswer->getStatusCode() == 200) {
+						//Received succesfully
+						$radicatedNumber = json_decode($insertionAnswer->getContent(), true)["numeroRadicado"];
+						$transaction->setRadicatedNumber($radicatedNumber);
+						$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-PlaEnv'));
+					} else {
+						//If some kind of error
+						$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-ErrSer'));
+					}
+				} else {
+					$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-ErrNov'));
+				}
+				
+				$em = $this->getDoctrine()->getManager();
+				$transaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
+				$em->persist($transaction);
+				$em->flush();
+				$podPila->setUploadedFile($transaction->getIdTransaction());
+				$podPila->addTransaction($transaction);
+				$podPila->setEnlaceOperativoFileName("NULL");
+				$em->persist($podPila);
+				$em->flush();
+				
+				if($index == 10){
+					return $this->redirectToRoute('show_pilas');
+				}
+			}
+		}
+		
+		return $this->redirectToRoute('show_pilas');
 	}
 }

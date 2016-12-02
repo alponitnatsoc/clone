@@ -111,9 +111,14 @@ class Contract
     private $salary;
 
     /**
-     * @ORM\Column(type="smallint",  nullable=TRUE)
+     * @ORM\Column(type="float",  nullable=TRUE)
      */
     private $holidayDebt;
+
+    /**
+     * @ORM\Column(type="date",nullable=TRUE)
+     */
+    private $holidayDebtDate;
 
     /**
      * @ORM\OneToMany(targetEntity="WeekWorkableDays", mappedBy="contractContract", cascade={"persist"})
@@ -887,21 +892,31 @@ class Contract
     /**
      * Set holidayDebt
      *
-     * @param integer $holidayDebt
+     * @param float $holidayDebt
      *
      * @return Contract
      */
     public function setHolidayDebt($holidayDebt)
     {
         $this->holidayDebt = $holidayDebt;
-
+        $this->holidayDebtDate = new \DateTime();
         return $this;
+    }
+
+    /**
+     * Get holidayDebtDate
+     *
+     * @return \DateTime
+     */
+    public function getHolidayDebtDate()
+    {
+        return $this->holidayDebtDate;
     }
 
     /**
      * Get holidayDebt
      *
-     * @return integer
+     * @return float
      */
     public function getHolidayDebt()
     {

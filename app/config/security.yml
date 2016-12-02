@@ -6,7 +6,8 @@ security:
 
     role_hierarchy:
         ROLE_NEW: [ ROLE_USER ]
-        ROLE_BACK_OFFICE: [ ROLE_USER, ROLE_BACK_OFFICE , ROLE_SONATA_ADMIN, ROLE_SELLS ]
+        ROLE_BACK_OFFICE: [ ROLE_USER, ROLE_BACK_OFFICE , ROLE_SONATA_ADMIN, ROLE_SELLS, ROLE_SUPER_SELLS ]
+        ROLE_SUPER_SELLS: [ ROLE_USER, ROLE_SELLS, ROLE_SUPER_SELLS ]
         ROLE_ADMIN:       [ ROLE_USER , ROLE_SONATA_ADMIN ]
         ROLE_SUPER_ADMIN: [ ROLE_ADMIN , ROLE_ALLOWED_TO_SWITCH ]
 
@@ -72,7 +73,7 @@ security:
     access_control:
         - { path: ^/admin.*, roles: [ROLE_ADMIN , ROLE_BACK_OFFICE] }
         - { path: ^/backoffice.*, roles: ROLE_BACK_OFFICE }
-        - { path: ^/ventas/*, roles: ROLE_SELLS }
+        - { path: ^/ventas/*, roles: ROLE_SELLS}
         - { path: ^/media.*, roles: ROLE_BACK_OFFICE }
 
         - { path: ^/add.*, roles: IS_AUTHENTICATED_FULLY }
