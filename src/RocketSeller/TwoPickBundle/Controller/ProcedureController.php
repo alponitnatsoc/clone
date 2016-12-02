@@ -516,7 +516,7 @@ class ProcedureController extends Controller
                 $change = false;
                 $priorityChange = false;
                 foreach ($procedures as $procedure) {
-                    if($this->calculateProcedureStatus($procedure,true)==1){
+                    if($this->calculateProcedureStatus($procedure)==1){
                         $em->persist($procedure);
                         $change = true;
                     }
@@ -2379,7 +2379,7 @@ class ProcedureController extends Controller
                             if(!$corrected and !$error){
                                 if($begin and !$finish){
                                     $procedure->setProcedureStatus($this->getStatusByStatusCode('STRT'));
-                                }elseif($finish){
+                                }elseif($finish and $procedure->getProcedureStatusCode()!='FIN'){
                                     $finishDate = null;
                                     if($procedure->getFinishedAt()!= null)
                                         $finishDate = $procedure->getFinishedAt();
