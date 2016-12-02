@@ -2391,7 +2391,7 @@ class ProcedureController extends Controller
                                     if($procedure->getFinishedAt()!= null)
                                         $finishDate = $procedure->getFinishedAt();
                                     if($procedure->getProcedureStatus()->getCode()!='FIN'){
-                                        $procedure->setProcedureStatus($this->getActionStatusByStatusCode('FIN'));
+                                        $procedure->setProcedureStatus($this->getStatusByStatusCode('FIN'));
                                         if($finishDate!=null)
                                             $procedure->setFinishedAt($finishDate);
                                     }
