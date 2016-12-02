@@ -16,6 +16,7 @@ use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Phone;
 use RocketSeller\TwoPickBundle\Entity\PilaDetail;
+use RocketSeller\TwoPickBundle\Entity\Prima;
 use RocketSeller\TwoPickBundle\Entity\PromotionCode;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
@@ -57,6 +58,79 @@ class BackOfficeController extends Controller
         }
 
         return $this->render('RocketSellerTwoPickBundle:BackOffice:index.html.twig');
+    }
+    public function addPrimaAction(Request $request)
+    {
+
+        $didSomething=false;
+        if(count($request->request->all())>0){
+            $em=$this->getDoctrine()->getManager();
+            $requ = $request->request->all();
+            foreach ($requ as $key=> $value) {
+
+                /** @var EmployerHasEmployee $realEhe */
+                $realEhe = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")->find($key);
+                if($realEhe==null)
+                    continue;
+                $contracts = $realEhe->getContracts();
+                $realContract=null;
+                /** @var Contract $contract */
+                foreach ($contracts as $contract) {
+                    if($contract->getState()==1){
+                        $realContract=$contract;
+                    }
+                }
+                if($realContract==null){
+                    continue;
+                }
+                /** @var User $realUser */
+                $realUser = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('personPerson'=>$realEhe->getEmployerEmployer()->getPersonPerson()->getIdPerson()));
+                $aPrima=false;
+                $primas = $realContract->getPrimas();
+                /** @var Prima  $pr */
+                foreach ($primas as $pr) {
+                    if($pr->getMonth()=="12"&&$pr->getYear()=="2016")
+                        $aPrima=true;
+                }
+                if($aPrima==true)
+                    break;
+                $didSomething=true;
+                //create the po and pod with the prima
+                $newPo = new PurchaseOrders();
+                $newPOD = new PurchaseOrdersDescription();
+                $primaProduct = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product")->findOneBy(array('simpleName'=>'PRM'));
+                $pendingStatus = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'P1'));
+                $newPOD->setProductProduct($primaProduct);
+                $newPOD->setValue($value);
+                $newPOD->setDescription("Prima Empleado ".$realEhe->getEmployeeEmployee()->getPersonPerson()->getFullName());
+                $newPOD->setPurchaseOrdersStatus($pendingStatus);
+                $newPo->setPurchaseOrdersStatus($pendingStatus);
+                $newPo->addPurchaseOrderDescription($newPOD);
+                $realUser->addPurchaseOrder($newPo);
+                //finally we add the prima to the contract
+                $prima= new Prima();
+                $prima->setMonth("12");
+                $prima->setYear("2016");
+                $prima->setValue($value);
+                $realContract->addPrima($prima);
+
+                $em->persist($realUser);
+                $em->flush();
+                $prima->setPurchaseOrdersDescriptionPurchaseOrdersDescription($newPOD);
+                $em->persist($realContract);
+                $em->flush();
+
+            }
+        }
+        $contracts = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Contract")->findBy(array('state'=>'1'));
+        $realEHES=new ArrayCollection();
+        /** @var Contract $contract */
+        foreach ($contracts as $contract) {
+            if($contract->getEmployerHasEmployeeEmployerHasEmployee()->getState()>=4&&$contract->getPrimas()->count()==0){
+                $realEHES->add($contract->getEmployerHasEmployeeEmployerHasEmployee());
+            }
+        }
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:addPrima.html.twig' , array('ehes'=>$realEHES));
     }
 
     public function generateCodesAction($amount)

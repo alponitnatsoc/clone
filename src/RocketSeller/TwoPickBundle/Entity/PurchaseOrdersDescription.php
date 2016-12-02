@@ -119,6 +119,11 @@ class PurchaseOrdersDescription
 		 * })
 		 */
 		private $document;
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Prima
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Prima", mappedBy="purchaseOrdersDescriptionPurchaseOrdersDescription", cascade={"persist"})
+     */
+    private $prima;
 
     /**
      * Get idPurchaseOrdersDescription
@@ -503,5 +508,29 @@ class PurchaseOrdersDescription
     public function getDocument()
     {
         return $this->document;
+    }
+
+    /**
+     * Set prima
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Prima $prima
+     *
+     * @return PurchaseOrdersDescription
+     */
+    public function setPrima(\RocketSeller\TwoPickBundle\Entity\Prima $prima = null)
+    {
+        $this->prima = $prima;
+
+        return $this;
+    }
+
+    /**
+     * Get prima
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Prima
+     */
+    public function getPrima()
+    {
+        return $this->prima;
     }
 }
