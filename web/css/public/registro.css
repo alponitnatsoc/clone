@@ -4,11 +4,12 @@
     background: #f1f1f1;
     padding: 5px 0;
     border-radius: 5px;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 .codProm a{
   color: #13878e;
   font-weight: 600;
   font-size: 15px;
+    text-decoration: none;
 }

@@ -23,6 +23,7 @@ use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Log;
 use RocketSeller\TwoPickBundle\Entity\Notification;
+use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\ProcedureType;
@@ -3389,7 +3390,7 @@ class ActionsRestController extends FOSRestController
                             if(!$corrected and !$error){
                                 if($begin and !$finish){
                                     $procedure->setProcedureStatus($this->getActionStatusByStatusCode('STRT'));
-                                }elseif($finish){
+                                }elseif($finish and $procedure->getProcedureStatusCode()!='FIN'){
                                     $finishDate = null;
                                     if($procedure->getFinishedAt()!= null)
                                         $finishDate = $procedure->getFinishedAt();
@@ -3980,6 +3981,85 @@ class ActionsRestController extends FOSRestController
             }
         }
         $view = View::create();
+        $view->setStatusCode(200);
+        return $view;
+    }
+
+    /**
+     * Corrects finish date in backoffice
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Corrects finishDate in backoffice.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     * @RequestParam(name="start_index", nullable=false, strict=true, description="start_index.")
+     * @RequestParam(name="end_index", nullable=false, strict=true, description="end_index.")
+     *
+     * @return View
+     */
+    public function postCorrectFinishDateAction(ParamFetcher $paramFetcher){
+        $em = $this->getDoctrine()->getManager();
+        $response = 'START'.'<br>----------------------------------------------------------------------------------------------------------------------------------------------------------------------<br>';
+        $start = $paramFetcher->get('start_index');
+        $end = $paramFetcher->get('end_index');
+        $count = 1;
+        $users = $em->getRepository('RocketSellerTwoPickBundle:User')->findAll();
+        /** @var User $user */
+        foreach ($users as $user) {
+            if($count >= $start and $count <= $end){
+                if($user->getPersonPerson() and $user->getPersonPerson()->getEmployer()){
+                    $EHES = $user->getPersonPerson()->getEmployer()->getActiveEmployerHasEmployees();
+                    if($EHES->count()>0){
+                        $response.= 'EMPLOYER: '.$user->getPersonPerson()->getEmployer()->getIdEmployer().' '.$user->getPersonPerson()->getFullName().' EHE_COUNT: '.$EHES->count().'<br>';
+                        /** @var EmployerHasEmployee $ehe */
+                        foreach ($EHES as $ehe) {
+                            $response.= 'EHE_ID: '.$ehe->getIdEmployerHasEmployee();
+                            if($ehe->getExistentSQL()==1){
+                                $response.= ' SQL_STATE: TRUE';
+                                $ehe->setState(4);
+                                $em->persist($ehe);
+                            }elseif($ehe->getState()<2){
+                                $ehe->setDocumentStatusType(null);
+                                $ehe->setDocumentStatus(null);
+                                $em->persist($ehe);
+                            }
+
+                            if($ehe->getActiveContract()){
+                                /** @var Contract $contract */
+                                $contract = $ehe->getActiveContract();
+                            }
+                            if($ehe->getDateFinished())
+                                $response.= ' EHE_FINISH_DATE: '.$ehe->getDateFinished()->format('d-m-Y H:i:s');
+                        }
+                        $response.='<br>----------------------------------------------------------------------------------------------------------------------------------------------------------------------<br>';
+                    }
+                }
+                if($count % 30 == 0){
+                    $response .= '<br>GROUP FROM ' . ( $count - 30 ) . ' TO ' . $count . ' FLUSHED' . '<br><br>';
+                    $em->flush();
+                    $em->clear();
+                }
+                if($count % 30 != 0 and $count == $end){
+                    $response .= '<br>GROUP FROM ' . ( $count - ( $count % 30 ) ) . ' TO ' . ( $count ) . ' FLUSHED' . '<br><br>';
+                    $em->flush();
+                    $em->clear();
+                }
+            }
+            $count++;
+        }
+        if($count <= $end and $count % 30 != 0 ){
+            $response .= '<br>GROUP FROM ' . ( $count - ( $count % 30 ) ) . ' TO ' . ( $count - 1 ) . ' FLUSHED' . '<br><br>';
+            $em->flush();
+            $em->clear();
+        }
+        $view = View::create($response);
         $view->setStatusCode(200);
         return $view;
     }

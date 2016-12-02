@@ -42,6 +42,10 @@ routes:
     path:     /routes
     defaults: { _controller: RocketSellerTwoPickBundle:Default:getAllRoutes }
 
+#Back Office SELLS
+sells_dashboard:
+    path:     /ventas
+    defaults: { _controller: RocketSellerTwoPickBundle:SellsBackOffice:index}
 #Back Office
 back_office:
     path:     /backoffice
@@ -126,8 +130,8 @@ clear_data_after_backup:
     path:     /backoffice/clearData/{autentication}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:clearDataAfterBackup}
 user_view:
-    path:     /backoffice/userView
-    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:userView}
+    path:     /backoffice/userView/{name}/{lastName}/{documentType}/{document}/{email}/{highTech}/{sql}/{ehe}/{pay}/{phone}/{contract}/{period}/{paid}/{join}/{index}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:userView, name: '', lastName: '',documentType: '',document: '',email: '',highTech: '', sql: '',ehe: '',pay: '',phone: '',contract: '',period: '',paid: '',join: '',index: 1}
 employer_state:
     path:     /backoffice/show/employersState
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:userBackOfficeState}

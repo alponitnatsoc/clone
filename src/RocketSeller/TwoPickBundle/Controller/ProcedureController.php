@@ -2386,7 +2386,7 @@ class ProcedureController extends Controller
                             if(!$corrected and !$error){
                                 if($begin and !$finish){
                                     $procedure->setProcedureStatus($this->getStatusByStatusCode('STRT'));
-                                }elseif($finish){
+                                }elseif($finish and $procedure->getProcedureStatusCode()!='FIN'){
                                     $finishDate = null;
                                     if($procedure->getFinishedAt()!= null)
                                         $finishDate = $procedure->getFinishedAt();

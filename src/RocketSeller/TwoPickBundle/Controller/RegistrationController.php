@@ -197,6 +197,8 @@ class RegistrationController extends BaseController
         if ($form->has("invitation")) {
            $form->get("invitation")->setData($queryCode);
         }
+        if($request->get('referredCode')!=-1)
+            $form->get("creationCode")->setData($request->get('referredCode'));
 
         return $this->render('FOSUserBundle:Registration:register.html.twig', array(
             'form' => $form->createView(),

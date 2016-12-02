@@ -417,9 +417,10 @@ class ChronServerRestController extends FOSRestController
         foreach($users as $user) {
             $employer = $EmployerRepo->findOneBy(array("personPerson" => $user->getPersonPerson()));
             if(!$employer) continue;
+            /** @var EmployerHasEmployee $eHE */
             foreach ( $employer->getEmployerHasEmployees() as $eHE) {
 
-                $dateFilesUploaded = $eHE->getDateDocumentsUploaded();
+                $dateFilesUploaded = $eHE->getInfoValidatedAt();
                 if(!$dateFilesUploaded) continue;
                 $today = new DateTime();
                 $utils = $this->get('app.symplifica_utils');
