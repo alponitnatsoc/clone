@@ -2166,83 +2166,114 @@ class EmployeeRestController extends FOSRestController
         foreach ($eHEs as $eHE) {
             if($eHE->getState()>=4){
                 if($count >= $start and $count <= $end){
-                    if($eHE->getLegalFF() == 0){//New employees
-                        /** @var Contract $contract */
-                        $contract = $eHE->getActiveContract();//Active Contracts
-                        if($contract){
-                            $start_date = $contract->getStartDate();
-                            $end_date = $contract->getEndDate();
-                            $today = new DateTime();
-                            if(!$end_date<=$today){
-
-                                $day = intval($start_date->format('d'));
-                                $month = intval($start_date->format('m'));
-                                $year = intval($start_date->format('Y'));
-
-                                $response.= 'EHE: ' . $eHE->getIdEmployerHasEmployee() . ' (' . $day . '-' . $month . '-'.$year.').<br>';
-
-                                $fullTime = false;
-                                if($contract->getTimeCommitmentTimeCommitment()->getCode() == 'TC'){//Full time
-                                    $fullTime = true;
+                    /** @var Contract $contract */
+                    $contract = $eHE->getActiveContract();//Active Contracts
+                    if($contract){
+                        $start_date = $contract->getStartDate();
+                        $end_date = $contract->getEndDate();
+                        $today = new DateTime();
+                        if(!$end_date or $end_date>=$today){
+                            $day = intval($start_date->format('d'));
+                            $month = intval($start_date->format('m'));
+                            $year = intval($start_date->format('Y'));
+                            $response.= "<br>EMPLOYER: ".$eHE->getEmployerEmployer()->getPersonPerson()->getFullName()." CONTRACT ID: ".$contract->getIdContract().".<br>";
+                            if($start_date < new DateTime("16-06-01 00:00:00"))
+                                $response.= "ANTIQUE.<br>";
+                            $response.= 'EHE: ' . $eHE->getIdEmployerHasEmployee() . ' (' . $day . '-' . $month . '-'.$year.')';
+                            if($end_date){
+                                $response.= ' (' . intval($end_date->format('d')) . '-' . intval($end_date->format('m')) . '-'.intval($end_date->format('Y')).').<br>';
+                            }else{
+                                $response.='.<br>';
+                            }
+                            $payrolls = $contract->getPayrolls();
+                            $vacationDebt = 0.0;
+                            $vacationDebt+= $contract->getHolidayDebt();
+                            $response.= "VACATIONS_DEBT: ".$vacationDebt."<br>";
+                            /** @var Payroll $payroll */
+                            foreach ($payrolls as $payroll) {
+                                $response.="ID_PAYROLL: ".$payroll->getIdPayroll()." MONTH: ".$payroll->getMonth()." YEAR: ".$payroll->getYear()." PERIOD: ".$payroll->getPeriod()." ";
+                                $novelties = $payroll->getSqlNovelties();
+                                if(count($novelties)==0){
+                                    $response.="NO NOVELTIES.<br>";
+                                }else{
+                                    $response.="<br>";
                                 }
-
-                                $monthly = false;
-                                if($contract->getFrequencyFrequency()->getPayrollCode()=='M'){//Monthly payment
-                                    $monthly = true;
-                                }
-                                $payrolls = $contract->getPayrolls();
-                                $vacationDebt = 0.0;
-                                /** @var Payroll $payroll */
-                                foreach ($payrolls as $payroll) {
-                                    $novelties = $payroll->getSqlNovelties();
-                                    $workableDays = 0;
-                                    $notPaidDays = 0;
-                                    $minusVacations = 0;
-                                    /** @var Novelty $novelty */
-                                    foreach ($novelties as $novelty) {
-                                        if($novelty->getNoveltyTypeNoveltyType()!= null){
-                                            if(intval($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == 1)){//Salary novelty type
-                                                if($novelty->getUnits() != null)
-                                                    $workableDays += intval($novelty->getUnits());
-                                            }
-                                            if(intval($novelty->getNoveltyTypeNoveltyType()->getPayrollCode()) == 3120 or intval($novelty->getNoveltyTypeNoveltyType()->getPayrollCode()) == 3125){//Suspension or unpaid novelty
-                                                if($novelty->getUnits() != null)
-                                                    $notPaidDays += intval($novelty->getUnits());
-                                            }
-                                            if(intval($novelty->getNoveltyTypeNoveltyType()->getPayrollCode()) == 145){
-                                                if($novelty->getUnits() != null)
-                                                    $minusVacations += inval($novelty->getUnits());
+                                $workableDays = 0;
+                                $notPaidDays = 0;
+                                $minusVacations = 0;
+                                /** @var Novelty $novelty */
+                                foreach ($novelties as $novelty) {
+                                    if($novelty->getNoveltyTypeNoveltyType()!= null){
+                                        if(intval($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == 1)){//Salary novelty type
+                                            $response.=" | NOVELTY: SALARY ";
+                                            if($novelty->getUnits() != null){
+                                                $response.="UNITS: ".intval($novelty->getUnits());
+                                                $workableDays += intval($novelty->getUnits());
+                                            }else{
+                                                $response.="ERROR";
                                             }
                                         }
-                                    }
-                                    if($payroll->getPeriod()==4){
-                                        $payrollDate = new DateTime( $payroll->getYear().'-'.$payroll->getMonth().'-26 00:00:00');
+                                        if(intval($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == 145)){//Vacations novelty type
+                                            $response.=" | NOVELTY: VACATIONS ";
+                                            if($novelty->getUnits() != null){
+                                                $response.="UNITS: ".intval($novelty->getUnits());
+                                                $minusVacations += intval($novelty->getUnits());
+                                            }else{
+                                                $response.="ERROR";
+                                            }
+                                        }
+                                        if(intval($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == 3120)){//Unpaid Leave novelty type
+                                            $response.="| NOVELTY: UNPAID LEAVE ";
+                                            if($novelty->getUnits() != null){
+                                                $response.="UNITS: ".intval($novelty->getUnits());
+                                                $notPaidDays += intval($novelty->getUnits());
+                                            }else{
+                                                $response.="ERROR";
+                                            }
+                                        }
+                                        if(intval($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == 28)){//Labor inability novelty type
+                                            $response.=" | NOVELTY: LABOR INABILITY ";
+                                            if($novelty->getUnits() != null){
+                                                $response.="UNITS: ".intval($novelty->getUnits());
+                                                $workableDays += intval($novelty->getUnits());
+                                            }else{
+                                                $response.="ERROR";
+                                            }
+                                        }
+                                        if(intval($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == 23)){//Paid Leave novelty type
+                                            $response.=" | NOVELTY: PAID LEAVE ";
+                                            if($novelty->getUnits() != null){
+                                                $response.="UNITS: ".intval($novelty->getUnits());
+                                                $workableDays += intval($novelty->getUnits());
+                                            }else{
+                                                $response.="ERROR";
+                                            }
+                                        }
                                     }else{
-                                        $payrollDate = new DateTime( $payroll->getYear().'-'.$payroll->getMonth().'-13 00:00:00');
-                                    }
-                                    if($today->format('m')==1){
-                                        $vacMonth = new DateTime($today->format('y').'-12-30 00:00:00');
-                                    }else{
-                                        $vacMonth = new DateTime($today->format('y').'-'.(intval($today->format('m'))-1).'-30 00:00:00');
-                                    }
-                                    if($payrollDate<$vacMonth){
-                                        $vacationDebt += ((($workableDays-$notPaidDays)/720)*30)-$minusVacations;
-                                    }
-//                                    $response.= 'PAYROLL: ' . $payroll->getIdPayroll() . ' PERIOD: ' . $payroll->getPeriod() . ' ' . $payroll->getYear() . '-' . $payroll->getMonth() . ' WORKABLE DAYS: ' . $workableDays . ' UNPAID DAYS: ' . $notPaidDays . ' PAID_VACATIONS: ' . $minusVacations . '<br>';
-                                    if($fullTime and $monthly){
-
-                                    }elseif($fullTime and !$monthly){
-
-                                    }elseif(!$fullTime and $monthly){
-
-                                    }elseif(!$fullTime and !$monthly){
-
+                                        $response.="___NO TYPE<br>";
                                     }
                                 }
-                                $response.= 'VACATIONS: ' . $vacationDebt . '<br>';
-                            }else{
-
+                                if($payroll->getPeriod()==4){
+                                    $payrollDate = new DateTime( $payroll->getYear().'-'.$payroll->getMonth().'-26 00:00:00');
+                                }else{
+                                    $payrollDate = new DateTime( $payroll->getYear().'-'.$payroll->getMonth().'-13 00:00:00');
+                                }
+                                if($today->format('m')==1){
+                                    $vacMonth = new DateTime($today->format('y').'-12-30 00:00:00');
+                                }else{
+                                    $vacMonth = new DateTime($today->format('y').'-'.(intval($today->format('m'))-1).'-30 00:00:00');
+                                }
+                                if($payrollDate<$vacMonth){
+                                    $response.=' | WORKABLE DAYS: ' . $workableDays . ' UNPAID DAYS: ' . $notPaidDays . ' PAID_VACATIONS: ' . $minusVacations ." | DEBT: ".(((($workableDays-$notPaidDays)/720)*30)-$minusVacations);
+                                    $vacationDebt += ((($workableDays-$notPaidDays)/720)*30)-$minusVacations;
+                                }
+                                $response.="<br>";
                             }
+                            $response.= 'VACATIONS: ' . $vacationDebt . '<br>';
+                            $contract->setHolidayDebt($vacationDebt);
+                            $em->persist($contract);
+                        }else{
+                            $response.="ID_CONTRACT: ".$contract->getIdContract()."<br>";
                         }
                     }
                     if($count % 30 == 0){
