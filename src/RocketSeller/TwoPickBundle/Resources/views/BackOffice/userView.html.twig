@@ -3,39 +3,134 @@
 {% block title %}Vista Usuarios{% endblock %}
 
 {% block fos_user_content %}
-    <div id="main" class="col-sm-15">
-        <div class="col-md-12">
-            <div class="panel panel-title">
-                BackOffice Vista Usuarios
+    <style>
+        .table{
+            border: 1px solid #0d3031;
+        }
+        .table>tbody+tbody{
+            border: 1px solid #0d3031;
+        }
+        .table>thead+thead{
+            border: 1px solid #0d3031;
+        }
+        .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+            padding: 1px 5px;
+            border: 1px solid #0d3031;
+            font-size: 11px;
+        }
+        th{
+            background-color: lightgrey;
+            color: black;
+        }
+    </style>
+    <div id="main">
+        <div class="back-panel-title">
+            Vista Usuarios
+        </div>
+        <div class="back-panel">
+            <div class="backoffice-headding">
+                <h4>Busqueda</h4>
             </div>
-            <br>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4>Información de los usuarios</h4>
+            <div class="col-md-12" style="padding: 20px;border: 1px solid #0c383f;border-radius: 0px 0px 5px 5px;clear: both">
+                {{ form_start(form) }}
+                <div style="width: 80px;display: inline-flex;margin: 2px">
+                    {{ form_row(form.name,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:auto;padding:1px 5px'},'label_attr':{'style':'min-height:30px;margin: 0px 0px -10px 0px;'}}) }}
                 </div>
-
-                {% for user in users %}
-                    <div>
+                <div style="width: 80px;display: inline-flex;margin: 2px">
+                    {{ form_row(form.lastName,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:auto;padding:1px 5px'},'label_attr':{'style':'min-height:30px;margin:  0px 0px -10px 0px;'}}) }}
+                </div>
+                <div  style="width: 120px;display: inline-flex;margin: 2px">
+                    {{ form_row(form.documentType,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:21px'},'label_attr':{'style':'min-height:30px;margin:  0px 0px -10px 0px;'}}) }}
+                </div>
+                <div style="width: 120px;display: inline-flex;margin: 2px">
+                    {{ form_row(form.document,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:auto;padding:1px 5px'},'label_attr':{'style':'min-height:30px;margin:  0px 0px -10px 0px;'}}) }}
+                </div>
+                <div style="width: 230px;display: inline-flex;margin: 2px">
+                    {{ form_row(form.email,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:auto;padding:1px 5px;width:230px'},'label_attr':{'style':'min-height:30px;margin:  0px 0px -10px 0px;'}}) }}
+                </div>
+                <div style="width: 80px;display: inline-flex;margin: 2px">
+                    {{ form_row(form.phone,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:auto;padding:1px 5px'},'label_attr':{'style':'min-height:30px;margin:  0px 0px -10px 0px;'}}) }}
+                </div>
+                <div style="width: 90px;display: inline-flex;margin: 2px">
+                    {{ form_row(form.hightech,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:auto;padding:1px 5px'},'label_attr':{'style':'min-height:30px;margin:  0px 0px -10px 0px;'}}) }}
+                </div>
+                <div style="width: 60px;display: inline-flex;margin: 2px">
+                    {{ form_row(form.sql,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:auto;padding:1px 5px'},'label_attr':{'style':'min-height:30px;margin:  0px 0px -10px 0px;'}}) }}
+                </div>
+                <div style="width: 60px;display: inline-flex;margin: 2px">
+                    {{ form_row(form.ehe,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:auto;padding:1px 5px'},'label_attr':{'style':'min-height:30px;margin:  0px 0px -10px 0px;'}}) }}
+                </div>
+                <div style="width: 80px;display: inline-flex;margin: 2px">
+                    {{ form_row(form.contract,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:auto;padding:1px 5px'},'label_attr':{'style':'min-height:30px;margin:  0px 0px -10px 0px;'}}) }}
+                </div>
+                <div  style="width: 100px;display: inline-flex;margin: 2px">
+                    {{ form_row(form.payMethod,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:21px'},'label_attr':{'style':'min-height:30px;margin:  0px 0px -10px 0px;'}}) }}
+                </div>
+                <div  style="width: 120px;display: inline-flex;margin: 2px">
+                    {{ form_row(form.period,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:21px'},'label_attr':{'style':'min-height:30px;margin:  0px 0px -10px 0px;'}}) }}
+                </div>
+                <div  style="width: 100px;display: inline-flex;margin: 2px">
+                    {{ form_row(form.paid,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:21px'},'label_attr':{'style':'min-height:30px;margin:  0px 0px -10px 0px;'}}) }}
+                </div>
+                <div  style="width: 100px;display: inline-flex;margin: 2px">
+                    {{ form_row(form.join,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:21px'},'label_attr':{'style':'min-height:30px;margin:  0px 0px -10px 0px;'}}) }}
+                </div>
+                <div style="display: inline-flex;clear: both; position: inherit">
+                    {{ form_widget(form.search,{'attr':{'class':'btn-back'}}) }}
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+        {% for message in app.session.flashBag.get('alert_message')%}
+            <div class="alert alert-fail semi-italic" for="alert" style="margin: 0px;clear: both;box-shadow: none;margin-bottom: -20px">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% if index is defined %}
+            {% if index == 1 %}
+                {% set count = 1 %}
+            {% else %}
+                {% set count = (( index - 1 ) * 20 ) + 1 %}
+            {% endif %}
+        {% endif %}
+        {% if users|length > 0 %}
+            <div class="back-panel">
+                <div class="backoffice-headding">
+                    <h4>Información de usuarios</h4>
+                </div>
+                {#<div class="backoffice-headding" style="border-radius: 0px; background-color: rgb(0, 99, 105);margin: -1px 0px -1px 0px;">#}
+                    {#Empleadores#}
+                {#</div>#}
+                <table class="table" style="padding: 0px; margin: 0px">
+                    {% for user in users %}
                         {% set empPerson = user.personPerson %}
-                        <table class="table">
+                        <thead>
+                            <th style="width: 5%;font-weight: 600;font-size: 16px;background-color:rgb(72, 72, 72);color: white">
+                                {{ count }}
+                            </th>
+                            <th style="background-color: #797979;color: #ffffff;font-weight: 600;font-size: 16px">
+                                {{ empPerson.fullName }}
+                            </th>
+                        </thead>
+                        <tbody>
                             <tr>
-                                <th>Empleador: {{ empPerson.fullName }}</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <table class="table">
-                                        <tr>
+                                <td colspan="2" style="padding: 8px 20px 4% 20px;background-color: white;">
+                                    <div class="backoffice-headding" style="border-radius: 0px; background-color: rgb(41, 41, 41);margin: -1px 0px -1px 0px;">
+                                        Información del empleador
+                                    </div>
+                                    <table class="table" style="margin-bottom: -1px;">
+                                        <thead>
                                             <th>Id Usuario</th>
-                                            <th>Id Person</th>
+                                            <th>Id Persona</th>
                                             <th>Email</th>
                                             <th>Estado Usuario</th>
                                             <th>Estado Data Credito</th>
                                             <th>SMS Validación</th>
                                             <th>Token Confirmación</th>
-                                        </tr>
-                                        <tr>
+                                        </thead>
+                                        <tbody>
                                             <td>{{ user.id }}</td>
-                                            <td>{{ user.personPerson.idPerson }}</td>
+                                            <td>{{ empPerson.idPerson }}</td>
                                             <td>{{ user.email }}</td>
                                             <td>{{ user.status }}</td>
                                             <td>{{ user.dataCreditStatus }}</td>
@@ -44,25 +139,27 @@
                                                     {{ user.confirmationToken }}
                                                 {% endif %}
                                             </td>
-                                        </tr>
+                                        </tbody>
                                     </table>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <table class="table">
-                                        <tr>
+                                    <table class="table" style="padding: 0px; margin: 0px 0px -1px 0px">
+                                        <thead>
+                                            <th>Id Empleador</th>
                                             <th>Nombres Empleador</th>
                                             <th>Apellidos Empleador</th>
-                                            <th>Tipo de Documento</th>
-                                            <th>Número de Documento</th>
+                                            <th>Tipo Documento</th>
+                                            <th>Documento</th>
                                             <th>Fecha de nacimiento</th>
                                             <th>Número Sociedad SQL</th>
                                             <th>Id HighTech</th>
                                             <th>Dirección Empleador</th>
                                             <th>Telefono Empleador</th>
-                                        </tr>
-                                        <tr>
+                                            </thead>
+                                        <tbody>
+                                            <td>
+                                                {% if user.personPerson.employer.idEmployer is defined %}
+                                                    {{ user.personPerson.employer.idEmployer }}
+                                                {% endif %}
+                                            </td>
                                             <td>{{ empPerson.names }}</td>
                                             <td>{{ empPerson.lastName1 }} {{ empPerson.lastName2 }}</td>
                                             <td>{{ empPerson.documentType }}</td>
@@ -96,52 +193,327 @@
                                                 {% if empPerson.phones|length > 0 %}
                                                     {{ empPerson.phones.0.phoneNumber }}
                                                 {% endif %}
-
                                             </td>
-                                        </tr>
+                                        </tbody>
                                     </table>
-                                </td>
-                            </tr>
-                            {% if user.personPerson.employer is defined and user.personPerson.employer.employerHasEmployees is defined %}
-
-                                {% for ehe in user.personPerson.employer.employerHasEmployees %}
-                                    <tr>
-                                        <td>
-                                            <table class="table">
+                                    {% if user.status >= 2 %}
+                                        <table class="table" style="padding: 0px; margin: 0px 0px -1px 0px">
+                                            <thead>
+                                                <th>Estado Documentos</th>
+                                                <th>Documento</th>
+                                                <th>fecha Documento</th>
+                                                <th>RUT</th>
+                                                <th>Fecha RUT</th>
+                                                <th>Mandato</th>
+                                                <th>Fecha Mandato</th>
+                                                <th>Fecha Documentos</th>
+                                            </thead>
+                                            <tbody>
+                                            {% set styleE = "" %}
+                                                <td>
+                                                    {% if user.personPerson.employer.documentStatus is defined
+                                                        and user.personPerson.employer.documentStatus is not null
+                                                        and user.personPerson.employer.documentStatus.name is defined %}
+                                                        {% if user.personPerson.employer.documentStatus.documentStatusCode == 'ALLDCP' %}
+                                                            {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                        {% endif %}
+                                                        {{ user.personPerson.employer.documentStatus.name }}
+                                                    {% else %}
+                                                        {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                        No tiene
+                                                    {% endif %}
+                                                </td>
+                                                {% if user.personPerson.documentDocument is defined and user.personPerson.documentDocument.mediaMedia is defined %}
+                                                    {% set styleE = "background-color: rgba(0, 128, 0, 0.39);" %}
+                                                {% else %}
+                                                    {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                {% endif %}
+                                                <td style="{{ styleE }}">
+                                                    {% if user.personPerson.documentDocument is defined and user.personPerson.documentDocument.mediaMedia is defined %}
+                                                        OK
+                                                    {% else %}
+                                                        ERROR
+                                                    {% endif %}
+                                                </td>
+                                                {% if user.personPerson.documentDocument is defined and user.personPerson.documentDocument.mediaMedia is defined %}
+                                                    {% set styleE = "background-color: rgba(0, 128, 0, 0.39);" %}
+                                                {% else %}
+                                                    {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                {% endif %}
+                                                <td style="{{ styleE }}">
+                                                    {% if user.personPerson.documentDocument is defined and user.personPerson.documentDocument.mediaMedia is defined %}
+                                                        {{ user.personPerson.documentDocument.mediaMedia.updatedAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                    {% endif %}
+                                                </td>
+                                                {% if user.personPerson.rutDocument is defined and user.personPerson.rutDocument.mediaMedia is defined %}
+                                                    {% set styleE = "background-color: rgba(0, 128, 0, 0.39);" %}
+                                                {% else %}
+                                                    {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                {% endif %}
+                                                <td style="{{ styleE }}">
+                                                    {% if user.personPerson.rutDocument is defined and user.personPerson.rutDocument.mediaMedia is defined %}
+                                                        OK
+                                                    {% else %}
+                                                        ERROR
+                                                    {% endif %}
+                                                </td>
+                                                {% if user.personPerson.rutDocument is defined and user.personPerson.rutDocument.mediaMedia is defined %}
+                                                    {% set styleE = "background-color: rgba(0, 128, 0, 0.39);" %}
+                                                {% else %}
+                                                    {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                {% endif %}
+                                                <td style="{{ styleE }}">
+                                                    {% if user.personPerson.rutDocument is defined and user.personPerson.rutDocument.mediaMedia is defined %}
+                                                        {{ user.personPerson.rutDocument.mediaMedia.updatedAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                    {% endif %}
+                                                </td>
+                                                {% if user.personPerson.employer.mandatoryDocument is defined and user.personPerson.employer.mandatoryDocument.mediaMedia is defined %}
+                                                    {% set styleE = "background-color: rgba(0, 128, 0, 0.39);" %}
+                                                {% else %}
+                                                    {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                {% endif %}
+                                                <td style="{{ styleE }}">
+                                                    {% if user.personPerson.employer.mandatoryDocument is defined and user.personPerson.employer.mandatoryDocument.mediaMedia is defined %}
+                                                        OK
+                                                    {% else %}
+                                                        ERROR
+                                                    {% endif %}
+                                                </td>
+                                                {% if user.personPerson.employer.mandatoryDocument is defined and user.personPerson.employer.mandatoryDocument.mediaMedia is defined %}
+                                                    {% set styleE = "background-color: rgba(0, 128, 0, 0.39);" %}
+                                                {% else %}
+                                                    {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                {% endif %}
+                                                <td style="{{ styleE }}">
+                                                    {% if user.personPerson.employer.mandatoryDocument is defined and user.personPerson.employer.mandatoryDocument.mediaMedia is defined %}
+                                                        {{ user.personPerson.employer.mandatoryDocument.mediaMedia.updatedAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                    {% endif %}
+                                                </td>
+                                                {% if user.personPerson.employer.allDocsReadyAt is defined %}
+                                                    {% set styleE = "background-color: rgba(0, 128, 0, 0.39);" %}
+                                                {% else %}
+                                                    {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                {% endif %}
+                                                <td>
+                                                    {% if user.personPerson.employer.allDocsReadyAt is defined %}
+                                                        {{ user.personPerson.employer.allDocsReadyAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                    {% endif %}
+                                                </td>
+                                            </tbody>
+                                        </table>
+                                    {% endif %}
+                                    {% if  user.realProcedures|length >0 %}
+                                        <div class="backoffice-headding" style="border-radius: 0px; background-color: rgb(41, 41, 41);margin: -1px 0px -1px 0px;">
+                                            Información de los tramites
+                                        </div>
+                                        <table class="table" style="padding: 0px; margin: 0px 0px -1px 0px">
+                                            <thead>
+                                                <th>Id RealProcedure</th>
+                                                <th>Tipo Procedure</th>
+                                                <th>Estado</th>
+                                                <th>Prioridad</th>
+                                                <th>Fecha Creación</th>
+                                                <th>Fecha Backoffice</th>
+                                                <th>Fecha Error</th>
+                                                <th>Fecha Primer Error</th>
+                                                <th>Fecha Corrección</th>
+                                                <th>Fecha Estado</th>
+                                                <th>Fecha Prioridad</th>
+                                                <th>Fecha Fin</th>
+                                                <th>Tiempo Exedido</th>
+                                            </thead>
+                                            <tbody>
+                                            {% for procedure in user.realProcedures %}
                                                 <tr>
-                                                    <th>Id EHE</th>
-                                                    <th>Nombres Empleado</th>
-                                                    <th>Apellidos Empleado</th>
-                                                    <th>Cédula Empleado</th>
-                                                    <th>Estado</th>
-                                                    <th>Existe SQL</th>
-                                                    <th>Existe HighTech</th>
-                                                </tr>
-                                                {% set employeePer = ehe.employeeEmployee.personPerson %}
-
-                                                <tr>
-                                                    <td>{{ ehe.idEmployerHasEmployee }}</td>
-                                                    <td>{{ employeePer.names }}</td>
-                                                    <td>{{ employeePer.lastName1 }} {{ employeePer.lastName2 }}</td>
-                                                    <td>{{ employeePer.document }}</td>
-                                                    <td>{{ ehe.state }}</td>
-                                                    <td>{% if ehe.existentSQL is defined %}
-                                                            {{ ehe.existentSQL }}
+                                                    <td>{{ procedure.idProcedure }}</td>
+                                                    <td>{{ procedure.procedureTypeProcedureType.code }}</td>
+                                                    <td>{{ procedure.procedureStatus.name }}</td>
+                                                    <td>{{ procedure.priority }}</td>
+                                                    <td>
+                                                        {% if procedure.createdAt is defined %}
+                                                            {{ procedure.createdAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
                                                         {% endif %}
                                                     </td>
-                                                    <td>{% if ehe.existentHightec is defined %}
-                                                            {{ ehe.existentHightec }}
+                                                    <td>
+                                                        {% if procedure.backOfficeDate is defined %}
+                                                            {{ procedure.backOfficeDate|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        {% if procedure.errorAt is defined %}
+                                                            {{ procedure.errorAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        {% if procedure.firstErrorAt is defined %}
+                                                            {{ procedure.firstErrorAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        {% if procedure.correctedAt is defined %}
+                                                            {{ procedure.correctedAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        {% if procedure.statusUpdatedAt is defined %}
+                                                            {{ procedure.statusUpdatedAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        {% if procedure.priorityUpdatedAt is defined %}
+                                                            {{ procedure.priorityUpdatedAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        {% if procedure.finishedAt is defined %}
+                                                            {{ procedure.finishedAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        {% if procedure.maxTimeReached == 1 %}
+                                                            Si
+                                                        {% else %}
+                                                            No
                                                         {% endif %}
                                                     </td>
                                                 </tr>
-
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    {% endif %}
+                                    {% if user.personPerson.employer is defined and user.personPerson.employer.employerHasEmployees is defined %}
+                                        <div class="backoffice-headding" style="border-radius: 0px; background-color: rgb(41, 41, 41);margin: -1px 0px -1px 0px;">
+                                            Información de los empleados
+                                        </div>
+                                        {% for ehe in user.personPerson.employer.employerHasEmployees %}
+                                            <table class="table" style="padding: 0px; margin: -1px 0px -1px 0px">
+                                                <thead>
+                                                    <th style="width: 10%;font-size: 14px;background-color: #464646;color: white">Id empleado </th>
+                                                    <th style="font-size: 14px;background-color: #797979;color: white">{{ ehe.idEmployerHasEmployee }}</th>
+                                                </thead>
                                             </table>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <table class="table">
-                                                <tr>
+                                            <table class="table" style="padding: 0px; margin: -1px 0px -1px 0px">
+                                                <thead>
+                                                <th>Nombres Empleado</th>
+                                                <th>Apellidos Empleado</th>
+                                                <th>Tipo documento</th>
+                                                <th>Documento Empleado</th>
+                                                <th>Estado</th>
+                                                <th>Existe SQL</th>
+                                                <th>Fecha SQL</th>
+                                                <th>Existe HighTech</th>
+                                                <th>fecha documentos</th>
+                                                </thead>
+                                                {% set employeePer = ehe.employeeEmployee.personPerson %}
+                                                <tbody>
+                                                <td>{{ employeePer.names }}</td>
+                                                <td>{{ employeePer.lastName1 }} {{ employeePer.lastName2 }}</td>
+                                                <td>{{ employeePer.documentType }}</td>
+                                                <td>{{ employeePer.document }}</td>
+                                                {% set styleEhe = "" %}
+                                                {% if ehe.state == 3 %}
+                                                    {% set styleEhe = "background-color:rgba(255, 214, 0, 0.84)" %}
+                                                {% elseif ehe.state >= 4 %}
+                                                    {% set styleEhe = "background-color:rgba(0, 128, 0, 0.39)" %}
+                                                {% elseif ehe.state == -2 %}
+                                                    {% set styleEhe = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                {% endif %}
+                                                <td style="{{ styleEhe }}">{{ ehe.state }}</td>
+                                                {% set styleEhe = "" %}
+                                                {% if ehe.existentSQL == 1 %}
+                                                    {% set styleEhe = "background-color:rgba(0, 128, 0, 0.39)" %}
+                                                {% endif %}
+                                                <td style="{{ styleEhe }}">{% if ehe.existentSQL is defined %}
+                                                        {{ ehe.existentSQL }}
+                                                    {% endif %}
+                                                </td>
+                                                <td style="{{ styleEhe }}">{% if ehe.DateRegisterToSql is defined %}
+                                                        {{ ehe.dateRegisterToSQL|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                    {% endif %}
+                                                </td>
+                                                <td>{% if ehe.existentHightec is defined %}
+                                                        {{ ehe.existentHightec }}
+                                                    {% endif %}
+                                                </td>
+                                                <td>{% if ehe.dateDocumentsUploaded is defined %}
+                                                        {{ ehe.dateDocumentsUploaded|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                    {% endif %}
+                                                </td>
+                                                </tbody>
+                                            </table>
+                                            {% if ehe.state > 2 %}
+                                                <table class="table" style="padding: 0px; margin: 0px 0px -1px 0px">
+                                                    <thead>
+                                                    <th>Estado Documentos</th>
+                                                    <th>Documento</th>
+                                                    <th>fecha Documento</th>
+                                                    <th>Carta Autorización</th>
+                                                    <th>Fecha carta</th>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% set styleE = "" %}
+                                                    <td>
+                                                        {% if ehe.documentStatusType is defined and ehe.documentStatusType is not null and ehe.documentStatusType.name is defined %}
+                                                            {% if ehe.documentStatusType.documentStatusCode == 'ALLDCP' %}
+                                                                {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                            {% endif %}
+                                                            {{ ehe.documentStatusType.name }}
+                                                        {% else %}
+                                                            {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                            No tiene
+                                                        {% endif %}
+                                                    </td>
+                                                    {% if employeePer.documentDocument is defined and employeePer.documentDocument.mediaMedia is defined %}
+                                                        {% set styleE = "background-color: rgba(0, 128, 0, 0.39);" %}
+                                                    {% else %}
+                                                        {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                    {% endif %}
+                                                    <td style="{{ styleE }}">
+                                                        {% if employeePer.documentDocument is defined and employeePer.documentDocument.mediaMedia is defined %}
+                                                            OK
+                                                        {% else %}
+                                                            ERROR
+                                                        {% endif %}
+                                                    </td>
+                                                    {% if employeePer.documentDocument is defined and employeePer.documentDocument.mediaMedia is defined %}
+                                                        {% set styleE = "background-color: rgba(0, 128, 0, 0.39);" %}
+                                                    {% else %}
+                                                        {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                    {% endif %}
+                                                    <td style="{{ styleE }}">
+                                                        {% if employeePer.documentDocument is defined and employeePer.documentDocument.mediaMedia is defined %}
+                                                            {% if  employeePer.documentDocument.mediaMedia.updatedAt is defined %}
+                                                                {{ employeePer.documentDocument.mediaMedia.updatedAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    </td>
+                                                    {% if ehe.authDocument is defined and ehe.authDocument.mediaMedia is defined %}
+                                                        {% set styleE = "background-color: rgba(0, 128, 0, 0.39);" %}
+                                                    {% else %}
+                                                        {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                    {% endif %}
+                                                    <td style="{{ styleE }}">
+                                                        {% if ehe.authDocument is defined and ehe.authDocument.mediaMedia is defined %}
+                                                            OK
+                                                        {% else %}
+                                                            ERROR
+                                                        {% endif %}
+                                                    </td>
+                                                    {% if ehe.authDocument is defined and ehe.authDocument.mediaMedia is defined %}
+                                                        {% set styleE = "background-color: rgba(0, 128, 0, 0.39);" %}
+                                                    {% else %}
+                                                        {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
+                                                    {% endif %}
+                                                    <td style="{{ styleE }}">
+                                                        {% if ehe.authDocument is defined and ehe.authDocument.mediaMedia is defined %}
+                                                            {{ ehe.authDocument.mediaMedia.updatedAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                        {% endif %}
+                                                    </td>
+                                                    </tbody>
+                                                </table>
+                                            {% endif %}
+                                                <table class="table" style="padding: 0px; margin: 0px 0px -1px 0px">
+                                                    <thead>
                                                     <th>Id Contrato</th>
                                                     <th>Frecuencia Pago</th>
                                                     <th>Payroll Activo</th>
@@ -152,51 +524,222 @@
                                                     <th>Fecha de Finalización de contrato</th>
                                                     <th>Días laborales al mes</th>
                                                     <th>Tipo de planilla</th>
-                                                </tr>
-                                                {% for aC in ehe.contracts %}
-                                                    {% if aC.state == 1 %}
-                                                        <tr>
-                                                            <td>{{ aC.idContract }}</td>
-                                                            <td>{% if aC.frequencyFrequency != NULL %}
-                                                                    {{ aC.frequencyFrequency.payrollCode }}
-                                                                {% endif %}
-                                                            </td>
-                                                            <td>{% if aC.activePayroll != NULL %}
-                                                                    {{ aC.activePayroll.period }} - {{ aC.activePayroll.month }} Paid: {{ aC.activePayroll.paid }}
-                                                                {% endif %}
-                                                            </td>
-                                                            <td> {{ aC.timeCommitmentTimeCommitment.code }}</td>
-                                                            <td>{% if aC.payMethodPayMethod != NULL %}
-                                                                    {{ aC.payMethodPayMethod.payTypePayType.simpleName }}
-                                                                {% endif %}
-                                                            </td>
-                                                            <td> {{ aC.salary }} </td>
-                                                            <td> {{ aC.startDate|date("y-m-d") }}</td>
-                                                            <td>{% if aC.endDate != NULL %}
-                                                                    {{ aC.endDate|date("y-m-d") }}
-                                                                {% endif %}
-                                                            </td>
-                                                            <td> {{ aC.workableDaysMonth }} </td>
-                                                            <td>{% if aC.planillaTypePlanillaType != NULL %}
-                                                                    {{ aC.planillaTypePlanillaType.code }}
-                                                                {% endif %}
-                                                            </td>
-                                                        </tr>
-                                                    {% endif %}
-                                                {% endfor %}
-                                            </table>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            {% endif %}
-                        </table>
-                    </div>
-                    <br>
-                    <hr>
-                    <br>
-                {% endfor %}
+                                                    </thead>
+                                                    {% for aC in ehe.contracts %}
+                                                        {% if aC.state == 1 %}
+                                                            <tbody>
+                                                            <tr>
+                                                                <td>{{ aC.idContract }}</td>
+                                                                <td>{% if aC.frequencyFrequency != NULL %}
+                                                                        {{ aC.frequencyFrequency.payrollCode }}
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td>{% if aC.activePayroll != NULL %}
+                                                                        {{ aC.activePayroll.period }} - {{ aC.activePayroll.month }} Paid: {{ aC.activePayroll.paid }}
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td> {{ aC.timeCommitmentTimeCommitment.code }}</td>
+                                                                <td>{% if aC.payMethodPayMethod != NULL %}
+                                                                        {{ aC.payMethodPayMethod.payTypePayType.simpleName }}
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td> {{ aC.salary }} </td>
+                                                                <td> {{ aC.startDate|date("y-m-d") }}</td>
+                                                                <td>{% if aC.endDate != NULL %}
+                                                                        {{ aC.endDate|date("y-m-d") }}
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td> {{ aC.workableDaysMonth }} </td>
+                                                                <td>{% if aC.planillaTypePlanillaType != NULL %}
+                                                                        {{ aC.planillaTypePlanillaType.code }}
+                                                                    {% endif %}
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </table>
+                                        {% endfor %}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
 
+                        {% set count = count + 1 %}
+                    {% endfor %}
+                </table>
+
+                {% if name is not defined or name == '' %}
+                    {% set name = '#' %}
+                {% endif %}
+                {% if lastName is not defined or lastName == '' %}
+                    {% set lastName = '#' %}
+                {% endif %}
+                {% if document is not defined or document == '' %}
+                    {% set document = '#' %}
+                {% endif %}
+                {% if documentType is not defined or documentType == '' %}
+                    {% set documentType = '#' %}
+                {% endif %}
+                {% if email is not defined or email == '' %}
+                    {% set email = '#' %}
+                {% endif %}
+                {% if highTech is not defined or highTech == '' %}
+                    {% set highTech = '#' %}
+                {% endif %}
+                {% if sql is not defined or sql == '' %}
+                    {% set sql = '#' %}
+                {% endif %}
+                {% if ehe is not defined or ehe == '' %}
+                    {% set ehe = '#' %}
+                {% endif %}
+                {% if pay is not defined or pay == '' %}
+                    {% set pay = '#' %}
+                {% endif %}
+                {% if phone is not defined or phone == '' %}
+                    {% set phone = '#' %}
+                {% endif %}
+                {% if contract is not defined or contract == '' %}
+                    {% set contract = '#' %}
+                {% endif %}
+                {% if join is not defined or join == '' %}
+                    {% set join = '#' %}
+                {% endif %}
+                {% if period is not defined or period == '' %}
+                    {% set period = '#' %}
+                {% endif %}
+                {% if paid is not defined or paid == '' %}
+                    {% set paid = '#' %}
+                {% endif %}
+                {% if maxIndex > 1 %}
+                    {% set nextIndex = index + 1 %}
+                    {% set prevIndex = 0 %}
+                    {% if index > 1 and index <= maxIndex %}
+                        {% set prevIndex = index - 1 %}
+                    {% endif %}
+                    {% if app.request.request.get('formFilter') is not null %}
+                        {% if app.request.request.get('formFilter')['name'] is defined and app.request.request.get('formFilter')['name']!='' %}
+                            {% set name = app.request.request.get('formFilter')['name'] %}
+                        {% endif %}
+                        {% if app.request.request.get('formFilter')['lastName'] is defined and app.request.request.get('formFilter')['lastName']!='' %}
+                            {% set lastName = app.request.request.get('formFilter')['lastName'] %}
+                        {% endif %}
+                        {% if app.request.request.get('formFilter')['document'] is defined and app.request.request.get('formFilter')['document']!='' %}
+                            {% set document = app.request.request.get('formFilter')['document'] %}
+                        {% endif %}
+                        {% if app.request.request.get('formFilter')['documentType'] is defined and app.request.request.get('formFilter')['documentType']!='' %}
+                            {% set documentType = app.request.request.get('formFilter')['documentType'] %}
+                        {% endif %}
+                        {% if app.request.request.get('formFilter')['email'] is defined and app.request.request.get('formFilter')['email']!='' %}
+                            {% set email = app.request.request.get('formFilter')['email'] %}
+                        {% endif %}
+                        {% if app.request.request.get('formFilter')['hightech'] is defined and app.request.request.get('formFilter')['hightech']!='' %}
+                            {% set highTech = app.request.request.get('formFilter')['hightech'] %}
+                        {% endif %}
+                        {% if app.request.request.get('formFilter')['sql'] is defined and app.request.request.get('formFilter')['sql']!='' %}
+                            {% set sql = app.request.request.get('formFilter')['sql'] %}
+                        {% endif %}
+                        {% if app.request.request.get('formFilter')['ehe'] is defined and app.request.request.get('formFilter')['ehe']!='' %}
+                            {% set ehe = app.request.request.get('formFilter')['ehe'] %}
+                        {% endif %}
+                        {% if app.request.request.get('formFilter')['payMethod'] is defined and app.request.request.get('formFilter')['payMethod']!='' %}
+                            {% set pay = app.request.request.get('formFilter')['payMethod'] %}
+                        {% endif %}
+                        {% if app.request.request.get('formFilter')['phone'] is defined and app.request.request.get('formFilter')['phone']!='' %}
+                            {% set phone = app.request.request.get('formFilter')['phone'] %}
+                        {% endif %}
+                        {% if app.request.request.get('formFilter')['contract'] is defined and app.request.request.get('formFilter')['contract']!='' %}
+                            {% set phone = app.request.request.get('formFilter')['contract'] %}
+                        {% endif %}
+                        {% if app.request.request.get('formFilter')['join'] is defined and app.request.request.get('formFilter')['join']!='' %}
+                            {% set join = app.request.request.get('formFilter')['join'] %}
+                        {% endif %}
+                        {% if app.request.request.get('formFilter')['period'] is defined and app.request.request.get('formFilter')['period']!='' %}
+                            {% set period = app.request.request.get('formFilter')['period'] %}
+                        {% endif %}
+                        {% if app.request.request.get('formFilter')['paid'] is defined and app.request.request.get('formFilter')['paid']!='' %}
+                            {% set paid = app.request.request.get('formFilter')['paid'] %}
+                        {% endif %}
+                    {% endif %}
+                    <div class="text-center col-md-12" style="display: inline-flex">
+                        {% if index > 1 and index <= maxIndex %}
+                            {% if index == maxIndex %}
+                                <a class="btn btn-back notAjax" style="margin: 10px auto 0px auto" href="{{ path("user_view",{
+                                    'name':name,
+                                    'lastName':lastName,
+                                    'documentType':documentType,
+                                    'document':document,
+                                    'email':email,
+                                    'highTech':highTech,
+                                    'sql':sql,
+                                    'ehe':ehe,
+                                    'pay':pay,
+                                    'phone':phone,
+                                    'contract':contract,
+                                    'period':period,
+                                    'paid':paid,
+                                    'join':join,
+                                    'index':prevIndex}) }}">&#10094;</a>
+                            {% else %}
+                                <a class="btn btn-back notAjax" style="margin: 10px 1px 0px auto" href="{{ path("user_view",{
+                                    'name':name,
+                                    'lastName':lastName,
+                                    'documentType':documentType,
+                                    'document':document,
+                                    'email':email,
+                                    'highTech':highTech,
+                                    'sql':sql,
+                                    'ehe':ehe,
+                                    'pay':pay,
+                                    'phone':phone,
+                                    'contract':contract,
+                                    'period':period,
+                                    'paid':paid,
+                                    'join':join,
+                                    'index':prevIndex}) }}">&#10094;</a>
+                            {% endif %}
+
+                        {% endif %}
+                        {% if index > 0 and index < maxIndex %}
+                            {% if index == 1 %}
+                                <a class="btn btn-back notAjax" style="margin: 10px auto 0px auto" href="{{ path("user_view",{
+                                    'name':name,
+                                    'lastName':lastName,
+                                    'documentType':documentType,
+                                    'document':document,
+                                    'email':email,
+                                    'highTech':highTech,
+                                    'sql':sql,
+                                    'ehe':ehe,
+                                    'pay':pay,
+                                    'phone':phone,
+                                    'contract':contract,
+                                    'period':period,
+                                    'paid':paid,
+                                    'join':join,
+                                    'index':nextIndex}) }}">&#10095;</a>
+                            {% else %}
+                                <a class="btn btn-back notAjax" style="margin: 10px auto 0px 1px" href="{{ path("user_view",{
+                                    'name':name,
+                                    'lastName':lastName,
+                                    'documentType':documentType,
+                                    'document':document,
+                                    'email':email,
+                                    'highTech':highTech,
+                                    'sql':sql,
+                                    'ehe':ehe,
+                                    'pay':pay,
+                                    'phone':phone,
+                                    'contract':contract,
+                                    'period':period,
+                                    'paid':paid,
+                                    'join':join,
+                                    'index':nextIndex}) }}">&#10095;</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                {% endif %}
             </div>
-        </div>
+        {% endif %}
     </div>
 {% endblock %}

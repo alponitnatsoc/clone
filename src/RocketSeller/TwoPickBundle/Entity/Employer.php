@@ -88,6 +88,7 @@ class Employer
     private $realProcedure;
 
     /**
+     * @var EmployerHasEmployee $employerHasEmployees
      * @ORM\OneToMany(targetEntity="EmployerHasEmployee", mappedBy="employerEmployer", cascade={"persist"})
      */
     private $employerHasEmployees;
