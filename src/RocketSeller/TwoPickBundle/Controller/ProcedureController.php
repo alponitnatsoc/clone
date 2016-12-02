@@ -515,7 +515,11 @@ class ProcedureController extends Controller
                 $procedures = $query2->getQuery()->getResult();
                 $change = false;
                 $priorityChange = false;
+                /** @var RealProcedure $procedure */
                 foreach ($procedures as $procedure) {
+                    if($procedure->getBackOfficeDate()==null and $procedure->getProcedureStatusCode()=='NEW'){
+                        $this->allDocumentsReady($procedure->getUserUser());
+                    }
                     if($this->calculateProcedureStatus($procedure)==1){
                         $em->persist($procedure);
                         $change = true;
@@ -537,6 +541,9 @@ class ProcedureController extends Controller
         $change = false;
         $priorityChange = false;
         foreach ($procedures as $procedure) {
+            if($procedure->getBackOfficeDate()==null and $procedure->getProcedureStatusCode()=='NEW'){
+                $this->allDocumentsReady($procedure->getUserUser());
+            }
             if($this->calculateProcedureStatus($procedure)==1){
                 $em->persist($procedure);
                 $change = true;
