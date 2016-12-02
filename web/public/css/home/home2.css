@@ -10,6 +10,7 @@ a {text-decoration: none}
 
 .fondo-section {background: #f7f7f7; padding-bottom: 50px;}
 
+.rojo  {background: #fd5c5c}
 .naranja {background: #FD9224}
 .azuloscuro {background: #3c4b5a}
 .azulmedio {background: #00838c}
@@ -21,6 +22,8 @@ a {text-decoration: none}
 .semi-italic {font-family: 'Open Sans', sans-serif;font-weight: 600;font-style:italic}
 .bold {font-family: 'Open Sans', sans-serif;font-weight: 700}
 .extrabold {font-family: 'Open Sans', sans-serif;font-weight: 800}
+.lightRale {font-family: 'Raleway', sans-serif;font-weight: 200}
+.boldRale {font-family: 'Raleway', sans-serif;font-weight: 700}
 
 header {
 	padding-top: 105px;
@@ -83,7 +86,7 @@ header {
 }
 #banner {
 	width: 100%;
-	padding: 35px 0;
+	padding: 60px 0;
 	height: auto;
 	background: url("../../img/home/bannernuevo.png");
 	background-size:cover;
@@ -130,13 +133,11 @@ margin-top: 5px}
 	border-bottom-left-radius: 25px;
 	border-top-left-radius: 25px}
 
-#btn-prueba:hover {background: #DA6E00;
-border-bottom: 3px solid #794815}
+#btn-prueba:hover {background: #DA6E00;}
 
 .callto:hover {background: #DA6E00;
 border-bottom: 3px solid #794815}
-.callto2:hover {background: #DA6E00;
-border-bottom: 3px solid #794815}
+.callto2:hover {background: #DA6E00;}
 
 .btn-video {
 	cursor: pointer;
@@ -168,6 +169,23 @@ border-bottom: 3px solid #794815}
 	    width: 600px;
 	    margin: 0 auto;
 	 }
+
+	#campanaSlide #terminosBtn {
+		color: #FFF;
+		cursor: pointer;
+		padding-bottom: 50px;
+	}
+	.campanaSlideContent {
+		background: #FFF;
+	}
+	.campanaSlideContent2 {
+		width: 100%;
+		padding: 85px 0 15px;
+		height: auto;
+		background: url("../../img/home/promoImg.png");
+		background-size:cover;
+		background-position:center;
+	}
 	#campanaSlide {
 		text-align: center;
 		position: fixed;
@@ -176,31 +194,56 @@ border-bottom: 3px solid #794815}
     z-index: 1;
     height: 100%;
     width: 100%;
-		padding-bottom: 100px;
     overflow-y: scroll;
-		background: rgba(113,201,200,1);
-		background: -moz-radial-gradient(center, ellipse cover, rgba(113,201,200,1) 0%, rgba(71,128,136,1) 88%, rgba(71,128,136,1) 100%);
-		background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(113,201,200,1)), color-stop(88%, rgba(71,128,136,1)), color-stop(100%, rgba(71,128,136,1)));
-		background: -webkit-radial-gradient(center, ellipse cover, rgba(113,201,200,1) 0%, rgba(71,128,136,1) 88%, rgba(71,128,136,1) 100%);
-		background: -o-radial-gradient(center, ellipse cover, rgba(113,201,200,1) 0%, rgba(71,128,136,1) 88%, rgba(71,128,136,1) 100%);
-		background: -ms-radial-gradient(center, ellipse cover, rgba(113,201,200,1) 0%, rgba(71,128,136,1) 88%, rgba(71,128,136,1) 100%);
-		background: radial-gradient(ellipse at center, rgba(113,201,200,1) 0%, rgba(71,128,136,1) 88%, rgba(71,128,136,1) 100%);
-		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#71c9c8', endColorstr='#478088', GradientType=1 );
-	}
-
-	#campanaSlide #terminosBtn {
-		color: #FFF;
-		cursor: pointer;
-		padding-bottom: 50px;
-	}
-	.logoCamp img {
-		width: 155px;
-		height: auto;
-		padding-top: 35px;
-	}
-	.campanaSlideContent {
 		background: #FFF;
 	}
+	.titleSlide {
+		font-size: 25px;
+		margin: 50px 0;
+	}
+	.formSlide {
+			font-size: 25px;
+			margin: 50px 0;
+		}
+	.inputSLide {
+		font-size: 16px;
+    border-radius: 20px;
+    border: 1px solid #CCC;
+    padding: 5px 0;
+    width: 500px;
+    text-align: center;
+    margin: 10px 0;
+    color: #797979;
+	}
+	#trigger3 p {
+		font-size: 20px;
+	}
+	.incluye {
+		width: 400px;
+    margin: 60px auto;
+    font-size: 17px;
+	}
+	.incluye li {
+		list-style-type: none;
+		text-indent: -20px;
+		padding: 5px 0;
+	}
+	.adPLan {
+		font-size: 20px;
+		background: #f5f5f5;
+		padding: 50px 0;
+	}
+	.submitPLan {
+		text-transform: uppercase;
+    background: #fd5c5c;
+    color: #FFF;
+    border: 0;
+    border-radius: 20px;
+    padding: 8px 30px;
+    font-size: 15px;
+    margin: 20px 0 0;
+	}
+	#trigger2, #trigger3 {display: none}
 	/*modal terminos y condicions*/
 	#terminosText {
 		padding: 35px;
@@ -212,18 +255,21 @@ border-bottom: 3px solid #794815}
 		}
 /*seccion de slide promocional*/
 /*seccion de banner promocional*/
-.promo1 {text-align: right;}
-.promo1 img, .promo2 img {height: 95px;width: auto;}
 .bannerPromos {
-	height: auto;
-	background: rgba(113,201,200,1);
-	background: -moz-radial-gradient(center, ellipse cover, rgba(113,201,200,1) 0%, rgba(71,128,136,1) 88%, rgba(71,128,136,1) 100%);
-	background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(113,201,200,1)), color-stop(88%, rgba(71,128,136,1)), color-stop(100%, rgba(71,128,136,1)));
-	background: -webkit-radial-gradient(center, ellipse cover, rgba(113,201,200,1) 0%, rgba(71,128,136,1) 88%, rgba(71,128,136,1) 100%);
-	background: -o-radial-gradient(center, ellipse cover, rgba(113,201,200,1) 0%, rgba(71,128,136,1) 88%, rgba(71,128,136,1) 100%);
-	background: -ms-radial-gradient(center, ellipse cover, rgba(113,201,200,1) 0%, rgba(71,128,136,1) 88%, rgba(71,128,136,1) 100%);
-	background: radial-gradient(ellipse at center, rgba(113,201,200,1) 0%, rgba(71,128,136,1) 88%, rgba(71,128,136,1) 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#71c9c8', endColorstr='#478088', GradientType=1 );
+	background: #21272f;
+	color: #FFF;
+	padding: 15px 0;
+}
+.textoPromo h2 {
+	margin: 0;
+	color: #FFF;
+}
+.textoPromo {
+	margin: 10px 0 10px;
+	font-size: 20px;
+}
+.bannerPromos h3 {
+	margin: 0;
 }
 /*fin banner promocional*/
 .titleSec {
@@ -284,7 +330,6 @@ font-weight: 100;}
 	height: 35px;
 	margin: 0 auto;
 	border-radius: 3px;
-	border-bottom:#D3731C 3px solid; color: #FFFFFF;
 	padding: 6px 12px;
 	box-sizing: border-box;
 	text-align: center;
@@ -574,6 +619,10 @@ font-weight: 100;
 	}
 
 	@media only screen and (max-width: 640px) {
+		/**/
+			#slideBody {width: 90%;margin: 0 auto;}
+			.inputSLide {width: 90%;}
+		/**/
 		#campanaDesc, #campanaTitle {width: 85%}
 		.numeros {float: left; padding: 20px 10px 0 100px;}
 		#contenido-pc p {width: 90%;}
@@ -589,7 +638,12 @@ font-weight: 100;
 		}
 
 @media only screen and (max-width: 480px) {
+	/*ceroesfuerzo*/
+	.incluye {width: 80%;}
+	.titleSlide {font-size: 20px;}
+	.adPLan {padding: 50px 15px;}
 
+	/*ceroesfuerzo*/
 	#contenido-pc p {width: 375px;}
 	.contHeadForm h1 {text-align: center}
 	.contHeadForm p {text-align: center}
@@ -634,7 +688,8 @@ font-weight: 100;
 
 
 @media only screen and (max-width: 414px) {
-	#contenido-pc p {width: 340px;}}
+	#contenido-pc p {width: 340px;}
+}
 
 @media only screen and (max-width: 375px) {
 	.inputHalf {width: 100%;}

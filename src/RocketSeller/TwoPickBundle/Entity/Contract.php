@@ -117,7 +117,7 @@ class Contract
     private $salary;
 
     /**
-     * @ORM\Column(type="smallint",  nullable=TRUE)
+     * @ORM\Column(type="float",  nullable=TRUE)
      */
     private $holidayDebt;
 
@@ -898,7 +898,7 @@ class Contract
     /**
      * Set holidayDebt
      *
-     * @param integer $holidayDebt
+     * @param float $holidayDebt
      *
      * @return Contract
      */
@@ -922,7 +922,7 @@ class Contract
     /**
      * Get holidayDebt
      *
-     * @return integer
+     * @return float
      */
     public function getHolidayDebt()
     {
