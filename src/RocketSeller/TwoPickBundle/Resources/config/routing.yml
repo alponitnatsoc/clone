@@ -50,6 +50,9 @@ sells_dashboard:
 back_office:
     path:     /backoffice
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:index}
+back_office_prima:
+    path:     /backoffice/add/prima
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:addPrima}
 show_procedures:
     path:     /backoffice/procedures/{orderType}/{order}/{state}/{document}/{names}/{prior}
     defaults: { _controller: RocketSellerTwoPickBundle:Procedure:index,orderType: 'none',order: 'ASC',state: 'none',document: 'none',names: 'none',prior: 'none'}
