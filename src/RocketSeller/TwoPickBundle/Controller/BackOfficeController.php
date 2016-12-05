@@ -2848,69 +2848,76 @@ class BackOfficeController extends Controller
 				//There are novelties missing, but so far the clients have used the ones in the ifs
 				//If the payroll belongs to the 2nd half of the 2016 we need to get the values
 				if((int)$payroll->getYear() == 2016 && (int)$payroll->getMonth() >= 7 && (int)$payroll->getMonth() <= 11 ){
+					if( (int)$payroll->getYear() == 2016 && (int)$payroll->getMonth() == 11 ){
+						$multiplier = 2;
+					}
+					else{
+						$multiplier = 1;
+					}
+					
 					/** @var Novelty $novelty */
 					foreach ($payroll->getSqlNovelties() as $novelty){
 						//Sueldo
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "1"){
-							$totalDias = $totalDias + (int)$novelty->getUnits();
-							$totalPago = $totalPago + (int)$novelty->getSqlValue();
+							$totalDias = $totalDias + (int)$novelty->getUnits() * $multiplier;
+							$totalPago = $totalPago + (int)$novelty->getSqlValue() * $multiplier;
 						}
 						
 						//Bonificacion
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "285"){
-							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue();
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
 						}
 						
 						//Vacaciones
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "145"){
-							$totalDias = $totalDias + (int)$novelty->getUnits();
-							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue();
+							$totalDias = $totalDias + (int)$novelty->getUnits() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
 						}
 						
 						//Subsidio de transporte
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "120"){
-							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue();
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
 						}
 						
 						//Hora extra festiva diurna
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "65"){
-							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue();
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
 						}
 						
 						//Incapacidad laboral
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "28"){
-							$totalDias = $totalDias + (int)$novelty->getUnits();
-							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue();
+							$totalDias = $totalDias + (int)$novelty->getUnits() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
 						}
 						
 						//Incapacidad general
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "15"){
-							$totalDias = $totalDias + (int)$novelty->getUnits();
-							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue();
+							$totalDias = $totalDias + (int)$novelty->getUnits() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
 						}
 						
 						//Licencia remunerada
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "23"){
-							$totalDias = $totalDias + (int)$novelty->getUnits();
-							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue();
+							$totalDias = $totalDias + (int)$novelty->getUnits() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
 						}
 						
 						//Licencia No remunerada
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "3120"){
-							$totalDias = $totalDias - (int)$novelty->getUnits();
-							$totalOtrosSalariales = $totalOtrosSalariales - (int)$novelty->getSqlValue();
+							$totalDias = $totalDias - (int)$novelty->getUnits() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales - (int)$novelty->getSqlValue() * $multiplier;
 						}
 						
 						//Licencia maternidad
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "25"){
-							$totalDias = $totalDias + (int)$novelty->getUnits();
-							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue();
+							$totalDias = $totalDias + (int)$novelty->getUnits() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
 						}
 						
 						//Gasto de incapacidad
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "20"){
-							$totalDias = $totalDias + (int)$novelty->getUnits();
-							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue();
+							$totalDias = $totalDias + (int)$novelty->getUnits() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
 						}
 					}
 				}
