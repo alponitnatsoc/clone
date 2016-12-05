@@ -132,6 +132,9 @@ clear_data_after_backup:
 user_view:
     path:     /backoffice/userView/{name}/{lastName}/{documentType}/{document}/{email}/{highTech}/{sql}/{ehe}/{pay}/{phone}/{contract}/{period}/{paid}/{join}/{index}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:userView, name: '', lastName: '',documentType: '',document: '',email: '',highTech: '', sql: '',ehe: '',pay: '',phone: '',contract: '',period: '',paid: '',join: '',index: 1}
+post_register:
+    path:     /backoffice/show/postRegister
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showPostRegisterEmployees}
 employer_state:
     path:     /backoffice/show/employersState
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:userBackOfficeState}
@@ -159,6 +162,7 @@ activate_notification:
 #email test
 back_test_email:
     path:         /backoffice/test/email
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:testEmail }
 
 #export documents
 export_documents_entity:

@@ -224,6 +224,7 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                  * if comprobante
                  * string path
                  * string documentName
+                 * boolean pagoPila
                  */
                 $template = $this->parameters['template']['succesDispersion'];
                 if($context['comprobante']){
@@ -249,7 +250,7 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                  * string toEmail
                  * string userName
                  * string payMethod
-                 * DateTime startDate
+                 * DateTime starDate
                  */
                 $template = $this->parameters['template']['validatePayMethod'];
                 return $this->sendMessage($template,$context,$teamFromEmail, $context['toEmail']);
@@ -410,7 +411,7 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                  * string toEmail
                  * string userName
                  * string employeeName
-                 * array error
+                 * array errors
                  */
                 $template = $this->parameters['template']['employeeDocsError'];
                 return $this->sendMessage($template,$context,$teamFromEmail,$context['toEmail']);
@@ -458,7 +459,7 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                 $template = $this->parameters['template']['helpTransaction'];
                 return $this->sendMessage($template, $context,$contactPublicFromEmail,$contactPrivate);
                 break;
-	        
+
 	          case 'stuckRegistration':
 		            /** $context must have:
 		             * string name
