@@ -306,8 +306,13 @@ class PayrollRestSecuredController extends FOSRestController
                 $flagFrequency = false;
                 $flagNomi=false;
             } else {
-                $person = $tempPOD->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
-                if ($tempPOD->getPayrollPayroll()->getContractContract()->getPayMethodPayMethod()->getPayTypePayType()->getPayrollCode() == "EFE"){
+                if($tempPOD->getProductProduct()->getSimpleName()=="PRM"){
+                    $contract = $tempPOD->getPrima()->getContractContract();
+                }else{
+                    $contract = $tempPOD->getPayrollPayroll()->getContractContract();
+                }
+                $person = $contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
+                if ($contract->getPayMethodPayMethod()->getPayTypePayType()->getPayrollCode() == "EFE"){
                     $flagFrequency = true;
                     $flagNomi=false;
                 }
@@ -666,9 +671,14 @@ class PayrollRestSecuredController extends FOSRestController
 		              $em->persist($tempPOD);
 		              $em->flush();
 	              }
-            } elseif( $tempPOD->getProductProduct()->getSimpleName()=="PN") {
-                $person = $tempPOD->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
-                if ($tempPOD->getPayrollPayroll()->getContractContract()->getPayMethodPayMethod()->getPayTypePayType()->getPayrollCode() == "EFE"){
+            } elseif( $tempPOD->getProductProduct()->getSimpleName() == "PN" || $tempPOD->getProductProduct()->getSimpleName() == "PRM") {
+                if($tempPOD->getProductProduct()->getSimpleName() == "PRM"){
+                    $contract = $tempPOD->getPrima()->getContractContract();
+                }else{
+                    $contract = $tempPOD->getPayrollPayroll()->getContractContract();
+                }
+                $person = $contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
+                if ($contract->getPayMethodPayMethod()->getPayTypePayType()->getPayrollCode() == "EFE"){
                     $flagFrequency = true;
                     $flagNomi=false;
                 }

@@ -515,7 +515,11 @@ class ProcedureController extends Controller
                 $procedures = $query2->getQuery()->getResult();
                 $change = false;
                 $priorityChange = false;
+                /** @var RealProcedure $procedure */
                 foreach ($procedures as $procedure) {
+                    if($procedure->getBackOfficeDate()==null and $procedure->getProcedureStatusCode()=='NEW'){
+                        $this->allDocumentsReady($procedure->getUserUser());
+                    }
                     if($this->calculateProcedureStatus($procedure)==1){
                         $em->persist($procedure);
                         $change = true;
@@ -537,6 +541,9 @@ class ProcedureController extends Controller
         $change = false;
         $priorityChange = false;
         foreach ($procedures as $procedure) {
+            if($procedure->getBackOfficeDate()==null and $procedure->getProcedureStatusCode()=='NEW'){
+                $this->allDocumentsReady($procedure->getUserUser());
+            }
             if($this->calculateProcedureStatus($procedure)==1){
                 $em->persist($procedure);
                 $change = true;
@@ -882,7 +889,7 @@ class ProcedureController extends Controller
                     $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEDCPE'));
                     $em->persist($ehe);
                 }elseif ($employer->getAllDocsReadyAt() != null and $ehe->getAllEmployeeDocsReadyAt() != null) {
-                    $ehe->setDateDocumentsUploaded($today);
+                    if($ehe->getDateDocumentsUploaded()==null)$ehe->setDateDocumentsUploaded($today);
                     $em->persist($ehe);
                     if($ehe->getInfoValidatedAt() != null) {
                         if ($employer->getInfoValidatedAt() != null) {
@@ -2379,8 +2386,15 @@ class ProcedureController extends Controller
                             if(!$corrected and !$error){
                                 if($begin and !$finish){
                                     $procedure->setProcedureStatus($this->getStatusByStatusCode('STRT'));
-                                }elseif($finish and $procedure->getProcedureStatuscode()!='FIN'){
-                                    $procedure->setProcedureStatus($this->getStatusByStatusCode('FIN'));
+                                }elseif($finish and $procedure->getProcedureStatusCode()!='FIN'){
+                                    $finishDate = null;
+                                    if($procedure->getFinishedAt()!= null)
+                                        $finishDate = $procedure->getFinishedAt();
+                                    if($procedure->getProcedureStatus()->getCode()!='FIN'){
+                                        $procedure->setProcedureStatus($this->getStatusByStatusCode('FIN'));
+                                        if($finishDate!=null)
+                                            $procedure->setFinishedAt($finishDate);
+                                    }
                                     foreach ($procedure->getEmployerEmployer()->getEmployerHasEmployees() as $ehe){
                                         $ehe->setDocumentStatusType($this->getDocumentStatusByCode('BOFFFF'));
                                         $ehe->setAllEmployeeDocsReadyAt(new DateTime());

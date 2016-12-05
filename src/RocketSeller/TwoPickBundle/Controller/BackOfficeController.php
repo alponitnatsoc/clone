@@ -3,6 +3,9 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\DBAL\Schema\ForeignKeyConstraint;
+use Doctrine\DBAL\Schema\Table;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use RocketSeller\TwoPickBundle\Entity\Configuration;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\Document;
@@ -16,6 +19,7 @@ use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Phone;
 use RocketSeller\TwoPickBundle\Entity\PilaDetail;
+use RocketSeller\TwoPickBundle\Entity\Prima;
 use RocketSeller\TwoPickBundle\Entity\PromotionCode;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
@@ -57,6 +61,79 @@ class BackOfficeController extends Controller
         }
 
         return $this->render('RocketSellerTwoPickBundle:BackOffice:index.html.twig');
+    }
+    public function addPrimaAction(Request $request)
+    {
+
+        $didSomething=false;
+        if(count($request->request->all())>0){
+            $em=$this->getDoctrine()->getManager();
+            $requ = $request->request->all();
+            foreach ($requ as $key=> $value) {
+
+                /** @var EmployerHasEmployee $realEhe */
+                $realEhe = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")->find($key);
+                if($realEhe==null)
+                    continue;
+                $contracts = $realEhe->getContracts();
+                $realContract=null;
+                /** @var Contract $contract */
+                foreach ($contracts as $contract) {
+                    if($contract->getState()==1){
+                        $realContract=$contract;
+                    }
+                }
+                if($realContract==null){
+                    continue;
+                }
+                /** @var User $realUser */
+                $realUser = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('personPerson'=>$realEhe->getEmployerEmployer()->getPersonPerson()->getIdPerson()));
+                $aPrima=false;
+                $primas = $realContract->getPrimas();
+                /** @var Prima  $pr */
+                foreach ($primas as $pr) {
+                    if($pr->getMonth()=="12"&&$pr->getYear()=="2016")
+                        $aPrima=true;
+                }
+                if($aPrima==true)
+                    break;
+                $didSomething=true;
+                //create the po and pod with the prima
+                $newPo = new PurchaseOrders();
+                $newPOD = new PurchaseOrdersDescription();
+                $primaProduct = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product")->findOneBy(array('simpleName'=>'PRM'));
+                $pendingStatus = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'P1'));
+                $newPOD->setProductProduct($primaProduct);
+                $newPOD->setValue($value);
+                $newPOD->setDescription("Prima Empleado ".$realEhe->getEmployeeEmployee()->getPersonPerson()->getFullName());
+                $newPOD->setPurchaseOrdersStatus($pendingStatus);
+                $newPo->setPurchaseOrdersStatus($pendingStatus);
+                $newPo->addPurchaseOrderDescription($newPOD);
+                $realUser->addPurchaseOrder($newPo);
+                //finally we add the prima to the contract
+                $prima= new Prima();
+                $prima->setMonth("12");
+                $prima->setYear("2016");
+                $prima->setValue($value);
+                $realContract->addPrima($prima);
+
+                $em->persist($realUser);
+                $em->flush();
+                $prima->setPurchaseOrdersDescriptionPurchaseOrdersDescription($newPOD);
+                $em->persist($realContract);
+                $em->flush();
+
+            }
+        }
+        $contracts = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Contract")->findBy(array('state'=>'1'));
+        $realEHES=new ArrayCollection();
+        /** @var Contract $contract */
+        foreach ($contracts as $contract) {
+            if($contract->getEmployerHasEmployeeEmployerHasEmployee()->getState()>=4&&$contract->getPrimas()->count()==0){
+                $realEHES->add($contract->getEmployerHasEmployeeEmployerHasEmployee());
+            }
+        }
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:addPrima.html.twig' , array('ehes'=>$realEHES));
     }
 
     public function generateCodesAction($amount)
@@ -1592,13 +1669,423 @@ class BackOfficeController extends Controller
         return $this->redirect($this->generateUrl('back_office'));
     }
 
-    public function userViewAction(){
+    /**
+     * @param string $name
+     * @param string $lastName
+     * @param string $documentType
+     * @param string $document
+     * @param string $email
+     * @param string $highTech
+     * @param string $sql
+     * @param string $ehe
+     * @param string $pay
+     * @param string $phone
+     * @param string $contract
+     * @param string $period
+     * @param string $paid
+     * @param string $join
+     * @param integer $index
+     * @param Request $request
+     * @return Response
+     */
+    public function userViewAction($name,$lastName,$documentType,$document,$email,$highTech,$sql,$ehe,$pay,$phone,$contract,$period,$paid,$join,$index,Request $request){
         $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+//        $contract ='';
+//        $activePayrrol ='';
+        if($name == "#")$name = '';
+        if($lastName =='#')$lastName = '';
+        if($document =='#')$document = '';
+        if($email =='#')$email = '';
+        if($highTech =='#')$highTech = '';
+        if($sql =='#')$sql = '';
+        if($ehe =='#')$ehe = '';
+        if($pay =='#')$pay = '';
+        if($phone =='#')$phone = '';
+        if($documentType=='#')$documentType = '';
+        if($contract=='#')$contract = '';
+        if($join=='#')$join = '';
+        if($period=='#')$period = '';
+        if($paid=='#')$paid = '';
+        $form = $this->get('form.factory')->createNamedBuilder('formFilter')
+            ->add('name','text',array('label'=>'Nombres:','required'=>false))
+            ->add('lastName','text',array('label'=>'Apellidos:','required'=>false))
+            ->add('documentType','choice', array('label'=>'Tipo Documento:','expanded'=>false,'multiple'=>false,'placeholder' => 'tipo','required'=>false,
+                'choices' => array(
+                    'CC'=> 'Cédula',
+                    'CE' => 'Cédula de Extranjeria',
+                    'PASAPORTE' => 'Pasaporte',
+                )))
+            ->add('document','text',array('label'=>'No. Documento:','required'=>false))
+            ->add('email','text',array('label'=>'Email:','required'=>false))
+            ->add('phone','text',array('label'=>'Telefono:','required'=>false))
+            ->add('hightech','text',array('label'=>'Id HighTech:','required'=>false))
+            ->add('sql','text',array('label'=>'Id SQL:','required'=>false))
+            ->add('ehe','text',array('label'=>'Id EHE:','required'=>false))
+            ->add('contract','text',array('label'=>'Id Contrato:','required'=>false))
+            ->add('payMethod','choice', array('label'=>'Metodo Pago:','expanded'=>false,'multiple'=>false,'placeholder' => 'metodo','required'=>false,
+                'choices' => array(
+                    'EFE' => 'Efectivo',
+                    'DAV' => 'Daviplata',
+                    'TRA'=> 'Transferencia',
+                )))
+            ->add('period','choice', array('label'=>'Periodo Payroll:','expanded'=>false,'multiple'=>false,'placeholder' => 'periodo','required'=>false,
+                'choices' => array(
+                    '2' => 'Primera Quincena',
+                    '4' => 'Segunda Quincena',
+                )))
+            ->add('paid','choice', array('label'=>'Payroll Pago:','expanded'=>false,'multiple'=>false,'placeholder' => 'pagado','required'=>false,
+                'choices' => array(
+                    '1' => 'Si',
+                    '-1' => 'No',
+                )))
+            ->add('join','choice', array('label'=>'Forzar join:','expanded'=>false,'multiple'=>false,'placeholder' => 'forzar','required'=>false,
+                'choices' => array(
+                    'YES' => 'Si',
+                )))
+            ->add('search','submit',array('label' => 'Buscar'))->getForm();
+        if($name!='')
+            $form->get('name')->setData($name);
+        if($lastName!='')
+            $form->get('lastName')->setData($lastName);
+        if($documentType!='')
+            $form->get('documentType')->setData($documentType);
+        if($document!='')
+            $form->get('document')->setData($document);
+        if($email!='')
+            $form->get('email')->setData($email);
+        if($highTech!='')
+            $form->get('hightech')->setData($highTech);
+        if($sql!='')
+            $form->get('sql')->setData($sql);
+        if($ehe!='')
+            $form->get('ehe')->setData($ehe);
+        if($pay!='')
+            $form->get('payMethod')->setData($pay);
+        if($phone!='')
+            $form->get('phone')->setData($phone);
+        if($contract!='')
+            $form->get('contract')->setData($contract);
+        if($period!='')
+            $form->get('period')->setData($period);
+        if($paid!='')
+            $form->get('paid')->setData($paid);
+        if($join!='')
+            $form->get('join')->setData($join);
+        $form->handleRequest($request);
+        if($form->isSubmitted() and $form->isValid()){
+            $name = $form->get('name')->getData();
+            $index = 1;
+            $lastName = $form->get('lastName')->getData();
+            $document = $form->get('document')->getData();
+            $documentType = $form->get('documentType')->getData();
+            $email = $form->get('email')->getData();
+            $highTech = $form->get('hightech')->getData();
+            $sql = intval($form->get('sql')->getData());
+            $ehe = intval($form->get('ehe')->getData());
+            $contract = intval($form->get('contract')->getData());
+            $pay = $form->get('payMethod')->getData();
+            $phone = $form->get('phone')->getData();
+            $join = $form->get('join')->getData();
+            $period = $form->get('period')->getData();
+            $paid = $form->get('paid')->getData();
+        }
 
         $em = $this->getDoctrine()->getManager();
-        $userRepo = $em->getRepository('RocketSellerTwoPickBundle:User')->findAll();
+        if($name=='' and $lastName=='' and $document=='' and $documentType=='' and $email=='' and $highTech=='' and $sql=='' and $ehe == null and $pay=='' and $phone==''
+            and $contract=='' and $join=='' and $period=='' and $paid==''){
+            return $this->render('RocketSellerTwoPickBundle:BackOffice:userView.html.twig',array('form'=>$form->createView(),'users'=>$em->getRepository("RocketSellerTwoPickBundle:User")->find(0)));
+        }else{
+            /** @var QueryBuilder $query */
+            $query = $em->createQueryBuilder();
+            $query->add('select', 'u');
+            if($join!=''){
+                $query->from("RocketSellerTwoPickBundle:User",'u')
+                    ->join("u.personPerson",'pe')
+                    ->join("u.realProcedures",'pr')
+                    ->join('pe.employer','em')
+                    ->join('pe.phones','ph')
+                    ->join("em.employerHasEmployees",'ehe')
+                    ->join("ehe.employeeEmployee",'ee')
+                    ->join("ehe.contracts",'c')
+                    ->join("c.activePayroll",'ap')
+                    ->join("c.payMethodPayMethod",'pm')
+                    ->join("pm.payTypePayType",'pt')
+                    ->join("ee.personPerson",'ep');
+            }else{
+                $query->from("RocketSellerTwoPickBundle:User",'u')
+                    ->leftJoin("u.personPerson",'pe')
+                    ->leftJoin("u.realProcedures",'pr')
+                    ->leftJoin('pe.employer','em')
+                    ->leftJoin('pe.phones','ph')
+                    ->leftJoin("em.employerHasEmployees",'ehe')
+                    ->leftJoin("ehe.employeeEmployee",'ee')
+                    ->leftJoin("ehe.contracts",'c')
+                    ->leftJoin("c.activePayroll",'ap')
+                    ->leftJoin("c.payMethodPayMethod",'pm')
+                    ->leftJoin("pm.payTypePayType",'pt')
+                    ->leftJoin("ee.personPerson",'ep');
+            }
+            if($name!= ''){
+                $strex = explode(' ',$name);
+                foreach ($strex as $str) {
+                    $sbstrs = $this->getAllStrings($str);
+                    foreach ($sbstrs as $sbstr) {
+                        $query->andWhere($query->expr()->orX(
+                            $query->expr()->like("pe.names","?1"),
+                            $query->expr()->like("ep.names","?1")
+                        ))
+                            ->setParameter('1',"%".$sbstr."%");
+                    }
+                }
+            }
+            if($lastName!=''){
+                $strex = explode(' ',$lastName);
+                foreach ($strex as $str) {
+                    $sbstrs = $this->getAllStrings($str);
+                    foreach ($sbstrs as $sbstr) {
+                        $query->andWhere($query->expr()->orX(
+                            $query->expr()->like("pe.lastName1","?2"),
+                            $query->expr()->like("ep.lastName1","?2"),
+                            $query->expr()->like("pe.lastName2","?2"),
+                            $query->expr()->like("ep.lastName2","?2")
+                        ))
+                            ->setParameter('2',"%".$sbstr."%");
+                    }
+                }
+            }
+            if($document!=''){
+                $query->andWhere($query->expr()->orX(
+                    $query->expr()->like("pe.document","?3"),
+                    $query->expr()->like("ep.document","?3"),
+                    $query->expr()->like("pe.document","?3"),
+                    $query->expr()->like("ep.document","?3")
+                ))
+                    ->setParameter('3',"%".$document."%");
+            }
+            if($highTech!=''){
+                $query->andWhere($query->expr()->orX(
+                    $query->expr()->like("em.idHighTech","?4")
+                ))
+                    ->setParameter('4',"%".$highTech."%");
+            }
+            if($sql!=''){
+                $query->andWhere($query->expr()->orX(
+                    $query->expr()->like("em.idSqlSociety","?5")
+                ))
+                    ->setParameter('5',"%".$sql."%");
+            }
+            if($ehe!=null){
+                $query->andWhere($query->expr()->orX(
+                    $query->expr()->like("ehe.idEmployerHasEmployee","?6")
+                ))
+                    ->setParameter('6',"%".$ehe."%");
+            }
+            if($pay!=''){
+                $query->andWhere($query->expr()->orX(
+                    $query->expr()->like("pt.simpleName","?7")
+                ))
+                    ->andWhere($query->expr()->eq("c.state",1))
+                    ->setParameter('7',"%".$pay."%");
+            }
+            if($email!=''){
+                $query->andWhere($query->expr()->orX(
+                    $query->expr()->like("u.email","?8")
+                ))
+                    ->setParameter('8',"%".$email."%");
+            }
+            if($phone!=''){
+                $query->andWhere($query->expr()->orX(
+                    $query->expr()->like("ph.phoneNumber","?9")
+                ))
+                    ->setParameter('9',"%".$phone."%");
+            }
+            if($documentType!=''){
+                $query->andWhere($query->expr()->orX(
+                    $query->expr()->like("pe.documentType","?10"),
+                    $query->expr()->like("ep.documentType","?10")
+                ))
+                    ->setParameter('10',"%".$documentType."%");
+            }
+            if($contract!=''){
+                $query->andWhere($query->expr()->orX(
+                    $query->expr()->eq("c.idContract","?11")
+                ))
+                    ->setParameter('11',$contract);
+            }
+            if($period!=''){
+                $query->andWhere($query->expr()->orX(
+                    $query->expr()->eq("ap.period","?12")
+                ))
+                    ->setParameter('12',$period);
+            }
+            if($paid!='') {
+                if($paid==1){
+                    $query->andWhere($query->expr()->orX(
+                        $query->expr()->eq("ap.paid", "?13")
+                    ))
+                        ->setParameter('13', $paid);
+                }else{
+                    $query->andWhere($query->expr()->orX(
+                        $query->expr()->eq("ap.paid", "?13")
+                    ))
+                        ->setParameter('13', 0);
+                }
 
-        return $this->render('RocketSellerTwoPickBundle:BackOffice:userView.html.twig',array('users'=>$userRepo));
+            }
+            $query->addOrderBy('u.id','ASC');
+            $maxIndex = 1;
+            $results = count($query->getQuery()->getResult());
+            if($results%20!=0){
+                $maxIndex = intval($results/20)+1;
+            }else{
+                $maxIndex = intval($results/20);
+            }
+            if($index==1){
+                $query->setFirstResult(0);
+                $query->setMaxResults(20);
+                $paginator = new Paginator($query,$fetchJoinCollection = true);
+                $users = $paginator->getIterator();
+            }else{
+                $query->setFirstResult(($index-1)*20);
+                $query->setMaxResults(20);
+                $paginator = new Paginator($query,$fetchJoinCollection = true);
+                $users = $paginator->getIterator();
+            }
+            if($results > 20){
+                $this->addFlash('alert_message',"La query obtuvo ".$results." resultados.");
+            }
+            return $this->render('RocketSellerTwoPickBundle:BackOffice:userView.html.twig',array(
+                'form'=>$form->createView(),
+                'users'=>$users,
+                'index'=>intval($index),
+                'name'=>$name,
+                'lastName'=>$lastName,
+                'document'=>$document,
+                'documentType'=>$documentType,
+                'email'=>$email,
+                'highTech'=>$highTech,
+                'sql'=>$sql,
+                'ehe'=>$ehe,
+                'pay'=>$pay,
+                'phone'=>$phone,
+                'contract'=>$contract,
+                'period'=>$period,
+                'paid'=>$paid,
+                'join'=>$join,
+                'maxIndex'=>intval($maxIndex),
+                ));
+        }
+    }
+
+    public function getAllStrings($str){
+        $strs = array();
+        $strs[]=$str;
+        if(count(explode('a',$str))>1){
+            if(count(explode('a',$str))>2){
+                $count = count(explode('a',$str));
+                $sbstr = explode('a',$str);
+                $fstr2 = $sbstr[0];
+                for($i = 1; $i<$count;$i++){
+                    for($j = 1; $j<$count;$j++){
+                        if($j==$i){
+                            $fstr2.='á'.$sbstr[$j];
+                        }else{
+                            $fstr2.='a'.$sbstr[$j];
+                        }
+                    }
+                    $strs[]=$fstr2;
+                    $fstr2 = $sbstr[0];
+                }
+            }else{
+                $sbstr = explode('a',$str);
+                $strs[]=$sbstr[0].'á'.$sbstr[1];
+            }
+        }
+        if(count(explode('e',$str))>1){
+            if(count(explode('e',$str))>2){
+                $count = count(explode('e',$str));
+                $sbstr = explode('e',$str);
+                $fstr2 = $sbstr[0];
+                for($i = 1; $i<$count;$i++){
+                    for($j = 1; $j<$count;$j++){
+                        if($j==$i){
+                            $fstr2.='é'.$sbstr[$j];
+                        }else{
+                            $fstr2.='e'.$sbstr[$j];
+                        }
+                    }
+                    $strs[]=$fstr2;
+                    $fstr2 = $sbstr[0];
+                }
+            }else{
+                $sbstr = explode('e',$str);
+                $strs[]=$sbstr[0].'é'.$sbstr[1];
+            }
+        }
+        if(count(explode('i',$str))>1){
+            if(count(explode('i',$str))>2){
+                $count = count(explode('i',$str));
+                $sbstr = explode('i',$str);
+                $fstr2 = $sbstr[0];
+                for($i = 1; $i<$count;$i++){
+                    for($j = 1; $j<$count;$j++){
+                        if($j==$i){
+                            $fstr2.='í'.$sbstr[$j];
+                        }else{
+                            $fstr2.='i'.$sbstr[$j];
+                        }
+                    }
+                    $strs[]=$fstr2;
+                    $fstr2 = $sbstr[0];
+                }
+            }else{
+                $sbstr = explode('i',$str);
+                $strs[]=$sbstr[0].'í'.$sbstr[1];
+            }
+        }
+        if(count(explode('o',$str))>1){
+            if(count(explode('o',$str))>2){
+                $count = count(explode('o',$str));
+                $sbstr = explode('o',$str);
+                $fstr2 = $sbstr[0];
+                for($i = 1; $i<$count;$i++){
+                    for($j = 1; $j<$count;$j++){
+                        if($j==$i){
+                            $fstr2.='ó'.$sbstr[$j];
+                        }else{
+                            $fstr2.='o'.$sbstr[$j];
+                        }
+                    }
+                    $strs[]=$fstr2;
+                    $fstr2 = $sbstr[0];
+                }
+            }else{
+                $sbstr = explode('o',$str);
+                $strs[]=$sbstr[0].'ó'.$sbstr[1];
+            }
+        }
+        if(count(explode('u',$str))>1){
+            if(count(explode('u',$str))>2){
+                $count = count(explode('u',$str));
+                $sbstr = explode('u',$str);
+                $fstr2 = $sbstr[0];
+                for($i = 1; $i<$count;$i++){
+                    for($j = 1; $j<$count;$j++){
+                        if($j==$i){
+                            $fstr2.='ú'.$sbstr[$j];
+                        }else{
+                            $fstr2.='u'.$sbstr[$j];
+                        }
+                    }
+                    $strs[]=$fstr2;
+                    $fstr2 = $sbstr[0];
+                }
+            }else{
+                $sbstr = explode('u',$str);
+                $strs[]=$sbstr[0].'ú'.$sbstr[1];
+            }
+        }
+        return $strs;
     }
 
 	public function userBackOfficeStateAction(){

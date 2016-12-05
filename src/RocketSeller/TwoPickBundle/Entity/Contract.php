@@ -71,6 +71,12 @@ class Contract
     private $payrolls;
 
     /**
+     * @ORM\OneToMany(targetEntity="Prima", mappedBy="contractContract", cascade={"persist"})
+     * @Exclude
+     */
+    private $primas;
+
+    /**
      * @var \RocketSeller\TwoPickBundle\Entity\Payroll
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Payroll", cascade={"persist"})
      * @ORM\JoinColumn(name="active_payroll", referencedColumnName="id_payroll")
@@ -111,7 +117,7 @@ class Contract
     private $salary;
 
     /**
-     * @ORM\Column(type="smallint",  nullable=TRUE)
+     * @ORM\Column(type="float",  nullable=TRUE)
      */
     private $holidayDebt;
 
@@ -892,7 +898,7 @@ class Contract
     /**
      * Set holidayDebt
      *
-     * @param integer $holidayDebt
+     * @param float $holidayDebt
      *
      * @return Contract
      */
@@ -916,7 +922,7 @@ class Contract
     /**
      * Get holidayDebt
      *
-     * @return integer
+     * @return float
      */
     public function getHolidayDebt()
     {
@@ -931,6 +937,7 @@ class Contract
         $this->benefits = new \Doctrine\Common\Collections\ArrayCollection();
         $this->weekWorkableDays = new \Doctrine\Common\Collections\ArrayCollection();
         $this->liquidations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->primas = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -1004,5 +1011,55 @@ class Contract
     public function getContractDocumentStatusType()
     {
         return $this->contractDocumentStatusType;
+    }
+
+    /**
+     * Set holidayDebtDate
+     *
+     * @param \DateTime $holidayDebtDate
+     *
+     * @return Contract
+     */
+    public function setHolidayDebtDate($holidayDebtDate)
+    {
+        $this->holidayDebtDate = $holidayDebtDate;
+
+        return $this;
+    }
+
+
+    /**
+     * Add prima
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Prima $prima
+     *
+     * @return Contract
+     */
+    public function addPrima(\RocketSeller\TwoPickBundle\Entity\Prima $prima)
+    {
+        $prima->setContractContract($this);
+        $this->primas[] = $prima;
+
+        return $this;
+    }
+
+    /**
+     * Remove prima
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Prima $prima
+     */
+    public function removePrima(\RocketSeller\TwoPickBundle\Entity\Prima $prima)
+    {
+        $this->primas->removeElement($prima);
+    }
+
+    /**
+     * Get primas
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPrimas()
+    {
+        return $this->primas;
     }
 }

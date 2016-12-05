@@ -766,12 +766,12 @@ trait EmployeeMethodsTrait
             }
             if(!$pending){
                 if($procedure->getEmployerEmployer()->getAllDocsReadyAt()!=null){
-                    $ehe->setDateDocumentsUploaded(new DateTime());
-                    $ehe->setAllEmployeeDocsReadyAt(new DateTime());
+                    if($ehe->getDateDocumentsUploaded()==null) $ehe->setDateDocumentsUploaded(new DateTime());
+                    if($ehe->getAllEmployeeDocsReadyAt()==null) $ehe->setAllEmployeeDocsReadyAt(new DateTime());
                     $this->getDoctrine()->getManager()->persist($ehe);
                     $this->getDoctrine()->getManager()->flush();
                 }else{
-                    $ehe->setAllEmployeeDocsReadyAt(new DateTime());
+                    if($ehe->getAllEmployeeDocsReadyAt()==null) $ehe->setAllEmployeeDocsReadyAt(new DateTime());
                     $this->getDoctrine()->getManager()->persist($ehe);
                     $this->getDoctrine()->getManager()->flush();
                 }
@@ -925,7 +925,7 @@ trait EmployeeMethodsTrait
                             $ehe->setDocumentStatusType($this->getDocumentStatusByCode('EEDCPE'));
                             $em->persist($ehe);
                         }elseif ($employer->getAllDocsReadyAt() != null and $ehe->getAllEmployeeDocsReadyAt() != null) {
-                            $ehe->setDateDocumentsUploaded($today);
+                            if($ehe->getDateDocumentsUploaded()==null)$ehe->setDateDocumentsUploaded($today);
                             $em->persist($ehe);
                             if($ehe->getInfoValidatedAt() != null) {
                                 if ($employer->getInfoValidatedAt() != null) {
@@ -1782,6 +1782,7 @@ trait EmployeeMethodsTrait
         /** @var User $user */
         $user = $realUser;
         $this->activate150KCampaign($user);
+        $em = $this->getDoctrine()->getManager();
         $effectiveDate = $user->getLastPayDate();
         $isFreeMonths = $user->getIsFree();
         if($isFreeMonths==0){
@@ -1816,12 +1817,15 @@ trait EmployeeMethodsTrait
                     $realToPay->addPurchaseOrderDescription($symplificaPOD);
                     $realToPay->setPurchaseOrdersStatus($procesingStatus);
                     $user->addPurchaseOrder($realToPay);
-                    $em = $this->getDoctrine()->getManager();
                     $em->persist($user);
                     $em->flush();
+                    break;
                 }
             }
         }
+        $eHE->setState(3);
+        $em->persist($eHE);
+        $em->flush();
 
     }
 
