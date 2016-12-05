@@ -1,0 +1,90 @@
+{% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
+
+{% block title %}Datos prima{% endblock %}
+
+{% block fos_user_content %}
+    <div id="main" class="col-sm-15">
+        <div class="col-md-12">
+            <div class="panel panel-title">
+                Datos para calcular prima
+            </div>
+            <br>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Información por empleado dado de alta - Entre Julio y Diciembre (Diciembre es igual a Noviembre)</h4>
+                </div>
+
+                <table class="table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Empleador</th>
+                        <th>Empleado</th>
+                        <th>Fecha inicio D/M/A</th>
+                        <th>Fecha fin D/M/A</th>
+                        <th>Fecha primera nómina Symplifica</th>
+                        <th>Salario Contrato</th>
+                        <th>Auxilio</th>
+                        <th>Días laborados total</th>
+                        <th>Valor total otros salariales</th>
+                        <th>Total pago vigencia</th>
+                        <th>Salario diario</th>
+                        <th>Días por semana</th>
+                    </tr>
+                    {% for ehe in ehes %}
+                        {% set locIndex = loop.index - 1 %}
+                        <tr>
+                            <td> {{ loop.index }}</td>
+                            <td> {{ ehe.employerEmployer.personPerson.names }} {{ ehe.employerEmployer.personPerson.lastName1 }}</td>
+                            <td> {{ ehe.employeeEmployee.personPerson.names }} {{ ehe.employeeEmployee.personPerson.lastName1 }}</td>
+                            <td> {{ ehe.activeContract.startDate|date("Y-m-d")|localizeddate('short', 'none', 'es-CO') }}</td>
+                            <td>
+                                {% if ehe.activeContract.endDate is not null %}
+                                    {{ ehe.activeContract.endDate|date("Y-m-d")|localizeddate('short', 'none', 'es-CO') }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ payrolls[locIndex].year }} - {{ payrolls[locIndex].month }} -
+                                {% if ehe.activeContract.frequencyFrequency.payrollCode == "M" %}
+                                    Mensual
+                                {% else %}
+                                    {% if payrolls[locIndex].period == 2 %}
+                                        1ra Quincena
+                                    {% else %}
+                                        2da Quincena
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if ehe.activeContract.timeCommitmentTimeCommitment.code == "TC" %}
+                                    {{ ehe.activeContract.salary|number_format(0, ',', '.') }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if ehe.activeContract.transportAid is not null %}
+                                    {% if ehe.activeContract.transportAid == 1 %}
+                                        NO
+                                    {% elseif ehe.activeContract.transportAid == 0 %}
+                                        SI
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                            <td> {{ days[locIndex] }} </td>
+                            <td> {{ otrosSalariales[locIndex]|number_format(0, ',', '.') }}</td>
+                            <td> {{ totalPago[locIndex]|number_format(0, ',', '.') }}</td>
+                            <td>
+                                {% if ehe.activeContract.timeCommitmentTimeCommitment.code == "XD" %}
+                                    {{ ehe.activeContract.salary / ehe.activeContract.workableDaysMonth }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if ehe.activeContract.timeCommitmentTimeCommitment.code == "XD" %}
+                                    {{ ehe.activeContract.workableDaysMonth / 4 }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
