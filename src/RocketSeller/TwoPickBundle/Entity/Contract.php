@@ -237,6 +237,11 @@ class Contract
      */
     private $planillaTypePlanillaType;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Supply", mappedBy="contractContract", cascade={"persist"})
+     */
+    private $supplies;
+
 
     /**
      * Get idContract
@@ -1061,5 +1066,39 @@ class Contract
     public function getPrimas()
     {
         return $this->primas;
+    }
+
+    /**
+     * Add supply
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Supply $supply
+     *
+     * @return Contract
+     */
+    public function addSupply(\RocketSeller\TwoPickBundle\Entity\Supply $supply)
+    {
+        $this->supplies[] = $supply;
+
+        return $this;
+    }
+
+    /**
+     * Remove supply
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Supply $supply
+     */
+    public function removeSupply(\RocketSeller\TwoPickBundle\Entity\Supply $supply)
+    {
+        $this->supplies->removeElement($supply);
+    }
+
+    /**
+     * Get supplies
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSupplies()
+    {
+        return $this->supplies;
     }
 }
