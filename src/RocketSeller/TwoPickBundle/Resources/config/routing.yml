@@ -276,3 +276,6 @@ back_download_planilla_log:
 back_fix_broken_pila_bot:
     path:         /backoffice/fix/broken/pila/bot
     defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:fixBrokenPilaBot }
+back_prima_view:
+    path:         /backoffice/prima/view
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:primaView }
