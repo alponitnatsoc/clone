@@ -15,6 +15,7 @@ use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Notification;
+use RocketSeller\TwoPickBundle\Entity\Novelty;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Phone;
@@ -2791,4 +2792,142 @@ class BackOfficeController extends Controller
 		
 		return $this->redirectToRoute('show_pilas');
 	}
+
+	public function primaViewAction(){
+		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		$criteria = new \Doctrine\Common\Collections\Criteria();
+		$criteria->where($criteria->expr()->gt('state', 3));
+		
+		$eheRepo = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
+		$activeEhe = $eheRepo->matching($criteria);
+		
+		$payrollArr = array();
+		$diasArr = array();
+		$otrosSalArr = array();
+		$totalPagoArr = array();
+		
+		/** @var EmployerHasEmployee $ehe */
+		foreach ($activeEhe as $index => $ehe) {
+			
+			$comparativePayroll = new Payroll();
+			$comparativePayroll->setYear("2020");
+			$comparativePayroll->setMonth("12");
+			$comparativePayroll->setPeriod("4");
+			
+			$totalDias = 0;
+			$totalOtrosSalariales = 0;
+			$totalPago = 0;
+			
+			/** @var Payroll $payroll */
+			foreach ($ehe->getActiveContract()->getPayrolls() as $payroll) {
+				
+				//Finds the oldest payroll (since we fixed the DB they are not stored in order)
+				if( (int)$payroll->getYear() < (int)$comparativePayroll->getYear() ){
+					$comparativePayroll->setYear($payroll->getYear());
+					$comparativePayroll->setMonth($payroll->getMonth());
+					$comparativePayroll->setPeriod($payroll->getPeriod());
+				}
+				elseif( (int)$payroll->getYear() == (int)$comparativePayroll->getYear() ){
+					if( (int)$payroll->getMonth() < (int)$comparativePayroll->getMonth() ){
+						$comparativePayroll->setYear($payroll->getYear());
+						$comparativePayroll->setMonth($payroll->getMonth());
+						$comparativePayroll->setPeriod($payroll->getPeriod());
+					}
+					elseif ((int)$payroll->getMonth() == (int)$comparativePayroll->getMonth()){
+						if( (int)$payroll->getPeriod() < (int)$comparativePayroll->getPeriod() ){
+							$comparativePayroll->setYear($payroll->getYear());
+							$comparativePayroll->setMonth($payroll->getMonth());
+							$comparativePayroll->setPeriod($payroll->getPeriod());
+						}
+					}
+				}
+				
+				//There are novelties missing, but so far the clients have used the ones in the ifs
+				//If the payroll belongs to the 2nd half of the 2016 we need to get the values
+				if((int)$payroll->getYear() == 2016 && (int)$payroll->getMonth() >= 7 && (int)$payroll->getMonth() <= 11 ){
+					/** @var Novelty $novelty */
+					foreach ($payroll->getSqlNovelties() as $novelty){
+						//Sueldo
+						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "1"){
+							$totalDias = $totalDias + (int)$novelty->getUnits();
+							$totalPago = $totalPago + (int)$novelty->getSqlValue();
+						}
+						
+						//Bonificacion
+						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "285"){
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue();
+						}
+						
+						//Vacaciones
+						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "145"){
+							$totalDias = $totalDias + (int)$novelty->getUnits();
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue();
+						}
+						
+						//Subsidio de transporte
+						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "120"){
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue();
+						}
+						
+						//Hora extra festiva diurna
+						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "65"){
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue();
+						}
+						
+						//Incapacidad laboral
+						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "28"){
+							$totalDias = $totalDias + (int)$novelty->getUnits();
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue();
+						}
+						
+						//Incapacidad general
+						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "15"){
+							$totalDias = $totalDias + (int)$novelty->getUnits();
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue();
+						}
+						
+						//Licencia remunerada
+						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "23"){
+							$totalDias = $totalDias + (int)$novelty->getUnits();
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue();
+						}
+						
+						//Licencia No remunerada
+						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "3120"){
+							$totalDias = $totalDias - (int)$novelty->getUnits();
+							$totalOtrosSalariales = $totalOtrosSalariales - (int)$novelty->getSqlValue();
+						}
+						
+						//Licencia maternidad
+						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "25"){
+							$totalDias = $totalDias + (int)$novelty->getUnits();
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue();
+						}
+						
+						//Gasto de incapacidad
+						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "20"){
+							$totalDias = $totalDias + (int)$novelty->getUnits();
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue();
+						}
+					}
+				}
+			}
+			
+			$totalPago = $totalPago + $totalOtrosSalariales;
+			
+			array_push($payrollArr,$comparativePayroll);
+			array_push($diasArr, $totalDias);
+			array_push($otrosSalArr, $totalOtrosSalariales);
+			array_push($totalPagoArr,$totalPago);
+			
+		}
+		
+		return $this->render('RocketSellerTwoPickBundle:BackOffice:primaView.html.twig',
+			array('ehes' => $activeEhe, 'payrolls' => $payrollArr, 'days' => $diasArr, 'otrosSalariales' => $otrosSalArr, 'totalPago' => $totalPagoArr));
+	}
 }
+
+
