@@ -24,6 +24,7 @@ use RocketSeller\TwoPickBundle\Entity\PromotionCode;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\RealProcedure;
+use RocketSeller\TwoPickBundle\Entity\Supply;
 use RocketSeller\TwoPickBundle\Entity\Transaction;
 use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -3014,5 +3015,48 @@ class BackOfficeController extends Controller
         return $this->render('RocketSellerTwoPickBundle:BackOffice:showPostRegister.html.twig',array(
             'ehes'=>$ehes,
             'type'=>$em->getRepository("RocketSellerTwoPickBundle:ProcedureType")->findOneBy(array('code'=>'REE'))));
+    }
+
+    public function setSupplyNotificationsAction($month, $year) {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+
+        $em = $this->getDoctrine()->getManager();
+        $eHERepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
+
+        $comprobanteType = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:DocumentType")
+                                ->findOneBy(array('docCode' => 'CPR'));
+        $eHEs = $eHERepo->findAll();
+        /** @var EmployerHasEmployee $eHE */
+        foreach ($eHEs as $eHE) {
+            if($eHE->getState() < 4) continue;
+
+            $activeContract = $eHE->getActiveContract();
+            $supply = new Supply();
+            $supply->setMonth($month);
+            $supply->setYear($year);
+            $supply->setContractContract($activeContract);
+            $em->persist($supply);
+            $em->flush();
+            $supplyId = $supply->getIdSupply();
+
+            $personEmployer = $eHE->getEmployerEmployer()->getPersonPerson();
+            $personEmployee = $eHE->getEmployeeEmployee()->getPersonPerson();
+            $notification = new Notification();
+            $notification->setPersonPerson($personEmployer);
+            $notification->setDocumentTypeDocumentType($comprobanteType);
+            $notification->setType('alert');
+            $notification->setStatus(1);
+            $notification->setRelatedLink("/document/add/Supply/$supplyId/CPR");
+            $notification->setDownloadLink("/documents/downloads/comprobante-dotacion/1/pdf");
+            $notification->setAccion('Subir');
+            $notification->setDownloadAction('Bajar');
+            $notification->setDescription('Subir copia comprobante de dotación de ' . $personEmployee->getNames() .
+                                            ' ' . $personEmployee->getLastName1());
+
+            $em->persist($notification);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('back_office');
     }
 }

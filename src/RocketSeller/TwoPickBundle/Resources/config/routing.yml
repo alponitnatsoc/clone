@@ -280,3 +280,6 @@ back_download_planilla_log:
 back_fix_broken_pila_bot:
     path:         /backoffice/fix/broken/pila/bot
     defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:fixBrokenPilaBot }
+back_set_supply_notifications:
+    path:         /backoffice/set/supply/notifications/{month}/{year}
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:setSupplyNotifications }
