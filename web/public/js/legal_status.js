@@ -413,10 +413,6 @@ function displayForm(){
 }
 
 function sendEmail(subject , message ){
-  var name = "{{ user.personPerson.fullName }}";
-  var phone = "{{ user.personPerson.phones.first.phoneNumber }}";
-  var email = "{{ user.email }}";
-
   $.ajax( {
     type: "POST",
     url: '/api/public/v1/sends/registrations/stucks/emails',
