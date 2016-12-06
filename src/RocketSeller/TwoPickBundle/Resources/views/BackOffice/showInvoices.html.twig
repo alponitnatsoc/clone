@@ -57,7 +57,7 @@ ID Factura en Symplifica, Consecutivo Factura, Documento Cliente, Nombres, Apell
     {% set totalFeeWTX = totalFeeWOTX*0.16 %}
     {% set totalTransacWOTX = totalTransac/1.16 %}
     {% set totalTransacWTX = totalTransacWOTX*0.16 %}
-    {% set grandTotal = totalNomnina+totalPila+totalFee+totalTransac+total4mill %}
+    {% set grandTotal = totalNomnina+totalPila+totalFee+totalTransac+total4mill+totalMora %}
 <br>{{ po.idPurchaseOrders }}, {{ po.InvoiceNumber }}, {{ document }}, {{ names }}, {{ lastNames }}, {{ address }} {{ city }} {{ dept }}, {{ phone }}, ---, {{ datePay }},{{ totalNomnina }}, {{ totalPila }}, {{ totalMora }},{{ totalFeeWOTX }}, {{ totalFeeWTX }}, {{ totalFee }}, {{ totalTransacWOTX }}, {{ totalTransacWTX }}, {{ totalTransac }},  {{ total4mill }}, {{ grandTotal }}
     {% endfor %}
     {#

@@ -2912,13 +2912,13 @@ class BackOfficeController extends Controller
 						
 						//Bonificacion
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "285"){
-							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() ;
 						}
 						
 						//Vacaciones
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "145"){
 							$totalDias = $totalDias + (int)$novelty->getUnits() * $multiplier;
-							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() ;
 						}
 						
 						//Subsidio de transporte
@@ -2928,25 +2928,25 @@ class BackOfficeController extends Controller
 						
 						//Hora extra festiva diurna
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "65"){
-							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() ;
 						}
 						
 						//Incapacidad laboral
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "28"){
 							$totalDias = $totalDias + (int)$novelty->getUnits() * $multiplier;
-							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() ;
 						}
 						
 						//Incapacidad general
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "15"){
 							$totalDias = $totalDias + (int)$novelty->getUnits() * $multiplier;
-							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() ;
 						}
 						
 						//Licencia remunerada
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "23"){
 							$totalDias = $totalDias + (int)$novelty->getUnits() * $multiplier;
-							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() ;
 						}
 						
 						//Licencia No remunerada
@@ -2959,13 +2959,13 @@ class BackOfficeController extends Controller
 						//Licencia maternidad
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "25"){
 							$totalDias = $totalDias + (int)$novelty->getUnits() * $multiplier;
-							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() ;
 						}
 						
 						//Gasto de incapacidad
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "20"){
 							$totalDias = $totalDias + (int)$novelty->getUnits() * $multiplier;
-							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() ;
 						}
 					}
 				}
