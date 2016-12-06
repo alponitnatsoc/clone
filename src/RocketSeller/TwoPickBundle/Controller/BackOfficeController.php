@@ -14,6 +14,7 @@ use RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
+use RocketSeller\TwoPickBundle\Entity\LandingRegistration;
 use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\Novelty;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
@@ -70,6 +71,10 @@ class BackOfficeController extends Controller
         if(count($request->request->all())>0){
             $em=$this->getDoctrine()->getManager();
             $requ = $request->request->all();
+            $lab=$requ["LAB"];
+            $noLab=$requ["NOLAB"];
+            unset($requ["LAB"]);
+            unset($requ["NOLAB"]);
             foreach ($requ as $key=> $value) {
 
                 /** @var EmployerHasEmployee $realEhe */
@@ -116,6 +121,19 @@ class BackOfficeController extends Controller
                 $prima->setMonth("12");
                 $prima->setYear("2016");
                 $prima->setValue($value);
+                $prima->setDateEnd(new DateTime("2016-12-31"));
+                $datestart =new DateTime("2016-07-01");
+                if($contract->getStartDate()>$datestart){
+                    $datestart=$contract->getStartDate();
+                }
+                $prima->setDateStart($datestart);
+                $aux=0;
+                if($contract->getTransportAid()==0){
+                    $aux=77700;
+                }
+                $prima->setTransportAid($aux);
+                $prima->setWorked($lab);
+                $prima->setNotWorked($noLab);
                 $realContract->addPrima($prima);
 
                 $em->persist($realUser);
@@ -1221,6 +1239,33 @@ class BackOfficeController extends Controller
             ->getRepository('RocketSellerTwoPickBundle:LandingRegistration')
             ->findAll();
         return $this->render('RocketSellerTwoPickBundle:BackOffice:marketing.html.twig', array('landings'=>array_reverse($landings)));
+    }
+
+    /**
+     * Funcion que muestra la tabla de registrados en el landing
+     * @return Response /backoffice/marketing
+     */
+    public function showExpressAction($id)
+    {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        if($id==-1){
+            $landings = $this->getdoctrine()
+                ->getRepository('RocketSellerTwoPickBundle:LandingRegistration')
+                ->findBy(array('type'=>'0Esfuezo'));
+            return $this->render('RocketSellerTwoPickBundle:BackOffice:marketing.html.twig', array('landings'=>array_reverse($landings),'express'=>'active'));
+        }else{
+            /** @var LandingRegistration $lidRegister */
+            $lidRegister = $this->getdoctrine()
+                ->getRepository('RocketSellerTwoPickBundle:LandingRegistration')
+                ->find($id);
+            /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
+            $userManager = $this->get('fos_user.user_manager');
+            /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
+            $user = $userManager->createUser();
+
+            return $this->render('RocketSellerTwoPickBundle:BackOffice:marketing.html.twig', array('landings'=>array_reverse($landings),'express'=>'active'));
+        }
+
     }
 
     /**
@@ -2806,6 +2851,7 @@ class BackOfficeController extends Controller
 		
 		$payrollArr = array();
 		$diasArr = array();
+        $menosDiasArr = array();
 		$otrosSalArr = array();
 		$totalPagoArr = array();
 		
@@ -2818,6 +2864,7 @@ class BackOfficeController extends Controller
 			$comparativePayroll->setPeriod("4");
 			
 			$totalDias = 0;
+            $menosDías = 0;
 			$totalOtrosSalariales = 0;
 			$totalPago = 0;
 			
@@ -2904,8 +2951,9 @@ class BackOfficeController extends Controller
 						
 						//Licencia No remunerada
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "3120"){
-							$totalDias = $totalDias - (int)$novelty->getUnits() * $multiplier;
-							$totalOtrosSalariales = $totalOtrosSalariales - (int)$novelty->getSqlValue() * $multiplier;
+							$totalDias = $totalDias - (int)$novelty->getUnits() ;
+							$totalOtrosSalariales = $totalOtrosSalariales - (int)$novelty->getSqlValue();
+                            $menosDías +=   (int)$novelty->getUnits();
 						}
 						
 						//Licencia maternidad
@@ -2927,13 +2975,14 @@ class BackOfficeController extends Controller
 			
 			array_push($payrollArr,$comparativePayroll);
 			array_push($diasArr, $totalDias);
+			array_push($menosDiasArr, $menosDías);
 			array_push($otrosSalArr, $totalOtrosSalariales);
 			array_push($totalPagoArr,$totalPago);
 			
 		}
 		
 		return $this->render('RocketSellerTwoPickBundle:BackOffice:primaView.html.twig',
-			array('ehes' => $activeEhe, 'payrolls' => $payrollArr, 'days' => $diasArr, 'otrosSalariales' => $otrosSalArr, 'totalPago' => $totalPagoArr));
+			array('ehes' => $activeEhe, 'payrolls' => $payrollArr, 'days' => $diasArr, 'minusDays' => $menosDiasArr, 'otrosSalariales' => $otrosSalArr, 'totalPago' => $totalPagoArr));
 	}
 }
 
