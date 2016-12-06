@@ -451,3 +451,13 @@ function changeValues(data) {
 
 
 }
+
+function setMinimumTC() {
+    $("#form_salarioM").val(smmlv);
+}
+
+function setMinimumXD() {
+    var val = $("#form_numberOfDays").val() + 1;
+
+    $("#form_salarioD").val((smmlv)/30 * val);
+}

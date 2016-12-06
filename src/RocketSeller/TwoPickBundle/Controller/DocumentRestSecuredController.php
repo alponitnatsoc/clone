@@ -11,7 +11,9 @@ use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Novelty;
 use RocketSeller\TwoPickBundle\Entity\NoveltyTypeHasDocumentType;
+use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Person;
+use RocketSeller\TwoPickBundle\Entity\Prima;
 use Symfony\Component\HttpFoundation\Request;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
@@ -217,7 +219,9 @@ class DocumentRestSecuredController extends FOSRestController
     *   }
     * )
     *
-    * @RequestParam(name="idPayroll", nullable=false, strict=true, description="id Payroll")
+    * @RequestParam(name="idEntity", nullable=false, strict=true, description="id Entity")
+    * @RequestParam(name="entityType", nullable=false, strict=true, description="Entity Type")
+    * @RequestParam(name="ref", nullable=false, strict=true, description="download link document ref")
     * @RequestParam(name="idPerson", nullable=false, strict=true, description="id person employer")
     * @RequestParam(name="idDocumentType", nullable=false, strict=true, description="id document type")
     * @RequestParam(name="idNotification", nullable=false, strict=true, description="id of notification to be removed")
@@ -227,19 +231,17 @@ class DocumentRestSecuredController extends FOSRestController
    public function postUploadPayslipAction(ParamFetcher $paramFetcher)
    {
        $idPerson = $paramFetcher->get('idPerson');
-       $idPayroll = $paramFetcher->get('idPayroll');
+       $idEntity = $paramFetcher->get('idEntity');
+       $entityType = $paramFetcher->get('entityType');
        $idDocumentType = $paramFetcher->get('idDocumentType');
        $idNotification = $paramFetcher->get('idNotification');
+       $ref = $paramFetcher->get('ref');
 
        $em = $this->getDoctrine()->getManager();
 
        $person = $this->getDoctrine()
            ->getRepository('RocketSellerTwoPickBundle:Person')
            ->find($idPerson);
-
-       $payroll = $this->getDoctrine()
-           ->getRepository('RocketSellerTwoPickBundle:Payroll')
-           ->find($idPayroll);
 
        $documentType = $this->getDoctrine()
            ->getRepository('RocketSellerTwoPickBundle:DocumentType')
@@ -250,8 +252,8 @@ class DocumentRestSecuredController extends FOSRestController
            ->find($idNotification);
 
        $params = array(
-         'ref' => 'comprobante',
-         'id' => $idPayroll,
+         'ref' => $ref,
+         'id' => $idEntity,
          'type' => 'pdf',
          'attach'=> null
        );
@@ -261,28 +263,69 @@ class DocumentRestSecuredController extends FOSRestController
        $file_path = "uploads/tempDocumentPages/paysliptempFile.pdf";
        file_put_contents($file_path, $file);
 
-       $document = new Document();
-       $document->setPersonPerson($person);
-       $document->setName('Comprobante_idperson_' + $idPerson);
-       $document->setStatus(1);
-       $document->setDocumentTypeDocumentType($documentType);
-       $em->persist($document);
 
 
-       $mediaManager = $this->container->get('sonata.media.manager.media');
-       $media = $mediaManager->create();
-       $media->setBinaryContent($file_path);
-       $media->setProviderName('sonata.media.provider.file');
-       $media->setName($document->getName());
-       $media->setProviderStatus(Media::STATUS_OK);
-       $media->setContext('person');
-       $media->setDocumentDocument($document);
+       switch ($entityType) {
+           case 'Payroll':
+               /** @var Payroll $payroll */
+               $payroll = $this->getDoctrine()
+                   ->getRepository('RocketSellerTwoPickBundle:Payroll')
+                   ->find($idEntity);
 
-       $em->persist($media);
+               $document = new Document();
+               $document->setPersonPerson($person);
+               $document->setName('Comprobante de pago id payrrol' . $payroll->getIdPayroll());
+               $document->setStatus(1);
+               $document->setDocumentTypeDocumentType($documentType);
+               $em->persist($document);
 
 
-       $payroll->setPayslip($document);
-       $em->persist($payroll);
+               $mediaManager = $this->container->get('sonata.media.manager.media');
+               $media = $mediaManager->create();
+               $media->setBinaryContent($file_path);
+               $media->setProviderName('sonata.media.provider.file');
+               $media->setName($document->getName());
+               $media->setProviderStatus(Media::STATUS_OK);
+               $media->setContext('person');
+               $media->setDocumentDocument($document);
+
+               $em->persist($media);
+
+               $payroll->setPayslip($document);
+               $em->persist($payroll);
+               break;
+           case 'Prima':
+               /** @var Prima $prima */
+               $prima = $this->getDoctrine()
+                   ->getRepository('RocketSellerTwoPickBundle:Prima')
+                   ->find($idEntity);
+
+               $document = new Document();
+               $document->setPersonPerson($person);
+               $document->setName('Comprobante prima de' .
+                   $prima->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName());
+               $document->setStatus(1);
+               $document->setDocumentTypeDocumentType($documentType);
+               $em->persist($document);
+
+
+               $mediaManager = $this->container->get('sonata.media.manager.media');
+               $media = $mediaManager->create();
+               $media->setBinaryContent($file_path);
+               $media->setProviderName('sonata.media.provider.file');
+               $media->setName($document->getName());
+               $media->setProviderStatus(Media::STATUS_OK);
+               $media->setContext('person');
+               $media->setDocumentDocument($document);
+
+               $em->persist($media);
+
+
+
+               $prima->setPayslip($document);
+               $em->persist($prima);
+               break;
+       }
 
        $notification->setStatus(0);
        $em->persist($notification);

@@ -181,6 +181,11 @@ class EmployerHasEmployee
     private $docErrorMessageAt=null;
 
     /**
+     * @ORM\Column(name="is_post_register",type="boolean", nullable=TRUE)
+     */
+    private $isPostRegister;
+
+    /**
      * @ORM\Column(name="error_email_sent_at",type="datetime", nullable=true)
      */
     private $ErrorEmailSentAt=null;
@@ -855,5 +860,29 @@ class EmployerHasEmployee
     public function getDocErrorMessageAt()
     {
         return $this->docErrorMessageAt;
+    }
+
+    /**
+     * Set isPostRegister
+     *
+     * @param boolean $isPostRegister
+     *
+     * @return EmployerHasEmployee
+     */
+    public function setIsPostRegister($isPostRegister)
+    {
+        $this->isPostRegister = $isPostRegister;
+
+        return $this;
+    }
+
+    /**
+     * Get isPostRegister
+     *
+     * @return boolean
+     */
+    public function getIsPostRegister()
+    {
+        return $this->isPostRegister;
     }
 }

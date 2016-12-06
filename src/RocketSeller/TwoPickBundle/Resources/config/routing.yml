@@ -132,6 +132,9 @@ clear_data_after_backup:
 user_view:
     path:     /backoffice/userView/{name}/{lastName}/{documentType}/{document}/{email}/{highTech}/{sql}/{ehe}/{pay}/{phone}/{contract}/{period}/{paid}/{join}/{index}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:userView, name: '', lastName: '',documentType: '',document: '',email: '',highTech: '', sql: '',ehe: '',pay: '',phone: '',contract: '',period: '',paid: '',join: '',index: 1}
+post_register:
+    path:     /backoffice/show/postRegister
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showPostRegisterEmployees}
 employer_state:
     path:     /backoffice/show/employersState
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:userBackOfficeState}
@@ -159,6 +162,7 @@ activate_notification:
 #email test
 back_test_email:
     path:         /backoffice/test/email
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:testEmail }
 
 #export documents
 export_documents_entity:
@@ -276,6 +280,9 @@ back_download_planilla_log:
 back_fix_broken_pila_bot:
     path:         /backoffice/fix/broken/pila/bot
     defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:fixBrokenPilaBot }
+back_set_supply_notifications:
+    path:         /backoffice/set/supply/notifications/{month}/{year}
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:setSupplyNotifications }
 back_prima_view:
     path:         /backoffice/prima/view
     defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:primaView }

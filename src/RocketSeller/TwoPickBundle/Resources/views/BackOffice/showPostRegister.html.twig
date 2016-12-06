@@ -1,0 +1,41 @@
+{% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
+{% block title %}Empleados Post Registro{% endblock %}
+{% block fos_user_content %}
+    <div id="main" class="col-md -12">
+        <div class="back-panel-title">
+            Empleados Post Registro
+        </div>
+        <div class="back-panel">
+            <div class="backoffice-headding">
+                Información del Empleados Post Registro
+            </div>
+            <table class="table" style="margin-bottom: -1px;">
+                <thead>
+                <th style="width: 10%">Id Procedure</th>
+                <th style="width: 10%">Id Empleador</th>
+                <th style="width: 20%">Nombre Empleador</th>
+                <th style="width: 20%">Nombre Empleado</th>
+                <th>Tipo Documento Empleado</th>
+                <th>Número Documento</th>
+                <th>Acción</th>
+                </thead>
+                <tbody>
+                {% for ehe in ehes %}
+                    {% if ehe.employerEmployer.getRealProcedureByProcedureTypeType(type).first.getProcedureStatusCode != 'FIN' %}
+                    <tr>
+                        <td>{{ ehe.employerEmployer.getRealProcedureByProcedureTypeType(type).first.idProcedure  }}</td>
+                        <td>{{ ehe.employerEmployer.idEmployer }}</td>
+                        <td>{{ ehe.EmployerEmployer.personPerson.fullName }}</td>
+                        <td>{{ ehe.employeeEmployee.personPerson.fullName }}</td>
+                        <td>{{ ehe.employeeEmployee.personPerson.documentType }}</td>
+                        <td>{{ ehe.employeeEmployee.personPerson.document }}</td>
+                        <td><a class="notAjax" href="{{ path("show_procedure",{'procedureId':ehe.employerEmployer.getRealProcedureByProcedureTypeType(type).first.idProcedure}) }}">ir al tramite</a></td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+{% endblock %}

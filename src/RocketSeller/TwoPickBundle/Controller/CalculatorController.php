@@ -66,6 +66,18 @@ class CalculatorController extends Controller
 			        'required' => true
 		        ))
             ->add('save', 'submit', array('label' => 'Calcular'))
+            ->add('minimumTC', 'button', array(
+                'label' => 'Salario Mínimo Mensual',
+                'attr' => array(
+                    'onclick' => 'setMinimumTC()'
+                )
+            ))
+            ->add('minimumXD', 'button', array(
+                'label' => 'Salario Mínimo Diario',
+                'attr' => array(
+                    'onclick' => 'setMinimumXD()'
+                )
+            ))
             ->getForm();
 
         return $this->render('RocketSellerTwoPickBundle:Calculator:showCalculatorForm.html.twig',

@@ -6,11 +6,13 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\SerializationContext;
 use RocketSeller\TwoPickBundle\Entity\Config;
+use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\PilaConstraints;
 use RocketSeller\TwoPickBundle\Entity\PilaDetail;
 use RocketSeller\TwoPickBundle\Entity\PilaTax;
+use RocketSeller\TwoPickBundle\Entity\Prima;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
@@ -241,6 +243,8 @@ class PayrollRestSecuredController extends FOSRestController
                         $em->persist($actualPayroll->getContractContract());
                     }
                     $em->flush();
+                } elseif ($pod->getPrima() != null) {
+                    $this->createNotificationPrimaPayslip($pod->getPrima());
                 }
             }
 
@@ -462,6 +466,32 @@ class PayrollRestSecuredController extends FOSRestController
 
         return $view->setStatusCode(200)->setData($answer);
 
+    }
+
+    /**
+     * @param Prima $prima
+     */
+    private function createNotificationPrimaPayslip(Prima $prima) {
+        $em = $this->getDoctrine()->getManager();
+
+        $employerHasEmployee = $prima->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee();
+        /** @var Employer $employer */
+        $personEmployer = $employerHasEmployee->getEmployerEmployer()->getPersonPerson();
+        /** @var Person $personEmployee */
+        $personEmployee = $employerHasEmployee->getEmployeeEmployee()->getPersonPerson();
+
+        $notification = new Notification();
+        $notification->setPersonPerson($personEmployer);
+        $notification->setStatus(1);
+        $notification->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'CPR')));
+        $notification->setType('alert');
+        $notification->setDescription('Subir comprobante firmado de prima de ' . $personEmployee->getFullName());
+        $notification->setRelatedLink('/document/add/Prima/' . $prima->getIdPrima() . '/CPR');
+        $notification->setAccion('Subir');
+        $notification->setDownloadAction('Bajar');
+        $notification->setDownloadLink('/document/downloads/comprobante-prima/' . $prima->getIdPrima() . '/pdf');
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($notification);
     }
 
     /**
@@ -884,6 +914,8 @@ class PayrollRestSecuredController extends FOSRestController
                         $em->persist($actualPayroll->getContractContract());
                     }
                     $em->flush();
+                } elseif ($pod->getPrima() != null) {
+                    $this->createNotificationPrimaPayslip($pod->getPrima());
                 }
             }
 

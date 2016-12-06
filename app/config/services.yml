@@ -93,7 +93,7 @@ services:
                     descubrir: 'FOSUserBundle:EmailTemplates:descubreSymplifica.txt.twig'
                     supplies: 'FOSUserBundle:EmailTemplates:dotacion.txt.twig'
                     waiting: 'FOSUserBundle:EmailTemplates:estamosEsperando.txt.twig'
-                    contractFinishReminder: 'FOSUserBundle:EmailTemplates:fechaTerminancionContrato.txt.twig'
+                    contractFinishReminder: 'FOSUserBundle:EmailTemplates:fechaTerminaContrato.txt.twig'
                     cesantCharges: 'FOSUserBundle:EmailTemplates:interesesCesantias.txt.twig'
                     cesantPayment: 'FOSUserBundle:EmailTemplates:pagoCesantias.txt.twig'
                     bonus: 'FOSUserBundle:EmailTemplates:pagoPrima.txt.twig'
@@ -108,6 +108,7 @@ services:
                     notRegisteredUserApp: 'FOSUserBundle:EmailTemplates:notRegisteredUserApp.txt.twig'
                     helpTransaction: 'FOSUserBundle:EmailTemplates:helpTransaction.txt.twig'
                     stuckRegistration: 'FOSUserBundle:EmailTemplates:stuck_registration_wizard.txt.twig'
+                    primaReminder: 'FOSUserBundle:EmailTemplates:primaReminder.txt.twig'
 
                 from_email:
                   confirmation: '%fos_user.registration.confirmation.from_email%'

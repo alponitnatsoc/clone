@@ -224,6 +224,7 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                  * if comprobante
                  * string path
                  * string documentName
+                 * boolean pagoPila
                  */
                 $template = $this->parameters['template']['succesDispersion'];
                 if($context['comprobante']){
@@ -249,7 +250,7 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                  * string toEmail
                  * string userName
                  * string payMethod
-                 * DateTime startDate
+                 * DateTime starDate
                  */
                 $template = $this->parameters['template']['validatePayMethod'];
                 return $this->sendMessage($template,$context,$teamFromEmail, $context['toEmail']);
@@ -410,7 +411,7 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                  * string toEmail
                  * string userName
                  * string employeeName
-                 * array error
+                 * array errors
                  */
                 $template = $this->parameters['template']['employeeDocsError'];
                 return $this->sendMessage($template,$context,$teamFromEmail,$context['toEmail']);
@@ -458,17 +459,27 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                 $template = $this->parameters['template']['helpTransaction'];
                 return $this->sendMessage($template, $context,$contactPublicFromEmail,$contactPrivate);
                 break;
-	        
-	          case 'stuckRegistration':
-		            /** $context must have:
-		             * string name
-		             * string userEmail
-		             * string phone
-		             * string message
-		             * string subject
-			           */
-		            $template = $this->parameters['template']['stuckRegistration'];
-		            return $this->sendMessage($template, $context, $teamFromEmail, $registrationStuck);
+
+            case 'stuckRegistration':
+                /** $context must have:
+                 * string name
+                 * string userEmail
+                 * string phone
+                 * string message
+                 * string subject
+                   */
+                $template = $this->parameters['template']['stuckRegistration'];
+                return $this->sendMessage($template, $context, $teamFromEmail, $registrationStuck);
+                break;
+            case 'primaReminder':
+                /** $context must have:
+                 * string name
+                 * string userEmail
+                 * string employeeName
+                 */
+                $template = $this->parameters['template']['primaReminder'];
+                return $this->sendMessage($template, $context, $contactPublicFromEmail, $contactPublic);
+                break;
         }
     }
 

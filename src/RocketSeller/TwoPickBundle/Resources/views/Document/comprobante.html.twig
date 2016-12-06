@@ -208,7 +208,7 @@
                   <p>
                       <span>Firma empleado</span><br>
                       {{ data.employeeInfo.name }}<br>
-                      {{ data.employeeInfo.docType }}{{ data.employeeInfo.docNumber }}
+                      {{ data.employeeInfo.docType }} {{ data.employeeInfo.docNumber | number_format(0, '.', ',') }}
 
                   </p>
               </div>

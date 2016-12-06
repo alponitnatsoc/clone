@@ -12,6 +12,7 @@ use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Novelty;
 use RocketSeller\TwoPickBundle\Entity\NoveltyTypeHasDocumentType;
 use RocketSeller\TwoPickBundle\Entity\Person;
+use RocketSeller\TwoPickBundle\Entity\Prima;
 use Symfony\Component\HttpFoundation\Request;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
@@ -39,26 +40,16 @@ class DocumentRestController extends FOSRestController
      * @param paramFetcher $paramFetcher ParamFetcher
      *
      * @RequestParam(name="signature", nullable=false, strict=true, description="the signature img")
-     * @RequestParam(name="idPerson", nullable=false, strict=true, description="id person employer")
-     * @RequestParam(name="idPayroll", nullable=false, strict=true, description="id associated payroll")
+     * @RequestParam(name="idEntity", nullable=false, strict=true, description="id associated entity")
+     * @RequestParam(name="entityType", nullable=false, strict=true, description="entity type")
      *
      * @return View
      */
     public function postUploadSignatureAction(ParamFetcher $paramFetcher)
     {
-        //only works for comprobantes
         $em = $this->getDoctrine()->getManager();
-        //todo id person is not necessary
-        $idPerson = $paramFetcher->get('idPerson');
-
-        $idPayroll = $paramFetcher->get('idPayroll');
-        $payroll = $this->getDoctrine()
-            ->getRepository('RocketSellerTwoPickBundle:Payroll')
-            ->find($idPayroll);
-        $employerHasEmployee = $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee();
-
-        $employer = $employerHasEmployee->getEmployerEmployer();
-        $personEmployee = $employerHasEmployee->getEmployeeEmployee()->getPersonPerson();
+        $entityType = $paramFetcher->get('entityType');
+        $idEntity = $paramFetcher->get('idEntity');
 
         $rawSignature = $paramFetcher->get('signature');
         $raw2 = $rawSignature;
@@ -72,17 +63,48 @@ class DocumentRestController extends FOSRestController
             ->getRepository('RocketSellerTwoPickBundle:DocumentType')
             ->findOneBy(array("name" => 'Firma'));
 
-        $document = new Document();
-        $document->setPersonPerson($personEmployee);
-        $document->setEmployerEmployer($employer);
-        $document->setName('Firma');
-        $document->setStatus(1);
-        $document->setDocumentTypeDocumentType($documentType);
-        $em->persist($document);
+        switch($entityType) {
+            case 'Payroll':
+                $payroll = $this->getDoctrine()
+                ->getRepository('RocketSellerTwoPickBundle:Payroll')
+                ->find($idEntity);
+                $employerHasEmployee = $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee();
 
-        $payroll->setSignature($document);
-        $em->persist($payroll);
+                $employer = $employerHasEmployee->getEmployerEmployer();
+                $personEmployee = $employerHasEmployee->getEmployeeEmployee()->getPersonPerson();
 
+                $document = new Document();
+                $document->setPersonPerson($personEmployee);
+                $document->setEmployerEmployer($employer);
+                $document->setName('Firma');
+                $document->setStatus(1);
+                $document->setDocumentTypeDocumentType($documentType);
+                $em->persist($document);
+
+                $payroll->setSignature($document);
+                $em->persist($payroll);
+                break;
+            case 'Prima':
+                /** @var Prima $prima */
+                $prima = $this->getDoctrine()
+                    ->getRepository('RocketSellerTwoPickBundle:Prima')
+                    ->find($idEntity);
+                $employerHasEmployee = $prima->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee();
+                $employer = $employerHasEmployee->getEmployerEmployer();
+                $personEmployee = $employerHasEmployee->getEmployeeEmployee()->getPersonPerson();
+
+                $document = new Document();
+                $document->setPersonPerson($personEmployee);
+                $document->setEmployerEmployer($employer);
+                $document->setName('Firma');
+                $document->setStatus(1);
+                $document->setDocumentTypeDocumentType($documentType);
+                $em->persist($document);
+
+                $prima->setSignature($document);
+                $em->persist($prima);
+                break;
+        }
         $mediaManager = $this->container->get('sonata.media.manager.media');
         $media = $mediaManager->create();
         $media->setBinaryContent("uploads/$fileSignatureName");

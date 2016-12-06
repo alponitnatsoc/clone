@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Exclude;
 
 /**
  * Prima
@@ -61,6 +62,26 @@ class Prima
      * @ORM\Column(type="string", length=20, nullable=TRUE)
      */
     private $month;
+
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Document
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Document")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="payslip_id_payslip", referencedColumnName="id_document")
+     * })
+     * @Exclude
+     */
+    private $payslip;
+
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Document
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Document")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="signature_id_signature", referencedColumnName="id_document")
+     * })
+     * @Exclude
+     */
+    private $signature;
 
     /**
      * @ORM\Column(type="integer", nullable=TRUE)
@@ -212,6 +233,54 @@ class Prima
     public function getPurchaseOrdersDescriptionPurchaseOrdersDescription()
     {
         return $this->purchaseOrdersDescriptionPurchaseOrdersDescription;
+    }
+
+    /**
+     * Set payslip
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Document $payslip
+     *
+     * @return Prima
+     */
+    public function setPayslip(\RocketSeller\TwoPickBundle\Entity\Document $payslip = null)
+    {
+        $this->payslip = $payslip;
+
+        return $this;
+    }
+
+    /**
+     * Get payslip
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Document
+     */
+    public function getPayslip()
+    {
+        return $this->payslip;
+    }
+
+    /**
+     * Set signature
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Document $signature
+     *
+     * @return Prima
+     */
+    public function setSignature(\RocketSeller\TwoPickBundle\Entity\Document $signature = null)
+    {
+        $this->signature = $signature;
+
+        return $this;
+    }
+
+    /**
+     * Get signature
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Document
+     */
+    public function getSignature()
+    {
+        return $this->signature;
     }
 
     /**

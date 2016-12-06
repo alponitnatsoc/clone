@@ -8,6 +8,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\Prima;
 use RocketSeller\TwoPickBundle\Entity\Product;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
@@ -584,6 +585,129 @@ class ChronServerRestController extends FOSRestController
         $view = View::create();
         $view->setData($resultUsers)->setStatusCode(200);
         return $view;
+
+    }
+
+    /**
+     *  Send reminder to pay prima<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Send reminder to pay prima",
+     *   statusCodes = {
+     *     200 = "OK"
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function putPrimaReminderAction()
+    {
+
+        $primaRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Prima");
+        $userRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+        $primas = $primaRepo->findAll();
+        $resultUsers = array();
+        /** @var Prima $prima */
+        foreach ($primas as $prima) {
+            $employeePerson = $prima->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()
+                                    ->getEmployeeEmployee()->getPersonPerson();
+            $employerPerson  = $prima->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()
+                                    ->getEmployerEmployer()->getPersonPerson();
+            $user = $userRepo->findOneBy(array('personPerson' => $employerPerson));
+            $context = array(
+                'emailType' => 'primaReminder',
+                'toEmail' => $user->getEmail(),
+                'userName' => $employerPerson->getFullName(),
+                'employeeName' => $employeePerson->getFullName()
+            );
+            $send = $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+            $message = "Es momento de pagar la prima a tus empleados. ¡Entra ahora!";
+            $title = "Symplifica";
+            $longMessage = "Es momento de pagar la prima a tus empleados. ¡Entra ahora!";
+
+            $request = new Request();
+            $request->setMethod("POST");
+            $request->request->add(array(
+                "idUser" => $user->getId(),
+                "title" => $title,
+                "message" => $message,
+                "longMessage" => $longMessage,
+                "page" => 'PaymentsPage'
+            ));
+            $pushNotificationService = $this->get('app.symplifica_push_notification');
+            $result = $pushNotificationService->postPushNotificationAction($request);
+            $collect = $result->getData();
+            $resultUsers[] = array('userId' => $user->getId(), 'resultPush' => $collect, 'resultMail' => $send);
+
+            $view = View::create();
+            $view->setData($resultUsers)->setStatusCode(200);
+            return $view;
+        }
+
+    }
+
+    /**
+     *  Send reminder to pay prima<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Send reminder to pay prima",
+     *   statusCodes = {
+     *     200 = "OK"
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function putDotacionReminderAction()
+    {
+
+        //TODO change texts
+        $primaRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Prima");
+        $userRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+        $primas = $primaRepo->findAll();
+        $resultUsers = array();
+        /** @var Prima $prima */
+        foreach ($primas as $prima) {
+            $employeePerson = $prima->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()
+                ->getEmployeeEmployee()->getPersonPerson();
+            $employerPerson  = $prima->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()
+                ->getEmployerEmployer()->getPersonPerson();
+            $user = $userRepo->findOneBy(array('personPerson' => $employerPerson));
+//            $context = array(
+//                'emailType' => 'primaReminder',
+//                'toEmail' => $user->getEmail(),
+//                'userName' => $employerPerson->getFullName(),
+//                'employeeName' => $employeePerson->getFullName()
+//            );
+//            $send = $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+            //no email sent
+            $send = false;
+
+            $message = "¡Hola! Recuerda dar la dotacion";
+            $title = "Symplifica";
+            $longMessage = "¡Hola! Te recordamos dar la dotacion";
+
+            $request = new Request();
+            $request->setMethod("POST");
+            $request->request->add(array(
+                "idUser" => $user->getId(),
+                "title" => $title,
+                "message" => $message,
+                "longMessage" => $longMessage,
+                "page" => 'PaymentsPage'
+            ));
+            $pushNotificationService = $this->get('app.symplifica_push_notification');
+            $result = $pushNotificationService->postPushNotificationAction($request);
+            $collect = $result->getData();
+            $resultUsers[] = array('userId' => $user->getId(), 'resultPush' => $collect, 'resultMail' => $send);
+
+            $view = View::create();
+            $view->setData($resultUsers)->setStatusCode(200);
+            return $view;
+        }
 
     }
 

@@ -26,6 +26,7 @@ use RocketSeller\TwoPickBundle\Entity\PromotionCode;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\RealProcedure;
+use RocketSeller\TwoPickBundle\Entity\Supply;
 use RocketSeller\TwoPickBundle\Entity\Transaction;
 use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -1496,221 +1497,428 @@ class BackOfficeController extends Controller
 
         $toEmail = "alponitnatsnoc@gmail.com.com";
 
-//        /** test welcome Email*/
-//        $context = array(
-//            'emailType'=>'welcome',
-//            'user'=>$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User')->find(3),
-//        );
-//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+        /** test confirmation Email */
+        $context=array(
+            'emailType'=>'confirmation',
+            'user'=>$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User')->find(3),
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test welcome Email*/
+        $context = array(
+            'emailType'=>'welcome',
+            'user'=>$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User')->find(3),
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test reminder Email */
+        $context=array(
+            'emailType'=>'reminder',
+            'toEmail'=>$toEmail,
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test help Email */
+        $context=array(
+            'emailType'=>'help',
+            'name' => 'Andrés Felipe',
+            'subject'=>'prueba',
+            'fromEmail' =>$toEmail,
+            'message' =>'Prueba email de ayuda publico',
+            'ip'=> '127.0.0.1',
+            'phone'=>'3009999999'
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test helpPrivate Email */
+        $context=array(
+            'emailType'=>'helpPrivate',
+            'name' => 'Andrés Felipe',
+            'subject'=>'prueba',
+            'fromEmail' =>$toEmail,
+            'message' =>'Prueba email de ayuda publico',
+            'ip'=> '127.0.0.1',
+            'phone'=>'3009999999'
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test daviPlata Email */
+        $context = array(
+            'emailType'=>'daviplata',
+            'toEmail'=>$toEmail,
+            'user'=>$this->getUser(),
+            'subject'=>'Información Daviplata',
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test oneDay Email */
+        $this->get('symplifica.mailer.twig_swift')
+            ->sendOneDayMessage(
+                $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User')->find(5),
+                $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User')->find(5)->getPersonPerson()->getEmployer()->getEmployerHasEmployees()->first());
+
+        /** test diasHabiles Email */
+        $this->get('symplifica.mailer.twig_swift')
+            ->sendDiasHabilesMessage(
+                $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User')->find(5),
+                $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User')->find(5)->getPersonPerson()->getEmployer()->getEmployerHasEmployees()->first());
+
+        /** test backval Email */
+        $this->get('symplifica.mailer.twig_swift')
+            ->sendBackValidatedMessage(
+                $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User')->find(5),
+                $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User')->find(5)->getPersonPerson()->getEmployer()->getEmployerHasEmployees()->first());
+
+        /** test reminderPay Email */
+        $context = array(
+            'emailType'=>'reminderPay',
+            'toEmail'=>$toEmail,
+            'userName'=>'Andrés Felipe',
+            'days'=>3,
+            'isEfectivo'=>true,
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test reminderPay Email */
+        $context = array(
+            'emailType'=>'reminderPay',
+            'toEmail'=>$toEmail,
+            'userName'=>'Andrés Felipe',
+            'days'=>2,
+            'isEfectivo'=>false,
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test lastReminderPay Email */
+        $context = array(
+            'emailType'=>'lastReminderPay',
+            'toEmail'=>$toEmail,
+            'userName'=>'Andrés Felipe',
+            'days'=>2
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test ReminderDaviplata Email */
+        $context = array(
+            'emailType'=>'reminderDaviplata',
+            'toEmail'=>$toEmail,
+            'userName'=>'Andrés Felipe',
+            'employeeName'=>'Esteban'
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test succesRecollect Email */
+        /** @var \DateTime $date */
+        $date = new DateTime();
+        $date->setTimezone(new \DateTimeZone('America/Bogota'));
+        $params = array(
+            'ref'=> 'factura',
+            'id' => 19,
+            'type' => 'pdf',
+            'attach' => null
+        );
+        $documentResult = $this->forward('RocketSellerTwoPickBundle:Document:downloadDocuments', $params);
+        $file =  $documentResult->getContent();
+        if (!file_exists('uploads/temp/facturas')) {
+            mkdir('uploads/temp/facturas', 0777, true);
+        }
+        $path = 'uploads/temp/facturas/'.$this->getUser()->getPersonPerson()->getIdPerson().'_tempFacturaFile.pdf';
+        file_put_contents($path, $file);
+        $context = array(
+            'emailType'=>'succesRecollect',
+            'toEmail' => $toEmail,
+            'userName' => 'Andrés Felipe',
+            'fechaRecaudo' => $date,
+            'value'=>40690.93,
+            'path'=>$path,
+            'documentName'=>'Factura '.date_format($date,'d-m-y H:i:s').'.pdf',
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test failRecollect Email */
+        $context=array(
+            'emailType'=>'failRecollect',
+            'userEmail'=>'algo@alg.com',
+            'toEmail'=>$toEmail,
+            'userName'=>'Andrés Felipe',
+            'rejectionDate'=>new DateTime(),
+            'value' => 230750.23,
+            'phone'=>'3183941645'
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test regectionCollect Email */
+        $context=array(
+            'emailType'=>'regectionCollect',
+            'userEmail'=>$this->getUser()->getEmail(),
+            'userName'=>$this->getUser()->getPersonPerson()->getFullName(),
+            'rejectionDate'=>new DateTime(),
+            'toEmail'=> $toEmail,
+            'phone'=>'3183941645',
+            'value'=>'350400'
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test regectionDispersion Email */
+        $context=array(
+            'emailType'=>'regectionDispersion',
+            'userEmail'=>'algo@algo.com',
+            'toEmail'=>$toEmail,
+            'userName'=>'Andrés Felipe',
+            'rejectionDate'=>new DateTime(),
+            'phone'=>'3183941645',
+            'rejectedProduct'=>'Nombre del producto',
+            'idPOD'=>4,
+            'value'=>483909,23
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test succesfulDispersion Email */
+        $context=array(
+            'emailType'=>'succesDispersion',
+            'toEmail'=>$toEmail,
+            'userName'=>'Andrés Felipe Ramírez',
+            'pagoPila'=>true,
+        );
+        $params = array(
+            'ref'=> 'comprobante',
+            'id' => 6,
+            'type' => 'pdf',
+            'attach' => null
+        );
+        $documentResult = $this->forward('RocketSellerTwoPickBundle:Document:downloadDocuments', $params);
+        $file =  $documentResult->getContent();
+        if (!file_exists('uploads/temp/comprobantes')) {
+            mkdir('uploads/temp/comprobantes', 0777, true);
+        }
+        $path = 'uploads/temp/comprobantes/'.'2'.'_tempComprobanteFile.pdf';
+        file_put_contents($path, $file);
+        $context['path']=$path;
+        $context['comprobante']=true;
+        $context['documentName']='Comprobante '.date_format(new DateTime(),'d-m-y H:i:s').'.pdf';
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test failDispersion Email */
+        $context=array(
+            'emailType'=>'failDispersion',
+            'userEmail'=>'algo@algo.com',
+            'toEmail'=>$toEmail,
+            'userName'=>'Andrés Felipe'
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test validatePayMethod Email */
+        $context=array(
+            'emailType'=>'validatePayMethod',
+            'payMethod'=>'Efectivo',
+            'toEmail'=>$toEmail,
+            'userName'=>'Andrés Felipe',
+            'starDate'=>new DateTime(),
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test transactionRejected Eamil */
+        $context=array(
+            'emailType'=>'transactionRejected',
+            'toEmail'=>$toEmail,
+            'userName'=>'Andrés Felipe',
+            'rejectionDate'=>new DateTime(),
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test liquidation Email */
+        $context=array(
+            'emailType'=>'liquidation',
+            'toEmail'=>$toEmail,
+            'userName'=>'Andrés Felipe',
+            'employerSociety'=>'103',
+            'documentNumber'=>'1020772509',
+            'userEmail'=>'algo@algo.com',
+            'employeeName'=>'Esteban',
+            'sqlNumber'=>'13009',
+            'phone'=>'3134338252'
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test appDownload Email */
+        $context=array(
+            'emailType'=>'appDownload',
+            'toEmail'=>$toEmail,
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test descubrir Email */
+        $context=array(
+            'emailType'=>'descubrir',
+            'toEmail'=>$toEmail,
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test supplies Email */
+        $context=array(
+            'emailType'=>'supplies',
+            'toEmail'=>$toEmail,
+            'userName'=>'Esteban'
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test waiting Email */
+        $context=array(
+            'emailType'=>'waiting',
+            'toEmail'=>$toEmail,
+            'userName'=>'Esteban'
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test contractFinishReminder Email */
+        $context=array(
+            'emailType'=>'contractFinishReminder',
+            'toEmail'=>$toEmail,
+            'userName'=>'Andrés',
+            'employeeName'=>'Esteban',
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test cesantCharges Email */
+        $context=array(
+            'emailType'=>'cesantCharges',
+            'toEmail'=>$toEmail,
+            'userName'=>'Andrés',
+            'employeeName'=>'Esteban',
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test cesantPayment Email */
+        $context=array(
+            'emailType'=>'cesantPayment',
+            'toEmail'=>$toEmail,
+            'userName'=>'Andrés',
+            'employeeName'=>'Esteban',
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test bonus Email */
+        $context=array(
+            'emailType'=>'bonus',
+            'toEmail'=>$toEmail,
+            'userName'=>'Andrés',
+            'employeeName'=>'Esteban',
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test clientRecovery Email */
+        $context=array(
+            'emailType'=>'clientRecovery',
+            'toEmail'=>$toEmail,
+            'userName'=>'Esteban'
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test risks Email */
+        $context=array(
+            'emailType'=>'risks',
+            'toEmail'=>$toEmail,
+            'userName'=>'Esteban'
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test contractFinish Email */
+        $context=array(
+            'emailType'=>'contractFinish',
+            'toEmail'=>$toEmail,
+            'userName'=>'Esteban'
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test contractAttachmentEmail Email */
+        $context=array(
+            'emailType'=>'contractAttachmentEmail',
+            'toEmail'=>$toEmail,
+            'userName'=>'Esteban',
+            'docType'=>'contrato',
+            'path'=>null,
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test docsValidated Email */
+        $context=array(
+            'emailType'=>'docsValidated',
+            'toEmail'=>$toEmail,
+            'userName'=>'Esteban'
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test docsError Email */
+        $context=array(
+            'emailType'=>'docsError',
+            'toEmail'=>$toEmail,
+            'userName'=>'Esteban',
+            'errors'=>array('RUT','MAND'),
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test employeeDocsError Email */
+        $context=array(
+            'emailType'=>'employeeDocsError',
+            'toEmail'=>$toEmail,
+            'userName'=>'Andres',
+            'employeeName'=>'Esteban',
+            'errors'=>array('CAS','CC'),
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test employeeDocsValidated Email */
+        $context=array(
+            'emailType'=>'employeeDocsValidated',
+            'toEmail'=>$toEmail,
+            'userName'=>'Andres',
+            'employeeName'=>'Esteban'
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test notRegisteredUserApp Email */
+        $context=array(
+            'emailType'=>'notRegisteredUserApp',
+            'userEmail'=>$toEmail,
+            'name'=>'Andres',
+            'phone'=>'3134338252'
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
+        /** test helpTransaction Email */
+        $context=array(
+            'emailType'=>'helpTransaction',
+            'userEmail'=>$toEmail,
+            'name'=>'Andres',
+            'phone'=>'3134338252',
+            'userId'=>'10',
+            'username'=>'Andres',
+            'idPod'=>'102',
+            'idNovoPay'=>'1231',
+            'statusName'=>'algo',
+            'statusDescription'=>'descript',
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 
 
-        $this->get('symplifica.mailer.twig_swift')->sendBackValidatedMessage($this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User')->find(5),$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User')->find(5)->getPersonPerson()->getEmployer()->getEmployerHasEmployees()->first());
+        /** $context must have:
+         * string name
+         * string userEmail
+         * string phone
+         * string message
+         * string subject
+         */
 
-//        /** test confirmation Email */
-//        $context=array(
-//            'emailType'=>'confirmation',
-//            'user'=>$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User')->find(3),
-//        );
-//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
-
-
-//        /** test reminder Email */
-//        $context=array(
-//            'emailType'=>'reminder',
-//            'toEmail'=>$toEmail,
-//        );
-//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
-
-//        /** test help Email */
-//        $context=array(
-//            'emailType'=>'help',
-//            'name' => 'Andrés Felipe',
-//            'subject'=>'prueba',
-//            'fromEmail' =>$toEmail,
-//            'message' =>'Prueba email de ayuda publico',
-//            'ip'=> '127.0.0.1',
-//            'phone'=>'3009999999'
-//        );
-//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
-
-//        /** test helpPrivate Email */
-//        $context=array(
-//            'emailType'=>'helpPrivate',
-//            'name' => 'Andrés Felipe',
-//            'subject'=>'prueba',
-//            'fromEmail' =>$toEmail,
-//            'message' =>'Prueba email de ayuda publico',
-//            'ip'=> '127.0.0.1',
-//            'phone'=>'3009999999'
-//        );
-//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
-
-//        /** test daviPlata Email */
-//        $context = array(
-//            'emailType'=>'daviplata',
-//            'toEmail'=>$toEmail,
-//            'user'=>$this->getUser(),
-//            'subject'=>'Información Daviplata',
-//        );
-//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
-
-//        /** test reminderPay Email */
-//        $context = array(
-//            'emailType'=>'reminderPay',
-//            'toEmail'=>$toEmail,
-//            'userName'=>'Andrés Felipe',
-//            'days'=>3
-//        );
-//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
-
-//        /** test lastReminderPay Email */
-//        $context = array(
-//            'emailType'=>'lastReminderPay',
-//            'toEmail'=>$toEmail,
-//            'userName'=>'Andrés Felipe',
-//            'days'=>2
-//        );
-//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
-
-//        /** test succesRecollect Email */
-//        /** @var \DateTime $date */
-//        $date = new DateTime();
-//        $date->setTimezone(new \DateTimeZone('America/Bogota'));
-//        $params = array(
-//            'ref'=> 'factura',
-//            'id' => 3,
-//            'type' => 'pdf',
-//            'attach' => null
-//        );
-//        $documentResult = $this->forward('RocketSellerTwoPickBundle:Document:downloadDocuments', $params);
-//        $file =  $documentResult->getContent();
-//        if (!file_exists('uploads/temp/facturas')) {
-//            mkdir('uploads/temp/facturas', 0777, true);
-//        }
-//        $path = 'uploads/temp/facturas/'.$this->getUser()->getPersonPerson()->getIdPerson().'_tempFacturaFile.pdf';
-//        file_put_contents($path, $file);
-//        $context = array(
-//            'emailType'=>'succesRecollect',
-//            'toEmail' => $toEmail,
-//            'userName' => 'Andrés Felipe',
-//            'fechaRecaudo' => $date,
-//            'value'=>40690.93,
-//            'path'=>$path,
-//            'documentName'=>'Factura '.date_format($date,'d-m-y H:i:s').'.pdf',
-//        );
-//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
-
-//        /** test failRecollect Email */
-//        $context=array(
-//            'emailType'=>'failRecollect',
-//            'userEmail'=>'algo@alg.com',
-//            'toEmail'=>$toEmail,
-//            'userName'=>'Andrés Felipe',
-//            'rejectionDate'=>new DateTime(),
-//            'value' => 230750.23,
-//            'phone'=>'3183941645'
-//        );
-//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
-//
-//        /** test regectionCollect Email */
-//        $context=array(
-//            'emailType'=>'regectionCollect',
-//            'userEmail'=>$this->getUser()->getEmail(),
-//            'userName'=>$this->getUser()->getPersonPerson()->getFullName(),
-//            'rejectionDate'=>new DateTime(),
-//            'toEmail'=> $toEmail,
-//            'phone'=>'3183941645',
-//            'value'=>'350400'
-//        );
-//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
-//
-//        /** test regectionDispersion Email */
-//        $context=array(
-//            'emailType'=>'regectionDispersion',
-//            'userEmail'=>'algo@algo.com',
-//            'toEmail'=>$toEmail,
-//            'userName'=>'Andrés Felipe',
-//            'rejectionDate'=>new DateTime(),
-//            'phone'=>'3183941645',
-//            'rejectedProduct'=>'Nombre del producto',
-//            'idPOD'=>4,
-//            'value'=>483909,23
-//        );
-//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
-
-//        /** test succesfulDispersion Eamil */
-//        $context=array(
-//            'emailType'=>'succesDispersion',
-//            'toEmail'=>$toEmail,
-//            'userName'=>'Andrés Felipe Ramírez',
-//        );
-//        $params = array(
-//            'ref'=> 'comprobante',
-//            'id' => 4,
-//            'type' => 'pdf',
-//            'attach' => null
-//        );
-//        $documentResult = $this->forward('RocketSellerTwoPickBundle:Document:downloadDocuments', $params);
-//        $file =  $documentResult->getContent();
-//        if (!file_exists('uploads/temp/comprobantes')) {
-//            mkdir('uploads/temp/comprobantes', 0777, true);
-//        }
-//        $path = 'uploads/temp/comprobantes/'.'2'.'_tempComprobanteFile.pdf';
-//        file_put_contents($path, $file);
-//        $context['path']=$path;
-//        $context['comprobante']=true;
-//        $context['documentName']='Comprobante '.date_format(new DateTime(),'d-m-y H:i:s').'.pdf';
-//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
-
-//        /** test failDispersion Eamil */
-//        $context=array(
-//            'emailType'=>'failDispersion',
-//            'userEmail'=>'algo@algo.com',
-//            'toEmail'=>$toEmail,
-//            'userName'=>'Andrés Felipe'
-//        );
-//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
-//
-//        /** test addPayMethod */
-//        $context = array(
-//            'emailType'=>'validatePayMethod',
-//            'toEmail'=>$toEmail,
-//            'userName'=>'Andrés Felipe Ramírez',
-//            'starDate'=>new DateTime(),
-//            'payMethod'=>'Tarjeta de Credito'
-//        );
-//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
-
-//        /** test backWarning Email */
-//        $context = array(
-//            'emailType'=>'backWarning',
-//            'toEmail'=>$toEmail,
-//            'idPod'=>1,
-//        );
-//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
-
-//        /** test liquidation Email */
-//        $context=array(
-//            'emailType'=>'liquidation',
-//            'toEmail'=>$toEmail,
-//            'userName'=>'Esto es una prueba para daniel',
-//            'employerSociety'=> '123123',
-//            'documentNumber'=>'1020772509',
-//            'userEmail'=>'algo@algo.com',
-//            'phone'=>'5138283475',
-//            'employeeName'=>'Empleado Prueba',
-//            'sqlNumber'=>'101201'
-//        );
-//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
-
-//        /** test transactionAcepted Email */
-//        $context = array(
-//            'emailType'=>'transactionAcepted',
-//            'toEmail'=>$toEmail,
-//            'userName'=>'Andres felipe',
-//            'po'=>$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrders")->find(132),
-//        );
-//        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+        /** test stuckRegistration Email */
+        $context=array(
+            'emailType'=>'stuckRegistration',
+            'userEmail'=>$toEmail,
+            'name'=>'Andres',
+            'phone'=>'3134338252',
+            'message'=>'algun contenido',
+            'subject'=>'subject',
+        );
+        $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
 
         return $this->redirect($this->generateUrl('back_office'));
     }
@@ -2838,6 +3046,66 @@ class BackOfficeController extends Controller
 		return $this->redirectToRoute('show_pilas');
 	}
 
+    /**
+     * @return Response
+     */
+    public function showPostRegisterEmployeesAction(){
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+	    $em = $this->getDoctrine()->getManager();
+        /** @var QueryBuilder $query */
+        $query = $em->createQueryBuilder();
+        $query->add('select', 'ehe');
+        $query->from("RocketSellerTwoPickBundle:EmployerHasEmployee",'ehe')
+            ->where($query->expr()->eq('ehe.isPostRegister',true));
+        $ehes = $query->getQuery()->getResult();
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:showPostRegister.html.twig',array(
+            'ehes'=>$ehes,
+            'type'=>$em->getRepository("RocketSellerTwoPickBundle:ProcedureType")->findOneBy(array('code'=>'REE'))));
+    }
+
+    public function setSupplyNotificationsAction($month, $year) {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+
+        $em = $this->getDoctrine()->getManager();
+        $eHERepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
+
+        $comprobanteDotType = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:DocumentType")
+                                ->findOneBy(array('docCode' => 'CPRDOT'));
+        $eHEs = $eHERepo->findAll();
+        /** @var EmployerHasEmployee $eHE */
+        foreach ($eHEs as $eHE) {
+            if($eHE->getState() < 4) continue;
+
+            $activeContract = $eHE->getActiveContract();
+            $supply = new Supply();
+            $supply->setMonth($month);
+            $supply->setYear($year);
+            $supply->setContractContract($activeContract);
+            $em->persist($supply);
+            $em->flush();
+            $supplyId = $supply->getIdSupply();
+
+            $personEmployer = $eHE->getEmployerEmployer()->getPersonPerson();
+            $personEmployee = $eHE->getEmployeeEmployee()->getPersonPerson();
+            $notification = new Notification();
+            $notification->setPersonPerson($personEmployer);
+            $notification->setDocumentTypeDocumentType($comprobanteDotType);
+            $notification->setType('alert');
+            $notification->setStatus(1);
+            $notification->setRelatedLink("/document/add/Supply/$supplyId/CPRDOT");
+            $notification->setDownloadLink("/documents/downloads/comprobante-dotacion/1/pdf");
+            $notification->setAccion('Subir');
+            $notification->setDownloadAction('Bajar');
+            $notification->setDescription('Subir copia comprobante de dotación de ' . $personEmployee->getNames() .
+                                            ' ' . $personEmployee->getLastName1());
+
+            $em->persist($notification);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('back_office');
+    }
+	
 	public function primaViewAction(){
 		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
 		
