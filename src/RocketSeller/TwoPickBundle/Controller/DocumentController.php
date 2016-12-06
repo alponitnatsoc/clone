@@ -13,6 +13,7 @@ use RocketSeller\TwoPickBundle\Entity\Log;
 use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Person;
+use RocketSeller\TwoPickBundle\Entity\Prima;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\TempFile;
 use RocketSeller\TwoPickBundle\Entity\User;
@@ -1680,7 +1681,9 @@ use EmployerMethodsTrait;
                 }
                 /** @var Prima $prima */
                 $prima = $primaRepo->find($id);
-
+                if(!$prima){
+                    return $this->redirectToRoute("show_dashboard");
+                }
                 $signatureUrl = null;
 
                 $document = $prima->getSignature();
@@ -1712,8 +1715,13 @@ use EmployerMethodsTrait;
 
                 $infoPrima = array(
                     'valorPrima' => $prima->getValue(),
-                    'month'=>$prima->getMonth(),
-                    'year'=>$prima->getYear()
+                    'month' => $prima->getMonth(),
+                    'year' => $prima->getYear(),
+                    'worked' => $prima->getWorked(),
+                    'notWorked' => $prima->getNotWorked(),
+                    'transportAid' => $prima->getTransportAid(),
+                    'dateStart' => $prima->getDateStart()->format('d/m/Y'),
+                    'dateEnd' => $prima->getDateEnd()->format('d/m/Y'),
                 );
                 $data = array(
                     'employeeInfo' => $employeeInfo,

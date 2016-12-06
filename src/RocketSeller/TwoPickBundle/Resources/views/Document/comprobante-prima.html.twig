@@ -124,7 +124,7 @@
                     <div class="info-celdas">
                         <p>
                             <span>Cédula</span><br>
-                            {{ data.client.docNumber }}
+                            {{ data.client.docNumber | number_format(0, '.', ',') }}
                         </p>
                     </div>
                 </div>
@@ -138,7 +138,7 @@
                     <div class="info-celdas">
                         <p>
                             <span>Cédula</span><br>
-                            {{ data.employeeInfo.docNumber }}
+                            {{ data.employeeInfo.docNumber | number_format(0, '.', ',') }}
                         </p>
                     </div>
                 </div>
@@ -148,13 +148,13 @@
                     <div class="info-celdas">
                         <p>
                             <span>Fecha Inicio</span><br>
-                            2/2/2016
+                            {{ data.infoPrima.dateStart }}
                         </p>
                     </div>
                     <div class="info-celdas">
                         <p>
                             <span>Fecha Fin</span><br>
-                            2/2/2016
+                            {{ data.infoPrima.dateEnd }}
                         </p>
                     </div>
                 </div>
@@ -162,21 +162,32 @@
                     <div class="info-celdas">
                         <p>
                             <span>Salario base</span><br>
-                            $750.000
+                            ${{ data.employeeInfo.salary | number_format(0, '.', ',') }}
                         </p>
                     </div>
                     <div class="info-celdas">
                         <p>
-                            <span>Días</span><br>
-                            16
+                            <span>Auxilio de transporte</span><br>
+                            {% if  data.infoPrima.transportAid != 0 %}
+                                {{ data.infoPrima.transportAid }}
+                            {% else %}
+                                No aplica
+                            {% endif %}
+
                         </p>
                     </div>
                 </div>
                 <div class="celdas-copm">
                     <div class="info-celdas">
                         <p>
+                            <span>Días Laborados</span><br>
+                            {{ data.infoPrima.worked }}
+                        </p>
+                    </div>
+                    <div class="info-celdas">
+                        <p>
                             <span>Días no laborados</span><br>
-                            9
+                            {{ data.infoPrima.notWorked }}
                         </p>
                     </div>
                 </div>
@@ -184,7 +195,7 @@
                     <div class="info-celdas">
                         <p>
                             <span>Valor prima</span><br>
-                            $750.000
+                            ${{ data.infoPrima.valorPrima | number_format(0, '.', ',') }}
                         </p>
                     </div>
                 </div>
@@ -202,7 +213,7 @@
             <div id="firma-empleado">
                     <span>Firma empleado</span><br>
                     {{ data.employeeInfo.name }}<br>
-                    {{ data.employeeInfo.docType }}{{ data.employeeInfo.docNumber }}
+                    {{ data.employeeInfo.docType }} {{ data.employeeInfo.docNumber | number_format(0, '.', ',') }}
                 </p>
                 <br>
                 <br>
