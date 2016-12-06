@@ -15,6 +15,7 @@ use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Notification;
+use RocketSeller\TwoPickBundle\Entity\Novelty;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Phone;
@@ -24,6 +25,7 @@ use RocketSeller\TwoPickBundle\Entity\PromotionCode;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\RealProcedure;
+use RocketSeller\TwoPickBundle\Entity\Supply;
 use RocketSeller\TwoPickBundle\Entity\Transaction;
 use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -3015,4 +3017,192 @@ class BackOfficeController extends Controller
             'ehes'=>$ehes,
             'type'=>$em->getRepository("RocketSellerTwoPickBundle:ProcedureType")->findOneBy(array('code'=>'REE'))));
     }
+
+    public function setSupplyNotificationsAction($month, $year) {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+
+        $em = $this->getDoctrine()->getManager();
+        $eHERepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
+
+        $comprobanteDotType = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:DocumentType")
+                                ->findOneBy(array('docCode' => 'CPRDOT'));
+        $eHEs = $eHERepo->findAll();
+        /** @var EmployerHasEmployee $eHE */
+        foreach ($eHEs as $eHE) {
+            if($eHE->getState() < 4) continue;
+
+            $activeContract = $eHE->getActiveContract();
+            $supply = new Supply();
+            $supply->setMonth($month);
+            $supply->setYear($year);
+            $supply->setContractContract($activeContract);
+            $em->persist($supply);
+            $em->flush();
+            $supplyId = $supply->getIdSupply();
+
+            $personEmployer = $eHE->getEmployerEmployer()->getPersonPerson();
+            $personEmployee = $eHE->getEmployeeEmployee()->getPersonPerson();
+            $notification = new Notification();
+            $notification->setPersonPerson($personEmployer);
+            $notification->setDocumentTypeDocumentType($comprobanteDotType);
+            $notification->setType('alert');
+            $notification->setStatus(1);
+            $notification->setRelatedLink("/document/add/Supply/$supplyId/CPRDOT");
+            $notification->setDownloadLink("/documents/downloads/comprobante-dotacion/1/pdf");
+            $notification->setAccion('Subir');
+            $notification->setDownloadAction('Bajar');
+            $notification->setDescription('Subir copia comprobante de dotación de ' . $personEmployee->getNames() .
+                                            ' ' . $personEmployee->getLastName1());
+
+            $em->persist($notification);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('back_office');
+    }
+	
+	public function primaViewAction(){
+		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		$criteria = new \Doctrine\Common\Collections\Criteria();
+		$criteria->where($criteria->expr()->gt('state', 3));
+		
+		$eheRepo = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
+		$activeEhe = $eheRepo->matching($criteria);
+		
+		$payrollArr = array();
+		$diasArr = array();
+		$otrosSalArr = array();
+		$totalPagoArr = array();
+		
+		/** @var EmployerHasEmployee $ehe */
+		foreach ($activeEhe as $index => $ehe) {
+			
+			$comparativePayroll = new Payroll();
+			$comparativePayroll->setYear("2020");
+			$comparativePayroll->setMonth("12");
+			$comparativePayroll->setPeriod("4");
+			
+			$totalDias = 0;
+			$totalOtrosSalariales = 0;
+			$totalPago = 0;
+			
+			/** @var Payroll $payroll */
+			foreach ($ehe->getActiveContract()->getPayrolls() as $payroll) {
+				
+				//Finds the oldest payroll (since we fixed the DB they are not stored in order)
+				if( (int)$payroll->getYear() < (int)$comparativePayroll->getYear() ){
+					$comparativePayroll->setYear($payroll->getYear());
+					$comparativePayroll->setMonth($payroll->getMonth());
+					$comparativePayroll->setPeriod($payroll->getPeriod());
+				}
+				elseif( (int)$payroll->getYear() == (int)$comparativePayroll->getYear() ){
+					if( (int)$payroll->getMonth() < (int)$comparativePayroll->getMonth() ){
+						$comparativePayroll->setYear($payroll->getYear());
+						$comparativePayroll->setMonth($payroll->getMonth());
+						$comparativePayroll->setPeriod($payroll->getPeriod());
+					}
+					elseif ((int)$payroll->getMonth() == (int)$comparativePayroll->getMonth()){
+						if( (int)$payroll->getPeriod() < (int)$comparativePayroll->getPeriod() ){
+							$comparativePayroll->setYear($payroll->getYear());
+							$comparativePayroll->setMonth($payroll->getMonth());
+							$comparativePayroll->setPeriod($payroll->getPeriod());
+						}
+					}
+				}
+				
+				//There are novelties missing, but so far the clients have used the ones in the ifs
+				//If the payroll belongs to the 2nd half of the 2016 we need to get the values
+				if((int)$payroll->getYear() == 2016 && (int)$payroll->getMonth() >= 7 && (int)$payroll->getMonth() <= 11 ){
+					if( (int)$payroll->getYear() == 2016 && (int)$payroll->getMonth() == 11 ){
+						$multiplier = 2;
+					}
+					else{
+						$multiplier = 1;
+					}
+					
+					/** @var Novelty $novelty */
+					foreach ($payroll->getSqlNovelties() as $novelty){
+						//Sueldo
+						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "1"){
+							$totalDias = $totalDias + (int)$novelty->getUnits() * $multiplier;
+							$totalPago = $totalPago + (int)$novelty->getSqlValue() * $multiplier;
+						}
+						
+						//Bonificacion
+						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "285"){
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
+						}
+						
+						//Vacaciones
+						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "145"){
+							$totalDias = $totalDias + (int)$novelty->getUnits() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
+						}
+						
+						//Subsidio de transporte
+						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "120"){
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
+						}
+						
+						//Hora extra festiva diurna
+						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "65"){
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
+						}
+						
+						//Incapacidad laboral
+						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "28"){
+							$totalDias = $totalDias + (int)$novelty->getUnits() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
+						}
+						
+						//Incapacidad general
+						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "15"){
+							$totalDias = $totalDias + (int)$novelty->getUnits() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
+						}
+						
+						//Licencia remunerada
+						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "23"){
+							$totalDias = $totalDias + (int)$novelty->getUnits() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
+						}
+						
+						//Licencia No remunerada
+						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "3120"){
+							$totalDias = $totalDias - (int)$novelty->getUnits() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales - (int)$novelty->getSqlValue() * $multiplier;
+						}
+						
+						//Licencia maternidad
+						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "25"){
+							$totalDias = $totalDias + (int)$novelty->getUnits() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
+						}
+						
+						//Gasto de incapacidad
+						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "20"){
+							$totalDias = $totalDias + (int)$novelty->getUnits() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
+						}
+					}
+				}
+			}
+			
+			$totalPago = $totalPago + $totalOtrosSalariales;
+			
+			array_push($payrollArr,$comparativePayroll);
+			array_push($diasArr, $totalDias);
+			array_push($otrosSalArr, $totalOtrosSalariales);
+			array_push($totalPagoArr,$totalPago);
+			
+		}
+		
+		return $this->render('RocketSellerTwoPickBundle:BackOffice:primaView.html.twig',
+			array('ehes' => $activeEhe, 'payrolls' => $payrollArr, 'days' => $diasArr, 'otrosSalariales' => $otrosSalArr, 'totalPago' => $totalPagoArr));
+	}
 }
+
+

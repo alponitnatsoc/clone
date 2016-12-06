@@ -954,6 +954,37 @@ use EmployerMethodsTrait;
                 }
                 $em->persist($payroll);
                 break;
+            case "Supply":
+                /** @var Supply $supply */
+                $supply = $em->getRepository("RocketSellerTwoPickBundle:Supply")->find($entityId);
+                $name = "dotación de ".$supply->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName().
+                    " mes ".$supply->getMonth() . " año " . $supply->getYear();
+
+                $document = $supply->getPayslip();
+                if ($document) {
+                    if ($document->getMediaMedia()) {
+                        /** @var Media $media */
+                        $media = $document->getMediaMedia();
+                        if ($media->getProviderName()) {
+                            $provider = $this->get($media->getProviderName());
+                            $provider->removeThumbnails($media);
+                        }
+                        $em->remove($em->getRepository('\Application\Sonata\MediaBundle\Entity\Media')->find($media->getId()));
+                        $em->remove($em->getRepository('ApplicationSonataMediaBundle:Media')->find($media->getId()));
+                        $em->flush();
+                    }
+                    $document->setName($documentType->getName());
+                    $document->setDocumentTypeDocumentType($documentType);
+                    $document->setStatus(0);
+                } else {
+                    $document = new Document();
+                    $document->setName($documentType->getName());
+                    $document->setDocumentTypeDocumentType($documentType);
+                    $document->setStatus(0);
+                    $supply->setPayslip($document);
+                }
+                $em->persist($supply);
+                break;
         }
         return array('document'=>$document,'notification'=>$notification,'personName'=> $name,'documentType'=>$documentType);
     }
@@ -1638,6 +1669,18 @@ use EmployerMethodsTrait;
                     'signatureUrl' => $signatureUrl,
                     'isMobile' => $isMobile
                 );
+                break;
+            case "comprobante-dotacion":
+                $response = new Response();
+
+                $filename = 'public/docs/dotacion.pdf';
+
+                $response->headers->set('Content-type', 'application/pdf');
+                $response->headers->set('Content-Disposition', 'attachment; filename="' . $ref . '.pdf";');
+
+                $response->setContent(file_get_contents($filename));
+
+                return $response;
                 break;
             case "joiner":
                 $data = array();

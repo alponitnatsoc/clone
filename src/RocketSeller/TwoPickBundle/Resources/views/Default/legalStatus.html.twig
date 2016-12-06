@@ -220,8 +220,11 @@
 {% block javascripts %}
 	{{ parent() }}
 	<script>
-  	$.getScript("{{ asset('/public/js/legal_status.js') }}").done(function () {
-        displayForm();
+        var name = "{{ user.personPerson.fullName }}";
+        var phone = "{{ user.personPerson.phones.first.phoneNumber }}";
+        var email = "{{ user.email }}";
+        $.getScript("{{ asset('/public/js/legal_status.js') }}").done(function () {
+            displayForm();
   	});
 	</script>
 {% endblock %}
