@@ -29,6 +29,13 @@ class Prima
     private $value;
 
     /**
+     * @var float
+     *
+     * @ORM\Column( type="float")
+     */
+    private $transportAid;
+
+    /**
      * @var \RocketSeller\TwoPickBundle\Entity\Contract
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Contract" , inversedBy="primas")
      * @ORM\JoinColumns({
@@ -54,6 +61,26 @@ class Prima
      * @ORM\Column(type="string", length=20, nullable=TRUE)
      */
     private $month;
+
+    /**
+     * @ORM\Column(type="integer", nullable=TRUE)
+     */
+    private $worked;
+
+    /**
+     * @ORM\Column(type="integer", nullable=TRUE)
+     */
+    private $notWorked;
+
+    /**
+     * @ORM\Column(type="date", nullable=TRUE)
+     */
+    private $dateStart;
+
+    /**
+     * @ORM\Column(type="date", nullable=TRUE)
+     */
+    private $dateEnd;
 
 
     /**
@@ -185,5 +212,125 @@ class Prima
     public function getPurchaseOrdersDescriptionPurchaseOrdersDescription()
     {
         return $this->purchaseOrdersDescriptionPurchaseOrdersDescription;
+    }
+
+    /**
+     * Set transportAid
+     *
+     * @param float $transportAid
+     *
+     * @return Prima
+     */
+    public function setTransportAid($transportAid)
+    {
+        $this->transportAid = $transportAid;
+
+        return $this;
+    }
+
+    /**
+     * Get transportAid
+     *
+     * @return float
+     */
+    public function getTransportAid()
+    {
+        return $this->transportAid;
+    }
+
+    /**
+     * Set worked
+     *
+     * @param integer $worked
+     *
+     * @return Prima
+     */
+    public function setWorked($worked)
+    {
+        $this->worked = $worked;
+
+        return $this;
+    }
+
+    /**
+     * Get worked
+     *
+     * @return integer
+     */
+    public function getWorked()
+    {
+        return $this->worked;
+    }
+
+    /**
+     * Set notWorked
+     *
+     * @param integer $notWorked
+     *
+     * @return Prima
+     */
+    public function setNotWorked($notWorked)
+    {
+        $this->notWorked = $notWorked;
+
+        return $this;
+    }
+
+    /**
+     * Get notWorked
+     *
+     * @return integer
+     */
+    public function getNotWorked()
+    {
+        return $this->notWorked;
+    }
+
+    /**
+     * Set dateStart
+     *
+     * @param \DateTime $dateStart
+     *
+     * @return Prima
+     */
+    public function setDateStart($dateStart)
+    {
+        $this->dateStart = $dateStart;
+
+        return $this;
+    }
+
+    /**
+     * Get dateStart
+     *
+     * @return \DateTime
+     */
+    public function getDateStart()
+    {
+        return $this->dateStart;
+    }
+
+    /**
+     * Set dateEnd
+     *
+     * @param \DateTime $dateEnd
+     *
+     * @return Prima
+     */
+    public function setDateEnd($dateEnd)
+    {
+        $this->dateEnd = $dateEnd;
+
+        return $this;
+    }
+
+    /**
+     * Get dateEnd
+     *
+     * @return \DateTime
+     */
+    public function getDateEnd()
+    {
+        return $this->dateEnd;
     }
 }
