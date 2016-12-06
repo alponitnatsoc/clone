@@ -71,6 +71,10 @@ class BackOfficeController extends Controller
         if(count($request->request->all())>0){
             $em=$this->getDoctrine()->getManager();
             $requ = $request->request->all();
+            $lab=$requ["LAB"];
+            $noLab=$requ["NOLAB"];
+            unset($requ["LAB"]);
+            unset($requ["NOLAB"]);
             foreach ($requ as $key=> $value) {
 
                 /** @var EmployerHasEmployee $realEhe */
@@ -117,6 +121,19 @@ class BackOfficeController extends Controller
                 $prima->setMonth("12");
                 $prima->setYear("2016");
                 $prima->setValue($value);
+                $prima->setDateEnd(new DateTime("2016-12-31"));
+                $datestart =new DateTime("2016-07-01");
+                if($contract->getStartDate()>$datestart){
+                    $datestart=$contract->getStartDate();
+                }
+                $prima->setDateStart($datestart);
+                $aux=0;
+                if($contract->getTransportAid()==1){
+                    $aux=77700;
+                }
+                $prima->setTransportAid($aux);
+                $prima->setWorked($lab);
+                $prima->setNotWorked($noLab);
                 $realContract->addPrima($prima);
 
                 $em->persist($realUser);

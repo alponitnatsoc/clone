@@ -119,6 +119,7 @@ class DashBoardEmployerController extends Controller {
                     'finished'=>$finished,
                 ));
             }else{
+
                 if($valid and !$backval) {
                     return $this->render('@RocketSellerTwoPick/Employer/cleanDashboard.html.twig', array(
                         'user' => $user->getPersonPerson(),
