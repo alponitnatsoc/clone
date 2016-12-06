@@ -71,10 +71,10 @@
                     {% for pods in po.purchaseOrderDescriptions %}
 					       <tbody>
                                 <tr>
-                                    <td align="left">
+                                    <td align="left" style="width:50%;padding: 5px 0 5px 9px;">
                                         {{ pods.description }}
                                     </td>
-                                    <td align="right">
+                                    <td align="right" style="width:50%;padding: 5px 5px 5px 0;">
                                          $ {{ pods.value|number_format(0, '.', ',') }}
                                     </td>
                                 </tr>
