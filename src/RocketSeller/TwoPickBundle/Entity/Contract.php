@@ -238,7 +238,8 @@ class Contract
     private $planillaTypePlanillaType;
 
     /**
-     * @ORM\OneToMany(targetEntity="Supply", mappedBy="contractContract", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\Supply", mappedBy="contractContract", cascade={"persist"})
+     * @Exclude
      */
     private $supplies;
 
@@ -943,6 +944,7 @@ class Contract
         $this->weekWorkableDays = new \Doctrine\Common\Collections\ArrayCollection();
         $this->liquidations = new \Doctrine\Common\Collections\ArrayCollection();
         $this->primas = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->supplies = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -1077,6 +1079,7 @@ class Contract
      */
     public function addSupply(\RocketSeller\TwoPickBundle\Entity\Supply $supply)
     {
+        $supply->setContractContract($this);
         $this->supplies[] = $supply;
 
         return $this;
@@ -1091,6 +1094,7 @@ class Contract
     {
         $this->supplies->removeElement($supply);
     }
+
 
     /**
      * Get supplies
