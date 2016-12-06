@@ -1670,6 +1670,59 @@ use EmployerMethodsTrait;
                     'isMobile' => $isMobile
                 );
                 break;
+            case "comprobante-prima":
+                $primaRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Prima');
+                $isMobile = false;
+                if(strpos($id, ",")) {
+                    $arr = explode(',', $id);
+                    $id = $arr[0];
+                    $isMobile = true;
+                }
+                /** @var Prima $prima */
+                $prima = $primaRepo->find($id);
+
+                $signatureUrl = null;
+
+                $document = $prima->getSignature();
+                // signatre is already stored in db
+                if($document != null) {
+
+                    $fileUrl = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
+                    $data = file_get_contents($fileUrl);
+                    $signatureUrl = 'data:image/png;base64,' . base64_encode($data);
+                }
+                /** @var Person $employer */
+                $employerPerson = $prima->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
+                $employeePerson = $prima->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson();
+                /** @var Contract $contract */
+                $contract = $prima->getContractContract();
+
+                $clientInfo = array(
+                    'name' => $this->fullName($employerPerson->getIdPerson()),
+                    'docType' => $employerPerson->getDocumentType(),
+                    'docNumber' => $employerPerson->getDocument(),
+                );
+                $employeeInfo = array(
+                    'name' => $this->fullName($employeePerson->getIdPerson()),
+                    'docType' => $employeePerson->getDocumentType(),
+                    'docNumber' => $employeePerson->getDocument(),
+                    'position' => $contract->getPositionPosition()->getName(),
+                    'salary' => $contract->getTimeCommitmentTimeCommitment()->getCode()=="XD"?$contract->getSalary()/$contract->getWorkableDaysMonth():$contract->getSalary(),
+                );
+
+                $infoPrima = array(
+                    'valorPrima' => $prima->getValue(),
+                    'month'=>$prima->getMonth(),
+                    'year'=>$prima->getYear()
+                );
+                $data = array(
+                    'employeeInfo' => $employeeInfo,
+                    'client' => $clientInfo,
+                    'infoPrima' => $infoPrima,
+                    'signatureUrl' => $signatureUrl,
+                    'isMobile' => $isMobile
+                );
+                break;
             case "comprobante-dotacion":
                 $response = new Response();
 

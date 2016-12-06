@@ -460,16 +460,26 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                 return $this->sendMessage($template, $context,$contactPublicFromEmail,$contactPrivate);
                 break;
 
-	          case 'stuckRegistration':
-		            /** $context must have:
-		             * string name
-		             * string userEmail
-		             * string phone
-		             * string message
-		             * string subject
-			           */
-		            $template = $this->parameters['template']['stuckRegistration'];
-		            return $this->sendMessage($template, $context, $teamFromEmail, $registrationStuck);
+            case 'stuckRegistration':
+                /** $context must have:
+                 * string name
+                 * string userEmail
+                 * string phone
+                 * string message
+                 * string subject
+                   */
+                $template = $this->parameters['template']['stuckRegistration'];
+                return $this->sendMessage($template, $context, $teamFromEmail, $registrationStuck);
+                break;
+            case 'primaReminder':
+                /** $context must have:
+                 * string name
+                 * string userEmail
+                 * string employeeName
+                 */
+                $template = $this->parameters['template']['primaReminder'];
+                return $this->sendMessage($template, $context, $contactPublicFromEmail, $contactPublic);
+                break;
         }
     }
 

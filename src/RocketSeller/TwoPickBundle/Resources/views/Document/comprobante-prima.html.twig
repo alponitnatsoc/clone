@@ -94,7 +94,7 @@
                     margin: 15px 0 0 0
                  }
                 #firma-empleado {
-                    width: 100%;
+                    width: 300px;
                     margin: 0 0 0 0;
                     border-top: 1px #CCC solid;
                     padding: 15px 0 0 0;
@@ -103,7 +103,12 @@
         </style>
 
     </head>
+
+    {% if  data.isMobile %}
+    <body style="zoom: 0.5;">
+    {% else %}
     <body>
+    {% endif %}
         <div id="contenedor-comp">
             <div id="tittle-comp">
                 <h2>Liquidación prima legal de servicios</h2>
@@ -113,13 +118,13 @@
                     <div class="info-celdas">
                         <p>
                             <span>Empleador</span><br>
-                            Sandra María Bisval Mora
+                            {{ data.client.name }}<br>
                         </p>
                     </div>
                     <div class="info-celdas">
                         <p>
                             <span>Cédula</span><br>
-                            123456790
+                            {{ data.client.docNumber }}
                         </p>
                     </div>
                 </div>
@@ -127,13 +132,13 @@
                     <div class="info-celdas">
                         <p>
                             <span>Empleado</span><br>
-                            Sandra María Bisval Mora
+                            {{ data.employeeInfo.name }}
                         </p>
                     </div>
                     <div class="info-celdas">
                         <p>
                             <span>Cédula</span><br>
-                            123456790
+                            {{ data.employeeInfo.docNumber }}
                         </p>
                     </div>
                 </div>
@@ -185,26 +190,26 @@
                 </div>
             </div>
 
+            {% if  data.signatureUrl != null %}
+                <div class="firmaImg">
+                    <img src="{{ data.signatureUrl }}" width="auto" height="100"/>
+                </div>
+            {% else %}
+                <div style="margin:100px 0">
 
+                </div>
+            {% endif %}
             <div id="firma-empleado">
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <p>
-                    ____________________________<br>
                     <span>Firma empleado</span><br>
-                    Sandra Liliana Mahecha Gonzales<br>
-                    1234567890
+                    {{ data.employeeInfo.name }}<br>
+                    {{ data.employeeInfo.docType }}{{ data.employeeInfo.docNumber }}
                 </p>
                 <br>
                 <br>
-                <div align="center" style="font-size:13px">
-                    <p>Dias no laborados: Licencias no remuneradas, sanciones o suspensiones.<br><br>
-                <strong>www.symplifica.com | NIT 900862831-1 | 350 461 2013</strong></p>
-                </div>
-
+            </div>
+            <div align="center" style="font-size:13px">
+                <p>Dias no laborados: Licencias no remuneradas, sanciones o suspensiones.<br><br>
+                    <strong>www.symplifica.com | NIT 900862831-1 | 350 461 2013</strong></p>
             </div>
         </div>
     </body>
