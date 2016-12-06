@@ -1675,12 +1675,9 @@ use EmployerMethodsTrait;
 
                 $filename = 'public/docs/dotacion.pdf';
 
-                $response->headers->set('Cache-Control', 'private');
-                $response->headers->set('Content-type', mime_content_type($filename));
-                $response->headers->set('Content-Disposition', 'attachment; filename="' . basename($filename) . '";');
-                $response->headers->set('Content-length', filesize($filename));
+                $response->headers->set('Content-type', 'application/pdf');
+                $response->headers->set('Content-Disposition', 'attachment; filename="' . $ref . '.pdf";');
 
-                $response->sendHeaders();
                 $response->setContent(file_get_contents($filename));
 
                 return $response;

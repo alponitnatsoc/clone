@@ -3024,8 +3024,8 @@ class BackOfficeController extends Controller
         $em = $this->getDoctrine()->getManager();
         $eHERepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
 
-        $comprobanteType = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:DocumentType")
-                                ->findOneBy(array('docCode' => 'CPR'));
+        $comprobanteDotType = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:DocumentType")
+                                ->findOneBy(array('docCode' => 'CPRDOT'));
         $eHEs = $eHERepo->findAll();
         /** @var EmployerHasEmployee $eHE */
         foreach ($eHEs as $eHE) {
@@ -3044,10 +3044,10 @@ class BackOfficeController extends Controller
             $personEmployee = $eHE->getEmployeeEmployee()->getPersonPerson();
             $notification = new Notification();
             $notification->setPersonPerson($personEmployer);
-            $notification->setDocumentTypeDocumentType($comprobanteType);
+            $notification->setDocumentTypeDocumentType($comprobanteDotType);
             $notification->setType('alert');
             $notification->setStatus(1);
-            $notification->setRelatedLink("/document/add/Supply/$supplyId/CPR");
+            $notification->setRelatedLink("/document/add/Supply/$supplyId/CPRDOT");
             $notification->setDownloadLink("/documents/downloads/comprobante-dotacion/1/pdf");
             $notification->setAccion('Subir');
             $notification->setDownloadAction('Bajar');
