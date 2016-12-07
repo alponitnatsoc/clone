@@ -760,6 +760,15 @@ class EmployeeController extends Controller
             ))
             ->getForm();
 
+        $formPaymentMethod = $this->get("form.factory")->createNamedBuilder("changePaymentMethod")
+            ->add('payMethod','choice',array('label'=>'Selecciona un método de pago:','placeholder'=>'selecciona una opción','multiple'=>false,'expanded'=>false,'choices'=>array(
+                1=>'Daviplata',
+                2=>'Transferencia bancaria',
+                3=>'Efectivo',
+            )))
+            ->add('submit','submit',array('label'=>'Cambiar metodo de pago'))
+            ->getForm();
+
 
         return $this->render(
                         'RocketSellerTwoPickBundle:Employee:showEmployee.html.twig', array(
@@ -773,6 +782,7 @@ class EmployeeController extends Controller
                     'form' => $form->createView(),
                     'form2' =>$form2->createView(),
                     'payMethodTypes'=> $payMethodTypes,
+                    'changePaymentMethod'=>$formPaymentMethod->createView(),
         ));
     }
 

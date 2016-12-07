@@ -146,6 +146,117 @@ class EmployeeRestController extends FOSRestController
     }
 
     /**
+     * Change the contract Payment Method.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Change the contract Payment Method.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors",
+     *     404 = "Returned when any Id does not exist in the DB"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     *
+     * @RequestParam(name="payTypeId", nullable=false, strict=true, description="payment tipe.")
+     * @RequestParam(name="bankId", nullable=true, strict=true, description="Bank id.")
+     * @RequestParam(name="accountTypeId", nullable=true, strict=true, description="Account type Id.")
+     * @RequestParam(name="accountNumber", nullable=true, strict=true, description="Account number.")
+     * @RequestParam(name="cellphone", nullable=true, strict=true, description="employee cellphone.")
+     * @RequestParam(name="hasIt", nullable=true, strict=true, description="emloyee Has daviplata.")
+     * @RequestParam(name="contractId", nullable=false, strict=true, description="id of the contract.")
+     *
+     * @return View
+     */
+    public function postChangePaymentMethodAction(ParamFetcher $paramFetcher)
+    {
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $view = View::create();
+            return $view->setStatusCode(401)->setData(array("error" => array("login" => "El usuario no está logeado"), "url" => $this->generateUrl("fos_user_security_login")));
+        }
+        $view = View::create();
+        /** @var User $user */
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $idContract = $paramFetcher->get("contractId");
+        $contract = $em->getRepository("RocketSellerTwoPickBundle:Contract")->find($idContract);
+        if($contract!= null){
+            $oldPayMethod = $contract->getPayMethodPayMethod();
+            $payMethod = $contract->getPayMethodPayMethod();
+            if ($payMethod != null) {
+                $payMethod->setCellPhone(null);
+                $payMethod->setAccountNumber(null);
+                $payMethod->setBankBank(null);
+                $payMethod->setAccountTypeAccountType(null);
+                $payMethod->setPayTypePayType(null);
+            } else {
+                $payMethod = new PayMethod();
+            }
+            $payMethod->setUserUser($user);
+            if ($paramFetcher->get('bankId')) {
+                /** @var Bank $tempBank */
+                $tempBank = $em->getRepository('RocketSellerTwoPickBundle:Bank')->find($paramFetcher->get('bankId'));
+                if ($tempBank == null) {
+                    $view->setStatusCode(404)->setHeader("error", "The bankId ID " . $paramFetcher->get('bankId') . " is invalid");
+                    return $view;
+                }
+                $payMethod->setAccountNumber($paramFetcher->get('accountNumber'));
+                $payMethod->setBankBank($tempBank);
+            }elseif (!($paramFetcher->get('cellphone') == "" || $paramFetcher->get('cellphone') == null)) {
+                $tempBank = $em->getRepository('RocketSellerTwoPickBundle:Bank')->findOneBy(array("hightechCode" => 51)); //daviviedna bank ofr daviplata
+                $tempAccountType = $em->getRepository("RocketSellerTwoPickBundle:AccountType")->findOneBy(array("name" => "Ahorros")); //tipo de cuenta  bank ofr daviplata
+                $payMethod->setCellPhone($paramFetcher->get("cellphone"));
+                $payMethod->setBankBank($tempBank);
+                $payMethod->setAccountTypeAccountType($tempAccountType);
+            }
+
+            if ($paramFetcher->get('payTypeId')) {
+                /** @var PayType $tempPayType */
+                $tempPayType = $em->getRepository("RocketSellerTwoPickBundle:PayType")->find($paramFetcher->get('payTypeId'));
+                if ($tempPayType == null) {
+                    $view->setStatusCode(404)->setHeader("error", "The payTypeId ID " . $paramFetcher->get('payTypeId') . " is invalid");
+                    return $view;
+                }
+                $payMethod->setPayTypePayType($tempPayType);
+            }
+
+            if ($paramFetcher->get('accountTypeId')) {
+                /** @var AccountType $tempAccountType */
+                $tempAccountType = $em->getRepository("RocketSellerTwoPickBundle:AccountType")->find($paramFetcher->get('accountTypeId'));
+                if ($tempAccountType == null) {
+                    $view->setStatusCode(404)->setHeader("error", "The accountTypeId ID " . $paramFetcher->get('accountTypeId') . " is invalid");
+                    return $view;
+                }
+                $payMethod->setAccountTypeAccountType($tempAccountType);
+            }
+
+            $hasIt = $paramFetcher->get("hasIt");
+            if ($hasIt != null) {
+                $payMethod->setHasIt($hasIt);
+            }
+            $contract->setPayMethodPayMethod($payMethod);
+            $em->persist($contract);
+            $this->removeEmployeeToHighTech($contract->getEmployerHasEmployeeEmployerHasEmployee());
+            $adding = $this->addEmployeeToHighTech($contract->getEmployerHasEmployeeEmployerHasEmployee());
+            if(!$adding){
+                $contract->setPayMethodPayMethod($oldPayMethod);
+                $em->persist($contract);
+                $view->setStatusCode(404)->setHeader("error", "Contract not found");
+                return $view;
+            }
+        }else{
+            $view->setStatusCode(404)->setHeader("error", "Contract not found");
+            return $view;
+        }
+
+        $view->setStatusCode(200);
+        return $view;
+    }
+
+    /**
      * Create a Person from the submitted data.<br/>
      *
      * @ApiDoc(
