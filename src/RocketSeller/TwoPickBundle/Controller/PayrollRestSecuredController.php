@@ -486,10 +486,12 @@ class PayrollRestSecuredController extends FOSRestController
         $notification->setDocumentTypeDocumentType($em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array("docCode"=>'CPR')));
         $notification->setType('alert');
         $notification->setDescription('Subir comprobante firmado de prima de ' . $personEmployee->getFullName());
-        $notification->setRelatedLink('/document/add/Prima/' . $prima->getIdPrima() . '/CPR');
+        $uploadurl=$this->generateUrl('documentos_employee', array('entityType'=>"Prima",'entityId'=>$prima->getIdPrima(),'docCode'=>"CPR"));
+        $notification->setRelatedLink($uploadurl);
         $notification->setAccion('Subir');
         $notification->setDownloadAction('Bajar');
-        $notification->setDownloadLink('/document/downloads/comprobante-prima/' . $prima->getIdPrima() . '/pdf');
+        $routeAlfredo= $this->generateUrl("download_documents", array('ref'=>"comprobante-prima",'id'=>$prima->getIdPrima() ,'type'=>"pdf"));
+        $notification->setDownloadLink($routeAlfredo);
         $em = $this->getDoctrine()->getManager();
         $em->persist($notification);
     }
@@ -943,7 +945,7 @@ class PayrollRestSecuredController extends FOSRestController
             $pods = $realtoPay->getPurchaseOrderDescriptions();
             /** @var PurchaseOrdersDescription $pod */
             foreach ($pods as $pod) {
-                if (!($pod->getProductProduct()->getSimpleName() == "PP" || $pod->getProductProduct()->getSimpleName() == "PN")) {
+                if (!($pod->getProductProduct()->getSimpleName() == "PP" || $pod->getProductProduct()->getSimpleName() == "PN"|| $pod->getProductProduct()->getSimpleName() == "PRM")) {
                     $em->remove($pod);
                     $em->flush();
                 }
