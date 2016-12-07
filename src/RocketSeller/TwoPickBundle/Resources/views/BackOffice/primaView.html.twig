@@ -25,6 +25,7 @@
                         <th>Salario Contrato</th>
                         <th>Auxilio</th>
                         <th>Días laborados total</th>
+                        <th>Días NO laborados total</th>
                         <th>Valor total otros salariales</th>
                         <th>Total pago vigencia</th>
                         <th>Salario diario</th>
@@ -69,6 +70,7 @@
                                 {% endif %}
                             </td>
                             <td> {{ days[locIndex] }} </td>
+                            <td> {{ minusDays[locIndex] }} </td>
                             <td> {{ otrosSalariales[locIndex]|number_format(0, ',', '.') }}</td>
                             <td> {{ totalPago[locIndex]|number_format(0, ',', '.') }}</td>
                             <td>

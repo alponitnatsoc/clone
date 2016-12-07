@@ -13,6 +13,7 @@ use RocketSeller\TwoPickBundle\Entity\Log;
 use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Person;
+use RocketSeller\TwoPickBundle\Entity\Prima;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\TempFile;
 use RocketSeller\TwoPickBundle\Entity\User;
@@ -985,6 +986,37 @@ use EmployerMethodsTrait;
                 }
                 $em->persist($supply);
                 break;
+            case "Prima":
+                /** @var Prima $prima */
+                $prima = $em->getRepository("RocketSellerTwoPickBundle:Prima")->find($entityId);
+                $name = "prima de ".$prima->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName().
+                    " mes ".$prima->getMonth() . " año " . $prima->getYear();
+
+                $document = $prima->getPayslip();
+                if ($document) {
+                    if ($document->getMediaMedia()) {
+                        /** @var Media $media */
+                        $media = $document->getMediaMedia();
+                        if ($media->getProviderName()) {
+                            $provider = $this->get($media->getProviderName());
+                            $provider->removeThumbnails($media);
+                        }
+                        $em->remove($em->getRepository('\Application\Sonata\MediaBundle\Entity\Media')->find($media->getId()));
+                        $em->remove($em->getRepository('ApplicationSonataMediaBundle:Media')->find($media->getId()));
+                        $em->flush();
+                    }
+                    $document->setName($documentType->getName());
+                    $document->setDocumentTypeDocumentType($documentType);
+                    $document->setStatus(0);
+                } else {
+                    $document = new Document();
+                    $document->setName($documentType->getName());
+                    $document->setDocumentTypeDocumentType($documentType);
+                    $document->setStatus(0);
+                    $prima->setPayslip($document);
+                }
+                $em->persist($prima);
+                break;
         }
         return array('document'=>$document,'notification'=>$notification,'personName'=> $name,'documentType'=>$documentType);
     }
@@ -1666,6 +1698,66 @@ use EmployerMethodsTrait;
                     'employeeInfo' => $employeeInfo,
                     'client' => $clientInfo,
                     'discriminatedInfo' => $discriminatedInfo,
+                    'signatureUrl' => $signatureUrl,
+                    'isMobile' => $isMobile
+                );
+                break;
+            case "comprobante-prima":
+                $primaRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Prima');
+                $isMobile = false;
+                if(strpos($id, ",")) {
+                    $arr = explode(',', $id);
+                    $id = $arr[0];
+                    $isMobile = true;
+                }
+                /** @var Prima $prima */
+                $prima = $primaRepo->find($id);
+                if(!$prima){
+                    return $this->redirectToRoute("show_dashboard");
+                }
+                $signatureUrl = null;
+
+                $document = $prima->getSignature();
+                // signatre is already stored in db
+                if($document != null) {
+
+                    $fileUrl = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
+                    $data = file_get_contents($fileUrl);
+                    $signatureUrl = 'data:image/png;base64,' . base64_encode($data);
+                }
+                /** @var Person $employer */
+                $employerPerson = $prima->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
+                $employeePerson = $prima->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson();
+                /** @var Contract $contract */
+                $contract = $prima->getContractContract();
+
+                $clientInfo = array(
+                    'name' => $this->fullName($employerPerson->getIdPerson()),
+                    'docType' => $employerPerson->getDocumentType(),
+                    'docNumber' => $employerPerson->getDocument(),
+                );
+                $employeeInfo = array(
+                    'name' => $this->fullName($employeePerson->getIdPerson()),
+                    'docType' => $employeePerson->getDocumentType(),
+                    'docNumber' => $employeePerson->getDocument(),
+                    'position' => $contract->getPositionPosition()->getName(),
+                    'salary' => $contract->getTimeCommitmentTimeCommitment()->getCode()=="XD"?$contract->getSalary()/$contract->getWorkableDaysMonth():$contract->getSalary(),
+                );
+
+                $infoPrima = array(
+                    'valorPrima' => $prima->getValue(),
+                    'month' => $prima->getMonth(),
+                    'year' => $prima->getYear(),
+                    'worked' => $prima->getWorked(),
+                    'notWorked' => $prima->getNotWorked(),
+                    'transportAid' => $prima->getTransportAid(),
+                    'dateStart' => $prima->getDateStart()->format('d/m/Y'),
+                    'dateEnd' => $prima->getDateEnd()->format('d/m/Y'),
+                );
+                $data = array(
+                    'employeeInfo' => $employeeInfo,
+                    'client' => $clientInfo,
+                    'infoPrima' => $infoPrima,
                     'signatureUrl' => $signatureUrl,
                     'isMobile' => $isMobile
                 );

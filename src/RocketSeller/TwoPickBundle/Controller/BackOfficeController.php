@@ -14,6 +14,7 @@ use RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
+use RocketSeller\TwoPickBundle\Entity\LandingRegistration;
 use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\Novelty;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
@@ -71,6 +72,10 @@ class BackOfficeController extends Controller
         if(count($request->request->all())>0){
             $em=$this->getDoctrine()->getManager();
             $requ = $request->request->all();
+            $lab=$requ["LAB"];
+            $noLab=$requ["NOLAB"];
+            unset($requ["LAB"]);
+            unset($requ["NOLAB"]);
             foreach ($requ as $key=> $value) {
 
                 /** @var EmployerHasEmployee $realEhe */
@@ -117,6 +122,19 @@ class BackOfficeController extends Controller
                 $prima->setMonth("12");
                 $prima->setYear("2016");
                 $prima->setValue($value);
+                $prima->setDateEnd(new DateTime("2016-12-31"));
+                $datestart =new DateTime("2016-07-01");
+                if($contract->getStartDate()>$datestart){
+                    $datestart=$contract->getStartDate();
+                }
+                $prima->setDateStart($datestart);
+                $aux=0;
+                if($contract->getTransportAid()==0){
+                    $aux=77700;
+                }
+                $prima->setTransportAid($aux);
+                $prima->setWorked($lab);
+                $prima->setNotWorked($noLab);
                 $realContract->addPrima($prima);
 
                 $em->persist($realUser);
@@ -1222,6 +1240,33 @@ class BackOfficeController extends Controller
             ->getRepository('RocketSellerTwoPickBundle:LandingRegistration')
             ->findAll();
         return $this->render('RocketSellerTwoPickBundle:BackOffice:marketing.html.twig', array('landings'=>array_reverse($landings)));
+    }
+
+    /**
+     * Funcion que muestra la tabla de registrados en el landing
+     * @return Response /backoffice/marketing
+     */
+    public function showExpressAction($id)
+    {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        if($id==-1){
+            $landings = $this->getdoctrine()
+                ->getRepository('RocketSellerTwoPickBundle:LandingRegistration')
+                ->findBy(array('type'=>'0Esfuezo'));
+            return $this->render('RocketSellerTwoPickBundle:BackOffice:marketing.html.twig', array('landings'=>array_reverse($landings),'express'=>'active'));
+        }else{
+            /** @var LandingRegistration $lidRegister */
+            $lidRegister = $this->getdoctrine()
+                ->getRepository('RocketSellerTwoPickBundle:LandingRegistration')
+                ->find($id);
+            /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
+            $userManager = $this->get('fos_user.user_manager');
+            /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
+            $user = $userManager->createUser();
+
+            return $this->render('RocketSellerTwoPickBundle:BackOffice:marketing.html.twig', array('landings'=>array_reverse($landings),'express'=>'active'));
+        }
+
     }
 
     /**
@@ -3038,7 +3083,6 @@ class BackOfficeController extends Controller
             $supply->setContractContract($activeContract);
             $em->persist($supply);
             $em->flush();
-            $supplyId = $supply->getIdSupply();
 
             $personEmployer = $eHE->getEmployerEmployer()->getPersonPerson();
             $personEmployee = $eHE->getEmployeeEmployee()->getPersonPerson();
@@ -3047,8 +3091,10 @@ class BackOfficeController extends Controller
             $notification->setDocumentTypeDocumentType($comprobanteDotType);
             $notification->setType('alert');
             $notification->setStatus(1);
-            $notification->setRelatedLink("/document/add/Supply/$supplyId/CPRDOT");
-            $notification->setDownloadLink("/documents/downloads/comprobante-dotacion/1/pdf");
+            $uploadurl = $this->generateUrl('documentos_employee', array('entityType'=>"Supply",'entityId'=>$supply->getIdSupply(),'docCode'=>"CPRDOT"));
+            $notification->setRelatedLink($uploadurl);
+            $routeDownload = $this->generateUrl("download_documents", array('ref'=>"comprobante-dotacion",'id'=>$supply->getIdSupply() ,'type'=>"pdf"));
+            $notification->setDownloadLink($routeDownload);
             $notification->setAccion('Subir');
             $notification->setDownloadAction('Bajar');
             $notification->setDescription('Subir copia comprobante de dotación de ' . $personEmployee->getNames() .
@@ -3074,6 +3120,7 @@ class BackOfficeController extends Controller
 		
 		$payrollArr = array();
 		$diasArr = array();
+        $menosDiasArr = array();
 		$otrosSalArr = array();
 		$totalPagoArr = array();
 		
@@ -3086,6 +3133,7 @@ class BackOfficeController extends Controller
 			$comparativePayroll->setPeriod("4");
 			
 			$totalDias = 0;
+            $menosDías = 0;
 			$totalOtrosSalariales = 0;
 			$totalPago = 0;
 			
@@ -3133,13 +3181,13 @@ class BackOfficeController extends Controller
 						
 						//Bonificacion
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "285"){
-							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() ;
 						}
 						
 						//Vacaciones
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "145"){
 							$totalDias = $totalDias + (int)$novelty->getUnits() * $multiplier;
-							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() ;
 						}
 						
 						//Subsidio de transporte
@@ -3149,43 +3197,44 @@ class BackOfficeController extends Controller
 						
 						//Hora extra festiva diurna
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "65"){
-							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() ;
 						}
 						
 						//Incapacidad laboral
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "28"){
 							$totalDias = $totalDias + (int)$novelty->getUnits() * $multiplier;
-							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() ;
 						}
 						
 						//Incapacidad general
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "15"){
 							$totalDias = $totalDias + (int)$novelty->getUnits() * $multiplier;
-							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() ;
 						}
 						
 						//Licencia remunerada
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "23"){
 							$totalDias = $totalDias + (int)$novelty->getUnits() * $multiplier;
-							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() ;
 						}
 						
 						//Licencia No remunerada
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "3120"){
-							$totalDias = $totalDias - (int)$novelty->getUnits() * $multiplier;
-							$totalOtrosSalariales = $totalOtrosSalariales - (int)$novelty->getSqlValue() * $multiplier;
+							$totalDias = $totalDias - (int)$novelty->getUnits() ;
+							$totalOtrosSalariales = $totalOtrosSalariales - (int)$novelty->getSqlValue();
+                            $menosDías +=   (int)$novelty->getUnits();
 						}
 						
 						//Licencia maternidad
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "25"){
 							$totalDias = $totalDias + (int)$novelty->getUnits() * $multiplier;
-							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() ;
 						}
 						
 						//Gasto de incapacidad
 						if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode() == "20"){
 							$totalDias = $totalDias + (int)$novelty->getUnits() * $multiplier;
-							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() * $multiplier;
+							$totalOtrosSalariales = $totalOtrosSalariales + (int)$novelty->getSqlValue() ;
 						}
 					}
 				}
@@ -3195,13 +3244,14 @@ class BackOfficeController extends Controller
 			
 			array_push($payrollArr,$comparativePayroll);
 			array_push($diasArr, $totalDias);
+			array_push($menosDiasArr, $menosDías);
 			array_push($otrosSalArr, $totalOtrosSalariales);
 			array_push($totalPagoArr,$totalPago);
 			
 		}
 		
 		return $this->render('RocketSellerTwoPickBundle:BackOffice:primaView.html.twig',
-			array('ehes' => $activeEhe, 'payrolls' => $payrollArr, 'days' => $diasArr, 'otrosSalariales' => $otrosSalArr, 'totalPago' => $totalPagoArr));
+			array('ehes' => $activeEhe, 'payrolls' => $payrollArr, 'days' => $diasArr, 'minusDays' => $menosDiasArr, 'otrosSalariales' => $otrosSalArr, 'totalPago' => $totalPagoArr));
 	}
 }
 
