@@ -3083,7 +3083,6 @@ class BackOfficeController extends Controller
             $supply->setContractContract($activeContract);
             $em->persist($supply);
             $em->flush();
-            $supplyId = $supply->getIdSupply();
 
             $personEmployer = $eHE->getEmployerEmployer()->getPersonPerson();
             $personEmployee = $eHE->getEmployeeEmployee()->getPersonPerson();
@@ -3092,8 +3091,10 @@ class BackOfficeController extends Controller
             $notification->setDocumentTypeDocumentType($comprobanteDotType);
             $notification->setType('alert');
             $notification->setStatus(1);
-            $notification->setRelatedLink("/document/add/Supply/$supplyId/CPRDOT");
-            $notification->setDownloadLink("/documents/downloads/comprobante-dotacion/1/pdf");
+            $uploadurl = $this->generateUrl('documentos_employee', array('entityType'=>"Supply",'entityId'=>$supply->getIdSupply(),'docCode'=>"CPRDOT"));
+            $notification->setRelatedLink($uploadurl);
+            $routeDownload = $this->generateUrl("download_documents", array('ref'=>"comprobante-dotacion",'id'=>$supply->getIdSupply() ,'type'=>"pdf"));
+            $notification->setDownloadLink($routeDownload);
             $notification->setAccion('Subir');
             $notification->setDownloadAction('Bajar');
             $notification->setDescription('Subir copia comprobante de dotación de ' . $personEmployee->getNames() .
