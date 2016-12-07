@@ -2,7 +2,7 @@
 <html>
     <head>
     <meta charset="UTF-8">
-    <title>Documento sin título</title>
+    <title>Comprobante Prima</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700" rel="stylesheet" type="text/css">
 
         <style type="text/css">
@@ -44,9 +44,15 @@
                     margin-top: 4px;
                 }
                 .info-celdas {
+                    width: 29%;
+                    float: left;
+                    padding: 5px 1px 15px 20px;
+                }
+
+                .info-celdas2 {
                     width: 45%;
                     float: left;
-                    padding: 5px 15px;
+                    padding: 5px 1px 15px 20px;
                 }
 
                 p {
@@ -115,13 +121,13 @@
             </div>
             <div id="data-empleado">
                 <div class="celdas-copm">
-                    <div class="info-celdas">
+                    <div class="info-celdas2">
                         <p>
                             <span>Empleador</span><br>
                             {{ data.client.name }}<br>
                         </p>
                     </div>
-                    <div class="info-celdas">
+                    <div class="info-celdas2" align="right">
                         <p>
                             <span>Cédula</span><br>
                             {{ data.client.docNumber | number_format(0, '.', ',') }}
@@ -129,13 +135,13 @@
                     </div>
                 </div>
                 <div class="celdas-copm">
-                    <div class="info-celdas">
+                    <div class="info-celdas2">
                         <p>
                             <span>Empleado</span><br>
                             {{ data.employeeInfo.name }}
                         </p>
                     </div>
-                    <div class="info-celdas">
+                    <div class="info-celdas2" align="right">
                         <p>
                             <span>Cédula</span><br>
                             {{ data.employeeInfo.docNumber | number_format(0, '.', ',') }}
@@ -155,6 +161,12 @@
                         <p>
                             <span>Fecha Fin</span><br>
                             {{ data.infoPrima.dateEnd }}
+                        </p>
+                    </div>
+                    <div class="info-celdas">
+                        <p>
+                            <span>Días Transcurridos</span><br>
+                            {{ data.infoPrima.worked }}
                         </p>
                     </div>
                 </div>
@@ -178,12 +190,6 @@
                     </div>
                 </div>
                 <div class="celdas-copm">
-                    <div class="info-celdas">
-                        <p>
-                            <span>Días Laborados</span><br>
-                            {{ data.infoPrima.worked }}
-                        </p>
-                    </div>
                     <div class="info-celdas">
                         <p>
                             <span>Días no laborados</span><br>
