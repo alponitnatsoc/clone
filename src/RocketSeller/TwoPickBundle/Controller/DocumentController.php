@@ -986,6 +986,37 @@ use EmployerMethodsTrait;
                 }
                 $em->persist($supply);
                 break;
+            case "Prima":
+                /** @var Prima $prima */
+                $prima = $em->getRepository("RocketSellerTwoPickBundle:Prima")->find($entityId);
+                $name = "prima de ".$prima->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName().
+                    " mes ".$prima->getMonth() . " año " . $prima->getYear();
+
+                $document = $prima->getPayslip();
+                if ($document) {
+                    if ($document->getMediaMedia()) {
+                        /** @var Media $media */
+                        $media = $document->getMediaMedia();
+                        if ($media->getProviderName()) {
+                            $provider = $this->get($media->getProviderName());
+                            $provider->removeThumbnails($media);
+                        }
+                        $em->remove($em->getRepository('\Application\Sonata\MediaBundle\Entity\Media')->find($media->getId()));
+                        $em->remove($em->getRepository('ApplicationSonataMediaBundle:Media')->find($media->getId()));
+                        $em->flush();
+                    }
+                    $document->setName($documentType->getName());
+                    $document->setDocumentTypeDocumentType($documentType);
+                    $document->setStatus(0);
+                } else {
+                    $document = new Document();
+                    $document->setName($documentType->getName());
+                    $document->setDocumentTypeDocumentType($documentType);
+                    $document->setStatus(0);
+                    $prima->setPayslip($document);
+                }
+                $em->persist($prima);
+                break;
         }
         return array('document'=>$document,'notification'=>$notification,'personName'=> $name,'documentType'=>$documentType);
     }
