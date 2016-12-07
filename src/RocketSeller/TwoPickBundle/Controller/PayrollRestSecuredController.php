@@ -943,7 +943,7 @@ class PayrollRestSecuredController extends FOSRestController
             $pods = $realtoPay->getPurchaseOrderDescriptions();
             /** @var PurchaseOrdersDescription $pod */
             foreach ($pods as $pod) {
-                if (!($pod->getProductProduct()->getSimpleName() == "PP" || $pod->getProductProduct()->getSimpleName() == "PN")) {
+                if (!($pod->getProductProduct()->getSimpleName() == "PP" || $pod->getProductProduct()->getSimpleName() == "PN"|| $pod->getProductProduct()->getSimpleName() == "PRM")) {
                     $em->remove($pod);
                     $em->flush();
                 }
