@@ -185,8 +185,8 @@ trait SubscriptionMethodsTrait
                 "document_type" => $employeeDocType,
                 "document" => $employeePerson->getDocument(),
                 "gender" => $employeePerson->getGender(),
-                "birth_date" => $employeePerson->getBirthDate()->format("Y-m-d"),
-                "start_date" => $actContract->getStartDate()->format("Y-m-d"),
+                "birth_date" => $employeePerson->getBirthDate()->format("d-m-Y"),
+                "start_date" => $actContract->getStartDate()->format("d-m-Y"),
                 "contract_number" => $actContract->getIdContract(),
                 "worked_hours_day" => 8,
                 "payment_method" => "EFE",
@@ -199,7 +199,7 @@ trait SubscriptionMethodsTrait
             ));
             if ($endDate != null) {
                 $request->request->add(array(
-                    "last_contract_end_date" => $endDate->format("Y-m-d")
+                    "last_contract_end_date" => $endDate->format("d-m-Y")
                 ));
             }
             $today = new DateTime();
