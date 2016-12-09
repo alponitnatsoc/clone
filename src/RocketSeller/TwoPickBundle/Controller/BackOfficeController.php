@@ -2393,7 +2393,7 @@ class BackOfficeController extends Controller
 		$podPrima = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')->findBy(array("productProduct"=>$product3->getIdProduct()));
 
 		//Now Pod has all the products nomina on the database.
-		return $this->render('RocketSellerTwoPickBundle:BackOffice:payState.html.twig', array('podsN' => $podNomina, 'podsP' => $podPila, 'podsPr' => $podPila));
+		return $this->render('RocketSellerTwoPickBundle:BackOffice:payState.html.twig', array('podsN' => $podNomina, 'podsP' => $podPila, 'podsPr' => $podPrima));
 	}
 
 	public function payTypeInfoViewAction()
