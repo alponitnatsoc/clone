@@ -480,10 +480,10 @@ class PayrollRestController extends FOSRestController
      *   (name="document_type", nullable=true, requirements="([a-z|A-Z| ])+", description="Document type on two char format, if null CC will be used.")
      *   (name="document", nullable=false, requirements="([0-9])+", strict=true, description="Employee document number")
      *   (name="gender", nullable=false, requirements="(MAS|FEM)", strict=true, description="Employee gender(MAS or FEM).")
-     *   (name="birth_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Employee birth day on the format DD-MM-YYYY.")
-     *   (name="start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the employee started working on the comopany(format: DD-MM-YYYY).")
+     *   (name="birth_date", nullable=false, requirements="[0-9]{4}-[0-9]{2}-[0-9]{2}", strict=true, description="Employee birth day on the format DD-MM-YYYY.")
+     *   (name="start_date", nullable=true, requirements="[0-9]{4}-[0-9]{2}-[0-9]{2}", strict=true, description="Day the employee started working on the comopany(format: DD-MM-YYYY).")
      *   (name="contract_number", nullable=true, requirements="([0-9])+", strict=true, description="Employee contract number.")
-     *   (name="last_contract_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Last work contract termination day, only termnio indefinido(format: DD-MM-YYYY).")
+     *   (name="last_contract_end_date", nullable=true, requirements="[0-9]{4}-[0-9]{2}-[0-9]{2}", strict=true, description="Last work contract termination day, only termnio indefinido(format: DD-MM-YYYY).")
      *   (name="worked_hours_day", nullable=false, requirements="([0-9])+", strict=true, description="Number of hours worked on a day.")
      *   (name="worked_days_week", nullable=false, requirements="([0-9])+", strict=true, description="Number of days worked in a week.")
      *   (name="payment_method", nullable=false, requirements="(CHE|CON|EFE)", strict=true, description="Code of payment method(CHE, CON, EFE). This code can be obtained using the table pay_type, field payroll_code.")
@@ -514,13 +514,13 @@ class PayrollRestController extends FOSRestController
         $mandatory['document'] = true;
         $regex['gender'] = '(MAS|FEM)';
         $mandatory['gender'] = true;
-        $regex['birth_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
+        $regex['birth_date'] = '[0-9]{4}-[0-9]{2}-[0-9]{2}';
         $mandatory['birth_date'] = true;
-        $regex['start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
+        $regex['start_date'] = '[0-9]{4}-[0-9]{2}-[0-9]{2}';
         $mandatory['start_date'] = false;
         $regex['contract_number'] = '([0-9])+';
         $mandatory['contract_number'] = false;
-        $regex['last_contract_end_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
+        $regex['last_contract_end_date'] = '[0-9]{4}-[0-9]{2}-[0-9]{2}';
         $mandatory['last_contract_end_date'] = false;
         $regex['worked_hours_day'] = '([0-9])+';
         $mandatory['worked_hours_day'] = true;
