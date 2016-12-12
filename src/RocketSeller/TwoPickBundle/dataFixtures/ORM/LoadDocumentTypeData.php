@@ -195,6 +195,11 @@ class LoadDocumentTypeData extends AbstractFixture implements OrderedFixtureInte
         $documentTypePasaporte->setName('Pasaporte');
         $documentTypePasaporte->setDocCode('PASAPORTE');
         $manager->persist($documentTypePasaporte);
+
+        $documentComprobanteDotacion = new DocumentType();
+        $documentComprobanteDotacion->setName('Comprobante Dotación');
+        $documentComprobanteDotacion->setDocCode('CPRDOT');
+        $manager->persist($documentComprobanteDotacion);
 	    
         $manager->flush();
 
@@ -232,6 +237,7 @@ class LoadDocumentTypeData extends AbstractFixture implements OrderedFixtureInte
         $this->addReference('document-EOIE', $documentTypePilaOperatorLog);
         $this->addReference('document-EOCP', $documentTypePayslipPila);
         $this->addReference('document-PASAPORTE', $documentTypePasaporte);
+        $this->addReference('document-CPRDOT', $documentComprobanteDotacion);
 
     }
     public function getOrder()

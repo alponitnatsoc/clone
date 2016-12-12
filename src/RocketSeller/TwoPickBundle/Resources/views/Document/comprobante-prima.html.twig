@@ -1,0 +1,233 @@
+<!doctype html>
+<html>
+    <head>
+    <meta charset="UTF-8">
+    <title>Comprobante Prima</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700" rel="stylesheet" type="text/css">
+
+        <style type="text/css">
+            * {margin: 0 auto;padding: 0}
+
+                #contenedor-comp {
+                    width: 612px;
+                    height: auto;
+                }
+
+                #tittle-comp {
+                    color: #5D5D5D;
+                    text-align: center;
+                    margin-top: 45px;
+                }
+                span,th {
+                    font-family: 'Open Sans', sans-serif;
+                    font-weight: 700;
+                    font-size: 15px
+                }
+                #tittle-comp h2 {
+                    font-family: 'Open Sans', sans-serif;
+                    font-weight: 300;
+                    text-transform: uppercase;
+                    line-height: 30px
+                }
+
+                #data-empleado {
+                    border-top: 1px #CCC solid;
+                    margin: 20px 0 0 0;
+                    padding: 20px 0 0 0;
+                    color: #5D5D5D;
+                }
+
+                .celdas-copm {
+                    border: 1px #CCC solid;
+                    height: auto;
+                    overflow: hidden;
+                    margin-top: 4px;
+                }
+                .info-celdas {
+                    width: 29%;
+                    float: left;
+                    padding: 5px 1px 15px 20px;
+                }
+
+                .info-celdas2 {
+                    width: 45%;
+                    float: left;
+                    padding: 5px 1px 15px 20px;
+                }
+
+                p {
+                    font-family: 'Open Sans', sans-serif;
+                    font-weight: 300;
+                }
+
+                th {
+                    color: #5D5D5D
+                }
+
+                #descript-comp {
+                    margin: 35px 0 0 0;
+                    clear: both
+                }
+
+                .border-comp td {
+                    border: 1px solid #e6e6e6;
+                    font-family: 'Open Sans', sans-serif;
+                    font-weight: 300;
+                    padding: 5px 15px;
+                    color: #828282;
+                }
+
+                .bold {
+                    font-weight: 700 !important;
+                    color: #5D5D5D;
+                }
+
+                .sub {
+                    background: #e4e4e4;
+                }
+
+                .total {
+                   background: #c1c1c1;
+                }
+
+                .border-comp th {
+                    background: #e4e4e4;;
+                    padding: 5px 0;
+                }
+                .firmaImg {
+                    width: 100%;
+                    height: auto;
+                    margin: 15px 0 0 0
+                 }
+                #firma-empleado {
+                    width: 300px;
+                    margin: 0 0 0 0;
+                    border-top: 1px #CCC solid;
+                    padding: 15px 0 0 0;
+                    color: #5D5D5D
+                }
+        </style>
+
+    </head>
+
+    {% if  data.isMobile %}
+    <body style="zoom: 0.5;">
+    {% else %}
+    <body>
+    {% endif %}
+        <div id="contenedor-comp">
+            <div id="tittle-comp">
+                <h2>Liquidación prima legal de servicios</h2>
+            </div>
+            <div id="data-empleado">
+                <div class="celdas-copm">
+                    <div class="info-celdas2">
+                        <p>
+                            <span>Empleador</span><br>
+                            {{ data.client.name }}<br>
+                        </p>
+                    </div>
+                    <div class="info-celdas2" align="right">
+                        <p>
+                            <span>Cédula</span><br>
+                            {{ data.client.docNumber | number_format(0, '.', ',') }}
+                        </p>
+                    </div>
+                </div>
+                <div class="celdas-copm">
+                    <div class="info-celdas2">
+                        <p>
+                            <span>Empleado</span><br>
+                            {{ data.employeeInfo.name }}
+                        </p>
+                    </div>
+                    <div class="info-celdas2" align="right">
+                        <p>
+                            <span>Cédula</span><br>
+                            {{ data.employeeInfo.docNumber | number_format(0, '.', ',') }}
+                        </p>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <div class="celdas-copm">
+                    <div class="info-celdas">
+                        <p>
+                            <span>Fecha Inicio</span><br>
+                            {{ data.infoPrima.dateStart }}
+                        </p>
+                    </div>
+                    <div class="info-celdas">
+                        <p>
+                            <span>Fecha Fin</span><br>
+                            {{ data.infoPrima.dateEnd }}
+                        </p>
+                    </div>
+                    <div class="info-celdas">
+                        <p>
+                            <span>Días Transcurridos</span><br>
+                            {{ data.infoPrima.worked }}
+                        </p>
+                    </div>
+                </div>
+                <div class="celdas-copm">
+                    <div class="info-celdas">
+                        <p>
+                            <span>Salario base</span><br>
+                            ${{ data.employeeInfo.salary | number_format(0, '.', ',') }}
+                        </p>
+                    </div>
+                    <div class="info-celdas">
+                        <p>
+                            <span>Auxilio de transporte</span><br>
+                            {% if  data.infoPrima.transportAid != 0 %}
+                                {{ data.infoPrima.transportAid }}
+                            {% else %}
+                                No aplica
+                            {% endif %}
+
+                        </p>
+                    </div>
+                </div>
+                <div class="celdas-copm">
+                    <div class="info-celdas">
+                        <p>
+                            <span>Días no laborados</span><br>
+                            {{ data.infoPrima.notWorked }}
+                        </p>
+                    </div>
+                </div>
+                <div class="celdas-copm">
+                    <div class="info-celdas">
+                        <p>
+                            <span>Valor prima</span><br>
+                            ${{ data.infoPrima.valorPrima | number_format(0, '.', ',') }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            {% if  data.signatureUrl != null %}
+                <div class="firmaImg">
+                    <img src="{{ data.signatureUrl }}" width="auto" height="100"/>
+                </div>
+            {% else %}
+                <div style="margin:100px 0">
+
+                </div>
+            {% endif %}
+            <div id="firma-empleado">
+                    <span>Firma empleado</span><br>
+                    {{ data.employeeInfo.name }}<br>
+                    {{ data.employeeInfo.docType }} {{ data.employeeInfo.docNumber | number_format(0, '.', ',') }}
+                </p>
+                <br>
+                <br>
+            </div>
+            <div align="center" style="font-size:13px">
+                <p>Dias no laborados: Licencias no remuneradas, sanciones o suspensiones.<br><br>
+                    <strong>www.symplifica.com | NIT 900862831-1 | 350 461 2013</strong></p>
+            </div>
+        </div>
+    </body>
+</html>

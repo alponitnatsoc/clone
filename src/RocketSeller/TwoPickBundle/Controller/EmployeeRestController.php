@@ -2385,6 +2385,7 @@ class EmployeeRestController extends FOSRestController
             $em->flush();
             if($user->getStatus()==2){
                 $ehe->setState(3);
+                $ehe->setIsPostRegister(true);
                 $em->persist($ehe);
                 $em->flush();
                 $this->crearTramites($user);
