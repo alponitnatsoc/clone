@@ -415,6 +415,9 @@ class PurchaseOrdersDescription
         if($this->getPayrollPayroll()!=null){
             return $this->getPayrollPayroll()->getContractContract()->getPayMethodPayMethod();
         }
+        if($this->getPrima()!=null){
+            return $this->getPrima()->getContractContract()->getPayMethodPayMethod();
+        }
         return null;
     }/**
      * Get payment Status
