@@ -80,7 +80,11 @@ class PayController extends Controller
             $user = $this->getUser();
             $payMethod = $realPod->getPayMethod();
             /** @var Contract $contract */
-            $contract = $realPod->getPayrollPayroll()->getContractContract();
+            if($realPod->getProductProduct()!=null&&$realPod->getProductProduct()->getSimpleName()=="PRM"){
+                $contract = $realPod->getPrima()->getContractContract();
+            }else{
+                $contract = $realPod->getPayrollPayroll()->getContractContract();
+            }
             $fields = $payMethod->getPayTypePayType()->getPayMethodFields();
             $options = array();
             foreach ($fields as $field) {

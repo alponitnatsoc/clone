@@ -61,6 +61,8 @@ class PayRestSecuredController extends FOSRestController
             foreach ($pods as $pod) {
                 if ($pod->getPurchaseOrdersStatus() == null) {
                     continue;
+                }if ($pod->getProductProduct() != null && $pod->getProductProduct()->getSimpleName()=="CM") {
+                    continue;
                 }
                 if ($pod->getPurchaseOrdersStatus()->getIdNovoPay() == "00" ||
                     $pod->getPurchaseOrdersStatus()->getIdNovoPay() == "-2"
