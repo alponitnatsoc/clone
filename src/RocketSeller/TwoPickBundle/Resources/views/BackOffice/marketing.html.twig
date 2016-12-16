@@ -8,32 +8,47 @@
             <div class="panel panel-title">
                 Marketing
             </div>
+            {% if express is not defined %}
+                <a href="{{ path('express_back') }}" class="btn btn-warning notAjax">Filtrar 0 esfuerzo</a>
+            {% else %}
+                <a href="{{ path('marketing') }}" class="btn btn-warning notAjax">Remover filtro</a>
+                Las contraseñas de los usuarios creados es el telefono que aparece en cada registro
+            {% endif %}
             <br>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4>Landing Symplifica</h4>
                 </div>
+
                 <table class="table">
                     <thead>
                     <tr>
                         <td class="tbHeader">Tipo de Inscripción</td>
                         <td class="tbHeader">Nombre</td>
-                        <td class="tbHeader">E-Mail</>
+                        <td class="tbHeader">E-Mail</td>
                         <td class="tbHeader">Teléfono</td>
                         <td class="tbHeader">Fecha Inscripción</td>
                         <td class="tbHeader">Tipo</td>
+                        {% if express is defined %}
+                            <td class="tbHeader">Crear Usuario y enviar Email</td>
+                        {% endif %}
                     </tr>
                     </thead>
                     <tbody>
                     {% for landing in landings %}
-                        <tr>
-                            <td>{{ landing.entityType}}</td>
-                            <td>{{ landing.name}}</td>
-                            <td>{{ landing.email }}</td>
-                            <td>{{ landing.phone }}</td>
-                            <td>{{ landing.createdAt|date('y-m-d h:i:s a') }}</td>
-                            <td>{{ landing.type}}</td>
-                        </tr>
+                        {% if landing.state != -1 %}
+                            <tr>
+                                <td>{{ landing.entityType}}</td>
+                                <td>{{ landing.name}} {{ landing.lastName}}</td>
+                                <td>{{ landing.email }}</td>
+                                <td>{{ landing.phone }}</td>
+                                <td>{{ landing.createdAt|date('y-m-d h:i:s a') }}</td>
+                                <td>{{ landing.type}}</td>
+                                {% if express is defined %}
+                                    <td class="tbHeader"><a href="{{ path('express_back',{id : landing.id}) }}" class="btn btn-warning notAjax">Crear y enviar</a>{% if landing.state == 1 %} Ya se envió correo{% endif %}</td>
+                                {% endif %}
+                            </tr>
+                        {% endif %}
                     {% endfor %}
                     </tbody>
                 </table>

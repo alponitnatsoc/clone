@@ -68,6 +68,9 @@ register_express:
 marketing:
     path:     /backoffice/marketing
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showLanding}
+express_back:
+    path:     /backoffice/marketing/express/{id}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showExpress, id: -1}
 
 #security break
 autenticate:

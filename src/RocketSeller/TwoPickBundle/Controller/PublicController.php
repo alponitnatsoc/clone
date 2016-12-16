@@ -90,6 +90,33 @@ class PublicController extends Controller
         }
 
     }
+	public function expressLandingAction(Request $request) {
+        $user=$this->getUser();
+        if (empty($user)) {
+            $answer = $request->request->all();
+
+            if (isset($answer["firstname"])&&isset($answer["email"])&&isset($answer["cellphone"])&&isset($answer["lastname"])) {
+
+                $landRes = new LandingRegistration();
+                $landRes->setEmail($answer['email']);
+                $landRes->setName($answer['firstname']);
+                $landRes->setLastName($answer['lastname']);
+                $landRes->setCreatedAt(new \DateTime());
+                $landRes->setPhone($answer['cellphone']);
+                $landRes->setEntityType("persona");
+                $landRes->setType("0Esfuezo");
+                //TODO-Andres enviar un email a Salua con el lid
+                //email to send
+                $email=$landRes->getEmail();
+
+                $em= $this->getDoctrine()->getEntityManager();
+                $em->persist($landRes);
+                $em->flush();
+            }
+        }
+        return $this->redirectToRoute('welcome_post_register');
+
+    }
 	public function maintenanceAction(Request $request) {
         return $this->render('RocketSellerTwoPickBundle:Public:mantenimiento.html.twig');
     }
