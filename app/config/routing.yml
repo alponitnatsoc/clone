@@ -89,6 +89,10 @@ documentos_employee:
     path:      /document/add/{entityType}/{entityId}/{docCode}/{idNotification}/{idProcedure}
     defaults:  { _controller: RocketSellerTwoPickBundle:Document:addDoc , idNotification: 0, idProcedure: null}
 
+solve_contract_end:
+    path:      /contract/resolve/status/{idContract}/{idNotification}
+    defaults:  { _controller: RocketSellerTwoPickBundle:DashBoardEmployer:solveContractStatus, idNotification: 0}
+
 documentos_contract:
     path:      /contractLayout/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Document:downloadContract}
