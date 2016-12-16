@@ -515,6 +515,10 @@ real_landing:
     path:     /lohagobien
     defaults: { _controller: RocketSellerTwoPickBundle:Public:landing }
 
+express_landing:
+    path:     /assistance/registration
+    defaults: { _controller: RocketSellerTwoPickBundle:Public:expressLanding }
+
 beneficios:
     path:     /beneficios
     defaults: { _controller: RocketSellerTwoPickBundle:Public:beneficios }
