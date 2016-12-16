@@ -1,5 +1,5 @@
 @charset "UTF-8";
-* {margin: 0; padding: 0}
+*,a {margin: 0; padding: 0;text-decoration: none;}
 a {text-decoration: none}
 
 .grisclarofont  {color: #87868A}
@@ -154,6 +154,12 @@ border-bottom: 3px solid #794815}
 
 /*empieza la seccion de beneficios*/
 /*seccion de slide promocional*/
+
+	.error {
+		font-size: 15px;
+    color: #fd5c5c;
+    font-weight: 600;
+	}
 	.cerrarSlide {
 		position: absolute;
 		right: 20px;
@@ -202,8 +208,9 @@ border-bottom: 3px solid #794815}
 		margin: 50px 0;
 	}
 	.formSlide {
-			font-size: 25px;
-			margin: 50px 0;
+		font-size: 25px;
+		width: 500px;
+		margin: 50px auto 0;
 		}
 	.inputSLide {
 		font-size: 16px;
@@ -214,6 +221,7 @@ border-bottom: 3px solid #794815}
     text-align: center;
     margin: 10px 0;
     color: #797979;
+		font-weight: 100;
 	}
 	#trigger3 p {
 		font-size: 20px;
@@ -633,9 +641,8 @@ font-weight: 100;
 			.contHeadForm {width: 95%;}
 			.contHeadForm h1 { font-size: 1.5em;}
 			.contHeadForm p {font-size: 1.3em;line-height: 20px;}
-			#terminosText {
-				height:400px
-			}
+			#terminosText {height:400px}
+			.formSlide {width: 90%;}
 		}
 
 @media only screen and (max-width: 480px) {
