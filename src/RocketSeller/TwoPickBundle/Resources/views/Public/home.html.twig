@@ -109,14 +109,19 @@
 							<div class="formEsfuerzo" id="trigger2">
 								<div class="azulmediofont lightRale formSlide">
 									Datos para contactarte<br />
-									<form action="action_page.php">
-									  <input class="inputSLide" type="text" name="firstname" placeholder="Nombre" value="Mickey"><br />
-									  <input class="inputSLide" type="text" name="lastname" placeholder="Celular" value="Mouse"><br />
-										<input class="inputSLide" type="text" name="firstname" placeholder="Correo electrónico" value="Mickey"><br />
+									<form id="0effort" action="{{ path('express_landing') }}" method="post">
+										<input id="0formfirstname" class="inputSLide" type="text" name="firstname" placeholder="Nombres">
+										<input id="0formlastname" class="inputSLide" type="text" name="lastname" placeholder="Apellidos">
+										<input id="0formcellphone" class="inputSLide" type="number" name="cellphone" placeholder="Celular">
+										<input id="0formemail" class="inputSLide" type="email" name="email" placeholder="Correo electrónico">
+										<div style="clear:both">
+											<div hidden class="0errorTxt light"></div>
+										</div>
 										<input id="sendTrigg" class="submitPLan" type="submit" value="Enviar">
 									</form>
 								</div>
 							</div>
+
 
 							<div id="trigger3">
 								<div class="azulmediofont lightRale titleSlide">
@@ -132,17 +137,17 @@
 
          <!--------------------beneficios-------------------------->
         <section>
-					<!-- <div class="bannerPromos btnBanner" align="center">
+					 <div class="bannerPromos btnBanner" align="center">
 						<img src="{{ asset('public/img/home/crown.png') }}" alt="">
 						<div class="lightRale textoPromo">
 							<h3 class="boldRale">Plan Cero Estrés</h3>
 							Formaliza a tu empleada doméstica con un clic
 						</div>
 						<a><div class="callto2 rojo light" onClick="ga('send', 'event', 'Formulario', 'Click');">¡HAZ CLIC AQUÍ!</div></a>
-					</div> -->
-					<div class="titleSec">
-						<h2 class="light grisclarofont">Soluciona cada mes, en un solo lugar todo lo relacionado a la gestión de tus empleados </h2>
 					</div>
+					{#<div class="titleSec">
+						<h2 class="light grisclarofont">Soluciona cada mes, en un solo lugar todo lo relacionado a la gestión de tus empleados </h2>
+					</div>#}
         	<div id="beneficios" class="section group">
 
                 <div class="col span_1_of_4 beneficios">
@@ -369,13 +374,15 @@ de empleados que quieras administrar</h4>
 
         <section>
         	<div id="contenido-pc" class="section group">
-            	<div class="col span_1_of_2"><img class="img" src="{{ asset('public/img/home/pc.png') }}"></div>
-                <div class="col span_1_of_2 texto-bullets">
-                	<img class="numeros" src="{{ asset('public/img/home/numero1.png') }}"><p class="light">Completa unas preguntas<br><span class="bold">fáciles de responder</span></p><br>
-                    <img class="numeros" src="{{ asset('public/img/home/numero2.png') }}"><p class="light">Carga unos pocos documentos<br><span class="bold">fáciles  de conseguir </span></p><br>
-                    <img class="numeros" src="{{ asset('public/img/home/numero3.png') }}"><p class="light">Autorízanos a realizar por tí<br><span class="bold">los procesos que ocupan tu tiempo</span></p><br>
-                    <img class="numeros" src="{{ asset('public/img/home/numero4.png') }}"><p class="light">Y  despreocúpate...<br><span class="bold">de acá en adelante te llevamos de la mano </span></p><br>
-                </div>
+            	<div class="col span_1_of_2 texto-bullets">
+								<img class="img" src="{{ asset('public/img/home/pc.png') }}">
+							</div>
+              <div class="col span_1_of_2 texto-bullets">
+              	<img class="numeros" src="{{ asset('public/img/home/numero1.png') }}"><p class="light">Completa unas preguntas<br><span class="bold">fáciles de responder</span></p><br>
+                  <img class="numeros" src="{{ asset('public/img/home/numero2.png') }}"><p class="light">Carga unos pocos documentos<br><span class="bold">fáciles  de conseguir </span></p><br>
+                  <img class="numeros" src="{{ asset('public/img/home/numero3.png') }}"><p class="light">Autorízanos a realizar por tí<br><span class="bold">los procesos que ocupan tu tiempo</span></p><br>
+                  <img class="numeros" src="{{ asset('public/img/home/numero4.png') }}"><p class="light">Y  despreocúpate...<br><span class="bold">de acá en adelante te llevamos de la mano </span></p><br>
+              </div>
             </div>
         </section>
 
@@ -384,7 +391,6 @@ de empleados que quieras administrar</h4>
 				<h2 class="light grisclarofont minH2">Hacemos parte del cambio</h2>
 				<a href="http://www.mintrabajo.gov.co/images/documentos/red-formalizacion-laboral.pdf" target="_blank"><div id="contenido-pc" class="section group min">
 					<div class="col span_1_of_3" align="center">
-						<strong style="margin-right: 95px;color: #5D5D5D;">Hacemos parte de</strong><br />
 						<img src="{{ asset('public/img/home/minlogo1.png') }}" width="250" height="auto" />
 					</div>
 					<div class="col span_1_of_3" align="center">

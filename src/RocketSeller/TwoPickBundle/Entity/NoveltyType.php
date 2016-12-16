@@ -70,6 +70,11 @@ class NoveltyType
     private $displayOn;
 
     /**
+     * @ORM\Column(type="string", length=10, nullable=TRUE)
+     */
+    private $simpleName;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -324,5 +329,29 @@ class NoveltyType
     public function getDisplayOn()
     {
         return $this->displayOn;
+    }
+
+    /**
+     * Set simpleName
+     *
+     * @param string $simpleName
+     *
+     * @return NoveltyType
+     */
+    public function setSimpleName($simpleName)
+    {
+        $this->simpleName = $simpleName;
+
+        return $this;
+    }
+
+    /**
+     * Get simpleName
+     *
+     * @return string
+     */
+    public function getSimpleName()
+    {
+        return $this->simpleName;
     }
 }

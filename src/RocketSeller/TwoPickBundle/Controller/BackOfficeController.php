@@ -1249,10 +1249,10 @@ class BackOfficeController extends Controller
     public function showExpressAction($id)
     {
         $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        $landings = $this->getdoctrine()
+            ->getRepository('RocketSellerTwoPickBundle:LandingRegistration')
+            ->findBy(array('type'=>'0Esfuezo'));
         if($id==-1){
-            $landings = $this->getdoctrine()
-                ->getRepository('RocketSellerTwoPickBundle:LandingRegistration')
-                ->findBy(array('type'=>'0Esfuezo'));
             return $this->render('RocketSellerTwoPickBundle:BackOffice:marketing.html.twig', array('landings'=>array_reverse($landings),'express'=>'active'));
         }else{
             /** @var LandingRegistration $lidRegister */
@@ -1261,10 +1261,39 @@ class BackOfficeController extends Controller
                 ->find($id);
             /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
             $userManager = $this->get('fos_user.user_manager');
-            /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
-            $user = $userManager->createUser();
+            $tempoUser = $userManager->findUserBy(array('username'=>$lidRegister->getEmail()));
+            $em=$this->getDoctrine()->getManager();
+            if($tempoUser==null){
+                $user = $userManager->createUser();
+                $user->setEmail($lidRegister->getEmail());
+                $user->setUsername($lidRegister->getEmail());
+                $user->setConfirmationToken(null);
+                $user->setPlainPassword($lidRegister->getPhone());
+                $user->setEnabled(true);
+                $userManager->updateUser($user);
+                $person = new Person();
+                $explode = explode(" ",$lidRegister->getLastName());
+                $person->setNames($lidRegister->getName());
+                if(count($explode)>1){
+                    $person->setLastName2($explode[1]);
+                }
+                $person->setLastName1($explode[0]);
+                $phone= new Phone();
+                $phone->setPhoneNumber($lidRegister->getPhone());
+                $person->addPhone($phone);
+                $user->setPersonPerson($person);
+                $lidRegister->setState(1);
+                /** @var User $user */
+                $em->persist($lidRegister);
+                $em->persist($person);
 
-            return $this->render('RocketSellerTwoPickBundle:BackOffice:marketing.html.twig', array('landings'=>array_reverse($landings),'express'=>'active'));
+            }
+            //TODO-falta enviar el correo
+
+
+
+            $em->flush();
+            return $this->redirectToRoute("express_back",array('id'=>-1),301);
         }
 
     }
@@ -2386,12 +2415,14 @@ class BackOfficeController extends Controller
 
 		$product = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:Product')->findOneBy(array("simpleName"=>"PN"));
 		$product2 = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:Product')->findOneBy(array("simpleName"=>"PP"));
+		$product3 = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:Product')->findOneBy(array("simpleName"=>"PRM"));
 
 		$podNomina = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')->findBy(array("productProduct"=>$product->getIdProduct()));
 		$podPila = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')->findBy(array("productProduct"=>$product2->getIdProduct()));
+		$podPrima = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')->findBy(array("productProduct"=>$product3->getIdProduct()));
 
 		//Now Pod has all the products nomina on the database.
-		return $this->render('RocketSellerTwoPickBundle:BackOffice:payState.html.twig', array('podsN' => $podNomina, 'podsP' => $podPila));
+		return $this->render('RocketSellerTwoPickBundle:BackOffice:payState.html.twig', array('podsN' => $podNomina, 'podsP' => $podPila, 'podsPr' => $podPrima));
 	}
 
 	public function payTypeInfoViewAction()

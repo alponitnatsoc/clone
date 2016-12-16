@@ -137,9 +137,10 @@ footer {
 		#menu  {display: none; margin: : 0;}
 		#nav-menu {width: 90%;}
 		#hamburguesa {display: block;width: 45px;float: left;margin: 5px 0 0 28%;}
-		#menu-resp {text-align: center; background: #F7F7F7; padding: 10px 0}
+		#menu-resp {text-align: center; background: #F7F7F7; padding: 10px 0 0}
 		#menu-resp li {padding: 15px 0; color:#5DD5D5D}
-
+		#menu-resp ul {margin-bottom: 0px}
+		.contactPhone {padding: 15px 10px;display: block;}
 	}
 
 @media only screen and (max-width: 900px) {
@@ -158,6 +159,7 @@ footer {
 		}
 
 		@media only screen and (max-width: 580px) {
+			.noPhone {display: none;}
 			#menu-foot li {
 			    display: inline-block;
 			    margin: 15px 15px;

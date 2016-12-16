@@ -376,7 +376,9 @@ class NoveltyController extends Controller {
 	    array_push($answerArr, ""); //Index 1 - If index 0 is false, sets a custom error msg to display to the user
 
 	    $utils = $this->get('app.symplifica_utils');
-	    $constrainList = $novelty->getNoveltyTypeNoveltyType()->getRequiredFields();
+        $em = $this->getDoctrine()->getManager();
+
+        $constrainList = $novelty->getNoveltyTypeNoveltyType()->getRequiredFields();
 
 	    /** @var NoveltyTypeFields $constrain */
 	    foreach ($constrainList as $constrain){
@@ -387,9 +389,9 @@ class NoveltyController extends Controller {
 				    return $answerArr;
 			    }
 			    else{
+
 			    	//Calls dedicated function to evaluate the constrain of Dates
 				    $isValidD = $utils->novelty_date_constrain_to_date_validation($constrain->getNoveltyDataConstrain(), $novelty->getDateStart(),$payRol);
-
 				    if($isValidD[0] == false){
 				    	return $isValidD;
 				    }
@@ -406,7 +408,6 @@ class NoveltyController extends Controller {
 			    else{
 				    //Calls dedicated function to evaluate the constrain of Dates
 				    $isValidD = $utils->novelty_date_constrain_to_date_validation($constrain->getNoveltyDataConstrain(), $novelty->getDateEnd(),$payRol);
-
 				    if($isValidD[0] == false){
 					    return $isValidD;
 				    }
@@ -438,7 +439,6 @@ class NoveltyController extends Controller {
 			    else{
 			    	//Calls dedicated function to evaluate the constrain of Units
 				    $isValidU = $utils->novelty_units_constrain_validation($constrain->getNoveltyDataConstrain(),$novelty->getUnits());
-
 				    if($isValidU[0] == false){
 				    	return $isValidU;
 				    }
@@ -470,22 +470,147 @@ class NoveltyController extends Controller {
 			    "payrollId" => "-1",
 		    ), array('_format' => 'json'));
 
-		    $days = json_decode($insertionAnswer->getContent(), true)["days"];
-
-		    if($days > 45){
+            $numDaysVacation = json_decode($insertionAnswer->getContent(), true)["days"];
+            /** @var array $dateToCheck */
+            $dateToCheck = json_decode($insertionAnswer->getContent(), true)["dateToCheck"];
+		    if($numDaysVacation > 45){
 			    $answerArr[0] = false;
 			    $answerArr[1] = "El rango de fechas excede el máximo número de días permitido (45)";
 			    return $answerArr;
 		    }
+		    if($numDaysVacation == 0) {
+                $answerArr[0] = false;
+                $answerArr[1] = "El rango de fechas no contiene dias de trabajo del empleado";
+                return $answerArr;
+            }
 
-		    $novelty->setUnits($days);
+		    /** @var Contract $contract */
+		    $contract = $contractRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Contract")->find($payRol->getContractContract()->getIdContract());
+            $holidayDebt = $contract->getHolidayDebt();
+
+            //special case of vacaciones (vacaciones adelantadas)
+		    if($holidayDebt < $numDaysVacation) {
+		        if(floor($holidayDebt) <= 0) {
+
+                    //change novelty type to vacaciones adelantadas
+                    $noveltyTypeVacacionesAdelantadas = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:NoveltyType')->findOneBy(array('simpleName' => 'VA'));
+                    $novelty->setNoveltyTypeNoveltyType($noveltyTypeVacacionesAdelantadas);
+                    $novelty->setName($noveltyTypeVacacionesAdelantadas->getName());
+                    $payRol->addNovelty($novelty);
+                    $em->persist($payRol);
+                    $em->flush();
+
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getAddNoveltySql', array(
+                        "idNovelty" => $novelty->getIdNovelty()), array('_format' => 'json'));
+
+                    if($insertionAnswer->getStatusCode() != 201){
+                        $payRol->removeNovelty($novelty);
+                        $em->remove($novelty);
+                        $em->persist($payRol);
+                        $em->flush();
+
+                        $answerArr[0] = false;
+                        $answerArr[1] = "No se pudo agregar la novedad, intente más tarde, si el problema persiste, pongase en contacto con nosotros";
+                        return $answerArr;
+                    }
+
+                    $em->persist($novelty);
+                    $contract->setHolidayDebt($holidayDebt - $numDaysVacation);
+
+                    $em->persist($contract);
+                    $em->flush();
+
+                    return $answerArr;
+
+                } else {
+                    $daysNormalVacaciones = intval(floor($holidayDebt));
+                    $daysVacacionesAdelantadas = $numDaysVacation - $daysNormalVacaciones;
+
+                    $lastDayVacaciones = new DateTime($dateToCheck[$daysNormalVacaciones-1]);
+                    $firstDayVacacionesAdelantadas = new DateTime($dateToCheck[$daysNormalVacaciones]);
+                    $lastDayVacacionesAdelantadas = new DateTime($dateToCheck[count($dateToCheck)-1]);
+
+
+                    //add $holidayDebt ($daysNormalVacaciones) as vacaiones to SQL
+                    $novelty->setName($noveltyType->getName());
+                    //change end date and number of days
+                    $novelty->setDateEnd($lastDayVacaciones);
+                    $novelty->setUnits($daysNormalVacaciones);
+
+                    $payRol->addNovelty($novelty);
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($payRol);
+                    $em->flush();
+
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getAddNoveltySql', array(
+                        "idNovelty" => $novelty->getIdNovelty()), array('_format' => 'json'));
+
+                    if($insertionAnswer->getStatusCode() != 201){
+                        $payRol->removeNovelty($novelty);
+                        $em->remove($novelty);
+                        $em->persist($payRol);
+                        $em->flush();
+
+                        $answerArr[0] = false;
+                        $answerArr[1] = "No se pudo agregar la novedad, intente más tarde, si el problema persiste, pongase en contacto con nosotros";
+                        return $answerArr;
+                    }
+
+                    $contract->setHolidayDebt($contract->getHolidayDebt() - $daysNormalVacaciones);
+                    $em->persist($contract);
+                    $em->flush();
+
+                    //add remainding dates as vacaciones adelantadas to SQL
+                    $noveltyTypeVacacionesAdelantadas = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:NoveltyType')->findOneBy(array('simpleName' => 'VA'));
+                    $noveltyVacacionesAdelantadas = new Novelty();
+                    $noveltyVacacionesAdelantadas->setNoveltyTypeNoveltyType($noveltyTypeVacacionesAdelantadas);
+                    $noveltyVacacionesAdelantadas->setUnits($daysVacacionesAdelantadas);
+
+                    $noveltyVacacionesAdelantadas->setDateStart($firstDayVacacionesAdelantadas);
+                    $noveltyVacacionesAdelantadas->setDateEnd($lastDayVacacionesAdelantadas);
+                    $noveltyVacacionesAdelantadas->setUnits($daysVacacionesAdelantadas);
+
+                    $noveltyVacacionesAdelantadas->setName($noveltyTypeVacacionesAdelantadas->getName());
+                    $payRol->addNovelty($noveltyVacacionesAdelantadas);
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($payRol);
+                    $em->flush();
+
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getAddNoveltySql', array(
+                        "idNovelty" => $noveltyVacacionesAdelantadas->getIdNovelty()), array('_format' => 'json'));
+
+                    if($insertionAnswer->getStatusCode() != 201){
+                        $payRol->removeNovelty($noveltyVacacionesAdelantadas);
+                        $em->remove($noveltyVacacionesAdelantadas);
+                        $em->persist($payRol);
+                        $em->flush();
+
+                        $answerArr[0] = false;
+                        $answerArr[1] = "No se pudo agregar la novedad, intente más tarde, si el problema persiste, pongase en contacto con nosotros";
+                        return $answerArr;
+                    }
+
+                    $contract->setHolidayDebt($contract->getHolidayDebt() - $daysVacacionesAdelantadas);
+
+                    $em->persist($contract);
+                    $em->flush();
+
+                    return $answerArr;
+                }
+            } else {
+                //all days will be reported as vacaciones normales
+                $novelty->setUnits($numDaysVacation);
+            }
 	    }
 
-	    $novelty->setName($noveltyType->getName());
-	    $payRol->addNovelty($novelty);
-	    $em = $this->getDoctrine()->getManager();
-	    $em->persist($payRol);
-	    $em->flush();
+        $novelty->setName($noveltyType->getName());
+        $em->persist($novelty);
+        $em->flush();
+
+        $payRol->addNovelty($novelty);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($payRol);
+        $em->flush();
 
 	    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getAddNoveltySql', array(
 	    	"idNovelty" => $novelty->getIdNovelty()), array('_format' => 'json'));
@@ -501,6 +626,14 @@ class NoveltyController extends Controller {
 		    return $answerArr;
 	    }
 
+	    //update holidayDebt if novelty is vacaciones
+        if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode()==145) {
+            $contract = $contractRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Contract")
+                            ->find($payRol->getContractContract()->getIdContract());
+            $contract->setHolidayDebt($contract->getHolidayDebt() - $novelty->getUnits());
+            $em->persist($contract);
+            $em->flush();
+        }
 	    //TODO Update when documents are reworked
 
 //	    if(!$this->checkNoveltyFulfilment($novelty)){
