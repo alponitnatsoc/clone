@@ -544,7 +544,7 @@ font-weight: 100;
 /*  REMOVE MARGINS AS ALL GO FULL WIDTH AT 480 PIXELS */
 
 @media only screen and (max-width: 1024px) {
-		#beneficios,#headForm {width: 90%;}
+		#beneficios,#headForm {width: 95%;}
 		.beneficios {font-size: 14px}
 		#calculadora {width: 90%;}
 		#opiniones {width: 90%;}
@@ -560,7 +560,7 @@ font-weight: 100;
 }
 @media only screen and (max-width: 800px) {
 	#cont-banner {width: 90%;}
-	.span_1_of_4 {width: 49%;}
+	.span_1_of_4 {width: 50%;}
 
 	/*cambio calculadora de calculadora*/
 	.calculadora-espacios {display:none}
@@ -602,7 +602,7 @@ font-weight: 100;
 	#cont-banner {width: 90%;}
 	#tbanner1 h1 {font-size: 25px;}
 	/*#banner {height: 380px;padding: 130px 0 0 0;box-sizing: border-box;}*/
-	.span_1_of_4 {width: 49%;}
+	.span_1_of_4 {width: 50%;}
 	.span_1_of_5,.span_3_of_5  {width: 100%;}
 	.no-colorcont {text-align: center; height: 75px;padding: 10px 0 0 0;}
 	.middle-cont {height: 80px;}
@@ -619,6 +619,7 @@ font-weight: 100;
 	}
 
 	@media only screen and (max-width: 640px) {
+		.contHeadForm {margin: 0 auto;float: none;overflow: hidden;}
 		/**/
 			#slideBody {width: 90%;margin: 0 auto;}
 			.inputSLide {width: 90%;}
