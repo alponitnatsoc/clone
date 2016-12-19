@@ -10,6 +10,7 @@ use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Person;
+use RocketSeller\TwoPickBundle\Entity\Prima;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\User;
@@ -114,15 +115,25 @@ class PayRestSecuredController extends FOSRestController
             $pods = $po->getPurchaseOrderDescriptions();
             /** @var PurchaseOrdersDescription $pod */
             foreach ($pods as $pod) {
-                if (($pod->getProductProduct()->getSimpleName() == "PP" || $pod->getProductProduct()->getSimpleName() == "PN") && $pod->getPurchaseOrdersStatus()->getIdNovoPay() == "-1") {
+                if ( ($pod->getProductProduct()->getSimpleName() == "PP"
+		                  || $pod->getProductProduct()->getSimpleName() == "PN"
+		                  || $pod->getProductProduct()->getSimpleName() == "PRM")
+	                    && $pod->getPurchaseOrdersStatus()->getIdNovoPay() == "-1")
+                {
                     if ($pod->getProductProduct()->getSimpleName() == "PP") {
                         $period = $pod->getPayrollsPila()->get(0)->getPeriod();
                         $month = $pod->getPayrollsPila()->get(0)->getMonth();
                         $year = $pod->getPayrollsPila()->get(0)->getYear();
-                    } else {
+                    } elseif ($pod->getProductProduct()->getSimpleName() == "PN") {
                         $period = $pod->getPayrollPayroll()->getPeriod();
                         $month = $pod->getPayrollPayroll()->getMonth();
                         $year = $pod->getPayrollPayroll()->getYear();
+                    } elseif ($pod->getProductProduct()->getSimpleName() == "PRM") {
+                    	$prima = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Prima")
+		                    ->findOneBy(array("purchaseOrdersDescriptionPurchaseOrdersDescription" => $pod));
+	                    $period = 4;
+	                    $month = $prima->getMonth();
+	                    $year = $prima->getYear();
                     }
                     $result[intval($year)][intval($month)][$period][]=$pod;
                 }

@@ -68,11 +68,11 @@ class NoveltyType
      * @ORM\Column(type="string", length=40, nullable=TRUE)
      */
     private $displayOn;
-
-    /**
-     * @ORM\Column(type="string", length=10, nullable=TRUE)
-     */
-    private $simpleName;
+	
+		/**
+		 * @ORM\Column(type="string", length=10, nullable=TRUE)
+		 */
+		private $simpleName;
 
     /**
      * Constructor
