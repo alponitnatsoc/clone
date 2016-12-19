@@ -68,7 +68,12 @@ class NoveltyType
      * @ORM\Column(type="string", length=40, nullable=TRUE)
      */
     private $displayOn;
-
+	
+		/**
+		 * @ORM\Column(type="string", length=10, nullable=TRUE)
+		 */
+		private $simpleName;
+	
     /**
      * Constructor
      */
@@ -324,5 +329,29 @@ class NoveltyType
     public function getDisplayOn()
     {
         return $this->displayOn;
+    }
+
+    /**
+     * Set simpleName
+     *
+     * @param string $simpleName
+     *
+     * @return NoveltyType
+     */
+    public function setSimpleName($simpleName)
+    {
+        $this->simpleName = $simpleName;
+
+        return $this;
+    }
+
+    /**
+     * Get simpleName
+     *
+     * @return string
+     */
+    public function getSimpleName()
+    {
+        return $this->simpleName;
     }
 }
