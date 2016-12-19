@@ -493,7 +493,7 @@ class NoveltyController extends Controller {
 		        if(floor($holidayDebt) <= 0) {
 
                     //change novelty type to vacaciones adelantadas
-                    $noveltyTypeVacacionesAdelantadas = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:NoveltyType')->findOneBy(array('simpleName' => 'VA'));
+                    $noveltyTypeVacacionesAdelantadas = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:NoveltyType')->findOneBy(array('simpleName' => 'VACA'));
                     $novelty->setNoveltyTypeNoveltyType($noveltyTypeVacacionesAdelantadas);
                     $novelty->setName($noveltyTypeVacacionesAdelantadas->getName());
                     $payRol->addNovelty($novelty);
@@ -561,7 +561,7 @@ class NoveltyController extends Controller {
                     $em->flush();
 
                     //add remainding dates as vacaciones adelantadas to SQL
-                    $noveltyTypeVacacionesAdelantadas = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:NoveltyType')->findOneBy(array('simpleName' => 'VA'));
+                    $noveltyTypeVacacionesAdelantadas = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:NoveltyType')->findOneBy(array('simpleName' => 'VACA'));
                     $noveltyVacacionesAdelantadas = new Novelty();
                     $noveltyVacacionesAdelantadas->setNoveltyTypeNoveltyType($noveltyTypeVacacionesAdelantadas);
                     $noveltyVacacionesAdelantadas->setUnits($daysVacacionesAdelantadas);

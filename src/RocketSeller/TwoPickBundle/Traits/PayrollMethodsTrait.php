@@ -170,7 +170,20 @@ trait PayrollMethodsTrait
                     $totalLiquidation = $this->totalLiquidation($detailNomina);
                     if($totalLiquidation==0)
                         break;
-
+	                
+	                  $currentNovelties = $payroll->getNovelties();
+	                  $vacacionesAPorUnidades = [];
+	                  /** @var Novelty $currentNovelty */
+	                  foreach ($currentNovelties as $currentNovelty) {
+	                  	if($currentNovelty->getNoveltyTypeNoveltyType()->getSimpleName() == 'VACA') {
+	                  		$realDays = intVal($currentNovelty->getDateEnd()->diff($currentNovelty->getDateStart())->format("%d")) + 1;
+	                  		if(array_key_exists($realDays, $vacacionesAPorUnidades))
+			                    $vacacionesAPorUnidades[$realDays]++;
+			                  else
+				                  $vacacionesAPorUnidades[$realDays] = 1;
+		                  }
+	                  }
+	                  $noveltyTypeVacacionesAdelantadas = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:NoveltyType")->findOneBy(array('simpleName' => 'VACA'));
                     //checking if any new stuff was added to this payroll
                     /** @var ArrayCollection $novelties */
                     $novelties=$totalLiquidation["novelties"];
@@ -184,10 +197,20 @@ trait PayrollMethodsTrait
                             /** @var Novelty $actNovel */
                             $actNovel=$sqlNovelties->get($z);
                             $actNovel->setSqlValue($novelties->get($z)->getSqlValue());
-                            $actNovel->setNoveltyTypeNoveltyType($novelties->get($z)->getNoveltyTypeNoveltyType());
+	                          $actNovel->setNoveltyTypeNoveltyType($novelties->get($z)->getNoveltyTypeNoveltyType());
                             $actNovel->setName($actNovel->getNoveltyTypeNoveltyType()->getName());
                             $actNovel->setSqlNovConsec($novelties->get($z)->getSqlnovConsec());
                             $actNovel->setUnits($novelties->get($z)->getUnits());
+														
+	                          //if licencia remunerada corresponds to vacaciones adelantadas change type
+		                        if($novelties->get($z)->getNoveltyTypeNoveltyType()->getSimpleName() == 'LR') {
+			                        $keyUnits = $novelties->get($z)->getUnits();
+			                        if(array_key_exists($keyUnits, $vacacionesAPorUnidades) && $vacacionesAPorUnidades[$keyUnits] > 0) {
+				                        $actNovel->setNoveltyTypeNoveltyType($noveltyTypeVacacionesAdelantadas);
+				                        $actNovel->setName($noveltyTypeVacacionesAdelantadas->getName());
+				                        $vacacionesAPorUnidades[$keyUnits]--;
+			                        }
+		                        }
                         }
                     }
                     $em=$this->getDoctrine()->getManager();
