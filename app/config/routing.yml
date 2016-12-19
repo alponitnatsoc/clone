@@ -512,8 +512,12 @@ home_landing:
     defaults: { _controller: "%route_home%" }
 
 real_landing:
-    path:     /lohagobien
+    path:     /salario2016
     defaults: { _controller: RocketSellerTwoPickBundle:Public:landing }
+
+salario_actual:
+    path:     /salario
+    defaults: { _controller: RocketSellerTwoPickBundle:Public:salario }
 
 express_landing:
     path:     /assistance/registration
