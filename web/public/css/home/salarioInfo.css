@@ -1,0 +1,199 @@
+
+*,a,ul {margin: 0 auto;padding: 0;text-decoration: none;list-style-type: none}
+html,body {height: 100%;-webkit-font-smoothing: antialiased !important;}
+
+.light {font-family: 'Open Sans', sans-serif;font-weight: 400}
+.bold {font-family: 'Open Sans', sans-serif;font-weight: 700}
+.extrabold {font-family: 'Open Sans', sans-serif;font-weight: 800}
+.lightRale {font-family: 'Raleway', sans-serif;font-weight: 400}
+.boldRale {font-family: 'Raleway', sans-serif;font-weight: 700}
+.verdeOscu {color:#00838c !important;}
+
+#outer-left {
+    -ms-transform: skew(0deg, 2deg);
+    -webkit-transform: skew(0deg, 2deg);
+    transform: skew(0deg, 2deg);
+    background: #f0f4f5;
+    width: 100%;
+    height: 415px;
+    z-index: 20;
+    padding: 90px 0 0 0;
+    font-size: 20px;
+    position: relative;
+    bottom: 45px;
+}
+#outer-left:after {
+    content:"";
+    display:inline-block;
+    position:absolute;
+    width:20px;
+    height:100%;
+    float:right;
+    right:0px;
+    top:0px;
+    z-index:10;
+}
+#inner-left {
+    -ms-transform: skew(0deg, -2deg);
+    /* IE 9 */
+    -webkit-transform: skew(0deg, -2deg);
+    /* Chrome, Safari, Opera */
+    transform: skew(0deg, -2deg);
+    display:inline-block;
+}
+.izqInfo {
+    padding: 30px 0 0 15%;
+    box-sizing: border-box;
+}
+.izqInfo p {
+    font-size: 15px;
+    padding: 0 130px 0 65px;
+    box-sizing: border-box;}
+.float {
+    float: left;
+    width: 50%
+}
+#contenedorPrincipal {
+    position: relative;
+    height: auto;
+    bottom: 75px;
+}
+
+
+/*etilso del aside derecho*/
+aside {
+    position: absolute;
+    float: left;
+    right: 0;
+    background: #0bbfbe;
+    height: 100%;
+    width: 40%;
+    margin-top: -45px;
+    padding-top: 50px;
+    color: #FFF;
+}
+
+button {
+  padding: 10px 25px;
+  border-radius: 20px;
+  background: #00838c;
+  border: none;
+  color: #FFF;
+  margin-top: 15px;
+  font-size: 15px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+#backAside {padding-top: 40px;}
+
+.stickytop {
+    top: 0;
+    right: 0;
+    position: fixed;
+    z-index: 9999999;
+}
+#dataAside {width: 80%}
+.bottomLogo {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+}
+/*etilso del aside izquierdo*/
+section {
+    position: absolute;
+    float: left;
+    width: 60%;
+    margin-top: -90px;
+    background: #0dcbca;
+    padding-top: 80px;
+}
+.dataMinimo {
+  padding-bottom: 40px;
+}
+.dataMinimo h2 {
+  color:#FFF;
+}
+.whiteBack {
+    background: #FFF;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    color: #00838c;
+}
+.blueBack {
+    background: #0bbfbe;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    color: #FFF;
+}
+.datawhite {
+  background: #FFF;
+  padding-top: 40px;
+}
+.infoWidth {width:80%}
+
+table {
+  width: 100%;
+}
+
+td {
+  width: 260px;
+}
+@media only screen and (max-width: 1250px) {
+  .derInfo img {width: 100%}
+  .izqInfo p {padding: 0 30px 0 65px;}
+}
+@media only screen and (max-width: 900px) {
+  .bottomLogo {display: none}
+  .izqInfo {padding: 0 0 0 30px}
+  aside {height: auto;width: 100%;padding-bottom: 20px;padding-top: 40px;margin-top: -65px;}
+  section {width: 100%;margin-top: 165px;margin-bottom: 30px;}
+  /* Force table to not be like tables anymore */
+	table, thead, tbody, th, td, tr {
+		display: block;
+	}
+
+	/* Hide table headers (but not display: none;, for accessibility) */
+	thead tr {
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+
+	tr { padding: 3px 0;}
+
+	td {
+		/* Behave  like a "row" */
+    width: 100%;
+		border: none;
+		border-bottom: 1px solid #eee;
+		position: relative;
+		padding-left: 50%;
+	}
+
+	td:before {
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%;
+		padding-right: 10px;
+		white-space: nowrap;
+	}
+
+	/*
+	Label the data
+	*/
+  tr td:first-child {font-weight: bold;}
+}
+
+@media only screen and (max-width: 758px) {
+  .float {float: none;width: 90%;margin: 0 auto;}
+  .derInfo {display: none;}
+  .izqInfo {padding: 0}
+  #outer-left {height:320px}
+}
+@media only screen and (max-width: 440px) {
+  .izqInfo img {width: 100%;}
+}
