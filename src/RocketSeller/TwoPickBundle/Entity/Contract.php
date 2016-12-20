@@ -242,9 +242,13 @@ class Contract
      * @Exclude
      */
     private $supplies;
-
-
-    /**
+	
+		/**
+		 * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\ContractRecord", mappedBy="idContractRecord")
+		 */
+		private $contractRecords;
+    
+		/**
      * Get idContract
      *
      * @return integer
@@ -1104,5 +1108,39 @@ class Contract
     public function getSupplies()
     {
         return $this->supplies;
+    }
+
+    /**
+     * Add contractRecord
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\ContractRecord $contractRecord
+     *
+     * @return Contract
+     */
+    public function addContractRecord(\RocketSeller\TwoPickBundle\Entity\ContractRecord $contractRecord)
+    {
+        $this->contractRecords[] = $contractRecord;
+
+        return $this;
+    }
+
+    /**
+     * Remove contractRecord
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\ContractRecord $contractRecord
+     */
+    public function removeContractRecord(\RocketSeller\TwoPickBundle\Entity\ContractRecord $contractRecord)
+    {
+        $this->contractRecords->removeElement($contractRecord);
+    }
+
+    /**
+     * Get contractRecords
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContractRecords()
+    {
+        return $this->contractRecords;
     }
 }

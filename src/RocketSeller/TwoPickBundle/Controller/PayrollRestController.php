@@ -247,7 +247,7 @@ class PayrollRestController extends FOSRestController
 
         $view = View::create();
 
-        if ($errorCode == 505 || $errorCode == 605)
+        if ($errorCode == 505 || $errorCode == 605 || $errorCode == 609)
             $errorCode = 404;
         $view->setStatusCode($errorCode);
 
@@ -634,9 +634,9 @@ class PayrollRestController extends FOSRestController
         // Set all the parameters info.
         $regex['employee_id'] = '([0-9])+';
         $mandatory['employee_id'] = true;
-        $regex['last_name'] = '([a-z|A-Z| ])+';
+        $regex['last_name'] = '(.)+';
         $mandatory['last_name'] = false;
-        $regex['first_name'] = '([a-z|A-Z| ])+';
+        $regex['first_name'] = '(.)+';
         $mandatory['first_name'] = false;
         $regex['document_type'] = '([a-z|A-Z| ])+';
         $mandatory['document_type'] = false;
@@ -664,7 +664,6 @@ class PayrollRestController extends FOSRestController
         $mandatory['salary_type'] = false;
         $regex['contract_type'] = '([0-9])';
         $mandatory['contract_type'] = false;
-        $mandatory['salary_type'] = false;
         $regex['transport_aux'] = '(S|N)';
         $mandatory['transport_aux'] = false;
         $regex['society'] = '(.)*';
@@ -709,7 +708,6 @@ class PayrollRestController extends FOSRestController
 
         /** @var View $res */
         $responseView = $this->callApi($parameters);
-
         return $responseView;
     }
 
