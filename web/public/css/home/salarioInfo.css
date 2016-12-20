@@ -99,6 +99,7 @@ button {
   bottom: 30px;
   right: 30px;
 }
+.displayB {display: none;}
 /*etilso del aside izquierdo*/
 section {
     position: absolute;
@@ -144,6 +145,8 @@ td {
   .izqInfo p {padding: 0 30px 0 65px;}
 }
 @media only screen and (max-width: 900px) {
+  .displayN {display: none;}
+  .displayB {display: block;}
   .bottomLogo {display: none}
   .izqInfo {padding: 0 0 0 30px}
   aside {height: auto;width: 100%;padding-bottom: 20px;padding-top: 40px;margin-top: -65px;}
@@ -189,6 +192,7 @@ td {
 }
 
 @media only screen and (max-width: 758px) {
+  section {margin-top: 115px;}
   .float {float: none;width: 90%;margin: 0 auto;}
   .derInfo {display: none;}
   .izqInfo {padding: 0}
