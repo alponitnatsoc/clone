@@ -256,6 +256,7 @@ class Contract
     /**
      * @ORM\Column(name="to_liquidate",type="smallint",length=1,nullable=true)
      */
+
     private $toLiquidate;
 
     /**
