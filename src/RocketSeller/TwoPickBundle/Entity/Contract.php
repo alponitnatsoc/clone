@@ -192,6 +192,16 @@ class Contract
     private $documentDocument;
 
     /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Document
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Document")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="finish_contract_letter_document", referencedColumnName="id_document")
+     * })
+     * @Exclude
+     */
+    private $finishContractLetterDocument;
+
+    /**
      * @var \RocketSeller\TwoPickBundle\Entity\Liquidation
      * @ORM\OneToMany(targetEntity="Liquidation", mappedBy="contract", cascade={"persist", "remove"})
      * @Exclude
@@ -243,6 +253,20 @@ class Contract
      */
     private $supplies;
 
+    /**
+     * @ORM\Column(name="to_liquidate",type="smallint",length=1,nullable=true)
+     */
+    private $toLiquidate;
+
+    /**
+     * @ORM\Column(type="date", nullable=TRUE)
+     */
+    private $dateToEnd;
+
+    /**
+     * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\ContractRecord", mappedBy="idContractRecord")
+     */
+    private $contractRecords;
 
     /**
      * Get idContract
@@ -1104,5 +1128,111 @@ class Contract
     public function getSupplies()
     {
         return $this->supplies;
+    }
+
+    /**
+     * Add contractRecord
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\ContractRecord $contractRecord
+     *
+     * @return Contract
+     */
+    public function addContractRecord(\RocketSeller\TwoPickBundle\Entity\ContractRecord $contractRecord)
+    {
+        $this->contractRecords[] = $contractRecord;
+
+        return $this;
+    }
+
+    /**
+     * Remove contractRecord
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\ContractRecord $contractRecord
+     */
+    public function removeContractRecord(\RocketSeller\TwoPickBundle\Entity\ContractRecord $contractRecord)
+    {
+        $this->contractRecords->removeElement($contractRecord);
+    }
+
+    /**
+     * Get contractRecords
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContractRecords()
+    {
+        return $this->contractRecords;
+    }
+
+    /**
+     * Set toLiquidate
+     *
+     * @param integer $toLiquidate
+     *
+     * @return Contract
+     */
+    public function setToLiquidate($toLiquidate)
+    {
+        $this->toLiquidate = $toLiquidate;
+
+        return $this;
+    }
+
+    /**
+     * Get toLiquidate
+     *
+     * @return integer
+     */
+    public function getToLiquidate()
+    {
+        return $this->toLiquidate;
+    }
+
+    /**
+     * Set dateToEnd
+     *
+     * @param \DateTime $dateToEnd
+     *
+     * @return Contract
+     */
+    public function setDateToEnd($dateToEnd)
+    {
+        $this->dateToEnd = $dateToEnd;
+
+        return $this;
+    }
+
+    /**
+     * Get dateToEnd
+     *
+     * @return \DateTime
+     */
+    public function getDateToEnd()
+    {
+        return $this->dateToEnd;
+    }
+
+    /**
+     * Set finishContractLetterDocument
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Document $finishContractLetterDocument
+     *
+     * @return Contract
+     */
+    public function setFinishContractLetterDocument(\RocketSeller\TwoPickBundle\Entity\Document $finishContractLetterDocument = null)
+    {
+        $this->finishContractLetterDocument = $finishContractLetterDocument;
+
+        return $this;
+    }
+
+    /**
+     * Get finishContractLetterDocument
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Document
+     */
+    public function getFinishContractLetterDocument()
+    {
+        return $this->finishContractLetterDocument;
     }
 }

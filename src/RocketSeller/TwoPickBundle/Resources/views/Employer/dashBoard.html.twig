@@ -81,7 +81,7 @@
             .download-link, .download-link:hover {
                 width: 100px;
                 display: block;
-                margin: 5px auto;
+                margin: 0px auto;
                 padding: 5px;
                 cursor: pointer;
                 background-color: #FD9224;
@@ -687,9 +687,8 @@
                                             {% endif %}
                                         </div>
                                     </div>
-
-                                    {% if notification.accion %}
-                                        {% if (notification.accion|lower|trim) == "subir" %}
+                                    {% if notification.accion is defined %}
+                                        {% if (notification.accion|lower|trim) == "subir" or (notification.accion|lower|trim) == 'resolver' %}
                                             <div class="panel_btn">
                                                 <span href="{{ notification.relatedlink }}/{{ notification.id }}"
                                                       class="download-link">{{ notification.accion }}</span>
@@ -746,7 +745,7 @@
 
                                       <div class="btn_list col-md-2">
                                           {% if notification.accion %}
-                                              {% if (notification.accion|lower|trim) == "subir" %}
+                                              {% if (notification.accion|lower|trim) == "subir" or (notification.accion|lower|trim) == "resolver" %}
                                                   <span href="{{ notification.relatedlink }}/{{ notification.id }}"
                                                         class="download-link"> {{ notification.accion }}</span><!--subir-->
 

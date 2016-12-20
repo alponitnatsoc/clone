@@ -299,7 +299,8 @@
                                     </li>
                                     <li>
                                         <p class="title left"><i>Metodo de pago</i></p>
-                                        <p class="liEmpl right"><strong>{{contract.payMethodPayMethod.payTypePayType.name}}</strong></p>
+                                        <p class="liEmpl right"><strong>{{contract.payMethodPayMethod.payTypePayType.name}}</strong>|
+                                            <a  class="notAjax" id="change_payment_method" data-toggle="modal" data-target="#change_payment_modal">Cambiar</a></p>
                                     </li>
                                     <li>
                                         <p class="title left"><i>Dedicación de tiempo</i></p>
@@ -310,6 +311,37 @@
                                         <p class="liEmpl right"><strong>{{contract.workableDaysMonth}}</strong></p>
                                     </li>
                                 </ul>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="change_payment_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button id="close_change_payment_method" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <h4 class="modal-title bold azulmediofont" id="myModalLabel">Cambiar método de pago del empleado</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="col-md-12" id="error_payment_change" style="display: none">
+                                            <h3 style="color: #7b0000;"><strong>Ocurrio un error. Verifica la información</strong></h3>
+                                        </div>
+                                        {{ form_start(changePaymentMethod) }}
+                                        <input id="id_contract" value="{{ contract.idContract }}" style="display: none">
+                                        <div class="col-md-12">
+                                            {{ form_row(changePaymentMethod.payMethod,{'attr':{'id':'payment_option'}}) }}
+                                        </div>
+                                        <div class="col-md-12" id="change_pay_method_content">
+                                        </div>
+                                        <div class="col-md-12" id="submit_change_pay_method" style="display: none">
+                                            {{ form_widget(changePaymentMethod.submit,{'attr':{'style':'margin-bottom:20px'}}) }}
+                                        </div>
+                                        {{ form_end(changePaymentMethod) }}
+                                    </div>
+                                    <div class="modal-footer text-center" style="clear:both">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="contract-edit-form" style="display:none;">

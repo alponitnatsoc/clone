@@ -1,0 +1,170 @@
+{% extends "base.html.twig" %}
+{% block fos_user_content %}
+    <div class="modal-dialog modal-md" role="document" id="cuerpoModal">
+        <div class="modal-content">
+            <div class="modal-body" style="padding: 0">
+                <input style="display: none" id="id_contract" value="{{ contract.idContract }}">
+                <input style="display: none" id="id_notification" value="{{ notification.id }}">
+                <button id="close_modal" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class="close_span" aria-hidden="true">&times;</span>
+                </button>
+                <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
+                    <div class="col-sm-12 col-xs-12 up-Intro">Resolver situación del contrato de {{ ehe.employeeEmployee.personPerson.fullName }}</div>
+                </div>
+                <div class="row-fluid clearfix">
+                    <div id="select_action_content" class="col-md-12" style="padding: 10px 15px 10px 15px">
+                        <div id="select_action_header" class="col-md-12 text-center">
+                            <p class="grisclarofont" style="text-align: justify;font-size: 13px"><strong>Tu contrato a término fijo está por finalizar.</strong>
+                                Es momento de decidir si continuarás con el contrato actual, harás modificaciones o darás por terminada la relación laboral.</p>
+                                <p class="grisclarofont" style="text-align: justify;font-size: 12px">
+                                    <strong>*Recuerda que si no notificas a tu empleado por escrito por lo menos 30 días antes de la fecha de finalización del contrato,
+                                    este se renovará de forma automática por el mismo periodo según el artículo 46 del Código Sustantivo del Trabajo.</strong></p>
+                            <h1 class="bold azulclarofont" style="font-size:20px">Selecciona una opción</h1>
+                        </div>
+                        <div id="end_contract" class="col-md-6 text-center" style="padding:20px 20px 20px 20px">
+                            <div class="col-md-12 btn-grey" style="cursor:pointer;border-radius: 5px;background-color: #e4e4e4" data-toggle="tooltip" data-placement="top"
+                                 title="Selecciona esta opción si deseas que tu relación laboral termine el día {{ contract.endDate|date("d-M-Y")|localizeddate('long', 'none', 'es-CO') }}.">
+                                <h4 class="light" id="show_end_contract" style="color:#5D5D5D;font-size:15px;font-weight:500">Terminaré mi relación laboral</h4>
+                            </div>
+                        </div>
+                        <div id="continue_contract" class="col-md-6 text-center" style="padding:20px 20px 20px 20px">
+                            <div class="col-md-12 btn-grey" style="cursor:pointer;border-radius: 5px; background-color: #e4e4e4" data-toggle="tooltip" data-placement="top"
+                                 title="Selecciona esta opción si deseas que tu relación laboral continúe despues del día {{ contract.endDate|date("d-M-Y")|localizeddate('long', 'none', 'es-CO') }}.">
+                                <h4 class="light" id="show_continue_contract" style="color:#5D5D5D;font-size:15px;font-weight:500">Renovaré mi relación laboral</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        $.getScript("{{ asset('public/js/contract_end.js') }}").done(function () {
+                            startEndContract();
+                        });
+                    </script>
+                    <div id="end_contract_content" class="col-md-12" style="display: none; padding: 0px 40px">
+                        <div class="col-md-12 text-center" style="margin: 20px 0px">
+                            <p style="font-size: 15px;text-align: justify"><strong>Para dar por terminada la relación laboral de forma válida, deberás seguir estos pasos:</strong></p>
+                            <p style="font-size: 15px;text-align: justify">
+                                <ul style="text-align: justify; padding: 10px 20px;list-style-type: decimal">
+                                    <li> Descargar la carta de terminación de contrato que encontraras en tu tablero de control.</li>
+                                    <li> Hacerla firmar por tu empleado.</li>
+                                <li> Subirla a Symplifica a más tardar <strong>30 días</strong> antes de la fecha de finalización del contrato</li>
+                                </ul>
+                            </p>
+                            <p style="font-size: 11px;text-align: justify; text-decoration: underline"><strong>Ten en cuenta que:</strong></p>
+                            <p style="font-size: 11px;text-align: justify;">
+                                <ul style="font-size: 11px;text-align: justify;padding: 0px 15px">
+                                    <li>Si no notificas a tu empleado por lo menos 30 días antes de la fecha de terminación de contrato, este se renovara automaticamente por el mismo
+                                        periodo de tiempo pactado en el contrato actual.</li>
+                                    <li>En caso de dar por terminado el contrato sin notificar a tu empleado con el debido tiempo de antelación, deberás indemnizar a tu empleado
+                                        como si fuera un despido sin justa causa.</li>
+                                    <li>Si notificas correctamente a tu empleado dentro del tiempo que establece la ley, una semana antes de la fecha de terminación de contrato,
+                                        podrás encontrar los valores a pagar por la liquidación del contrato.</li>
+                                </ul>
+                            </p>
+                            <p id="error_contract_end_terms_conditions" style="color: red; font-size: 14px;font-weight:600;text-align: left;display: none">
+                                Debes aceptar los términos de finalización del contrato</p>
+                            <div id="end_contract_terms_conditions" style="display: inline-flex;margin-bottom: 10px">
+                                <input id="accept_contract_end_conditions" type="checkbox" style="text-align: justify; margin: 5px 10px">
+                                <p style="font-size: 12px;text-align: justify;margin: 0px">He leído y estoy de acuerdo con la información brindada y tomaré acción de acuerdo a
+                                    los tiempos mencionados.</p>
+                            </div>
+                            <br>
+                            {{ form_start(end_contract_form,
+                            {'action': path('solve_contract_end',{
+                                'idContract': contract.idContract,
+                                'idNotification': notification.id,
+                            }), 'method': 'POST'}) }}
+                            {{ form_widget(end_contract_form.submit) }}
+                            <a id="cancel_button1" class="btn btn-grisBorde">
+                                <strong>Cancelar</strong>
+                            </a>
+                            {{ form_end(end_contract_form) }}
+                        </div>
+                    </div>
+                    <div id="continue_contract_content" class="col-md-12" style="display: none" style="padding:20px 20px 20px 20px">
+                        <div class="col-md-12 text-center">
+                            <a id="cancel_button2" class="btn btn-gray" style="margin: 20px 0">
+                                <strong>Cancelar</strong>
+                            </a>
+                        </div>
+                    </div>
+                        {#{{ form_start(form,#}
+                        {#{'action': path('documentos_employee',{#}
+                            {#'entityType': entityType ,#}
+                            {#'entityId':entityId,#}
+                            {#'docCode':docCode,#}
+                            {#'idNotification':idNotification,#}
+                            {#'idProcedure':idProcedure#}
+                        {#}), 'method': 'POST'})#}
+                        {#}}#}
+                        {#{{ form_errors(form) }}#}
+                        {#<div style="display: none;">#}
+                            {#{{ form_row(form.mediaMedia.unlink) }}#}
+                        {#</div>#}
+                        {#<div style="display: none;">#}
+                            {#{{ form_row(form.documentTypeDocumentType) }}#}
+                        {#</div>#}
+                        {#<div class="row modal-responsive">#}
+                            {#<div class="col-md-12 text-center">#}
+                                {#<div class="col-md-12 subir-archivo" style="margin-top: 20px;">#}
+                                    {#<h4 class="bold azulclarofont">Selecciona un archivo</h4>#}
+                                    {#<h5 style="font-stretch: expanded">Los formatos aceptados son .pdf .jpg .png .jpeg</h5>#}
+                                {#</div>#}
+                                {#<div class="col-sm-12 text-center">#}
+                                    {#{{ form_widget(form.mediaMedia.binaryContent,#}
+                                    {#{'attr':#}
+                                        {#{'accept':#}
+                                            {#"application/pdf,image/jpeg,image/tiff,image/png",#}
+                                            {#'style':"margin:10px 0 15px;display: initial;"#}
+                                        {#}#}
+                                    {#})#}
+                                    {#}}#}
+                                {#</div>#}
+                                {#<div class="col-md-12 text-center" style="margin-bottom: 20px;">#}
+                                    {#<div class="col-md-6">#}
+                                        {#{{ form_row(form.save,{'attr':{'style':'margin:20px 0 0 0;background:#FD9224'}}) }}#}
+                                        {#{{ form_end(form) }}#}
+                                    {#</div>#}
+                                    {#<div class="col-md-6">#}
+                                        {#<a id="add_doc_cancel_button1" class="btn btn-grey" style="margin: 20px 0 0 0">#}
+                                            {#<strong>Cancelar</strong></a>#}
+                                    {#</div>#}
+                                {#</div>#}
+                            {#</div>#}
+                        {#</div>#}
+                    {#</div>#}
+                    {#<div id="upload_multiple_doc_form" class="col-md-12" style="display: none" style="padding:20px">#}
+                        {#{{ form_start(form2,{'action': path('documentos_employee',{#}
+                            {#'entityType': entityType ,#}
+                            {#'entityId':entityId,#}
+                            {#'docCode':docCode,#}
+                            {#'idNotification':idNotification,#}
+                            {#'idProcedure':idProcedure#}
+                        {#}), 'method': 'POST','attr':{'id':'add_multiple_files_form'}}) }}#}
+                        {#<div class="col-md-12" style="margin: 20px 0; padding-left: 8px">#}
+                            {#<ul id="file-field-list"#}
+                                {#class="file_add_prototype" style="list-style-type: none"#}
+                                {#data-prototype='<div class="col-md-12" style="padding:0">{{ form_widget(form2.files.vars.prototype|e('html_attr')) }}</div>'>#}
+                            {#</ul>#}
+                            {#<div class="col-md-12 text-center">#}
+                                {#{% for fileField in form2.files %}#}
+                                    {#{{ form_row(fileField,{'attr':{'class':'col-md-10','style':'padding-left:20px'}}) }}#}
+                                {#{% endfor %}#}
+                                {#<a id="add_file_link" style="color:#00cdcc;text-decoration: none;margin-right: 5px;"><span class="btn btn-grey" style="display: inline;"><i class="fa fa-plus-circle fa-2x" style="color:#00cdcc;font-size:20px;"></i> Agregar imagen</span></a>#}
+                                {#<a id="remove_file_link" style="color:#fd5c5c;text-decoration: none;font-size:20px;margin-top: 10px;margin-left: 5px;"><span class="btn btn-grey"><i class="fa fa-minus-circle " style="color:#fd5c5c;font-size:20px"></i> Eliminar imagen</span></a>#}
+                            {#</div>#}
+                        {#</div>#}
+                        {#<div class="col-md-12 text-center" style="margin-bottom: 20px;">#}
+                            {#<div class="col-md-6">#}
+                                {#{{ form_row(form2.save,{'attr':{'style':'margin: 20px 0 0 0'}}) }}#}
+                            {#</div>#}
+                            {#<div class="col-md-6">#}
+                                {#<a id="add_doc_cancel_button2" class="btn btn btn-default" style="margin: 20px 0 0 0"><strong>Cancelar</strong></a>#}
+                            {#</div>#}
+                        {#</div>#}
+                        {#{{ form_end(form2) }}#}
+                    {#</div>#}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -131,6 +131,14 @@ class Notification {
      */
     private $liquidation;
 
+    /**
+     * @ORM\Column(name="downloaded", type="smallint", nullable=true)
+     *
+     * 1 - YES
+     * 0 - NO
+     */
+    private $downloaded;
+
     public function _construct() {
         $this->sawDate = new \DateTime();
     }
@@ -496,4 +504,28 @@ class Notification {
         return $this;
     }
 
+
+    /**
+     * Set downloaded
+     *
+     * @param integer $downloaded
+     *
+     * @return Notification
+     */
+    public function setDownloaded($downloaded)
+    {
+        $this->downloaded = $downloaded;
+
+        return $this;
+    }
+
+    /**
+     * Get downloaded
+     *
+     * @return integer
+     */
+    public function getDownloaded()
+    {
+        return $this->downloaded;
+    }
 }

@@ -263,8 +263,11 @@
                                                     {% set styleE = "background-color: rgba(187, 9, 9, 0.56);" %}
                                                 {% endif %}
                                                 <td style="{{ styleE }}">
-                                                    {% if user.personPerson.rutDocument is defined and user.personPerson.rutDocument.mediaMedia is defined and user.personPerson.rutDocument.mediMedia.updatedAt is defined %}
+                                                    {% if user.personPerson.rutDocument is defined and user.personPerson.rutDocument.mediaMedia is defined
+                                                    and user.personPerson.rutDocument.mediMedia.updatedAt is defined %}
                                                         {{ user.personPerson.rutDocument.mediaMedia.updatedAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                    {% elseif user.personPerson.rutDocument is defined and user.personPerson.rutDocument.mediaMedia is defined %}
+                                                        {{  user.personPerson.rutDocument.mediaMedia.createdAt|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
                                                     {% endif %}
                                                 </td>
                                                 {% if user.personPerson.employer.mandatoryDocument is defined and user.personPerson.employer.mandatoryDocument.mediaMedia is defined %}
@@ -523,6 +526,15 @@
                                                     <th>Fecha de Inicio de contrato</th>
                                                     <th>Fecha de Finalización de contrato</th>
                                                     <th>Días laborales al mes</th>
+                                                    {% if ehe.activeContract.timeCommitmentTimeCommitment.code == 'XD' %}
+                                                        <th>Lu</th>
+                                                        <th>Ma</th>
+                                                        <th>Mi</th>
+                                                        <th>Ju</th>
+                                                        <th>Vi</th>
+                                                        <th>Sa</th>
+                                                        <th>Do</th>
+                                                    {% endif %}
                                                     <th>Tipo de planilla</th>
                                                     </thead>
                                                     {% for aC in ehe.contracts %}
@@ -550,6 +562,34 @@
                                                                     {% endif %}
                                                                 </td>
                                                                 <td> {{ aC.workableDaysMonth }} </td>
+                                                                {% if aC.timeCommitmentTimeCommitment.code == 'XD' %}
+                                                                    {% set mon = false %}{% set tue = false %}{% set wed = false %}{% set thu = false %}
+                                                                    {% set fri = false %}{% set sat = false %}{% set sun = false %}
+                                                                    {% for wwd in aC.weekWorkableDays %}
+                                                                        {% if wwd.dayNumber == 1 %}
+                                                                            {% set mon = true %}
+                                                                        {% elseif wwd.dayNumber == 2 %}
+                                                                            {% set tue = true %}
+                                                                        {% elseif wwd.dayNumber == 3 %}
+                                                                            {% set wed = true %}
+                                                                        {% elseif wwd.dayNumber == 4 %}
+                                                                            {% set thu = true %}
+                                                                        {% elseif wwd.dayNumber == 5 %}
+                                                                            {% set fri = true %}
+                                                                        {% elseif wwd.dayNumber == 6 %}
+                                                                            {% set sat = true %}
+                                                                        {% elseif wwd.dayNumber == 7 %}
+                                                                            {% set sun = true %}
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                    {% if mon %}<td>x</td>{% else %}<td></td>{% endif %}
+                                                                    {% if tue %}<td>x</td>{% else %}<td></td>{% endif %}
+                                                                    {% if wed %}<td>x</td>{% else %}<td></td>{% endif %}
+                                                                    {% if thu %}<td>x</td>{% else %}<td></td>{% endif %}
+                                                                    {% if fri %}<td>x</td>{% else %}<td></td>{% endif %}
+                                                                    {% if sat %}<td>x</td>{% else %}<td></td>{% endif %}
+                                                                    {% if sun %}<td>x</td>{% else %}<td></td>{% endif %}
+                                                                {% endif %}
                                                                 <td>{% if aC.planillaTypePlanillaType != NULL %}
                                                                         {{ aC.planillaTypePlanillaType.code }}
                                                                     {% endif %}
@@ -561,10 +601,15 @@
                                                 </table>
                                         {% endfor %}
                                     {% endif %}
+                                    {#{% if user.status >= 2 %}#}
+                                        {#<div class="backoffice-headding" style="border-radius: 0px; background-color: rgb(41, 41, 41);margin: -1px 0px -1px 0px;">#}
+                                            {#<a class="notAjax" href="{{ path('autenticate', { 'user': user.id, 'autentication': user.salt}) }}" style="text-underline: false;color: white">Entrar al perfil del usuario</a>#}
+                                        {#</div>#}
+                                    {#{% endif %}#}
+
                                 </td>
                             </tr>
                         </tbody>
-
                         {% set count = count + 1 %}
                     {% endfor %}
                 </table>

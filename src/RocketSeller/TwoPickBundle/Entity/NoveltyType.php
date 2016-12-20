@@ -73,7 +73,7 @@ class NoveltyType
 		 * @ORM\Column(type="string", length=10, nullable=TRUE)
 		 */
 		private $simpleName;
-	
+
     /**
      * Constructor
      */

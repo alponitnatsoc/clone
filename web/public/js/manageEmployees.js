@@ -99,6 +99,91 @@ function editEmployee() {
 
     });
 
+
+    $("#changePaymentMethod_payMethod").on('change',function (e) {
+        if($("#changePaymentMethod_payMethod").val()!=null && $("#changePaymentMethod_payMethod").val()!=''){
+            $("#error_payment_change").hide();
+            var validator;
+            $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
+                validator = $("form[name='changePaymentMethod']").validate({
+                    rules: {
+                        "method_type_fields[accountTypeAccountType]": {
+                            required:true},
+                        "method_type_fields[accountNumber]": {
+                            required:true,
+                            number:true},
+                        "method_type_fields[bankBank]": {
+                            required:true},
+                        "method_type_fields[cellphone]":{
+                            required:true,
+                            number: true,
+                            minlength: 10,
+                            maxlength:10},
+                        "method_type_fields[hasIt]":{
+                            required:true}
+                    },
+                    messages: {
+                        "method_type_fields[accountTypeAccountType]": {
+                            required:'Por favor selecciona una opción'},
+                        "method_type_fields[accountNumber]": {
+                            required:'El número de cuenta es obligatorio',
+                            number:'Este campo solo admite valores numéricos'},
+                        "method_type_fields[bankBank]": {
+                            required:'Por favor selecciona una opción'},
+                        "method_type_fields[cellphone]":{
+                            required:'Este campo es obligatorio',
+                            number: "Este campo solo admite valores numéricos",
+                            minlength: "El número celular ingresado es muy corto",
+                            maxlength:"El número celular ingresado es muy largo"},
+                        "method_type_fields[hasIt]":{
+                            required:"Este campo es obligatorio"}
+                    }
+                });
+            });
+            $("#submit_change_pay_method").show();
+            $.ajax({
+                url: '/pay/method/fields/' + $("#changePaymentMethod_payMethod").val() + '/' + $("input[id='id_contract']").val(),
+                type: 'GET'
+            }).done(function (data) {
+                $('#change_pay_method_content').html(
+                    // ... with the returned one from the AJAX response.
+                    $(data).find('#formFields'));
+            });
+        }else{
+            $("#submit_change_pay_method").hide();
+            $('#change_pay_method_content').html("");
+        }
+    });
+
+ $("form[name=changePaymentMethod]").on('submit',function (e) {
+        e.preventDefault();
+        if($("form[name=changePaymentMethod]").valid()){
+            $.ajax({
+                    url: "/api/public/v1/changes/payments/methods",
+                    type: 'POST',
+                    data: {
+                        payTypeId: $("#changePaymentMethod_payMethod").val(),
+                        cellphone: $("#method_type_fields_cellphone").val(),
+                        hasIt: $("#method_type_fields_hasIt").val(),
+                        accountTypeId: $("#method_type_fields_accountTypeAccountType").val(),
+                        accountNumber: $("#method_type_fields_accountNumber").val(),
+                        bankId: $("#method_type_fields_bankBank").val(),
+                        contractId: $("#id_contract").val(),
+                    }
+                }).done(function (data) {
+                    console.log(data);
+                    $("#close_change_payment_method").click();
+                    // location.reload();
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    $("#error_payment_change").show();
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                });
+        }
+        //
+    });
+
     $(".save-contract").on("click", function (e) {
         e.preventDefault();
         if ($('#form_contract_workplace').val() == "") {

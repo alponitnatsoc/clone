@@ -1453,6 +1453,54 @@
 														<strong>{{ employerHasEmployee.activeContract.timeCommitmentTimeCommitment.name }}</strong>
 													</td>
 												</tr>
+												{% if employerHasEmployee.activeContract.timeCommitmentTimeCommitment.code == 'XD' %}
+												<tr>
+													<td style="font-size: 12px; text-align: center">
+														<strong>Días que labora</strong>
+													</td>
+													<td  colspan="2" class="text center" style="padding-left: 16%">
+														<table>
+															<thead>
+																<th>Lu</th>
+																<th>Ma</th>
+																<th>Mi</th>
+																<th>Ju</th>
+																<th>Vi</th>
+																<th>Sa</th>
+																<th>Do</th>
+															</thead>
+															<tbody>
+																{% set mon = false %}{% set tue = false %}{% set wed = false %}{% set thu = false %}
+																{% set fri = false %}{% set sat = false %}{% set sun = false %}
+																{% for wwd in employerHasEmployee.activeContract.weekWorkableDays %}
+																	{% if wwd.dayNumber == 1 %}
+																		{% set mon = true %}
+																	{% elseif wwd.dayNumber == 2 %}
+                                                                        {% set tue = true %}
+                                                                	{% elseif wwd.dayNumber == 3 %}
+                                                                        {% set wed = true %}
+                                                                	{% elseif wwd.dayNumber == 4 %}
+                                                                        {% set thu = true %}
+                                                                    {% elseif wwd.dayNumber == 5 %}
+                                                                        {% set fri = true %}
+                                                                    {% elseif wwd.dayNumber == 6 %}
+                                                                        {% set sat = true %}
+                                                                    {% elseif wwd.dayNumber == 7 %}
+                                                                        {% set sun = true %}
+																	{% endif %}
+																{% endfor %}
+																{% if mon %}<td>x</td>{% else %}<td></td>{% endif %}
+                                                                {% if tue %}<td>x</td>{% else %}<td></td>{% endif %}
+                                                                {% if wed %}<td>x</td>{% else %}<td></td>{% endif %}
+                                                                {% if thu %}<td>x</td>{% else %}<td></td>{% endif %}
+                                                                {% if fri %}<td>x</td>{% else %}<td></td>{% endif %}
+                                                                {% if sat %}<td>x</td>{% else %}<td></td>{% endif %}
+                                                                {% if sun %}<td>x</td>{% else %}<td></td>{% endif %}
+															</tbody>
+														</table>
+													</td>
+												</tr>
+												{% endif %}
 												<tr>
 													<td style="font-size: 12px; text-align: center">
 														<strong>Días que trabaja al mes</strong>

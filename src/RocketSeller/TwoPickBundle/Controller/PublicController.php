@@ -51,11 +51,11 @@ class PublicController extends Controller
         }
 
     }
-		public function salarioAction(Request $request) {
-				return $this->render('RocketSellerTwoPickBundle:Public:salario.html.twig');
-		}
+	public function salarioAction(Request $request) {
+		return $this->render('RocketSellerTwoPickBundle:Public:salario.html.twig');
+	}
 	public function landingAction(Request $request) {
-				return $this->render('RocketSellerTwoPickBundle:Public:campana.html.twig');
+		return $this->render('RocketSellerTwoPickBundle:Public:campana.html.twig');
         $user=$this->getUser();
         if (empty($user)) {
             $form = $this->createFormBuilder()

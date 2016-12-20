@@ -1552,6 +1552,35 @@ use EmployerMethodsTrait;
                     'rootDir' => $this->get('kernel')->getRootDir().'/..'
                 );
                 break;
+            case "carta-terminacion-contrato":
+                $em = $this->getDoctrine()->getManager();
+                /** @var Contract $contract */
+                $contract = $em->getRepository("RocketSellerTwoPickBundle:Contract")->find($id);
+                if(!$contract)
+                    $this->createNotFoundException();
+                /** @var Person $person */
+                $person = $contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
+                $ePerson = $contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson();
+                /** @var Notification $notification */
+                $notification = $em->getRepository("RocketSellerTwoPickBundle:Notification")->findOneBy(array(
+                    "documentTypeDocumentType"=>$em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array('docCode'=>'CTC')),
+                    "personPerson"=>$person,
+                ));
+                $notification->setDownloaded(1);
+                $em->persist($notification);
+                $em->flush();
+                $endDate = $contract->getEndDate();
+                $city = $contract->getWorkplaceWorkplace()->getCity();
+                if(!$endDate)
+                    $this->createNotFoundException();
+                $data = array(
+                    'person'=>$person,
+                    'ePerson'=>$ePerson,
+                    'endDate'=>$endDate,
+                    'city'=>$city,
+                    'date'=>new DateTime(),
+                );
+                break;
             case "factura":
                 //id de la orden de compra
                 $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrders');

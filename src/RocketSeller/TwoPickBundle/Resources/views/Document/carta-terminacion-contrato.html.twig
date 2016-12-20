@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>CARTA DE TERMINACIÓN DE CONTRATO</title>
+    <meta charset="utf-8" />
+    <style>
+        body {
+            height: 792px;
+            width: 612px;
+            /* to centre page on screen*/
+            margin-left: auto;
+            margin-right: auto;
+        }
+        p {
+            font-family: 'Open Sans', sans-serif;font-weight: 300
+        }
+    </style>
+    <head>
+<body>
+<hr />
+<p>&nbsp;</p>
+<p style="text-align: left;"><strong>{% if data.city == 'Bogotá D.C.' %}Bogotá{% else %}{{ data.city }}{% endif %}, {{ data.date|date("d-M-Y")|localizeddate('long', 'none', 'es-CO') }}.</strong></p>
+<p style="text-align: left;"><strong>
+        {% if data.ePerson.gender is defined %}
+            {% if data.ePerson.gender == 'MAS' %}Señor {% else %}Señora {% endif %}
+        {% else %}Senor(a) {% endif %}{{ data.ePerson.fullName }}
+    </strong></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p style="text-align: justify;">Me permito comunicarle que según consta en su contrato de trabajo la fecha de terminación es el
+    próximo <strong>{{ data.endDate|date("d-M-Y")|localizeddate('long', 'none', 'es-CO') }}</strong> el cual no será prorrogado ni renovado.</p>
+<p style="text-align: justify;">Le agradecemos de antemano su colaboración prestada hasta la fecha, en espera de poder contar
+    con usted en un futuro.</p>
+<p style="text-align: justify;">En los términos de la legislación laboral este aviso se hace con 30 días de
+    antelación a la fecha de terminación de contrato de trabajo, segun lo establece el Código Sustantivo de Trabajo.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p style="text-align: justify;">Dado en la ciudad de {{ data.city }} a
+    los {{ "now"|localizeddate('none', 'none', 'es-CO', null, "d 'días del mes de' MMMM 'del año' Y") }}.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>Atentamente,</p>
+<p>&nbsp;</p>
+
+_____________________________________
+<p>{{ data.person.fullName }}</p>
+<p>{{ data.person.documentType }}: {{ data.person.document }}</p>
+<p>&nbsp;</p>
+<p>Recibida</p>
+<p>&nbsp;</p>
+
+_____________________________________
+<p>{{ data.ePerson.fullName }}</p>
+<p>{{ data.ePerson.documentType }}: {{ data.ePerson.document }}</p>
+
+<hr />
+
+</body>
+</html>
