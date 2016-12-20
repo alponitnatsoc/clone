@@ -374,7 +374,28 @@ class NoveltyController extends Controller {
     	$answerArr = array();
 	    array_push($answerArr,true); //Index 0 - Determines if is false or true the validation
 	    array_push($answerArr, ""); //Index 1 - If index 0 is false, sets a custom error msg to display to the user
-
+	
+	    if($novelty->getNoveltyTypeNoveltyType()->getSimpleName() == 'VAC' &&
+		    $payRol->getContractContract()->getTimeCommitmentTimeCommitment()->getCode() == 'XD')
+	    {
+		
+		    $context = array( 'emailType' => 'reportVacacionesXD',
+			    'payrollId' => $payRol->getIdPayroll(),
+			    'contractId' => $payRol->getContractContract()->getIdContract(),
+			    'startDate' => $novelty->getDateStart(),
+			    'endDate' => $novelty->getDateEnd(),
+			    'employerName' => $payRol->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson()->getFullName(),
+			    'employeeName' => $payRol->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName(),
+		    );
+		
+		    $smailer = $this->get('symplifica.mailer.twig_swift');
+		    $send = $smailer->sendEmailByTypeMessage($context);
+		
+		    $answerArr[0] = false;
+		    $answerArr[1] = "Actualmente no puedes reportar vacaciones de tus empleados por dias por este medio. Por favor comunicate con nosotros al telefono 3504612013.";
+		    return $answerArr;
+	    }
+	    
 	    $utils = $this->get('app.symplifica_utils');
         $em = $this->getDoctrine()->getManager();
 
@@ -493,7 +514,7 @@ class NoveltyController extends Controller {
 		        if(floor($holidayDebt) <= 0) {
 
                     //change novelty type to vacaciones adelantadas
-                    $noveltyTypeVacacionesAdelantadas = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:NoveltyType')->findOneBy(array('simpleName' => 'VA'));
+                    $noveltyTypeVacacionesAdelantadas = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:NoveltyType')->findOneBy(array('simpleName' => 'VACA'));
                     $novelty->setNoveltyTypeNoveltyType($noveltyTypeVacacionesAdelantadas);
                     $novelty->setName($noveltyTypeVacacionesAdelantadas->getName());
                     $payRol->addNovelty($novelty);
@@ -561,7 +582,7 @@ class NoveltyController extends Controller {
                     $em->flush();
 
                     //add remainding dates as vacaciones adelantadas to SQL
-                    $noveltyTypeVacacionesAdelantadas = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:NoveltyType')->findOneBy(array('simpleName' => 'VA'));
+                    $noveltyTypeVacacionesAdelantadas = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:NoveltyType')->findOneBy(array('simpleName' => 'VACA'));
                     $noveltyVacacionesAdelantadas = new Novelty();
                     $noveltyVacacionesAdelantadas->setNoveltyTypeNoveltyType($noveltyTypeVacacionesAdelantadas);
                     $noveltyVacacionesAdelantadas->setUnits($daysVacacionesAdelantadas);
