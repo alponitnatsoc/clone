@@ -325,6 +325,10 @@
                             <h2 class="lightRale">¿Tu empleada doméstica<br><strong>esta formal?</strong></h2><br />
                             <p>Descubre Symplifica: Afilia a seguridad social, genera un contrato, paga electrónicamente y administra el día a día de los empleados de tu hogar desde internet.</p>
                             <a href="https://symplifica.com/?utm_source=google&utm_campaign=salario&utm_medium=refferal"><button>Pruébalo gratis</button></a>
+                            <p class="displayN">Descubre Symplifica: Afilia a seguridad social, genera un contrato, paga electrónicamente y administra el día a día de los empleados de tu hogar desde internet.</p>
+                            <a class="displayN" href="https://symplifica.com/?utm_source=google&utm_campaign=salario&utm_medium=refferal"><button>Pruébalo gratis</button></a>
+                            <!--responsive-->
+                            <a class="displayB" href="https://symplifica.com/?utm_source=google&utm_campaign=salario&utm_medium=refferal"><button>Descubrelo en Symplifica</button></a>
                         </div>
                         <div class="bottomLogo">
                           <img src="https://symplifica.com/img/logo-white.png" width="170" height="auto"/>
@@ -343,13 +347,16 @@
 
             $(function(){
                 $(window).scroll(function() {
-                    if ($(this).scrollTop() >= 500) {
+                    if ($(this).scrollTop() >= 500 && $(window).width() >1024) {
                         $('aside').addClass('stickytop');
-                                    }
-                        else {
-                         $('aside').removeClass('stickytop');
-                     }
-                    });
+                    } else if ($(this).scrollTop() >= 500 && $(window).width() <= 1024) {
+                         $('aside').addClass('stickytop');
+                     } else if ($(this).scrollTop() >= 400 && $(window).width() <= 768) {
+                          $('aside').addClass('stickytop');
+                    } else {
+                          $('aside').removeClass('stickytop');
+                    }
+                });
             });
         </script>
     </body>
