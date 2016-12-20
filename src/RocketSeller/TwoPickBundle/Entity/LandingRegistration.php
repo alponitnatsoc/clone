@@ -37,7 +37,7 @@ class LandingRegistration
     /**
      * @var string
      *
-     * @ORM\Column(name="last_name", type="string", length=256)
+     * @ORM\Column(name="last_name", type="string", length=256, nullable = true)
      */
     private $lastName;
 
