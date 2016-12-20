@@ -8,6 +8,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\Prima;
 use RocketSeller\TwoPickBundle\Entity\Product;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
@@ -234,6 +235,97 @@ class ChronServerRestController extends FOSRestController
         $view->setStatusCode(200);
         return $view->setData($resultUsers);
     }
+
+    /**
+     *  creates notifications of automatic renewal for contracts that will end in less than a month<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Creates notifications of automatic renewal for contracts that will end in less than a month",
+     *   statusCodes = {
+     *     200 = "OK"
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function putAutoRenewalContractNotificationAction() {
+        $response = array();
+        $response['contracts']=array();
+        $em = $this->getDoctrine()->getManager();
+        $contracts = $em->getRepository("RocketSellerTwoPickBundle:Contract")->findAll();
+        /** @var Contract $contract */
+        foreach ($contracts as $contract) {
+            if($contract->getContractTypeContractType()->getPayrollCode()==2){
+                $today = new DateTime();
+                $today->modify('+1 month +9 days');
+                $end_date = $contract->getEndDate();
+                if($today->format("d-m-Y")==$end_date->format("d-m-Y") and $contract->getState()==1){
+                    $lastChanceDate = $contract->getEndDate()->modify("-1 month");
+                    $response['contracts'][]=$contract;
+                    $person = $contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
+                    $ePerson = $contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson();
+                    $notification = $em->getRepository("RocketSellerTwoPickBundle:Notification")->findOneBy(array(
+                        'personPerson'=>$person,
+                        'accion'=>'Resolver'
+                    ));
+                    if(!$notification)
+                        $notification = new Notification();
+                    $notification->setAccion('Resolver');
+                    $notification->setPersonPerson($person);
+                    $notification->setType('alert');
+                    $notification->setDescription("Debes definir la situación laboral de ".$ePerson->getNames()." 1 mes antes de que termine su contrato.");
+                    $notification->setStatus(1);
+                    $notification->setRelatedLink("/contract/resolve/status/".$contract->getIdContract());
+                    $notification->setDeadline($lastChanceDate);
+                    $em->persist($notification);
+                    $contract->setDateToEnd($lastChanceDate);
+                    $em->persist($contract);
+                    $em->flush();
+                }
+            }
+        }
+        $view = View::create();
+        $view->setStatusCode(200);
+        return $view->setData($response);
+    }
+
+    /**
+     *  Disables notifications with docType TCT that has never been downloaded and reach deadline<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Disables notifications with docType TCT that has never been downloaded and reach deadline",
+     *   statusCodes = {
+     *     200 = "OK"
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function putDisableEndContractNotificationsAction() {
+        $response = array();
+        $response['notifications']=array();
+        $em = $this->getDoctrine()->getManager();
+        $notifications = $em->getRepository("RocketSellerTwoPickBundle:Notification")->findBy(array(
+            'documentTypeDocumentType'=>$em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array('docCode'=>'CTC')),
+            'status'=>1,
+        ));
+        /** @var Notification $notification */
+        foreach ($notifications as $notification) {
+            $today = new DateTime();
+            if($notification->getDeadline()->modify("+1 day")->format("d-m-Y")==$today->format("d-m-Y") and $notification->getDownloaded()==0){
+                $notification->disable();
+                $response['notifications'][]=$notification;
+                $em->persist($notification);
+            }
+        }
+        $em->flush();
+        $view = View::create();
+        $view->setStatusCode(200);
+        return $view->setData($response);
+    }
+
 
     /**
      *  Send reminder tu upload contract<br/>

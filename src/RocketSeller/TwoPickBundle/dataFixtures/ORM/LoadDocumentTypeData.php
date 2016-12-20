@@ -200,6 +200,11 @@ class LoadDocumentTypeData extends AbstractFixture implements OrderedFixtureInte
         $documentComprobanteDotacion->setName('Comprobante Dotación');
         $documentComprobanteDotacion->setDocCode('CPRDOT');
         $manager->persist($documentComprobanteDotacion);
+
+        $documentCartaTerminacionContrato = new DocumentType();
+        $documentCartaTerminacionContrato->setName('Carta de Terminación de Contrato');
+        $documentCartaTerminacionContrato->setDocCode('CTC');
+        $manager->persist($documentCartaTerminacionContrato);
 	    
         $manager->flush();
 
@@ -238,6 +243,7 @@ class LoadDocumentTypeData extends AbstractFixture implements OrderedFixtureInte
         $this->addReference('document-EOCP', $documentTypePayslipPila);
         $this->addReference('document-PASAPORTE', $documentTypePasaporte);
         $this->addReference('document-CPRDOT', $documentComprobanteDotacion);
+        $this->addReference('document-CTC',$documentCartaTerminacionContrato);
 
     }
     public function getOrder()

@@ -109,6 +109,7 @@ services:
                     helpTransaction: 'FOSUserBundle:EmailTemplates:helpTransaction.txt.twig'
                     stuckRegistration: 'FOSUserBundle:EmailTemplates:stuck_registration_wizard.txt.twig'
                     primaReminder: 'FOSUserBundle:EmailTemplates:primaReminder.txt.twig'
+                    endContractAdvice: 'FOSUserBundle:EmailTemplates:endContract.txt.twig'
 
                 from_email:
                   confirmation: '%fos_user.registration.confirmation.from_email%'

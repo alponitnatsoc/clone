@@ -42,7 +42,7 @@
                 <br />
                 <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#909090; font-size: 15px; width:90%;margin:0 auto"><span style="color:#13878e;font-weight:600">¡Recuerda qué!</span><br>
                   Debes notificar a tu empleado si darás por terminada la relación laboral.
-El contrato con tu empleado {{employeeName}} terminará el {{ la fecha fin de contrato }}.<br><br>
+El contrato con tu empleado {{employeeName}} terminará el {{ endDate|date('d-M-Y')|localizeddate('long', 'none', 'es-CO')}}.<br><br>
                  <span style="color:#13878e;font-weight:600">Entra a la plataforma o a tu APP y decide si deseas renovar el contrato, darlo por terminado o modificarlo.</span><br><br>
 
                   <span>Recuerda que debes notificarlo por escrito por lo menos <strong>30 días antes de la fecha de finalización del contrato</strong>, de lo contrario este se renovará automáticamente por el mismo periodo. (Descarga los documentos en tu cuenta).<br><br>
