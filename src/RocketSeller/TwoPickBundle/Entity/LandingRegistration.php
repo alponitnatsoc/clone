@@ -37,6 +37,13 @@ class LandingRegistration
     /**
      * @var string
      *
+     * @ORM\Column(name="last_name", type="string", length=256)
+     */
+    private $lastName;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="email", type="string", length=256)
      */
     private $email;
@@ -54,6 +61,15 @@ class LandingRegistration
      * @ORM\Column(name="type", type="string", length=10)
      */
     private $type;
+
+    /**
+     * @var string
+     *  -1 hidden
+     *  0 new
+     *  1 action taken
+     * @ORM\Column(name="state", type="smallint")
+     */
+    private $state = 0;
 
     /**
      * @var \DateTime
@@ -222,5 +238,53 @@ class LandingRegistration
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Set state
+     *
+     * @param integer $state
+     *
+     * @return LandingRegistration
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return integer
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * Set lastName
+     *
+     * @param string $lastName
+     *
+     * @return LandingRegistration
+     */
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * Get lastName
+     *
+     * @return string
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
     }
 }

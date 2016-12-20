@@ -1,32 +1,27 @@
-$(document).ready(function(){
-    $(".btnBanner").click(function(){
+$(document).ready(function () {
+    $(".btnBanner").click(function () {
         $("#campanaSlide").animate({left: '0px'}, "slow");
         $("#trigger2, #trigger3").fadeOut();
     });
-    $(".cerrarSlide, #campanaBtn").click(function(){
+    $(".cerrarSlide, #campanaBtn").click(function () {
         $("#campanaSlide").animate({left: '-2500px'}, "slow");
         $("#trigger1").fadeIn();
     });
-    $("#terminosBtn").click(function(){
+    $("#terminosBtn").click(function () {
         $("#150kCampaign").modal("show");
     });
 
-    $("#esfuerzoTrigg").click(function(){
+    $("#esfuerzoTrigg").click(function () {
         $("#trigger1").fadeOut("slow");
         $("#trigger2").delay(1000);
         $("#trigger2").fadeIn("slow");
     });
-    $("#sendTrigg").click(function(){
-        $("#trigger2").fadeOut("slow");
-        $("#trigger3").delay(1000);
-        $("#trigger3").fadeIn("slow");
-    });
 });
 
-$('#pausar').click(function(){
+$('#pausar').click(function () {
     document.getElementById('video1').pause();
 });
-$('#video2').click(function(){
+$('#video2').click(function () {
     document.getElementById('video1').play();
 });
 
@@ -43,19 +38,43 @@ $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.mi
         rules: {
             "firstname": "required",
             "lastname": "required",
-            "cellphone": {required : true, maxlength : 10},
-            "email": {required : true, email : true},
+            "cellphone": {required: true, maxlength: 10},
+            "email": {required: true, email: true},
             "chktyc": "required"
         },
         messages: {
             "firstname": "&#8227; El nombre no puede estar vacio",
             "lastname": "&#8227; Los apellidos no pueden estar vacios",
-            "cellphone": {required : "&#8227; El celular no puede estar vacio", maxlength : "&#8227; El celular no es válido"},
-            "email": {required : "&#8227; El email no puede estar vacio", email : "&#8227; El email no es válido"},
+            "cellphone": {
+                required: "&#8227; El celular no puede estar vacio",
+                maxlength: "&#8227; El celular no es válido"
+            },
+            "email": {required: "&#8227; El email no puede estar vacio", email: "&#8227; El email no es válido"},
             "chktyc": "&#8227; Acepta los Términos y Condiciones para continuar"
         },
-        errorElement : 'div',
+        errorElement: 'div',
         errorLabelContainer: '.errorTxt'
+    });
+    validator2 = $("#0effort").validate({
+        rules: {
+            "firstname": "required",
+            "lastname": "required",
+            "cellphone": {required: true, maxlength: 10,minlength: 7},
+            "email": {required: true, email: true},
+            "chktyc": "required"
+        },
+        messages: {
+            "firstname": "&#8227; El nombre no puede estar vacio",
+            "lastname": "&#8227; Los apellidos no pueden estar vacios",
+            "cellphone": {
+                required: "&#8227; El celular no puede estar vacio",
+                maxlength: "&#8227; El celular no es válido",
+                minlength: "&#8227; El celular no es válido"
+            },
+            "email": {required: "&#8227; El email no puede estar vacio", email: "&#8227; El email no es válido"},
+            "chktyc": "&#8227; Acepta los Términos y Condiciones para continuar"
+        },
+        errorElement: 'div',
     });
 });
 
@@ -75,6 +94,18 @@ $('#formcellphone').attr('oninput', "setCustomValidity('')");
 $('#formemail').attr('oninvalid', 'setCustomValidity("El correo escrito no es valido")');
 $('#formemail').attr('oninput', "setCustomValidity('')");
 
+$('#0formfirstname').attr('oninvalid', 'setCustomValidity("El campo no puede estar vacio")');
+$('#0formfirstname').attr('oninput', "setCustomValidity('')");
+
+$('#0formlastname').attr('oninvalid', 'setCustomValidity("El campo no puede estar vacio")');
+$('#0formlastname').attr('oninput', "setCustomValidity('')");
+
+$('#0formcellphone').attr('oninvalid', 'setCustomValidity("El campo no puede estar vacio")');
+$('#0formcellphone').attr('oninput', "setCustomValidity('')");
+
+$('#0formemail').attr('oninvalid', 'setCustomValidity("El correo escrito no es valido")');
+$('#0formemail').attr('oninput', "setCustomValidity('')");
+
 // var counter = 0;
 // var interval = setInterval(function() {
 // 	counter++;
@@ -83,45 +114,69 @@ $('#formemail').attr('oninput', "setCustomValidity('')");
 // 		clearInterval(interval);
 // 	}
 // }, 1000);
+$("#0effort").on('submit', function (e) {
+    e.preventDefault();
+    if(!$("#0effort").valid()){
+        return
+    }else {
+        alert("thefuck");return;
+    }
+    var url = $(this).attr("action");
+    $.ajax({
+        url: url,
+        type: $(this).attr('method'),
+        data: $(this).serializeArray(),
+        statusCode: {
+            500: function () {
+                $("#errorModal").modal("show");
+            }
+        }
+    }).done(function (data) {
+        $("#trigger2").fadeOut("slow");
+        $("#trigger3").delay(1000);
+        $("#trigger3").fadeIn("slow");
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        $("#errorModal").modal("show");
+    });
+});
 
-
-$("form[name='form']").on('submit',function (e) {
-    if (document.getElementById('formfirstname').value!= null){
+$("form[name='form']").on('submit', function (e) {
+    if (document.getElementById('formfirstname').value != null) {
         var nombre = document.getElementById('formfirstname').value;
-    }else{
+    } else {
         var nombre = "anonymous";
     }
-    if (document.getElementById('formlastname').value != null){
-        nombre +=' '+document.getElementById('formlastname').value;
+    if (document.getElementById('formlastname').value != null) {
+        nombre += ' ' + document.getElementById('formlastname').value;
     }
-    if (document.getElementById('formcellphone').value != null){
+    if (document.getElementById('formcellphone').value != null) {
         var telefono = document.getElementById('formcellphone').value;
-    }else{
+    } else {
         var telefono = "null";
     }
-    if (document.getElementById('formemail').value != null){
+    if (document.getElementById('formemail').value != null) {
         var email = document.getElementById('formemail').value;
-    }else{
+    } else {
         var email = "ninguno";
     }
     var dateNow = new Date();
     var day = dateNow.getDate();
-    if(day<10)
-        day='0'+day;
-    var month = dateNow.getMonth()+1;
-    if (month<10)
-        month='0'+month;
+    if (day < 10)
+        day = '0' + day;
+    var month = dateNow.getMonth() + 1;
+    if (month < 10)
+        month = '0' + month;
     var year = dateNow.getFullYear();
     var hour = dateNow.getHours();
     var min = dateNow.getMinutes();
-    var fecha = day+"/"+month+"/"+year+" "+hour+":"+min;
+    var fecha = day + "/" + month + "/" + year + " " + hour + ":" + min;
     console.log(fecha);
     fbq('track', 'Lead', {value: email});
-    window.Intercom("trackEvent", "Intento Registro Landing",{
+    window.Intercom("trackEvent", "Intento Registro Landing", {
         "Fecha del intento": fecha,
-        "Nombre en formulario":nombre,
-        "Celular en formulario":telefono,
-        "Email en formulario":email,
+        "Nombre en formulario": nombre,
+        "Celular en formulario": telefono,
+        "Email en formulario": email,
     });
 
 });
@@ -133,7 +188,7 @@ function numberWithCommas(x) {
 var conta1 = 0;
 var conta2 = 0;
 var conta3 = 0;
-var slider1 = $("#ex1Slider" ).slider({
+var slider1 = $("#ex1Slider").slider({
     value: 0,
     min: 0,
     max: 5,
@@ -159,7 +214,7 @@ var slider1 = $("#ex1Slider" ).slider({
  else
  $("#palabra-empleados1").text("empleado");
  });*/
-var slider2 = $("#ex2Slider" ).slider({
+var slider2 = $("#ex2Slider").slider({
     value: 0,
     min: 0,
     max: 5,
@@ -185,7 +240,7 @@ var slider2 = $("#ex2Slider" ).slider({
  $("#palabra-empleados2").text("empleado");
  });*/
 //var slider3 = new Slider("#ex3Slider");
-var slider3 = $("#ex3Slider" ).slider({
+var slider3 = $("#ex3Slider").slider({
     value: 0,
     min: 0,
     max: 5,
@@ -210,20 +265,20 @@ var slider3 = $("#ex3Slider" ).slider({
  else
  $("#palabra-empleados3").text("empleado");
  });*/
-function funcion(){
+function funcion() {
     var valor = (conta1 * 29500) + (conta2 * 22500) + (conta3 * 16500);
-    if((conta1 + conta2 + conta3) >= 4 )
+    if ((conta1 + conta2 + conta3) >= 4)
         valor = valor * 0.9;
     $("#total-empleados").text(conta1 + conta2 + conta3);
-    $("#precio").text(" = $"+numberWithCommas(valor) + " mensuales");
+    $("#precio").text(" = $" + numberWithCommas(valor) + " mensuales");
     //$("#total-empleados").text(conta1 + conta2 + conta3);
-    if((conta1 + conta2 + conta3) != 1)
+    if ((conta1 + conta2 + conta3) != 1)
         $("#palabra-empleados").text("empleados");
     else
         $("#palabra-empleados").text("empleado");
 
 }
 
-function stopVideo(){
+function stopVideo() {
     $('#mainVideoFrame').attr('src', $('#mainVideoFrame').attr('src'));
 }

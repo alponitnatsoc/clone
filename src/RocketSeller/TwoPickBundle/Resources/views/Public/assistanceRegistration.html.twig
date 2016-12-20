@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Dejanos ayudarte</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,700,800" rel="stylesheet">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600,600italic,700" rel="stylesheet" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="https://unpkg.com/scrollreveal@3.3.2/dist/scrollreveal.min.js"></script>
+</head>
+
+<body>
+    <main>
+        <header>
+            <div id="headerCont">
+                <div id="form">
+                    {{ form_start(form) }}
+                        <input class="half input" type="text" name="firstname" value="" placeholder="Nombre">
+                        <input class="half input" type="text" name="lastname" value="" placeholder="Apellido"><br>
+                        <input class="input full" type="text" name="cellphone" value="" placeholder="Celular"><br>
+                        <input class="input full" type="text" name="email" value="" placeholder="Correo electrónico">
+                        <br>
+                        <!--<input class="info buttonf" type="submit" value="¡Quiero más información!">-->
+                        {{ form_widget(form.save, { 'attr': {'class': 'start buttonf'}}) }}
+                    {{ form_end(form) }}<br />
+                </div>
+            </div>
+        </header>
+    </main>
+</body>
+<script type="text/javascript">
+
+
+    $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
+        validator = $("form[name='form']").validate({
+            rules: {
+                "firstname": "required",
+                "lastname": "required",
+                "cellphone": {required : true, maxlength : 10},
+                "email": {required : true, email : true},
+                "chktyc": "required"
+            },
+            messages: {
+                "firstname": "&#8227; El nombre no puede estar vacio",
+                "lastname": "&#8227; Los apellidos no pueden estar vacios",
+                "cellphone": {required : "&#8227; El celular no puede estar vacio", maxlength : "&#8227; El celular no es válido"},
+                "email": {required : "&#8227; El email no puede estar vacio", email : "&#8227; El email no es válido"},
+                "chktyc": "&#8227; Acepta los Términos y Condiciones para continuar"
+            },
+            errorElement : 'div',
+            errorLabelContainer: '.errorTxt'
+        });
+    });
+
+    $('#formfirstname').attr('oninvalid', 'setCustomValidity("El campo no puede estar vacio")');
+    $('#formfirstname').attr('oninput', "setCustomValidity('')");
+
+    $('#formlastname').attr('oninvalid', 'setCustomValidity("El campo no puede estar vacio")');
+    $('#formlastname').attr('oninput', "setCustomValidity('')");
+
+    $('#formcellphone').attr('oninvalid', 'setCustomValidity("El campo no puede estar vacio")');
+    $('#formcellphone').attr('oninput', "setCustomValidity('')");
+
+    $('#formemail').attr('oninvalid', 'setCustomValidity("El correo escrito no es valido")');
+    $('#formemail').attr('oninput', "setCustomValidity('')");
+
+
+
+</script>
+
+<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+<script>
+    (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+            function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+        e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+        e.src='//www.google-analytics.com/analytics.js';
+        r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+    ga('create','UA-70850811-3','auto');ga('send','pageview');
+</script>
+<!-- End Google Analytics -->
+
+</html>
