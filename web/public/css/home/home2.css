@@ -1,6 +1,6 @@
 @charset "UTF-8";
-*,a {margin: 0; padding: 0;text-decoration: none;}
-a {text-decoration: none}
+*,a {margin: 0; padding: 0;}
+a {text-decoration: none !important;cursor: pointer;}
 
 .grisclarofont  {color: #87868A}
 .naranjafont  {color: #FD9224}
