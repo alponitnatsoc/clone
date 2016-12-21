@@ -892,6 +892,23 @@ class PaymentMethodRestController extends FOSRestController
         $request->setMethod("POST");
         $pOSRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
         $flag=false;
+        if($purchaseOrder->getPayMethodId()=="none"){
+            //we inmidiatly disperse it to symplifica account
+            $radicatedNumber=substr(md5($purchaseOrder->getIdPurchaseOrders()),0,18);
+            $purchaseOrder->setRadicatedNumber($radicatedNumber);
+            $pOS = $pOSRepo->findOneBy(array("idNovoPay" => "00"));
+            $purchaseOrder->setPurchaseOrdersStatus($pOS);
+            $purchaseOrder->setDatePaid(new DateTime());
+            $em->persist($purchaseOrder);
+            $em->flush();
+            $request->setMethod("POST");
+            $request->request->add(array(
+                "numeroRadicado" => $radicatedNumber,
+                "estado" => "0"
+            ));
+            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:HighTechRest:postCollectionNotification',array("request"=>$request), array('_format' => 'json'));
+            return array('code'=>$insertionAnswer->getStatusCode(),'data'=> $insertionAnswer->getContent());
+        }
         if($purchaseOrder->getProviderId()==0){
 //            $simpleName=$purchaseOrder->getPurchaseOrderDescriptions()->get(0)->getProductProduct()->getSimpleName();
 //            if(!($simpleName=='PN'||$simpleName=='PP')){
