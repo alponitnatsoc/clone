@@ -118,8 +118,6 @@ $("#0effort").on('submit', function (e) {
     e.preventDefault();
     if(!$("#0effort").valid()){
         return
-    }else {
-        alert("thefuck");return;
     }
     var url = $(this).attr("action");
     $.ajax({
