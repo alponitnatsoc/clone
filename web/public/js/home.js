@@ -119,7 +119,7 @@ $("#0effort").on('submit', function (e) {
     if(!$("#0effort").valid()){
         return
     }else {
-        alert("thefuck");return;
+        alert("Revisa que tu información este bien escrita");return;
     }
     var url = $(this).attr("action");
     $.ajax({
