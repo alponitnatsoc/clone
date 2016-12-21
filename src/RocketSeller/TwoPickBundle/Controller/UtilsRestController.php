@@ -9,6 +9,8 @@ use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\Contract;
+use RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity;
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolation;
@@ -63,6 +65,51 @@ class UtilsRestController extends FOSRestController
             $answer[$i]['ENombre']=$real->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getFullName();
             $answer[$i]['FechaI']=$real->getStartDate()->format("Y-m-d");
             $i++;
+        }
+
+        $view = View::create();
+        $view->setData($answer)->setStatusCode(200);
+
+        return $view;
+    }
+
+    /**
+     * Return the overall user list.
+     *
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Return the overall User List",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     404 = "Returned when the user is not found"
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function getMissingFCESAction()
+    {
+        //correo nombre telefono nombre de la empleada
+        $entity = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Entity")->findBy(array('name'=>'NO SE'));
+        $ehe = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployeeHasEntity")->findBy(array('entityEntity'=>$entity));
+        $userRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+
+        $answer= array();
+        $i=0;
+        /** @var EmployeeHasEntity $item */
+        foreach ($ehe as $item) {
+            $employers = $item->getEmployeeEmployee()->getEmployeeHasEmployers();
+            /** @var EmployerHasEmployee $employer */
+            foreach ($employers as $employer) {
+                /** @var User $user */
+                $user = $userRepo->findOneBy(array('personPerson'=>$employer->getEmployerEmployer()->getPersonPerson()));
+                $answer[$i]=array();
+                $answer[$i]['nombreEmpleador'] = $employer->getEmployerEmployer()->getPersonPerson()->getFullName();
+                $answer[$i]['nombreEmpleado'] = $employer->getEmployeeEmployee()->getPersonPerson()->getFullName();
+                $answer[$i]['correo'] = $user->getEmail();
+                $i++;
+            }
         }
 
         $view = View::create();
