@@ -118,8 +118,6 @@ $("#0effort").on('submit', function (e) {
     e.preventDefault();
     if(!$("#0effort").valid()){
         return
-    }else {
-        alert("Revisa que tu información este bien escrita");return;
     }
     var url = $(this).attr("action");
     $.ajax({
