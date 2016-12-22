@@ -480,18 +480,23 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                 $template = $this->parameters['template']['primaReminder'];
                 return $this->sendMessage($template, $context, $contactPublicFromEmail, $contactPublic);
                 break;
-		        case 'reportVacacionesXD':
-			        /** $context must have:
-			         * string payrollId
-			         * string contractId
-			         * string startDate
-			         * string endDate
-			         * string employerName
-			         * string employeeName
-			         */
-			        $template = $this->parameters['template']['reportVacacionesXD'];
-			        return $this->sendMessage($template, $context, $contactPublicFromEmail, $contactPrivate);
-			        break;
+            case 'reportVacacionesXD':
+                /** $context must have:
+                 * string payrollId
+                 * string contractId
+                 * string startDate
+                 * string endDate
+                 * string employerName
+                 * string employeeName
+                 */
+                $template = $this->parameters['template']['reportVacacionesXD'];
+                return $this->sendMessage($template, $context, $contactPublicFromEmail, $contactPrivate);
+                break;
+            case 'minimumSalaryAdjust':
+                /** $context must have:
+                 * string toEmail
+                 */
+                break;
         }
     }
 
