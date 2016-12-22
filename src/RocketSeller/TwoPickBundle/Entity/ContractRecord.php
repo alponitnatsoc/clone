@@ -108,7 +108,7 @@ class ContractRecord
 	
 	/**
 	 * @var \RocketSeller\TwoPickBundle\Entity\PayMethod
-	 * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PayMethod", cascade={"persist"})
+	 * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PayMethod", cascade={"persist"})
 	 * @ORM\JoinColumns({
 	 *   @ORM\JoinColumn(name="pay_method_id_pay_method", referencedColumnName="id_pay_method")
 	 * })
@@ -195,6 +195,11 @@ class ContractRecord
 	 *   })
 	 */
 	private $contractContract;
+	
+	/**
+	 * @ORM\Column(name="to_be_executed", type="smallint", nullable=TRUE)
+	 */
+	private $toBeExecuted;
 	
 	/**
 	 * @ORM\Column(type="date", nullable=TRUE)
@@ -850,5 +855,29 @@ class ContractRecord
     public function getContractContract()
     {
         return $this->contractContract;
+    }
+
+    /**
+     * Set toBeExecuted
+     *
+     * @param integer $toBeExecuted
+     *
+     * @return ContractRecord
+     */
+    public function setToBeExecuted($toBeExecuted)
+    {
+        $this->toBeExecuted = $toBeExecuted;
+
+        return $this;
+    }
+
+    /**
+     * Get toBeExecuted
+     *
+     * @return integer
+     */
+    public function getToBeExecuted()
+    {
+        return $this->toBeExecuted;
     }
 }
