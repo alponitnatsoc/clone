@@ -281,6 +281,7 @@ function manageEmployees() {
             }).done(function (data) {
                 console.log(data);
                 $("#close_change_payment_method").click();
+                $("#error_payment_change").hide();
                 // location.reload();
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 $("#error_payment_change").show();
