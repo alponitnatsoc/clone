@@ -94,7 +94,26 @@ class LoadDocumentStatusTypeData extends AbstractFixture implements OrderedFixtu
         $documentStatusTypeBackOfficeFinished->setName("Backoffice finished");
         $documentStatusTypeBackOfficeFinished->setDocumentStatusCode("BOFFFF");
         $manager->persist($documentStatusTypeBackOfficeFinished);
-
+	
+		    $documentStatusTypeAmendmentPending= new DocumentStatusType();
+	      $documentStatusTypeAmendmentPending->setName("Amendment pending");
+	      $documentStatusTypeAmendmentPending->setDocumentStatusCode("AMDCPE");
+		    $manager->persist($documentStatusTypeAmendmentPending);
+	
+		    $documentStatusTypeAmendmentInValidation= new DocumentStatusType();
+		    $documentStatusTypeAmendmentInValidation->setName("Amendment in validation");
+		    $documentStatusTypeAmendmentInValidation->setDocumentStatusCode("AMDCIV");
+		    $manager->persist($documentStatusTypeAmendmentInValidation);
+	
+		    $documentStatusTypeAmendmentValidated= new DocumentStatusType();
+		    $documentStatusTypeAmendmentValidated->setName("Amendment validated");
+		    $documentStatusTypeAmendmentValidated->setDocumentStatusCode("AMDCVA");
+		    $manager->persist($documentStatusTypeAmendmentValidated);
+	
+		    $documentStatusTypeAmendmentError= new DocumentStatusType();
+		    $documentStatusTypeAmendmentError->setName("Amendment error");
+		    $documentStatusTypeAmendmentError->setDocumentStatusCode("AMDCER");
+		    $manager->persist($documentStatusTypeAmendmentError);
 	    
         $manager->flush();
 

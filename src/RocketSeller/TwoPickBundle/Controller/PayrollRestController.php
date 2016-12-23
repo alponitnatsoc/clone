@@ -622,7 +622,7 @@ class PayrollRestController extends FOSRestController
      *   (name="contract_type", nullable=true, requirements="([0-9])", strict=false, description="Contract type of the employee, this can be found in the table contract_type, field payroll_code.")
      *   (name="transport_aux", nullable=true, requirements="(S|N)", strict=false, description="Weather or not it needs transportation help, if empty it uses the law.")
      *   (name="society", nullable=true, requirements="(.)*", strict=true, description="Id of the society(id of the employeer).")
-     *   (name="payroll_type", nullable=false, requirements="4|6|1", strict=true, description="Payroll type, 4 for full time 6 part time 1 regular payroll.")
+     *   (name="payroll_type", nullable=true, requirements="4|6|1", strict=true, description="Payroll type, 4 for full time 6 part time 1 regular payroll.")
      *
      * @return View
      */
@@ -670,14 +670,15 @@ class PayrollRestController extends FOSRestController
         $mandatory['society'] = false;
         $regex['payroll_type'] = '4|6|1';
         $mandatory['payroll_type'] = false;
-
-
+	    
         $this->validateParamters($parameters, $regex, $mandatory);
 
         $content = array();
         $unico = array();
         $info = $this->getEmployeeAction($parameters['employee_id'])->getData();
-
+	
+	      if(!isset($info['RECIBE_AUX_TRA'])) $info['RECIBE_AUX_TRA'] = 'N';
+	      
         $unico['TIPOCON'] = 1;
         $unico['EMP_CODIGO'] = $parameters['employee_id'];
         $unico['EMP_APELLIDO1'] = isset($parameters['last_name']) ? $parameters['last_name'] : $info['EMP_APELLIDO1'];
@@ -695,7 +696,8 @@ class PayrollRestController extends FOSRestController
         $unico['EMP_TIPOLIQ'] = isset($parameters['liquidation_type']) ? $parameters['liquidation_type'] : $info['EMP_TIPOLIQ'];
         $unico['EMP_TIPO_SALARIO'] = isset($parameters['salary_type']) ? $parameters['salary_type'] : $info['EMP_TIPO_SALARIO'];
         $unico['RECIBE_AUX_TRA'] = isset($parameters['transport_aux']) ? $parameters['transport_aux'] : $info['RECIBE_AUX_TRA'];
-        $unico['EMP_SOCIEDAD'] = isset($parameters['society']) ? $parameters['society'] : $info['EMP_SOCIEDAD'];
+	      //TODO(andres_ramirez) preguntar si este se manda
+//        $unico['EMP_SOCIEDAD'] = isset($parameters['society']) ? $parameters['society'] : $info['EMP_SOCIEDAD'];
         $unico['EMP_TIPO_NOMINA'] = isset($parameters['payroll_type']) ? $parameters['payroll_type'] : $info['EMP_TIPO_NOMINA'];
 	      $unico['EMP_JORNADA'] = 1; //Is a must
 
