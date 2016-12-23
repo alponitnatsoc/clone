@@ -25,7 +25,7 @@ ID Factura en Symplifica, Consecutivo Factura, Documento Cliente, Nombres, Apell
     {% set totalTransac = 0 %}
     {% set total4mill = 0 %}
     {% set totalMora = 0 %}
-    {% set datePay = po.dateCreated|date("d-m-Y") %}
+    {% set datePay = po.dateModified|date("d-m-Y") %}
     {% for pod in pods %}
         {% set flag = 'f' %}
         {% if pod.productProduct.simpleName == 'PP' %}
