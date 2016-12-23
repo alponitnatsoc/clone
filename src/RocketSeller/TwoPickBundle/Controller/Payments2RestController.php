@@ -787,7 +787,7 @@ class Payments2RestController extends FOSRestController
         $mandatory['accountNumber'] = true;
         $regex['documentEmployee'] = '([0-9|-]| )+';
         $mandatory['documentEmployee'] = true;
-        $regex['documentTypeEmployee'] = '(CC|cc|nit|NIT)';
+        $regex['documentTypeEmployee'] = '(CC|cc|nit|NIT|ce|CE|PASAPORTE|pasaporte)';
         $mandatory['documentTypeEmployee'] = true;
 
         $this->validateParamters($parameters, $regex, $mandatory);
@@ -798,7 +798,12 @@ class Payments2RestController extends FOSRestController
         if($parameters['documentTypeEmployee'] == 'nit') {
           $parameters['documentTypeEmployee'] = 'NIT';
         }
-
+        if($parameters['documentTypeEmployee'] == 'ce') {
+            $parameters['documentTypeEmployee'] = 'CE';
+        }
+        if($parameters['documentTypeEmployee'] == 'pasaporte') {
+            $parameters['documentTypeEmployee'] = 'PASAPORTE';
+        }
         $parameters_fixed = array();
         $parameters_fixed['cuentaGSC'] = $parameters['accountNumber'];
         $parameters_fixed['tipoDocumentoBeneficiario'] = $parameters['documentTypeEmployee'];
