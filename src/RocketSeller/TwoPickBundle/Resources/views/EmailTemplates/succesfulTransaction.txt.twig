@@ -28,92 +28,97 @@
     </style>
   </head>
   <body>
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr>
-        <td>
-          <table border="0" cellpadding="0" cellspacing="0" align="center" width="640" bgcolor="#FFFFFF">
-          <tr>
-              {% include "RocketSellerTwoPickBundle:EmailTemplates:header.txt.twig" %}
-          </tr>
+      <table border="0" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td>
+            <table border="0" cellpadding="0" cellspacing="0" align="center" width="640" bgcolor="#FFFFFF">
+              <tr>
+                {% include "RocketSellerTwoPickBundle:EmailTemplates:header.txt.twig" %}
+              </tr>
 
-            <tr>
+              <tr>
                 <td style="padding: 10px 10px 20px 10px;">
-                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                      <tr>
-                          <td>
-                            <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#40c1c3; font-size: 20px;width: 90%;margin: 0 auto;">¡Hola {{ userName }}!
-                              </div><br />
-                          </td>
-                      </tr>
-                        <tr>
-                            <td>
-                                <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#909090; font-size: 15px; width:90%;margin:0 auto"><span style="color:#13878e;font-weight:600">¡Tu orden de pago fue recibida!</span><br>
-                      Tu pago se encuentra en proceso y podría tardar <strong>hasta 3 días habiles</strong>
-                  de acuerdo a la entidad bancaria. Puedes consultar el estado de la transacción ingresando a Symplifica.com. En cuanto la transacción se haya completado te
-                  enviaremos un comprobante de pago por este medio.<br><br/>
-                                    <span style="color:#13878e;font-weight:600">Los items a pagar son:</span>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
+                  <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tr>
+                      <td>
+                        <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#40c1c3; font-size: 20px;width: 90%;margin: 0 auto;">
+                          ¡Hola {{ userName }}!
+                        </div><br />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#909090; font-size: 15px; width:90%;margin:0 auto">
+                          <span style="color:#13878e;font-weight:600">¡Tu orden de pago fue recibida!</span><br>
+                          Tu pago se encuentra en proceso y podría tardar <strong>hasta 3 días habiles</strong>
+                          de acuerdo a la entidad bancaria. Puedes consultar el estado de la transacción ingresando a Symplifica.com. En cuanto la transacción se haya completado te
+                          enviaremos un comprobante de pago por este medio.<br><br/>
+                          <span style="color:#13878e;font-weight:600">Los items a pagar son:</span>
+                        </div>
+                      </td>
+                    </tr>
+                  </table>
                 </td>
-            </tr>
+              </tr>
 
-            <tr>
+              <tr>
                 <td bgcolor="#F7F7F8" style="display:block;margin:0 auto;width:90%">
-                    <table border="0" cellpadding="0" cellspacing="0">
+                  <table width="100%" border="0" cellpadding="0" cellspacing="0">
                     <thead>
-                        <tr>
-                            <th  align="left" bgcolor="#13878e" style="padding:5px 0 5px 15px"><span style="color:#FFF;font-weight:300">Concepto</span></th>
-                            <th  align="right" bgcolor="#13878e" style="padding:5px 15px 5px 0"><span style="color:#FFF;font-weight:300">Valor</span></th>
-                        </tr>
-					   </thead>
-                <tbody>
-                  {% set totalValue =0 %}
-                    {% for pods in po.purchaseOrderDescriptions %}
+                      <tr>
+                        <th  align="left" bgcolor="#13878e" style="padding:5px 0 5px 15px">
+                          <span style="color:#FFF;font-weight:300">Concepto</span>
+                        </th>
+                        <th  align="right" bgcolor="#13878e" style="padding:5px 15px 5px 0">
+                          <span style="color:#FFF;font-weight:300">Valor</span>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% set totalValue =0 %}
+                      {% for pods in po.purchaseOrderDescriptions %}
 
-                                <tr>
-                                    <td align="left" style="width:55%;padding: 5px 0 5px 9px;font-size:14px">
-                                        {{ pods.description }}
-                                    </td>
-                                    <td align="right" style="width:45%;padding: 5px 5px 5px 0;">
-                                         $ {{ pods.value|number_format(0, '.', ',') }}
-                                         {% set totalValue = totalValue + pods.value %}
-                                    </td>
-                                </tr>
+                      <tr>
+                        <td align="left" style="width:55%;padding: 5px 0 5px 9px;font-size:14px">
+                          {{ pods.description }}
+                        </td>
+                        <td align="right" style="width:45%;padding: 5px 5px 5px 0;">
+                           $ {{ pods.value|number_format(0, '.', ',') }}
+                           {% set totalValue = totalValue + pods.value %}
+                        </td>
+                      </tr>
 
-                    {% endfor %}
-                        <tr bgcolor="#CCC">
-                            <td align="left" style="color:#676767;width:55%;padding: 5px 0 5px 9px;">
-                                Total pagado
-                            </td>
-                            <td align="right" style="color:#676767;width:45%;padding: 5px 5px 5px 0;">
-                                 $ {{ totalValue|number_format(0, '.', ',') }}
-                            </td>
-                        </tr>
+                      {% endfor %}
+                      <tr bgcolor="#CCC">
+                        <td align="left" style="color:#676767;width:55%;padding: 5px 0 5px 9px;">
+                          Total pagado
+                        </td>
+                        <td align="right" style="color:#676767;width:45%;padding: 5px 5px 5px 0;">
+                          $ {{ totalValue|number_format(0, '.', ',') }}
+                        </td>
+                      </tr>
                     </tbody>
-                </table>
+                  </table>
                 </td>
-            </tr>
+              </tr>
 
-            <tr>
+              <tr>
                 <td>
-                    <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#909090; font-size: 15px; width:90%;margin:0 auto"><br>
-                                    <span style="color:#13878e;font-weight:600">¡Que tengas un buen día!</span><br>
-                                    Equipo Symplifica<br>
-
-                                </div>
+                  <div style="font-family: 'Open Sans', sans-serif; font-weight: 100; color:#909090; font-size: 15px; width:90%;margin:0 auto"><br>
+                    <span style="color:#13878e;font-weight:600">¡Que tengas un buen día!</span><br>
+                    Equipo Symplifica<br>
+                  </div>
                 </td>
-            </tr>
+              </tr>
 
-            <tr><td style="font-size: 0; line-height: 0;" height="20">&nbsp;</td></tr>
-            <tr>
+              <tr><td style="font-size: 0; line-height: 0;" height="20">&nbsp;</td></tr>
+              <tr>
                 {% include "RocketSellerTwoPickBundle:EmailTemplates:footer.txt.twig" %}
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
   </body>
 </html>
 {% endblock %}
