@@ -324,9 +324,9 @@
                         <div id="dataAside" class="foo">
                             <h2 class="lightRale">¿Tu empleada doméstica<br><strong>esta formal?</strong></h2><br />
                             <p class="displayN">Descubre Symplifica: Afilia a seguridad social, genera un contrato, paga electrónicamente y administra el día a día de los empleados de tu hogar desde internet.</p>
-                            <a class="displayN" href="https://symplifica.com/?utm_source=google&utm_campaign=salario&utm_medium=refferal"><button>Pruébalo gratis</button></a>
+                            <a class="displayN" onClick="ga('send', 'event', 'button', 'click');" href="https://symplifica.com/?utm_source=google&utm_campaign=salario&utm_medium=refferal"><button>Pruébalo gratis</button></a>
                             <!--responsive-->
-                            <a class="displayB" href="https://symplifica.com/?utm_source=google&utm_campaign=salario&utm_medium=refferal"><button>Descubrelo en Symplifica</button></a>
+                            <a class="displayB" onClick="ga('send', 'event', 'button', 'click');" href="https://symplifica.com/?utm_source=google&utm_campaign=salario&utm_medium=refferal"><button>Descubrelo en Symplifica</button></a>
                         </div>
                         <div class="bottomLogo">
                           <img src="https://symplifica.com/img/logo-white.png" width="170" height="auto"/>
@@ -335,7 +335,17 @@
                 </aside>
 
         </main>
+
         <script>
+
+            //codigo analyticas
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-70850811-3', 'auto');
+            ga('send', 'pageview');
 
             // JavaScript
             window.sr = ScrollReveal();
