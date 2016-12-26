@@ -2515,7 +2515,7 @@ class BackOfficeController extends Controller
 
 		$em=$this->getDoctrine()->getManager();
 
-		$payrolls = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll")->findBy(array("period" => 4, "month" => 11, "year" => 2016, "paid" => 1));
+		$payrolls = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll")->findBy(array("period" => 4, "month" => 12, "year" => 2016, "paid" => 1));
 		$pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array("idNovoPay" => "P1"));
 		$product = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product")->findOneBy(array("simpleName" => "PP"));
 
