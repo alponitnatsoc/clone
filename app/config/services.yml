@@ -112,6 +112,7 @@ services:
                     reportVacacionesXD: 'FOSUserBundle:EmailTemplates:reportVacacionesXD.txt.twig'
                     endContractAdvice: 'FOSUserBundle:EmailTemplates:endContract.txt.twig'
                     minimumSalaryAdjust: 'FOSUserBundle:EmailTemplates:minimumSalaryAdjust.txt.twig'
+                    sendBackLandingInfo: 'FOSUserBundle:EmailTemplates:landingBackInfo.txt.twig'
 
                 from_email:
                   confirmation: '%fos_user.registration.confirmation.from_email%'

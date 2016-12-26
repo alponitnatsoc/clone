@@ -871,8 +871,10 @@ class PayrollRestSecuredController extends FOSRestController
             $pilaOwePo->setPurchaseOrdersStatus($pendingStatus);
             $pilaOwePo->setIdUser($user);
             //set all to paid
-            $procesingStatus = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => 'S2'));
-            $realtoPay->setPurchaseOrdersStatus($procesingStatus);
+            if($realtoPay->getPayMethodId()!="none"){
+                $procesingStatus = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => 'S2'));
+                $realtoPay->setPurchaseOrdersStatus($procesingStatus);
+            }
             /** @var PurchaseOrdersDescription $pod */
             foreach ($pods as $pod) {
                 $pod->setPurchaseOrdersStatus($procesingStatus);
