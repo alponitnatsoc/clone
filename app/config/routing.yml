@@ -582,3 +582,7 @@ calculadora:
 register_referido:
     path: /register/{referredCode}
     defaults: { _controller: RocketSellerTwoPickBundle:Registration:register, referredCode: -1}
+
+free_payments:
+    path: /show/referred/
+    defaults: { _controller: RocketSellerTwoPickBundle:User:myReferredShow}
