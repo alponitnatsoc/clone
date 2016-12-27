@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use RocketSeller\TwoPickBundle\Entity\Campaign;
 use RocketSeller\TwoPickBundle\Entity\PromotionCode;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use RocketSeller\TwoPickBundle\Form\PagoMembresiaForm;
@@ -504,7 +505,9 @@ class SubscriptionController extends Controller
     public function suscripcionSuccessAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $promoTypeRef = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCodeType")->find(6);
+        $promoTypeRef = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCodeType")->findOneBy(array('shortName'=>'RF'));
+        /** @var Campaign $campaing */
+        $campaing = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Campaign")->findOneBy(array('description'=>'RefCamp'));
         /** @var User $user */
         $user = $this->getUser();
         if(!$user->getPromoCodeClaimedByReferidor()) {
@@ -513,7 +516,12 @@ class SubscriptionController extends Controller
                 if ($promoCode->getPromotionCodeTypePromotionCodeType() == $promoTypeRef) {
                     /** @var User $userReferidor */
                     $userReferidor = $promoCode->getUserUser();
-                    $userReferidor->setIsFree($userReferidor->getIsFree() + 3);
+                    if($campaing->getEnabled()==1){
+                        //stock in this campaing is used to have a database value of the campaing
+                        $userReferidor->setMoney($userReferidor->getMoney()+$campaing->getStock());
+                    }else{
+                        $userReferidor->setIsFree($userReferidor->getIsFree() + 3);
+                    }
                     $em->persist($userReferidor);
                     $user->setPromoCodeClaimedByReferidor(true);
                     $em->persist($user);

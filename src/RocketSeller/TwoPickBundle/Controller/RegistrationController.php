@@ -131,7 +131,7 @@ class RegistrationController extends BaseController
             $refCode = $this->generateUserReferidosCode($user);
 	        $user->setCode($refCode);
 
-            $promoTypeRef = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCodeType")->find(6);
+            $promoTypeRef = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCodeType")->findOneBy(array('shortName'=>'RF'));
             /** @var PromotionCode $promoCode */
             $promoCode = new PromotionCode();
             $promoCode->setCode($refCode);
