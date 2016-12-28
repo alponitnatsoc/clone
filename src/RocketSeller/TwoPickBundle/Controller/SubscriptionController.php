@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use DateTime;
 use RocketSeller\TwoPickBundle\Entity\Campaign;
 use RocketSeller\TwoPickBundle\Entity\PromotionCode;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -86,6 +87,52 @@ class SubscriptionController extends Controller
 
     public function suscripcionConfirmAction(Request $request)
     {
+        $inData = $request->request->all();
+        if(isset($inData["referredCode"])){
+            /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
+            $userManager = $this->get('fos_user.user_manager');
+            /** @var User $user */
+            $user = $this->getUser();
+            $em=$this->getDoctrine()->getManager();
+            $invitationCode=$inData["referredCode"];
+            $utils = $this->get('app.symplifica_utils');
+            $invitationCode = $utils->mb_normalize($invitationCode);
+
+            $promoCodeRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCode");
+            /** @var PromotionCode $realCode */
+            $realCode=$promoCodeRepo->findOneBy(array("code"=>$invitationCode));
+            if($realCode!=null&&$realCode->getPromotionCodeTypePromotionCodeType()->getStatus()!=-1&&$realCode->getPromotionCodeTypePromotionCodeType()->getUniqueness()==1){
+                $users = $realCode->getUsers();
+                $flag = false;
+                /** @var User $tUser */
+                foreach ($users as $tUser) {
+                    if($user->getId() == $tUser->getId()){
+                        $flag = true;
+                        break;
+                    }
+                }
+                if(!$flag){
+                    $realCode->addUser($user);
+                    $user->setIsFree($realCode->getPromotionCodeTypePromotionCodeType()->getDuration());
+                    $realCode->setStartDate(new \DateTime());
+                    $endDate= new DateTime(date("Y-m-d", strtotime("+".$user->getIsFree()." month", strtotime($realCode->getStartDate()->format("Y-m-d")))));
+                    $realCode->setEndDate($endDate);
+                    $em->persist($realCode);
+                    $userManager->updateUser($user);
+                }
+            }else{
+                if($realCode!=null&&$realCode->getPromotionCodeTypePromotionCodeType()->getUniqueness()=="-1"&&$realCode->getUsers()->count()==0){
+                    /** @var User $user */
+                    $realCode->addUser($user);
+                    $user->setIsFree($realCode->getPromotionCodeTypePromotionCodeType()->getDuration());
+                    $realCode->setStartDate(new \DateTime());
+                    $endDate= new DateTime(date("Y-m-d", strtotime("+".$user->getIsFree()." month", strtotime($realCode->getStartDate()->format("Y-m-d")))));
+                    $realCode->setEndDate($endDate);
+                    $em->persist($realCode);
+                }
+                $userManager->updateUser($user);
+            }
+        }
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
         }
