@@ -523,17 +523,19 @@
         </div>
     </div>
     <hr>
-    <form action="{{ path('subscription_confirm') }}" method="POST">
-        <div>
-            <label>Tienes algún codigo de referido?</label>
-            <input type="text" placeholder="Codigo" name="referredCode">
-        </div>
-        <div class="row padding-left-right-40">
-            <div class="col-md-12 margin-top-bottom-10 text-center">
-                <input type="submit" class="btn btn-orange" value="Continuar"/>
-            </div>
-        </div>
-    </form>
+    <div class="col-md-12">
+      <form action="{{ path('subscription_confirm') }}" method="POST">
+          <div class="center">
+              <label class="bold grisclarofont">Tienes algún codigo de referido?</label><br />
+              <input type="text" placeholder="Codigo" name="referredCode">
+          </div>
+          <div class="row padding-left-right-40">
+              <div class="col-md-12 margin-top-bottom-10 text-center">
+                  <input type="submit" class="btn btn-orange" value="Continuar"/>
+              </div>
+          </div>
+      </form>
+    </div>
 
     <!--<div class="row">
         <br/>

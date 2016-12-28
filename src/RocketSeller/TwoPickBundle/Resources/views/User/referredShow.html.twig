@@ -1,6 +1,56 @@
 {% extends '::base.html.twig' %}
 
 {% block fos_user_content %}
-<h1>Esta es la bolsa de dinero ${{ app.user.money|number_format(0, '.', ',') }}</h1>
-{% endblock %}
+<div>
+    <div class="col-sm-12 col-xs-12 align-Resp azulclaro">
+        <div id="" class=" col-sm-12 col-xs-12 blockStep inline  nav-link" >
+            <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+                 <img src="/img/block-inline.png" class="center-block">
+            </div>
+            <div id="" class="col-md-10 col-xs-12">
+                <div id="" class="text-left">
+                    <h1 style="color:#FFF;margin:25px 0 0;font-size:25px" class="bold">¡Hola {{ app.user.getPersonPerson().getNames() }}!</h1>
+                    <span clas="light" style="color:#FFF;margin:0;font-weight:100;font-size:20px">Refiere a Symplifica y gana dinero para tus pagos</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
+<div class="row">
+  <div>
+    <div>
+      <img />
+    </div>
+    <div>
+      <strong>¿Sabes que Symplifica</strong>
+      <h2>PODRÍA PAGAR</h2>
+      <p>el sueldo y aportes a seguridad social de tu empleada?</p>
+    </div>
+  </div>
+  <div>
+    <div>
+      <h3>¿Qué recibo?</h3>
+      <p>
+        Recibes $100.000 pesos en crédito Symplifica por cada persona que complete su registro con tu código, el dinero acumulado puedes redimirlo cuando desees.
+      </p>
+      <h3>¿Qué debo hacer?</h3>
+      <p>
+        Contarle a todos tus amigos y familiares tu buena experiencia con Symplifica e invitarlos usando tu código.
+      </p>
+      <h3>¿Qué reciben mis referidos?</h3>
+      <p>
+        2 meses gratis al usar tu código.
+      </p>
+    </div>
+    <div>
+      <div>
+
+      </div>
+      <div>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
