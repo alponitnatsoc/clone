@@ -16,11 +16,9 @@
         </div>
     </div>
 </div>
-    <center>{% include '@RocketSellerTwoPick/User/referredCodeShare.html.twig' ignore missing %}</center>
 
-
-    <div class="row">
-  <div>
+<div class="row">
+  <div class="col-md-12">
     <div>
       <img />
     </div>
@@ -30,7 +28,7 @@
       <p>el sueldo y aportes a seguridad social de tu empleada?</p>
     </div>
   </div>
-  <div>
+  <div class="col-md-12">
     <div>
       <h3>¿Qué recibo?</h3>
       <p>
@@ -51,6 +49,13 @@
       </div>
       <div>
 
+      </div>
+      <div>
+        <h1>Este es tu código para referir "<b>{{ app.user.code }}"</b></h1>
+        <h3>Comparte en:</h3>
+        <div>facebook</div>
+        <div>o copia este link</div>
+        <input value="{{ url('register_referido', {'referredCode':app.user.code}) }}" onclick="this.focus();this.select();document.execCommand('copy');">
       </div>
     </div>
   </div>
