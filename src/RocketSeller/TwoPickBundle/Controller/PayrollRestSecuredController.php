@@ -447,6 +447,24 @@ class PayrollRestSecuredController extends FOSRestController
                     $total += $discount->getValue();
                 }
             }
+            $money = $user->getMoney();
+            if($money >0){
+                if($total< $money){
+                    $monDiscount=$total;
+                    $total=0;
+                }else{
+                    $monDiscount= $money;
+                    $total=$total- $money;
+                }
+
+                $productDiscount= $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product")->findOneBy(array('simpleName'=>'DIS'));
+                $podRef=new PurchaseOrdersDescription();
+                $podRef->setDescription("Descuento Referidos");
+                $podRef->setValue(-1*$monDiscount);
+                $podRef->setProductProduct($productDiscount);
+                $realtoPay->addPurchaseOrderDescription($podRef);
+
+            }
 
 
         }
@@ -849,6 +867,25 @@ class PayrollRestSecuredController extends FOSRestController
                     $total += $discount->getValue();
                 }
             }
+
+            $money = $user->getMoney();
+            if($money >0){
+                if($total< $money){
+                    $monDiscount=$total;
+                    $total=0;
+                }else{
+                    $monDiscount= $money;
+                    $total=$total- $money;
+                }
+
+                $productDiscount= $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product")->findOneBy(array('simpleName'=>'DIS'));
+                $podRef=new PurchaseOrdersDescription();
+                $podRef->setDescription("Descuento Referidos");
+                $podRef->setValue(-1*$monDiscount);
+                $podRef->setProductProduct($productDiscount);
+                $realtoPay->addPurchaseOrderDescription($podRef);
+
+            }
         }
         $realtoPay->setIdUser($user);
         $realtoPay->setDatePaid(new DateTime());
@@ -862,6 +899,17 @@ class PayrollRestSecuredController extends FOSRestController
             "idPurchaseOrder" => $realtoPay->getIdPurchaseOrders()), array('_format' => 'json'));
         if ($response->getStatusCode() == 200) {
             $this->useDiscounts($user);
+            $money = $user->getMoney();
+            if($money >0){
+                if($total< $money){
+                    $monDiscount=$total;
+                }else{
+                    $monDiscount= $money;
+                }
+                $user->setMoney($money-$monDiscount);
+                $em->persist($user);
+                $em->flush();
+            }
             $pods = $realtoPay->getPurchaseOrderDescriptions();
             /** @var UtilsController $utils */
             $utils = $this->get('app.symplifica_utils');
@@ -871,8 +919,10 @@ class PayrollRestSecuredController extends FOSRestController
             $pilaOwePo->setPurchaseOrdersStatus($pendingStatus);
             $pilaOwePo->setIdUser($user);
             //set all to paid
-            $procesingStatus = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => 'S2'));
-            $realtoPay->setPurchaseOrdersStatus($procesingStatus);
+            if($realtoPay->getPayMethodId()!="none"){
+                $procesingStatus = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => 'S2'));
+                $realtoPay->setPurchaseOrdersStatus($procesingStatus);
+            }
             /** @var PurchaseOrdersDescription $pod */
             foreach ($pods as $pod) {
                 $pod->setPurchaseOrdersStatus($procesingStatus);

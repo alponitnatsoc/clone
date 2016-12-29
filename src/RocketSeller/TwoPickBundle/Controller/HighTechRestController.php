@@ -125,6 +125,7 @@ class HighTechRestController extends FOSRestController
             return $retorno;
         } else {
             $dis->setAlreadyRecived(1);
+            $dis->setDateModified(new DateTime());
             $em->persist($dis);
             $em->flush();
         }

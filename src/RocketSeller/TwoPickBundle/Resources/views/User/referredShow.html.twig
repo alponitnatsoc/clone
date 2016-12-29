@@ -1,0 +1,138 @@
+{% extends '::base.html.twig' %}
+
+{% block fos_user_content %}
+<link rel="stylesheet" type="text/css" href="{{ asset('css/public/referred.css') }}"/>
+<div>
+    <div class="col-sm-12 col-xs-12 align-Resp azulclaro">
+        <div id="" class=" col-sm-12 col-xs-12 blockStep inline  nav-link" >
+            <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+                 <img src="/img/block-inline.png" class="center-block">
+            </div>
+            <div id="" class="col-md-10 col-xs-12">
+                <div id="" class="text-left">
+                    <h1 style="color:#FFF;margin:25px 0 0;font-size:25px" class="bold">¡Hola {{ app.user.getPersonPerson().getNames() }}!</h1>
+                    <span clas="light" style="color:#FFF;margin:0;font-weight:100;font-size:20px">Refiere a Symplifica y gana dinero para tus pagos</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="referredContainer">
+  <div class="col-md-12">
+    <div class="col-md-12 refTitleCont">
+      <div class="col-md-2">
+        <img src="{{ asset('public/img/home/referredPig.png') }}" alt="">
+      </div>
+      <div class="col-md-10 refTitle azuloscurofont">
+        <strong>¿Sabes que Symplifica</strong>
+        <h2 class="bold">PODRÍA PAGAR</h2>
+        <p>el sueldo y aportes a seguridad social de tu empleada?</p>
+      </div>
+    </div>
+    <div class="col-md-12 referredBoxesCont">
+      <div class="col-md-5">
+          <h4 class="grisoscurofont light">&#8226; ¿Qué recibo?</h4>
+          <p class="grisclarofont light">
+            Recibes $100.000 pesos en crédito Symplifica por cada persona que complete su registro con tu código, el dinero acumulado puedes redimirlo cuando desees.
+          </p>
+          <h4 class="grisoscurofont light">&#8226; ¿Qué debo hacer?</h4>
+          <p class="grisclarofont light">
+            Contarle a todos tus amigos y familiares tu buena experiencia con Symplifica e invitarlos usando tu código.
+          </p>
+          <h4 class="grisoscurofont light">&#8226; ¿Qué reciben mis referidos?</h4>
+          <p class="grisclarofont light">
+            2 meses gratis al usar tu código.
+          </p>
+      </div>
+      <div class="col-md-7">
+          <div class="col-md-6 referredBoxes azulmediofont" style="background: #f9f9fb">
+              <img src="{{ asset('public/img/home/icon9.png') }}" width="56px" height="auto" alt="moneyBa">
+              <p>Dinero <strong>acumulado</strong></p>
+              <h2 id="target" class="extrabold">$<span class="span" id="realTarget">0</span></h2>
+              <span class="noShow btn-azul btn regular">REDIMIR</span>
+          </div>
+          <div class="col-md-6 referredBoxes azulmediofont">
+              <img src="{{ asset('public/img/home/icon6.png') }}" width="56px" height="auto" alt="referidos">
+              <p>Número <strong>de referidos</strong></p>
+              <h2 class="extrabold">2 INSCRITOS</h2>
+              <span class="btn-azul btn regular" data-toggle="modal" data-target="#myModal">REFERIR AQUÍ</span>
+          </div>
+          <div class="col-md-12 azulmedio noPadding">
+            <div class="col-md-6 codeShare">
+              <br />
+              <p class="regular" style="margin:0">Tu código para referir es:</p>
+              <span class="extrabold" style="font-size:20px">{{ app.user.code }}</span>
+            </div>
+            <div class="col-md-6 azuloscuro codeShare">
+              Comparte en:
+              <!-- Load Facebook SDK for JavaScript -->
+              <span id="fb-root"></span>
+              <div class="fb-share-button" data-href="http://127.0.0.1:8000/register/elReferidor" data-layout="button" data-size="large" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ url('register_referido', {'referredCode':app.user.code}) }}&amp;src=sdkpreparse">Compartir</a></div>
+              <div>o copia este link</div>
+              <input value="{{ url('register_referido', {'referredCode':app.user.code}) }}" onclick="this.focus();this.select();document.execCommand('copy');">
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title center azulmediofont bold">¿A quíen vas a referir?</h4></h4>
+        </div>
+        <div class="modal-body">
+          <p class="regular grisclarofont center">Para referir a alguien, solo debes ingresar el correo y el número de celular de tu amigo</p>
+        </div>
+        <div class="center">
+          <form>
+            <input class="refBorder center" type="text" placeholder="Correo electrónico" />
+            <input class="refBorder center" type="text" placeholder="Número celular" />
+            <br />
+            <br />
+            <button type="button" class="btn btn-azul">enviar</button>
+          </form>
+          <br />
+        </div>
+        <div class="modal-footer center">
+          <button type="button" class="btn btn-grisBorde" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v2.8&appId=404251236437754";
+  fjs.parentNode.insertBefore(js, fjs);
+ }(document, 'script', 'facebook-jssdk'));
+
+ var tope={{ app.user.money}};
+ var delay=1000;
+
+  setTimeout(function() {
+    window.setInterval(function(){
+
+     var total = parseInt($("#realTarget").text())+2500;
+     if( total> tope ){
+       return;
+     }
+
+     $("#realTarget").text(total);
+   }, 25);  }, delay)
+
+
+
+
+ </script>
+{% endblock %}

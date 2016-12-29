@@ -276,6 +276,12 @@ class User extends BaseUser
     private $promoCodeClaimedByReferidor;
 
     /**
+     * @var float
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $money = 0;
+
+    /**
      * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\Log", mappedBy="userUser",cascade={"persist"})
      */
     private $logs;
@@ -1215,5 +1221,29 @@ class User extends BaseUser
     public function getPromoCodeClaimedByReferidor()
     {
         return $this->promoCodeClaimedByReferidor;
+    }
+
+    /**
+     * Set money
+     *
+     * @param float $money
+     *
+     * @return User
+     */
+    public function setMoney($money)
+    {
+        $this->money = $money;
+
+        return $this;
+    }
+
+    /**
+     * Get money
+     *
+     * @return float
+     */
+    public function getMoney()
+    {
+        return $this->money;
     }
 }

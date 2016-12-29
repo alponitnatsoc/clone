@@ -47,7 +47,7 @@ class TwigSwiftMailer extends Controller implements MailerInterface
         $contactPublic = 'contactanos@symplifica.com';
         $contactPrivate = 'servicioalcliente@symplifica.com';
         $testEmail = 'andres.ramirez@symplifica.com';
-	      $registrationStuck = 'salua.garcia@symplifica.com';
+        $registrationStuck = 'salua.garcia@symplifica.com';
         switch ($context['emailType']){
             /** tested OK */
             //$context['emailType']=='welcome'
@@ -496,7 +496,20 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                 /** $context must have:
                  * string toEmail
                  */
+                 $template = $this->parameters['template']['minimumSalaryAdjust'];
+                 return $this->sendMessage($template, $context, $teamFromEmail, $context["toEmail"]);
                 break;
+            case "sendBackLandingInfo":
+                /** $context must have:
+                 * string email
+                 * string name
+                 * string phone
+                 * string createdAt
+                 */
+                $template = $this->parameters['template']['sendBackLandingInfo'];
+                return $this->sendMessage($template, $context, $contactPublicFromEmail, $registrationStuck);
+                break;
+
         }
     }
 

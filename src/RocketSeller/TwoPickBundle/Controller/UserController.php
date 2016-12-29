@@ -42,6 +42,10 @@ class UserController extends Controller
         return $this->getUser();
     }
 
+    public function myReferredShowAction(Request $request)
+    {
+        return $this->render('RocketSellerTwoPickBundle:User:referredShow.html.twig',array());
+    }
     public function myAccountShowAction(Request $request)
     {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {

@@ -131,7 +131,7 @@ class RegistrationController extends BaseController
             $refCode = $this->generateUserReferidosCode($user);
 	        $user->setCode($refCode);
 
-            $promoTypeRef = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCodeType")->find(6);
+            $promoTypeRef = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCodeType")->findOneBy(array('shortName'=>'RF'));
             /** @var PromotionCode $promoCode */
             $promoCode = new PromotionCode();
             $promoCode->setCode($refCode);
@@ -159,7 +159,6 @@ class RegistrationController extends BaseController
                 if($realCode!=null&&$realCode->getPromotionCodeTypePromotionCodeType()->getUniqueness()=="-1"&&$realCode->getUsers()->count()==0){
                     /** @var User $user */
                     $realCode->addUser($user);
-                    dump('entre');
                     $user->setIsFree($realCode->getPromotionCodeTypePromotionCodeType()->getDuration());
                     $realCode->setStartDate(new \DateTime());
                     $endDate= new DateTime(date("Y-m-d", strtotime("+".$user->getIsFree()." month", strtotime($realCode->getStartDate()->format("Y-m-d")))));

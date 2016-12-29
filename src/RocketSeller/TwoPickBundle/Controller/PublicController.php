@@ -29,10 +29,6 @@ class PublicController extends Controller
                 $landRes->setPhone($result['cellphone']);
                 $landRes->setEntityType("persona");
                 $landRes->setType("mesgratis");
-                //TODO-Andres Enviar un correo diciendole que lso dátos fueron recibidos y que todo bien que si quiere continuar puede seguir en la página del registro
-                //email to send
-                $email=$landRes->getEmail();
-
                 $em= $this->getDoctrine()->getEntityManager();
                 $em->persist($landRes);
                 $em->flush();
@@ -109,10 +105,15 @@ class PublicController extends Controller
                 $landRes->setPhone($answer['cellphone']);
                 $landRes->setEntityType("persona");
                 $landRes->setType("0Esfuezo");
-                //TODO-Andres enviar un email a Salua con el lid
-                //email to send
-                $email=$landRes->getEmail();
-
+                $mailer = $this->get("symplifica.mailer.twig_swift");
+                $context = array(
+                    "emailType"=>"sendBackLandingInfo",
+                    "email"=>$landRes->getEmail(),
+                    "name"=>$landRes->getName()." ".$landRes->getLastName(),
+                    "phone"=>$landRes->getPhone(),
+                    "createdAt"=>$landRes->getCreatedAt()->format("d-m-Y"),
+                );
+                $mailer->sendEmailByTypeMessage($context);
                 $em= $this->getDoctrine()->getEntityManager();
                 $em->persist($landRes);
                 $em->flush();
