@@ -265,7 +265,7 @@ class Contract
     private $dateToEnd;
 
     /**
-     * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\ContractRecord", mappedBy="idContractRecord")
+     * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\ContractRecord", mappedBy="contractContract")
      */
     private $contractRecords;
 

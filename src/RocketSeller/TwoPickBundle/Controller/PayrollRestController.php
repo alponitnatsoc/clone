@@ -211,8 +211,8 @@ class PayrollRestController extends FOSRestController
 
         str_replace("%20", "", $test);
         $test = trim(preg_replace('/\s\s+/', '', $test));
-        //dump ($url_request . '?' . str_replace( "%20", "",urldecode($test)));
-        //die();
+//        dump ($url_request . '?' . str_replace( "%20", "",urldecode($test)));
+//        die();
 
         $response = $client->request('GET', $url_request . '?' . str_replace("%20", "", urldecode($test))); //, ['query' => urldecode($test)]);
         // die ($url_request . '?' . str_replace( "%20", "",urldecode($test)));
@@ -3306,5 +3306,4 @@ class PayrollRestController extends FOSRestController
 		
 		return $responseView;
 	}
-
 }

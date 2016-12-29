@@ -42,8 +42,5 @@ notification :
     type:         rest
     resource:     "RocketSellerTwoPickBundle:NotificationRestSecured"
     name_prefix:  api_secured_
-contract :
-    type:         rest
-    resource:     "RocketSellerTwoPickBundle:ContractRestSecured"
-    name_prefix:  api_secured_
+
 

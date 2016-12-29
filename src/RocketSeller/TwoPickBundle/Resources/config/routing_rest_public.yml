@@ -153,3 +153,7 @@ utils :
     type: rest
     resource : "RocketSellerTwoPickBundle:UtilsRest"
     name_prefix: api_public_
+contract :
+    type:         rest
+    resource:     "RocketSellerTwoPickBundle:ContractRestSecured"
+    name_prefix:  api_public_secured_
