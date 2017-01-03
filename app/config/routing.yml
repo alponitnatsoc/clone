@@ -525,7 +525,7 @@ salario_actual:
 
 salario_min_actual:
     path:     /salario-minimo-2017
-    defaults: { _controller: RocketSellerTwoPickBundle:Public:salario }
+    defaults: { _controller: RocketSellerTwoPickBundle:Public:salario2017 }
 
 express_landing:
     path:     /assistance/registration
