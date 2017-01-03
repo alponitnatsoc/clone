@@ -19,6 +19,7 @@ use RocketSeller\TwoPickBundle\Entity\WeekWorkableDaysRecord;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
+use Symfony\Component\Validator\Constraints\Date;
 
 class ContractRestSecuredController extends FOSRestController
 {
@@ -68,8 +69,7 @@ class ContractRestSecuredController extends FOSRestController
         if($this->getUser()){//setting the user to the session user or backoffice
             $user = $this->getUser();
         }else{
-            $user = $em->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array(
-                "personPerson"=>$em->getRepository("RocketSellerTwoPickBundle:Person")->findOneBy(array("names"=>"Back","lastName1"=>"Office"))));
+            $user = $em->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('emailCanonical'=>"backOfficeSymplifica@gmail.com"));
         }
         /** @var Person $employeePerson */
         $employeePerson = $actualContract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson();//getting the employee person
@@ -241,7 +241,7 @@ class ContractRestSecuredController extends FOSRestController
         }
 
         $minimumSalary = $em->getRepository("RocketSellerTwoPickBundle:CalculatorConstraints")->findOneBy(array("name"=>"smmlv"))->getValue();
-        $newWorkableDaysMonth = $paramFetcher->get("workable_days_month");
+        $newWorkableDaysMonth = intval($paramFetcher->get("workable_days_month"));
         $newSalary = $paramFetcher->get("salary");
         $actualContractSalary = $actualContract->getSalary();
         $actualContractWorkableDaysOfMonth = $actualContract->getWorkableDaysMonth();
@@ -255,10 +255,7 @@ class ContractRestSecuredController extends FOSRestController
             $minimumSalaryPerDay = $minimumSalary/30;
             $actualContractPerDaySalary = $actualContractSalary/$actualContractWorkableDaysOfMonth;
             $newSalaryPerDay = $newSalary/$newWorkableDaysMonth;
-            if($actualContract->getWorkableDaysMonth() != $newWorkableDaysMonth){
-                $contractRecord->setWorkableDaysMonth($newWorkableDaysMonth);
-                $ContractHasChanged=true;
-            }
+            $contractRecord->setWorkableDaysMonth($newWorkableDaysMonth);
             if($newSalaryPerDay < $actualContractPerDaySalary)
                 $newSalaryPerDay = $actualContractPerDaySalary;
             if($newSalaryPerDay < $minimumSalaryPerDay)
@@ -269,6 +266,7 @@ class ContractRestSecuredController extends FOSRestController
                 $newSalary = $actualContractSalary;
             if($newSalary < $minimumSalary)
                 $newSalary = $minimumSalary;
+            $contractRecord->setWorkableDaysMonth($newWorkableDaysMonth);
         }
         if($newSalary != $actualContractSalary){
             $contractRecord->setSalary($newSalary);
@@ -294,68 +292,301 @@ class ContractRestSecuredController extends FOSRestController
         $contractRecord->setPayMethodPayMethod($actualContract->getPayMethodPayMethod());
         $contractRecord->setTestPeriod($actualContract->getTestPeriod());
         $contractRecord->setPlanillaTypePlanillaType($actualContract->getPlanillaTypePlanillaType());
-        $contractRecord->setToBeExecuted(true);
+        $contractRecord->setToBeExecuted(1);
+        $contractRecord->setDateChangesApplied($dateToExecute);
         if($ContractHasChanged){
             $em->persist($contractRecord);
             $em->flush();
+            if($today->format("d-m-Y") == $dateToExecute->format("d-m-Y")) {
+                if($this->executeContractRecord($contractRecord)){
+                    $response["done"]=true;
+                }else{
+                    $response["done"]=false;
+                }
+            }else{
+                $response["to_do"]=true;
+            }
         }
-        if($today->format("d-m-Y") == $dateToExecute->format("d-m-Y")) {
-            $response["done"]=true;
-        }else{
-            $response["to_do"]=true;
-        }
-
         $view = View::create();
         $view->setStatusCode(200);
         $view->setData($response);
         return $view;
     }
 
-//    private function executeContractRecord(ContractRecord $contractRecord){
-//
-//
-//        $contractRecord->setFrequencyFrequency($actualContract->getFrequencyFrequency());
-//        $contractRecord->setContractTypeContractType($actualContract->getContractTypeContractType());
-//        $contractRecord->setEmployeeContractTypeEmployeeContractType($actualContract->getEmployeeContractTypeEmployeeContractType());
-//        $contractRecord->setWorkplaceWorkplace($actualContract->getWorkplaceWorkplace());
-//        $contractRecord->setSisben($actualContract->getSisben());
-//        $contractRecord->setTransportAid($actualContract->getTransportAid());
-//        $contractRecord->setSalary($actualContract->getSalary());
-//        $contractRecord->setHolidayDebt($actualContract->getHolidayDebt());
-//        if($actualContract->getWeekWorkableDays()->count()>0){
-//            /** @var WeekWorkableDays $weekWorkableDay */
-//            foreach ($actualContract->getWeekWorkableDays() as $weekWorkableDay) {
-//                $weekWorkableDayRecord = new WeekWorkableDaysRecord();
-//                $weekWorkableDayRecord->setContractRecordContractRecord($contractRecord);
-//                $weekWorkableDayRecord->setDayName($weekWorkableDay->getDayName());
-//                $weekWorkableDayRecord->setDayNumber($weekWorkableDay->getDayNumber());
-//                $em->persist($weekWorkableDayRecord);
-//                $contractRecord->addWeekWorkableDaysRecord($weekWorkableDayRecord);
-//            }
-//        }
-//        $contractRecord->setTimeCommitmentTimeCommitment($actualContract->getTimeCommitmentTimeCommitment());
-//        $contractRecord->setPositionPosition($actualContract->getPositionPosition());
-//        $contractRecord->setPayMethodPayMethod($actualContract->getPayMethodPayMethod());
-//        $contractRecord->setStartDate($actualContract->getStartDate());
-//        if($actualContract->getEndDate())$contractRecord->setEndDate($actualContract->getEndDate());
-//        $contractRecord->setTestPeriod($actualContract->getTestPeriod());
-//        $contractRecord->setWorkTimeStart($actualContract->getWorkTimeStart());
-//        $contractRecord->setWorkTimeEnd($actualContract->getWorkTimeEnd());
-//        $contractRecord->setWorkableDaysMonth($actualContract->getWorkableDaysMonth());
-//        $contractRecord->setPlanillaTypePlanillaType($actualContract->getPlanillaTypePlanillaType());
-//        $contractRecord->setDateChangesApplied(new \DateTime($dateToExecute));
-//        $contractRecord->setToBeExecuted(false);
-//        if($actualContract->getEndDate()){
-//            $dateInterval = date_diff($actualContract->getStartDate(),$actualContract->getEndDate());
-//            $endDate = $actualContract->getEndDate();
-//            $contractRecord->setAutoRenewalEndDate($endDate->modify("+".$dateInterval->d." days +".
-//                $dateInterval->m." month +".$dateInterval->y." years"));
-//        }
-//        $contractRecord->setContractContract($actualContract);
-//        $em->persist($contractRecord);
-//        return true;
-//    }
-//
+    private function executeContractRecord(ContractRecord $contractRecord){
 
+        $em = $this->getDoctrine()->getManager();
+        /** @var Contract $contract */
+        $contract = $contractRecord->getContractContract();
+        $newRecord = new ContractRecord();
+        if($contract->getPayMethodPayMethod())
+            $newRecord->setPayMethodPayMethod($contract->getPayMethodPayMethod());
+        if($contractRecord->getPayMethodPayMethod())
+            $contract->setPayMethodPayMethod($contractRecord->getPayMethodPayMethod());
+        if($contract->getEmployerHasEmployeeEmployerHasEmployee())
+            $newRecord->setEmployerHasEmployeeEmployeeHasEmployee($contract->getEmployerHasEmployeeEmployerHasEmployee());
+        if($contractRecord->getEmployerHasEmployeeEmployeeHasEmployee())
+            $contract->setEmployerHasEmployeeEmployerHasEmployee($contractRecord->getEmployerHasEmployeeEmployeeHasEmployee());
+        if($contract->getContractTypeContractType())
+            $newRecord->setContractTypeContractType($contract->getContractTypeContractType());
+        if($contractRecord->getContractTypeContractType())
+            $contract->setContractTypeContractType($contractRecord->getContractTypeContractType());
+        if($contract->getFrequencyFrequency())
+            $newRecord->setFrequencyFrequency($contract->getFrequencyFrequency());
+        if($contractRecord->getFrequencyFrequency())
+            $contract->setFrequencyFrequency($contractRecord->getFrequencyFrequency());
+        if($contract->getSalary())
+            $newRecord->setSalary($contract->getSalary());
+        if($contractRecord->getSalary())
+            $contract->setSalary($contractRecord->getSalary());
+        if($contract->getWorkplaceWorkplace())
+            $newRecord->setWorkplaceWorkplace($contract->getWorkplaceWorkplace());
+        if($contractRecord->getWorkplaceWorkplace())
+            $contract->setWorkplaceWorkplace($contractRecord->getWorkplaceWorkplace());
+        if($contract->getWeekWorkableDays()->count()>0){
+            /** @var WeekWorkableDays $weekWorkableDay */
+            foreach ($contract->getWeekWorkableDays() as $weekWorkableDay) {
+                $weekWorkableDayRecord = new WeekWorkableDaysRecord();
+                $weekWorkableDayRecord->setDayNumber($weekWorkableDay->getDayNumber());
+                $weekWorkableDayRecord->setDayName($weekWorkableDay->getDayName());
+                $weekWorkableDayRecord->setContractRecordContractRecord($newRecord);
+                $newRecord->addWeekWorkableDaysRecord($weekWorkableDayRecord);
+            }
+        }
+        if($contractRecord->getWeekWorkableDaysRecord()->count()>0){
+            /** @var WeekWorkableDaysRecord $weekWorkableDayRecord */
+            foreach ($contractRecord->getWeekWorkableDaysRecord() as $weekWorkableDayRecord) {
+                $weekWorkableDay = new WeekWorkableDays();
+                $weekWorkableDay->setDayNumber($weekWorkableDayRecord->getDayNumber());
+                $weekWorkableDay->setDayName($weekWorkableDayRecord->getDayName());
+                $weekWorkableDay->setContractContract($weekWorkableDayRecord->getContractRecordContractRecord()->getContractContract());
+                $contract->addWeekWorkableDay($weekWorkableDay);
+            }
+        }
+        if($contract->getWorkableDaysMonth())
+            $newRecord->setWorkableDaysMonth($contract->getWorkableDaysMonth());
+        if($contractRecord->getWorkableDaysMonth())
+            $contract->setWorkableDaysMonth($contractRecord->getWorkableDaysMonth());
+        if($contract->getTimeCommitmentTimeCommitment())
+            $newRecord->setTimeCommitmentTimeCommitment($contract->getTimeCommitmentTimeCommitment());
+        if($contractRecord->getTimeCommitmentTimeCommitment())
+            $contract->setTimeCommitmentTimeCommitment($contractRecord->getTimeCommitmentTimeCommitment());
+        if($contract->getSisben())
+            $newRecord->setSisben($contract->getSisben());
+        if($contractRecord->getSisben())
+            $contract->setSisben($contractRecord->getSisben());
+        if($contract->getTransportAid())
+            $newRecord->setTransportAid($contract->getTransportAid());
+        if($contractRecord->getTransportAid())
+            $contract->setTransportAid($contractRecord->getTransportAid());
+        if($contract->getHolidayDebt())
+            $newRecord->setHolidayDebt($contract->getHolidayDebt());
+        if($contractRecord->getHolidayDebt())
+            $contractRecord->setHolidayDebt($contractRecord->getHolidayDebt());
+        if($contract->getEmployeeContractTypeEmployeeContractType())
+            $newRecord->setEmployeeContractTypeEmployeeContractType($contract->getEmployeeContractTypeEmployeeContractType());
+        if($contractRecord->getEmployeeContractTypeEmployeeContractType())
+            $contractRecord->setEmployeeContractTypeEmployeeContractType($contractRecord->getEmployeeContractTypeEmployeeContractType());
+        if($contract->getTestPeriod())
+            $newRecord->setTestPeriod($contract->getTestPeriod());
+        if($contractRecord->getTestPeriod())
+            $contract->setTestPeriod($contractRecord->getTestPeriod());
+        if($contract->getEndDate())
+            $newRecord->setEndDate($contract->getEndDate());
+        if($contractRecord->getEndDate())
+            $contract->setEndDate($contractRecord->getEndDate());
+        if($contract->getStartDate())
+            $newRecord->setStartDate($contract->getStartDate());
+        if($contractRecord->getStartDate())
+            $contract->setStartDate($contractRecord->getStartDate());
+        if($contract->getWorkTimeStart())
+            $newRecord->setWorkTimeStart($contract->getWorkTimeStart());
+        if($contractRecord->getWorkTimeStart())
+            $contract->setWorkTimeStart($contractRecord->getWorkTimeStart());
+        if($contract->getWorkTimeEnd())
+            $newRecord->setWorkTimeEnd($contract->getWorkTimeEnd());
+        if($contractRecord->getWorkTimeEnd())
+            $contract->setWorkTimeEnd($contractRecord->getWorkTimeEnd());
+        if($contract->getPlanillaTypePlanillaType())
+            $newRecord->setPlanillaTypePlanillaType($contract->getPlanillaTypePlanillaType());
+        if($contractRecord->getPlanillaTypePlanillaType())
+            $contract->setPlanillaTypePlanillaType($contractRecord->getPlanillaTypePlanillaType());
+        $newRecord->setDateChangesApplied(new DateTime());
+        $newRecord->setContractContract($contract);
+        $newRecord->setToBeExecuted(0);
+        if ($contractRecord->getEndDate()!= null){
+            $newRecord->setAutoRenewalEndDate($contractRecord->getAutoRenewalEndDate());
+        }
+        $newRecord->setContractContract($contract);
+        $request = $this->container->get('request');
+        $request->setMethod("POST");
+        $employeePerson = $contractRecord->getEmployerHasEmployeeEmployeeHasEmployee()->getEmployeeEmployee()->getPersonPerson();
+        if($employeePerson->getDocumentType() == "PASAPORTE"){
+            $employeeDocType = "PA";
+        }else{
+            $employeeDocType = $employeePerson->getDocumentType();
+        }
+        $minimumSalary = $em->getRepository("RocketSellerTwoPickBundle:CalculatorConstraints")->findOneBy(array("name"=>"smmlv"))->getValue();
+        if($contractRecord->getTransportAid()==1){
+            $transportAid = 'N';
+        }elseif($contractRecord->getSalary() >= $minimumSalary*2){
+            $transportAid = 'N';
+        }else{
+            $transportAid = 'S';
+        }
+        if ($contractRecord->getTimeCommitmentTimeCommitment()->getCode() == "TC") {
+            $payroll_type = 4;
+            $value = $contractRecord->getSalary();
+            $wokableDaysWeek = 6;
+        } else {
+            $payroll_type = 6;
+            $value = $contractRecord->getSalary() / $contractRecord->getWorkableDaysMonth();
+            $wokableDaysWeek = $contractRecord->getWorkableDaysMonth() / 4;
+        }
+        $employer = $contractRecord->getEmployerHasEmployeeEmployeeHasEmployee()->getEmployerEmployer();
+        $endDate = $contractRecord->getEndDate();
+        $request->request->add(array(
+            "employee_id" => $contractRecord->getEmployerHasEmployeeEmployeeHasEmployee()->getIdEmployerHasEmployee(),
+            "last_name" => $employeePerson->getLastName1(),
+            "first_name" => $employeePerson->getNames(),
+            "document_type" => $employeeDocType,
+            "document" => $employeePerson->getDocument(),
+            "gender" => $employeePerson->getGender(),
+            "birth_date" => $employeePerson->getBirthDate()->format("d-m-Y"),
+            "start_date" => $contractRecord->getStartDate()->format("d-m-Y"),
+            "contract_number" => $contract->getIdContract(),
+            "worked_hours_day" => 8,
+            "payment_method" => "EFE",
+            "liquidation_type" => $contractRecord->getFrequencyFrequency()->getPayrollCode(),
+            "contract_type" => $contractRecord->getContractTypeContractType()->getPayrollCode(),
+            "transport_aux" => $transportAid,
+            "worked_days_week" => $wokableDaysWeek,
+            "society" => $employer->getIdSqlSociety(),
+            "payroll_type" => $payroll_type,
+        ));
+        if ($endDate != null) {
+            $request->request->add(array(
+                "last_contract_end_date" => $endDate->format("d-m-Y")
+            ));
+        }
+        if($newRecord->getStartDate()!= $contractRecord->getStartDate()){
+            $request->request->add(array(
+                "last_contract_start_date" => $newRecord->getStartDate()->format("d-m-Y")
+            ));
+        }
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postModifyEmployee', array('_format' => 'json'));
+        if ($insertionAnswer->getStatusCode() != 200) {
+            return false;
+        }
+        /** @var User $user */
+        if($this->getUser()){//setting the user to the session user or backoffice
+            $user = $this->getUser();
+        }else{
+            $user = $em->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('emailCanonical'=>"backOfficeSymplifica@gmail.com"));
+        }
+        $log = new Log($user,"Contract","all",$contract->getIdContract()," ",
+            " ","Se modificó el contrato al ejecutar un contract record");
+        $em->persist($log);
+        $em->flush();
+        $request->setMethod("POST");
+        $today = new DateTime();
+        $request->request->add(array(
+            "employee_id" => $contractRecord->getEmployerHasEmployeeEmployeeHasEmployee()->getIdEmployerHasEmployee(),
+            "value" => $value,
+            "date_change" => $today->format("d-m-Y"),
+        ));
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postModifyFixedConcepts', array('request' => $request ), array('_format' => 'json'));
+        if ($insertionAnswer->getStatusCode() != 200) {
+            return false;
+        }
+        $log = new Log($user,"Contract","Salary",$contract->getIdContract(),$newRecord->getSalary(),$contract->getSalary()
+            ,"Se modificó el salario desde execute contract record");
+        $em->persist($log);
+        $em->persist($newRecord);
+        $em->persist($contract);
+        $em->remove($contractRecord);
+        $em->flush();
+        return true;
+    }
+
+    /**
+     * Update minimum salary
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Update minimum salary",
+     *   statusCodes = {
+     *     200 = "ALL OK",
+     *     400 = "Bad Request",
+     *   }
+     * )
+
+     * @return View
+     */
+    public function postUpdateMinimumSalaryAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $minimumSalary = $em->getRepository("RocketSellerTwoPickBundle:CalculatorConstraints")->findOneBy(array("name"=>"smmlv"))->getValue();
+        $minimumSalaryPerDay = $minimumSalary/30;
+        $contracts = $em->getRepository("RocketSellerTwoPickBundle:Contract")->findAll();
+        $today = new DateTime();
+        /** @var Contract $contract */
+        foreach ($contracts as $contract){
+            $ehe = $contract->getEmployerHasEmployeeEmployerHasEmployee();
+            $employer = $ehe->getEmployerEmployer();
+            if(!($ehe->getExistentSQL() == 1 and $ehe->getState() >= 4 and $employer->getIdSqlSociety()!=null))
+                continue;
+            /** @var TimeCommitment $timeCommitment */
+            $timeCommitment = $contract->getTimeCommitmentTimeCommitment();
+            if($timeCommitment->getCode() == "XD"){
+//                $actualContractPerDaySalary = $contract->getSalary()/$contract->getWorkableDaysMonth();
+//                if($actualContractPerDaySalary<$minimumSalaryPerDay){
+//                    $request = $this->container->get('request');
+//                    $request->setMethod("PUT");
+//                    $request->request->add(array(
+//                        'date_to_execute'=>$today->format("d-m-Y"),
+//                        'contract_id'=>$contract->getIdContract(),
+//                        'salary'=>$minimumSalaryPerDay
+//                    ));
+//                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:ContractRestSecured:putCreateContractRecord',
+//                        array('request' => $request ), array('_format' => 'json'));
+//                    if ($insertionAnswer->getStatusCode() != 200) {
+//                        $response["contracts"][$contract->getIdContract()]="fail";
+//                    }else{
+//                        $response["contracts"][$contract->getIdContract()]="yay";
+//                    }
+//                }else{
+//                    $response["contracts"][$contract->getIdContract()]="no entro";
+//                }
+            }else{
+                $actualContractSalary = $contract->getSalary();
+                if($actualContractSalary<$minimumSalary){
+                    $response["contracts"][$contract->getIdContract()]="entro";
+                    $request = $this->container->get('request');
+                    $request->setMethod("PUT");
+                    $request->request->add(array(
+                        'date_to_execute'=>$today->format("d-m-Y"),
+                        'contract_id'=>$contract->getIdContract(),
+                        'salary'=>$minimumSalary
+                    ));
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:ContractRestSecured:putCreateContractRecord',
+                        array('request' => $request ), array('_format' => 'json'));
+                    if ($insertionAnswer->getStatusCode() != 200) {
+                        $response["contracts"][$contract->getIdContract()]="fail";
+                    }else{
+                        $response["contracts"][$contract->getIdContract()]="yay";
+                    }
+                }else{
+                    $response["contracts"][$contract->getIdContract()]="no entro";
+                }
+
+            }
+        }
+        $response['done']=true;
+        $view = View::create();
+        $view->setStatusCode(200);
+        $view->setData($response);
+        return $view;
+    }
 
 }
