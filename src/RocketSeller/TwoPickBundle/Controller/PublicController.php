@@ -48,6 +48,9 @@ class PublicController extends Controller
 
     }
 	public function salarioAction(Request $request) {
+		return $this->redirectToRoute("salario_min_actual");
+	}
+	public function salario2017Action(Request $request) {
 		return $this->render('RocketSellerTwoPickBundle:Public:salario.html.twig');
 	}
 	public function landingAction(Request $request) {
