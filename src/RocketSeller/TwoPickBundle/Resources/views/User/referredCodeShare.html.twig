@@ -1,7 +1,22 @@
- <h1>Este es tu código para referir "<b>{{ app.user.code }}"</b></h1>
- <h3>Comparte en:</h3>
- <!-- Load Facebook SDK for JavaScript -->
- <div id="fb-root"></div>
+<link rel="stylesheet" type="text/css" href="{{ asset('css/public/referred.css') }}"/>
+  <div class="col-sm-12 codShare">
+    <p class="light">Tu código para referir es:<br />
+      <h1 class="bold">{{ app.user.code }}</h1>
+    </p>
+  </div>
+  <div class="col-md-5 col-sm-4 shareBox" style="padding-bottom: 12px;">
+    <p class="bold">Comparte en:</p>
+    <!-- Load Facebook SDK for JavaScript -->
+    <div id="fb-root"></div>
+    <div class="fb-share-button" data-href="http://127.0.0.1:8000/register/elReferidor" data-layout="button" data-size="large" data-mobile-iframe="true">
+    <a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ url('register_referido', {'referredCode':app.user.code}) }}&amp;src=sdkpreparse">Compartir</a>
+    </div>
+  </div>
+  <div class="col-md-7 col-sm-8 shareBox">
+    <p class="bold">o copia este link</p>
+    <input value="{{ url('register_referido', {'referredCode':app.user.code}) }}" onclick="this.focus();this.select();document.execCommand('copy');">
+  </div>
+
  <script>(function(d, s, id) {
    var js, fjs = d.getElementsByTagName(s)[0];
    if (d.getElementById(id)) return;
@@ -9,7 +24,3 @@
    js.src = "//connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v2.8&appId=404251236437754";
    fjs.parentNode.insertBefore(js, fjs);
   }(document, 'script', 'facebook-jssdk'));</script>
-
- <div class="fb-share-button" data-href="http://127.0.0.1:8000/register/elReferidor" data-layout="button" data-size="large" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ url('register_referido', {'referredCode':app.user.code}) }}&amp;src=sdkpreparse">Compartir</a></div>
- <div>o copia este link</div>
- <input value="{{ url('register_referido', {'referredCode':app.user.code}) }}" onclick="this.focus();this.select();document.execCommand('copy');">

@@ -28,3 +28,36 @@ a,h2 {margin: 0;text-decoration: none !important;-webkit-font-smoothing: antiali
 .noPadding {padding: 0}
 .codeShare {padding: 15px 0;text-align: center;color: #FFF}
 .codeShare input {background: none; border: 0}
+
+/* pagina paso 3 de 3*/
+
+.shareBox input {
+  border: none;
+  outline: none;
+  width: 90%;
+  background: transparent;
+}
+.referredArea {
+  margin: 20px 0;
+  background: #3c4b5a;
+  padding: 20px 0 0;
+  -webkit-font-smoothing: antialiased !important;
+  }
+.shareBox {
+    background: #00858c;
+    padding: 10px 0 10px 15px;
+    border: 1px solid #3c4b5a;
+    color: #FFF;
+}
+.codShare {margin-bottom: 15px;}
+.codShare h1{
+    font-size: 30px;
+    padding: 0;
+    margin: 0;
+    color: #FFF;
+}
+.codShare p, .shareBox p {
+    font-size: 15px;
+    margin: 0;
+    color: #FFF;
+}

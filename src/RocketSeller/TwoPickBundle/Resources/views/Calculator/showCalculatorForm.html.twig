@@ -4,74 +4,73 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
           crossorigin="anonymous">
-    <style type="text/css">
-    .calculator-block {
-        width: 100%;
-        text-align: center;
-    }
+<style type="text/css">
+.calculator-block {
+    width: 100%;
+    text-align: center;
+}
 
-    .header-cal {
-        margin: 10px;
-    }
-    .calculator-block form {
-        margin: 20px
-    }
-    .tipo-empleado .radio {
+.header-cal {
+    margin: 10px;
+}
+.calculator-block form {
+    margin: 20px
+}
+.tipo-empleado .radio {
 
-    }
+}
 
-    #registrationFormContainer {
-        width: 90%;
-        margin: 0 auto;
-    }
-    #registrationFormContainer .tipo-empleado .radio label {
-        font-size: 14px !important;
-    }
-    #registrationFormContainer .radio  {
-        float: left;
-        margin: 10px 0 0;
-        width: 50%;
+#registrationFormContainer {
+    width: 90%;
+    margin: 0 auto;
+}
+#registrationFormContainer .tipo-empleado .radio label {
+    font-size: 14px !important;
+}
+#registrationFormContainer .radio  {
+    float: left;
+    margin: 10px 0 0;
+    width: 50%;
 
-    }
-    .tipo-empleado .radio input {
-        font-size: 13px;
-    }
-    .form-group {
-        overflow: hidden;
-    }
-    #form_sisben .radio, #form_auxilio .radio, #form_transporte .radio {
-        float: left;
-        overflow: hidden;
-        width: 90px;
-    }
-    .dual {
-        overflow: hidden;
-        margin:0 0 10px 0;
+}
+.tipo-empleado .radio input {
+    font-size: 13px;
+}
+.form-group {
+    overflow: hidden;
+}
+#form_sisben .radio, #form_auxilio .radio, #form_transporte .radio {
+    float: left;
+    overflow: hidden;
+    width: 90px;
+}
+.dual {
+    overflow: hidden;
+    margin:0 0 10px 0;
 
-    }
-    .dual label {
-        display: block;
-        float: left;
-        width: 45%;
-        margin-right: 30px;
-        text-align: right;
-    }
+}
+.dual label {
+    display: block;
+    float: left;
+    width: 45%;
+    margin-right: 30px;
+    text-align: right;
+}
 
-    .dual .input-group, {
+.dual .input-group, {
 
-    }
-    .dual select.form-control {
-        width: 50%;
-    }
+}
+.dual select.form-control {
+    width: 50%;
+}
 
-    .form-control {
-    }
-    #form-sisben {
-    }
-    #form-sisben .radio {
-    }
-
-    </style>
+.form-control {
+}
+#form-sisben {
+}
+#form-sisben .radio {
+}
+</style>
 {% endblock %}
 {% block body %}
 
@@ -84,7 +83,7 @@
    height: 310px;
 }
   #bannercal {padding-top: 95px}
-  #bannercal h1 {padding-top: 0px}
+  #bannercal h1 {padding-top: 50px}
   .col-sm-12, .col-xs-12 {
     padding:0;
   }
@@ -98,11 +97,6 @@
   text-align: left
 }
 
-  .light-italic {font-family: 'Open Sans', sans-serif;font-weight: 300;font-style:italic}
-  .light {font-family: 'Open Sans', sans-serif;font-weight: 300}
-  .semi-italic {font-family: 'Open Sans', sans-serif;font-weight: 600;font-style:italic}
-  .bold {font-family: 'Open Sans', sans-serif;font-weight: 700}
-  .extrabold {font-family: 'Open Sans', sans-serif;font-weight: 800}
 
   #estilo_calculadora {
     width: 600px;
@@ -125,10 +119,8 @@
 <div class="col-sm-12 col-xs-12 align-Resp" id="bannercal" style="margin-bottom: 30px;">
     <div id="" class="col-sm-12 col-xs-12 blockStep inline banner">
         <div id="banner7" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
-          <div id="banner-beneficios-cont">
-              <h1 class="bold azuloscurofont">Calculadora salarial</h1>
-              <h1 class="light azulmediofont">El valor mensual que debes pagar a tu empleado</h1>
-            </div>
+            <h1 class="bold azuloscurofont">Calculadora salarial</h1>
+            <h2 class="light azulmediofont">El valor mensual que debes pagar a tu empleado</h2>
         </div>
     </div>
 </div>
@@ -200,7 +192,87 @@
                     <!--Aca debe ir lo del modal que hizo Gustavo -->
                     <style>
                         /* Estilo del modal de la calculadora salarial */
+                        .light {
+                            font-family: 'Open Sans', sans-serif;
+                            font-weight: 300
+                        }
 
+                        .semi-italic {
+                            font-family: 'Open Sans', sans-serif;
+                            font-weight: 600;
+                            font-style: italic
+                        }
+
+                        #verDatos {
+                            width: 300px;
+                            margin: 0 auto;
+                            text-align: center
+                        }
+
+                        .border {
+                            border-radius: 5px;
+                            border: 1px solid #CCC
+                        }
+
+                        .franja-gris {
+                            background: #CCC;
+                            padding: 5px 0;
+                            text-align: center;
+                            color: #5D5D5D;
+                            font-family: 'Open Sans', sans-serif;
+                            font-weight: 700
+                        }
+
+                        .concepto {
+                            border-right: 1px solid #CCC;
+                            padding: 5px 0 5px 25px;
+                            box-sizing: border-box;
+                            border-bottom: solid 1px #CCC;
+                            font-family: 'Open Sans', sans-serif;
+                            font-weight: 300;
+                            color: #868482
+
+                        }
+
+                        .pagos {
+                            background: #3A4A58;
+                            padding: 5px 0 5px 25px;
+                            box-sizing: border-box;
+                            color: #FFF;
+                            font-family: 'Open Sans', sans-serif;
+                            font-weight: 300
+                        }
+
+                        .centrar {
+                            text-align: center;
+                            font-family: 'Open Sans', sans-serif;
+                            font-weight: 600;
+                            font-style: italic;
+                            color: #5D5D5D
+                        }
+
+                        .padding {
+                            padding: 20px 30px 20px 30px;
+                        }
+
+                        /*tooltip hover*/
+
+                        .toolstyle {
+                            background: #efefef;
+                            color: #888888;
+                            padding: 13px 15px;
+                            border-radius: 5px;
+                            display: none;
+                            border: dashed 1px #CCC;
+                            margin: 10px 0 0 0;
+                            cursor: pointer;
+                        }
+
+                        @media only screen and (max-width: 600px) {
+                            .concepto {
+                                width: 50%
+                            }
+                        }
                     </style>
                     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
                     <script>
