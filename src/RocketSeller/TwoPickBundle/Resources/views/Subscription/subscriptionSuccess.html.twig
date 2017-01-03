@@ -72,14 +72,20 @@
                <!--<a class="btn btn-azul notAjax" value="Continuar" href="{{ path('show_dashboard') }}" >¡Descarga nuestra App!</a>-->
             </div>
 
-           <hr />
+            <div class="referredArea col-sm-12">
+                {% include '@RocketSellerTwoPick/User/referredCodeShare.html.twig' ignore missing %}
+            </div>
+
+
             <div style="clear:both;">
+              <hr />
                 <h4>¡Aquí empieza el trabajo de Symplifica! </h4>
                 <!--<span style="font-weight: bold;color: #35D4D1;">Verificar documentos: </span>-->
                 <p style="color: #6F6F6F;">Una vez completadas tus tareas nos encargaremos de revisar tus documentos y hacer las afiliaciones si son necesarias. Muy pronto podrás gestionar a tus empleados desde la plataforma.</p>
+              <hr />
            </div>
 
-            <hr />
+
             <a class="btn btn-orange notAjax" value="Continuar" href="{{ path('show_dashboard') }}" >Continuar</a>
         </dir>
 

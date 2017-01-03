@@ -1,5 +1,21 @@
 .basicConfirmation .blockStep .txt-AD1{margin-top:22px}.basicConfirmation .confirmationBlock{text-align:left;clear: both;width: 80%;margin: 0 auto;padding: 0;}.basicConfirmation h3{font-weight:700;color: #3C4B5A;}.basicConfirmation h2{color:#e59233;margin-top:3px}.basicConfirmation h4{font-weight:100;font-size:20px;color:#00858C}@media only screen and (max-device-width:360px){.basicConfirmation .confirmationBlock{text-align:center;width:100%;margin:0;padding:0}}
-
+/*estilo subscriptionchoises*/
+  .codigoRef {
+    text-align: center;
+    background: #f4f6f7;
+    width: 90%;
+    margin: 15px auto 0;
+    border-radius: 5px;
+    border: 1px solid #e8ebec;
+  }
+  .codigoRef input {
+    padding: 5px 35px;
+    text-align: center;
+    border-radius: 5px;
+    border: 1px #eee solid;
+    outline: none;
+  }
+/*estilo subscriptionchoises*/
 .imgpaso {
     width: 50px;
     float: left;
@@ -93,7 +109,7 @@
 }
 
 .lightpay {
-  font-style: italic;
+    font-style: italic;
     color: #757575;
     font-weight: 100;
 }

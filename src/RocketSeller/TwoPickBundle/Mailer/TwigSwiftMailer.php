@@ -492,6 +492,13 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                 $template = $this->parameters['template']['reportVacacionesXD'];
                 return $this->sendMessage($template, $context, $contactPublicFromEmail, $contactPrivate);
                 break;
+            case 'minimumSalaryAdjust':
+                /** $context must have:
+                 * string toEmail
+                 */
+                 $template = $this->parameters['template']['minimumSalaryAdjust'];
+                 return $this->sendMessage($template, $context, $teamFromEmail, $context["toEmail"]);
+                break;
             case "sendBackLandingInfo":
                 /** $context must have:
                  * string email

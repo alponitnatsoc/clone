@@ -228,9 +228,7 @@ function manageEmployees() {
                             required:true,
                             number: true,
                             minlength: 10,
-                            maxlength:10},
-                        "method_type_fields[hasIt]":{
-                            required:true}
+                            maxlength:10}
                     },
                     messages: {
                         "method_type_fields[accountTypeAccountType]": {
@@ -244,9 +242,7 @@ function manageEmployees() {
                             required:'Este campo es obligatorio',
                             number: "Este campo solo admite valores numéricos",
                             minlength: "El número celular ingresado es muy corto",
-                            maxlength:"El número celular ingresado es muy largo"},
-                        "method_type_fields[hasIt]":{
-                            required:"Este campo es obligatorio"}
+                            maxlength:"El número celular ingresado es muy largo"}
                     }
                 });
             });
@@ -258,6 +254,8 @@ function manageEmployees() {
                 $('#change_pay_method_content').html(
                     // ... with the returned one from the AJAX response.
                     $(data).find('#formFields'));
+                $("#method_type_fields_hasIt").hide();
+                $("label[for='method_type_fields_hasIt']").hide();
             });
         }else{
             $("#submit_change_pay_method").hide();
@@ -274,7 +272,7 @@ function manageEmployees() {
                 data: {
                     payTypeId: $("#changePaymentMethod_payMethod").val(),
                     cellphone: $("#method_type_fields_cellphone").val(),
-                    hasIt: $("#method_type_fields_hasIt").val(),
+                    hasIt: true,
                     accountTypeId: $("#method_type_fields_accountTypeAccountType").val(),
                     accountNumber: $("#method_type_fields_accountNumber").val(),
                     bankId: $("#method_type_fields_bankBank").val(),
@@ -283,6 +281,7 @@ function manageEmployees() {
             }).done(function (data) {
                 console.log(data);
                 $("#close_change_payment_method").click();
+                $("#error_payment_change").hide();
                 // location.reload();
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 $("#error_payment_change").show();

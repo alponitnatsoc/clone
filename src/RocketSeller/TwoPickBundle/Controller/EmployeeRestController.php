@@ -57,6 +57,7 @@ use RocketSeller\TwoPickBundle\Entity\Workplace;
 use RocketSeller\TwoPickBundle\Traits\EmployeeMethodsTrait;
 use RocketSeller\TwoPickBundle\Traits\SubscriptionMethodsTrait;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\Security\Core\Tests\Authentication\Token\PreAuthenticatedTokenTest;
 use Symfony\Component\Validator\ConstraintViolationList;
 use RocketSeller\TwoPickBundle\Entity\Notification;
 use DateTime;
@@ -184,74 +185,168 @@ class EmployeeRestController extends FOSRestController
         $idContract = $paramFetcher->get("contractId");
         $contract = $em->getRepository("RocketSellerTwoPickBundle:Contract")->find($idContract);
         if($contract!= null){
-            $oldPayMethod = $contract->getPayMethodPayMethod();
             $payMethod = $contract->getPayMethodPayMethod();
-            if ($payMethod != null) {
+            $oldPayMethod = new PayMethod();
+            $oldPayType = '';
+            if($payMethod != null){
+                if($payMethod->getPayTypePayType())
+                    $oldPayType = $payMethod->getPayTypePayType()->getSimpleName();
+                if($payMethod->getPayTypePayType()) $oldPayMethod->setPayTypePayType($payMethod->getPayTypePayType());
+                if($payMethod->getHasIt()) $oldPayMethod->setHasIt($payMethod->getHasIt());
+                if($payMethod->getCellPhone()) $oldPayMethod->setCellPhone($payMethod->getCellPhone());
+                if($payMethod->getAccountNumber()) $oldPayMethod->setAccountNumber($payMethod->getAccountNumber());
+                if($payMethod->getAccountTypeAccountType()) $oldPayMethod->setAccountTypeAccountType($payMethod->getAccountTypeAccountType());
+                if($payMethod->getBankBank()) $oldPayMethod->setBankBank($payMethod->getBankBank());
+                if($payMethod->getUserUser()) $oldPayMethod->setUserUser($payMethod->getUserUser());
+                $payMethod->setHasIt(null);
                 $payMethod->setCellPhone(null);
+                $payMethod->setAccountTypeAccountType(null);
                 $payMethod->setAccountNumber(null);
                 $payMethod->setBankBank(null);
-                $payMethod->setAccountTypeAccountType(null);
                 $payMethod->setPayTypePayType(null);
-            } else {
+            }else{
                 $payMethod = new PayMethod();
             }
             $payMethod->setUserUser($user);
-            if ($paramFetcher->get('bankId')) {
-                /** @var Bank $tempBank */
-                $tempBank = $em->getRepository('RocketSellerTwoPickBundle:Bank')->find($paramFetcher->get('bankId'));
-                if ($tempBank == null) {
-                    $view->setStatusCode(404)->setHeader("error", "The bankId ID " . $paramFetcher->get('bankId') . " is invalid");
-                    return $view;
-                }
-                $payMethod->setAccountNumber($paramFetcher->get('accountNumber'));
-                $payMethod->setBankBank($tempBank);
-            }elseif (!($paramFetcher->get('cellphone') == "" || $paramFetcher->get('cellphone') == null)) {
-                $tempBank = $em->getRepository('RocketSellerTwoPickBundle:Bank')->findOneBy(array("hightechCode" => 51)); //daviviedna bank ofr daviplata
-                $tempAccountType = $em->getRepository("RocketSellerTwoPickBundle:AccountType")->findOneBy(array("name" => "Ahorros")); //tipo de cuenta  bank ofr daviplata
-                $payMethod->setCellPhone($paramFetcher->get("cellphone"));
-                $payMethod->setBankBank($tempBank);
-                $payMethod->setAccountTypeAccountType($tempAccountType);
-            }
-
             if ($paramFetcher->get('payTypeId')) {
                 /** @var PayType $tempPayType */
                 $tempPayType = $em->getRepository("RocketSellerTwoPickBundle:PayType")->find($paramFetcher->get('payTypeId'));
                 if ($tempPayType == null) {
+                    $payMethod->setHasIt($oldPayMethod->getHasIt());
+                    $payMethod->setCellPhone($oldPayMethod->getCellPhone());
+                    $payMethod->setAccountTypeAccountType($oldPayMethod->getAccountTypeAccountType());
+                    $payMethod->setAccountNumber($oldPayMethod->getAccountNumber());
+                    $payMethod->setBankBank($oldPayMethod->getBankBank());
+                    $payMethod->setPayTypePayType($oldPayMethod->getPayTypePayType());
                     $view->setStatusCode(404)->setHeader("error", "The payTypeId ID " . $paramFetcher->get('payTypeId') . " is invalid");
                     return $view;
                 }
                 $payMethod->setPayTypePayType($tempPayType);
             }
-
-            if ($paramFetcher->get('accountTypeId')) {
-                /** @var AccountType $tempAccountType */
-                $tempAccountType = $em->getRepository("RocketSellerTwoPickBundle:AccountType")->find($paramFetcher->get('accountTypeId'));
-                if ($tempAccountType == null) {
-                    $view->setStatusCode(404)->setHeader("error", "The accountTypeId ID " . $paramFetcher->get('accountTypeId') . " is invalid");
+            switch ($payMethod->getPayTypePayType()->getSimpleName()){
+                case 'DAV':
+                    /** @var Bank $tempBank */
+                    $tempBank = $em->getRepository('RocketSellerTwoPickBundle:Bank')->findOneBy(array("hightechCode" => 51)); //daviviedna bank ofr daviplata
+                    $tempAccountType = $em->getRepository("RocketSellerTwoPickBundle:AccountType")->findOneBy(array("name" => "Ahorros")); //tipo de cuenta  bank ofr daviplata
+                    if($paramFetcher->get("cellphone") == null or  $paramFetcher->get("cellphone") == '' ){
+                        $payMethod->setHasIt($oldPayMethod->getHasIt());
+                        $payMethod->setCellPhone($oldPayMethod->getCellPhone());
+                        $payMethod->setAccountTypeAccountType($oldPayMethod->getAccountTypeAccountType());
+                        $payMethod->setAccountNumber($oldPayMethod->getAccountNumber());
+                        $payMethod->setBankBank($oldPayMethod->getBankBank());
+                        $payMethod->setPayTypePayType($oldPayMethod->getPayTypePayType());
+                        $view->setStatusCode(404)->setHeader("error", "cellphone not found in paramfetcher");
+                        return $view;
+                    }
+                    $payMethod->setCellPhone($paramFetcher->get("cellphone"));
+                    $payMethod->setBankBank($tempBank);
+                    $payMethod->setAccountTypeAccountType($tempAccountType);
+                    $payMethod->setHasIt(1);
+                    break;
+                case 'TRA':
+                    if($paramFetcher->get('bankId')){
+                        /** @var Bank $tempBank */
+                        $tempBank = $em->getRepository('RocketSellerTwoPickBundle:Bank')->find($paramFetcher->get('bankId'));
+                        if ($tempBank == null) {
+                            $payMethod->setHasIt($oldPayMethod->getHasIt());
+                            $payMethod->setCellPhone($oldPayMethod->getCellPhone());
+                            $payMethod->setAccountTypeAccountType($oldPayMethod->getAccountTypeAccountType());
+                            $payMethod->setAccountNumber($oldPayMethod->getAccountNumber());
+                            $payMethod->setBankBank($oldPayMethod->getBankBank());
+                            $payMethod->setPayTypePayType($oldPayMethod->getPayTypePayType());
+                            $view->setStatusCode(404)->setHeader("error", "The bankId ID " . $paramFetcher->get('bankId') . " is invalid");
+                            return $view;
+                        }
+                        $payMethod->setBankBank($tempBank);
+                    }else{
+                        $payMethod->setHasIt($oldPayMethod->getHasIt());
+                        $payMethod->setCellPhone($oldPayMethod->getCellPhone());
+                        $payMethod->setAccountTypeAccountType($oldPayMethod->getAccountTypeAccountType());
+                        $payMethod->setAccountNumber($oldPayMethod->getAccountNumber());
+                        $payMethod->setBankBank($oldPayMethod->getBankBank());
+                        $payMethod->setPayTypePayType($oldPayMethod->getPayTypePayType());
+                        $view->setStatusCode(404)->setHeader("error", "bankId not found in paramfetcher");
+                        return $view;
+                    }
+                    if ($paramFetcher->get('accountTypeId')) {
+                        /** @var AccountType $tempAccountType */
+                        $tempAccountType = $em->getRepository("RocketSellerTwoPickBundle:AccountType")->find($paramFetcher->get('accountTypeId'));
+                        if ($tempAccountType == null) {
+                            $payMethod->setHasIt($oldPayMethod->getHasIt());
+                            $payMethod->setCellPhone($oldPayMethod->getCellPhone());
+                            $payMethod->setAccountTypeAccountType($oldPayMethod->getAccountTypeAccountType());
+                            $payMethod->setAccountNumber($oldPayMethod->getAccountNumber());
+                            $payMethod->setBankBank($oldPayMethod->getBankBank());
+                            $payMethod->setPayTypePayType($oldPayMethod->getPayTypePayType());
+                            $view->setStatusCode(404)->setHeader("error", "The accountTypeId ID " . $paramFetcher->get('accountTypeId') . " is invalid");
+                            return $view;
+                        }
+                        $payMethod->setAccountTypeAccountType($tempAccountType);
+                    }else{
+                        $payMethod->setHasIt($oldPayMethod->getHasIt());
+                        $payMethod->setCellPhone($oldPayMethod->getCellPhone());
+                        $payMethod->setAccountTypeAccountType($oldPayMethod->getAccountTypeAccountType());
+                        $payMethod->setAccountNumber($oldPayMethod->getAccountNumber());
+                        $payMethod->setBankBank($oldPayMethod->getBankBank());
+                        $payMethod->setPayTypePayType($oldPayMethod->getPayTypePayType());
+                        $view->setStatusCode(404)->setHeader("error", "AccountTypeId not found in paramfetcher");
+                        return $view;
+                    }
+                    if($paramFetcher->get('accountNumber')){
+                        $payMethod->setAccountNumber($paramFetcher->get('accountNumber'));
+                    }else{
+                        $payMethod->setHasIt($oldPayMethod->getHasIt());
+                        $payMethod->setCellPhone($oldPayMethod->getCellPhone());
+                        $payMethod->setAccountTypeAccountType($oldPayMethod->getAccountTypeAccountType());
+                        $payMethod->setAccountNumber($oldPayMethod->getAccountNumber());
+                        $payMethod->setBankBank($oldPayMethod->getBankBank());
+                        $payMethod->setPayTypePayType($oldPayMethod->getPayTypePayType());
+                        $view->setStatusCode(404)->setHeader("error", "AccountNumber not found in paramfetcher");
+                        return $view;
+                    }
+                    $payMethod->setCellPhone(0);
+                    break;
+                case 'EFE':
+                    $payMethod->setCellPhone(0);
+                    break;
+            }
+            if($oldPayType != '' and $oldPayType != 'EFE'){
+                $remove = $this->removeEmployeeToHighTech($contract->getEmployerHasEmployeeEmployerHasEmployee());
+                if(!$remove){
+                    $payMethod->setHasIt($oldPayMethod->getHasIt());
+                    $payMethod->setCellPhone($oldPayMethod->getCellPhone());
+                    $payMethod->setAccountTypeAccountType($oldPayMethod->getAccountTypeAccountType());
+                    $payMethod->setAccountNumber($oldPayMethod->getAccountNumber());
+                    $payMethod->setBankBank($oldPayMethod->getBankBank());
+                    $payMethod->setPayTypePayType($oldPayMethod->getPayTypePayType());
+                    $view->setStatusCode(404)->setHeader("error", "Error removing from HighTech");
                     return $view;
                 }
-                $payMethod->setAccountTypeAccountType($tempAccountType);
             }
-
-            $hasIt = $paramFetcher->get("hasIt");
-            if ($hasIt != null) {
-                $payMethod->setHasIt($hasIt);
+            if($payMethod->getPayTypePayType()->getSimpleName() != 'EFE'){
+                $adding = $this->addEmployeeToHighTech($contract->getEmployerHasEmployeeEmployerHasEmployee());
+                if(!$adding){
+                    $payMethod->setHasIt($oldPayMethod->getHasIt());
+                    $payMethod->setCellPhone($oldPayMethod->getCellPhone());
+                    $payMethod->setAccountTypeAccountType($oldPayMethod->getAccountTypeAccountType());
+                    $payMethod->setAccountNumber($oldPayMethod->getAccountNumber());
+                    $payMethod->setBankBank($oldPayMethod->getBankBank());
+                    $payMethod->setPayTypePayType($oldPayMethod->getPayTypePayType());
+                    $view->setStatusCode(404)->setHeader("error", "Error adding to HighTech");
+                    return $view;
+                }
             }
             $contract->setPayMethodPayMethod($payMethod);
             $em->persist($contract);
-            $this->removeEmployeeToHighTech($contract->getEmployerHasEmployeeEmployerHasEmployee());
-            $adding = $this->addEmployeeToHighTech($contract->getEmployerHasEmployeeEmployerHasEmployee());
-            if(!$adding){
-                $contract->setPayMethodPayMethod($oldPayMethod);
-                $em->persist($contract);
-                $view->setStatusCode(404)->setHeader("error", "Contract not found");
-                return $view;
-            }
+            $em->persist($payMethod);
+            $em->flush();
+            $response["new"]=$payMethod;
+            $response["old"]=$oldPayMethod;
         }else{
             $view->setStatusCode(404)->setHeader("error", "Contract not found");
             return $view;
         }
-
+        $view->setData($response);
         $view->setStatusCode(200);
         return $view;
     }

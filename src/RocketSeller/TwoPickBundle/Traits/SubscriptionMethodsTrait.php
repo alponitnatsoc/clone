@@ -5,6 +5,7 @@ namespace RocketSeller\TwoPickBundle\Traits;
 use DateTime;
 use Doctrine\Common\Persistence\ObjectRepository;
 use FOS\RestBundle\View\View;
+use RocketSeller\TwoPickBundle\Entity\CalculatorConstraints;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Log;
@@ -154,6 +155,7 @@ trait SubscriptionMethodsTrait
                         ->findOneBy(array('personPerson' => $employer->getPersonPerson()));
         $em = $this->getDoctrine()->getManager();
         if ($eHE->getState() > 2 && (!$eHE->getExistentSQL())) {
+            $minimumSalary = $em->getRepository("RocketSellerTwoPickBundle:CalculatorConstraints")->findOneBy(array("name"=>"smmlv"))->getValue();
             $contracts = $eHE->getContracts();
             $actContract = $eHE->getActiveContract();
 //                 $liquidationType=$actContract->getPayMethodPayMethod()->getFrequencyFrequency()->getPayrollCode();
@@ -171,12 +173,19 @@ trait SubscriptionMethodsTrait
                 $wokableDaysWeek = $actContract->getWorkableDaysMonth() / 4;
             }
             
-	          if($employeePerson->getDocumentType() == "PASAPORTE"){
-	          	$employeeDocType = "PA";
-	          }else{
-	          	$employeeDocType = $employeePerson->getDocumentType();
-	          }
-	          
+            if($employeePerson->getDocumentType() == "PASAPORTE"){
+            $employeeDocType = "PA";
+            }else{
+            $employeeDocType = $employeePerson->getDocumentType();
+            }
+
+            if($actContract->getTransportAid()==1){
+                $transportAid = 'N';
+            }elseif($actContract->getSalary() >= $minimumSalary*2){
+                $transportAid = 'N';
+            }else{
+                $transportAid = 'S';
+            }
             $request->setMethod("POST");
             $request->request->add(array(
                 "employee_id" => $eHE->getIdEmployerHasEmployee(),
@@ -192,7 +201,7 @@ trait SubscriptionMethodsTrait
                 "payment_method" => "EFE",
                 "liquidation_type" => $liquidationType,
                 "contract_type" => $actContract->getContractTypeContractType()->getPayrollCode(),
-                "transport_aux" => $actContract->getTransportAid() == 1 ? "N" : "S",
+                "transport_aux" => $transportAid,
                 "worked_days_week" => $wokableDaysWeek,
                 "society" => $employer->getIdSqlSociety(),
                 "payroll_type" => $payroll_type,
@@ -205,7 +214,6 @@ trait SubscriptionMethodsTrait
             $today = new DateTime();
             $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployee', array('_format' => 'json'));
             if ($insertionAnswer->getStatusCode() != 200) {
-
                 if($eHE->getDateTryToRegisterToSQL()!=null){
                     $log = new Log($this->getUser(),'EmployerHasEmployee','DateTryToRegisterToSQL',$eHE->getIdEmployerHasEmployee(),$eHE->getDateTryToRegisterToSQL()->format('d-m-Y H:i:s'),$today->format('d-m-Y H:i:s'),'Add to SQL fail');
                 }else{
@@ -316,54 +324,54 @@ trait SubscriptionMethodsTrait
 	                        return false;
                         }
 
-												//The first period of the month is done at this point, now into the second half of the month, if needed
+                                        //The first period of the month is done at this point, now into the second half of the month, if needed
 
-												if($startDate->diff($periodDate)->m > 0 || $startDate->format("m") != $periodDate->format("m")) {
-													$request->setMethod("POST");
-													$request->request->add(array(
-														"employee_id" => $eHE->getIdEmployerHasEmployee(),
-														"units" => $actContract->getWorkableDaysMonth() / 2,
-														"value" => floor($actContract->getSalary() / 2),
-														"year" => $startDate->format("Y"),
-														"month" => $startDate->format("m"),
-														"period" => "4",
-													));
+                                        if($startDate->diff($periodDate)->m > 0 || $startDate->format("m") != $periodDate->format("m")) {
+                                            $request->setMethod("POST");
+                                            $request->request->add(array(
+                                                "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                                                "units" => $actContract->getWorkableDaysMonth() / 2,
+                                                "value" => floor($actContract->getSalary() / 2),
+                                                "year" => $startDate->format("Y"),
+                                                "month" => $startDate->format("m"),
+                                                "period" => "4",
+                                            ));
 
-													$insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('request' => $request ), array('_format' => 'json'));
-													if ($insertionAnswer->getStatusCode() != 200) {
-														return false;
-													}
-												}
-													//The second period of the month is done at this point, now the date changes again
-													$startDate->modify("+1 month");
-											}
-											else{ //startDate is 16 or more
-												$relativeWorkedDays = 30 - $startDate->format("d") + 1;
-												$proportionalPeriod = $relativeWorkedDays / 15;
-												$unitsPerPeriod = floor($proportionalPeriod * ($actContract->getWorkableDaysMonth() / 2));
-												if($unitsPerPeriod == 0){ //If the contract starts that period it need to work at least one
-													$unitsPerPeriod = 1;
-												}
-												$salaryPerPeriod = $actContract->getSalary() / $actContract->getWorkableDaysMonth();
+                                            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('request' => $request ), array('_format' => 'json'));
+                                            if ($insertionAnswer->getStatusCode() != 200) {
+                                                return false;
+                                            }
+                                        }
+                                            //The second period of the month is done at this point, now the date changes again
+                                            $startDate->modify("+1 month");
+                                    }
+                                    else{ //startDate is 16 or more
+                                        $relativeWorkedDays = 30 - $startDate->format("d") + 1;
+                                        $proportionalPeriod = $relativeWorkedDays / 15;
+                                        $unitsPerPeriod = floor($proportionalPeriod * ($actContract->getWorkableDaysMonth() / 2));
+                                        if($unitsPerPeriod == 0){ //If the contract starts that period it need to work at least one
+                                            $unitsPerPeriod = 1;
+                                        }
+                                        $salaryPerPeriod = $actContract->getSalary() / $actContract->getWorkableDaysMonth();
 
-												$request->setMethod("POST");
-												$request->request->add(array(
-													"employee_id" => $eHE->getIdEmployerHasEmployee(),
-													"units" => $unitsPerPeriod,
-													"value" => floor($salaryPerPeriod * $unitsPerPeriod),
-													"year" => $startDate->format("Y"),
-													"month" => $startDate->format("m"),
-													"period" => "4",
-												));
+                                        $request->setMethod("POST");
+                                        $request->request->add(array(
+                                            "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                                            "units" => $unitsPerPeriod,
+                                            "value" => floor($salaryPerPeriod * $unitsPerPeriod),
+                                            "year" => $startDate->format("Y"),
+                                            "month" => $startDate->format("m"),
+                                            "period" => "4",
+                                        ));
 
-												$insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('request' => $request ), array('_format' => 'json'));
-												if ($insertionAnswer->getStatusCode() != 200) {
-													return false;
-												}
+                                        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('request' => $request ), array('_format' => 'json'));
+                                        if ($insertionAnswer->getStatusCode() != 200) {
+                                            return false;
+                                        }
 
-												//The period of the month is done at this point, now the date changes again
-												$startDate->modify("+1 month");
-											}
+                                        //The period of the month is done at this point, now the date changes again
+                                        $startDate->modify("+1 month");
+                                    }
 					          }
 					          elseif ($actContract->getTimeCommitmentTimeCommitment()->getCode() == "TC"){
 						          if($startDate->format('d') <= 15){
