@@ -539,29 +539,28 @@ class ContractRestSecuredController extends FOSRestController
             /** @var TimeCommitment $timeCommitment */
             $timeCommitment = $contract->getTimeCommitmentTimeCommitment();
             if($timeCommitment->getCode() == "XD"){
-//                $actualContractPerDaySalary = $contract->getSalary()/$contract->getWorkableDaysMonth();
-//                if($actualContractPerDaySalary<$minimumSalaryPerDay){
-//                    $request = $this->container->get('request');
-//                    $request->setMethod("PUT");
-//                    $request->request->add(array(
-//                        'date_to_execute'=>$today->format("d-m-Y"),
-//                        'contract_id'=>$contract->getIdContract(),
-//                        'salary'=>$minimumSalaryPerDay
-//                    ));
-//                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:ContractRestSecured:putCreateContractRecord',
-//                        array('request' => $request ), array('_format' => 'json'));
-//                    if ($insertionAnswer->getStatusCode() != 200) {
-//                        $response["contracts"][$contract->getIdContract()]="fail";
-//                    }else{
-//                        $response["contracts"][$contract->getIdContract()]="yay";
-//                    }
-//                }else{
-//                    $response["contracts"][$contract->getIdContract()]="no entro";
-//                }
+                $actualContractPerDaySalary = $contract->getSalary()/$contract->getWorkableDaysMonth();
+                if($actualContractPerDaySalary<$minimumSalaryPerDay){
+                    $request = $this->container->get('request');
+                    $request->setMethod("PUT");
+                    $request->request->add(array(
+                        'date_to_execute'=>$today->format("d-m-Y"),
+                        'contract_id'=>$contract->getIdContract(),
+                        'salary'=>$minimumSalaryPerDay
+                    ));
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:ContractRestSecured:putCreateContractRecord',
+                        array('request' => $request ), array('_format' => 'json'));
+                    if ($insertionAnswer->getStatusCode() != 200) {
+                        $response["contracts"][$contract->getIdContract()]="fail";
+                    }else{
+                        $response["contracts"][$contract->getIdContract()]="yay";
+                    }
+                }else{
+                    $response["contracts"][$contract->getIdContract()]="no entro";
+                }
             }else{
                 $actualContractSalary = $contract->getSalary();
                 if($actualContractSalary<$minimumSalary){
-                    $response["contracts"][$contract->getIdContract()]="entro";
                     $request = $this->container->get('request');
                     $request->setMethod("PUT");
                     $request->request->add(array(
