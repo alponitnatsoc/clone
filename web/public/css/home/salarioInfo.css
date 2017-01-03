@@ -76,7 +76,7 @@ aside {
 button {
   padding: 10px 25px;
   border-radius: 20px;
-  background: #00838c;
+  background: #f7932a;
   border: none;
   color: #FFF;
   margin-top: 15px;
@@ -145,6 +145,7 @@ td {
   .izqInfo p {padding: 0 30px 0 65px;}
 }
 @media only screen and (max-width: 900px) {
+  #backAside {padding-top: 60px;}
   .displayN {display: none;}
   .displayB {display: block;}
   .bottomLogo {display: none}
@@ -197,6 +198,7 @@ td {
   .derInfo {display: none;}
   .izqInfo {padding: 0}
   #outer-left {height:320px}
+  #backAside {padding-top: 15px;}
 }
 @media only screen and (max-width: 440px) {
   .izqInfo img {width: 100%;}
