@@ -69,8 +69,9 @@
               <!-- Load Facebook SDK for JavaScript -->
               <span id="fb-root"></span>
               <div class="fb-share-button" data-href="http://127.0.0.1:8000/register/elReferidor" data-layout="button" data-size="large" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ url('register_referido', {'referredCode':app.user.code}) }}&amp;src=sdkpreparse">Compartir</a></div>
-              <div>o copia este link</div>
-              <input value="{{ url('register_referido', {'referredCode':app.user.code}) }}" onclick="this.focus();this.select();document.execCommand('copy');">
+              <div>o has clic <a id="copyref" class="notAjax" href="{{ url('register_referido', {'referredCode':app.user.code}) }}">aqui</a> para copiar el link</div>
+                <input id="hiddenCopy" value="{{ url('register_referido', {'referredCode':app.user.code}) }}">
+
             </div>
           </div>
       </div>
@@ -116,7 +117,6 @@
   js.src = "//connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v2.8&appId=404251236437754";
   fjs.parentNode.insertBefore(js, fjs);
  }(document, 'script', 'facebook-jssdk'));
-
  var tope={{ app.user.money}};
  var delay=1000;
 
@@ -135,4 +135,18 @@
 
 
  </script>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $("#hiddenCopy").hide();
+        $("#copyref").on('click', function (e) {
+            e.preventDefault();
+            var hiddentex = $("#hiddenCopy");
+            hiddentex.show();
+            hiddentex.focus();hiddentex.select();document.execCommand('copy');
+            hiddentex.hide();
+
+        });
+    </script>
 {% endblock %}
