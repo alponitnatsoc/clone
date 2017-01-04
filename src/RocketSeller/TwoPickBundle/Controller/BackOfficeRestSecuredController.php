@@ -3,8 +3,10 @@ namespace RocketSeller\TwoPickBundle\Controller;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
+use RocketSeller\TwoPickBundle\Entity\LandingRegistration;
 use RocketSeller\TwoPickBundle\Entity\Pay;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
+use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\RequestParam;

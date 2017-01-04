@@ -11,6 +11,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\LandingRegistration;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolation;
@@ -154,6 +155,53 @@ class UtilsRestController extends FOSRestController
 
             }
             $view->setData(array())->setStatusCode(404);
+
+            return $view;
+        }
+
+        $view->setData(array())->setStatusCode(400);
+
+        return $view;
+    }
+    /**
+     * Creates a marketing lid that contains the referred information
+     *
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Return the overall User List",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     404 = "Returned when the user is not found"
+     *   }
+     * )
+     *
+     * @param Request $request
+     * @return View
+     */
+    public function postCreateReferredAction(Request $request)
+    {
+        $requ = $request->request->all();
+        $view = View::create();
+
+
+        if(isset($requ['names'])&&isset($requ['cellphone'])){
+            $cellphone = $requ['cellphone'];
+            $names = $requ['names'];
+            /** @var User $user */
+            $user = $this->getUser();
+            $newLid = new LandingRegistration();
+            $newLid->setEmail("none");
+            $newLid->setEntityType("persona");
+            $newLid->setName($names);
+            $newLid->setLastName($user->getPersonPerson()->getFullName());
+            $newLid->setPhone($cellphone);
+            $newLid->setType("REFERIDO");
+            $newLid->setCreatedAt(new \DateTime());
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($newLid);
+            $em->flush();
+            $view->setData(array())->setStatusCode(201);
 
             return $view;
         }
