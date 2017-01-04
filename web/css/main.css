@@ -20,6 +20,18 @@
 .bold {font-family: 'Open Sans', sans-serif;font-weight: 700;-webkit-font-smoothing: antialiased !important;}
 .extrabold {font-family: 'Open Sans', sans-serif;font-weight: 800;-webkit-font-smoothing: antialiased !important;}
 .btn.active {margin-top: 10px;}
+/**/
+  .referidos {
+    display: block;
+    background: #00838c;
+    border-radius: 5px;
+    padding: 5px;
+    width: 150px;
+    color: #FFF !important;
+    text-decoration: none !important;
+  }
+  .referidos:focus {background: #33d7d6;}
+/**/
 /*boton es para usar*/
 .btn-azul {
     border-radius: 25px;

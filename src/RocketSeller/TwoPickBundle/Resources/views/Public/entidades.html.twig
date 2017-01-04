@@ -1,0 +1,107 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/html">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <link rel="stylesheet" type="text/css" href="{{ asset('public/css/home/entidades.css') }}"/>
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,800,700' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://unpkg.com/scrollreveal@3.3.2/dist/scrollreveal.min.js"></script>
+    </head>
+    <body>
+        <main>
+            <div class="bannerEnti">
+                <div>
+                    <img src="https://symplifica.com/img/logo-white.png" width="170" height="auto"/>
+                    <br><br>
+                    <h2 class="lightRale">Ubica las entidades</h2>
+                    <h2 class="boldRale">de seguridad social por región</h2>
+                </div>
+            </div>
+            <div class="light more">
+                <div id="backAside">
+                    <div id="dataAside">
+                        <h2 class="lightRale">¿Tu empleada doméstica <strong>esta formal?</strong></h2>
+                        <p class="displayN">Afilia y gestiona a los empeleados de tu hogar con pocos clics</p>
+                        <a class="displayN" href="https://symplifica.com/?utm_source=google&utm_campaign=salario&utm_medium=refferal"><button>Pruébalo gratis</button></a>
+                        <!--responsive-->
+                        <a class="displayB" href="https://symplifica.com/?utm_source=google&utm_campaign=salario&utm_medium=refferal"><button>Descubrelo en Symplifica</button></a>
+                    </div>
+                </div>
+            </div>
+            <section>
+                <div class="mainInfoContent light foo">
+                    <p>Aquí encontrarás la información de contacto de las diferentes entidades, EPS, ARL,
+    Cajas de compensación, entidades gestoras de cesantías y pensiones en Colombia.</p>
+                    <h3>Encuentra la tuya:</h3>
+                    <select>
+                        <option value="volvo">Selecciona una entidad</option>
+                        <option value="saab">EPS</option>
+                    </select>
+                    <select>
+                        <option value="volvo">Selecciona una lugar</option>
+                        <option value="saab">Bogotá</option>
+                    </select>
+                    <button>Filtrar</button>
+                </div>
+                <div class="light entidadesBack">
+                    <div class="entidades">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nombre entidad</th>
+                                    <th>Tipo</th>
+                                    <th>Ciudad</th>
+                                    <th>Teléfono</th>
+                                    <th>Dirección</th>
+                                    <th>Horario atención</th>
+                                    <th>Página web</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Sanitas</td>
+                                    <td>EPS</td>
+                                    <td>Bogotá</td>
+                                    <td>2345678</td>
+                                    <td>cl 12 # 34 - 45</td>
+                                    <td>L -V 7AM - 5PM<br>
+                                        L -V 7AM - 5PM
+                                    </td>
+                                    <td>www.algo.com</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+         <script>
+
+            // JavaScript
+            window.sr = ScrollReveal();
+            sr.reveal('.infoWidth', { reset: true, origin: 'bottom', distance: '90px', duration: 1000 });
+            sr.reveal('.foo', { delay: 500 });
+            sr.reveal('.izqInfo', { origin: 'top', distance: '90px', duration: 1000 });
+
+            $(function(){
+                $(window).scroll(function() {
+                    if ($(this).scrollTop() >= 210 && $(window).width() >1024) {
+                        $('.more').addClass('stickytop');
+                        $('section').addClass('paddingTop');
+                    } else if ($(this).scrollTop() >= 200 && $(window).width() <= 768) {
+                        $('.more').addClass('stickytop');
+                        $('section').addClass('paddingTop');
+                    } else if ($(this).scrollTop() >= 5210 && $(window).width() <= 1024) {
+                        $('.more').addClass('stickytop');
+                        $('section').addClass('paddingTop');
+                    } else {
+                        $('.more').removeClass('stickytop');
+                        $('section').removeClass('paddingTop');
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>
