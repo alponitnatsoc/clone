@@ -193,6 +193,11 @@ class ContractRecord
 	 */
 	private $dateChangesApplied;
 
+    /**
+     * @ORM\Column(name="date_to_be_aplied", type="date", nullable=TRUE)
+     */
+    private $dateToBeAplied;
+
 	/**
 	 * @var Contract
 	 * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Contract", inversedBy="contractRecords")
@@ -915,5 +920,29 @@ class ContractRecord
     public function getContractContract()
     {
         return $this->contractContract;
+    }
+
+    /**
+     * Set dateToBeAplied
+     *
+     * @param \DateTime $dateToBeAplied
+     *
+     * @return ContractRecord
+     */
+    public function setDateToBeAplied($dateToBeAplied)
+    {
+        $this->dateToBeAplied = $dateToBeAplied;
+
+        return $this;
+    }
+
+    /**
+     * Get dateToBeAplied
+     *
+     * @return \DateTime
+     */
+    public function getDateToBeAplied()
+    {
+        return $this->dateToBeAplied;
     }
 }

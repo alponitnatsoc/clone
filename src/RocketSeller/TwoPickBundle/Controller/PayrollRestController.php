@@ -247,7 +247,7 @@ class PayrollRestController extends FOSRestController
 
         $view = View::create();
 
-        if ($errorCode == 505 || $errorCode == 605 || $errorCode == 609)
+        if ($errorCode == 505 || $errorCode == 605 || $errorCode == 609 || $errorCode == 603 )
             $errorCode = 404;
         $view->setStatusCode($errorCode);
 
@@ -670,7 +670,7 @@ class PayrollRestController extends FOSRestController
         $mandatory['society'] = false;
         $regex['payroll_type'] = '4|6|1';
         $mandatory['payroll_type'] = false;
-	    
+
         $this->validateParamters($parameters, $regex, $mandatory);
 
         $content = array();
