@@ -297,7 +297,7 @@ class ContractRestSecuredController extends FOSRestController
         if($ContractHasChanged){
             $em->persist($contractRecord);
             $em->flush();
-            if($today->format("d-m-Y") == $dateToExecute->format("d-m-Y")) {
+            if($today->format("d-m-Y") == $dateToExecute->format("d-m-Y") or $today>=$dateToExecute) {
                 if($this->executeContractRecord($contractRecord)){
                     $response["done"]=true;
                 }else{
@@ -489,11 +489,11 @@ class ContractRestSecuredController extends FOSRestController
         $em->persist($log);
         $em->flush();
         $request->setMethod("POST");
-        $today = new DateTime();
+        $date = $contractRecord->getDateChangesApplied();
         $request->request->add(array(
             "employee_id" => $contractRecord->getEmployerHasEmployeeEmployeeHasEmployee()->getIdEmployerHasEmployee(),
             "value" => $value,
-            "date_change" => $today->format("d-m-Y"),
+            "date_change" => $date->format("d-m-Y"),
         ));
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postModifyFixedConcepts', array('request' => $request ), array('_format' => 'json'));
         if ($insertionAnswer->getStatusCode() != 200) {
@@ -564,7 +564,7 @@ class ContractRestSecuredController extends FOSRestController
                     $request = $this->container->get('request');
                     $request->setMethod("PUT");
                     $request->request->add(array(
-                        'date_to_execute'=>$today->format("d-m-Y"),
+                        'date_to_execute'=>"01-01-2017",
                         'contract_id'=>$contract->getIdContract(),
                         'salary'=>$minimumSalary
                     ));
