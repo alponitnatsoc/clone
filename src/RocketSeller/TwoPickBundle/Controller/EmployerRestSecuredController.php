@@ -41,7 +41,8 @@ class EmployerRestSecuredController extends FOSRestController
         return $view->setStatusCode(200)->setData(array('data'=>$realUser->getPersonPerson(),
                                                         'idUser'=>$realUser->getId(),
                                                         'dataCreditStatus' => $realUser->getDataCreditStatus(),
-                                                        'referidosCode' => $realUser->getCode()));
+                                                        'referidosCode' => $realUser->getCode(),
+                                                        'money' => $realUser->getMoney() ));
     }
     /**
      * Obtener las notificaciones activas del usuario
