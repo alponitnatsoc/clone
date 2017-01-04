@@ -194,7 +194,7 @@ class UtilsRestController extends FOSRestController
             $newLid->setEmail("none");
             $newLid->setEntityType("persona");
             $newLid->setName($names);
-            $newLid->setLastName($user->getPersonPerson()->getFullName());
+            $newLid->setLastName(".R: ".$user->getPersonPerson()->getFullName());
             $newLid->setPhone($cellphone);
             $newLid->setType("REFERIDO");
             $newLid->setCreatedAt(new \DateTime());
