@@ -190,21 +190,24 @@
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title center azulmediofont bold">¿A quíen vas a referir?</h4></h4>
         </div>
-        <div class="modal-body">
-          <p class="regular grisclarofont center">Para referir a alguien, solo debes ingresar el correo y el número de celular de tu amigo</p>
+        <div id="topmsn"  class="modal-body">
+          <p class="regular grisclarofont center">Para referir a alguien, solo debes ingresar los nombres y el número de celular de tu amigo</p>
         </div>
         <div class="center">
-          <form>
-            <input class="refBorder center" type="text" placeholder="Nombre" />
-            <input class="refBorder center" type="text" placeholder="Número celular" />
+          <form id="formReferred" method="post">
+            <input id="realNames" class="refBorder center" name="names" type="text" placeholder="Nombres" />
+            <input class="refBorder center" name="cellphone" type="text" placeholder="Número celular" />
             <br />
             <br />
-            <button type="button" class="btn btn-azul">enviar</button>
+            <button id="submitReferred" type="button" class="btn btn-azul">enviar</button>
           </form>
+            <div id="thankMsn">
+                <h3 class="light grisclarofont">Gracias, pronto nos pondremos en contacto con <span class="bold azulmediofont" id="nameReferred"></span></h3>
+            </div>
           <br />
         </div>
         <div class="modal-footer center">
-          <button type="button" class="btn btn-grisBorde" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-grisBorde notAjax" data-dismiss="modal" onclick="window.reload();">Cerrar</button>
         </div>
       </div>
 
@@ -243,6 +246,7 @@
         //codigo de plata brrrr
 
         $("#hiddenCopy").hide();
+        $("#thankMsn").hide();
         $("#copyref").on('click', function (e) {
             e.preventDefault();
             var hiddentex = $("#hiddenCopy");
@@ -250,6 +254,48 @@
             hiddentex.focus();hiddentex.select();document.execCommand('copy');
             hiddentex.hide();
 
+        });
+        $("#submitReferred").on('click', function (e) {
+            e.preventDefault();
+            var form = $("#formReferred");
+            if(!form.valid()){
+                return
+            }
+            $.ajax({
+                url: $(form).attr('action'),
+                type: $(form).attr('method'),
+                data: $(form).serializeArray(),
+                statusCode: {
+                    500: function () {
+                        $("#errorModal").modal("show");
+                    }
+                }
+            }).done(function (data) {
+                $("#formReferred").hide();
+                $("#topmsn").hide();
+                $("#thankMsn").show();
+                $("#nameReferred").html($("#realNames").val());
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                if (jqXHR == errorHandleTry(jqXHR)) {
+                    $("#errorModal").modal("show");
+                }
+            });
+        });
+        $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
+            validator2 = $("#formReferred").validate({
+                rules: {
+                    "names": "required",
+                    "cellphone": {required: true, maxlength: 10,minlength: 10},
+                },
+                messages: {
+                    "names": "&#8227; Los nombres no pueden estar vacios",
+                    "cellphone": {
+                        required: "&#8227; El celular no puede estar vacio",
+                        maxlength: "&#8227; El celular no es válido",
+                        minlength: "&#8227; El celular no es válido"
+                    }
+                },
+            });
         });
     </script>
 {% endblock %}

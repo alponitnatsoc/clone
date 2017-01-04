@@ -184,7 +184,7 @@ trait SubscriptionMethodsTrait
             }elseif($actContract->getSalary() >= $minimumSalary*2){
                 $transportAid = 'N';
             }else{
-                $transportAid = 'Y';
+                $transportAid = 'S';
             }
             $request->setMethod("POST");
             $request->request->add(array(

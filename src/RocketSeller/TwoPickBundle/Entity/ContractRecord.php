@@ -37,7 +37,7 @@ class ContractRecord
 	private $payMethodPayMethod;
 
     /**
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee", cascade={"persist"})
      * @ORM\JoinColumn(name="employer_has_employee_id_employer_has_employee", referencedColumnName="id_employer_has_employee")
      */
     private $employerHasEmployeeEmployeeHasEmployee;
@@ -204,7 +204,11 @@ class ContractRecord
 
 	/**
 	 * @ORM\Column(name="to_be_executed", type="smallint", nullable=TRUE)
-	 */
+     *
+     * 0 - false
+     * 1 - true
+     *
+     */
 	private $toBeExecuted;
 
 	/**
