@@ -71,13 +71,16 @@
                 <a class="notAjax" target="_blank" href="https://www.facebook.com/sharer/sharer.php?app_id=404251236437754&sdk=joey&u={{ url('register_referido', {'referredCode':app.user.code}) }}&display=popup&ref=plugin&src=share_button">
                   <img src="https://symplifica.com/public/img/home/face.png">
                 </a>
-                <a>
+                <a target="_blank" class="notAjax twitter-share-button"
+                 href="https://twitter.com/intent/tweet?text=Te invito a que pruebes Symplifica gratis para gestionar a los empleados de tu hogar. Usa mi código {{ url('register_referido', {'referredCode':app.user.code}) }}"
+                 data-size="large">
                   <img src="https://symplifica.com/public/img/home/twee.png">
                 </a>
-                <a id="copyref" class="btn btn-azul notAjax" href="{{ url('register_referido', {'referredCode':app.user.code}) }}">¡Copiar link!</a>
+                 ó 
+                <a style="font-size: 10px;" id="copyref" class="btn btn-azul notAjax bold" href="{{ url('register_referido', {'referredCode':app.user.code}) }}">¡Copia el link!</a>
                 <input id="hiddenCopy" value="{{ url('register_referido', {'referredCode':app.user.code}) }}">
               </div>
-              
+
 
             </div>
           </div>
