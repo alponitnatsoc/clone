@@ -524,7 +524,7 @@ class TwigSwiftMailer extends Controller implements MailerInterface
 				         * string toEmail
 				         * string referredCode
 				         */
-				        $template = $this->parameters['template']['promoReferred5days'];
+				        $template = $this->parameters['template']['promoReferred15days'];
 								//TODO (a-santamaria cambiar el form a $mercadeoFromEmail)
 				        return $this->sendMessage($template, $context, $contactPublicFromEmail, $context["toEmail"]);
 				        break;
