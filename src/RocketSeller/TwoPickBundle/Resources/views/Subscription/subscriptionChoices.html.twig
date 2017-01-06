@@ -517,19 +517,22 @@
         </div>
     </div>-->
 
-    <div class="col-md-12">
-        <div class="grisclarofont light center padding-top-botton-20">
-          *Recuerda que las transacciones dentro de la plataforma tienen un costo de $6.000 pesos + 4x1000
-        </div>
+    <div>
+      <form action="{{ path('subscription_confirm') }}" method="POST">
+          <div class="padding-top-botton-20 codigoRef">
+              <label class="bold grisclarofont">¿Tienes algún código de referido?</label><br />
+              <input type="text" placeholder="Codigo" name="referredCode">
+          </div>
+          <div class="grisclarofont light center padding-top-botton-20">
+            *Recuerda que las transacciones dentro de la plataforma tienen un costo de $6.000 pesos + 4x1000
+          </div>
+          <div class="row padding-left-right-40">
+              <div class="col-md-12 margin-top-bottom-10 text-center">
+                  <input type="submit" class="btn btn-orange" value="Continuar"/>
+              </div>
+          </div>
+      </form>
     </div>
-    <hr>
-    <form action="{{ path('subscription_confirm') }}" method="POST">
-        <div class="row padding-left-right-40">
-            <div class="col-md-12 margin-top-bottom-10 text-center">
-                <input type="submit" class="btn btn-orange" value="Continuar"/>
-            </div>
-        </div>
-    </form>
 
     <!--<div class="row">
         <br/>

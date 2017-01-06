@@ -30,7 +30,7 @@ class WeekWorkableDaysRecord
      * @ORM\Column(type="string", length=10)
      */
     private $dayName;
-	
+
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\ContractRecord
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\ContractRecord", inversedBy="weekWorkableDaysRecord")
@@ -39,6 +39,7 @@ class WeekWorkableDaysRecord
      * })
      */
     private $contractRecordContractRecord;
+
 
     /**
      * Get idWeekWorkableDaysRecord

@@ -45,6 +45,11 @@ class Workplace
     private $contracts;
 
     /**
+     * @ORM\oneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\ContractRecord", mappedBy="workplaceWorkplace", cascade={"persist"})
+     */
+    private $contractRecords;
+
+    /**
      * @ORM\Column(type="string", length=200, nullable=TRUE)
      */
     private $mainAddress;
@@ -244,5 +249,39 @@ class Workplace
     public function getCity()
     {
         return $this->city;
+    }
+
+    /**
+     * Add contractRecord
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\ContractRecord $contractRecord
+     *
+     * @return Workplace
+     */
+    public function addContractRecord(\RocketSeller\TwoPickBundle\Entity\ContractRecord $contractRecord)
+    {
+        $this->contractRecords[] = $contractRecord;
+
+        return $this;
+    }
+
+    /**
+     * Remove contractRecord
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\ContractRecord $contractRecord
+     */
+    public function removeContractRecord(\RocketSeller\TwoPickBundle\Entity\ContractRecord $contractRecord)
+    {
+        $this->contractRecords->removeElement($contractRecord);
+    }
+
+    /**
+     * Get contractRecords
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContractRecords()
+    {
+        return $this->contractRecords;
     }
 }

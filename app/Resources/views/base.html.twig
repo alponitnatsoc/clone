@@ -24,7 +24,7 @@
               crossorigin="anonymous"/>
         <link href='//fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet' type='text/css'>
         <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,800,600italic,700' rel='stylesheet' type='text/css'>
         <link href='//fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
         <link href='//fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet'
               type='text/css'>
@@ -243,10 +243,15 @@
                                       <span class="glyphicon glyphicon-piggy-bank gIcon" aria-hidden="true"></span>
                                       Pago a empleados</a>
                                 </div>
-                                <div class="{% if app.request.get('_route') == 'list_pods_description' %}activeMenu{% endif %} well well-lg separador">
+                                <div class="{% if app.request.get('_route') == 'list_pods_description' %}activeMenu{% endif %} well well-lg">
                                     <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('list_pods_description') }}" class="notAjax"{% endif %}>
                                       <span class="glyphicon glyphicon-refresh gIcon" aria-hidden="true"></span>
                                       Transacciones en Proceso</a>
+                                </div>
+                                <div class="{% if app.request.get('_route') == 'free_payments' %}activeMenu{% endif %} well well-lg separador">
+                                    <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('free_payments') }}" class="notAjax"{% endif %}>
+                                      <span class="glyphicon glyphicon-certificate gIcon" aria-hidden="true"></span>
+                                      Tus pagos gratis</a>
                                 </div>
                                 <div class="{% if app.request.get('_route') == 'show_certificates' %}activeMenu{% endif %} well well-lg">
                                     <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('show_certificates') }}"{% endif %}>

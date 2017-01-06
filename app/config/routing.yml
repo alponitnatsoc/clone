@@ -525,7 +525,7 @@ salario_actual:
 
 salario_min_actual:
     path:     /salario-minimo-2017
-    defaults: { _controller: RocketSellerTwoPickBundle:Public:salario }
+    defaults: { _controller: RocketSellerTwoPickBundle:Public:salario2017 }
 
 express_landing:
     path:     /assistance/registration
@@ -586,3 +586,7 @@ calculadora:
 register_referido:
     path: /register/{referredCode}
     defaults: { _controller: RocketSellerTwoPickBundle:Registration:register, referredCode: -1}
+
+free_payments:
+    path: /show/referred/
+    defaults: { _controller: RocketSellerTwoPickBundle:User:myReferredShow}

@@ -1,0 +1,255 @@
+{% extends '::base.html.twig' %}
+
+{% block fos_user_content %}
+<link rel="stylesheet" type="text/css" href="{{ asset('css/public/referred.css') }}"/>
+<div>
+    <div class="col-sm-12 col-xs-12 align-Resp azulclaro">
+        <div id="" class=" col-sm-12 col-xs-12 blockStep inline  nav-link" >
+            <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+                 <img src="/img/block-inline.png" class="center-block">
+            </div>
+            <div id="" class="col-md-10 col-xs-12">
+                <div id="" class="text-left">
+                    <h1 style="color:#FFF;margin:25px 0 0;font-size:25px" class="bold">¡Hola {{ app.user.getPersonPerson().getNames() }}!</h1>
+                    <span clas="light" style="color:#FFF;margin:0;font-weight:100;font-size:20px">Refiere a Symplifica y gana dinero para tus pagos</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="referredContainer">
+  <div class="col-md-12">
+    <div class="col-md-12 refTitleCont">
+      <div class="col-md-2">
+        <img src="{{ asset('public/img/home/referredPig.png') }}" alt="">
+      </div>
+      <div class="col-md-10 refTitle azuloscurofont">
+        <strong>¿Sabes que Symplifica</strong>
+        <h2 class="bold">PODRÍA PAGAR</h2>
+        <p>el sueldo y aportes a seguridad social de tu empleada?</p>
+      </div>
+    </div>
+    <div class="col-md-12 referredBoxesCont">
+      <div class="col-md-5">
+          <h4 class="grisoscurofont light">&#8226; ¿Qué recibo?</h4>
+          <p class="grisclarofont light">
+            Recibes $100.000 pesos en crédito Symplifica por cada persona que complete su registro con tu código, el dinero acumulado puedes redimirlo cuando desees.
+          </p>
+          <h4 class="grisoscurofont light">&#8226; ¿Qué debo hacer?</h4>
+          <p class="grisclarofont light">
+            Contarle a todos tus amigos y familiares tu buena experiencia con Symplifica e invitarlos usando tu código.
+          </p>
+          <h4 class="grisoscurofont light">&#8226; ¿Qué reciben mis referidos?</h4>
+          <p class="grisclarofont light">
+            2 meses gratis al usar tu código.
+          </p>
+      </div>
+      <div class="col-md-7">
+          <div class="col-md-6 referredBoxes azulmediofont" style="background: #f9f9fb">
+              <img src="{{ asset('public/img/home/icon9.png') }}" width="56px" height="auto" alt="moneyBa">
+              <p>Dinero <strong>acumulado</strong></p>
+              <h2 id="target" class="extrabold">$<span class="span" id="realTarget">0</span></h2>
+              <span class="noShow btn-azul btn regular">REDIMIR</span>
+          </div>
+          <div class="col-md-6 referredBoxes azulmediofont">
+              <img src="{{ asset('public/img/home/icon6.png') }}" width="56px" height="auto" alt="referidos">
+              <p>¿Tienes a quien <strong>referir?</strong></p>
+              <h2 class="extrabold">¡Refiere ya!</h2>
+              <span class="btn-azul btn regular" data-toggle="modal" data-target="#myModal">REFERIR AQUÍ</span>
+          </div>
+          <div class="col-md-12 azulmedio noPadding">
+            <div class="col-md-6 codeShare">
+              <p class="regular" style="margin:0">Tu código para referir es:</p>
+              <span class="extrabold" style="font-size:20px">{{ app.user.code }}</span>
+              Compartelo en:
+              <!-- Load Facebook SDK for JavaScript -->
+              <span id="fb-root"></span>
+              <div class="fb-share-button" data-href="http://127.0.0.1:8000/register/elReferidor" data-layout="button" data-size="large" data-mobile-iframe="true">
+                <a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ url('register_referido', {'referredCode':app.user.code}) }}&amp;src=sdkpreparse">Compartir</a>
+              </div>
+            </div>
+            <div class="col-md-6 azuloscuro codeShare">
+              <div class="light">
+                Copia el link y pegalo en tu navegador<br /><br />
+                <a id="copyref" class="btn btn-azul notAjax" href="{{ url('register_referido', {'referredCode':app.user.code}) }}">¡Copiar link!</a>
+              </div>
+                <input id="hiddenCopy" value="{{ url('register_referido', {'referredCode':app.user.code}) }}">
+
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 center">
+    <hr />
+    <button class="btn btn-grisBorde" data-toggle="modal" data-target="#modal1">Terminos y condiciones</button>
+  </div>
+</div>
+
+<!-- Modal terminos y condiciones-->
+
+  <div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title azulmediofont bold center" id="myModalLabel">Terminos y condiones referidos</h4>
+        </div>
+        <div class="modal-body light grisoscurofont" style="padding: 20px 30px">
+          <p>
+            • Los usuarios de Symplifica que refieran a amigos, familiares o conocidos que completen el
+
+            registro en Symplifica, incluyendo todos los documentos solicitados, recibirán un premio de valor
+
+            equivalente a cien mil pesos ($100.000) por cada referido, los cuales pueden hacerse efectivos en
+
+            los pagos que salgan desde Symplifica web o App.<br /><br />
+
+            • Para recibir el premio, las personas referidas deben haber sido documentadas por un cliente
+
+            activo, e ingresar el código promocional en la sección “¿Tienes un código promocional?” al
+
+            momento de crear la cuenta y completar exitosamente el registro incluyendo los documentos
+
+            solicitados.<br /><br />
+
+            • El crédito no podrá ser utilizado para pago en efectivo, únicamente para las transacciones
+
+            realizadas de forma electrónica dentro de Symplifica (Pago de aportes, costos transaccionales, 4 x
+
+            1000, pago de sueldo y prestaciones).<br /><br />
+
+            • El premio ganado deberá ser gastado en el siguiente periodo luego de ser recibido, a no ser que
+
+            quede saldo a favor del usuario, en caso tal, será acumulado hasta gastar la totalidad del premio.<br /><br />
+
+            • El premio se verá reflejado en la sección “Tus pagos gratis” de la app y web, y se realizará el
+
+            descuento al momento de realizar transacciones desde la plataforma.<br /><br />
+
+            • Al realizar los pagos con este crédito no se afectarán los pagos de aportes o sueldos, solamente
+
+            serán asumidos por Symplifica hasta los montos máximos del crédito acumulado por periodo, el
+
+            cual no tiene un límite (depende del número de referidos traídos por el usuario)<br /><br />
+
+            • El premio no podrá ser cambiado por efectivo ni ningún otro elemento.<br /><br />
+
+            • Symplifica se reserva el derecho de modificar los montos con previo aviso a través de redes
+
+            sociales.<br /><br />
+
+            •Los referidos recibirán 2 meses gratis en el uso de la plataforma, aplicados desde el momento en
+
+            que se inscribe una cuenta bancaria en Symplifica.<br /><br />
+
+            • En el caso de que una persona sea un referido activo por dos o más clientes, el premio será
+
+            entregado a la primera persona que lo haya referido.<br /><br />
+
+            • Esta promoción solo aplica para el registro de empleados domésticos (Empleada de servicio
+
+            doméstico, niñera, conductor, mayordomo de finca de recreo y enfermera de adulto mayor).<br /><br />
+
+            • No es acumulable con otras promociones vigentes.<br /><br />
+
+            • El premio es por empleador registrado independiente del número de trabajadores que registre
+
+            en la plataforma.<br /><br />
+
+            • Promoción válida sólo para Colombia.<br /><br />
+
+            • En caso de retiro o desactivación de un empleado, el saldo acumulado por esta campaña no
+
+            podrá usarse para el pago de liquidación y no podrá ser recibido en efectivo o por algún otro
+
+            método.<br /><br />
+
+            • Las demás condiciones de los Términos y Condiciones generales de SYMPLIFICA, incluyendo las
+
+            restricciones para el acceso a los servicios de SYMPLIFICA y los servicios excluidos de la Plataforma,
+
+            aplicarán también para los Usuarios que se beneficien de esta Promoción.
+          </p>
+        </div>
+        <div class="modal-footer center">
+          <button type="button" class="btn btn-grisBorde" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title center azulmediofont bold">¿A quíen vas a referir?</h4></h4>
+        </div>
+        <div class="modal-body">
+          <p class="regular grisclarofont center">Para referir a alguien, solo debes ingresar el correo y el número de celular de tu amigo</p>
+        </div>
+        <div class="center">
+          <form>
+            <input class="refBorder center" type="text" placeholder="Nombre" />
+            <input class="refBorder center" type="text" placeholder="Número celular" />
+            <br />
+            <br />
+            <button type="button" class="btn btn-azul">enviar</button>
+          </form>
+          <br />
+        </div>
+        <div class="modal-footer center">
+          <button type="button" class="btn btn-grisBorde" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<script>
+    (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v2.8&appId=404251236437754";
+    fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+ </script>
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+
+        //codigo de plata brrrr
+        var tope={{ app.user.money}};
+        var delay=1000;
+
+         setTimeout(function() {
+           window.setInterval(function(){
+
+            var total = parseInt($("#realTarget").text())+2500;
+            if( total> tope ){
+              return;
+            }
+
+            $("#realTarget").text(total);
+          }, 25);  }, delay)
+        //codigo de plata brrrr
+
+        $("#hiddenCopy").hide();
+        $("#copyref").on('click', function (e) {
+            e.preventDefault();
+            var hiddentex = $("#hiddenCopy");
+            hiddentex.show();
+            hiddentex.focus();hiddentex.select();document.execCommand('copy');
+            hiddentex.hide();
+
+        });
+    </script>
+{% endblock %}

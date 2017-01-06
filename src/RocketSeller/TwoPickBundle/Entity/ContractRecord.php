@@ -26,96 +26,107 @@ class ContractRecord
 	 * @ORM\GeneratedValue(strategy="AUTO")
 	 */
 	private $idContractRecord;
-	
-	/**
-	 * @var \RocketSeller\TwoPickBundle\Entity\Frequency
-	 * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Frequency")
-	 * @ORM\JoinColumns({
-	 *   @ORM\JoinColumn(name="frequency_id_frequency", referencedColumnName="id_frequency", nullable=TRUE)
-	 * })
-	 */
-	private $frequencyFrequency;
-	
-	/**
-	 * @var \RocketSeller\TwoPickBundle\Entity\ContractType
-	 * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\ContractType")
-	 * @ORM\JoinColumns({
-	 *   @ORM\JoinColumn(name="contract_type_id_contract_type", referencedColumnName="id_contract_type")
-	 * })
-	 */
-	private $contractTypeContractType;
-	
-	/**
-	 * @var \RocketSeller\TwoPickBundle\Entity\Workplace
-	 * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Workplace",  inversedBy="contracts")
-	 * @ORM\JoinColumns({
-	 *   @ORM\JoinColumn(name="workplace_id_workplace", referencedColumnName="id_workplace")
-	 * })
-	 */
-	private $workplaceWorkplace;
-	
-	/**
-	 * @ORM\Column(type="smallint", nullable=TRUE)
-	 */
-	private $sisben;
-	
-	/**
-	 * @ORM\Column(type="smallint", nullable=TRUE)
-	 */
-	private $transportAid; // 1 vive donde trabaja - 0 externo
-	
-	/**
-	 * @ORM\Column(type="float",  nullable=TRUE)
-	 */
-	private $salary;
-	
-	/**
-	 * @ORM\Column(type="float",  nullable=TRUE)
-	 */
-	private $holidayDebt;
-	
-	/**
-	 * @ORM\OneToMany(targetEntity="WeekWorkableDaysRecord", mappedBy="contractRecord", cascade={"persist", "remove"})
-	 */
-	private $weekWorkableDaysRecord;
-	
-	/**
-	 * @var \RocketSeller\TwoPickBundle\Entity\EmployeeContractType
-	 * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EmployeeContractType")
-	 * @ORM\JoinColumns({
-	 *   @ORM\JoinColumn(name="employee_contract_type_id_employee_contract_type", referencedColumnName="id_employee_contract_type")
-	 * })
-	 */
-	private $employeeContractTypeEmployeeContractType;
-	
-	/**
-	 * @var \RocketSeller\TwoPickBundle\Entity\TimeCommitment
-	 * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\TimeCommitment")
-	 * @ORM\JoinColumns({
-	 *   @ORM\JoinColumn(name="time_commitment_id_time_commitment", referencedColumnName="id_time_commitment")
-	 * })
-	 */
-	private $timeCommitmentTimeCommitment;
-	
-	/**
-	 * @var \RocketSeller\TwoPickBundle\Entity\Position
-	 * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Position")
-	 * @ORM\JoinColumns({
-	 *   @ORM\JoinColumn(name="position_id_position", referencedColumnName="id_position")
-	 * })
-	 */
-	private $positionPosition;
-	
-	/**
+
+    /**
 	 * @var \RocketSeller\TwoPickBundle\Entity\PayMethod
-	 * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PayMethod", cascade={"persist"})
+	 * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PayMethod", cascade={"persist"})
 	 * @ORM\JoinColumns({
 	 *   @ORM\JoinColumn(name="pay_method_id_pay_method", referencedColumnName="id_pay_method")
 	 * })
 	 */
 	private $payMethodPayMethod;
-	
-	/**
+
+    /**
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee", cascade={"persist"})
+     * @ORM\JoinColumn(name="employer_has_employee_id_employer_has_employee", referencedColumnName="id_employer_has_employee")
+     */
+    private $employerHasEmployeeEmployeeHasEmployee;
+
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\ContractType
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\ContractType")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="contract_type_id_contract_type", referencedColumnName="id_contract_type")
+     * })
+     */
+    private $contractTypeContractType;
+
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Frequency
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Frequency")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="frequency_id_frequency", referencedColumnName="id_frequency", nullable=TRUE)
+     * })
+     */
+    private $frequencyFrequency;
+
+    /**
+     * @ORM\Column(type="float",  nullable=TRUE)
+     */
+    private $salary;
+
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Workplace
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Workplace",  inversedBy="contractRecords")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="workplace_id_workplace", referencedColumnName="id_workplace")
+     * })
+     */
+    private $workplaceWorkplace;
+
+    /**
+     * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\WeekWorkableDaysRecord", mappedBy="contractRecordContractRecord", cascade={"persist", "remove"})
+     */
+    private $weekWorkableDaysRecord;
+
+    /**
+     * @ORM\Column(type="integer", nullable=TRUE)
+     */
+    private $workableDaysMonth;
+
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\TimeCommitment
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\TimeCommitment")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="time_commitment_id_time_commitment", referencedColumnName="id_time_commitment")
+     * })
+     */
+    private $timeCommitmentTimeCommitment;
+
+    /**
+     * @ORM\Column(type="smallint", nullable=TRUE)
+     */
+    private $sisben;
+
+    /**
+     * @ORM\Column(type="smallint", nullable=TRUE)
+     */
+    private $transportAid; // 1 vive donde trabaja - 0 externo
+
+    /**
+     * @ORM\Column(type="float",  nullable=TRUE)
+     */
+    private $holidayDebt;
+
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\EmployeeContractType
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EmployeeContractType")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="employee_contract_type_id_employee_contract_type", referencedColumnName="id_employee_contract_type")
+     * })
+     */
+    private $employeeContractTypeEmployeeContractType;
+
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Position
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Position")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="position_id_position", referencedColumnName="id_position")
+     * })
+     */
+    private $positionPosition;
+
+    /**
 	 * @var \RocketSeller\TwoPickBundle\Entity\Document
 	 * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Document")
 	 * @ORM\JoinColumns({
@@ -124,7 +135,7 @@ class ContractRecord
 	 * @Exclude
 	 */
 	private $documentAmendment;
-	
+
 	/**
 	 * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\DocumentStatusType")
 	 * @ORM\JoinColumns({
@@ -132,47 +143,42 @@ class ContractRecord
 	 *   })
 	 */
 	private $documentStatus;
-	
+
 	/**
 	 * @ORM\Column(name="validation_date", type="date", nullable=true)
 	 */
 	private $validationDate;
-	
+
 	/**
 	 * @ORM\Column(name="error_date", type="date", nullable=true)
 	 */
 	private $errorDate;
-	
+
 	/**
 	 * @ORM\Column(type="date", nullable=TRUE)
 	 */
 	private $startDate;
-	
+
 	/**
 	 * @ORM\Column(type="date", nullable=TRUE)
 	 */
 	private $endDate;
-	
+
 	/**
 	 * @ORM\Column(type="date", nullable=TRUE)
 	 */
 	private $testPeriod;
-	
+
 	/**
 	 * @ORM\Column(type="time", nullable=TRUE)
 	 */
 	private $workTimeStart;
-	
+
 	/**
 	 * @ORM\Column(type="time", nullable=TRUE)
 	 */
 	private $workTimeEnd;
-	
-	/**
-	 * @ORM\Column(type="integer", nullable=TRUE)
-	 */
-	private $workableDaysMonth;
-	
+
 	/**
 	 * @var \RocketSeller\TwoPickBundle\Entity\PlanillaType
 	 * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PlanillaType")
@@ -181,12 +187,12 @@ class ContractRecord
 	 * })
 	 */
 	private $planillaTypePlanillaType;
-	
+
 	/**
 	 * @ORM\Column(name="date_changes_applied", type="date", nullable=TRUE)
 	 */
 	private $dateChangesApplied;
-	
+
 	/**
 	 * @var Contract
 	 * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Contract", inversedBy="contractRecords")
@@ -195,11 +201,22 @@ class ContractRecord
 	 *   })
 	 */
 	private $contractContract;
-	
+
+	/**
+	 * @ORM\Column(name="to_be_executed", type="smallint", nullable=TRUE)
+     *
+     * 0 - false
+     * 1 - true
+     *
+     */
+	private $toBeExecuted;
+
 	/**
 	 * @ORM\Column(type="date", nullable=TRUE)
 	 */
 	private $autoRenewalEndDate;
+
+
     /**
      * Constructor
      */
@@ -216,6 +233,54 @@ class ContractRecord
     public function getIdContractRecord()
     {
         return $this->idContractRecord;
+    }
+
+    /**
+     * Set salary
+     *
+     * @param float $salary
+     *
+     * @return ContractRecord
+     */
+    public function setSalary($salary)
+    {
+        $this->salary = $salary;
+
+        return $this;
+    }
+
+    /**
+     * Get salary
+     *
+     * @return float
+     */
+    public function getSalary()
+    {
+        return $this->salary;
+    }
+
+    /**
+     * Set workableDaysMonth
+     *
+     * @param integer $workableDaysMonth
+     *
+     * @return ContractRecord
+     */
+    public function setWorkableDaysMonth($workableDaysMonth)
+    {
+        $this->workableDaysMonth = $workableDaysMonth;
+
+        return $this;
+    }
+
+    /**
+     * Get workableDaysMonth
+     *
+     * @return integer
+     */
+    public function getWorkableDaysMonth()
+    {
+        return $this->workableDaysMonth;
     }
 
     /**
@@ -264,30 +329,6 @@ class ContractRecord
     public function getTransportAid()
     {
         return $this->transportAid;
-    }
-
-    /**
-     * Set salary
-     *
-     * @param float $salary
-     *
-     * @return ContractRecord
-     */
-    public function setSalary($salary)
-    {
-        $this->salary = $salary;
-
-        return $this;
-    }
-
-    /**
-     * Get salary
-     *
-     * @return float
-     */
-    public function getSalary()
-    {
-        return $this->salary;
     }
 
     /**
@@ -483,30 +524,6 @@ class ContractRecord
     }
 
     /**
-     * Set workableDaysMonth
-     *
-     * @param integer $workableDaysMonth
-     *
-     * @return ContractRecord
-     */
-    public function setWorkableDaysMonth($workableDaysMonth)
-    {
-        $this->workableDaysMonth = $workableDaysMonth;
-
-        return $this;
-    }
-
-    /**
-     * Get workableDaysMonth
-     *
-     * @return integer
-     */
-    public function getWorkableDaysMonth()
-    {
-        return $this->workableDaysMonth;
-    }
-
-    /**
      * Set dateChangesApplied
      *
      * @param \DateTime $dateChangesApplied
@@ -528,6 +545,30 @@ class ContractRecord
     public function getDateChangesApplied()
     {
         return $this->dateChangesApplied;
+    }
+
+    /**
+     * Set toBeExecuted
+     *
+     * @param integer $toBeExecuted
+     *
+     * @return ContractRecord
+     */
+    public function setToBeExecuted($toBeExecuted)
+    {
+        $this->toBeExecuted = $toBeExecuted;
+
+        return $this;
+    }
+
+    /**
+     * Get toBeExecuted
+     *
+     * @return integer
+     */
+    public function getToBeExecuted()
+    {
+        return $this->toBeExecuted;
     }
 
     /**
@@ -555,27 +596,27 @@ class ContractRecord
     }
 
     /**
-     * Set frequencyFrequency
+     * Set employerHasEmployeeEmployeeHasEmployee
      *
-     * @param \RocketSeller\TwoPickBundle\Entity\Frequency $frequencyFrequency
+     * @param \RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee $employerHasEmployeeEmployeeHasEmployee
      *
      * @return ContractRecord
      */
-    public function setFrequencyFrequency(\RocketSeller\TwoPickBundle\Entity\Frequency $frequencyFrequency = null)
+    public function setEmployerHasEmployeeEmployeeHasEmployee(\RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee $employerHasEmployeeEmployeeHasEmployee = null)
     {
-        $this->frequencyFrequency = $frequencyFrequency;
+        $this->employerHasEmployeeEmployeeHasEmployee = $employerHasEmployeeEmployeeHasEmployee;
 
         return $this;
     }
 
     /**
-     * Get frequencyFrequency
+     * Get employerHasEmployeeEmployeeHasEmployee
      *
-     * @return \RocketSeller\TwoPickBundle\Entity\Frequency
+     * @return \RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee
      */
-    public function getFrequencyFrequency()
+    public function getEmployerHasEmployeeEmployeeHasEmployee()
     {
-        return $this->frequencyFrequency;
+        return $this->employerHasEmployeeEmployeeHasEmployee;
     }
 
     /**
@@ -600,6 +641,30 @@ class ContractRecord
     public function getContractTypeContractType()
     {
         return $this->contractTypeContractType;
+    }
+
+    /**
+     * Set frequencyFrequency
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Frequency $frequencyFrequency
+     *
+     * @return ContractRecord
+     */
+    public function setFrequencyFrequency(\RocketSeller\TwoPickBundle\Entity\Frequency $frequencyFrequency = null)
+    {
+        $this->frequencyFrequency = $frequencyFrequency;
+
+        return $this;
+    }
+
+    /**
+     * Get frequencyFrequency
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Frequency
+     */
+    public function getFrequencyFrequency()
+    {
+        return $this->frequencyFrequency;
     }
 
     /**
@@ -661,30 +726,6 @@ class ContractRecord
     }
 
     /**
-     * Set employeeContractTypeEmployeeContractType
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\EmployeeContractType $employeeContractTypeEmployeeContractType
-     *
-     * @return ContractRecord
-     */
-    public function setEmployeeContractTypeEmployeeContractType(\RocketSeller\TwoPickBundle\Entity\EmployeeContractType $employeeContractTypeEmployeeContractType = null)
-    {
-        $this->employeeContractTypeEmployeeContractType = $employeeContractTypeEmployeeContractType;
-
-        return $this;
-    }
-
-    /**
-     * Get employeeContractTypeEmployeeContractType
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\EmployeeContractType
-     */
-    public function getEmployeeContractTypeEmployeeContractType()
-    {
-        return $this->employeeContractTypeEmployeeContractType;
-    }
-
-    /**
      * Set timeCommitmentTimeCommitment
      *
      * @param \RocketSeller\TwoPickBundle\Entity\TimeCommitment $timeCommitmentTimeCommitment
@@ -706,6 +747,30 @@ class ContractRecord
     public function getTimeCommitmentTimeCommitment()
     {
         return $this->timeCommitmentTimeCommitment;
+    }
+
+    /**
+     * Set employeeContractTypeEmployeeContractType
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\EmployeeContractType $employeeContractTypeEmployeeContractType
+     *
+     * @return ContractRecord
+     */
+    public function setEmployeeContractTypeEmployeeContractType(\RocketSeller\TwoPickBundle\Entity\EmployeeContractType $employeeContractTypeEmployeeContractType = null)
+    {
+        $this->employeeContractTypeEmployeeContractType = $employeeContractTypeEmployeeContractType;
+
+        return $this;
+    }
+
+    /**
+     * Get employeeContractTypeEmployeeContractType
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\EmployeeContractType
+     */
+    public function getEmployeeContractTypeEmployeeContractType()
+    {
+        return $this->employeeContractTypeEmployeeContractType;
     }
 
     /**
