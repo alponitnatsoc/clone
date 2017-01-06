@@ -44,6 +44,15 @@ class UserController extends Controller
 
     public function myReferredShowAction(Request $request)
     {
+        $requ = $request->request->all();
+
+
+        if(isset($requ['names'])&&isset($requ['cellphone'])){
+            $insertin = $this->forward("RocketSellerTwoPickBundle:BackOfficeRestSecured:postCreateReferred", array('request'=>$request), array('_format' => 'json'));
+            if($insertin->getStatusCode()!=201){
+                throw $this->createNotFoundException('Not good');
+            }
+        }
         return $this->render('RocketSellerTwoPickBundle:User:referredShow.html.twig',array());
     }
     public function myAccountShowAction(Request $request)
