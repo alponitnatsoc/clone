@@ -567,7 +567,7 @@ class SubscriptionController extends Controller
                         //stock in this campaing is used to have a database value of the campaing
                         $userReferidor->setMoney($userReferidor->getMoney()+$campaing->getStock());
                     }else{
-                        $userReferidor->setIsFree($userReferidor->getIsFree() + 3);
+                        $userReferidor->setIsFree($userReferidor->getIsFree() + 1);
                     }
                     $em->persist($userReferidor);
                     $user->setPromoCodeClaimedByReferidor(true);
