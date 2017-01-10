@@ -12,6 +12,7 @@ use PHPExcel_Style_Color;
 use PHPExcel_Style_Fill;
 use PHPExcel_Style_Font;
 use PHPExcel_Writer_Excel2007;
+use RocketSeller\TwoPickBundle\Entity\EmailInfo;
 use RocketSeller\TwoPickBundle\Entity\Employee;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use RocketSeller\TwoPickBundle\Entity\Action;
@@ -2113,5 +2114,183 @@ class ExportController extends Controller
         readfile($tmp_file);
         ignore_user_abort(true);
         unlink($tmp_file);
+    }
+
+    /**
+     * @param string $type
+     * @param boolean $all
+     * @return StreamedResponse
+     */
+    public function generateXLSAction($type,$all=false){
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        $em = $this->getDoctrine()->getManager();
+        switch ($type){
+            case 'emailInfo':
+                if($all){
+                    $emailsInfo = $em->getRepository("RocketSellerTwoPickBundle:EmailInfo")->findAll();
+                }
+                $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+                //setting some properties
+                $phpExcelObject->getProperties()->setCreator("Symplifica-Doc-Generator")
+                    ->setLastModifiedBy("Symplifica-Bot")
+                    ->setTitle("General Email Info Group")
+                    ->setSubject("Details")
+                    ->setDescription("generated document with the Email Group information")
+                    ->setKeywords("email group document")
+                    ->setCategory("Information");
+                //setting the active sheet and changing name
+                $phpExcelObject->setActiveSheetIndex(0)->setTitle('Información Correos');
+                $outlineBorderTitleStyle= array(
+                    'borders' => array(
+                        'outline' => array(
+                            'style' => PHPExcel_Style_Border::BORDER_THIN,
+                            'color' => array('argb' => 'FF000000'),
+                        ),
+                    ),
+                    'font'=>array(
+                        'name'=>'Calibri',
+                        'color' => array('argb'=>'FFFFFFFF'),
+                        'bold' => true,
+                        'size' => 12,
+                    ),
+                    'fill'=>array(
+                        'type'=>'solid',
+                        'color'=>array('argb'=>'FF818181'),
+                    ),
+                    'alignment'=>array(
+                        'horizontal'=>'center',
+                        'vertical'=>'center',
+                    ),
+                );
+                $allBordersContentStyle = array(
+                    'borders'=>array(
+                        'allborders'=> array(
+                            'style' => PHPExcel_Style_Border::BORDER_THIN,
+                            'color' => array('argb' => 'FF000000'),
+                        ),
+                    ),
+                    'font'=>array(
+                        'name'=>'Calibri',
+                        'color' => array('argb'=>'FF000000'),
+                        'bold' => true,
+                        'size' => 11,
+                    ),
+                    'fill'=>array(
+                        'type'=>'solid',
+                        'color'=>array('argb'=>'FFDBDBDB'),
+                    ),
+                    'alignment'=>array(
+                        'horizontal'=>'left',
+                        'vertical'=>'center',
+                    ),
+                );
+                $allBordersNoContentStyle = array(
+                    'borders'=>array(
+                        'allborders'=> array(
+                            'style' => PHPExcel_Style_Border::BORDER_THIN,
+                            'color' => array('argb' => 'FF000000'),
+                        ),
+                    ),
+                    'font'=>array(
+                        'name'=>'Calibri',
+                        'color' => array('argb'=>'FF000000'),
+                        'size' => 10,
+                    ),
+                    'fill'=>array(
+                        'type'=>'solid',
+                        'color'=>array('argb'=>'FFFFFFFF'),
+                    ),
+                    'alignment'=>array(
+                        'horizontal'=>'left',
+                        'vertical'=>'center',
+                    ),
+
+                );
+                $sheet = $phpExcelObject->getActiveSheet();
+                $sheet->getColumnDimension('A')->setWidth(5);
+                $sheet->getColumnDimension('B')->setWidth(13);
+                $sheet->getColumnDimension('C')->setWidth(35);
+                $sheet->getColumnDimension('D')->setWidth(10);
+                $sheet->getColumnDimension('E')->setWidth(15);
+                $sheet->getColumnDimension('F')->setWidth(35);
+                $sheet->getRowDimension(1)->setRowHeight(17);
+                $sheet->getRowDimension(2)->setRowHeight(16);
+                $row=1;
+                /** @var \PHPExcel_Cell $cell */
+                $cell = $sheet->getCellByColumnAndRow(0,$row);
+                $cell->setValue('INFORMACIÓN CORREOS');
+                $row++;
+                $cell = $sheet->getCellByColumnAndRow(0,$row);
+                $iniCol = $cell->getColumn();
+                $cell->setValue('ID');
+                $cell = $sheet->getCellByColumnAndRow(1,$row);
+                $cell->setValue('GRUPO');
+                $cell = $sheet->getCellByColumnAndRow(2,$row);
+                $cell->setValue('NOMBRE');
+                $cell = $sheet->getCellByColumnAndRow(3,$row);
+                $cell->setValue('TIPO_DOC');
+                $cell = $sheet->getCellByColumnAndRow(4,$row);
+                $cell->setValue('DOCUMENTO');
+                $cell = $sheet->getCellByColumnAndRow(5,$row);
+                $cell->setValue('EMAIL');
+                $sheet->mergeCells($iniCol.($row-1).':'.$cell->getColumn().($row-1));
+                $sheet->getStyle($iniCol.($row-1).':'.$cell->getColumn().($row-1))->applyFromArray($outlineBorderTitleStyle);
+                $sheet->getStyle($iniCol.$row.':'.$cell->getColumn().$row)->applyFromArray($allBordersContentStyle);
+                $row++;
+                $iniRow = $row;
+                if($all==true) {
+                    /** @var EmailInfo $emailInfo */
+                    foreach ($emailsInfo as $emailInfo) {
+                        $col = 0;
+                        $cell = $sheet->getCellByColumnAndRow($col, $row);
+                        $cell->setValue($emailInfo->getIdEmailInfo());
+                        $col++;
+                        $cell = $sheet->getCellByColumnAndRow($col, $row);
+                        $cell->setValue($emailInfo->getEmailGroup()->getName());
+                        $col++;
+                        $cell = $sheet->getCellByColumnAndRow($col, $row);
+                        $name = $emailInfo->getName();
+                        $docType = $emailInfo->getDocumentType();
+                        $docNumber = $emailInfo->getDocument();
+                        $email = $emailInfo->getEmail();
+                        $cell->setValue($name);
+                        $col++;
+                        $cell = $sheet->getCellByColumnAndRow($col, $row);
+                        $cell->setValue($docType);
+                        $col++;
+                        $cell = $sheet->getCellByColumnAndRow($col, $row);
+                        $cell->setValue($docNumber);
+                        $col++;
+                        $cell = $sheet->getCellByColumnAndRow($col, $row);
+                        $cell->setValue($email);
+                        $row++;
+                    }
+                    $sheet->getStyle($iniCol.$iniRow.':'.$cell->getColumn().($row-1))->applyFromArray($allBordersNoContentStyle);
+                }
+                // create the writer
+                $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel2007');
+                // create the response
+                $response = $this->get('phpexcel')->createStreamedResponse($writer);
+                // adding headers
+                if($all==true){
+                    $dispositionHeader = $response->headers->makeDisposition(
+                        ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                        'All_Emails_Info_'.date('d-m-y').'.xlsx'
+                    );
+                }else{
+                    $dispositionHeader = $response->headers->makeDisposition(
+                        ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                        'Emails_info_template_'.date('d-m-y').'.xlsx'
+                    );
+                }
+                $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+                $response->headers->set('Pragma', 'public');
+                $response->headers->set('Cache-Control', 'maxage=1');
+                $response->headers->set('Content-Disposition', $dispositionHeader);
+                return $response;
+                break;
+            default:
+                break;
+        }
     }
 }

@@ -16,6 +16,9 @@ procedure_test:
 payments_method:
     path:     /paymentmethod/{idNotification}
     defaults: { _controller: RocketSellerTwoPickBundle:PaymentMethod:index, idNotification: -1 }
+show_email_groups:
+    path:     /backoffice/email/groups/info
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:emailGroupView }
 
 #Payments
 show_payments:

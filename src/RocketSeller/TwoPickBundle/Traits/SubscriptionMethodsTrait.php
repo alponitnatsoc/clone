@@ -5,6 +5,7 @@ namespace RocketSeller\TwoPickBundle\Traits;
 use DateTime;
 use Doctrine\Common\Persistence\ObjectRepository;
 use FOS\RestBundle\View\View;
+use RocketSeller\TwoPickBundle\Controller\UtilsController;
 use RocketSeller\TwoPickBundle\Entity\CalculatorConstraints;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
@@ -753,6 +754,7 @@ trait SubscriptionMethodsTrait
 
     }
 
+
     protected function addToSQL(User $user)
     {
         $person = $user->getPersonPerson();
@@ -763,6 +765,8 @@ trait SubscriptionMethodsTrait
         $dateToday = new DateTime();
         $dateToday->setDate(1970, 01, 01); //TODO DO NOT ERASE THIS SHIT
         $request = $this->container->get('request');
+        /** @var UtilsController $utils */
+        $utils = $this->get("app.symplifica_utils");
         if ($employer->getIdSqlSociety() == null) {
         	  if($person->getDocumentType() == "PASAPORTE"){
         	  	$nitToAdd = "PA" . $person->getDocument();
@@ -770,13 +774,12 @@ trait SubscriptionMethodsTrait
 	          else{
 	          	$nitToAdd = $person->getDocumentType().$person->getDocument();
 	          }
-	          
             $request->setMethod("POST");
             $request->request->add(array(
                 "society_nit" => $nitToAdd,
                 "society_name" => $person->getNames(),
                 "society_start_date" => $dateToday->format("d-m-Y"),
-                "society_mail" => $user->getEmail(),
+                "society_mail" => $utils->generateRandomEmail(),
             ));
             $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddSociety', array('_format' => 'json'));
             if ($insertionAnswer->getStatusCode() != 200) {
