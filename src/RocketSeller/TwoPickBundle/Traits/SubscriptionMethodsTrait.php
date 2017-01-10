@@ -167,12 +167,15 @@ trait SubscriptionMethodsTrait
                 $payroll_type = 4;
                 $value = $actContract->getSalary();
                 $wokableDaysWeek = 6;
-            } else {
+            } elseif($actContract->getTimeCommitmentTimeCommitment()->getCode() == "XD") {
                 $payroll_type = 6;
                 $value = $actContract->getSalary() / $actContract->getWorkableDaysMonth();
                 $wokableDaysWeek = $actContract->getWorkableDaysMonth() / 4;
-            }
-            
+            } elseif($actContract->getTimeCommitmentTimeCommitment()->getCode() == "DS") {
+                $payroll_type = 7;
+                $value = $actContract->getSalary() / $actContract->getWorkableDaysMonth();
+                $wokableDaysWeek = $actContract->getWorkableDaysMonth() / 4;
+            }else{return false;}
             if($employeePerson->getDocumentType() == "PASAPORTE"){
             $employeeDocType = "PA";
             }else{
@@ -206,6 +209,7 @@ trait SubscriptionMethodsTrait
                 "society" => $employer->getIdSqlSociety(),
                 "payroll_type" => $payroll_type,
             ));
+
             if ($endDate != null) {
                 $request->request->add(array(
                     "last_contract_end_date" => $endDate->format("d-m-Y")
@@ -299,7 +303,7 @@ trait SubscriptionMethodsTrait
 		          	if($startMonthSpecialTreatment){
 				          //Need to calculate how many days did the person work on this point
 				          if($actContract->getFrequencyFrequency()->getPayrollCode() == "Q"){
-					          if($actContract->getTimeCommitmentTimeCommitment()->getCode() == "XD"){
+                              if($actContract->getTimeCommitmentTimeCommitment()->getCode() == "XD" || $actContract->getTimeCommitmentTimeCommitment()->getCode() == "DS"){
 											if($startDate->format('d') <= 15){
 												$relativeWorkedDays = 15 - $startDate->format("d") + 1;
 												$proportionalPeriod = $relativeWorkedDays / 15;
@@ -309,20 +313,20 @@ trait SubscriptionMethodsTrait
 												}
 												$salaryPerPeriod = $actContract->getSalary() / $actContract->getWorkableDaysMonth();
 
-                        $request->setMethod("POST");
-                        $request->request->add(array(
-	                        "employee_id" => $eHE->getIdEmployerHasEmployee(),
-	                        "units" => $unitsPerPeriod,
-	                        "value" => floor($salaryPerPeriod * $unitsPerPeriod),
-	                        "year" => $startDate->format("Y"),
-	                        "month" => $startDate->format("m"),
-	                        "period" => "2",
-                        ));
+                                                $request->setMethod("POST");
+                                                $request->request->add(array(
+                                                    "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                                                    "units" => $unitsPerPeriod,
+                                                    "value" => floor($salaryPerPeriod * $unitsPerPeriod),
+                                                    "year" => $startDate->format("Y"),
+                                                    "month" => $startDate->format("m"),
+                                                    "period" => "2",
+                                                ));
 
-                        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('request' => $request ), array('_format' => 'json'));
-                        if ($insertionAnswer->getStatusCode() != 200) {
-	                        return false;
-                        }
+                                                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('request' => $request), array('_format' => 'json'));
+                                                if ($insertionAnswer->getStatusCode() != 200) {
+                                                    return false;
+                                                }
 
                                         //The first period of the month is done at this point, now into the second half of the month, if needed
 
@@ -443,7 +447,7 @@ trait SubscriptionMethodsTrait
 					          }
 				          }
 				          elseif ($actContract->getFrequencyFrequency()->getPayrollCode() == "M"){
-					          if($actContract->getTimeCommitmentTimeCommitment()->getCode() == "XD"){
+                              if($actContract->getTimeCommitmentTimeCommitment()->getCode() == "XD" || $actContract->getTimeCommitmentTimeCommitment()->getCode() == "DS"){
 						          $relativeWorkedDays = 30 - $startDate->format("d") + 1;
 						          $proportionalPeriod = $relativeWorkedDays / 30;
 						          $unitsPerPeriod = floor($proportionalPeriod * ($actContract->getWorkableDaysMonth() ));
@@ -500,7 +504,7 @@ trait SubscriptionMethodsTrait
 			          } //End of special treatment, now into the full month historical
 			          else{
 				          if($actContract->getFrequencyFrequency()->getPayrollCode() == "Q"){
-					          if($actContract->getTimeCommitmentTimeCommitment()->getCode() == "XD"){
+					          if($actContract->getTimeCommitmentTimeCommitment()->getCode() == "XD" || $actContract->getTimeCommitmentTimeCommitment()->getCode() == "DS"){
 
 						          $unitsPerPeriod = $actContract->getWorkableDaysMonth() / 2;
 						          $salaryPerPeriod = $actContract->getSalary() / 2;
@@ -583,7 +587,7 @@ trait SubscriptionMethodsTrait
 					          }
 				          }
 				          elseif ($actContract->getFrequencyFrequency()->getPayrollCode() == "M"){
-					          if($actContract->getTimeCommitmentTimeCommitment()->getCode() == "XD"){
+                              if($actContract->getTimeCommitmentTimeCommitment()->getCode() == "XD" || $actContract->getTimeCommitmentTimeCommitment()->getCode() == "DS"){
 						          $unitsPerPeriod = $actContract->getWorkableDaysMonth();
 						          $salaryPerPeriod = $actContract->getSalary();
 
