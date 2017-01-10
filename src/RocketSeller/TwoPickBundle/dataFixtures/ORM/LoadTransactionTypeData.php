@@ -23,6 +23,12 @@ class LoadTransactionTypeData extends AbstractFixture implements OrderedFixtureI
 		    $transactionType2->setDescription('Cargar archivo de pila del empleador al operador de pila');
 		    $transactionType2->setCode('CPla');
 		    $manager->persist($transactionType2);
+	
+		    $transactionType3 = new TransactionType();
+		    $transactionType3->setName('Registro cuenta bancaria');
+		    $transactionType3->setDescription('Registro cuenta bancaria');
+		    $transactionType3->setCode('RCB');
+		    $manager->persist($transactionType3);
 	    
 	      $manager->flush();
     }

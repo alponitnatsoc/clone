@@ -44,6 +44,7 @@ class TwigSwiftMailer extends Controller implements MailerInterface
         $teamFromEmail=array('registro@symplifica.com'=>'Equipo Symplifica');
         $contactPublicFromEmail=array('registro@symplifica.com'=>'Contacto Público');
         $contactPrivateFromEmail=array('registro@symplifica.com'=>'Contacto Privado');
+	      $mercadeoFromEmail=array('mercadeo@symplifica.com'=>'Mercadeo Symplifica');
         $contactPublic = 'contactanos@symplifica.com';
         $contactPrivate = 'servicioalcliente@symplifica.com';
         $testEmail = 'andres.ramirez@symplifica.com';
@@ -509,6 +510,24 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                 $template = $this->parameters['template']['sendBackLandingInfo'];
                 return $this->sendMessage($template, $context, $contactPublicFromEmail, $registrationStuck);
                 break;
+		        case "promoReferred5days":
+				        /** $context must have:
+				         * string toEmail
+				         * string referredCode
+				         */
+				        $template = $this->parameters['template']['promoReferred5days'];
+			          //TODO (a-santamaria cambiar el form a $mercadeoFromEmail)
+				        return $this->sendMessage($template, $context, $contactPublicFromEmail, $context["toEmail"]);
+				        break;
+		        case "promoReferred15days":
+				        /** $context must have:
+				         * string toEmail
+				         * string referredCode
+				         */
+				        $template = $this->parameters['template']['promoReferred15days'];
+								//TODO (a-santamaria cambiar el form a $mercadeoFromEmail)
+				        return $this->sendMessage($template, $context, $contactPublicFromEmail, $context["toEmail"]);
+				        break;
 
         }
     }
