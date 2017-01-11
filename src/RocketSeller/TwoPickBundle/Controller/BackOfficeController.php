@@ -11,6 +11,7 @@ use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\Document;
 use RocketSeller\TwoPickBundle\Entity\EmailGroup;
 use RocketSeller\TwoPickBundle\Entity\EmailInfo;
+use RocketSeller\TwoPickBundle\Entity\EmailType;
 use RocketSeller\TwoPickBundle\Entity\Employee;
 use RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Employer;
@@ -3303,13 +3304,55 @@ class BackOfficeController extends Controller
             if($this->checkFile($formEmailGroups->get('document')->getData())){
                 $this->addFlash('success_import','Se importo correctamente el archivo.');
             }else{
-                $this->addFlash('fail_import','Ocurrio un error o el archivo no cumple con el formato requerido.');
+                $this->addFlash('fail_import','Ocurrió un error o el archivo no cumple con el formato requerido.');
             }
         }
+
+//        $emailGroups=$em->getRepository("RocketSellerTwoPickBundle:EmailGroup")->findAll();
+        $formChoice = $this->get("form.factory")->createNamedBuilder("formChoiceGroup")
+            ->add("groups","entity",array(
+                'class'=>"RocketSellerTwoPickBundle:EmailGroup",
+                'choice_label'=>'name',
+                'multiple'=>false,
+                'expanded'=>false,
+                'placeholder'=>'seleccione un grupo'))
+            ->add('emailTypes',"entity",array(
+                'class'=>"RocketSellerTwoPickBundle:EmailType",
+                'choice_label'=>'name',
+                'multiple'=>false,
+                'expanded'=>false,
+                'placeholder'=>'Seleccione un correo'))
+            ->add('submit','submit',array('label'=>'Enviar'))
+            ->getForm();
+        $formChoice->handleRequest($request);
+        if($formChoice->isValid() and $formChoice->isSubmitted()){
+            /** @var EmailGroup $group */
+            $group = $formChoice->get("groups")->getData();
+            /** @var EmailType $emailType */
+            $emailType = $formChoice->get("emailTypes")->getData();
+            $infoEmails = $em->getRepository("RocketSellerTwoPickBundle:EmailInfo")->findBy(array('emailGroup'=>$group));
+            if(count($infoEmails)>0){
+                $toEmail = array();
+                /** @var EmailInfo $infoEmail */
+                foreach ($infoEmails as $infoEmail) {
+                    $toEmail[$infoEmail->getEmail()]=$infoEmail->getName();
+                }
+                $context["emailType"]=$emailType->getEmailType();
+                $context["toEmail"]=$toEmail;
+                $send = $this->get("symplifica.mailer.twig_swift")->sendMultipleRecipientsEmailByType($context);
+                if($send){
+                    $this->addFlash('success_import','Se envió correctamente el correo.');
+                }else{
+                    $this->addFlash('fail_import','Ocurrió un error enviando el correo.');
+                }
+            }
+        }
+
         $emailsInfo=$em->getRepository("RocketSellerTwoPickBundle:EmailInfo")->findAll();
         return $this->render("RocketSellerTwoPickBundle:BackOffice:EmailInfoGroup.html.twig",array(
            'emailsInfo'=>$emailsInfo,
             'formEmailGroups'=>$formEmailGroups->createView(),
+            'formChoiceGroup'=>$formChoice->createView(),
         ));
     }
 

@@ -7,6 +7,7 @@
         <div class="back-panel-title">
             Grupos de correos
         </div>
+
         {% for type, messages in app.session.flashbag.all() %}
             {% for message in messages %}
                 {% if type == "success_import" %}
@@ -20,6 +21,23 @@
                 {% endif %}
             {% endfor %}
         {% endfor %}
+        <div class="col-md-12" style="display: inline-flex; clear: both; margin: 15px 10px">
+            {{ form_start(formChoiceGroup) }}
+            <div class="col-md-3" style="width: 250px">
+                {{ form_label(formChoiceGroup.groups,'Grupos de correo',{'label_attr':{'style':'font-weight:700;font-size:15px;margin-left:5px'}}) }}
+                {{ form_widget(formChoiceGroup.groups) }}
+            </div>
+            <div class="col-md-3" style="width: 300px">
+                {{ form_label(formChoiceGroup.emailTypes,'Nombre del correo',{'label_attr':{'style':'font-weight:700;font-size:15px;margin-left:5px'}}) }}
+                {{ form_widget(formChoiceGroup.emailTypes) }}
+            </div>
+            <div class="col-md-3" style="text-align: center;width: 100px;margin-top: 1.8%">
+                {{ form_widget(formChoiceGroup.submit) }}
+            </div>
+            {{ form_end(formChoiceGroup) }}
+        </div>
+
+
         <div class="back-panel">
             <div class="backoffice-headding">
                 <h4>Información grupos de correos</h4>

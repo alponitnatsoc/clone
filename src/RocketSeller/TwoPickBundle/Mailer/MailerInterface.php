@@ -31,6 +31,12 @@ interface MailerInterface
     public function sendEmailByTypeMessage($context);
 
     /**
+     * @param array $context
+     * @return void
+     */
+    public function sendMultipleRecipientsEmailByType($context);
+
+    /**
      * Send an email to a user to confirm the account creation
      *
      * @param UserInterface $user

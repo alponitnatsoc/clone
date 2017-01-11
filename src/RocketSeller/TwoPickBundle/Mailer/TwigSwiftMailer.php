@@ -39,12 +39,29 @@ class TwigSwiftMailer extends Controller implements MailerInterface
         $this->parameters = $parameters;
     }
 
+    public function sendMultipleRecipientsEmailByType($context){
+        $fromEmail = array('hola@symplifica.com'=>'Equipo Symplifica');
+        $toEmail = $context["toEmail"];
+        $replyEmail = array('hola@symplifica.com'=>'Equipo Symplifica');
+        $template = $this->parameters['template'][$context['emailType']];
+        switch ($context["emailType"]){
+            case 'twoMonthsRegistration':
+                return $this->sendMessage2($template,$context,$fromEmail,$replyEmail,$toEmail);
+                break;
+            case 'noRegisterFacebook':
+                return $this->sendMessage2($template,$context,$fromEmail,$replyEmail,$toEmail);
+                break;
+            case 'noRegisterLanding':
+                return $this->sendMessage2($template,$context,$fromEmail,$replyEmail,$toEmail);
+                break;
+        }
+    }
+
     public function sendEmailByTypeMessage($context){
         $registerFromEmail = array('registro@symplifica.com'=>'Registro Symplifica');
         $teamFromEmail=array('registro@symplifica.com'=>'Equipo Symplifica');
         $contactPublicFromEmail=array('registro@symplifica.com'=>'Contacto Público');
         $contactPrivateFromEmail=array('registro@symplifica.com'=>'Contacto Privado');
-	      $mercadeoFromEmail=array('mercadeo@symplifica.com'=>'Mercadeo Symplifica');
         $contactPublic = 'contactanos@symplifica.com';
         $contactPrivate = 'servicioalcliente@symplifica.com';
         $testEmail = 'andres.ramirez@symplifica.com';
@@ -638,6 +655,32 @@ class TwigSwiftMailer extends Controller implements MailerInterface
         }
         $to = $context['toEmail'];
         return $this->sendMessage($template,$context,'registro@symplifica.com', $to,$path);
+    }
+
+    protected function sendMessage2($templateName,$context,$fromEmail,$replyEmail,$toEmail,$path=null)
+    {
+        $context = $this->twig->mergeGlobals($context);
+        $template = $this->twig->loadTemplate($templateName);
+        $subject = $template->renderBlock('subject', $context);
+        $textBody = $template->renderBlock('body_text', $context);
+        $htmlBody = $template->renderBlock('body_html', $context);
+        $message ="";
+        $message = \Swift_Message::newInstance()
+            ->setSubject($subject)
+            ->setFrom($fromEmail)
+            ->setTo($toEmail)
+            ->setReplyTo($replyEmail)
+            ->setPriority(1);
+        if (!empty($htmlBody)) {
+            $message->setBody($htmlBody, 'text/html')
+                ->addPart($textBody, 'text/plain');
+        } else {
+            $message->setBody($textBody, 'text/plain');
+        }
+        if ($path) {
+            $message->attach(Swift_Attachment::fromPath(getcwd().'/'.$path)->setFilename($context['documentName']));
+        }
+        return $this->mailer->send($message);
     }
 
     /**

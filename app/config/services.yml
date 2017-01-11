@@ -115,6 +115,9 @@ services:
                     sendBackLandingInfo: 'FOSUserBundle:EmailTemplates:landingBackInfo.txt.twig'
                     promoReferred5days: 'FOSUserBundle:EmailTemplates:promocionReferidos5dias.txt.twig'
                     promoReferred15days: 'FOSUserBundle:EmailTemplates:promocionReferidos15dias.txt.twig'
+                    twoMonthsRegistration: 'FOSUserBundle:EmailTemplates:twoMonthsWithoutRegistration.txt.twig'
+                    noRegisterFacebook: 'FOSUserBundle:EmailTemplates:noRegisterFacebook.txt.twig'
+                    noRegisterLanding: 'FOSUserBundle:EmailTemplates:noRegisterLanding.txt.twig'
 
                 from_email:
                   confirmation: '%fos_user.registration.confirmation.from_email%'
