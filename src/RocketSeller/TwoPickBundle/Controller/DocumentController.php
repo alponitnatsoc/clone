@@ -1309,6 +1309,8 @@ use EmployerMethodsTrait;
                 $employeePerson = $employee->getPersonPerson();
                 $employer = $employerHasEmployee->getEmployerEmployer();
                 $employerPerson = $employer->getPersonPerson();
+                /** @var User $userEmployer */
+                $userEmployer = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('personPerson'=>$employerPerson));
 
 								$replaceOldContracts = false;
 								$stillOnTest = false;
@@ -1342,7 +1344,7 @@ use EmployerMethodsTrait;
                     'docType' => $employerPerson->getDocumentType(),
                     'docNumber' => $employerPerson->getDocument(),
                     'tel' => $employerPerson->getPhones()->getValues()[0],
-                    'email' => $employerPerson->getEmail()
+                    'email' => $userEmployer->getEmailCanonical()
                 );
 
                 $position = $contract->getPositionPosition()->getName();
