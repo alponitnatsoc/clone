@@ -535,7 +535,7 @@ class PayrollRestController extends FOSRestController
         $mandatory['transport_aux'] = true;
         $regex['society'] = '(.)*';
         $mandatory['society'] = true;
-        $regex['payroll_type'] = '4|6|1';
+        $regex['payroll_type'] = '4|6|1|7';
         $mandatory['payroll_type'] = true;
 	     // $regex['worked_days_week'] = '([0-9])+';
 	      //$mandatory['worked_days_week'] = false;

@@ -771,6 +771,7 @@ class BackOfficeController extends Controller
                     $em->persist($notification);
                     $em->flush();
                     $this->addFlash("employee_ended_successfully", 'Éxito al dar de alta al empleado');
+	                  $this->claimPromotioByReferidor($employerHasEmployee);
                     return $this->redirectToRoute('show_procedure', array('procedureId'=>$procedureId), 301);
                 }else{
                     $this->addFlash("employee_ended_faild", 'No se han terminado todos los tramites para este empleado.');
@@ -788,6 +789,43 @@ class BackOfficeController extends Controller
         }
         return $this->redirectToRoute('show_procedure', array('procedureId'=>$procedureId), 301);
     }
+	
+		/**
+		 * give referidor money or free month
+		 */
+		private function claimPromotioByReferidor(EmployerHasEmployee $eHE)
+		{
+			$person = $eHE->getEmployerEmployer()->getPersonPerson();
+			/** @var User $user */
+			$user = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")
+				->findOneBy(array('personPerson' => $person));
+			$em = $this->getDoctrine()->getManager();
+			$promoTypeRef = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCodeType")
+				->findOneBy(array('shortName' => 'RF'));
+			/** @var Campaign $campaing */
+			$campaing = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Campaign")
+				->findOneBy(array('description' => 'RefCamp'));
+			if (!$user->getPromoCodeClaimedByReferidor()) {
+				/** @var PromotionCode $promoCode */
+				foreach ($user->getPromoCodes() as $promoCode) {
+					if ($promoCode->getPromotionCodeTypePromotionCodeType() == $promoTypeRef) {
+						/** @var User $userReferidor */
+						$userReferidor = $promoCode->getUserUser();
+						if ($campaing->getEnabled() == 1) {
+							//stock in this campaing is used to have a database value of the campaing
+							$userReferidor->setMoney($userReferidor->getMoney() + $campaing->getStock());
+						} else {
+							$userReferidor->setIsFree($userReferidor->getIsFree() + 1);
+						}
+						$em->persist($userReferidor);
+						$user->setPromoCodeClaimedByReferidor(true);
+						$em->persist($user);
+						$em->flush();
+						break;
+					}
+				}
+			}
+		}
 
     //todo old function test an remove Andres
     /**
