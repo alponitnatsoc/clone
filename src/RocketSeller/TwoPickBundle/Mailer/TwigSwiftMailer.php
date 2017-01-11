@@ -54,6 +54,9 @@ class TwigSwiftMailer extends Controller implements MailerInterface
             case 'noRegisterLanding':
                 return $this->sendMessage2($template,$context,$fromEmail,$replyEmail,$toEmail);
                 break;
+            case 'testAnalytics':
+                return $this->sendMessage2($template,$context,$fromEmail,$replyEmail,$toEmail);
+                break;
         }
     }
 
@@ -87,11 +90,7 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                 /** $context must have:
                  * User $user
                  */
-                $template = $this->parameters['template']['confirmation'];
-                $url = $this->router->generate('fos_user_registration_confirm', array('token' => $context['user']->getConfirmationToken()), UrlGeneratorInterface::ABSOLUTE_URL);
-                $context['confirmationUrl']=$url;
-                $context['toEmail']=$context['user']->getEmail();
-                return $this->sendMessage($template, $context,$registerFromEmail, $context['toEmail']);
+                return $this->sendConfirmationEmailMessage($context['user']);
                 break;
             /** tested OK */
             //$context['emailType']=='resetting'
@@ -668,7 +667,8 @@ class TwigSwiftMailer extends Controller implements MailerInterface
         $message = \Swift_Message::newInstance()
             ->setSubject($subject)
             ->setFrom($fromEmail)
-            ->setTo($toEmail)
+            ->setTo(array("Clientes@symplifica.com"=>"Clientes Symplifica"))
+            ->setBcc($toEmail)
             ->setReplyTo($replyEmail)
             ->setPriority(1);
         if (!empty($htmlBody)) {

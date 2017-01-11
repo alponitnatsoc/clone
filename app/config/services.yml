@@ -118,7 +118,7 @@ services:
                     twoMonthsRegistration: 'FOSUserBundle:EmailTemplates:twoMonthsWithoutRegistration.txt.twig'
                     noRegisterFacebook: 'FOSUserBundle:EmailTemplates:noRegisterFacebook.txt.twig'
                     noRegisterLanding: 'FOSUserBundle:EmailTemplates:noRegisterLanding.txt.twig'
-
+                    testAnalytics: 'FOSUserBundle:EmailTemplates:testAnalytics.txt.twig'
                 from_email:
                   confirmation: '%fos_user.registration.confirmation.from_email%'
                   resetting: '%fos_user.resetting.email.from_email%'
