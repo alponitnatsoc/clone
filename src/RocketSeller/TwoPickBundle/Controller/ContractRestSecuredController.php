@@ -19,7 +19,6 @@ use RocketSeller\TwoPickBundle\Entity\WeekWorkableDaysRecord;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
-use Symfony\Component\Validator\Constraints\Date;
 
 class ContractRestSecuredController extends FOSRestController
 {
@@ -172,9 +171,6 @@ class ContractRestSecuredController extends FOSRestController
         }else{
             $dateToExecute = new DateTime($dateToExecute);
             $contractRecord->setDateToBeAplied($dateToExecute);
-            if($dateToExecute<$today){
-                $dateToExecute=$today;
-            }
         }
 
         $response["data"]=$data;
@@ -330,7 +326,6 @@ class ContractRestSecuredController extends FOSRestController
         $contractRecord->setTestPeriod($actualContract->getTestPeriod());
         $contractRecord->setPlanillaTypePlanillaType($actualContract->getPlanillaTypePlanillaType());
         $contractRecord->setToBeExecuted(1);
-        $contractRecord->setDateToBeAplied($dateToExecute);
         if($ContractHasChanged){
             $em->persist($contractRecord);
             $em->flush();

@@ -7,10 +7,15 @@
   <div class="col-md-5 col-sm-4 shareBox" style="padding-bottom: 12px;">
     <p class="bold">Comparte en:</p>
     <!-- Load Facebook SDK for JavaScript -->
-    <div id="fb-root"></div>
-    <div class="fb-share-button" data-href="http://127.0.0.1:8000/register/elReferidor" data-layout="button" data-size="large" data-mobile-iframe="true">
-    <a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ url('register_referido', {'referredCode':app.user.code}) }}&amp;src=sdkpreparse">Compartir</a>
-    </div>
+    <span id="fb-root"></span>
+    <a class="notAjax azulmediofont" target="_blank" href="https://www.facebook.com/sharer/sharer.php?app_id=404251236437754&sdk=joey&u={{ url('register_referido', {'referredCode':app.user.code}) }}&display=popup&ref=plugin&src=share_button">
+      <img src="https://symplifica.com/public/img/home/face.png"> Facebook |
+    </a>
+    <a target="_blank" class="notAjax twitter-share-button azulmediofont"
+     href="https://twitter.com/intent/tweet?text=Te invito a que pruebes Symplifica gratis para gestionar a los empleados de tu hogar. Usa mi código {{ url('register_referido', {'referredCode':app.user.code}) }}"
+     data-size="large">
+      <img src="https://symplifica.com/public/img/home/twee.png"> twitter |
+    </a>
   </div>
   <div class="col-md-7 col-sm-8 shareBox">
     <p class="bold">o copia este link</p>

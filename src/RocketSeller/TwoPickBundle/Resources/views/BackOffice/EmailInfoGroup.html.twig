@@ -1,0 +1,211 @@
+{% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
+
+{% block title %}Info Correos{% endblock %}
+
+{% block fos_user_content %}
+    <div id="main">
+        <div class="back-panel-title">
+            Grupos de correos
+        </div>
+
+        {% for type, messages in app.session.flashbag.all() %}
+            {% for message in messages %}
+                {% if type == "success_import" %}
+                    <div style="background-color: rgba(7, 130, 29, 0.37);color: darkgreen;font-weight: 600;padding: 15px;border: 1px solid darkgreen;border-radius: 15px;">
+                        {{ message }}
+                    </div>
+                {% else %}
+                    <div style="background-color: rgba(130, 7, 7, 0.37);color: darkred;font-weight: 600;padding: 15px;border: 1px solid darkred;border-radius: 15px;">
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+        <div class="col-md-12" style="display: inline-flex; clear: both; margin: 15px 10px">
+            {{ form_start(formChoiceGroup) }}
+            <div class="col-md-3" style="width: 250px">
+                {{ form_label(formChoiceGroup.groups,'Grupos de correo',{'label_attr':{'style':'font-weight:700;font-size:15px;margin-left:5px'}}) }}
+                {{ form_widget(formChoiceGroup.groups) }}
+            </div>
+            <div class="col-md-3" style="width: 300px">
+                {{ form_label(formChoiceGroup.emailTypes,'Nombre del correo',{'label_attr':{'style':'font-weight:700;font-size:15px;margin-left:5px'}}) }}
+                {{ form_widget(formChoiceGroup.emailTypes) }}
+            </div>
+            <div class="col-md-3" style="text-align: center;width: 100px;margin-top: 1.8%">
+                {{ form_widget(formChoiceGroup.submit) }}
+            </div>
+            {{ form_end(formChoiceGroup) }}
+        </div>
+
+
+        <div class="back-panel">
+            <div class="backoffice-headding">
+                <h4>Información grupos de correos</h4>
+            </div>
+            {% if emailsInfo|length == 0 %}
+            <table id="table-pilas" class="display" cellspacing="0" width="100%">
+            <tr>
+                <td style="font-size: 20px;text-align: center;padding: 10px 0px">No se ha importado ninguna información.</td>
+            </tr>
+            </table>
+            {% else %}
+                <table id="table-pilas" class="display" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th style="width: 5%">Nº</th>
+                            <th style="width: 25%">Nombre</th>
+                            <th style="width: 15%">Grupo</th>
+                            <th style="width: 10%">Tipo_doc</th>
+                            <th style="width: 15%">Documento</th>
+                            <th style="width: 30%">Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% set count = 1 %}
+                        {% for emailInfo in emailsInfo %}
+                            <tr>
+                                <td>{{ count }}</td>
+                                <td>{{ emailInfo.name }}</td>
+                                <td>{{ emailInfo.emailGroup.name }}</td>
+                                <td>{{ emailInfo.documentType }}</td>
+                                <td>{{ emailInfo.document }}</td>
+                                <td>{{ emailInfo.email }}</td>
+                            </tr>
+                            {% set count = count + 1 %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+
+        <div class="col-md-12 noPadding text-center" style="clear:both;margin-top: 20px;margin-bottom: 1%!important;">
+            <a href="{{ path('export_table',{'type':'emailInfo','all':false}) }}" id="exportInfo" target="_blank" class="btn notAjax" style="margin: 5px 20px 0 0;padding: 4px 15px;font-size: 16px;background-color: #00BFBE;border-color: #00c4c5;border-radius: 5px;color: white" >
+                Descargar Template
+            </a>
+            <div id="import_teachers" class="btn notAjax" style="margin: 5px 20px 0 0;padding: 4px 15px;font-size: 16px;background-color: #00b3ee;border-color: #00c0ef;border-radius: 5px;color: white" data-toggle="modal" data-target="#modalImportEmails" style="margin: 10px 0;padding: 4px 15px;font-size: 16px" >
+                Importar Correos
+            </div>
+            <!-- IMPORT EMAILS MODAL -->
+            <div class="modal fade" id="modalImportEmails" tabindex="-1" style="top: 20%;bottom: auto" role="dialog" aria-labelledby="modalImportEmailsLabel" aria-hidden="true">
+                <div class="modal-dialog" style="min-width: 300px;width: 400px;" role="document">
+                    <div class="modal-content" >
+                        <div class="modal-header" style="padding: 8px 10px;font-weight:600;background-color: #179695;border-radius: 10px 10px 0px 0px;">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" style="font-size: 23px;color: white">&times;</span>
+                            </button>
+                            <h4 class="modal-title" id="modalImportEmailsLabel" style="font-size: 20px; color: white">Importar información correos</h4>
+                        </div>
+                        <div class="modal-body" style="height: 80px">
+                            {{ form_start(formEmailGroups) }}
+                            <div id="errorEmailInfo" class="col-md-12" style="height: 30px">
+                            </div>
+                            <div class="col-md-12" >
+                                {{ form_widget(formEmailGroups.document,{'required':true,'attr':{'style':'font-size: 16px; display:block; width:100%'}}) }}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            {{ form_widget(formEmailGroups.upload,{'attr':{'class':'btn btn-secondary','style':"background-color: #0b4c86;font-size: 16px; color: white; margin: auto"},'label':"Importar"}) }}
+                            <button type="button" class="btn notAjax" style="background-color: #36546f;font-size: 16px; color: white" data-dismiss="modal">Cerrar</button>
+                        </div>
+                        {{ form_end(formEmailGroups) }}
+
+                    </div>
+                </div>
+            </div>
+            <!-- END IMPORT EMAILS MODAL -->
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        jQuery(document).ready(function () {
+            $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
+                $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js").done(function () {
+                    var validator;
+                    jQuery.validator.setDefaults({
+                        errorPlacement: function (error, element) {
+                            if(element.attr("name")=='add_document_form[document]'){
+                                error.appendTo('#errorEmailInfo');
+                            }
+
+                        }
+                    });
+                    validator = $("form[name='add_document_form']").validate({
+                        rules: {
+                            "add_document_form[document]": {
+                                required: true,
+                                accept:
+                                'application/vnd.ms-excel,' +
+                                'application/msexcel,' +
+                                'application/x-msexcel,' +
+                                'application/x-ms-excel,' +
+                                'application/x-excel,' +
+                                'application/x-dos_ms_excel,' +
+                                'application/xls,' +
+                                'application/x-xls,' +
+                                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                            }
+                        },
+                        messages: {
+                            "add_document_form[document]": {
+                                required: "Por favor seleccione un archivo",
+                                accept: 'No es un tipo de archivo valido'
+                            }
+                        }
+                    });
+                });
+            });
+
+
+            $("#import-teacher-info").on('click',function () {
+                $("#add_document_document").click();
+            });
+
+            $("form[name='add_document']").on('submit',function (e) {
+                var form = $("form[name='add_document']");
+                if (!form.valid()) {
+                    e.preventDefault()
+                    return false;
+                }else{
+                    return true;
+                }
+            });
+        });
+    </script>
+    {#<script type="text/javascript">#}
+        {#$(document).ready(function () {#}
+
+
+            {#// Setup - add a text input to each footer cell#}
+            {#$('#table-pilas .th1').each( function () {#}
+                {#var title = $(this).text();#}
+                {#$(this).html('<input type="text" placeholder="Buscar" style="width: 75%;margin: 1px 2px;padding: 1px 5px;color:black"/>' );#}
+            {#});#}
+
+            {#// DataTable#}
+            {#var table = $('#table-pilas').DataTable({#}
+                {#"lengthMenu":[[10,25,50,100,-1],[10,25,50,100,"Todos"]],#}
+                {#"language":{#}
+                    {#"url":"//cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"#}
+                {#}#}
+            {#});#}
+
+
+            {#// Apply the search#}
+            {#table.columns().every( function () {#}
+                {#var that = this;#}
+                {#$( 'input', this.header() ).on( 'keyup change', function () {#}
+                    {#if (that.search() !== this.value ) {#}
+                        {#that#}
+                                {#.search( this.value )#}
+                                {#.draw();#}
+                    {#}#}
+                {#} );#}
+            {#} );#}
+        {#});#}
+    {#</script>#}
+
+{% endblock %}

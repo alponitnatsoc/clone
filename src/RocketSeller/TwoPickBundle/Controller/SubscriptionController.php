@@ -551,33 +551,7 @@ class SubscriptionController extends Controller
 
     public function suscripcionSuccessAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $promoTypeRef = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCodeType")->findOneBy(array('shortName'=>'RF'));
-        /** @var Campaign $campaing */
-        $campaing = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Campaign")->findOneBy(array('description'=>'RefCamp'));
-        /** @var User $user */
-        $user = $this->getUser();
-        if(!$user->getPromoCodeClaimedByReferidor()) {
-            /** @var PromotionCode $promoCode */
-            foreach ($user->getPromoCodes() as $promoCode) {
-                if ($promoCode->getPromotionCodeTypePromotionCodeType() == $promoTypeRef) {
-                    /** @var User $userReferidor */
-                    $userReferidor = $promoCode->getUserUser();
-                    if($campaing->getEnabled()==1){
-                        //stock in this campaing is used to have a database value of the campaing
-                        $userReferidor->setMoney($userReferidor->getMoney()+$campaing->getStock());
-                    }else{
-                        $userReferidor->setIsFree($userReferidor->getIsFree() + 1);
-                    }
-                    $em->persist($userReferidor);
-                    $user->setPromoCodeClaimedByReferidor(true);
-                    $em->persist($user);
-                    $em->flush();
-                    break;
-                }
-            }
-        }
-
+	      $user = $this->getUser();
         return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionSuccess.html.twig', array(
             'user' => $user,
             'date' => \date('Y-m-d')

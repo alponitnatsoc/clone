@@ -387,7 +387,60 @@ class ChronServerRestController extends FOSRestController
         $view->setStatusCode(200);
         return $view->setData($resultUsers);
     }
-
+	
+	
+		/**
+		 *  Send mail promo code referidos <br/>
+		 *
+		 * @ApiDoc(
+		 *   resource = true,
+		 *   description = "Send mail promo code referidos",
+		 *   statusCodes = {
+		 *     200 = "OK"
+		 *   }
+		 * )
+		 *
+		 * @return View
+		 */
+		public function putPromoReferredMailAction() {
+			
+			$userRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+			$users = $userRepo->findAll();
+			$resultUsers = array();
+			foreach($users as $user) {
+				//status 2 -> completed step 3
+				if($user->getStatus() != 2) continue;
+				
+				if($user->getDevices()->count() == 0) continue;
+				
+				foreach ($user->getPersonPerson()->getEmployer()->getEmployerHasEmployees() as $eHE ){
+					if($eHE->getState() < 4) continue;
+					
+					$dateRegisteredToSQL = $eHE->getDateRegisterToSQL();
+					if($dateRegisteredToSQL == null) continue;
+					if($eHE->getActiveContract()->getDocumentDocument() != null) continue;
+					$today = new DateTime();
+					$difference = $today->diff($dateRegisteredToSQL);
+					
+					if($difference->d == 5 || $difference->d == 15) {
+						$emailType = $difference->d == 5 ? 'promoReferred5days' :  'promoReferred15days';
+						
+						$smailer = $this->get('symplifica.mailer.twig_swift');
+						
+						$send = $smailer->sendEmailByTypeMessage(array('emailType' => $emailType,
+							'toEmail' => $user->getEmail(),
+							'referredCode' => $user->getCode()
+						));
+						
+						$resultUsers[] = array('userId' => $user->getId(), 'resultMail' => $send);
+					}
+				}
+			}
+			$view = View::create();
+			$view->setStatusCode(200);
+			return $view->setData($resultUsers);
+		}
+	
     /**
      *  Send reminder of payments and register novelties<br/>
      *

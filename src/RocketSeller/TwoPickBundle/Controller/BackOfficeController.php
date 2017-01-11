@@ -9,6 +9,9 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use RocketSeller\TwoPickBundle\Entity\Configuration;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\Document;
+use RocketSeller\TwoPickBundle\Entity\EmailGroup;
+use RocketSeller\TwoPickBundle\Entity\EmailInfo;
+use RocketSeller\TwoPickBundle\Entity\EmailType;
 use RocketSeller\TwoPickBundle\Entity\Employee;
 use RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Employer;
@@ -29,6 +32,7 @@ use RocketSeller\TwoPickBundle\Entity\RealProcedure;
 use RocketSeller\TwoPickBundle\Entity\Supply;
 use RocketSeller\TwoPickBundle\Entity\Transaction;
 use RocketSeller\TwoPickBundle\Entity\User;
+use RocketSeller\TwoPickBundle\Form\addDocument;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Response;
@@ -767,6 +771,7 @@ class BackOfficeController extends Controller
                     $em->persist($notification);
                     $em->flush();
                     $this->addFlash("employee_ended_successfully", 'Éxito al dar de alta al empleado');
+	                  $this->claimPromotioByReferidor($employerHasEmployee);
                     return $this->redirectToRoute('show_procedure', array('procedureId'=>$procedureId), 301);
                 }else{
                     $this->addFlash("employee_ended_faild", 'No se han terminado todos los tramites para este empleado.');
@@ -784,6 +789,43 @@ class BackOfficeController extends Controller
         }
         return $this->redirectToRoute('show_procedure', array('procedureId'=>$procedureId), 301);
     }
+	
+		/**
+		 * give referidor money or free month
+		 */
+		private function claimPromotioByReferidor(EmployerHasEmployee $eHE)
+		{
+			$person = $eHE->getEmployerEmployer()->getPersonPerson();
+			/** @var User $user */
+			$user = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")
+				->findOneBy(array('personPerson' => $person));
+			$em = $this->getDoctrine()->getManager();
+			$promoTypeRef = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCodeType")
+				->findOneBy(array('shortName' => 'RF'));
+			/** @var Campaign $campaing */
+			$campaing = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Campaign")
+				->findOneBy(array('description' => 'RefCamp'));
+			if (!$user->getPromoCodeClaimedByReferidor()) {
+				/** @var PromotionCode $promoCode */
+				foreach ($user->getPromoCodes() as $promoCode) {
+					if ($promoCode->getPromotionCodeTypePromotionCodeType() == $promoTypeRef) {
+						/** @var User $userReferidor */
+						$userReferidor = $promoCode->getUserUser();
+						if ($campaing->getEnabled() == 1) {
+							//stock in this campaing is used to have a database value of the campaing
+							$userReferidor->setMoney($userReferidor->getMoney() + $campaing->getStock());
+						} else {
+							$userReferidor->setIsFree($userReferidor->getIsFree() + 1);
+						}
+						$em->persist($userReferidor);
+						$user->setPromoCodeClaimedByReferidor(true);
+						$em->persist($user);
+						$em->flush();
+						break;
+					}
+				}
+			}
+		}
 
     //todo old function test an remove Andres
     /**
@@ -3284,6 +3326,133 @@ class BackOfficeController extends Controller
 		return $this->render('RocketSellerTwoPickBundle:BackOffice:primaView.html.twig',
 			array('ehes' => $activeEhe, 'payrolls' => $payrollArr, 'days' => $diasArr, 'minusDays' => $menosDiasArr, 'otrosSalariales' => $otrosSalArr, 'totalPago' => $totalPagoArr));
 	}
+
+
+    public function emailGroupViewAction(Request $request){
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        $em = $this->getDoctrine()->getManager();
+
+        $formEmailGroups= $this->createForm(new addDocument());
+        $formEmailGroups
+            ->add('upload',"submit",array("label"=>"Importar"));
+        $formEmailGroups['type']->setData('EmailGroup');
+        $formEmailGroups->handleRequest($request);
+
+        if ($formEmailGroups->isValid() and $formEmailGroups->isSubmitted()) {
+            if($this->checkFile($formEmailGroups->get('document')->getData())){
+                $this->addFlash('success_import','Se importo correctamente el archivo.');
+            }else{
+                $this->addFlash('fail_import','Ocurrió un error o el archivo no cumple con el formato requerido.');
+            }
+        }
+
+//        $emailGroups=$em->getRepository("RocketSellerTwoPickBundle:EmailGroup")->findAll();
+        $formChoice = $this->get("form.factory")->createNamedBuilder("formChoiceGroup")
+            ->add("groups","entity",array(
+                'class'=>"RocketSellerTwoPickBundle:EmailGroup",
+                'choice_label'=>'name',
+                'multiple'=>false,
+                'expanded'=>false,
+                'placeholder'=>'seleccione un grupo'))
+            ->add('emailTypes',"entity",array(
+                'class'=>"RocketSellerTwoPickBundle:EmailType",
+                'choice_label'=>'name',
+                'multiple'=>false,
+                'expanded'=>false,
+                'placeholder'=>'Seleccione un correo'))
+            ->add('submit','submit',array('label'=>'Enviar'))
+            ->getForm();
+        $formChoice->handleRequest($request);
+        if($formChoice->isValid() and $formChoice->isSubmitted()){
+            /** @var EmailGroup $group */
+            $group = $formChoice->get("groups")->getData();
+            /** @var EmailType $emailType */
+            $emailType = $formChoice->get("emailTypes")->getData();
+            $infoEmails = $em->getRepository("RocketSellerTwoPickBundle:EmailInfo")->findBy(array('emailGroup'=>$group));
+            if(count($infoEmails)>0){
+                $toEmail = array();
+                /** @var EmailInfo $infoEmail */
+                foreach ($infoEmails as $infoEmail) {
+                    $toEmail[$infoEmail->getEmail()]=$infoEmail->getName();
+                }
+                $context["emailType"]=$emailType->getEmailType();
+                $context["toEmail"]=$toEmail;
+                $send = $this->get("symplifica.mailer.twig_swift")->sendMultipleRecipientsEmailByType($context);
+                if($send){
+                    $this->addFlash('success_import','Se envió correctamente el correo.');
+                }else{
+                    $this->addFlash('fail_import','Ocurrió un error enviando el correo.');
+                }
+            }
+        }
+
+        $emailsInfo=$em->getRepository("RocketSellerTwoPickBundle:EmailInfo")->findAll();
+        return $this->render("RocketSellerTwoPickBundle:BackOffice:EmailInfoGroup.html.twig",array(
+           'emailsInfo'=>$emailsInfo,
+            'formEmailGroups'=>$formEmailGroups->createView(),
+            'formChoiceGroup'=>$formChoice->createView(),
+        ));
+    }
+
+    private function checkFile($file){
+        if (!file_exists('uploads/Files/TempFiles')) {
+            mkdir('uploads/Files/TempFiles', 0777, true);
+        }
+        $em = $this->getDoctrine()->getManager();
+        $absPath = getcwd();
+        $tempFile = $file;
+        $fileName = md5(uniqid()).'.'.$tempFile->guessExtension();
+        $tempFile->move('uploads/Files/Tempfiles',$fileName);
+        $inputFileType = \PHPExcel_IOFactory::identify('uploads/Files/Tempfiles'. '/' . $fileName);
+        $objReader = \PHPExcel_IOFactory::createReader($inputFileType);
+        /** @var \PHPExcel $obj */
+        $obj = $objReader->load('uploads/Files/Tempfiles' . '/' . $fileName);
+        /** @var \PHPExcel_Worksheet $worksheet */
+        foreach ($obj->getWorksheetIterator() as $worksheet) {
+            /** @var \PHPExcel_Worksheet_Row $row */
+            foreach ($worksheet->getRowIterator() as $row) {
+                $rowCount= $row->getRowIndex();
+                if($rowCount==2){
+                    if(!($worksheet->getCellByColumnAndRow(0, $rowCount)->getValue() == 'ID' and
+                        $worksheet->getCellByColumnAndRow(1, $rowCount)->getValue() == 'GRUPO' and
+                        $worksheet->getCellByColumnAndRow(2, $rowCount)->getValue() == 'NOMBRE' and
+                        $worksheet->getCellByColumnAndRow(3, $rowCount)->getValue() == 'TIPO_DOC' and
+                        $worksheet->getCellByColumnAndRow(4, $rowCount)->getValue() == 'DOCUMENTO' and
+                        $worksheet->getCellByColumnAndRow(5, $rowCount)->getValue() == 'EMAIL')){
+                        unlink('uploads/Files/Tempfiles'.'/'.$fileName);
+                        return false;
+                    }
+                }
+                if ($rowCount > 2) {
+                    $groupName = $worksheet->getCellByColumnAndRow(1, $rowCount)->getValue();
+                    $fullName = $worksheet->getCellByColumnAndRow(2, $rowCount)->getValue();
+                    $docType = $worksheet->getCellByColumnAndRow(3, $rowCount)->getValue();
+                    $docNum = $worksheet->getCellByColumnAndRow(4, $rowCount)->getValue();
+                    $email = $worksheet->getCellByColumnAndRow(5, $rowCount)->getValue();
+                    $group = $em->getRepository('RocketSellerTwoPickBundle:EmailGroup')->findOneBy(array('name'=>$groupName));
+                    if(!$group){
+                        $group = new EmailGroup();
+                        $group->setName($groupName);
+                        $em->persist($group);
+                        $em->flush();
+                    }
+                    $emailInfo = $em->getRepository("RocketSellerTwoPickBundle:EmailInfo")->findOneBy(array("documentType"=>$docType,"document"=>$docNum,"emailGroup"=>$group));
+                    if(!$emailInfo){
+                        $emailInfo = new EmailInfo();
+                        $emailInfo->setName($fullName);
+                        $emailInfo->setDocumentType($docType);
+                        $emailInfo->setDocument($docNum);
+                        $emailInfo->setEmail($email);
+                        $emailInfo->setEmailGroup($group);
+                        $em->persist($emailInfo);
+                        $em->flush();
+                    }
+                }
+            }
+            unlink('uploads/Files/Tempfiles'.'/'.$fileName);
+            return true;
+        }
+    }
 }
 
 

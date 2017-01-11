@@ -1,0 +1,100 @@
+{% trans_default_domain 'FOSUserBundle' %}
+{% block subject %}{% autoescape false %}¿Ya tienes tus referidos?{% endautoescape %}{% endblock %}
+{% block body_html %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600,600italic,700" rel="stylesheet" type="text/css">
+    <title>Responsive email</title>
+    <style type="text/css">
+      body {margin: 10px 0; padding: 0 10px; background: #FFF; font-size: 13px;}
+      table {border-collapse: collapse;}
+      td {font-family: arial, sans-serif; color: #333333;}
+        a {text-decoration: none}
+      @media only screen and (max-width: 580px) {
+
+        body,table,td,p,a,li,blockquote {
+          -webkit-text-size-adjust:none !important;
+        }
+        table {width: 100% !important}
+
+        .responsive-image img {
+          height: auto !important;
+          max-width: 50% !important;
+          width: 50% !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr>
+        <td>
+          <table border="0" cellpadding="0" cellspacing="0" align="center" width="640" bgcolor="#FFFFFF">
+            <tr>
+                {% include "RocketSellerTwoPickBundle:EmailTemplates:header.txt.twig" %}
+            </tr>
+
+           <tr>
+              <td style="padding: 10px 10px 20px 10px;">
+                <div style="text-align: center;width:80%;margin:0 auto;color:#75BEC1;font-size: 25px; font-family: 'Open Sans', sans-serif; font-weight: 100;">
+                    <span style="font-size: 25px; font-family: 'Open Sans', sans-serif; font-weight: 500;">¿Ya tienes tus referidos?</span></div><br />
+                </td>
+              </tr>
+
+              <tr>
+                  <td style="text-align:center">
+                      <img src="https://symplifica.com/public/img/mail/imgReferidos1.png" width="80%">
+                  </td>
+              </tr>
+
+              <tr>
+              <td style="padding: 10px 10px 20px 10px;">
+                  <div style="text-align:left;font-size:15px;width: 80%;margin: 0 auto 5px auto;color: #5D5D5D;font-family: 'Open Sans', sans-serif;font-weight: 100;border-radius: 5px;background: #f1f1f1;padding: 10px 20px; box-sizing: border-box">
+                    Recuerda que por cada amigo o familiar que comience a usar Symplifica gracias a ti, recibirás $100.000 pesos para el sueldo de tus empleados
+                  </div>
+                </td>
+              </tr>
+
+              <tr style="text-align:center;">
+                  <td>
+                    <div style="font-size: 17px; font-family: 'Open Sans', sans-serif; font-weight: 300; color:#5D5D5D; width: 70%; margin: 0 auto">
+                        <strong>Solamente comparte tu código</strong><br>
+                        <span style="color:#FD9224;font-size: 25px; font-family: 'Open Sans', sans-serif; font-weight: 700;">"{{ referredCode }}"</span><br>
+                        Ellos recibirán 2 meses gratis.<br><br>
+
+                        <a href="mailto:?subject=prueba&body=Hola,%0D%0A%0D%0A¿Sabías que ahora tengo a mi empleada formal y fue muy sencillo hacerlo?%0D%0A%0D%0AEstoy usando Symplifica, una herramienta que se encarga de todo y cumple con los requisitos de ley. Puedes probarla gratis por 2 meses si usas mi código “{{ referredCode }}”%0D%0A%0D%0ALos puedes contactar al 350 833 0000 en www.symplifica.com%0D%0A%0D%0AUn saludo.">
+                            <img src="https://symplifica.com/public/img/mail/emailBtn.png" border="0" alt="Email"/>
+                        </a>
+
+                        <a href="https://www.addtoany.com/add_to/facebook?linkurl=http%3A%2F%2Fsymplifica.com%2Fregister%2F{{ referredCode }}&type=page&linkname=symplifica&linknote="/>
+                            <img src="https://symplifica.com/public/img/mail/faceboob.png" border="0" alt="Email"/>
+                        </a>
+
+                        <a href="https://www.addtoany.com/add_to/whatsapp?linkurl=http%3A%2F%2Fsymplifica.com%2Fregister%2F{{ referredCode }}&type=page&linkname=symplifica&linknote="/>
+                            <img src="https://symplifica.com/public/img/mail/whatsappBtn.png" border="0" alt="Email"/>
+                        </a>
+                        <br>
+                        <br>
+                        <strong>¡Ayúdalos a hacer las cosas bien!</strong>
+                    </div>
+                    <br />
+                  </td>
+            </tr>
+
+
+
+            <tr><td style="font-size: 0; line-height: 0;" height="20">&nbsp;</td></tr>
+            <tr>
+                {% include "RocketSellerTwoPickBundle:EmailTemplates:footer.txt.twig" %}
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+{% endblock %}

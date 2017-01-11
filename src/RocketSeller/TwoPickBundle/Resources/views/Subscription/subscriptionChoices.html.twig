@@ -333,7 +333,7 @@
                                             <span style="font-weight:80;">{{ utils.mb_capitalize(employee.employeeEmployee.personPerson.lastname1 ~" "~ employee.employeeEmployee.personPerson.lastname2)}}</span>
                                         </div>
                                         {% set tipo_tiempo_contrato = contrato.workableDaysMonth %}
-                                        <div style="font-style:italic; font-weight:100; font-size: small;"
+                                        <div class="bold"
                                              class="{{ ((contrato.workableDaysMonth) >= 20)? 'tiempo_completo':(((contrato.workableDaysMonth) >= 11)? 'medio_tiempo':'trabajo_por_dias' ) }}  "
                                              data-employeeId="{{ employee.idEmployerHasEmployee }}">
                                             {# Trabaja {{ ((contrato.workableDaysMonth / 4) * 4.34523810)|number_format(2, '.', ',') }} días #}
@@ -521,7 +521,7 @@
       <form action="{{ path('subscription_confirm') }}" method="POST">
           <div class="padding-top-botton-20 codigoRef">
               <label class="bold grisclarofont">¿Tienes algún código de referido?</label><br />
-              <input type="text" placeholder="Codigo" name="referredCode">
+              <input type="text" placeholder="Código" name="referredCode">
           </div>
           <div class="grisclarofont light center padding-top-botton-20">
             *Recuerda que las transacciones dentro de la plataforma tienen un costo de $5.900 pesos + 4x1000

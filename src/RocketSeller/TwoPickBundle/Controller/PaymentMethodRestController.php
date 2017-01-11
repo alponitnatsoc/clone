@@ -15,6 +15,8 @@ use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\Pay;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
+use RocketSeller\TwoPickBundle\Entity\Transaction;
+use RocketSeller\TwoPickBundle\Entity\TransactionState;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Mailer\TwigSwiftMailer;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -78,6 +80,25 @@ class PaymentMethodRestController extends FOSRestController
         if ($insertionAnswer->getStatusCode() != 200) {
             $view->setStatusCode($insertionAnswer->getStatusCode())->setData(json_decode($insertionAnswer->getContent(), true));
             return $view;
+        } else {
+						$em = $this->getDoctrine()->getEntityManager();
+						$arrDecoded = get_object_vars(json_decode($insertionAnswer->getContent()));
+						$radicatedNumber = $arrDecoded['numeroRadicado'];
+						
+						$transactionTypeRCB = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:TransactionType")
+						    ->findOneBy(array('code' => 'RCB'));
+						$podStatusIscripcionEnviada = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")
+						    ->findOneBy(array('idNovoPay' => 'InsCue-Env'));
+						
+						/** @var Transaction $transaction */
+						$transactionBankAccount = new Transaction();
+						$transactionBankAccount->setRadicatedNumber($radicatedNumber);
+						$transactionBankAccount->setTransactionType($transactionTypeRCB);
+						$transactionBankAccount->setPurchaseOrdersStatus($podStatusIscripcionEnviada);
+						
+						$employer->addTransaction($transactionBankAccount);
+						$em->persist($employer);
+						$em->flush();
         }
 
         return $view->setStatusCode(201)->setData(array());

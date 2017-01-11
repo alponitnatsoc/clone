@@ -17,6 +17,29 @@ class UtilsController extends ContainerAware
         if($container)
             $this->setContainer($container);
     }
+    public function generateRandomString($STRL = 20) {
+        $CHR = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        for ($STR = ''; strlen($STR) < $STRL;)
+            $STR .= $CHR[rand(0, strlen($CHR) - 1)];
+        return $STR;
+    }
+    public function generateRandomEmail($KNOWN=false){
+        $STRL = rand(8, 15);
+        $STRL2= rand(4, 10);
+        $CHR = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        for ($STR = ''; strlen($STR) < $STRL;)
+            $STR .= $CHR[rand(0, strlen($CHR) - 1)];
+        if($KNOWN){
+            $EMEND =["@gmail.com","@hotmail.com","@yahoo.co","@yahoo.es"];
+            $STR.=$EMEND[rand(0, count($EMEND) - 1)];
+        }else{
+            $END=[".co",".com",".edu",".gov",".org",".es"];
+            for ($EMEND = ''; strlen($EMEND) < $STRL2;)
+                $EMEND.=$CHR[rand(0, strlen($CHR) - 1)];
+            $STR.="@".$EMEND.$END[rand(0, count($END) - 1)];
+        }
+        return $STR;
+    }
     public function getDocumentPath(Document $document)
     {
 

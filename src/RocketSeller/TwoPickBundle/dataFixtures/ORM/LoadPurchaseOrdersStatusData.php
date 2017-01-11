@@ -224,6 +224,24 @@ class LoadPurchaseOrdersStatusData extends AbstractFixture implements OrderedFix
 		    $PurchaseOrdersStatusCargaPlanilla7->setDescription('Hay novedades entonces no se envia');
 		    $PurchaseOrdersStatusCargaPlanilla7->setIdNovoPay('CarPla-ErrNov');
 		    $manager->persist($PurchaseOrdersStatusCargaPlanilla7);
+	
+		    $PurchaseOrdersStatusInscribirCuenta1 = new PurchaseOrdersStatus();
+		    $PurchaseOrdersStatusInscribirCuenta1->setName('inscripción cuenta enviada');
+		    $PurchaseOrdersStatusInscribirCuenta1->setDescription('Inscripción de cuenta bancaria enviada a Hightech');
+		    $PurchaseOrdersStatusInscribirCuenta1->setIdNovoPay('InsCue-Env');
+	      $manager->persist($PurchaseOrdersStatusInscribirCuenta1);
+	
+		    $PurchaseOrdersStatusInscribirCuenta2 = new PurchaseOrdersStatus();
+		    $PurchaseOrdersStatusInscribirCuenta2->setName('inscripción cuenta aprobada');
+		    $PurchaseOrdersStatusInscribirCuenta2->setDescription('Inscripción de cuenta bancaria aprobada por Hightech');
+		    $PurchaseOrdersStatusInscribirCuenta2->setIdNovoPay('InsCue-Apr');
+		    $manager->persist($PurchaseOrdersStatusInscribirCuenta2);
+		
+		    $PurchaseOrdersStatusInscribirCuenta3 = new PurchaseOrdersStatus();
+		    $PurchaseOrdersStatusInscribirCuenta3->setName('inscripción cuenta rechazada');
+		    $PurchaseOrdersStatusInscribirCuenta3->setDescription('Inscripción de cuenta bancaria rechazada por Hightech');
+		    $PurchaseOrdersStatusInscribirCuenta3->setIdNovoPay('InsCue-Rec');
+		    $manager->persist($PurchaseOrdersStatusInscribirCuenta3);
 	    
 	      $manager->flush();
     }

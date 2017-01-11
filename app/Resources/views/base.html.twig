@@ -249,7 +249,7 @@
                                       Transacciones en Proceso</a>
                                 </div>
                                 <div class="{% if app.request.get('_route') == 'free_payments' %}activeMenu{% endif %} well well-lg separador">
-                                    <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('free_payments') }}" class="notAjax"{% endif %}>
+                                    <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('free_payments') }}" class="notAjax referidos"{% endif %}>
                                       <span class="glyphicon glyphicon-certificate gIcon" aria-hidden="true"></span>
                                       Tus pagos gratis</a>
                                 </div>

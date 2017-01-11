@@ -590,3 +590,7 @@ register_referido:
 free_payments:
     path: /show/referred/
     defaults: { _controller: RocketSellerTwoPickBundle:User:myReferredShow}
+
+export_table:
+    path: /backoffice/export/table/{type}/{all}
+    defaults: {_controller: RocketSellerTwoPickBundle:Export:generateXLS,type: null,all: false}
