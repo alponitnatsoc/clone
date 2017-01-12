@@ -47,7 +47,7 @@ class ReferredRestSecuredController extends FOSRestController
 			'money' => $user->getMoney(),
 			'code' => $user->getCode(),
 			'textCampaign' => 'En Enero gana $' . number_format($campaignRef->getStock()) . ' por cada referido que complete su registro',
-			'textShareSocial' => 'Symplifica me ha ayudado a formalizar la relación laboral con mi empleada.\nUsa mi código y recibe 1 mes gratis para usar la plataforma, solo debes entrar al link \n'
+			'numberMonths' => '2'
 		));
 		
 		return $view;

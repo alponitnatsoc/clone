@@ -10,8 +10,11 @@ use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity;
+use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\LandingRegistration;
+use RocketSeller\TwoPickBundle\Entity\Pay;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolation;
@@ -73,6 +76,8 @@ class UtilsRestController extends FOSRestController
 
         return $view;
     }
+
+
 
     /**
      * Return the overall user list.
@@ -164,5 +169,133 @@ class UtilsRestController extends FOSRestController
         return $view;
     }
 
+    /**
+     * create refund<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "create refund",
+     *   statusCodes = {
+     *     200 = "Created",
+     *     400 = "Bad Request",
+     *     404 = "Not found",
+     *     422 = "Bad parameters"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     *  Rest Parameters:
+     * (name="source", nullable=true, requirements="101|100", description="source 100 for hightech 101 for novopayment")
+     * (name="accountNumber", nullable=false, requirements="[0-9]+",description="employer hightech id")
+     * (name="accountId", nullable=false, requirements="[0-9]+", description="id from the account when asking hightech")
+     * (name="value", nullable=false, requirements="[0-9]+(\.[0-9]+)?",description="Value for the purchase order")
+     * @return View
+     */
+
+    public function putCreateRefundPurchaseOrderAction(Request $request){
+
+        $parameters = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        if(!$parameters["account_number"]){
+            $view = View::create();
+            $view->setStatusCode(422);
+            return $view;
+        }
+        $accountNumber = $parameters["account_number"];
+        if(!$parameters["account_id"]){
+            $view = View::create();
+            $view->setStatusCode(422);
+            return $view;
+        }
+        $accountId = $parameters["account_id"];
+        if(!$parameters["source"]){
+            $view = View::create();
+            $view->setStatusCode(422);
+            return $view;
+        }
+        $source = intval($parameters["source"]);
+        if(!$parameters["value"]){
+            $view = View::create();
+            $view->setStatusCode(422);
+            return $view;
+        }
+        $value = floatval($parameters["value"]);
+        /** @var Employer $employer */
+        $employer = $em->getRepository("RocketSellerTwoPickBundle:Employer")->findOneBy(array('idHighTech'=>$parameters["account_number"]));
+        if(!$employer){
+            $view = View::create();
+            $view->setStatusCode(404);
+            return $view;
+        }
+        $person = $employer->getPersonPerson();
+        /** @var User $user */
+        $user = $em->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('personPerson'=>$person));
+        if(!$user){
+            $view = View::create();
+            $view->setStatusCode(404);
+            return $view;
+        }
+        $request->setMethod("POST");
+        $request->request->add(array(
+            'source'=>$source,
+            'accountNumber'=>$accountNumber,
+            'accountId'=>$accountId,
+            'value'=>$value));
+        $responseView = $this->forward("RocketSellerTwoPickBundle:Payments2Rest:postRegisterDevolution",array('request' => $request), array('_format' => 'json'));
+        if ($responseView->getStatusCode() != 200) {
+            //If some kind of error
+            $view = View::create();
+            $view->setStatusCode(400);
+            return $view;
+        }
+        $radicatedNumber = json_decode($responseView->getContent(), true)["numeroRadicado"];
+        $responseCode = json_decode($responseView->getContent(), true)["codigoRespuesta"];
+        $PO = new PurchaseOrders();
+        $PO->setIdUser($user);
+        $PO->setPayMethodId($accountId);
+        if($source==100){
+            $PO->setProviderId(1);
+        }else{
+            $PO->setProviderId(0);
+        }
+        $PO->setDateCreated(new \DateTime());
+        $PO->setDateModified(new \DateTime());
+        $PO->setName("Devolución");
+        $PO->setValue($value);
+        if($responseCode==0){
+            $PO->setDatePaid(new \DateTime());
+            $PO->setPurchaseOrdersStatus($em->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'00')));
+        }else{
+            $PO->setPurchaseOrdersStatus($em->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'-2')));
+        }
+        $PO->setAlreadyRecived(1);
+        $em->persist($PO);
+        $pod = new PurchaseOrdersDescription();
+        $pod->setPurchaseOrders($PO);
+        $pod->setValue($value);
+        $pod->setProductProduct($em->getRepository("RocketSellerTwoPickBundle:Product")->findOneBy(array('simpleName'=>'DEV')));
+        $pod->setDescription("Devolución");
+        $em->persist($pod);
+        $pay = new Pay();
+        $pay->setUserIdUser($user);
+        $pay->setPurchaseOrdersDescription($pod);
+        $pay->setIdDispercionNovo($radicatedNumber);
+        $em->persist($pay);
+        $em->flush();
+        $view = View::create();
+        $view->setData(array(
+            'userID'=>$user->getId(),
+            'employerId'=>$employer->getIdEmployer(),
+            'numeroRadicado'=>$radicatedNumber,
+            'purchaseOrderId'=>$PO->getIdPurchaseOrders(),
+            'purchaseOrderDescriptionId'=>$pod->getIdPurchaseOrdersDescription(),
+            'payId'=>$pay->getIdPay(),
+            'codigoRespuestaDevolucion'=>$responseCode,
+            'estado'=>'OK'
+            ));
+        $view->setStatusCode(200);
+        return $view;
+
+    }
 
 }
