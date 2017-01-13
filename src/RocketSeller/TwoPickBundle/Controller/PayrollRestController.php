@@ -854,7 +854,7 @@ class PayrollRestController extends FOSRestController
         $unico['TIPOCON'] = 1;
         $unico['EMP_CODIGO'] = isset($parameters['employee_id']) ? $parameters['employee_id'] : $info['EMP_CODIGO'];
         $unico['COF_VALOR'] = isset($parameters['value']) ? $parameters['value'] : $info['COF_VALOR'];
-	      $unico['CON_CODIGO'] = 1;
+        $unico['CON_CODIGO'] = 1;
         $unico['COF_FECHA_CAMBIO'] = isset($parameters['date_change']) ? $parameters['date_change'] : $info['COF_FECHA_CAMBIO'];
 
         $content[] = $unico;
