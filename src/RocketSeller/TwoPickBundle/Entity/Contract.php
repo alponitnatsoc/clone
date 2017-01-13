@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Entity;
 
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Exclude;
@@ -1235,5 +1236,17 @@ class Contract
     public function getFinishContractLetterDocument()
     {
         return $this->finishContractLetterDocument;
+    }
+
+    /**
+     * Get WeekWorkableDay By Day Number
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\WeekWorkableDays
+     */
+    public function getWorkableDayByDayNumber($dayNumber)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('dayNumber',$dayNumber));
+        return $this->weekWorkableDays->matching($criteria)->first();
     }
 }

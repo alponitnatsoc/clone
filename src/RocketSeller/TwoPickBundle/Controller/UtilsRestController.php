@@ -179,15 +179,14 @@ class UtilsRestController extends FOSRestController
      *     200 = "Created",
      *     400 = "Bad Request",
      *     404 = "Not found",
-     *     422 = "Bad parameters"
      *   }
      * )
      *
      * @param Request $request.
      *  Rest Parameters:
      * (name="source", nullable=true, requirements="101|100", description="source 100 for hightech 101 for novopayment")
-     * (name="accountNumber", nullable=false, requirements="[0-9]+",description="employer hightech id")
-     * (name="accountId", nullable=false, requirements="[0-9]+", description="id from the account when asking hightech")
+     * (name="account_number", nullable=false, requirements="[0-9]+",description="employer hightech id")
+     * (name="account_id", nullable=false, requirements="[0-9]+", description="id from the account when asking hightech")
      * (name="value", nullable=false, requirements="[0-9]+(\.[0-9]+)?",description="Value for the purchase order")
      * @return View
      */
@@ -198,25 +197,25 @@ class UtilsRestController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         if(!$parameters["account_number"]){
             $view = View::create();
-            $view->setStatusCode(422);
+            $view->setStatusCode(400);
             return $view;
         }
         $accountNumber = $parameters["account_number"];
         if(!$parameters["account_id"]){
             $view = View::create();
-            $view->setStatusCode(422);
+            $view->setStatusCode(400);
             return $view;
         }
         $accountId = $parameters["account_id"];
         if(!$parameters["source"]){
             $view = View::create();
-            $view->setStatusCode(422);
+            $view->setStatusCode(400);
             return $view;
         }
         $source = intval($parameters["source"]);
         if(!$parameters["value"]){
             $view = View::create();
-            $view->setStatusCode(422);
+            $view->setStatusCode(400);
             return $view;
         }
         $value = floatval($parameters["value"]);
