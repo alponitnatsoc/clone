@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use Application\Sonata\MediaBundle\Entity\Media;
+use Doctrine\ORM\QueryBuilder;
 use FOS\RestBundle\View\View;
 use PHPExcel;
 use PHPExcel_RichText;
@@ -2283,6 +2284,192 @@ class ExportController extends Controller
                         'Emails_info_template_'.date('d-m-y').'.xlsx'
                     );
                 }
+                $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+                $response->headers->set('Pragma', 'public');
+                $response->headers->set('Cache-Control', 'maxage=1');
+                $response->headers->set('Content-Disposition', $dispositionHeader);
+                return $response;
+                break;
+            case 'fullTimeEmployeesCalendars':
+                /** @var QueryBuilder $query */
+                $query = $em->createQueryBuilder();
+                $query->add('select','con');
+                $query->from("RocketSellerTwoPickBundle:Contract",'con')
+                    ->join("con.employerHasEmployeeEmployerHasEmployee",'ehe')
+                    ->join("ehe.employerEmployer",'er')
+                    ->join("ehe.employeeEmployee",'ee')
+                    ->join("ee.personPerson",'eep')
+                    ->join('er.personPerson','erp')
+                    ->join("con.timeCommitmentTimeCommitment",'tc')
+                    ->join("RocketSellerTwoPickBundle:User",'u','WITH','u.personPerson=erp.idPerson')
+                    ->join("erp.phones",'ph')
+                    ->where("ehe.state>=4")
+                    ->andWhere("con.state=1")
+                    ->andWhere("tc.code='TC'")
+                    ->orderBy("u.id ");
+                $contracts = $query->getQuery()->getResult();
+                $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+                //setting some properties
+                $phpExcelObject->getProperties()->setCreator("Symplifica-Doc-Generator")
+                    ->setLastModifiedBy("Symplifica-Bot")
+                    ->setTitle("Full Time Calendar Contracts Info")
+                    ->setSubject("Details")
+                    ->setDescription("generated document with Full time contracts calendar info")
+                    ->setKeywords("Full time calendar")
+                    ->setCategory("Information");
+                //setting the active sheet and changing name
+                $phpExcelObject->setActiveSheetIndex(0)->setTitle('Información Calendarios TC');
+                $outlineBorderTitleStyle= array(
+                    'borders' => array(
+                        'outline' => array(
+                            'style' => PHPExcel_Style_Border::BORDER_THIN,
+                            'color' => array('argb' => 'FF000000'),
+                        ),
+                    ),
+                    'font'=>array(
+                        'name'=>'Calibri',
+                        'color' => array('argb'=>'FFFFFFFF'),
+                        'bold' => true,
+                        'size' => 12,
+                    ),
+                    'fill'=>array(
+                        'type'=>'solid',
+                        'color'=>array('argb'=>'FF818181'),
+                    ),
+                    'alignment'=>array(
+                        'horizontal'=>'center',
+                        'vertical'=>'center',
+                    ),
+                );
+                $allBordersContentStyle = array(
+                    'borders'=>array(
+                        'allborders'=> array(
+                            'style' => PHPExcel_Style_Border::BORDER_THIN,
+                            'color' => array('argb' => 'FF000000'),
+                        ),
+                    ),
+                    'font'=>array(
+                        'name'=>'Calibri',
+                        'color' => array('argb'=>'FF000000'),
+                        'bold' => true,
+                        'size' => 11,
+                    ),
+                    'fill'=>array(
+                        'type'=>'solid',
+                        'color'=>array('argb'=>'FFDBDBDB'),
+                    ),
+                    'alignment'=>array(
+                        'horizontal'=>'left',
+                        'vertical'=>'center',
+                    ),
+                );
+                $allBordersNoContentStyle = array(
+                    'borders'=>array(
+                        'allborders'=> array(
+                            'style' => PHPExcel_Style_Border::BORDER_THIN,
+                            'color' => array('argb' => 'FF000000'),
+                        ),
+                    ),
+                    'font'=>array(
+                        'name'=>'Calibri',
+                        'color' => array('argb'=>'FF000000'),
+                        'size' => 10,
+                    ),
+                    'fill'=>array(
+                        'type'=>'solid',
+                        'color'=>array('argb'=>'FFFFFFFF'),
+                    ),
+                    'alignment'=>array(
+                        'horizontal'=>'left',
+                        'vertical'=>'center',
+                    ),
+
+                );
+                $sheet = $phpExcelObject->getActiveSheet();
+                $sheet->getColumnDimension('A')->setWidth(5);
+                $sheet->getColumnDimension('B')->setWidth(13);
+                $sheet->getColumnDimension('C')->setWidth(35);
+                $sheet->getColumnDimension('D')->setWidth(10);
+                $sheet->getColumnDimension('E')->setWidth(15);
+                $sheet->getColumnDimension('F')->setWidth(35);
+                $sheet->getRowDimension(1)->setRowHeight(17);
+                $sheet->getRowDimension(2)->setRowHeight(16);
+                $row=1;
+                /** @var \PHPExcel_Cell $cell */
+                $cell = $sheet->getCellByColumnAndRow(0,$row);
+                $cell->setValue('INFORMACIÓN CALENDARIOS TIEMPO COMPLETO');
+                $row++;
+                $cell = $sheet->getCellByColumnAndRow(0,$row);
+                $iniCol = $cell->getColumn();
+                $cell->setValue('Nº');
+                $cell = $sheet->getCellByColumnAndRow(1,$row);
+                $cell->setValue('NOMBRE_EMPLEADOR');
+                $cell = $sheet->getCellByColumnAndRow(2,$row);
+                $cell->setValue('TELEFONO');
+                $cell = $sheet->getCellByColumnAndRow(3,$row);
+                $cell->setValue('TIPO_DOC');
+                $cell = $sheet->getCellByColumnAndRow(4,$row);
+                $cell->setValue('DOCUMENTO');
+                $cell = $sheet->getCellByColumnAndRow(5,$row);
+                $cell->setValue('NOMBRE_EMPLEADO');
+                $cell = $sheet->getCellByColumnAndRow(6,$row);
+                $cell->setValue('TIPO_DOC_EMPLEADO');
+                $cell = $sheet->getCellByColumnAndRow(7,$row);
+                $cell->setValue('DOCUMENTO_EMPLEADO');
+                $cell = $sheet->getCellByColumnAndRow(8,$row);
+                $cell->setValue('SABADO');
+                $sheet->mergeCells($iniCol.($row-1).':'.$cell->getColumn().($row-1));
+                $sheet->getStyle($iniCol.($row-1).':'.$cell->getColumn().($row-1))->applyFromArray($outlineBorderTitleStyle);
+                $sheet->getStyle($iniCol.$row.':'.$cell->getColumn().$row)->applyFromArray($allBordersContentStyle);
+                $row++;
+                $iniRow = $row;
+                $count = 1;
+                /** @var Contract $contract */
+                foreach ($contracts as $contract) {
+                    $person= $contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
+                    $ePerson = $contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson();
+                    /** @var Phone $phone */
+                    $phone = $person->getPhones()->first();
+                    $col = 0;
+                    $cell = $sheet->getCellByColumnAndRow($col, $row);
+                    $cell->setValue($count);
+                    $col++;
+                    $cell = $sheet->getCellByColumnAndRow($col, $row);
+                    $cell->setValue($person->getFullName());
+                    $col++;
+                    $cell = $sheet->getCellByColumnAndRow($col, $row);
+                    $cell->setValue($phone->getPhoneNumber());
+                    $col++;
+                    $cell = $sheet->getCellByColumnAndRow($col, $row);
+                    $cell->setValue($person->getDocumentType());
+                    $col++;
+                    $cell = $sheet->getCellByColumnAndRow($col, $row);
+                    $cell->setValue($person->getDocument());
+                    $col++;
+                    $cell = $sheet->getCellByColumnAndRow($col, $row);
+                    $cell->setValue($ePerson->getFullName());
+                    $col++;
+                    $cell = $sheet->getCellByColumnAndRow($col, $row);
+                    $cell->setValue($ePerson->getDocumentType());
+                    $col++;
+                    $cell = $sheet->getCellByColumnAndRow($col, $row);
+                    $cell->setValue($ePerson->getDocument());
+                    $col++;
+                    $cell = $sheet->getCellByColumnAndRow($col, $row);
+                    $cell->setValue("");
+                    $row++;
+                    $count++;
+                }
+                $sheet->getStyle($iniCol.$iniRow.':'.$cell->getColumn().($row-1))->applyFromArray($allBordersNoContentStyle);
+                // create the writer
+                $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel2007');
+                // create the response
+                $response = $this->get('phpexcel')->createStreamedResponse($writer);
+                // adding headers
+                $dispositionHeader = $response->headers->makeDisposition(
+                    ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                    'Contract_calendars_'.date('d-m-y').'.xlsx'
+                );
                 $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
                 $response->headers->set('Pragma', 'public');
                 $response->headers->set('Cache-Control', 'maxage=1');

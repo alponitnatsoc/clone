@@ -388,11 +388,13 @@ class ContractRestSecuredController extends FOSRestController
         if($contractRecord->getWeekWorkableDaysRecord()->count()>0){
             /** @var WeekWorkableDaysRecord $weekWorkableDayRecord */
             foreach ($contractRecord->getWeekWorkableDaysRecord() as $weekWorkableDayRecord) {
-                $weekWorkableDay = new WeekWorkableDays();
-                $weekWorkableDay->setDayNumber($weekWorkableDayRecord->getDayNumber());
-                $weekWorkableDay->setDayName($weekWorkableDayRecord->getDayName());
-                $weekWorkableDay->setContractContract($weekWorkableDayRecord->getContractRecordContractRecord()->getContractContract());
-                $contract->addWeekWorkableDay($weekWorkableDay);
+                if(!$contract->getWorkableDayByDayNumber($weekWorkableDayRecord->getDayNumber())){
+                    $weekWorkableDay = new WeekWorkableDays();
+                    $weekWorkableDay->setDayNumber($weekWorkableDayRecord->getDayNumber());
+                    $weekWorkableDay->setDayName($weekWorkableDayRecord->getDayName());
+                    $weekWorkableDay->setContractContract($weekWorkableDayRecord->getContractRecordContractRecord()->getContractContract());
+                    $contract->addWeekWorkableDay($weekWorkableDay);
+                }
             }
         }
         if($contract->getWorkableDaysMonth())
@@ -539,6 +541,7 @@ class ContractRestSecuredController extends FOSRestController
         $em->persist($contract);
         $em->remove($contractRecord);
         $em->flush();
+        dump($contract->getIdContract());die;
         return true;
     }
 
