@@ -318,7 +318,7 @@ class PayrollMethodRestController extends FOSRestController
                                     $nextPeriod=4;
                                     $nextMonth=$month;
                                 }
-                                if($nextMonth==1){
+                                if($nextMonth==1&&$period==4){
                                     $nextYear=intval($activePayrrol->getYear())+1;
                                 }else{
                                     $nextYear=$activePayrrol->getYear();
