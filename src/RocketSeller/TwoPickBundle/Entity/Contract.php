@@ -104,8 +104,12 @@ class Contract
 
     /**
      * @ORM\Column(type="smallint", nullable=TRUE)
+     * 0 no definido
+     * 1 si trabaja los sabados
+     * -1 no trabaja los sabados
+     * aplica solo para tiempo completo
      */
-    private $worksSaturday;
+    private $worksSaturday = 0;
 
     /**
      * @ORM\Column(type="smallint", nullable=TRUE)
