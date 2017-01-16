@@ -103,6 +103,8 @@ class Contract
     private $sisben;
 
     /**
+     * 1 = yes
+     * 0 = No
      * @ORM\Column(type="smallint", nullable=TRUE)
      */
     private $worksSaturday;
