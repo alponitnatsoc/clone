@@ -541,7 +541,6 @@ class ContractRestSecuredController extends FOSRestController
         $em->persist($contract);
         $em->remove($contractRecord);
         $em->flush();
-        dump($contract->getIdContract());die;
         return true;
     }
 
