@@ -3,8 +3,11 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use Doctrine\DBAL\Schema\Table;
+use Doctrine\ORM\LazyCriteriaCollection;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use RocketSeller\TwoPickBundle\Entity\Configuration;
 use RocketSeller\TwoPickBundle\Entity\Contract;
@@ -3339,7 +3342,7 @@ class BackOfficeController extends Controller
         $formEmailGroups->handleRequest($request);
 
         if ($formEmailGroups->isValid() and $formEmailGroups->isSubmitted()) {
-            if($this->checkFile($formEmailGroups->get('document')->getData())){
+            if($this->checkFile($formEmailGroups->get('document')->getData(),'emailGroup')['response']){
                 $this->addFlash('success_import','Se importo correctamente el archivo.');
             }else{
                 $this->addFlash('fail_import','Ocurrió un error o el archivo no cumple con el formato requerido.');
@@ -3394,10 +3397,14 @@ class BackOfficeController extends Controller
         ));
     }
 
-    private function checkFile($file){
+    private function checkFile($file,$tipe){
         if (!file_exists('uploads/Files/TempFiles')) {
             mkdir('uploads/Files/TempFiles', 0777, true);
         }
+        $errors = array();
+        $errors["ehes"]=array();
+        $errors["contracts"]=array();
+        $change = false;
         $em = $this->getDoctrine()->getManager();
         $absPath = getcwd();
         $tempFile = $file;
@@ -3412,46 +3419,186 @@ class BackOfficeController extends Controller
             /** @var \PHPExcel_Worksheet_Row $row */
             foreach ($worksheet->getRowIterator() as $row) {
                 $rowCount= $row->getRowIndex();
-                if($rowCount==2){
-                    if(!($worksheet->getCellByColumnAndRow(0, $rowCount)->getValue() == 'ID' and
-                        $worksheet->getCellByColumnAndRow(1, $rowCount)->getValue() == 'GRUPO' and
-                        $worksheet->getCellByColumnAndRow(2, $rowCount)->getValue() == 'NOMBRE' and
-                        $worksheet->getCellByColumnAndRow(3, $rowCount)->getValue() == 'TIPO_DOC' and
-                        $worksheet->getCellByColumnAndRow(4, $rowCount)->getValue() == 'DOCUMENTO' and
-                        $worksheet->getCellByColumnAndRow(5, $rowCount)->getValue() == 'EMAIL')){
-                        unlink('uploads/Files/Tempfiles'.'/'.$fileName);
-                        return false;
+                if($worksheet->getCellByColumnAndRow(0,$rowCount)->getValue()!=null and $worksheet->getCellByColumnAndRow(0,$rowCount)->getValue()!=''){
+                    switch ($tipe){
+                        case 'emailGroup':
+                            if($rowCount==2){
+                                if(!($worksheet->getCellByColumnAndRow(0, $rowCount)->getValue() == 'ID' and
+                                    $worksheet->getCellByColumnAndRow(1, $rowCount)->getValue() == 'GRUPO' and
+                                    $worksheet->getCellByColumnAndRow(2, $rowCount)->getValue() == 'NOMBRE' and
+                                    $worksheet->getCellByColumnAndRow(3, $rowCount)->getValue() == 'TIPO_DOC' and
+                                    $worksheet->getCellByColumnAndRow(4, $rowCount)->getValue() == 'DOCUMENTO' and
+                                    $worksheet->getCellByColumnAndRow(5, $rowCount)->getValue() == 'EMAIL')){
+                                    unlink('uploads/Files/Tempfiles'.'/'.$fileName);
+                                    return array('response'=>false,'errors'=>$errors);
+                                }
+                            }
+                            if ($rowCount > 2) {
+                                $groupName = $worksheet->getCellByColumnAndRow(1, $rowCount)->getValue();
+                                $fullName = $worksheet->getCellByColumnAndRow(2, $rowCount)->getValue();
+                                $docType = $worksheet->getCellByColumnAndRow(3, $rowCount)->getValue();
+                                $docNum = $worksheet->getCellByColumnAndRow(4, $rowCount)->getValue();
+                                $email = $worksheet->getCellByColumnAndRow(5, $rowCount)->getValue();
+                                $group = $em->getRepository('RocketSellerTwoPickBundle:EmailGroup')->findOneBy(array('name'=>$groupName));
+                                if(!$group){
+                                    $group = new EmailGroup();
+                                    $group->setName($groupName);
+                                    $em->persist($group);
+                                    $em->flush();
+                                }
+                                $emailInfo = $em->getRepository("RocketSellerTwoPickBundle:EmailInfo")->findOneBy(array("documentType"=>$docType,"document"=>$docNum,"emailGroup"=>$group));
+                                if(!$emailInfo){
+                                    $emailInfo = new EmailInfo();
+                                    $emailInfo->setName($fullName);
+                                    $emailInfo->setDocumentType($docType);
+                                    $emailInfo->setDocument($docNum);
+                                    $emailInfo->setEmail($email);
+                                    $emailInfo->setEmailGroup($group);
+                                    $em->persist($emailInfo);
+                                    $em->flush();
+                                }
+                            }
+                            break;
+                        case 'fullTimeCalendar':
+                            if($rowCount==2){
+                                if(!($worksheet->getCellByColumnAndRow(0, $rowCount)->getValue() == 'Nº' and
+                                    $worksheet->getCellByColumnAndRow(1, $rowCount)->getValue() == 'NOMBRE_EMPLEADOR' and
+                                    $worksheet->getCellByColumnAndRow(2, $rowCount)->getValue() == 'TELEFONO' and
+                                    $worksheet->getCellByColumnAndRow(3, $rowCount)->getValue() == 'TIPO_DOC' and
+                                    $worksheet->getCellByColumnAndRow(4, $rowCount)->getValue() == 'DOCUMENTO' and
+                                    $worksheet->getCellByColumnAndRow(5, $rowCount)->getValue() == 'NOMBRE_EMPLEADO' and
+                                    $worksheet->getCellByColumnAndRow(6, $rowCount)->getValue() == 'TIPO_DOC_EMPLEADO' and
+                                    $worksheet->getCellByColumnAndRow(7, $rowCount)->getValue() == 'DOCUMENTO_EMPLEADO' and
+                                    $worksheet->getCellByColumnAndRow(8, $rowCount)->getValue() == 'SABADO')){
+                                    unlink('uploads/Files/Tempfiles'.'/'.$fileName);
+                                    return array('response'=>false,'errors'=>$errors);
+                                }
+                            }
+                            if ($rowCount > 2) {
+                                $docType = $worksheet->getCellByColumnAndRow(3, $rowCount)->getValue();
+                                $docNum = $worksheet->getCellByColumnAndRow(4, $rowCount)->getValue();
+                                $eDocType = $worksheet->getCellByColumnAndRow(6, $rowCount)->getValue();
+                                $eDocNum = $worksheet->getCellByColumnAndRow(7, $rowCount)->getValue();
+                                $saturday = $worksheet->getCellByColumnAndRow(8, $rowCount)->getValue();
+                                $person = $em->getRepository("RocketSellerTwoPickBundle:Person")->findOneBy(array(
+                                    'documentType'=>$docType,
+                                    'document'=>$docNum,));
+                                $ePerson = $em->getRepository("RocketSellerTwoPickBundle:Person")->findOneBy(array(
+                                    'documentType'=>$eDocType,
+                                    'document'=>$eDocNum,
+                                ));
+                                $employer = $em->getRepository("RocketSellerTwoPickBundle:Employer")->findOneBy(array(
+                                    'personPerson'=>$person));
+                                $employee = $em->getRepository("RocketSellerTwoPickBundle:Employee")->findOneBy(array(
+                                    'personPerson'=>$ePerson));
+                                $criteria =Criteria::create()->where(Criteria::expr()->andX(
+                                    Criteria::expr()->eq('employerEmployer',$employer),
+                                    Criteria::expr()->eq('employeeEmployee',$employee),
+                                    Criteria::expr()->gte('state',4)
+                                ));
+                                /** @var EmployerHasEmployee $ehe */
+                                $ehe = $em->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")->matching($criteria)->first();
+                                if($ehe){
+                                    /** @var Contract $activeContract */
+                                    $activeContract = $ehe->getActiveContract();
+                                    $workSaturday = $activeContract->getWorksSaturday();
+                                    if($saturday=='S'){
+                                        $activeContract->setWorksSaturday(1);
+                                    }else{
+                                        $activeContract->setWorksSaturday(0);
+                                    }
+                                    if($workSaturday!=$activeContract->getWorksSaturday()){
+                                        $calType = ($activeContract->getWorksSaturday()==1)? 2 : 1;
+                                        $request = new Request();
+                                        $request->setMethod('POST');
+                                        $request->request->add(array(
+                                            'cal_type'=>$calType,
+                                            'employee_id'=>$ehe->getIdEmployerHasEmployee()
+                                        ));
+                                        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postModifyEmployee',
+                                            array('request' => $request ), array('_format' => 'json'));
+                                        if ($insertionAnswer->getStatusCode() != 200) {
+                                            $errors['contracts'][]=array(
+                                                'contract'=>$activeContract->getIdContract(),
+                                                'ehe'=>$activeContract->getEmployerHasEmployeeEmployerHasEmployee()->getIdEmployerHasEmployee(),
+                                                );
+                                        }else{
+                                            $change = true;
+                                            $em->persist($activeContract);
+                                        }
+                                    }
+                                }else{
+                                    if($employee and $employer){
+                                        $errors['ehes'][]=array(
+                                            'personID'=>$person->getIdPerson(),
+                                            'ePersonID'=>$ePerson->getIdPerson(),
+                                            'employerID'=>$employer->getIdEmployer(),
+                                            'employeeID'=>$employee->getIdEmployee());
+                                    } else {
+                                        $errors['ehes'][]=array(
+                                            'personID'=>$person->getIdPerson(),
+                                            'ePersonID'=>$ePerson->getIdPerson());
+                                    }
+                                }
+                            }
+                            break;
                     }
+
                 }
-                if ($rowCount > 2) {
-                    $groupName = $worksheet->getCellByColumnAndRow(1, $rowCount)->getValue();
-                    $fullName = $worksheet->getCellByColumnAndRow(2, $rowCount)->getValue();
-                    $docType = $worksheet->getCellByColumnAndRow(3, $rowCount)->getValue();
-                    $docNum = $worksheet->getCellByColumnAndRow(4, $rowCount)->getValue();
-                    $email = $worksheet->getCellByColumnAndRow(5, $rowCount)->getValue();
-                    $group = $em->getRepository('RocketSellerTwoPickBundle:EmailGroup')->findOneBy(array('name'=>$groupName));
-                    if(!$group){
-                        $group = new EmailGroup();
-                        $group->setName($groupName);
-                        $em->persist($group);
-                        $em->flush();
-                    }
-                    $emailInfo = $em->getRepository("RocketSellerTwoPickBundle:EmailInfo")->findOneBy(array("documentType"=>$docType,"document"=>$docNum,"emailGroup"=>$group));
-                    if(!$emailInfo){
-                        $emailInfo = new EmailInfo();
-                        $emailInfo->setName($fullName);
-                        $emailInfo->setDocumentType($docType);
-                        $emailInfo->setDocument($docNum);
-                        $emailInfo->setEmail($email);
-                        $emailInfo->setEmailGroup($group);
-                        $em->persist($emailInfo);
-                        $em->flush();
-                    }
-                }
+
             }
+            if($change) $em->flush();
             unlink('uploads/Files/Tempfiles'.'/'.$fileName);
-            return true;
+            return array('response'=>true,'errors'=>$errors);
         }
+    }
+
+    public function fullTimeCalendarViewAction(Request $request)
+    {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        $em = $this->getDoctrine()->getManager();
+
+        $formFullTimeCalendar= $this->createForm(new addDocument());
+        $formFullTimeCalendar
+            ->add('upload',"submit",array("label"=>"Importar"));
+        $formFullTimeCalendar['type']->setData('fullTimeCalendar');
+        $formFullTimeCalendar->handleRequest($request);
+
+        if ($formFullTimeCalendar->isValid() and $formFullTimeCalendar->isSubmitted()) {
+            $ans = $this->checkFile($formFullTimeCalendar->get('document')->getData(),'fullTimeCalendar');
+            if($ans['response']){
+                $this->addFlash('success_import','Se importo correctamente el archivo.');
+                foreach ($ans["errors"]['ehes'] as $error) {
+                    $this->addFlash('fail_import','Error ehe con idPerson: '.$error['personID'].' y idEPerson: '.$error['ePersonID']);
+                }
+                foreach ($ans['errors']['contracts'] as $errorContract) {
+                    $this->addFlash('fail_import', "Fallo modificando el contrato: " . $errorContract['contract'] . " con ehe: " . $errorContract['ehe']);
+                }
+            }else{
+                $this->addFlash('fail_import','Ocurrió un error o el archivo no cumple con el formato requerido.');
+
+            }
+        }
+        /** @var QueryBuilder $query */
+        $query = $em->createQueryBuilder();
+        $query->add('select','con');
+        $query->from("RocketSellerTwoPickBundle:Contract",'con')
+            ->join("con.employerHasEmployeeEmployerHasEmployee",'ehe')
+            ->join("ehe.employerEmployer",'er')
+            ->join("ehe.employeeEmployee",'ee')
+            ->join("ee.personPerson",'eep')
+            ->join('er.personPerson','erp')
+            ->join("con.timeCommitmentTimeCommitment",'tc')
+            ->join("RocketSellerTwoPickBundle:User",'u','WITH','u.personPerson=erp.idPerson')
+            ->where("ehe.state>=4")
+            ->andWhere("con.state=1")
+            ->andWhere("tc.code='TC'")
+            ->orderBy("u.id",'ASC');
+        $contracts = $query->getQuery()->getResult();
+        return $this->render("RocketSellerTwoPickBundle:BackOffice:fullTimeCalendarInfo.html.twig",array(
+            'formFullTimeCalendar'=>$formFullTimeCalendar->createView(),
+            'contracts'=>$contracts
+        ));
     }
 }
 

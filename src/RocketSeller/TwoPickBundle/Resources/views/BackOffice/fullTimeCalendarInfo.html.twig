@@ -1,11 +1,11 @@
 {% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
 
-{% block title %}Info Correos{% endblock %}
+{% block title %}Info Calendarios{% endblock %}
 
 {% block fos_user_content %}
     <div id="main">
         <div class="back-panel-title">
-            Grupos de correos
+            Tipo Calendario TC
         </div>
 
         {% for type, messages in app.session.flashbag.all() %}
@@ -21,28 +21,28 @@
                 {% endif %}
             {% endfor %}
         {% endfor %}
-        <div class="col-md-12" style="display: inline-flex; clear: both; margin: 15px 10px">
-            {{ form_start(formChoiceGroup) }}
-            <div class="col-md-3" style="width: 250px">
-                {{ form_label(formChoiceGroup.groups,'Grupos de correo',{'label_attr':{'style':'font-weight:700;font-size:15px;margin-left:5px'}}) }}
-                {{ form_widget(formChoiceGroup.groups) }}
-            </div>
-            <div class="col-md-3" style="width: 300px">
-                {{ form_label(formChoiceGroup.emailTypes,'Nombre del correo',{'label_attr':{'style':'font-weight:700;font-size:15px;margin-left:5px'}}) }}
-                {{ form_widget(formChoiceGroup.emailTypes) }}
-            </div>
-            <div class="col-md-3" style="text-align: center;width: 100px;margin-top: 1.8%">
-                {{ form_widget(formChoiceGroup.submit) }}
-            </div>
-            {{ form_end(formChoiceGroup) }}
-        </div>
+        {#<div class="col-md-12" style="display: inline-flex; clear: both; margin: 15px 10px">#}
+            {#{{ form_start(formChoiceGroup) }}#}
+            {#<div class="col-md-3" style="width: 250px">#}
+                {#{{ form_label(formChoiceGroup.groups,'Grupos de correo',{'label_attr':{'style':'font-weight:700;font-size:15px;margin-left:5px'}}) }}#}
+                {#{{ form_widget(formChoiceGroup.groups) }}#}
+            {#</div>#}
+            {#<div class="col-md-3" style="width: 300px">#}
+                {#{{ form_label(formChoiceGroup.emailTypes,'Nombre del correo',{'label_attr':{'style':'font-weight:700;font-size:15px;margin-left:5px'}}) }}#}
+                {#{{ form_widget(formChoiceGroup.emailTypes) }}#}
+            {#</div>#}
+            {#<div class="col-md-3" style="text-align: center;width: 100px;margin-top: 1.8%">#}
+                {#{{ form_widget(formChoiceGroup.submit) }}#}
+            {#</div>#}
+            {#{{ form_end(formChoiceGroup) }}#}
+        {#</div>#}
 
 
         <div class="back-panel">
             <div class="backoffice-headding">
-                <h4>Información grupos de correos</h4>
+                <h4>Información Tipo Calendario Empleados Tiempo Completo</h4>
             </div>
-            {% if emailsInfo|length == 0 %}
+            {% if contracts|length == 0 %}
             <table id="table-pilas" class="display" cellspacing="0" width="100%">
             <tr>
                 <td style="font-size: 20px;text-align: center;padding: 10px 0px">No se ha importado ninguna información.</td>
@@ -52,24 +52,30 @@
                 <table id="table-pilas" class="display" cellspacing="0" width="100%">
                     <thead>
                         <tr style="height: 35px;font-weight: 600">
-                            <th style="width: 5%">Nº</th>
-                            <th style="width: 25%">Nombre</th>
-                            <th style="width: 15%">Grupo</th>
-                            <th style="width: 10%">Tipo_doc</th>
+                            <th style="width: 2%">Nº</th>
+                            <th style="width: 30%">Nombre Empleador</th>
+                            <th style="width: 15%">Telefono</th>
+                            <th style="width: 5%">Tipo Doc</th>
                             <th style="width: 15%">Documento</th>
-                            <th style="width: 30%">Email</th>
+                            <th style="width: 30%">Nombre Empleado</th>
+                            <th style="width: 5%">Tipo Doc Empleado</th>
+                            <th style="width: 15%">Documento Empleado</th>
+                            <th style="width: 5%">Trabaja Sabados</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% set count = 1 %}
-                        {% for emailInfo in emailsInfo %}
+                        {% for contract in contracts %}
                             <tr>
                                 <td>{{ count }}</td>
-                                <td>{{ emailInfo.name }}</td>
-                                <td>{{ emailInfo.emailGroup.name }}</td>
-                                <td>{{ emailInfo.documentType }}</td>
-                                <td>{{ emailInfo.document }}</td>
-                                <td>{{ emailInfo.email }}</td>
+                                <td>{{ contract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.fullName }}</td>
+                                <td>{{ contract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.phones.first.phoneNumber }}</td>
+                                <td>{{ contract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.documentType}}</td>
+                                <td>{{ contract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.document}}</td>
+                                <td>{{ contract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson.fullName}}</td>
+                                <td>{{ contract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson.documentType}}</td>
+                                <td>{{ contract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson.document}}</td>
+                                <td>{% if contract.worksSaturday == 1%}S{% else %}N{% endif %}</td>
                             </tr>
                             {% set count = count + 1 %}
                         {% endfor %}
@@ -79,11 +85,11 @@
         </div>
 
         <div class="col-md-12 noPadding text-center" style="clear:both;margin-top: 20px;margin-bottom: 1%!important;">
-            <a href="{{ path('export_table',{'type':'emailInfo','all':false}) }}" id="exportInfo" target="_blank" class="btn notAjax" style="margin: 5px 20px 0 0;padding: 4px 15px;font-size: 16px;background-color: #00BFBE;border-color: #00c4c5;border-radius: 5px;color: white" >
+            <a href="{{ path('export_table',{'type':'fullTimeEmployeesCalendars','all':false}) }}" id="exportInfo" target="_blank" class="btn notAjax" style="margin: 5px 20px 0 0;padding: 4px 15px;font-size: 16px;background-color: #00BFBE;border-color: #00c4c5;border-radius: 5px;color: white" >
                 Descargar Template
             </a>
             <div id="import_teachers" class="btn notAjax" style="margin: 5px 20px 0 0;padding: 4px 15px;font-size: 16px;background-color: #00b3ee;border-color: #00c0ef;border-radius: 5px;color: white" data-toggle="modal" data-target="#modalImportEmails" style="margin: 10px 0;padding: 4px 15px;font-size: 16px" >
-                Importar Correos
+                Importar Información Calendarios
             </div>
             <!-- IMPORT EMAILS MODAL -->
             <div class="modal fade" id="modalImportEmails" tabindex="-1" style="top: 20%;bottom: auto" role="dialog" aria-labelledby="modalImportEmailsLabel" aria-hidden="true">
@@ -93,21 +99,21 @@
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true" style="font-size: 23px;color: white">&times;</span>
                             </button>
-                            <h4 class="modal-title" id="modalImportEmailsLabel" style="font-size: 20px; color: white">Importar información correos</h4>
+                            <h4 class="modal-title" id="modalImportEmailsLabel" style="font-size: 20px; color: white">Importar Información de calendario</h4>
                         </div>
                         <div class="modal-body" style="height: 80px">
-                            {{ form_start(formEmailGroups) }}
+                            {{ form_start(formFullTimeCalendar) }}
                             <div id="errorEmailInfo" class="col-md-12" style="height: 30px">
                             </div>
                             <div class="col-md-12" >
-                                {{ form_widget(formEmailGroups.document,{'required':true,'attr':{'style':'font-size: 16px; display:block; width:100%'}}) }}
+                                {{ form_widget(formFullTimeCalendar.document,{'required':true,'attr':{'style':'font-size: 16px; display:block; width:100%'}}) }}
                             </div>
                         </div>
                         <div class="modal-footer">
-                            {{ form_widget(formEmailGroups.upload,{'attr':{'class':'btn btn-secondary','style':"background-color: #0b4c86;font-size: 16px; color: white; margin: auto"},'label':"Importar"}) }}
+                            {{ form_widget(formFullTimeCalendar.upload,{'attr':{'class':'btn btn-secondary','style':"background-color: #0b4c86;font-size: 16px; color: white; margin: auto"},'label':"Importar"}) }}
                             <button type="button" class="btn notAjax" style="background-color: #36546f;font-size: 16px; color: white" data-dismiss="modal">Cerrar</button>
                         </div>
-                        {{ form_end(formEmailGroups) }}
+                        {{ form_end(formFullTimeCalendar) }}
 
                     </div>
                 </div>

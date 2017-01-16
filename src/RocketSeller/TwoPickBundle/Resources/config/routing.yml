@@ -19,6 +19,9 @@ payments_method:
 show_email_groups:
     path:     /backoffice/email/groups/info
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:emailGroupView }
+show_calendar_info:
+    path:     /backoffice/calendar/info
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:fullTimeCalendarView }
 
 #Payments
 show_payments:

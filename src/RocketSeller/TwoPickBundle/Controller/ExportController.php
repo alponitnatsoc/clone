@@ -2095,9 +2095,9 @@ class ExportController extends Controller
         fputs($handle, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
 
         fputcsv($handle, array('INFORMACIÓN DEL LANDING SYMPLIFICA'),';');
-        fputcsv($handle, array('TIPO DE INSCRIPCIÓN', 'NOMBRE','E-MAIL','TELEFONO','FECHA DE INSCRIPCIÓN'),';');
+        fputcsv($handle, array('TIPO DE INSCRIPCIÓN', 'NOMBRE','APELLIDO','E-MAIL','TELEFONO','FECHA DE INSCRIPCIÓN'),';');
         foreach ($landings as $landing){
-            fputcsv($handle, array($landing->getEntityType(), $landing->getName(),$landing->getEmail(),$landing->getPhone(),$landing->getCreatedAt()->format('d/m/y')),';');
+            fputcsv($handle, array($landing->getEntityType(), $landing->getName(),$landing->getLastName(),$landing->getEmail(),$landing->getPhone(),$landing->getCreatedAt()->format('d/m/y')),';');
         }
 
         fclose($handle);
@@ -2303,10 +2303,11 @@ class ExportController extends Controller
                     ->join("con.timeCommitmentTimeCommitment",'tc')
                     ->join("RocketSellerTwoPickBundle:User",'u','WITH','u.personPerson=erp.idPerson')
                     ->join("erp.phones",'ph')
-                    ->where("ehe.state>=4")
-                    ->andWhere("con.state=1")
-                    ->andWhere("tc.code='TC'")
-                    ->orderBy("u.id ");
+                    ->where($query->expr()->gte('ehe.state',4))
+                    ->andWhere($query->expr()->eq('con.state',1))
+                    ->andWhere($query->expr()->eq('tc.code','?1'))
+                    ->setParameter(1,'TC')
+                    ->orderBy("u.id",'ASC');
                 $contracts = $query->getQuery()->getResult();
                 $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
                 //setting some properties
@@ -2389,7 +2390,7 @@ class ExportController extends Controller
                 $sheet = $phpExcelObject->getActiveSheet();
                 $sheet->getColumnDimension('A')->setWidth(4.8);
                 $sheet->getColumnDimension('B')->setWidth(27);
-                $sheet->getColumnDimension('C')->setWidth(9);
+                $sheet->getColumnDimension('C')->setWidth(11);
                 $sheet->getColumnDimension('D')->setWidth(9);
                 $sheet->getColumnDimension('E')->setWidth(11);
                 $sheet->getColumnDimension('F')->setWidth(28);
@@ -2461,7 +2462,7 @@ class ExportController extends Controller
                     $cell->setValue($ePerson->getDocument());
                     $col++;
                     $cell = $sheet->getCellByColumnAndRow($col, $row);
-                    $cell->setValue("");
+                    if($contract->getWorksSaturday()==1){$cell->setValue("S");}else{$cell->setValue("N");}
                     $row++;
                     $count++;
                 }
