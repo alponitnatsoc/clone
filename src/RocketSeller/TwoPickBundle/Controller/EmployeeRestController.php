@@ -952,6 +952,7 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(array=true, name="periodicityBenefits", nullable=true, strict=true, description="benefits of the employee.")
      * @RequestParam(name="idWorkplace", nullable=false, strict=true, description="place of work.")
      * @RequestParam(name="transportAid", nullable=true, strict=true, description="aid for the employee to transport.")
+     * @RequestParam(name="worksSat", nullable=true, strict=true, description="if the employee works on saturdays or not.")
      * @RequestParam(name="sisben", nullable=true, strict=true, description="employee belongs to SISBEN.")
      * @RequestParam(name="benefitsConditions", nullable=true, strict=true, description="benefits conditions.")
      * @RequestParam(name="startDate", nullable=false, strict=true, description="benefits conditions.")
@@ -1156,6 +1157,7 @@ class EmployeeRestController extends FOSRestController
                 $contract->setWorkableDaysMonth($contract->getWeekWorkableDays()->count() * 4);
             } else {
                 $contract->setSalary($paramFetcher->get('salary'));
+                $contract->setWorksSaturday($paramFetcher->get('worksSat'));
                 $contract->setWorkableDaysMonth(30);
                 $contract->setTransportAid($paramFetcher->get('transportAid'));
             }

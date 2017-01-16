@@ -492,6 +492,7 @@ class PayrollRestController extends FOSRestController
      *   (name="transport_aux", nullable=false, requirements="(S|N)", strict=true, description="Weather or not it needs transportation help. Its just a flag SQL looks for it legaly.")
      *   (name="society", nullable=false, requirements="(.)*", strict=true, description="Id of the society(id of the employeer).")
      *   (name="payroll_type", nullable=false, requirements="4|6|1", strict=true, description="Payroll type, 4 for full time 6 part time 1 regular payroll.")
+     *   (name="cal_type", nullable=true, requirements="3|2|1", strict=true, description="1 from Monday to Friday, 2 from Monday to Saturday, 3 all the days")
      *
      * @return View
      */
@@ -537,6 +538,8 @@ class PayrollRestController extends FOSRestController
         $mandatory['society'] = true;
         $regex['payroll_type'] = '4|6|1|7';
         $mandatory['payroll_type'] = true;
+        $regex['cal_type'] = '3|2|1|';
+        $mandatory['cal_type'] = false;
 	     // $regex['worked_days_week'] = '([0-9])+';
 	      //$mandatory['worked_days_week'] = false;
 
@@ -569,11 +572,11 @@ class PayrollRestController extends FOSRestController
 	    
 	      /*if( $parameters['payroll_type'] == 6 ){
 	      	$unico['DIAS_LABOR_SEM'] = $parameters['worked_days_week'];
-	      }
+	      }*/
 	
-		    if( $parameters['payroll_type'] == 4 ){
-			    $unico['EMP_TIP_CAL'] = 1;
-		    }*/
+        if( $parameters['payroll_type'] == 4 ){
+            $unico['EMP_TIP_CAL'] = $parameters['cal_type'];
+        }
 
         $content[] = $unico;
         $parameters = array();
@@ -623,6 +626,7 @@ class PayrollRestController extends FOSRestController
      *   (name="transport_aux", nullable=true, requirements="(S|N)", strict=false, description="Weather or not it needs transportation help, if empty it uses the law.")
      *   (name="society", nullable=true, requirements="(.)*", strict=true, description="Id of the society(id of the employeer).")
      *   (name="payroll_type", nullable=true, requirements="4|6|1", strict=true, description="Payroll type, 4 for full time 6 part time 1 regular payroll.")
+     *   (name="cal_type", nullable=true, requirements="3|2|1", strict=true, description="1 from Monday to Friday, 2 from Monday to Saturday, 3 all the days")
      *
      * @return View
      */
@@ -670,6 +674,8 @@ class PayrollRestController extends FOSRestController
         $mandatory['society'] = false;
         $regex['payroll_type'] = '4|6|1';
         $mandatory['payroll_type'] = false;
+        $regex['cal_type'] = '3|2|1|';
+        $mandatory['cal_type'] = false;
 
         $this->validateParamters($parameters, $regex, $mandatory);
 
@@ -703,6 +709,9 @@ class PayrollRestController extends FOSRestController
 
         if (isset($info['EMP_TIPO_CONTRATO']))
             $unico['EMP_TIPO_CONTRATO'] = isset($parameters['contract_type']) ? $parameters['contract_type'] : $info['EMP_TIPO_CONTRATO'];
+        if( $unico['EMP_TIPO_NOMINA'] == 4 ){
+            $unico['EMP_TIP_CAL'] = isset($parameters['cal_type']) ? $parameters['cal_type'] : $info['EMP_TIP_CAL'];
+        }
         $content[] = $unico;
         $parameters = array();
         $parameters['inInexCod'] = '601';
