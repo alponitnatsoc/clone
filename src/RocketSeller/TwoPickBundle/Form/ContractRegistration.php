@@ -79,6 +79,16 @@ class ContractRegistration extends AbstractType
                 'label'=>'¿El empleado pertenece al SISBÉN? (regímen subsidiado)',
                 'required' => true,
             ))
+            ->add('worksSaturday', 'choice', array(
+                'choices' => array(
+                    1=> 'Si',
+                    -1=> 'No',
+                ),
+                'multiple' => false,
+                'expanded' => true,
+                'label'=>'¿Trabaja los sabados?',
+                'required' => true,
+            ))
             ->add('transportAid', 'choice', array(
                 'choices' => array(
                     1=> 'Si',

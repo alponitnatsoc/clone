@@ -105,6 +105,11 @@ class Contract
     /**
      * @ORM\Column(type="smallint", nullable=TRUE)
      */
+    private $worksSaturday;
+
+    /**
+     * @ORM\Column(type="smallint", nullable=TRUE)
+     */
     private $transportAid; // 1 vive donde trabaja - 0 externo
 
     /**
@@ -1248,5 +1253,29 @@ class Contract
         $criteria = Criteria::create()
             ->where(Criteria::expr()->eq('dayNumber',$dayNumber));
         return $this->weekWorkableDays->matching($criteria)->first();
+    }
+
+    /**
+     * Set worksSaturday
+     *
+     * @param integer $worksSaturday
+     *
+     * @return Contract
+     */
+    public function setWorksSaturday($worksSaturday)
+    {
+        $this->worksSaturday = $worksSaturday;
+
+        return $this;
+    }
+
+    /**
+     * Get worksSaturday
+     *
+     * @return integer
+     */
+    public function getWorksSaturday()
+    {
+        return $this->worksSaturday;
     }
 }

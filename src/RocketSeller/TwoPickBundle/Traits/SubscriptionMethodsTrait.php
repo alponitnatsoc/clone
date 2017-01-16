@@ -686,10 +686,7 @@ trait SubscriptionMethodsTrait
                     ));
                     $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('request' => $request ), array('_format' => 'json'));
                     if ($insertionAnswer->getStatusCode() != 200) {
-                        echo "Cago insertar entidad AFP " . $eHE->getIdEmployerHasEmployee() . " SC" . $insertionAnswer->getStatusCode();
-                        die();
-                        $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
-                        return $view;
+                        return false;
                     }
                 }
                 if ($eType->getPayrollCode() == "FCES") {
