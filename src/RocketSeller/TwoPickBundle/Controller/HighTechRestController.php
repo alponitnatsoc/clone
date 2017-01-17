@@ -1096,18 +1096,40 @@ class HighTechRestController extends FOSRestController
 			$podStatusIscripcionAprovada = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")
 				->findOneBy(array('idNovoPay' => 'InsCue-Apr'));
 			$transaction->setPurchaseOrdersStatus($podStatusIscripcionAprovada);
+			
+			$em->persist($transaction);
+			$em->flush();
 		} else {
 			$podStatusIscripcionRechazada = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")
 				->findOneBy(array('idNovoPay' => 'InsCue-Rec'));
 			$transaction->setPurchaseOrdersStatus($podStatusIscripcionRechazada);
+		
+			$em->persist($transaction);
+			$em->flush();
+
+			$employers = $transaction->getEmployers();
+			if($employers->count() == 1) {
+				
+				/** @var Employer $employer */
+				$employer = $employers->get(0);
+				$phone = '';
+				if($employer->getPersonPerson()->getPhones()->count() > 0) {
+					$phone = $employer->getPersonPerson()->getPhones()->get(0)->getPhoneNumber();
+				}
+				$context = array(
+					'emailType' => 'errorInBanckAccountRegistration',
+					'phone' => $phone,
+					'documentType' => $employer->getPersonPerson()->getDocumentType(),
+					'documentNumber' => $employer->getPersonPerson()->getDocument(),
+					'userName' => $employer->getPersonPerson()->getNames(),
+					'radicatedNumber' => $parameters['radicatedNumber'],
+					'errorLog' => isset($parameters['errorLog']) ? $parameters['errorLog'] : '',
+					'errorMessage' => isset($parameters['errorMessage']) ? $parameters['errorMessage'] : '',
+				);
+				
+				$this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+			}
 		}
-		$em->persist($transaction);
-		$em->flush();
-		
-		//TODO que mas hay que hacer acá ??
-//		$parameters['errorLog'];
-//		$parameters['errorMessage'];
-		
 		$view = View::create();
 		$view->setStatusCode(200);
 		$view->setData(array());

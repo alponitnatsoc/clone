@@ -126,7 +126,7 @@ class Employer
 
 
     /**
-     * @ORM\ManyToMany(targetEntity="Transaction", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Transaction", cascade={"persist"}, inversedBy="employers")
      * @ORM\JoinTable(name="employer_has_transactions",
      *      joinColumns={ @ORM\JoinColumn(name="employer_id_employer", referencedColumnName="id_employer")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="transaction_id_transaction", referencedColumnName="id_transaction")}

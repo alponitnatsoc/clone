@@ -51,6 +51,10 @@ class Transaction
 		 */
 		private $transactionType;
 	
+		/**
+		 * @ORM\ManyToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\Employer", mappedBy="transactions")
+		 */
+		private $employers;
 
     /**
      * Get idTransaction
@@ -156,5 +160,46 @@ class Transaction
     public function getTransactionType()
     {
         return $this->transactionType;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->employers = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add employer
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Employer $employer
+     *
+     * @return Transaction
+     */
+    public function addEmployer(\RocketSeller\TwoPickBundle\Entity\Employer $employer)
+    {
+        $this->employers[] = $employer;
+
+        return $this;
+    }
+
+    /**
+     * Remove employer
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Employer $employer
+     */
+    public function removeEmployer(\RocketSeller\TwoPickBundle\Entity\Employer $employer)
+    {
+        $this->employers->removeElement($employer);
+    }
+
+    /**
+     * Get employers
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmployers()
+    {
+        return $this->employers;
     }
 }
