@@ -3315,4 +3315,59 @@ class PayrollRestController extends FOSRestController
 		
 		return $responseView;
 	}
+	
+	/**
+	 * Executes the vacation pending days.<br/>
+	 *
+	 * @ApiDoc(
+	 *   resource = true,
+	 *   description = "Executes the vacation pending days.",
+	 *   statusCodes = {
+	 *     200 = "OK",
+	 *     400 = "Bad Request",
+	 *     401 = "Unauthorized",
+	 *     404 = "Not Found"
+	 *   }
+	 * )
+	 *
+	 * @param Request $request.
+	 * Rest Parameters:
+	 *
+	 *    (name="cod_process", nullable=false, requirements="(P|D|C)", strict=true, description="code of the process to execute")
+	 *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+	 *    (name="execution_type", nullable=false, requirements="(P|D|C)", strict=true, description="P for process, D for unprocess and C for close")
+	 *
+	 * @return View
+	 */
+	public function postProcessExecutionAction(Request $request)
+	{
+		$parameters = $request->request->all();
+		$regex = array();
+		$mandatory = array();
+		// Set all the parameters info.
+		$regex['cod_process'] = '([0-9])+';
+		$mandatory['cod_process'] = true;
+		$regex['employee_id'] = '([0-9])+';
+		$mandatory['employee_id'] = true;
+		$regex['execution_type'] = '(P|D|C)';
+		$mandatory['execution_type'] = true;
+		$this->validateParamters($parameters, $regex, $mandatory);
+		$content = array();
+		$unico = array();
+		
+		
+		$unico['COD_PROC'] = $parameters['cod_process'];
+		$unico['USUARIO'] = 'SRHADMIN';
+		$unico['EMP_CODIGO'] = $parameters['employee_id'];
+		$unico['TIP_EJEC'] = $parameters['execution_type'];
+		
+		$content[] = $unico;
+		$parameters = array();
+		$parameters['inInexCod'] = '611';
+		$parameters['clXMLSolic'] = $this->createXml($content, 611);
+		
+		/** @var View $res */
+		$responseView = $this->callApi($parameters);
+		return $responseView;
+	}
 }

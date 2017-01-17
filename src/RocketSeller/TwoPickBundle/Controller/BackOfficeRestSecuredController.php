@@ -41,13 +41,17 @@ class BackOfficeRestSecuredController extends FOSRestController
         if(isset($requ['names'])&&isset($requ['cellphone'])){
             $cellphone = $requ['cellphone'];
             $names = $requ['names'];
+		        $email = 'none';
+		        if(isset($requ['email'])) {
+		        	$email = $requ['email'];
+		        }
             /** @var User $user */
             $user = $this->getUser();
             $newLid = new LandingRegistration();
-            $newLid->setEmail("none");
+            $newLid->setEmail($email);
             $newLid->setEntityType("persona");
             $newLid->setName($names);
-            $newLid->setLastName(".R: ".$user->getPersonPerson()->getFullName());
+            $newLid->setLastName(".R: ".$user->getCode());
             $newLid->setPhone($cellphone);
             $newLid->setType("REFERIDO");
             $newLid->setCreatedAt(new \DateTime());
