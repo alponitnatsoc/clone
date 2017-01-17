@@ -51,7 +51,7 @@ class BackOfficeRestSecuredController extends FOSRestController
             $newLid->setEmail($email);
             $newLid->setEntityType("persona");
             $newLid->setName($names);
-            $newLid->setLastName(".R: ".$user->getPersonPerson()->getFullName());
+            $newLid->setLastName(".R: ".$user->getCode());
             $newLid->setPhone($cellphone);
             $newLid->setType("REFERIDO");
             $newLid->setCreatedAt(new \DateTime());
