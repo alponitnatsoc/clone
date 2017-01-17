@@ -34,15 +34,15 @@
       <div class="col-md-5">
           <h4 class="grisoscurofont light">&#8226; ¿Qué recibo?</h4>
           <p class="grisclarofont light">
-            <strong>Recibes $100.000</strong> en crédito Symplifica por cada persona que complete su registro con tu código, el dinero será usado para el pago de aportes y seguridad social de tu próximo periodo.
-          </p>
-          <h4 class="grisoscurofont light">&#8226; ¿Qué debo hacer?</h4>
-          <p class="grisclarofont light">
-            Contarle a todos tus amigos y familiares tu buena experiencia con Symplifica e invitarlos a usar Symplifica con tu código.
+            <strong>Recibes $100.000</strong> en crédito Symplifica por cada persona que complete su registro con tu código, el dinero será usado para el pago de sueldo y seguridad social de tu próxima fecha de pago.
           </p>
           <h4 class="grisoscurofont light">&#8226; ¿Qué reciben mis referidos?</h4>
           <p class="grisclarofont light">
-            2 meses gratis en el uso de nuestro servicio.
+              1 meses gratis de nuestro servicio adicional al mes que te regalamos (2 meses en total).
+          </p>
+          <h4 class="grisoscurofont light">&#8226; ¿Qué debo hacer?</h4>
+          <p class="grisclarofont light">
+            Contarle a todos tus amigos y familiares tu buena experiencia e invitarlos a usar Symplifica con tu código. ¡Cómpartelo ahora en tus redes sociales!
           </p>
       </div>
       <div class="col-md-7">
@@ -54,7 +54,7 @@
           </div>
           <div class="col-md-6 referredBoxes azulmediofont">
               <img src="{{ asset('public/img/home/icon6.png') }}" width="56px" height="auto" alt="referidos">
-              <p>¿Tienes a quien <strong>referir?</strong></p>
+              <p>¿Tienes a quién <strong>referir?</strong></p>
               <h2 class="extrabold">¡Refiere ya!</h2>
               <span class="btn-azul btn regular" data-toggle="modal" data-target="#myModal">REFERIR AQUÍ</span>
           </div>
@@ -64,7 +64,7 @@
               <span class="extrabold" style="font-size:20px">{{ app.user.code }}</span>
             </div>
             <div class="col-md-6 azuloscuro codeShare">
-              Compartelo en:
+              Compártelo en:
               <div>
                 <!-- Load Facebook SDK for JavaScript -->
                 <span id="fb-root"></span>
@@ -132,7 +132,7 @@
 
             quede saldo a favor del usuario, en caso tal, será acumulado hasta gastar la totalidad del premio.<br /><br />
 
-            • El premio se verá reflejado en la sección “Tus pagos gratis” de la app y web, y se realizará el
+            • El premio se verá reflejado en la sección “Plan Referidos” de la app y web, y se realizará el
 
             descuento al momento de realizar transacciones desde la plataforma.<br /><br />
 
@@ -195,10 +195,10 @@
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title center azulmediofont bold">¿A quíen vas a referir?</h4></h4>
+          <h4 class="modal-title center azulmediofont bold">¿A quién vas a referir?</h4></h4>
         </div>
         <div id="topmsn"  class="modal-body">
-          <p class="regular grisclarofont center">Para referir a alguien, solo debes ingresar los nombres y el número de celular de tu amigo</p>
+          <p class="regular grisclarofont center">Simplemente envíanos los datos de tus referidos. Nosotros los llamaremos y usaremos tu código si deciden usar Symplifica</p>
         </div>
         <div class="center">
           <form id="formReferred" method="post">
