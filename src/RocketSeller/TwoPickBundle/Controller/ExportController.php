@@ -2391,8 +2391,8 @@ class ExportController extends Controller
                 $sheet->getColumnDimension('A')->setWidth(4.8);
                 $sheet->getColumnDimension('B')->setWidth(27);
                 $sheet->getColumnDimension('C')->setWidth(11);
-                $sheet->getColumnDimension('D')->setWidth(10);
-                $sheet->getColumnDimension('E')->setWidth(11);
+                $sheet->getColumnDimension('D')->setWidth(9);
+                $sheet->getColumnDimension('E')->setWidth(12);
                 $sheet->getColumnDimension('F')->setWidth(28);
                 $sheet->getColumnDimension('G')->setWidth(10);
                 $sheet->getColumnDimension('H')->setWidth(12);
