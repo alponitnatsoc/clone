@@ -80,6 +80,26 @@ class Entity
      *      )
      */
     private $departments;
+	
+		/**
+		 * @ORM\Column(type="string", length=100, nullable=TRUE)
+		 */
+		private $address;
+	
+		/**
+		 * @ORM\Column(type="string", length=100, nullable=TRUE)
+		 */
+		private $webpage;
+	
+		/**
+		 * @ORM\Column(type="string", length=100, nullable=TRUE)
+		 */
+		private $phone;
+	
+		/**
+		 * @ORM\Column(type="string", length=100, nullable=TRUE)
+		 */
+		private $attentionHours;
 
     /**
      * Set idEntity
@@ -406,5 +426,101 @@ class Entity
     public function getDepartments()
     {
         return $this->departments;
+    }
+
+    /**
+     * Set address
+     *
+     * @param string $address
+     *
+     * @return Entity
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * Get address
+     *
+     * @return string
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * Set webpage
+     *
+     * @param string $webpage
+     *
+     * @return Entity
+     */
+    public function setWebpage($webpage)
+    {
+        $this->webpage = $webpage;
+
+        return $this;
+    }
+
+    /**
+     * Get webpage
+     *
+     * @return string
+     */
+    public function getWebpage()
+    {
+        return $this->webpage;
+    }
+
+    /**
+     * Set phone
+     *
+     * @param string $phone
+     *
+     * @return Entity
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
+     * Get phone
+     *
+     * @return string
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * Set attentionHours
+     *
+     * @param string $attentionHours
+     *
+     * @return Entity
+     */
+    public function setAttentionHours($attentionHours)
+    {
+        $this->attentionHours = $attentionHours;
+
+        return $this;
+    }
+
+    /**
+     * Get attentionHours
+     *
+     * @return string
+     */
+    public function getAttentionHours()
+    {
+        return $this->attentionHours;
     }
 }
