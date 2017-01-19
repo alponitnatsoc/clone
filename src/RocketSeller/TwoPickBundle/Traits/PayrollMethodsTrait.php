@@ -126,7 +126,7 @@ trait PayrollMethodsTrait
                     return true;
                 }
                 $insertionAnswer = json_decode($insertionAnswer->getContent(), true);
-                if($insertionAnswer["days"]>3){
+                if($insertionAnswer["days"]>5){
                     return false;
                 }
             }
