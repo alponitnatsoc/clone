@@ -3659,6 +3659,16 @@ class BackOfficeController extends Controller
                         $cell = $sheet->getCellByColumnAndRow($col, $row);
                         $cell->setValue($valueSeverances);
                         $col++;
+                    }elseif(!$exist){
+                        $cell = $sheet->getCellByColumnAndRow($col, $row);
+                        $cell->setValue("NO EXISTE");
+                        $col++;
+                        $cell = $sheet->getCellByColumnAndRow($col, $row);
+                        $cell->setValue("NO EXISTE");
+                        $col++;
+                        $cell = $sheet->getCellByColumnAndRow($col, $row);
+                        $cell->setValue("NO EXISTE");
+                        $col++;
                     }else{
                         $cell = $sheet->getCellByColumnAndRow($col, $row);
                         $cell->setValue("ERROR");
