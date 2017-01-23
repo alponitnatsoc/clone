@@ -64,7 +64,7 @@ ID Factura en Symplifica, Consecutivo Factura, Documento Cliente, Nombres, Apell
             {% set totalDev = totalDev + pod.value %}
             {% set flag = 't' %}
         {% endif %}
-        {% if pod.productProduct.simpleName == 'PS1' || pod.productProduct.simpleName == 'PS2' || pod.productProduct.simpleName == 'PS3' %}
+        {% if pod.productProduct.simpleName == 'PS1' or pod.productProduct.simpleName == 'PS2' or pod.productProduct.simpleName == 'PS3' %}
             {% set totalFee = totalFee + pod.value %}
             {% set flag = 't' %}
         {% endif %}
