@@ -3,9 +3,11 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use PHPExcel_Style_Border;
 use RocketSeller\TwoPickBundle\Entity\Configuration;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\Document;
@@ -41,6 +43,7 @@ use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Entity\ActionError;
 use RocketSeller\TwoPickBundle\Entity\Action;
 use RocketSeller\TwoPickBundle\Traits\SubscriptionMethodsTrait;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use DateTime;
 use Doctrine\ORM\QueryBuilder;
@@ -3451,6 +3454,253 @@ class BackOfficeController extends Controller
             }
             unlink('uploads/Files/Tempfiles'.'/'.$fileName);
             return true;
+        }
+    }
+
+    public function generateReportByTypeAction($type){
+        $this->denyAccessUnlessGranted("ROLE_BACK_OFFICE", null, 'Unable to access this page!');
+        switch($type){
+            case "severances":
+                $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+                //setting some properties
+                $phpExcelObject->getProperties()->setCreator("Symplifica-Doc-Generator")
+                    ->setLastModifiedBy("Symplifica-Bot")
+                    ->setTitle("severances report")
+                    ->setSubject("Details")
+                    ->setDescription("generated document with severances information")
+                    ->setKeywords("severances employees")
+                    ->setCategory("Information");
+                //setting the active sheet and changing name
+                $phpExcelObject->setActiveSheetIndex(0)->setTitle('Información Fondos de Cesantías');
+                $outlineBorderTitleStyle= array(
+                    'borders' => array(
+                        'outline' => array(
+                            'style' => PHPExcel_Style_Border::BORDER_THIN,
+                            'color' => array('argb' => 'FF000000'),
+                        ),
+                    ),
+                    'font'=>array(
+                        'name'=>'Calibri',
+                        'color' => array('argb'=>'FFFFFFFF'),
+                        'bold' => true,
+                        'size' => 12,
+                    ),
+                    'fill'=>array(
+                        'type'=>'solid',
+                        'color'=>array('argb'=>'FF818181'),
+                    ),
+                    'alignment'=>array(
+                        'horizontal'=>'center',
+                        'vertical'=>'center',
+                    ),
+                );
+                $allBordersContentStyle = array(
+                    'borders'=>array(
+                        'allborders'=> array(
+                            'style' => PHPExcel_Style_Border::BORDER_THIN,
+                            'color' => array('argb' => 'FF000000'),
+                        ),
+                    ),
+                    'font'=>array(
+                        'name'=>'Calibri',
+                        'color' => array('argb'=>'FF000000'),
+                        'bold' => true,
+                        'size' => 11,
+                    ),
+                    'fill'=>array(
+                        'type'=>'solid',
+                        'color'=>array('argb'=>'FFDBDBDB'),
+                    ),
+                    'alignment'=>array(
+                        'horizontal'=>'left',
+                        'vertical'=>'center',
+                    ),
+                );
+                $allBordersNoContentStyle = array(
+                    'borders'=>array(
+                        'allborders'=> array(
+                            'style' => PHPExcel_Style_Border::BORDER_THIN,
+                            'color' => array('argb' => 'FF000000'),
+                        ),
+                    ),
+                    'font'=>array(
+                        'name'=>'Calibri',
+                        'color' => array('argb'=>'FF000000'),
+                        'size' => 10,
+                    ),
+                    'fill'=>array(
+                        'type'=>'solid',
+                        'color'=>array('argb'=>'FFFFFFFF'),
+                    ),
+                    'alignment'=>array(
+                        'horizontal'=>'left',
+                        'vertical'=>'center',
+                    ),
+
+                );
+                $sheet = $phpExcelObject->getActiveSheet();
+                $sheet->getColumnDimension('A')->setWidth(5);
+                $sheet->getColumnDimension('B')->setWidth(11);
+                $sheet->getColumnDimension('C')->setWidth(13);
+                $sheet->getColumnDimension('D')->setWidth(28);
+                $sheet->getColumnDimension('E')->setWidth(11);
+                $sheet->getColumnDimension('F')->setWidth(13);
+                $sheet->getColumnDimension('G')->setWidth(28);
+                $sheet->getColumnDimension('H')->setWidth(10);
+                $sheet->getColumnDimension('I')->setWidth(8);
+                $sheet->getColumnDimension('J')->setWidth(10);
+                $sheet->getColumnDimension('K')->setWidth(30);
+                $sheet->getRowDimension(1)->setRowHeight(17);
+                $sheet->getRowDimension(2)->setRowHeight(36);
+                $row=1;
+                /** @var \PHPExcel_Cell $cell */
+                $cell = $sheet->getCellByColumnAndRow(0,$row);
+                $cell->setValue('INFORMACIÓN FONDOS DE CESANTÍAS');
+                $row++;
+                $cell = $sheet->getCellByColumnAndRow(0,$row);
+                $iniCol = $cell->getColumn();
+                $cell->setValue('Nº');
+                $cell = $sheet->getCellByColumnAndRow(1,$row);
+                $cell->setValue('TIPO DOC EMPLEADOR');
+                $cell = $sheet->getCellByColumnAndRow(2,$row);
+                $cell->setValue('DOCUMENTO EMPLEADOR');
+                $cell = $sheet->getCellByColumnAndRow(3,$row);
+                $cell->setValue('NOMBRE EMPLEADOR');
+                $cell = $sheet->getCellByColumnAndRow(4,$row);
+                $cell->setValue('TIPO DOC EMPLEADO');
+                $cell = $sheet->getCellByColumnAndRow(5,$row);
+                $cell->setValue('DOCUMENTO EMPLEADO');
+                $cell = $sheet->getCellByColumnAndRow(6,$row);
+                $cell->setValue('NOMBRE EMPLEADO');
+                $cell = $sheet->getCellByColumnAndRow(7,$row);
+                $cell->setValue('IBC');
+                $cell = $sheet->getCellByColumnAndRow(8,$row);
+                $cell->setValue('NÚMERO DÍAS');
+                $cell = $sheet->getCellByColumnAndRow(9,$row);
+                $cell->setValue('VALOR');
+                $cell = $sheet->getCellByColumnAndRow(10,$row);
+                $cell->setValue('FONDO DE SECANTÍAS');
+                $sheet->mergeCells($iniCol.($row-1).':'.$cell->getColumn().($row-1));
+                $sheet->getStyle($iniCol.($row-1).':'.$cell->getColumn().($row-1))->applyFromArray($outlineBorderTitleStyle);
+                $sheet->getStyle($iniCol.$row.':'.$cell->getColumn().$row)->applyFromArray($allBordersContentStyle);
+                $sheet->getStyle("A2:K2")->getAlignment()->setWrapText(true);
+                $row++;
+                $iniRow = $row;
+                $em = $this->getDoctrine()->getManager();
+                $criteria = Criteria::create()->where(Criteria::expr()->gte('state',4));
+                $ehes = $em->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")->matching($criteria);
+                $count = 1;
+                /** @var EmployerHasEmployee $ehe */
+                foreach ($ehes as $ehe) {
+//                    if($ehe->getIdEmployerHasEmployee()!=13002) continue;
+                    $error = false;
+                    $employerDocumentType = $ehe->getEmployerEmployer()->getPersonPerson()->getDocumentType();
+                    $employerDocumentNumber = $ehe->getEmployerEmployer()->getPersonPerson()->getDocument();
+                    $employeeDocumentType = $ehe->getEmployeeEmployee()->getPersonPerson()->getDocumentType();
+                    $employeeDocumentNumber = $ehe->getEmployeeEmployee()->getPersonPerson()->getDocument();
+                    $employerName = $ehe->getEmployerEmployer()->getPersonPerson()->getFullName();
+                    $employeeName = $ehe->getEmployeeEmployee()->getPersonPerson()->getFullName();
+                    $severanceEntity = null;
+                    $entities = $ehe->getEmployeeEmployee()->getEntities();
+                    /** @var EmployeeHasEntity $entity */
+                    foreach ($entities as $entity) {
+                        if($entity->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == 'FCES'){
+                            $severanceEntity = $entity->getEntityEntity();
+                        }
+                    }
+                    $request = new Request();
+                    $request->setMethod("GET");
+                    $insertionAnswer = $this->forward("RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll",array('employeeId'=>$ehe->getIdEmployerHasEmployee()),array('_format'=>'json'));
+                    if($insertionAnswer->getStatusCode() != 200){
+                        $error = true;
+                    }else{
+                        $data = json_decode($insertionAnswer->getContent(), true);
+                        $exist =  false;
+                        foreach ($data as $item) {
+                            if (!is_array($item)) continue;
+                            if(!array_key_exists('CON_CODIGO',$item))continue;
+                            if (intval($item['CON_CODIGO']) == 181 ){
+                                $exist = true;
+                                $IBC = intval($item["NOMI_BASE"]);
+                                $numDias = intval($item["NOMI_UNIDADES"]);
+                                $valueSeverances = intval($item["NOMI_VALOR_LOCAL"]);
+                            }
+                        }
+                    }
+                    $col = 0;
+                    $cell = $sheet->getCellByColumnAndRow($col, $row);
+                    $cell->setValue($count);
+                    $col++;
+                    $cell = $sheet->getCellByColumnAndRow($col, $row);
+                    $cell->setValue($employerDocumentType);
+                    $col++;
+                    $cell = $sheet->getCellByColumnAndRow($col, $row);
+                    $cell->setValue($employerDocumentNumber);
+                    $col++;
+                    $cell = $sheet->getCellByColumnAndRow($col, $row);
+                    $cell->setValue($employerName);
+                    $col++;
+                    $cell = $sheet->getCellByColumnAndRow($col, $row);
+                    $cell->setValue($employeeDocumentType);
+                    $col++;
+                    $cell = $sheet->getCellByColumnAndRow($col, $row);
+                    $cell->setValue($employeeDocumentNumber);
+                    $col++;
+                    $cell = $sheet->getCellByColumnAndRow($col, $row);
+                    $cell->setValue($employeeName);
+                    $col++;
+                    if(!$error and $exist){
+                        $cell = $sheet->getCellByColumnAndRow($col, $row);
+                        $cell->setValue($IBC);
+                        $col++;
+                        $cell = $sheet->getCellByColumnAndRow($col, $row);
+                        $cell->setValue($numDias);
+                        $col++;
+                        $cell = $sheet->getCellByColumnAndRow($col, $row);
+                        $cell->setValue($valueSeverances);
+                        $col++;
+                    }elseif(!$exist){
+                        $cell = $sheet->getCellByColumnAndRow($col, $row);
+                        $cell->setValue("NO EXISTE");
+                        $col++;
+                        $cell = $sheet->getCellByColumnAndRow($col, $row);
+                        $cell->setValue("NO EXISTE");
+                        $col++;
+                        $cell = $sheet->getCellByColumnAndRow($col, $row);
+                        $cell->setValue("NO EXISTE");
+                        $col++;
+                    }else{
+                        $cell = $sheet->getCellByColumnAndRow($col, $row);
+                        $cell->setValue("ERROR");
+                        $col++;
+                        $cell = $sheet->getCellByColumnAndRow($col, $row);
+                        $cell->setValue("ERROR");
+                        $col++;
+                        $cell = $sheet->getCellByColumnAndRow($col, $row);
+                        $cell->setValue("ERROR");
+                        $col++;
+                    }
+                    $cell = $sheet->getCellByColumnAndRow($col, $row);
+                    $cell->setValue($severanceEntity->getName());
+                    $row++;
+                    $count++;
+                }
+                $sheet->getStyle($iniCol.$iniRow.':'.$cell->getColumn().($row-1))->applyFromArray($allBordersNoContentStyle);
+                // create the writer
+                $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel2007');
+                // create the response
+                $response = $this->get('phpexcel')->createStreamedResponse($writer);
+                // adding headers
+                $dispositionHeader = $response->headers->makeDisposition(
+                    ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                    'Severances_report_'.date('d-m-y').'.xlsx'
+                );
+                $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+                $response->headers->set('Pragma', 'public');
+                $response->headers->set('Cache-Control', 'maxage=1');
+                $response->headers->set('Content-Disposition', $dispositionHeader);
+                return $response;
+                break;
         }
     }
 }
