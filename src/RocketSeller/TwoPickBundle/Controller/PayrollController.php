@@ -270,7 +270,7 @@ class PayrollController extends Controller
             if ($insertionAnswer->getStatusCode() != 200) {
                 if($insertionAnswer->getStatusCode()==421)
                     return $this->redirectToRoute("show_employer");
-                return false;
+                return $this->redirectToRoute("list_pods_description");
             }
 
             return $this->redirectToRoute("payroll_result",json_decode($insertionAnswer->getContent(), true));
