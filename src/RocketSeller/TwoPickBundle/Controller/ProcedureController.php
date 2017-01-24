@@ -3245,6 +3245,7 @@ class ProcedureController extends Controller
         }
         /** @var EmployerHasEmployee $ehe */
         foreach ($employer->getActiveEmployerHasEmployees() as $ehe){
+            if($ehe->getState()<3)continue;
             if($ehe->getEmployerEmployer()->getPersonPerson() == $ehe->getEmployeeEmployee()->getPersonPerson()){
                 $ehe->setState(-2);//setting the state of error
                 $em->persist($ehe);
