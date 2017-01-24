@@ -240,7 +240,7 @@ class PayrollController extends Controller
 
             if (count($payrollToPay) == 0) {
                 //por seguridad se verifica que exista por lo menos un item a pagar
-                return $this->redirectToRoute("payroll");
+                return $this->redirectToRoute("show_dashboard");
             }
 
             $poStatusProcesando = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')
@@ -256,7 +256,7 @@ class PayrollController extends Controller
                 $pod = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')
                     ->find($key);
 	              if($pod->getPurchaseOrders()!=null && $pod->getPurchaseOrders()->getPurchaseOrdersStatus() == $poStatusProcesando) {
-                    return $this->redirectToRoute("payroll");
+                    return $this->redirectToRoute("show_dashboard");
                 }
             }
 
@@ -266,15 +266,17 @@ class PayrollController extends Controller
                 "podsToPay" => $realtoPay,
                 "paymentMethod" => $paymethodid,
             ));
-            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRestSecured:postConfirm', array('_format' => 'json'));
+            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRestSecured:postConfirm', array('request'=>$request), array('_format' => 'json'));
             if ($insertionAnswer->getStatusCode() != 200) {
-                return false;
+                if($insertionAnswer->getStatusCode()==421)
+                    return $this->redirectToRoute("show_employer");
+                return $this->redirectToRoute("list_pods_description");
             }
 
             return $this->redirectToRoute("payroll_result",json_decode($insertionAnswer->getContent(), true));
 
         } else {
-            return $this->redirectToRoute("payroll");
+            return $this->redirectToRoute("manage_employees");
         }
     }
 
