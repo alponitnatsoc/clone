@@ -187,9 +187,9 @@ function manageEmployees() {
         $(this).text("Borrando...");
     })
 
-    $("#terminar_contrato_button").on("click", function (e){
-        $('#terminacion_contrato_modal').modal('show');
-    });
+    // $("#terminar_contrato_button").on("click", function (e){
+    //     $('#terminacion_contrato_modal').modal('show');
+    // });
 
     $("#solicitar_llamada").on("click", function (e){
         var ehe = $("#ehe-id").val();

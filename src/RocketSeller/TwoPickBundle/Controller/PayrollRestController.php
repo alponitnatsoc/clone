@@ -2296,7 +2296,84 @@ class PayrollRestController extends FOSRestController
 
         return $responseView;
     }
-
+	
+		/**
+		 * Modify final liquidation parameters.<br/>
+		 *
+		 * @ApiDoc(
+		 *   resource = true,
+		 *   description = "Modify final liquidation parameters.",
+		 *   statusCodes = {
+		 *     200 = "OK",
+		 *     400 = "Bad Request",
+		 *     401 = "Unauthorized",
+		 *     404 = "Not Found"
+		 *   }
+		 * )
+		 *
+		 * @param Request $request.
+		 * Rest Parameters:
+		 *
+		 *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+		 *    (name="year", nullable=true, requirements="([0-9])+", strict=true, description="Year of the process execution(format: DD-MM-YYYY)")
+		 *    (name="month", nullable=true, requirements="([0-9])+", strict=true, description="Month of the process execution(format: DD-MM-YYYY)")
+		 *    (name="period", nullable=true, requirements="([0-9])+", strict=true, description="Period of the process execution(format: DD-MM-YYYY)")
+		 *    (name="cutDate", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Date of the cut for the process execution(format: DD-MM-YYYY).")
+		 *    (name="processDate", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Date of the of the process execution(format: DD-MM-YYYY)")
+		 *    (name="retirementCause", nullable=true, requirements="([0-9])+", strict=true, description="ID of the retirement cause.")
+		 *
+		 * @return View
+		 */
+		public function postUnprocessFinalLiquidationParametersAction(Request $request)
+		{
+			$parameters = $request->request->all();
+			$regex = array();
+			$mandatory = array();
+			// Set all the parameters info.
+			$regex['employee_id'] = '([0-9])+';
+			$mandatory['employee_id'] = true;
+			$regex['year'] = '([0-9])+';
+			$mandatory['year'] = false;
+			$regex['month'] = '([0-9])+';
+			$mandatory['month'] = false;
+			$regex['period'] = '([0-9])+';
+			$mandatory['period'] = false;
+			$regex['cutDate'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
+			$mandatory['cutDate'] = false;
+			$regex['processDate'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
+			$mandatory['processDate'] = false;
+			$regex['retirementCause'] = '([0-9])+';
+			$mandatory['retirementCause'] = false;
+			
+			$this->validateParamters($parameters, $regex, $mandatory);
+			
+			$content = array();
+			$unico = array();
+			
+			$info = $this->getFinalLiquidationParametersAction($parameters['employee_id'])->getData();
+			
+			$unico['TIPOCON'] = 2;
+			$unico['USERNAME'] = 'SRHADMIN';
+			$unico['EMP_CODIGO'] =  $parameters['employee_id'];
+			$unico['PDEF_ANO'] = isset($parameters['year']) ? $parameters['year'] : $info['PDEF_ANO'];
+			$unico['PDEF_MES'] = isset($parameters['month']) ? $parameters['month'] : $info['PDEF_MES'];
+			$unico['PDEF_PERIODO'] = isset($parameters['period']) ? $parameters['period'] : $info['PDEF_PERIODO'];
+			$unico['PDEF_FECORTE'] = isset($parameters['cutDate']) ? $parameters['cutDate'] : $info['PDEF_FECORTE'];
+			$unico['PDEF_FEPAGO'] = isset($parameters['processDate']) ? $parameters['processDate'] : $info['PDEF_FEPAGO'];
+			$unico['CAUSA_RETIRO'] = isset($parameters['retirementCause']) ? $parameters['retirementCause'] : $info['CAUSA_RETIRO'];
+			
+			
+			$content[] = $unico;
+			$parameters = array();
+			$parameters['inInexCod'] = '620';
+			$parameters['clXMLSolic'] = $this->createXml($content, 620);
+			
+			/** @var View $res */
+			$responseView = $this->callApi($parameters);
+			
+			return $responseView;
+		}
+	
     /**
      * Gets the final liquidation parameteres.<br/>
      *
@@ -3333,7 +3410,7 @@ class PayrollRestController extends FOSRestController
 	 * @param Request $request.
 	 * Rest Parameters:
 	 *
-	 *    (name="cod_process", nullable=false, requirements="(P|D|C)", strict=true, description="code of the process to execute")
+	 *    (name="cod_process", nullable=false, requirements="([0-9])+", strict=true, description="code of the process to execute")
 	 *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
 	 *    (name="execution_type", nullable=false, requirements="(P|D|C)", strict=true, description="P for process, D for unprocess and C for close")
 	 *
