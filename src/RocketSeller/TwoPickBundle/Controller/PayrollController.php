@@ -256,7 +256,7 @@ class PayrollController extends Controller
                 $pod = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')
                     ->find($key);
 	              if($pod->getPurchaseOrders()!=null && $pod->getPurchaseOrders()->getPurchaseOrdersStatus() == $poStatusProcesando) {
-                    return $this->redirectToRoute("payroll");
+                    return $this->redirectToRoute("show_dashboard");
                 }
             }
 
@@ -268,6 +268,8 @@ class PayrollController extends Controller
             ));
             $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRestSecured:postConfirm', array('request'=>$request), array('_format' => 'json'));
             if ($insertionAnswer->getStatusCode() != 200) {
+                if($insertionAnswer->getStatusCode()==421)
+                    return $this->redirectToRoute("show_employer");
                 return false;
             }
 
