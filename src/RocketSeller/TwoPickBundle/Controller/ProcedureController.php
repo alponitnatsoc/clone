@@ -675,7 +675,7 @@ class ProcedureController extends Controller
                     'choices' => array(
                         'CC' => 'Cédula de ciudadania',
                         'CE' => 'Cédula de Extranjería',
-                        'PAS' => 'Pasaporte'
+                        'PASAPORTE' => 'Pasaporte'
                     )))
                 ->add('name','text',array('label'=>'Nombre Completo:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
                 ->add('lastName1','text',array('label'=>'Primer Apellido:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
