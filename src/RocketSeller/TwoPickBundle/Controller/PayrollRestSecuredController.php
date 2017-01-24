@@ -594,7 +594,7 @@ class PayrollRestSecuredController extends FOSRestController
         $podRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription");
         if (count($payrollToPay) == 0) {
             //por seguridad se verifica que exista por lo menos un item a pagar
-            return $this->redirectToRoute("payroll");
+            return $view->setData(array('data'=>'no payroll'))->setStatusCode(421);
         }
         $total = 0;
         $totalPayroll=0;
