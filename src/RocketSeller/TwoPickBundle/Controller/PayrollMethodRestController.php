@@ -140,7 +140,7 @@ class PayrollMethodRestController extends FOSRestController
 
         $view = View::create();
         $format = array('_format' => 'json');
-
+        $idPayroll=-1;
         $requ = $request->request->all();
         if(isset($requ['month'])){
             $month=$requ['month'];
@@ -148,6 +148,7 @@ class PayrollMethodRestController extends FOSRestController
             $period=$requ['period'];
             $day =  $requ['day'] ;
             $tokenBack =  $requ['token'] ;
+            $idPayroll=isset($requ['idpayroll'])?$requ['idpayroll']:-1;
             /** @var User $backuser */
             $backuser = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('emailCanonical'=>'backofficesymplifica@gmail.com'));
 
@@ -186,6 +187,9 @@ class PayrollMethodRestController extends FOSRestController
 
             $view->setData("No es dia para cerrar nominas automaticamente");
             return $view;
+        }
+        if($idPayroll!=-1){
+            $params['idPayroll']=$idPayroll;
         }
 
         $payrolls = $payrollEntity->findBy($params);
@@ -392,6 +396,12 @@ class PayrollMethodRestController extends FOSRestController
 
         if (!isset($total)) {
             $total = "no hay nominas pendientes por cerrar ";
+        }
+        if($idPayroll!=-1){
+            $view->setStatusCode(200);
+
+            $view->setData($total);
+            return $view;
         }
 
 //         $result .= count($pod);
