@@ -1,4 +1,4 @@
-ID Factura en Symplifica, Consecutivo Factura, Documento Cliente, Nombres, Apellidos, direccion, Celular, correo, Fecha Recaudo, RECAUDÓ NÓMINA, RECAUDÓ PILA, MORA, FEE SYMPLIFICA (ANTES DE IVA), IVA DEL FEE SYMPLIFICA, FEE SYMPLIFICA COBRADO, FEE TX, FEE TX COBRADO, FEE TX COBRADO, GMF RECAUDADO (Por PILA y NOMINA), DESCUENTOS, PRIMA, TOTAL RECAUDO
+ID Factura en Symplifica, Consecutivo Factura, Documento Cliente, Nombres, Apellidos, direccion, Celular, correo, Fecha Recaudo, RECAUDÓ NÓMINA, RECAUDÓ PILA, MORA, FEE SYMPLIFICA (ANTES DE IVA), IVA DEL FEE SYMPLIFICA, FEE SYMPLIFICA COBRADO, FEE TX, FEE TX COBRADO, FEE TX COBRADO, GMF RECAUDADO (Por PILA y NOMINA), DESCUENTOS, PRIMA, DEVOLUCIONES, NO Reconocido, TOTAL RECAUDO
 {% for po in pos %}
     {% set document = po.IdUser.personPerson.document %}
     {% set names = po.IdUser.personPerson.names %}
@@ -27,6 +27,8 @@ ID Factura en Symplifica, Consecutivo Factura, Documento Cliente, Nombres, Apell
     {% set totalMora = 0 %}
     {% set totalDisc = 0 %}
     {% set totalPrima = 0 %}
+    {% set totalDev = 0 %}
+    {% set totalNorRec = 0 %}
     {% set datePay = po.dateModified|date("d-m-Y") %}
     {% for pod in pods %}
         {% set flag = 'f' %}
@@ -58,8 +60,16 @@ ID Factura en Symplifica, Consecutivo Factura, Documento Cliente, Nombres, Apell
             {% set totalPrima = totalPrima + pod.value %}
             {% set flag = 't' %}
         {% endif %}
-        {% if flag == 'f' %}
+        {% if pod.productProduct.simpleName == 'DEV' %}
+            {% set totalDev = totalDev + pod.value %}
+            {% set flag = 't' %}
+        {% endif %}
+        {% if pod.productProduct.simpleName == 'PS1' or pod.productProduct.simpleName == 'PS2' or pod.productProduct.simpleName == 'PS3' %}
             {% set totalFee = totalFee + pod.value %}
+            {% set flag = 't' %}
+        {% endif %}
+        {% if flag == 'f' %}
+            {% set totalNorRec = totalNorRec + pod.value %}
         {% endif %}
     {% endfor %}
 
@@ -67,8 +77,8 @@ ID Factura en Symplifica, Consecutivo Factura, Documento Cliente, Nombres, Apell
     {% set totalFeeWTX = totalFeeWOTX*0.16 %}
     {% set totalTransacWOTX = totalTransac/1.16 %}
     {% set totalTransacWTX = totalTransacWOTX*0.16 %}
-    {% set grandTotal = totalNomnina+totalPila+totalFee+totalTransac+total4mill+totalMora+totalDisc+totalPrima %}
-    <br>{{ po.idPurchaseOrders }}, {{ po.InvoiceNumber }}, {{ document }}, {{ names }}, {{ lastNames }}, {{ address }} {{ city }} {{ dept }}, {{ phone }}, ---, {{ datePay }},{{ totalNomnina }}, {{ totalPila }}, {{ totalMora }},{{ totalFeeWOTX }}, {{ totalFeeWTX }}, {{ totalFee }}, {{ totalTransacWOTX }}, {{ totalTransacWTX }}, {{ totalTransac }},  {{ total4mill }}, {{ totalDisc }},  {{ totalPrima }}, {{ grandTotal }}
+    {% set grandTotal = totalNomnina+totalPila+totalFee+totalTransac+total4mill+totalMora+totalDisc+totalPrima+totalNorRec-totalDev %}
+    <br>{{ po.idPurchaseOrders }}, {{ po.InvoiceNumber }}, {{ document }}, {{ names }}, {{ lastNames }}, {{ address }} {{ city }} {{ dept }}, {{ phone }}, ---, {{ datePay }},{{ totalNomnina }}, {{ totalPila }}, {{ totalMora }},{{ totalFeeWOTX }}, {{ totalFeeWTX }}, {{ totalFee }}, {{ totalTransacWOTX }}, {{ totalTransacWTX }}, {{ totalTransac }},  {{ total4mill }}, {{ totalDisc }},  {{ totalPrima }}, {{ totalDev }},  {{ totalNorRec }}, {{ grandTotal }}
 {% endfor %}
     {#
 
