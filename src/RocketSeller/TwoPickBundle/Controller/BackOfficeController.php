@@ -2571,7 +2571,7 @@ class BackOfficeController extends Controller
 
 				$pilaPOD->setPurchaseOrdersStatus($pos);
 				$pilaPOD->setProductProduct($product);
-				$pilaPOD->setDescription("Pago de Aportes a Seguridad Social mes Diciembre");
+				$pilaPOD->setDescription("Pago de Aportes a Seguridad Social mes Enero");
 
 				$poList = $payroll->getPurchaseOrdersDescription();
 
