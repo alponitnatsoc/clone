@@ -2567,7 +2567,7 @@ class BackOfficeController extends Controller
 		foreach($payrolls as $payroll){
 			$pilaPOD = $payroll->getPila();
 
-			if($pilaPOD->getProductProduct() == NULL){
+			if($pilaPOD!=null&&$pilaPOD->getProductProduct() == NULL){
 
 				$pilaPOD->setPurchaseOrdersStatus($pos);
 				$pilaPOD->setProductProduct($product);
