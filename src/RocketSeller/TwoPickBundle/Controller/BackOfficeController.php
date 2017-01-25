@@ -4106,61 +4106,61 @@ class BackOfficeController extends Controller
 
                 $editForm->handleRequest($request);
 
-                if($editForm->isSubmitted() and $editForm->isValid()){
-                    dump($editForm->get("documentStatus")->getData());
-                }
-
-                /** @var UtilsController $utils */
-                $utils = $this->get("app.symplifica_utils");
-                $name = $utils->mb_capitalize($user->getPersonPerson()->getNames());
-                $otherName = $utils->mb_normalize($user->getPersonPerson()->getNames());
-                $otherNames = $utils->normalizeAccentedChars($user->getPersonPerson()->getNames());
-                dump($name);
-                dump($otherName);
-                dump($otherNames);
-                $ehes = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
-                /** @var EmployerHasEmployee $ehe */
-                foreach ($ehes as $ehe) {
-                    if($ehe->getState()<4) continue;
-                    $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:getEmployeeEntity",array('employeeId'=>$ehe->getIdEmployerHasEmployee()),array('_format'=>'json'));
-                    if ($response->getStatusCode() != 200) {
-                        dump("not so good man");
-                    } else {
-                        $data = json_decode($response->getContent(), true);
-                        dump($data);
-                    }
-                    $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:getEmployee",array('employeeId'=>$ehe->getIdEmployerHasEmployee()),array('_format'=>'json'));
-                    if ($response->getStatusCode() != 200) {
-                        dump("not so good man");
-                    } else {
-                        $data = json_decode($response->getContent(), true);
-                        dump($data);
-                    }
-                    $nit = $ehe->getEmployerEmployer()->getPersonPerson()->getDocumentType().$ehe->getEmployerEmployer()->getPersonPerson()->getDocument();
-                    $doc = $ehe->getEmployerEmployer()->getPersonPerson()->getDocument();
-                    $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:getSociety",array('societyNit'=>$nit),array('_format'=>'json'));
-                    if ($response->getStatusCode() != 200) {
-                        dump( "not so good man");
-                    } else {
-                        if($response->getContent() == '[]'){
-                            if($this->correctSociety($user)){
-                                $newResponse = $this->forward("RocketSellerTwoPickBundle:PayrollRest:getSociety",array('societyNit'=>$doc),array('_format'=>'json'));
-                                if($newResponse->getStatusCode() != 200){
-                                    dump( "not so good man");
-                                }else {
-                                    $data = json_decode($response->getContent(), true);
-                                    dump($data);
-                                }
-                            }else{
-                                dump( "not so good man");
-                            }
-                        }else{
-                            $data = json_decode($response->getContent(), true);
-                            dump($data);
-                        }
-
-                    }
-                }
+//                if($editForm->isSubmitted() and $editForm->isValid()){
+//                    dump($editForm->get("documentStatus")->getData());
+//                }
+//
+//                /** @var UtilsController $utils */
+//                $utils = $this->get("app.symplifica_utils");
+//                $name = $utils->mb_capitalize($user->getPersonPerson()->getNames());
+//                $otherName = $utils->mb_normalize($user->getPersonPerson()->getNames());
+//                $otherNames = $utils->normalizeAccentedChars($user->getPersonPerson()->getNames());
+//                dump($name);
+//                dump($otherName);
+//                dump($otherNames);
+//                $ehes = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+//                /** @var EmployerHasEmployee $ehe */
+//                foreach ($ehes as $ehe) {
+//                    if($ehe->getState()<4) continue;
+//                    $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:getEmployeeEntity",array('employeeId'=>$ehe->getIdEmployerHasEmployee()),array('_format'=>'json'));
+//                    if ($response->getStatusCode() != 200) {
+//                        dump("not so good man");
+//                    } else {
+//                        $data = json_decode($response->getContent(), true);
+//                        dump($data);
+//                    }
+//                    $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:getEmployee",array('employeeId'=>$ehe->getIdEmployerHasEmployee()),array('_format'=>'json'));
+//                    if ($response->getStatusCode() != 200) {
+//                        dump("not so good man");
+//                    } else {
+//                        $data = json_decode($response->getContent(), true);
+//                        dump($data);
+//                    }
+//                    $nit = $ehe->getEmployerEmployer()->getPersonPerson()->getDocumentType().$ehe->getEmployerEmployer()->getPersonPerson()->getDocument();
+//                    $doc = $ehe->getEmployerEmployer()->getPersonPerson()->getDocument();
+//                    $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:getSociety",array('societyNit'=>$nit),array('_format'=>'json'));
+//                    if ($response->getStatusCode() != 200) {
+//                        dump( "not so good man");
+//                    } else {
+//                        if($response->getContent() == '[]'){
+//                            if($this->correctSociety($user)){
+//                                $newResponse = $this->forward("RocketSellerTwoPickBundle:PayrollRest:getSociety",array('societyNit'=>$doc),array('_format'=>'json'));
+//                                if($newResponse->getStatusCode() != 200){
+//                                    dump( "not so good man");
+//                                }else {
+//                                    $data = json_decode($response->getContent(), true);
+//                                    dump($data);
+//                                }
+//                            }else{
+//                                dump( "not so good man");
+//                            }
+//                        }else{
+//                            $data = json_decode($response->getContent(), true);
+//                            dump($data);
+//                        }
+//
+//                    }
+//                }
 
             }
 
