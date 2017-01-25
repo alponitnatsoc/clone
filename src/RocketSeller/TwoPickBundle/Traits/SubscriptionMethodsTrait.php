@@ -164,10 +164,19 @@ trait SubscriptionMethodsTrait
             $endDate = $actContract->getEndDate();
             $employee = $eHE->getEmployeeEmployee();
             $employeePerson = $employee->getPersonPerson();
+            $calType=-1;
             if ($actContract->getTimeCommitmentTimeCommitment()->getCode() == "TC") {
                 $payroll_type = 4;
                 $value = $actContract->getSalary();
-                $wokableDaysWeek = 6;
+                $worksSats = $actContract->getWorksSaturday();
+                if($worksSats==1){
+                    $wokableDaysWeek = 6;
+                    $calType=2;
+                }
+                else{
+                    $wokableDaysWeek = 5;
+                    $calType=1;
+                }
             } elseif($actContract->getTimeCommitmentTimeCommitment()->getCode() == "XD") {
                 $payroll_type = 6;
                 $value = $actContract->getSalary() / $actContract->getWorkableDaysMonth();
@@ -214,6 +223,11 @@ trait SubscriptionMethodsTrait
             if ($endDate != null) {
                 $request->request->add(array(
                     "last_contract_end_date" => $endDate->format("d-m-Y")
+                ));
+            }
+            if ($calType != -1) {
+                $request->request->add(array(
+                    "cal_type" => $calType
                 ));
             }
             $today = new DateTime();
@@ -686,10 +700,7 @@ trait SubscriptionMethodsTrait
                     ));
                     $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('request' => $request ), array('_format' => 'json'));
                     if ($insertionAnswer->getStatusCode() != 200) {
-                        echo "Cago insertar entidad AFP " . $eHE->getIdEmployerHasEmployee() . " SC" . $insertionAnswer->getStatusCode();
-                        die();
-                        $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
-                        return $view;
+                        return false;
                     }
                 }
                 if ($eType->getPayrollCode() == "FCES") {

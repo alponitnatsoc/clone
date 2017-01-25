@@ -4,8 +4,10 @@ namespace RocketSeller\TwoPickBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use Doctrine\DBAL\Schema\Table;
+use Doctrine\ORM\LazyCriteriaCollection;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use PHPExcel_Style_Border;
 use RocketSeller\TwoPickBundle\Entity\Configuration;
@@ -20,8 +22,10 @@ use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
 use RocketSeller\TwoPickBundle\Entity\LandingRegistration;
+use RocketSeller\TwoPickBundle\Entity\Log;
 use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\Novelty;
+use RocketSeller\TwoPickBundle\Entity\NoveltyType;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Phone;
@@ -38,12 +42,12 @@ use RocketSeller\TwoPickBundle\Form\addDocument;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Entity\ActionError;
 use RocketSeller\TwoPickBundle\Entity\Action;
 use RocketSeller\TwoPickBundle\Traits\SubscriptionMethodsTrait;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use GuzzleHttp\Client;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use DateTime;
 use Doctrine\ORM\QueryBuilder;
@@ -2121,7 +2125,10 @@ class BackOfficeController extends Controller
         $em = $this->getDoctrine()->getManager();
         if($name=='' and $lastName=='' and $document=='' and $documentType=='' and $email=='' and $highTech=='' and $sql=='' and $ehe == null and $pay=='' and $phone==''
             and $contract=='' and $join=='' and $period=='' and $paid==''){
-            return $this->render('RocketSellerTwoPickBundle:BackOffice:userView.html.twig',array('form'=>$form->createView(),'users'=>$em->getRepository("RocketSellerTwoPickBundle:User")->find(0)));
+            return $this->render('RocketSellerTwoPickBundle:BackOffice:userView.html.twig',array(
+                'form'=>$form->createView(),
+                'users'=>$em->getRepository("RocketSellerTwoPickBundle:User")->find(0)
+            ));
         }else{
             /** @var QueryBuilder $query */
             $query = $em->createQueryBuilder();
@@ -2156,7 +2163,7 @@ class BackOfficeController extends Controller
             if($name!= ''){
                 $strex = explode(' ',$name);
                 foreach ($strex as $str) {
-                    $sbstrs = $this->getAllStrings($str);
+                    $sbstrs = $this->get("app.symplifica_utils")->getAllStrings($str);
                     foreach ($sbstrs as $sbstr) {
                         $query->andWhere($query->expr()->orX(
                             $query->expr()->like("pe.names","?1"),
@@ -2169,7 +2176,7 @@ class BackOfficeController extends Controller
             if($lastName!=''){
                 $strex = explode(' ',$lastName);
                 foreach ($strex as $str) {
-                    $sbstrs = $this->getAllStrings($str);
+                    $sbstrs = $this->get("app.symplifica_utils")->getAllStrings($str);
                     foreach ($sbstrs as $sbstr) {
                         $query->andWhere($query->expr()->orX(
                             $query->expr()->like("pe.lastName1","?2"),
@@ -2280,7 +2287,7 @@ class BackOfficeController extends Controller
                 $users = $paginator->getIterator();
             }
             if($results > 20){
-                $this->addFlash('alert_message',"La query obtuvo ".$results." resultados.");
+                $this->addFlash('success',"La query obtuvo ".$results." resultados.");
             }
             return $this->render('RocketSellerTwoPickBundle:BackOffice:userView.html.twig',array(
                 'form'=>$form->createView(),
@@ -2303,117 +2310,6 @@ class BackOfficeController extends Controller
                 'maxIndex'=>intval($maxIndex),
                 ));
         }
-    }
-
-    public function getAllStrings($str){
-        $strs = array();
-        $strs[]=$str;
-        if(count(explode('a',$str))>1){
-            if(count(explode('a',$str))>2){
-                $count = count(explode('a',$str));
-                $sbstr = explode('a',$str);
-                $fstr2 = $sbstr[0];
-                for($i = 1; $i<$count;$i++){
-                    for($j = 1; $j<$count;$j++){
-                        if($j==$i){
-                            $fstr2.='á'.$sbstr[$j];
-                        }else{
-                            $fstr2.='a'.$sbstr[$j];
-                        }
-                    }
-                    $strs[]=$fstr2;
-                    $fstr2 = $sbstr[0];
-                }
-            }else{
-                $sbstr = explode('a',$str);
-                $strs[]=$sbstr[0].'á'.$sbstr[1];
-            }
-        }
-        if(count(explode('e',$str))>1){
-            if(count(explode('e',$str))>2){
-                $count = count(explode('e',$str));
-                $sbstr = explode('e',$str);
-                $fstr2 = $sbstr[0];
-                for($i = 1; $i<$count;$i++){
-                    for($j = 1; $j<$count;$j++){
-                        if($j==$i){
-                            $fstr2.='é'.$sbstr[$j];
-                        }else{
-                            $fstr2.='e'.$sbstr[$j];
-                        }
-                    }
-                    $strs[]=$fstr2;
-                    $fstr2 = $sbstr[0];
-                }
-            }else{
-                $sbstr = explode('e',$str);
-                $strs[]=$sbstr[0].'é'.$sbstr[1];
-            }
-        }
-        if(count(explode('i',$str))>1){
-            if(count(explode('i',$str))>2){
-                $count = count(explode('i',$str));
-                $sbstr = explode('i',$str);
-                $fstr2 = $sbstr[0];
-                for($i = 1; $i<$count;$i++){
-                    for($j = 1; $j<$count;$j++){
-                        if($j==$i){
-                            $fstr2.='í'.$sbstr[$j];
-                        }else{
-                            $fstr2.='i'.$sbstr[$j];
-                        }
-                    }
-                    $strs[]=$fstr2;
-                    $fstr2 = $sbstr[0];
-                }
-            }else{
-                $sbstr = explode('i',$str);
-                $strs[]=$sbstr[0].'í'.$sbstr[1];
-            }
-        }
-        if(count(explode('o',$str))>1){
-            if(count(explode('o',$str))>2){
-                $count = count(explode('o',$str));
-                $sbstr = explode('o',$str);
-                $fstr2 = $sbstr[0];
-                for($i = 1; $i<$count;$i++){
-                    for($j = 1; $j<$count;$j++){
-                        if($j==$i){
-                            $fstr2.='ó'.$sbstr[$j];
-                        }else{
-                            $fstr2.='o'.$sbstr[$j];
-                        }
-                    }
-                    $strs[]=$fstr2;
-                    $fstr2 = $sbstr[0];
-                }
-            }else{
-                $sbstr = explode('o',$str);
-                $strs[]=$sbstr[0].'ó'.$sbstr[1];
-            }
-        }
-        if(count(explode('u',$str))>1){
-            if(count(explode('u',$str))>2){
-                $count = count(explode('u',$str));
-                $sbstr = explode('u',$str);
-                $fstr2 = $sbstr[0];
-                for($i = 1; $i<$count;$i++){
-                    for($j = 1; $j<$count;$j++){
-                        if($j==$i){
-                            $fstr2.='ú'.$sbstr[$j];
-                        }else{
-                            $fstr2.='u'.$sbstr[$j];
-                        }
-                    }
-                    $strs[]=$fstr2;
-                    $fstr2 = $sbstr[0];
-                }
-            }else{
-                $sbstr = explode('u',$str);
-                $strs[]=$sbstr[0].'ú'.$sbstr[1];
-            }
-        }
-        return $strs;
     }
 
 	public function userBackOfficeStateAction(){
@@ -2761,7 +2657,6 @@ class BackOfficeController extends Controller
 		}
 	}
 
-
     public function fixNotificationPayNotificationIdAction(){
 		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
 
@@ -2865,7 +2760,7 @@ class BackOfficeController extends Controller
         return $this->redirectToRoute('back_office');
     }
 
-		public function personalInfoViewAction()
+    public function personalInfoViewAction()
 		{
 			$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
 
@@ -3342,7 +3237,7 @@ class BackOfficeController extends Controller
         $formEmailGroups->handleRequest($request);
 
         if ($formEmailGroups->isValid() and $formEmailGroups->isSubmitted()) {
-            if($this->checkFile($formEmailGroups->get('document')->getData())){
+            if($this->checkFile($formEmailGroups->get('document')->getData(),'emailGroup')['response']){
                 $this->addFlash('success_import','Se importo correctamente el archivo.');
             }else{
                 $this->addFlash('fail_import','Ocurrió un error o el archivo no cumple con el formato requerido.');
@@ -3397,10 +3292,14 @@ class BackOfficeController extends Controller
         ));
     }
 
-    private function checkFile($file){
+    private function checkFile($file,$tipe){
         if (!file_exists('uploads/Files/TempFiles')) {
             mkdir('uploads/Files/TempFiles', 0777, true);
         }
+        $errors = array();
+        $errors["ehes"]=array();
+        $errors["contracts"]=array();
+        $change = false;
         $em = $this->getDoctrine()->getManager();
         $absPath = getcwd();
         $tempFile = $file;
@@ -3415,46 +3314,956 @@ class BackOfficeController extends Controller
             /** @var \PHPExcel_Worksheet_Row $row */
             foreach ($worksheet->getRowIterator() as $row) {
                 $rowCount= $row->getRowIndex();
-                if($rowCount==2){
-                    if(!($worksheet->getCellByColumnAndRow(0, $rowCount)->getValue() == 'ID' and
-                        $worksheet->getCellByColumnAndRow(1, $rowCount)->getValue() == 'GRUPO' and
-                        $worksheet->getCellByColumnAndRow(2, $rowCount)->getValue() == 'NOMBRE' and
-                        $worksheet->getCellByColumnAndRow(3, $rowCount)->getValue() == 'TIPO_DOC' and
-                        $worksheet->getCellByColumnAndRow(4, $rowCount)->getValue() == 'DOCUMENTO' and
-                        $worksheet->getCellByColumnAndRow(5, $rowCount)->getValue() == 'EMAIL')){
-                        unlink('uploads/Files/Tempfiles'.'/'.$fileName);
-                        return false;
+                if($worksheet->getCellByColumnAndRow(0,$rowCount)->getValue()!=null and $worksheet->getCellByColumnAndRow(0,$rowCount)->getValue()!=''){
+                    switch ($tipe){
+                        case 'emailGroup':
+                            if($rowCount==2){
+                                if(!($worksheet->getCellByColumnAndRow(0, $rowCount)->getValue() == 'ID' and
+                                    $worksheet->getCellByColumnAndRow(1, $rowCount)->getValue() == 'GRUPO' and
+                                    $worksheet->getCellByColumnAndRow(2, $rowCount)->getValue() == 'NOMBRE' and
+                                    $worksheet->getCellByColumnAndRow(3, $rowCount)->getValue() == 'TIPO_DOC' and
+                                    $worksheet->getCellByColumnAndRow(4, $rowCount)->getValue() == 'DOCUMENTO' and
+                                    $worksheet->getCellByColumnAndRow(5, $rowCount)->getValue() == 'EMAIL')){
+                                    unlink('uploads/Files/Tempfiles'.'/'.$fileName);
+                                    return array('response'=>false,'errors'=>$errors);
+                                }
+                            }
+                            if ($rowCount > 2) {
+                                $groupName = $worksheet->getCellByColumnAndRow(1, $rowCount)->getValue();
+                                $fullName = $worksheet->getCellByColumnAndRow(2, $rowCount)->getValue();
+                                $docType = $worksheet->getCellByColumnAndRow(3, $rowCount)->getValue();
+                                $docNum = $worksheet->getCellByColumnAndRow(4, $rowCount)->getValue();
+                                $email = $worksheet->getCellByColumnAndRow(5, $rowCount)->getValue();
+                                $group = $em->getRepository('RocketSellerTwoPickBundle:EmailGroup')->findOneBy(array('name'=>$groupName));
+                                if(!$group){
+                                    $group = new EmailGroup();
+                                    $group->setName($groupName);
+                                    $em->persist($group);
+                                    $em->flush();
+                                }
+                                $emailInfo = $em->getRepository("RocketSellerTwoPickBundle:EmailInfo")->findOneBy(array("documentType"=>$docType,"document"=>$docNum,"emailGroup"=>$group));
+                                if(!$emailInfo){
+                                    $emailInfo = new EmailInfo();
+                                    $emailInfo->setName($fullName);
+                                    $emailInfo->setDocumentType($docType);
+                                    $emailInfo->setDocument($docNum);
+                                    $emailInfo->setEmail($email);
+                                    $emailInfo->setEmailGroup($group);
+                                    $em->persist($emailInfo);
+                                    $em->flush();
+                                }
+                            }
+                            break;
+                        case 'fullTimeCalendar':
+                            if($rowCount==2){
+                                if(!($worksheet->getCellByColumnAndRow(0, $rowCount)->getValue() == 'Nº' and
+                                    $worksheet->getCellByColumnAndRow(1, $rowCount)->getValue() == 'NOMBRE_EMPLEADOR' and
+                                    $worksheet->getCellByColumnAndRow(2, $rowCount)->getValue() == 'TELEFONO' and
+                                    $worksheet->getCellByColumnAndRow(3, $rowCount)->getValue() == 'TIPO_DOC' and
+                                    $worksheet->getCellByColumnAndRow(4, $rowCount)->getValue() == 'DOCUMENTO' and
+                                    $worksheet->getCellByColumnAndRow(5, $rowCount)->getValue() == 'NOMBRE_EMPLEADO' and
+                                    $worksheet->getCellByColumnAndRow(6, $rowCount)->getValue() == 'TIPO_DOC_EMPLEADO' and
+                                    $worksheet->getCellByColumnAndRow(7, $rowCount)->getValue() == 'DOCUMENTO_EMPLEADO' and
+                                    $worksheet->getCellByColumnAndRow(8, $rowCount)->getValue() == 'SABADO')){
+                                    unlink('uploads/Files/Tempfiles'.'/'.$fileName);
+                                    return array('response'=>false,'errors'=>$errors);
+                                }
+                            }
+                            if ($rowCount > 2) {
+                                $docType = $worksheet->getCellByColumnAndRow(3, $rowCount)->getValue();
+                                $docNum = $worksheet->getCellByColumnAndRow(4, $rowCount)->getValue();
+                                $eDocType = $worksheet->getCellByColumnAndRow(6, $rowCount)->getValue();
+                                $eDocNum = $worksheet->getCellByColumnAndRow(7, $rowCount)->getValue();
+                                $saturday = $worksheet->getCellByColumnAndRow(8, $rowCount)->getValue();
+                                $person = $em->getRepository("RocketSellerTwoPickBundle:Person")->findOneBy(array(
+                                    'documentType'=>$docType,
+                                    'document'=>$docNum,));
+                                $ePerson = $em->getRepository("RocketSellerTwoPickBundle:Person")->findOneBy(array(
+                                    'documentType'=>$eDocType,
+                                    'document'=>$eDocNum,
+                                ));
+                                $employer = $em->getRepository("RocketSellerTwoPickBundle:Employer")->findOneBy(array(
+                                    'personPerson'=>$person));
+                                $employee = $em->getRepository("RocketSellerTwoPickBundle:Employee")->findOneBy(array(
+                                    'personPerson'=>$ePerson));
+                                $criteria =Criteria::create()->where(Criteria::expr()->andX(
+                                    Criteria::expr()->eq('employerEmployer',$employer),
+                                    Criteria::expr()->eq('employeeEmployee',$employee),
+                                    Criteria::expr()->gte('state',4)
+                                ));
+                                /** @var EmployerHasEmployee $ehe */
+                                $ehe = $em->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")->matching($criteria)->first();
+                                if($ehe){
+                                    /** @var Contract $activeContract */
+                                    $activeContract = $ehe->getActiveContract();
+                                    $workSaturday = $activeContract->getWorksSaturday();
+                                    if($saturday=='S'){
+                                        $activeContract->setWorksSaturday(1);
+                                    }else{
+                                        $activeContract->setWorksSaturday(0);
+                                    }
+                                    if($workSaturday!=$activeContract->getWorksSaturday()){
+                                        $calType = ($activeContract->getWorksSaturday()==1)? 2 : 1;
+                                        $request = new Request();
+                                        $request->setMethod('POST');
+                                        $request->request->add(array(
+                                            'cal_type'=>$calType,
+                                            'employee_id'=>$ehe->getIdEmployerHasEmployee()
+                                        ));
+                                        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postModifyEmployee',
+                                            array('request' => $request ), array('_format' => 'json'));
+                                        if ($insertionAnswer->getStatusCode() != 200) {
+                                            $errors['contracts'][]=array(
+                                                'contract'=>$activeContract->getIdContract(),
+                                                'ehe'=>$activeContract->getEmployerHasEmployeeEmployerHasEmployee()->getIdEmployerHasEmployee(),
+                                                );
+                                        }else{
+                                            $change = true;
+                                            $em->persist($activeContract);
+                                        }
+                                    }
+                                }else{
+                                    if($employee and $employer){
+                                        $errors['ehes'][]=array(
+                                            'personID'=>$person->getIdPerson(),
+                                            'ePersonID'=>$ePerson->getIdPerson(),
+                                            'employerID'=>$employer->getIdEmployer(),
+                                            'employeeID'=>$employee->getIdEmployee());
+                                    } else {
+                                        $errors['ehes'][]=array(
+                                            'personID'=>$person->getIdPerson(),
+                                            'ePersonID'=>$ePerson->getIdPerson());
+                                    }
+                                }
+                            }
+                            break;
                     }
+
                 }
-                if ($rowCount > 2) {
-                    $groupName = $worksheet->getCellByColumnAndRow(1, $rowCount)->getValue();
-                    $fullName = $worksheet->getCellByColumnAndRow(2, $rowCount)->getValue();
-                    $docType = $worksheet->getCellByColumnAndRow(3, $rowCount)->getValue();
-                    $docNum = $worksheet->getCellByColumnAndRow(4, $rowCount)->getValue();
-                    $email = $worksheet->getCellByColumnAndRow(5, $rowCount)->getValue();
-                    $group = $em->getRepository('RocketSellerTwoPickBundle:EmailGroup')->findOneBy(array('name'=>$groupName));
-                    if(!$group){
-                        $group = new EmailGroup();
-                        $group->setName($groupName);
-                        $em->persist($group);
-                        $em->flush();
-                    }
-                    $emailInfo = $em->getRepository("RocketSellerTwoPickBundle:EmailInfo")->findOneBy(array("documentType"=>$docType,"document"=>$docNum,"emailGroup"=>$group));
-                    if(!$emailInfo){
-                        $emailInfo = new EmailInfo();
-                        $emailInfo->setName($fullName);
-                        $emailInfo->setDocumentType($docType);
-                        $emailInfo->setDocument($docNum);
-                        $emailInfo->setEmail($email);
-                        $emailInfo->setEmailGroup($group);
-                        $em->persist($emailInfo);
-                        $em->flush();
+
+            }
+            if($change) $em->flush();
+            unlink('uploads/Files/Tempfiles'.'/'.$fileName);
+            return array('response'=>true,'errors'=>$errors);
+        }
+    }
+
+    public function fullTimeCalendarViewAction(Request $request)
+    {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        $em = $this->getDoctrine()->getManager();
+
+        $formFullTimeCalendar= $this->createForm(new addDocument());
+        $formFullTimeCalendar
+            ->add('upload',"submit",array("label"=>"Importar"));
+        $formFullTimeCalendar['type']->setData('fullTimeCalendar');
+        $formFullTimeCalendar->handleRequest($request);
+
+        if ($formFullTimeCalendar->isValid() and $formFullTimeCalendar->isSubmitted()) {
+            $ans = $this->checkFile($formFullTimeCalendar->get('document')->getData(),'fullTimeCalendar');
+            if($ans['response']){
+                $this->addFlash('success_import','Se importo correctamente el archivo.');
+                foreach ($ans["errors"]['ehes'] as $error) {
+                    $this->addFlash('fail_import','Error ehe con idPerson: '.$error['personID'].' y idEPerson: '.$error['ePersonID']);
+                }
+                foreach ($ans['errors']['contracts'] as $errorContract) {
+                    $this->addFlash('fail_import', "Fallo modificando el contrato: " . $errorContract['contract'] . " con ehe: " . $errorContract['ehe']);
+                }
+            }else{
+                $this->addFlash('fail_import','Ocurrió un error o el archivo no cumple con el formato requerido.');
+
+            }
+        }
+        /** @var QueryBuilder $query */
+        $query = $em->createQueryBuilder();
+        $query->add('select','con');
+        $query->from("RocketSellerTwoPickBundle:Contract",'con')
+            ->join("con.employerHasEmployeeEmployerHasEmployee",'ehe')
+            ->join("ehe.employerEmployer",'er')
+            ->join("ehe.employeeEmployee",'ee')
+            ->join("ee.personPerson",'eep')
+            ->join('er.personPerson','erp')
+            ->join("con.timeCommitmentTimeCommitment",'tc')
+            ->join("RocketSellerTwoPickBundle:User",'u','WITH','u.personPerson=erp.idPerson')
+            ->where("ehe.state>=4")
+            ->andWhere("con.state=1")
+            ->andWhere("tc.code='TC'")
+            ->orderBy("u.id",'ASC');
+        $contracts = $query->getQuery()->getResult();
+        return $this->render("RocketSellerTwoPickBundle:BackOffice:fullTimeCalendarInfo.html.twig",array(
+            'formFullTimeCalendar'=>$formFullTimeCalendar->createView(),
+            'contracts'=>$contracts
+        ));
+    }
+
+    public function modifyNoveltiesInfoAction($name,$lastName,$contract,$documentType,$document,$email,$index,Request $request){
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        if($name == "#")$name = '';
+        if($lastName == "#")$lastName = '';
+        if($contract == "#")$contract = '';
+        if($documentType =='#')$documentType = '';
+        if($document =='#')$document = '';
+        if($email =='#')$email = '';
+        $form = $this->get('form.factory')->createNamedBuilder('formFilter')
+            ->add('name','text',array('label'=>'Nombres:','required'=>false))
+            ->add('lastName','text',array('label'=>'Apellidos:','required'=>false))
+            ->add('contract','text',array('label'=>'Id Contrato:','required'=>false))
+            ->add('documentType','choice', array('label'=>'Tipo Documento:','expanded'=>false,'multiple'=>false,'placeholder' => 'tipo','required'=>false,
+                'choices' => array(
+                    'CC'=> 'Cédula',
+                    'CE' => 'Cédula de Extranjeria',
+                    'PASAPORTE' => 'Pasaporte',
+                )))
+            ->add('document','text',array('label'=>'No. Documento:','required'=>false))
+            ->add('email','text',array('label'=>'Email:','required'=>false))
+            ->add('search','submit',array('label' => 'Buscar'))->getForm();
+        if($name!='')
+            $form->get('name')->setData($name);
+        if($lastName!='')
+            $form->get('lastName')->setData($lastName);
+        if($contract!='')
+            $form->get('contract')->setData($contract);
+        if($documentType!='')
+            $form->get('documentType')->setData($documentType);
+        if($document!='')
+            $form->get('document')->setData($document);
+        if($email!='')
+            $form->get('email')->setData($email);
+        $form->handleRequest($request);
+        if($form->isSubmitted() and $form->isValid()){
+            $index = 1;
+            $name = $form->get('name')->getData();
+            $lastName = $form->get('lastName')->getData();
+            $contract = intval($form->get('contract')->getData());
+            $document = $form->get('document')->getData();
+            $documentType = $form->get('documentType')->getData();
+            $email = $form->get('email')->getData();
+        }
+        $em = $this->getDoctrine()->getManager();
+        if($name=='' and $lastName=='' and $contract=='' and $document=='' and $documentType=='' and $email==''){
+            return $this->render('RocketSellerTwoPickBundle:BackOffice:modifyNoveltiesView.html.twig',array(
+                'form'=>$form->createView(),
+                'contracts'=>array(),
+                'maxIndex'=>intval(1)));
+        }else{
+            /** @var QueryBuilder $query */
+            $query = $em->createQueryBuilder();
+            $query->add('select', 'c');
+
+            $query->from("RocketSellerTwoPickBundle:Contract",'c')
+                ->leftJoin("c.payrolls",'p')
+                ->leftJoin("p.sqlNovelties",'nov')
+                ->leftJoin("p.purchaseOrdersDescription",'pod')
+                ->leftJoin("c.employerHasEmployeeEmployerHasEmployee",'ehe')
+                ->leftJoin("ehe.employerEmployer",'er')
+                ->leftJoin("ehe.employeeEmployee",'ee')
+                ->leftJoin("er.personPerson",'pe')
+                ->leftJoin("ee.personPerson",'ep')
+                ->leftJoin("RocketSellerTwoPickBundle:User",'u','WITH','pe.idPerson = u.personPerson');
+            if($name!= ''){
+                $strex = explode(' ',$name);
+                foreach ($strex as $str) {
+                    $sbstrs = $this->get("app.symplifica_utils")->getAllStrings($str);
+                    foreach ($sbstrs as $sbstr) {
+                        $query->andWhere($query->expr()->orX(
+                            $query->expr()->like("pe.names","?1"),
+                            $query->expr()->like("ep.names","?1")
+                        ))
+                            ->setParameter('1',"%".$sbstr."%");
                     }
                 }
             }
-            unlink('uploads/Files/Tempfiles'.'/'.$fileName);
-            return true;
+            if($lastName!=''){
+                $strex = explode(' ',$lastName);
+                foreach ($strex as $str) {
+                    $sbstrs = $this->get("app.symplifica_utils")->getAllStrings($str);
+                    foreach ($sbstrs as $sbstr) {
+                        $query->andWhere($query->expr()->orX(
+                            $query->expr()->like("pe.lastName1","?2"),
+                            $query->expr()->like("ep.lastName1","?2"),
+                            $query->expr()->like("pe.lastName2","?2"),
+                            $query->expr()->like("ep.lastName2","?2")
+                        ))
+                            ->setParameter('2',"%".$sbstr."%");
+                    }
+                }
+            }
+            if($contract!=''){
+                $query->andWhere($query->expr()->orX(
+                    $query->expr()->eq("c.idContract","?1")
+                ))
+                    ->setParameter('1',$contract);
+            }
+            if($document!=''){
+                $query->andWhere($query->expr()->orX(
+                    $query->expr()->like("pe.document","?2"),
+                    $query->expr()->like("ep.document","?2"),
+                    $query->expr()->like("pe.document","?2"),
+                    $query->expr()->like("ep.document","?2")
+                ))
+                    ->setParameter('2',"%".$document."%");
+            }
+            if($email!=''){
+                $query->andWhere($query->expr()->orX(
+                    $query->expr()->like("u.email","?3")
+                ))
+                    ->setParameter('3',"%".$email."%");
+            }
+            if($documentType!=''){
+                $query->andWhere($query->expr()->orX(
+                    $query->expr()->like("pe.documentType","?4"),
+                    $query->expr()->like("ep.documentType","?4")
+                ))
+                    ->setParameter('4',"%".$documentType."%");
+            }
+            $query->addOrderBy('c.idContract','ASC');
+            $maxIndex = 1;
+            $results = count($query->getQuery()->getResult());
+            if($results==0){
+                $this->addFlash('fail',"No se encontraron resultados para esta busqueda.");
+            }
+            if($results%10!=0){
+                $maxIndex = intval($results/10)+1;
+            }else{
+                $maxIndex = intval($results/10);
+            }
+            if($index==1){
+                $query->setFirstResult(0);
+                $query->setMaxResults(10);
+                $paginator = new Paginator($query,$fetchJoinCollection = true);
+                $contracts = $paginator->getIterator();
+            }else{
+                $query->setFirstResult(($index-1)*10);
+                $query->setMaxResults(10);
+                $paginator = new Paginator($query,$fetchJoinCollection = true);
+                $contracts = $paginator->getIterator();
+            }
+            if($results > 10)
+                $this->addFlash('success',"La query obtuvo ".$results." resultados.");
+
+            return $this->render("RocketSellerTwoPickBundle:BackOffice:modifyNoveltiesView.html.twig",array(
+                'form'=>$form->createView(),
+                'contracts'=>$contracts,
+                'index'=>intval($index),
+                'name'=>$name,
+                'lastName'=>$lastName,
+                'contract'=>$contract,
+                'document'=>$document,
+                'documentType'=>$documentType,
+                'email'=>$email,
+                'maxIndex'=>intval($maxIndex),
+            ));
         }
+    }
+
+    public function modifyPayrollAction($idPayroll,$noveltiesHadChanged = false,$executed = false,Request $request){
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        if($idPayroll==0)
+            return $this->createNotFoundException();
+        $em = $this->getDoctrine()->getManager();
+        /** @var Payroll $payroll */
+        $payroll = $em->getRepository("RocketSellerTwoPickBundle:Payroll")->find($idPayroll);
+        $novelties = $payroll->getSqlNovelties();
+        $noveltiesForms = array();
+        $noveltiesFormsViews = array();
+        /** @var Novelty $novelty */
+        foreach ($novelties as $novelty) {
+            $noveltyForm = $this->get("form.factory")->createNamedBuilder("form_edit_novelty_".$novelty->getIdNovelty())
+                ->add('idNovelty','text',array(
+                    'required'=>true,
+                    'disabled'=>true,
+                    'label'=>false,
+                ))
+                ->add('noveltyType','entity',array(
+                    'label'=>false,
+                    'placeholder'=>'Seleccionar',
+                    'class'=>'RocketSellerTwoPickBundle:NoveltyType',
+                    'choice_label'=>'name',
+                    'multiple'=>false,
+                    'expanded'=>false,
+                    'required'=>true,
+                ))
+                ->add('units','text',array(
+                    'label'=>false,
+                    'required'=>true,
+                ))
+                ->add('value','text',array(
+                    'label'=>false,
+                    'required'=>true,
+                ))
+                ->add('submit','submit',array(
+                    'label'=>'Guardar'
+                ))
+                ->getForm();
+            $noveltyForm->get("idNovelty")->setData($novelty->getIdNovelty());
+            $noveltyForm->get("noveltyType")->setData($novelty->getNoveltyTypeNoveltyType());
+            $noveltyForm->get("units")->setData(intval($novelty->getUnits()));
+            $noveltyForm->get("value")->setData(floatval($novelty->getSqlValue()));
+
+            $noveltiesForms[$novelty->getIdNovelty()]=$noveltyForm;
+        }
+        foreach ($noveltiesForms as $noveltyForm) {
+            $noveltyForm->handleRequest($request);
+            if($noveltyForm->isValid() and $noveltyForm->isSubmitted()){
+                $noveltyHasChanged = false;
+                $idNovelty = $noveltyForm->get("idNovelty")->getData();
+                /** @var Novelty $actualNovelty */
+                $actualNovelty = $em->getRepository("RocketSellerTwoPickBundle:Novelty")->find($idNovelty);
+                /** @var NoveltyType $noveltyType */
+                $noveltyType = $noveltyForm->get("noveltyType")->getData();
+                $units = intval($noveltyForm->get("units")->getData());
+                $value = floatval($noveltyForm->get("value")->getData());
+                if($actualNovelty->getNoveltyTypeNoveltyType()!=$noveltyType){
+                    $log =  new Log($this->getUser(),"Novelty",'noveltyType',$idNovelty,$actualNovelty->getNoveltyTypeNoveltyType()->getIdNoveltyType(),$noveltyType->getIdNoveltyType(),"Se cambió el tipo de novedad");
+                    $actualNovelty->setNoveltyTypeNoveltyType($noveltyType);
+                    $em->persist($actualNovelty);
+                    $em->persist($log);
+                    $em->flush();
+                    $noveltyHasChanged = true;
+                    $noveltiesHadChanged = true;
+                }
+                if($actualNovelty->getUnits()!=$units){
+                    $log =  new Log($this->getUser(),"Novelty",'units',$idNovelty,$actualNovelty->getUnits(),$units,"Se cambiaron las unidades de una novedad");
+                    $actualNovelty->setUnits($units);
+                    $em->persist($actualNovelty);
+                    $em->persist($log);
+                    $em->flush();
+                    $noveltyHasChanged = true;
+                    $noveltiesHadChanged = true;
+                }
+                if($actualNovelty->getSqlValue()!=$value){
+                    $log =  new Log($this->getUser(),"Novelty",'sqlValue',$idNovelty,$actualNovelty->getSqlValue(),$value,"Se cambió el valor de una novedad");
+                    $actualNovelty->setSqlValue($value);
+                    $em->persist($actualNovelty);
+                    $em->persist($log);
+                    $em->flush();
+                    $noveltyHasChanged = true;
+                    $noveltiesHadChanged = true;
+                }
+                if($noveltyHasChanged){
+                    $this->addFlash('success',"Se modificó correctamente la novedad ".$actualNovelty->getIdNovelty().".");
+                }
+            }
+            $noveltiesFormsViews[$noveltyForm->get("idNovelty")->getData()]=$noveltyForm->createView();
+        }
+        $newNoveltyForm = $this->get("form.factory")->createNamedBuilder("new_novelty")
+            ->add('noveltyType','entity',array(
+                'label'=>false,
+                'placeholder'=>'Seleccionar',
+                'class'=>'RocketSellerTwoPickBundle:NoveltyType',
+                'choice_label'=>'name',
+                'multiple'=>false,
+                'expanded'=>false,
+                'required'=>true,
+            ))
+            ->add('units','text',array(
+                'label'=>false,
+                'required'=>true,
+            ))
+            ->add('value','text',array(
+                'label'=>false,
+                'required'=>true,
+            ))
+            ->add('submit','submit',array(
+                'label'=>'Guardar'
+            ))
+            ->getForm();
+        $newNoveltyForm->handleRequest($request);
+        if($newNoveltyForm->isSubmitted() and $newNoveltyForm->isValid()){
+            if($payroll->getPaid()==0){
+                /** @var User $backUser */
+                $backUser = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('emailCanonical'=>'backofficesymplifica@gmail.com'));
+                $request  = new Request();
+                $request->setMethod("PUT");
+                $request->request->add(array(
+                    "month" => $payroll->getMonth(),
+                    "year"=>$payroll->getYear(),
+                    "period" => $payroll->getPeriod(),
+                    "day"=> ($payroll->getPeriod()==2)?16:26,
+                    "token"=>$backUser->getSalt(),
+                    "idpayroll" => $payroll->getIdPayroll()
+                ));
+                $response = $this->forward("RocketSellerTwoPickBundle:PayrollMethodRest:putAutoLiquidatePayroll",array("request"=>$request),array('_format'=>'json'));
+                if($response->getStatusCode()!=200){
+                    $this->addFlash('fail',"Error Congelando la nómina.");
+                }else{
+                    $newNovelty = new Novelty();
+                    $newNovelty->setNoveltyTypeNoveltyType($newNoveltyForm->get("noveltyType")->getData());
+                    $newNovelty->setName($newNoveltyForm->get("noveltyType")->getData()->getName());
+                    $newNovelty->setUnits(intval($newNoveltyForm->get("units")->getData()));
+                    $newNovelty->setSqlValue(floatval($newNoveltyForm->get("value")->getData()));
+                    $newNovelty->setSqlPayrollPayroll($payroll);
+                    $payroll->addSqlNovelty($newNovelty);
+                    $em->persist($newNovelty);
+                    $em->flush();
+                    $this->addFlash('success',"Se congeló correctamente la nómina.");
+                    $this->addFlash('success',"Se creo correctamente la novedad.");
+                }
+            }else{
+                $newNovelty = new Novelty();
+                $newNovelty->setNoveltyTypeNoveltyType($newNoveltyForm->get("noveltyType")->getData());
+                $newNovelty->setName($newNoveltyForm->get("noveltyType")->getData()->getName());
+                $newNovelty->setUnits(intval($newNoveltyForm->get("units")->getData()));
+                $newNovelty->setSqlValue(floatval($newNoveltyForm->get("value")->getData()));
+                $newNovelty->setSqlPayrollPayroll($payroll);
+                $payroll->addSqlNovelty($newNovelty);
+                $em->persist($newNovelty);
+                $em->flush();
+                $this->addFlash('success',"Se creo correctamente la novedad.");
+            }
+            return $this->redirectToRoute("modify_payroll",array('idPayroll'=>$payroll->getIdPayroll(),'noveltiesHadChanged'=>true,'executed'=>true),302);
+        }
+        if($noveltiesHadChanged){
+            $error = false;
+            if($payroll->getPaid()==0 and !$executed){
+                /** @var User $backUser */
+                $backUser = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('emailCanonical'=>'backofficesymplifica@gmail.com'));
+                $request  = new Request();
+                $request->setMethod("PUT");
+                $request->request->add(array(
+                    "month" => $payroll->getMonth(),
+                    "year"=>$payroll->getYear(),
+                    "period" => $payroll->getPeriod(),
+                    "day"=> ($payroll->getPeriod()==2)?16:26,
+                    "token"=>$backUser->getSalt(),
+                    "idpayroll" => $payroll->getIdPayroll()
+                ));
+                $response = $this->forward("RocketSellerTwoPickBundle:PayrollMethodRest:putAutoLiquidatePayroll",array("request"=>$request),array('_format'=>'json'));
+                if($response->getStatusCode()!=200){
+                    $this->addFlash('fail',"Error Congelando la nómina.");
+                    $error = true;
+                }else{
+                    $this->addFlash('success',"Se congeló correctamente la nómina.");
+                    return $this->redirectToRoute("modify_payroll",array('idPayroll'=>$payroll->getIdPayroll(),'noveltiesHadChanged'=>true,'executed'=>true),302);
+                }
+            }
+            if(!$error){
+                $value = 0;
+                /** @var Novelty $novelty */
+                foreach ($payroll->getSqlNovelties() as $novelty) {
+                    if($novelty->getNoveltyTypeNoveltyType()->getNaturaleza() == 'DEV'){
+                        $value += $novelty->getSqlValue();
+                    }else{
+                        $value -= $novelty->getSqlValue();
+                    }
+                }
+                /** @var PurchaseOrdersDescription $pod */
+                $pod = $payroll->getPurchaseOrdersDescription()->first();
+                if($pod!=null){
+                    $log = new Log($this->getUser(),'PurchaseOrdersDescription','value',$pod->getIdPurchaseOrdersDescription(),$pod->getValue(),$value,"Se modificó el valor del purchaseOrderDescription de la nomina con payroll ".$payroll->getIdPayroll().".");
+                    $pod->setValue($value);
+                    $em->persist($pod);
+                    $em->persist($log);
+                    $em->flush();
+                }
+            }
+        }
+
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:modifyPayrollView.html.twig',array(
+            'payroll'=>$payroll,
+            'noveltiesForms'=>$noveltiesFormsViews,
+            'noveltiesHadChanged'=>$noveltiesHadChanged,
+            'newNoveltyForm'=>$newNoveltyForm->createView(),
+            'pods'=>$payroll->getPurchaseOrdersDescription(),
+        ));
+    }
+
+    public function deleteNoveltyAction($idPayroll, $idNovelty){
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        $em = $this->getDoctrine()->getManager();
+        $novelty = $em->getRepository("RocketSellerTwoPickBundle:Novelty")->find($idNovelty);
+        if($novelty->getSqlPayrollPayroll()->getIdPayroll()==$idPayroll){
+            $em->remove($novelty);
+            $em->flush();
+            $this->addFlash('success',"Se eliminó correctamente la novedad.");
+            return $this->redirectToRoute("modify_payroll",array('idPayroll'=>$idPayroll,'noveltiesHadChanged'=>true),302);
+        }
+        return $this->redirectToRoute("modify_payroll",array('idPayroll'=>$idPayroll,'noveltiesHadChanged'=>false),302);
+    }
+
+    public function modifyContractsViewAction($contract,$documentType,$document,$email,$index,Request $request){
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        if($contract == "#")$contract = '';
+        if($documentType =='#')$documentType = '';
+        if($document =='#')$document = '';
+        if($email =='#')$email = '';
+
+        $form = $this->get('form.factory')->createNamedBuilder('formFilter')
+            ->add('contract','text',array('label'=>'Id Contrato:','required'=>false))
+            ->add('documentType','choice', array('label'=>'Tipo Documento:','expanded'=>false,'multiple'=>false,'placeholder' => 'tipo','required'=>false,
+                'choices' => array(
+                    'CC'=> 'Cédula',
+                    'CE' => 'Cédula de Extranjeria',
+                    'PASAPORTE' => 'Pasaporte',
+                )))
+            ->add('document','text',array('label'=>'No. Documento:','required'=>false))
+            ->add('email','text',array('label'=>'Email:','required'=>false))
+            ->add('search','submit',array('label' => 'Buscar'))->getForm();
+
+        if($contract!='')
+            $form->get('contract')->setData($contract);
+        if($documentType!='')
+            $form->get('documentType')->setData($documentType);
+        if($document!='')
+            $form->get('document')->setData($document);
+        if($email!='')
+            $form->get('email')->setData($email);
+        $form->handleRequest($request);
+        if($form->isSubmitted() and $form->isValid()){
+            $index = 1;
+            $contract = intval($form->get('contract')->getData());
+            $document = $form->get('document')->getData();
+            $documentType = $form->get('documentType')->getData();
+            $email = $form->get('email')->getData();
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        if($contract=='' and $document=='' and $documentType=='' and $email==''){
+            return $this->render('RocketSellerTwoPickBundle:BackOffice:modifyContractsView.html.twig',array(
+                'form'=>$form->createView(),
+                'users'=>$em->getRepository("RocketSellerTwoPickBundle:User")->find(0),
+                'maxIndex'=>intval(1)));
+        }else{
+            /** @var QueryBuilder $query */
+            $query = $em->createQueryBuilder();
+            $query->add('select', 'u');
+
+            $query->from("RocketSellerTwoPickBundle:User",'u')
+                ->leftJoin("u.personPerson",'pe')
+                ->Join("u.realProcedures",'pr')
+                ->join('pe.employer','em')
+                ->leftJoin('pe.phones','ph')
+                ->leftJoin("em.employerHasEmployees",'ehe')
+                ->leftJoin("ehe.employeeEmployee",'ee')
+                ->leftJoin("ehe.contracts",'c')
+                ->leftJoin("c.activePayroll",'ap')
+                ->leftJoin("c.payMethodPayMethod",'pm')
+                ->leftJoin("pm.payTypePayType",'pt')
+                ->leftJoin("ee.personPerson",'ep');
+
+            if($contract!=''){
+                $query->andWhere($query->expr()->orX(
+                    $query->expr()->eq("c.idContract","?1")
+                ))
+                    ->setParameter('1',$contract);
+            }
+            if($document!=''){
+                $query->andWhere($query->expr()->orX(
+                    $query->expr()->like("pe.document","?2"),
+                    $query->expr()->like("ep.document","?2"),
+                    $query->expr()->like("pe.document","?2"),
+                    $query->expr()->like("ep.document","?2")
+                ))
+                    ->setParameter('2',"%".$document."%");
+            }
+            if($email!=''){
+                $query->andWhere($query->expr()->orX(
+                    $query->expr()->like("u.email","?3")
+                ))
+                    ->setParameter('3',"%".$email."%");
+            }
+            if($documentType!=''){
+                $query->andWhere($query->expr()->orX(
+                    $query->expr()->like("pe.documentType","?4"),
+                    $query->expr()->like("ep.documentType","?4")
+                ))
+                    ->setParameter('4',"%".$documentType."%");
+            }
+            $query->addOrderBy('u.id','ASC');
+            $maxIndex = 1;
+            $results = count($query->getQuery()->getResult());
+            if($results==0){
+                $this->addFlash('fail',"El usuario tiene errores, no se puede mostrar la información.");
+            }
+            if($results%3!=0){
+                $maxIndex = intval($results/3)+1;
+            }else{
+                $maxIndex = intval($results/3);
+            }
+            if($index==1){
+                $query->setFirstResult(0);
+                $query->setMaxResults(3);
+                $paginator = new Paginator($query,$fetchJoinCollection = true);
+                $users = $paginator->getIterator();
+            }else{
+                $query->setFirstResult(($index-1)*3);
+                $query->setMaxResults(3);
+                $paginator = new Paginator($query,$fetchJoinCollection = true);
+                $users = $paginator->getIterator();
+            }
+            if($results > 3){
+                $this->addFlash('success',"La query obtuvo ".$results." resultados.");
+            }
+            $editFormViews = array();
+            $today = new DateTime();
+            /** @var User $user */
+            foreach ($users as $user) {
+                $editForm = $this->get("form.factory")->createNamedBuilder("formEditUser".$user->getId())
+                    ->add('email','email',array(
+                        'label'=>false,
+                        'disabled'=>($this->isGranted("ROLE_BACK_OFFICE"))? false : true,
+                        'required'=>false,
+                    ))
+                    ->add('enabled','choice',array(
+                        'label'=>false,
+                        'choices'=>array(
+                            '0'=>'No',
+                            '1'=>'Si',
+                            'disabled'=>($this->isGranted("ROLE_BACK_OFFICE"))? false : true,
+                        ),
+                        'placeholder'=>'Seleccionar',
+                        'required'=>false,
+                    ))
+                    ->add('code','text',array(
+                        'label'=>false,
+                        'disabled'=>($this->isGranted("ROLE_SUPER_BACK_OFFICE"))? false : true,
+                        'required'=>false,
+                    ))
+                    ->add('dataCredit','number',array(
+                        'label'=>false,
+                        'disabled'=>($this->isGranted("ROLE_BACK_OFFICE"))? false : true,
+                        'required'=>false,
+                    ))
+                    ->add('isFree','number',array(
+                        'label'=>false,
+                        'disabled'=>($this->isGranted("ROLE_BACK_OFFICE"))? false : true,
+                        'required'=>false,
+                    ))
+                    ->add('legalFlag','number',array(
+                        'label'=>false,
+                        'disabled'=>($this->isGranted("ROLE_BACK_OFFICE"))? false : true,
+                        'required'=>false,
+                    ))
+                    ->add('pay','number',array(
+                        'label'=>false,
+                        'disabled'=>($this->isGranted("ROLE_BACK_OFFICE"))? false : true,
+                        'required'=>false,
+                    ))
+                    ->add('names','text',array(
+                        'label'=>false,
+                        'disabled'=>($this->isGranted("ROLE_BACK_OFFICE"))? false : true,
+                        'required'=>false,
+                    ))
+                    ->add('lastName1','text',array(
+                        'label'=>false,
+                        'disabled'=>($this->isGranted("ROLE_BACK_OFFICE"))? false : true,
+                        'required'=>false,
+                    ))
+                    ->add('lastName2','text',array(
+                        'label'=>false,
+                        'disabled'=>($this->isGranted("ROLE_BACK_OFFICE"))? false : true,
+                        'required'=>false,
+                    ))
+                    ->add('documentType','choice',array(
+                        'label'=>false,
+                        'choices'=>array(
+                            'CC'=>'Cédula',
+                            'CE'=>'Cédula de Extranjería',
+                            'PASAPORTE'=>'Pasaporte',
+                        ),
+                        'placeholder'=>'Seleccionar',
+                        'disabled'=>($this->isGranted("ROLE_BACK_OFFICE"))? false : true,
+                        'required'=>false,
+                    ))
+                    ->add('document','text',array(
+                        'label'=>false,
+                        'required'=>false,
+                    ))
+                    ->add('expeditionDate', 'date', array(
+                        'label'=>false,
+                        'placeholder' => array(
+                            'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
+                        ),
+                        'years' => range(intval($today->format("Y")),intval($today->format("Y"))-100),
+                        'disabled'=>($this->isGranted("ROLE_BACK_OFFICE"))? false : true,
+                        'required'=>false,
+                    ))
+                    ->add('expeditionPlace','text',array(
+                        'label'=>false,
+                        'disabled'=>($this->isGranted("ROLE_BACK_OFFICE"))? false : true,
+                        'required'=>false,
+                    ))
+                    ->add('birthDate', 'date', array(
+                        'label'=>false,
+                        'placeholder' => array(
+                            'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
+                        ),
+                        'years' => range(intval($today->format("Y")),intval($today->format("Y"))-100),
+                        'disabled'=>($this->isGranted("ROLE_BACK_OFFICE"))? false : true,
+                        'required'=>false,
+                    ))
+                    ->add('gender','choice',array(
+                        'label'=>false,
+                        'choices'=>array(
+                            'MAS'=>'Masculino',
+                            'FEM'=>'Femenino',
+                        ),
+                        'placeholder'=>'Seleccionar',
+                        'disabled'=>($this->isGranted("ROLE_BACK_OFFICE"))? false : true,
+                        'required'=>false,
+                    ))
+                    ->add("mainAddress",'text',array(
+                        'label'=>false,
+                        'disabled'=>($this->isGranted("ROLE_BACK_OFFICE"))? false : true,
+                        'required'=>false,
+                    ))
+                    ->add("phone",'text',array(
+                        'label'=>false,
+                        'disabled'=>($this->isGranted("ROLE_BACK_OFFICE"))? false : true,
+                        'required'=>false,
+                    ))
+                    ->add('registerState','text',array(
+                        'label'=>false,
+                        'disabled'=>($this->isGranted("ROLE_SUPER_BACK_OFFICE"))? false : true,
+                        'required'=>false,
+                    ))
+                    ->add('documentStatus','entity',array(
+                        'label'=>false,
+                        'placeholder'=>'Seleccionar',
+                        'class'=>'RocketSellerTwoPickBundle:DocumentStatusType',
+                        'choice_label'=>'name',
+                        'multiple'=>false,
+                        'expanded'=>false,
+                        'disabled'=>($this->isGranted("ROLE_BACK_OFFICE"))? false : true,
+                        'required'=>false,
+                    ))
+                    ->add('documentsDate', 'date', array(
+                        'label'=>false,
+                        'placeholder' => array(
+                            'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
+                        ),
+                        'years' => range(intval($today->format("Y")),intval($today->format("Y"))-5),
+                        'disabled'=>($this->isGranted("ROLE_BACK_OFFICE"))? false : true,
+                        'required'=>false,
+                    ))
+                    ->add('save','submit',array('label'=>'Guardar'))
+                    ->getForm();
+                $editForm->get("email")->setData($user->getEmail());
+                $editForm->get("enabled")->setData(($user->isEnabled())?1:0);
+                $editForm->get("code")->setData($user->getCode());
+                $editForm->get("dataCredit")->setData($user->getDataCreditStatus());
+                $editForm->get("isFree")->setData($user->getIsFree());
+                $editForm->get("legalFlag")->setData($user->getLegalFlag());
+                $editForm->get("pay")->setData($user->getPaymentState());
+                $editForm->get("names")->setData($user->getPersonPerson()->getNames());
+                $editForm->get("lastName1")->setData($user->getPersonPerson()->getLastName1());
+                $editForm->get("lastName2")->setData($user->getPersonPerson()->getLastName2());
+                $editForm->get("documentType")->setData($user->getPersonPerson()->getDocumentType());
+                $editForm->get("document")->setData($user->getPersonPerson()->getDocument());
+                $editForm->get("expeditionDate")->setData($user->getPersonPerson()->getDocumentExpeditionDate());
+                $editForm->get("expeditionPlace")->setData($user->getPersonPerson()->getDocumentExpeditionPlace());
+                $editForm->get("birthDate")->setData($user->getPersonPerson()->getBirthDate());
+                $editForm->get("gender")->setData($user->getPersonPerson()->getGender());
+                $editForm->get("mainAddress")->setData($user->getPersonPerson()->getMainAddress());
+                $editForm->get("phone")->setData($user->getPersonPerson()->getPhones()->first()->getPhoneNumber());
+                $editForm->get("registerState")->setData($user->getPersonPerson()->getEmployer()->getRegisterState());
+                $editForm->get("documentStatus")->setData($user->getPersonPerson()->getEmployer()->getDocumentStatus());
+                $editForm->get("documentsDate")->setData($user->getPersonPerson()->getEmployer()->getAllDocsReadyAt());
+
+                $editFormViews[$user->getId()]['userForm']=$editForm->createView();
+
+                $editForm->handleRequest($request);
+
+//                if($editForm->isSubmitted() and $editForm->isValid()){
+//                    dump($editForm->get("documentStatus")->getData());
+//                }
+//
+//                /** @var UtilsController $utils */
+//                $utils = $this->get("app.symplifica_utils");
+//                $name = $utils->mb_capitalize($user->getPersonPerson()->getNames());
+//                $otherName = $utils->mb_normalize($user->getPersonPerson()->getNames());
+//                $otherNames = $utils->normalizeAccentedChars($user->getPersonPerson()->getNames());
+//                dump($name);
+//                dump($otherName);
+//                dump($otherNames);
+//                $ehes = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+//                /** @var EmployerHasEmployee $ehe */
+//                foreach ($ehes as $ehe) {
+//                    if($ehe->getState()<4) continue;
+//                    $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:getEmployeeEntity",array('employeeId'=>$ehe->getIdEmployerHasEmployee()),array('_format'=>'json'));
+//                    if ($response->getStatusCode() != 200) {
+//                        dump("not so good man");
+//                    } else {
+//                        $data = json_decode($response->getContent(), true);
+//                        dump($data);
+//                    }
+//                    $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:getEmployee",array('employeeId'=>$ehe->getIdEmployerHasEmployee()),array('_format'=>'json'));
+//                    if ($response->getStatusCode() != 200) {
+//                        dump("not so good man");
+//                    } else {
+//                        $data = json_decode($response->getContent(), true);
+//                        dump($data);
+//                    }
+//                    $nit = $ehe->getEmployerEmployer()->getPersonPerson()->getDocumentType().$ehe->getEmployerEmployer()->getPersonPerson()->getDocument();
+//                    $doc = $ehe->getEmployerEmployer()->getPersonPerson()->getDocument();
+//                    $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:getSociety",array('societyNit'=>$nit),array('_format'=>'json'));
+//                    if ($response->getStatusCode() != 200) {
+//                        dump( "not so good man");
+//                    } else {
+//                        if($response->getContent() == '[]'){
+//                            if($this->correctSociety($user)){
+//                                $newResponse = $this->forward("RocketSellerTwoPickBundle:PayrollRest:getSociety",array('societyNit'=>$doc),array('_format'=>'json'));
+//                                if($newResponse->getStatusCode() != 200){
+//                                    dump( "not so good man");
+//                                }else {
+//                                    $data = json_decode($response->getContent(), true);
+//                                    dump($data);
+//                                }
+//                            }else{
+//                                dump( "not so good man");
+//                            }
+//                        }else{
+//                            $data = json_decode($response->getContent(), true);
+//                            dump($data);
+//                        }
+//
+//                    }
+//                }
+
+            }
+
+
+
+
+            return $this->render("RocketSellerTwoPickBundle:BackOffice:modifyContractsView.html.twig",array(
+                'form'=>$form->createView(),
+                'users'=>$users,
+                'index'=>intval($index),
+                'contract'=>$contract,
+                'document'=>$document,
+                'documentType'=>$documentType,
+                'email'=>$email,
+                'maxIndex'=>intval($maxIndex),
+                'editFormViews'=>$editFormViews,
+            ));
+        }
+    }
+
+
+    /**
+     * @param User $user
+     * @return bool
+     */
+    private function correctSociety(User $user){
+        $request = $this->container->get("request");
+        $request->setMethod("POST");
+        $person = $user->getPersonPerson();
+        $employer = $user->getPersonPerson()->getEmployer();
+        /** @var UtilsController $utils */
+        $utils = $this->get("app.symplifica_utils");
+        $nit = $person->getDocumentType().$person->getDocument();
+        $request->request->add(array(
+            "society_id" => $employer->getIdSqlSociety(),
+            "society_start_date"=>$user->getDateCreated()->format("d-m-Y"),
+            "society_name" => $utils->mb_capitalize($user->getPersonPerson()->getNames()),
+            "society_nit"=> $nit,
+            "society_mail" => $utils->generateRandomEmail()
+        ));
+        $insertionAnswer = $this->forward("RocketSellerTwoPickBundle:PayrollRest:postModifySociety",array('_format'=>'json'));
+        if($insertionAnswer->getStatusCode() != 200){
+           return false;
+        }
+        return true;
     }
 
     public function generateReportByTypeAction($type){

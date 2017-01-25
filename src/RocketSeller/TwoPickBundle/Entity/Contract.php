@@ -103,6 +103,17 @@ class Contract
     private $sisben;
 
     /**
+     * 1 = yes
+     * 0 = No
+     * @ORM\Column(type="smallint", nullable=TRUE)
+     * 0 no definido
+     * 1 si trabaja los sabados
+     * -1 no trabaja los sabados
+     * aplica solo para tiempo completo
+     */
+    private $worksSaturday = 0;
+
+    /**
      * @ORM\Column(type="smallint", nullable=TRUE)
      */
     private $transportAid; // 1 vive donde trabaja - 0 externo
@@ -1248,5 +1259,29 @@ class Contract
         $criteria = Criteria::create()
             ->where(Criteria::expr()->eq('dayNumber',$dayNumber));
         return $this->weekWorkableDays->matching($criteria)->first();
+    }
+
+    /**
+     * Set worksSaturday
+     *
+     * @param integer $worksSaturday
+     *
+     * @return Contract
+     */
+    public function setWorksSaturday($worksSaturday)
+    {
+        $this->worksSaturday = $worksSaturday;
+
+        return $this;
+    }
+
+    /**
+     * Get worksSaturday
+     *
+     * @return integer
+     */
+    public function getWorksSaturday()
+    {
+        return $this->worksSaturday;
     }
 }

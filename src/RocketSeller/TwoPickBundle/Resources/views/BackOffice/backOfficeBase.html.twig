@@ -3,6 +3,11 @@
     {% block title %}back office{% endblock %}
 
     {% block stylesheet %}
+        <style>
+            .sidebar-back{font-family: "Open Sans",Helvetica,Arial;font-size: 14px;text-transform: initial;text-align: left;background-image: none;background-color: transparent;border: none;box-shadow: none;padding: 0px 10px;margin-bottom: 5px;padding-left: 0;}
+            .sidebar-back-little{font-family: "Open Sans",Helvetica,Arial;font-size: 10px;text-transform: initial;text-align: left;background-image: none;background-color: transparent;border: none;box-shadow: none;padding: 0px 10px;margin-bottom: 5px;padding-left: 0;}
+            .sidebar-back a{color: #1fcecb;}
+        </style>
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
               crossorigin="anonymous">
@@ -31,14 +36,14 @@
     {% endblock %}
 
     {% block menuInicio %}
-        <div class="{% if app.request.get('_route') == 'back_office' %}activeMenu{% endif %} well well-lg"
-             style="margin-top: 30px;">
+        <div class="{% if app.request.get('_route') == 'back_office' %}activeMenu{% endif %} sidebar-back"
+             style="margin-top: 10px;">
             <a class="notAjax" href="{{ path('back_office') }}">Back Office</a>
         </div>
     {% endblock %}
 
     {% block menu %}
-        <div class="{% if app.request.get('_route') == 'show_procedures' %}activeMenu{% endif %} well well-lg">
+        <div class="{% if app.request.get('_route') == 'show_procedures' %}activeMenu{% endif %} well sidebar-back">
             <a class="notAjax" href="{{ path('show_procedures') }}">Tramites</a>
         </div>
         {#<div class="{% if app.request.get('_route') == 'show_request' %}activeMenu{% endif %} well well-lg">#}
@@ -50,44 +55,44 @@
         {#<div class="{% if app.request.get('_route') == 'register_express' %}activeMenu{% endif %} well well-lg">#}
             {#<a class="notAjax" href="{{ path('register_express') }}">Registro Express</a>#}
         {#</div>#}
-        <div class="{% if app.request.get('_route') == 'show_pilas' %}activeMenu{% endif %} well well-lg">
+        <div class="{% if app.request.get('_route') == 'show_pilas' %}activeMenu{% endif %} well sidebar-back">
             <a class="notAjax" href="{{ path('show_pilas') }}" >Pila</a>
         </div>
-        <div class="{% if app.request.get('_route') == 'back_entities_view' %}activeMenu{% endif %} well well-lg">
+        <div class="{% if app.request.get('_route') == 'back_entities_view' %}activeMenu{% endif %} well sidebar-back">
             <a class="notAjax" href="{{ path('back_entities_view') }}" >Entidades Empleados Activos</a>
         </div>
-        <div class="{% if app.request.get('_route') == 'back_pay_state_view' %}activeMenu{% endif %} well well-lg">
+        <div class="{% if app.request.get('_route') == 'back_pay_state_view' %}activeMenu{% endif %} well sidebar-back">
             <a class="notAjax" href="{{ path('back_pay_state_view') }}" >Estado pagos</a>
         </div>
-        <div class="{% if app.request.get('_route') == 'back_pay_state_view' %}activeMenu{% endif %} well well-lg">
+        <div class="{% if app.request.get('_route') == 'back_pay_state_view' %}activeMenu{% endif %} well sidebar-back">
             <a class="notAjax" href="{{ path('back_frequency_state_view') }}" >Frecuencia pagos</a>
         </div>
         {#<div class="{% if app.request.get('_route') == 'back_pila_operator_state_view' %}activeMenu{% endif %} well well-lg separador">
             <a class="notAjax" href="{{ path('back_pila_operator_state_view') }}" >Afiliaciones Pila</a>
         </div>#}
-        <div class="{% if app.request.get('_route') == 'show_rejected_pods' %}activeMenu{% endif %} well well-lg separador">
+        <div class="{% if app.request.get('_route') == 'show_rejected_pods' %}activeMenu{% endif %} well sidebar-back separador">
             <a class="notAjax" href="{{ path('show_rejected_pods') }}" >Manejo de devoluciones</a>
         </div>
-        <div class="{% if app.request.get('_route') == 'marketing' %}activeMenu{% endif %} well well-lg">
+        <div class="{% if app.request.get('_route') == 'marketing' %}activeMenu{% endif %} well sidebar-back">
             <a class="notAjax" href="{{ path('marketing') }}" >Marketing</a>
         </div>
-        <div class="{% if app.request.get('_route') == 'back_personal_info_view' %}activeMenu{% endif %} well well-lg">
+        <div class="{% if app.request.get('_route') == 'back_personal_info_view' %}activeMenu{% endif %} well sidebar-back">
             <a class="notAjax" href="{{ path('back_personal_info_view') }}" >Info Personal Despues Paso 3</a>
         </div>
-        <div class="{% if app.request.get('_route') == 'show_unfinished_users' %}activeMenu{% endif %} well well-lg">
+        <div class="{% if app.request.get('_route') == 'show_unfinished_users' %}activeMenu{% endif %} well sidebar-back">
             <a class="notAjax" href="{{ path('show_unfinished_users') }}" >Estado del registro</a>
         </div>
-        <div class="{% if app.request.get('_route') == 'employer_state' %}activeMenu{% endif %} well well-lg">
+        <div class="{% if app.request.get('_route') == 'employer_state' %}activeMenu{% endif %} well sidebar-back">
             <a class="notAjax" href="{{ path('employer_state') }}" >Estado altas BackOffice</a>
         </div>
-        <div class="{% if app.request.get('_route') == 'show_base_users_register' %}activeMenu{% endif %} well well-lg">
+        <div class="{% if app.request.get('_route') == 'show_base_users_register' %}activeMenu{% endif %} well sidebar-back">
             <a class="notAjax" href="{{ path('show_base_users_register') }}" >Base Usuarios Registros </a>
         </div>
 
     {% endblock %}
     {% block content_style %} style="width: 98%"{% endblock %}
     {% block classSideBarBase %}class="col-sm-2"{% endblock %}
-    {% block classMainBase %}class="col-sm-10 clearfix"{% endblock %}
+    {% block classMainBase %}class="col-sm-10 clearfix" style="overflow:auto"{% endblock %}
     {% block usrName %}BACK OFFICE{% endblock %}
     {% block footer %}
     {% endblock %}

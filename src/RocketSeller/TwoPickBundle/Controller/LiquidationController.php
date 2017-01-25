@@ -232,6 +232,9 @@ class LiquidationController extends Controller
      */
     public function finalLiquidationAction($id)
     {
+    	/** @var User $user */
+	    $user = $this->getUser();
+	    
         $em = $this->getDoctrine()->getManager();
         /** @var \RocketSeller\TwoPickBundle\Entity\Employee $employee */
         $employee = $this->getEmployee($id);
@@ -240,6 +243,11 @@ class LiquidationController extends Controller
         /** @var Employer $employer */
         $employer = $this->getEmployer($id);
         $employerPerson = $employer->getPersonPerson();
+	    
+	    if($employerPerson != $user->getPersonPerson()) {
+	    	return $this->redirectToRoute('show_dashboard');
+	    }
+	    
         $usernameEmployer = $employerPerson->getNames();
 
         $employeeInfo = array(

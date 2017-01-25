@@ -1203,7 +1203,7 @@ class ProcedureController extends Controller
                         'placeholder' => array(
                             'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
                         ),
-                        'years' => range(intval($today->format("Y"))+1,intval($ehe->getActiveContract()->getStartDate()->format("Y")))
+                        'years' => range(intval($today->format("Y"))+2,intval($ehe->getActiveContract()->getStartDate()->format("Y")-2))
                     ))
                     ->add('edit', 'submit', array('label' => 'Guardar','attr'=>array('class'=>'form-button')))
                     ->getForm();
