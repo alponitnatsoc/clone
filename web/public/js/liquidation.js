@@ -73,8 +73,8 @@ $('input[name="rocketseller_twopickbundle_liquidation[liquidationReason]"]:radio
     var employer_has_employee_id = form.find("input[name='rocketseller_twopickbundle_liquidation[idEmperHasEmpee]']").val();
     var username = form.find("input[name='rocketseller_twopickbundle_liquidation[username]']").val();
 
-    var url = form.find("input[name='rocketseller_twopickbundle_liquidation[api_public_post_pre_liquidation]']").val();
-
+    var url = form.find("input[name='rocketseller_twopickbundle_liquidation[api_public_post_preview_pre_liquidation]']").val();
+    console.log(url);
     var frequency = form.find("input[name='rocketseller_twopickbundle_liquidation[frequency]']").val();
 
     $("#liquidationValue").html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>')
