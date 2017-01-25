@@ -714,7 +714,7 @@
                                             <div class="element col-sm-4">
                                                 <p style="font-style:normal;" class="light grisclarofont">${{ pod.value|number_format(0, '.', ',')  }}</p>
                                             </div>
-                                            <div class="detail-element col-sm-4" data-toggle="modal" data-target="#detailModal{{ loop.index }}">
+                                            <div class="detail-element col-sm-4" data-toggle="modal" data-target="#detailModal{{ loop.parent.loop.index }}">
                                                 <p style="font-style:normal;cursor:pointer" class="bold grisclarofont">&#10095; Ver detalles</p>
                                             </div>
                                             {% set deducidos = [] %}
@@ -726,7 +726,7 @@
                                                     {% set deducidos = deducidos|merge([detail]) %}
                                                 {% endif %}
                                             {% endfor %}
-                                            <div class="modal fade" id="detailModal{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
+                                            <div class="modal fade" id="detailModal{{ loop.parent.loop.index }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">

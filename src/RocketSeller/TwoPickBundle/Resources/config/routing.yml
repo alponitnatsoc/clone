@@ -159,7 +159,9 @@ post_register:
 employer_state:
     path:     /backoffice/show/employersState
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:userBackOfficeState}
-
+generate_report:
+    path:     /backoffice/generate/report/{type}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:generateReportByType, type: null }
 #tramites
 create_procedures:
     path: /backoffice/procedure/creates/{userId}

@@ -778,13 +778,16 @@ trait SubscriptionMethodsTrait
         $request = $this->container->get('request');
         /** @var UtilsController $utils */
         $utils = $this->get("app.symplifica_utils");
+        if($person->getDocumentType() == "PASAPORTE"){
+            $docType="PA";
+            $nitToAdd = "PA" . $person->getDocument();
+        }
+        else{
+            $docType=$person->getDocumentType();
+            $nitToAdd = $person->getDocumentType().$person->getDocument();
+        }
         if ($employer->getIdSqlSociety() == null) {
-        	  if($person->getDocumentType() == "PASAPORTE"){
-        	  	$nitToAdd = "PA" . $person->getDocument();
-	          }
-	          else{
-	          	$nitToAdd = $person->getDocumentType().$person->getDocument();
-	          }
+
             $request->setMethod("POST");
             $request->request->add(array(
                 "society_nit" => $nitToAdd,
@@ -799,7 +802,7 @@ trait SubscriptionMethodsTrait
         }
 
         $request->setMethod("GET");
-        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getSociety', array("societyNit" => $person->getDocumentType().$person->getDocument()), array('_format' => 'json'));
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getSociety', array("societyNit" => $docType.$person->getDocument()), array('_format' => 'json'));
         if ($insertionAnswer->getStatusCode() != 200) {
             return false;
         }
