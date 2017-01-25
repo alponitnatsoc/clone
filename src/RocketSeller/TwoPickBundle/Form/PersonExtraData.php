@@ -50,7 +50,7 @@ class PersonExtraData extends AbstractType
                 'placeholder' => array(
                     'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
                 ),
-                'years' => range(2015,1900),
+                'years' => range(2018,1900),
                 'label' => 'Fecha de expedición de documento de identidad',
                 'required' => true
             ))
