@@ -1,0 +1,295 @@
+{% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
+
+{% block title %}Información Nomina{% endblock %}
+
+{% block fos_user_content %}
+    <style>
+        .table{
+            border: 1px solid black;
+        }
+        .table>tbody+tbody{
+            border: 1px solid black;
+        }
+        .table>thead+thead{
+            border: 1px solid black;
+        }
+        .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+            padding: 1px 5px;
+            border: 1px solid black;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        th{
+            background-color: lightgrey;
+            color: black;
+        }
+        .noPadding{
+            margin: 0!important;
+            padding: 0!important;
+        }
+        .form-tittle{
+            background-color: lightgrey;
+            color: black;
+            margin: 0px 0px 0px 0px;
+            padding:1px 5px;
+            border: 1px solid black;
+        }
+        .form-content{
+            margin: 0px 0px 0px 0px;
+            padding: 1px 5px;
+            border: 1px solid black;
+        }
+        .a-payroll{
+            color: #0a6267;
+            text-decoration: none;
+        }
+        .a-payroll:focus, .a-payroll:hover{
+            color: #00cdcc;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+        }
+    </style>
+    <div id="main">
+        <div class="back-panel-title col-sm-12 col-xs-12">
+            Información de Nómina
+        </div>
+
+        <div class="back-panel">
+            <div class="backoffice-headding">
+                <h4>Busqueda</h4>
+            </div>
+            <div class="col-md-12" style="padding: 10px;border: 1px solid #0c383f;border-radius: 0px 0px 5px 5px;margin-bottom: 15px">
+                {{ form_start(form) }}
+                <div style="width: 80px;display: inline-flex;margin: 2px">
+                    {{ form_row(form.name,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:auto;padding:1px 5px'},'label_attr':{'style':'min-height:30px;margin: 0px 0px -10px 0px;'}}) }}
+                </div>
+                <div style="width: 80px;display: inline-flex;margin: 2px">
+                    {{ form_row(form.lastName,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:auto;padding:1px 5px'},'label_attr':{'style':'min-height:30px;margin:  0px 0px -10px 0px;'}}) }}
+                </div>
+                <div style="width: 100px;display: inline-flex;margin: 2px">
+                    {{ form_row(form.contract,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:auto;padding:1px 5px'},'label_attr':{'style':'min-height:30px;margin: 0px 0px -10px 0px;'}}) }}
+                </div>
+                <div  style="width: 120px;display: inline-flex;margin: 2px">
+                    {{ form_row(form.documentType,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:21px'},'label_attr':{'style':'min-height:30px;margin:  0px 0px -10px 0px;'}}) }}
+                </div>
+                <div style="width: 120px;display: inline-flex;margin: 2px">
+                    {{ form_row(form.document,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:auto;padding:1px 5px'},'label_attr':{'style':'min-height:30px;margin:  0px 0px -10px 0px;'}}) }}
+                </div>
+                <div style="width: 230px;display: inline-flex;margin: 2px">
+                    {{ form_row(form.email,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:auto;padding:1px 5px;width:230px'},'label_attr':{'style':'min-height:30px;margin:  0px 0px -10px 0px;'}}) }}
+                </div>
+                <div style="display: inline-flex;clear: both; position: absolute">
+                    <div class="form-group" style="margin: 10px 20px">
+                        {{ form_widget(form.search,{'attr':{'class':'btn-back','style':'margin:0px'}}) }}
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+        {% for type, messages in app.session.flashbag.all() %}
+            {% for message in messages %}
+                {% if type == "success_changed" %}
+                    <div style="clear: both;background-color: rgba(7, 130, 29, 0.37);color: darkgreen;font-weight: 600;padding: 15px;border: 1px solid darkgreen;border-radius: 15px;">
+                        {{ message }}
+                    </div>
+                {% elseif type == "success" %}
+                    <div style="clear: both;background-color: rgba(7, 130, 29, 0.37);color: darkgreen;font-weight: 600;padding: 15px;border: 1px solid darkgreen;border-radius: 15px;">
+                        {{ message }}
+                    </div>
+                {% else %}
+                    <div style="clear: both;background-color: rgba(130, 7, 7, 0.37);color: darkred;font-weight: 600;padding: 15px;border: 1px solid darkred;border-radius: 15px;">
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+        {% if index is defined %}
+            {% if index == 1 %}
+                {% set count = 1 %}
+            {% else %}
+                {% set count = (( index - 1 ) * 10 ) + 1 %}
+            {% endif %}
+        {% endif %}
+        {% set count2 = 1 %}
+        {% if contracts|length > 0 %}
+        <div class="col-md-12" style="overflow: scroll;padding: 0px;">
+            <div class="back-panel" style="padding:0px;min-width: 1000px">
+                <div class="backoffice-headding">
+                    <h4>Información de las Nóminas</h4>
+                </div>
+                {% for contract in contracts %}
+                    {% set employer = contract.employerHasEmployeeEmployerHasEmployee.employerEmployer %}
+                    {% set employee = contract.employerHasEmployeeEmployerHasEmployee.employeeEmployee %}
+                    {% set erPerson = employer.personPerson %}
+                    {% set eePerson = employee.personPerson %}
+                    <table class="table" id="table_users" style=" margin: -1px 0px">
+                        <thead>
+                            <th style="width: 5%;font-weight: 600;font-size: 16px;background-color:rgb(72, 72, 72);color: white">
+                                {{ count }}
+                            </th>
+                            <th style="width: 8%;background-color: #797979;color: #ffffff;font-weight: 600;font-size: 16px">
+                                Contrato
+                            </th>
+                            <th style="width: 5%;background-color: white;color: #444444;font-weight: 600;font-size: 16px">
+                                {{ contract.idContract }}
+                            </th>
+                            <th style="width: 10%;background-color: #797979;color: #ffffff;font-weight: 600;font-size: 16px">
+                                Empleador
+                            </th>
+                            <th style="width: 30%;background-color: white;color: #444444;font-weight: 600;font-size: 16px">
+                                {{ erPerson.fullName }}
+                            </th>
+                            <th style="width: 10%;background-color: #797979;color: #ffffff;font-weight: 600;font-size: 16px">
+                                Empleado
+                            </th>
+                            <th style="background-color: white;color: #444444;font-weight: 600;font-size: 16px">
+                                {{ eePerson.fullName }}
+                            </th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="7" style="padding: 5px;background-color: white;">
+                                    <div class="backoffice-headding" style="border-radius: 0px; background-color: rgb(41, 41, 41);margin: -1px 0px -1px 0px;">
+                                        Información de Nómina
+                                    </div>
+                                    <table class="table" style="margin-bottom: -1px;">
+                                        <thead>
+                                            <th style="width: 100px">Id Payroll</th>
+                                            <th style="width: 200px">Periodo</th>
+                                            <th style="width: 100px">Mes</th>
+                                            <th style="width: 100px">Año</th>
+                                            <th style="width: 100px">Pila</th>
+                                            <th style="width: 200px">Estado</th>
+                                            <th style="width: 100px">Acción</th>
+                                        </thead>
+                                        <tbody>
+                                        {% for payroll in contract.payrolls %}
+                                            <tr>
+                                                <td>{{ payroll.idPayroll }}</td>
+                                                <td>{% if payroll.period == 4 %}Fin de Mes{% else %}Primera Quincena{% endif %}</td>
+                                                <td>{{ payroll.month }}</td>
+                                                <td>{{ payroll.year }}</td>
+                                                <td>{% if payroll.pila is defined and payroll.pila is not null %}{{ payroll.pila.idPurchaseOrdersDescription }}{% else %}-{% endif %}</td>
+                                                <td>{% if payroll.paid == 0 %}Por pagar{% else %}En orden de compra{% endif %}</td>
+                                                <td><a class="a-payroll notAjax" href="{{ path("modify_payroll",{'idPayroll':payroll.idPayroll}) }}">detalles</a></td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    {% set count = count + 1 %}
+                    {% set count2 = count2 + 1 %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if name is not defined or name == '' %}
+            {% set name = '#' %}
+        {% endif %}
+        {% if lastName is not defined or lastName == '' %}
+            {% set lastName = '#' %}
+        {% endif %}
+        {% if contract is not defined or contract == '' %}
+            {% set contract = '#' %}
+        {% endif %}
+        {% if document is not defined or document == '' %}
+            {% set document = '#' %}
+        {% endif %}
+        {% if documentType is not defined or documentType == '' %}
+            {% set documentType = '#' %}
+        {% endif %}
+        {% if email is not defined or email == '' %}
+            {% set email = '#' %}
+        {% endif %}
+        {% if maxIndex > 1 %}
+            {% set nextIndex = index + 1 %}
+            {% set prevIndex = 0 %}
+            {% if index > 1 and index <= maxIndex %}
+                {% set prevIndex = index - 1 %}
+            {% endif %}
+            {% if app.request.request.get('formFilter') is not null %}
+                {% if app.request.request.get('formFilter')['name'] is defined and app.request.request.get('formFilter')['name']!='' %}
+                    {% set name = app.request.request.get('formFilter')['name'] %}
+                {% endif %}
+                {% if app.request.request.get('formFilter')['lastName'] is defined and app.request.request.get('formFilter')['lastName']!='' %}
+                    {% set lastName = app.request.request.get('formFilter')['lastName'] %}
+                {% endif %}
+                {% if app.request.request.get('formFilter')['contract'] is defined and app.request.request.get('formFilter')['contract']!='' %}
+                    {% set contract = app.request.request.get('formFilter')['contract'] %}
+                {% endif %}
+                {% if app.request.request.get('formFilter')['document'] is defined and app.request.request.get('formFilter')['document']!='' %}
+                    {% set document = app.request.request.get('formFilter')['document'] %}
+                {% endif %}
+                {% if app.request.request.get('formFilter')['documentType'] is defined and app.request.request.get('formFilter')['documentType']!='' %}
+                    {% set documentType = app.request.request.get('formFilter')['documentType'] %}
+                {% endif %}
+                {% if app.request.request.get('formFilter')['email'] is defined and app.request.request.get('formFilter')['email']!='' %}
+                    {% set email = app.request.request.get('formFilter')['email'] %}
+                {% endif %}
+            {% endif %}
+            <div class="text-center col-md-12" style="display: inline-flex">
+                {% if index > 1 and index <= maxIndex %}
+                    {% if index == maxIndex %}
+                        <a class="btn btn-back notAjax" style="margin: 10px auto 0px auto" href="{{ path("show_novelties_info",{
+                            'name':name,
+                            'lastName':lastName,
+                            'contract':contract,
+                            'documentType':documentType,
+                            'document':document,
+                            'email':email,
+                            'index':prevIndex}) }}">&#10094;</a>
+                    {% else %}
+                        <a class="btn btn-back notAjax" style="margin: 10px 1px 0px auto" href="{{ path("show_novelties_info",{
+                            'name':name,
+                            'lastName':lastName,
+                            'contract':contract,
+                            'documentType':documentType,
+                            'document':document,
+                            'email':email,
+                            'index':prevIndex}) }}">&#10094;</a>
+                    {% endif %}
+
+                {% endif %}
+                {% if index > 0 and index < maxIndex %}
+                    {% if index == 1 %}
+                        <a class="btn btn-back notAjax" style="margin: 10px auto 0px auto" href="{{ path("show_novelties_info",{
+                            'name':name,
+                            'lastName':lastName,
+                            'contract':contract,
+                            'documentType':documentType,
+                            'document':document,
+                            'email':email,
+                            'index':nextIndex}) }}">&#10095;</a>
+                    {% else %}
+                        <a class="btn btn-back notAjax" style="margin: 10px auto 0px 1px" href="{{ path("show_novelties_info",{
+                            'name':name,
+                            'lastName':lastName,
+                            'contract':contract,
+                            'documentType':documentType,
+                            'document':document,
+                            'email':email,
+                            'index':nextIndex}) }}">&#10095;</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        {% endif %}
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        jQuery(document).ready(function () {
+
+        });
+    </script>
+
+{% endblock %}

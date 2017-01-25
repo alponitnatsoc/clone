@@ -1,0 +1,211 @@
+{% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
+
+{% block title %}Modificar Payroll{% endblock %}
+
+{% block fos_user_content %}
+    <style>
+        .table{
+            border: 1px solid black;
+        }
+        .table>tbody+tbody{
+            border: 1px solid black;
+        }
+        .table>thead+thead{
+            border: 1px solid black;
+        }
+        .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+            padding: 1px 5px;
+            border: 1px solid black;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        th{
+            background-color: lightgrey;
+            color: black;
+        }
+        .noPadding{
+            margin: 0!important;
+            padding: 0!important;
+        }
+        .form-tittle{
+            background-color: lightgrey;
+            color: black;
+            margin: 0px 0px 0px 0px;
+            padding:1px 5px;
+            border: 1px solid black;
+        }
+        .form-content{
+            margin: 0px 0px 0px 0px;
+            padding: 1px 5px;
+            border: 1px solid black;
+        }
+        .a-payroll{
+            color: #0a6267;
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .a-payroll:focus, .a-payroll:hover{
+            color: #00cdcc;
+            cursor: pointer;
+            font-weight: 700;
+            text-decoration: none;
+        }
+        input[id^='form_edit_novelty_']{
+            height: 20px;
+            font-size: 12px;
+            margin: 1px;
+            padding: 0px;
+            border: none;
+        }
+        button[id^='form_edit_novelty_']{
+            height: 22px;
+            font-size: 13px;
+            margin: 0px;
+            padding: 0px 5px;
+        }
+        select[id^='form_edit_novelty_']{
+            height: 22px;
+            font-size: 13px;
+            margin: 0px;
+            padding: 0px 5px;
+            border: none;
+        }
+    </style>
+    <div id="main">
+        <div class="back-panel-title col-sm-12 col-xs-12">
+            Modificar Nómina
+        </div>
+
+        {% for type, messages in app.session.flashbag.all() %}
+            {% for message in messages %}
+                {% if type == "success_changed" %}
+                    <div style="clear: both;background-color: rgba(7, 130, 29, 0.37);color: darkgreen;font-weight: 600;padding: 15px;border: 1px solid darkgreen;border-radius: 15px;">
+                        {{ message }}
+                    </div>
+                {% elseif type == "success" %}
+                    <div style="clear: both;background-color: rgba(7, 130, 29, 0.37);color: darkgreen;font-weight: 600;padding: 15px;border: 1px solid darkgreen;border-radius: 15px;">
+                        {{ message }}
+                    </div>
+                {% else %}
+                    <div style="clear: both;background-color: rgba(130, 7, 7, 0.37);color: darkred;font-weight: 600;padding: 15px;border: 1px solid darkred;border-radius: 15px;">
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+        {% if payroll is defined and payroll is not null %}
+        <div class="col-md-12" style="overflow: scroll;padding: 0px 7%;">
+            <div class="back-panel" style="padding:0px;min-width: 800px">
+                <div class="backoffice-headding">
+                    <h4>Detalle de la Nómina {{ payroll.idPayroll }}</h4>
+                </div>
+                <table class="table" id="table_users" style=" margin: -1px 0px">
+                    <thead>
+                        <th style="width: 100px">Id novedad</th>
+                        <th style="width: 250px">Tipo novedad</th>
+                        <th style="width: 100px">Unidades</th>
+                        <th style="width: 150px">Value</th>
+                        <th style="width: 100px">Naturaleza</th>
+                        <th style="width: 150px">Acciones</th>
+                    </thead>
+                    <tbody>
+                    {% for novelty in payroll.sqlNovelties %}
+                        <tr id="novelty_info_{{ novelty.idNovelty }}">
+                            <td>{{ novelty.idNovelty }}</td>
+                            <td>{{ novelty.noveltyTypeNoveltyType.name }}</td>
+                            <td>{{ novelty.units }}</td>
+                            <td>{{ novelty.sqlValue }}</td>
+                            <td>{{ novelty.noveltyTypeNoveltyType.naturaleza }}</td>
+                            <td>
+                                <div style="display: inline-flex">
+                                    <a content="{{ novelty.idNovelty }}" class="btn btn-back notAjax" id="edit_novelty_{{ novelty.idNovelty }}" style="font-weight: 700;font-size:12px;height:21px;padding: 1px 5px;margin: 0px 2px;border-color: #c0c0c0;background-color: #c0c0c0;color: black">Editar</a>
+                                    <a href="{{ path("delete_novelty",{'idPayroll':payroll.idPayroll,'idNovelty':novelty.idNovelty}) }}" class="btn btn-back notAjax" style="font-weight: 700;font-size:12px;height:21px;padding: 1px 5px;margin: 0px 2px;border-color: black;background-color: black;color: white">Eliminar</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr id="novelty_edit_{{ novelty.idNovelty }}" style="display: none">
+                            {% set editNoveltyForm = noveltiesForms[novelty.idNovelty] %}
+                            {{ form_start(editNoveltyForm) }}
+                            <td>{{ form_widget(editNoveltyForm.idNovelty) }}</td>
+                            <td>{{ form_widget(editNoveltyForm.noveltyType) }}</td>
+                            <td>{{ form_widget(editNoveltyForm.units) }}</td>
+                            <td>{{ form_widget(editNoveltyForm.value) }}</td>
+                            <td colspan="2" style="text-align: center">{{ form_widget(editNoveltyForm.submit,{'attr':{'class':'notAjax'}}) }}<a id="cancel_edit_novelty_{{ novelty.idNovelty }}" content="{{ novelty.idNovelty }}" class="btn btn-back notAjax" style="font-weight: 700;font-size:12px;height:21px;padding: 1px 5px;margin: 0px 2px;border-color: black;background-color: black;color: white">Cancelar</a></td>
+                            {{ form_end(editNoveltyForm) }}
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                       <td id="show_create_novelty" colspan="6" style="text-align: center">
+                           <a class="btn btn-back notAjax" id="create_novelty" style="font-weight: 700;font-size:16px;height:30px;padding: 3px 15px;margin: 3px 2px;border-color: #092d34;background-color: #0e5057;color: white">Nueva Novedad</a>
+                       </td>
+                    </tr>
+                    <tr id="new_novelty_form" style="display: none">
+                        {{ form_start(newNoveltyForm) }}
+                        <td></td>
+                        <td>{{ form_widget(newNoveltyForm.noveltyType) }}</td>
+                        <td>{{ form_widget(newNoveltyForm.units) }}</td>
+                        <td>{{ form_widget(newNoveltyForm.value) }}</td>
+                        <td colspan="2" style="text-align: center">{{ form_widget(newNoveltyForm.submit,{'attr':{'class':'notAjax'}}) }}<a id="cancel_new_novelty" class="btn btn-back notAjax" style="font-weight: 400;font-size:15px;height:33px;padding: 5px 5px;margin: 0px 2px;border-color: black;background-color: black;color: white">Cancelar</a></td>
+                        {{ form_end(newNoveltyForm) }}
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="backoffice-headding">
+                    <h4>Descripción de la orden de Compra</h4>
+                </div>
+                <table class="table" id="table_users" style=" margin: -1px 0px">
+                    <thead>
+                    <th style="width: 80px">Id pod</th>
+                    <th style="width: 80px">Id Payroll</th>
+                    <th style="width: 180px">Estado</th>
+                    <th style="width: 120px">Producto</th>
+                    <th>Descripción</th>
+                    <th style="width: 90px">valor</th>
+                    </thead>
+                    <tbody>
+                    {% for pod in pods %}
+                    <tr>
+                        <td>{{ pod.idPurchaseOrdersDescription }}</td>
+                        <td>{{ pod.payrollPayroll.idPayroll }}</td>
+                        <td>{{ pod.purchaseOrdersStatus.description }}</td>
+                        <td>{{ pod.productProduct.name }}</td>
+                        <td>{{ pod.description }}</td>
+                        <td>{{ pod.value }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        jQuery(document).ready(function () {
+            $("a[id^='edit_novelty_']").on('click',function () {
+                var novelty = $(this).attr("content");
+                $("#novelty_info_"+novelty).hide();
+                $("#novelty_edit_"+novelty).show();
+            });
+            $("a[id^='cancel_edit_novelty_']").on('click',function () {
+                var novelty = $(this).attr("content");
+                $("#novelty_info_"+novelty).show();
+                $("#novelty_edit_"+novelty).hide();
+            })
+            $("#create_novelty").on("click",function () {
+                $("#new_novelty_form").show();
+                $("#show_create_novelty").hide();
+            });
+            $("#cancel_new_novelty").on("click",function () {
+                $("#new_novelty_form").hide();
+                $("#show_create_novelty").show();
+            });
+        });
+    </script>
+
+{% endblock %}

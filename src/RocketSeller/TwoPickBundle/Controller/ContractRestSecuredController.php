@@ -719,4 +719,6 @@ class ContractRestSecuredController extends FOSRestController
         return $view;
 
     }
+
+
 }

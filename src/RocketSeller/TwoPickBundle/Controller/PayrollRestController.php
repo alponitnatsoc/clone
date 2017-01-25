@@ -386,7 +386,7 @@ class PayrollRestController extends FOSRestController
         $mandatory['society_id'] = true;
         $regex['society_name'] = '(.)*';
         $mandatory['society_name'] = false;
-        $regex['society_nit'] = '([0-9])+(-[0-9]+)?';
+        $regex['society_nit'] = '(.)*';
         $mandatory['society_nit'] = false;
         $regex['society_start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
         $mandatory['society_start_date'] = false;
@@ -622,7 +622,7 @@ class PayrollRestController extends FOSRestController
      *   (name="worked_hours_days", nullable=true, requirements="([0-9])+", description="Number of hours worked on a day.")
      *   (name="payment_method", nullable=true, requirements="(CHE|CON|EFE)", strict=false, description="Code of payment method(CHE, CON, EFE). This code can be obtained using the table pay_type, field payroll_code.")
      *   (name="liquidation_type", nullable=true, requirements="(J|M|Q)", strict=false, description="Liquidation type, (J daily, M monthly, Q every two weeks). This code can obtained using the table frequency field payroll_code.")
-     *   (name="contract_type", nullable=true, requirements="([0-9])", strict=false, description="Contract type of the employee, this can be found in the table contract_type, field payroll_code.")
+     *   (name="contract_type", nullable=true, requirements="([0-9])", strict=false, description="1 Termino indefinido 2 termino fijo.")
      *   (name="transport_aux", nullable=true, requirements="(S|N)", strict=false, description="Weather or not it needs transportation help, if empty it uses the law.")
      *   (name="society", nullable=true, requirements="(.)*", strict=true, description="Id of the society(id of the employeer).")
      *   (name="payroll_type", nullable=true, requirements="4|6|1", strict=true, description="Payroll type, 4 for full time 6 part time 1 regular payroll.")
@@ -684,7 +684,7 @@ class PayrollRestController extends FOSRestController
         $info = $this->getEmployeeAction($parameters['employee_id'])->getData();
 	
 	      if(!isset($info['RECIBE_AUX_TRA'])) $info['RECIBE_AUX_TRA'] = 'N';
-	      
+
         $unico['TIPOCON'] = 1;
         $unico['EMP_CODIGO'] = $parameters['employee_id'];
         $unico['EMP_APELLIDO1'] = isset($parameters['last_name']) ? $parameters['last_name'] : $info['EMP_APELLIDO1'];
@@ -693,24 +693,25 @@ class PayrollRestController extends FOSRestController
         $unico['EMP_CEDULA'] = isset($parameters['document']) ? $parameters['document'] : $info['EMP_CEDULA'];
         $unico['EMP_SEXO'] = isset($parameters['gender']) ? $parameters['gender'] : $info['EMP_SEXO'];
         $unico['EMP_FECHA_NACI'] = isset($parameters['birth_date']) ? $parameters['birth_date'] : $info['EMP_FECHA_NACI'];
+        //TODO(andres_ramirez) preguntar si este se manda
+//        $unico['EMP_SOCIEDAD'] = isset($parameters['society']) ? $parameters['society'] : $info['EMP_SOCIEDAD'];
         $unico['EMP_FECHA_INGRESO'] = isset($parameters['start_date']) ? $parameters['start_date'] : $info['EMP_FECHA_INGRESO'];
         $unico['EMP_FECHA_INI_CONTRATO'] = isset($parameters['start_date']) ? $parameters['start_date'] : $info['EMP_FECHA_INGRESO'];
-        $unico['EMP_NRO_CONTRATO'] = isset($parameters['contract_number']) ? $parameters['contract_number'] : $info['EMP_NRO_CONTRATO'];
         $unico['EMP_FECHA_FIN_CONTRATO'] = isset($parameters['last_contract_end_date']) ? $parameters['last_contract_end_date'] : $info['EMP_FECHA_FIN_CONTRATO'];
+        $unico['EMP_NRO_CONTRATO'] = isset($parameters['contract_number']) ? $parameters['contract_number'] : $info['EMP_NRO_CONTRATO'];
+        $unico['EMP_JORNADA'] = 1; //Is a must
         $unico['EMP_HORAS_TRAB'] = isset($parameters['worked_hours_days']) ? $parameters['worked_hours_days'] : $info['EMP_HORAS_TRAB'];
         $unico['EMP_FORMA_PAGO'] = isset($parameters['payment_method']) ? $parameters['payment_method'] : $info['EMP_FORMA_PAGO'];
         $unico['EMP_TIPOLIQ'] = isset($parameters['liquidation_type']) ? $parameters['liquidation_type'] : $info['EMP_TIPOLIQ'];
         $unico['EMP_TIPO_SALARIO'] = isset($parameters['salary_type']) ? $parameters['salary_type'] : $info['EMP_TIPO_SALARIO'];
         $unico['RECIBE_AUX_TRA'] = isset($parameters['transport_aux']) ? $parameters['transport_aux'] : $info['RECIBE_AUX_TRA'];
-	      //TODO(andres_ramirez) preguntar si este se manda
-//        $unico['EMP_SOCIEDAD'] = isset($parameters['society']) ? $parameters['society'] : $info['EMP_SOCIEDAD'];
         $unico['EMP_TIPO_NOMINA'] = isset($parameters['payroll_type']) ? $parameters['payroll_type'] : $info['EMP_TIPO_NOMINA'];
-	      $unico['EMP_JORNADA'] = 1; //Is a must
-
         if (isset($info['EMP_TIPO_CONTRATO']))
             $unico['EMP_TIPO_CONTRATO'] = isset($parameters['contract_type']) ? $parameters['contract_type'] : $info['EMP_TIPO_CONTRATO'];
         if( $unico['EMP_TIPO_NOMINA'] == 4 ){
             $unico['EMP_TIP_CAL'] = isset($parameters['cal_type']) ? $parameters['cal_type'] : $info['EMP_TIP_CAL'];
+        }else{
+            $unico['EMP_TIP_CAL'] = 1;
         }
         $content[] = $unico;
         $parameters = array();
@@ -755,7 +756,6 @@ class PayrollRestController extends FOSRestController
 
         /** @var View $res */
         $responseView = $this->callApi($parameters);
-
         return $responseView;
     }
 
@@ -1106,6 +1106,7 @@ class PayrollRestController extends FOSRestController
      */
     public function getEmployeeEntityAction($employeeId)
     {
+        $employeeId = intval($employeeId);
         $content = array();
         $unico = array();
 
