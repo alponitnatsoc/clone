@@ -29,8 +29,8 @@ show_novelties_info:
     path:     /backoffice/novelty/info/{name}/{lastName}/{contract}/{documentType}/{document}/{email}/{index}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:modifyNoveltiesInfo, name: '', lastName: '',contract: '',documentType: '',document: '',email: '',index: 1 }
 modify_payroll:
-    path:     /backoffice/modify/payroll/{idPayroll}/{noveltiesHadChanged}
-    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:modifyPayroll,idPairoll: 0,noveltiesHadChanged: false }
+    path:     /backoffice/modify/payroll/{idPayroll}/{noveltiesHadChanged}/{executed}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:modifyPayroll,idPairoll: 0,noveltiesHadChanged: false, executed: false }
 delete_novelty:
     path:     /backoffice/delete/novelty/{idPayroll}/{idNovelty}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:deleteNovelty,idPairoll: 0,idNovelty: 0 }

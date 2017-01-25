@@ -3656,7 +3656,7 @@ class BackOfficeController extends Controller
         }
     }
 
-    public function modifyPayrollAction($idPayroll,$noveltiesHadChanged = false,Request $request){
+    public function modifyPayrollAction($idPayroll,$noveltiesHadChanged = false,$executed = false,Request $request){
         $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
         if($idPayroll==0)
             return $this->createNotFoundException();
@@ -3770,35 +3770,93 @@ class BackOfficeController extends Controller
             ->getForm();
         $newNoveltyForm->handleRequest($request);
         if($newNoveltyForm->isSubmitted() and $newNoveltyForm->isValid()){
-            $newNovelty = new Novelty();
-            $newNovelty->setNoveltyTypeNoveltyType($newNoveltyForm->get("noveltyType")->getData());
-            $newNovelty->setName($newNoveltyForm->get("noveltyType")->getData()->getName());
-            $newNovelty->setUnits(intval($newNoveltyForm->get("units")->getData()));
-            $newNovelty->setSqlValue(floatval($newNoveltyForm->get("value")->getData()));
-            $newNovelty->setSqlPayrollPayroll($payroll);
-            $payroll->addSqlNovelty($newNovelty);
-            $em->persist($newNovelty);
-            $em->flush();
-            $this->addFlash('success',"Se creo correctamente la novedad.");
-            return $this->redirectToRoute("modify_payroll",array('idPayroll'=>$payroll->getIdPayroll(),'noveltiesHadChanged'=>true),302);
+            if($payroll->getPaid()==0){
+                /** @var User $backUser */
+                $backUser = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('emailCanonical'=>'backofficesymplifica@gmail.com'));
+                $request  = new Request();
+                $request->setMethod("PUT");
+                $request->request->add(array(
+                    "month" => $payroll->getMonth(),
+                    "year"=>$payroll->getYear(),
+                    "period" => $payroll->getPeriod(),
+                    "day"=> ($payroll->getPeriod()==2)?16:26,
+                    "token"=>$backUser->getSalt(),
+                    "idpayroll" => $payroll->getIdPayroll()
+                ));
+                $response = $this->forward("RocketSellerTwoPickBundle:PayrollMethodRest:putAutoLiquidatePayroll",array("request"=>$request),array('_format'=>'json'));
+                if($response->getStatusCode()!=200){
+                    $this->addFlash('fail',"Error Congelando la nómina.");
+                }else{
+                    $newNovelty = new Novelty();
+                    $newNovelty->setNoveltyTypeNoveltyType($newNoveltyForm->get("noveltyType")->getData());
+                    $newNovelty->setName($newNoveltyForm->get("noveltyType")->getData()->getName());
+                    $newNovelty->setUnits(intval($newNoveltyForm->get("units")->getData()));
+                    $newNovelty->setSqlValue(floatval($newNoveltyForm->get("value")->getData()));
+                    $newNovelty->setSqlPayrollPayroll($payroll);
+                    $payroll->addSqlNovelty($newNovelty);
+                    $em->persist($newNovelty);
+                    $em->flush();
+                    $this->addFlash('success',"Se congeló correctamente la nómina.");
+                    $this->addFlash('success',"Se creo correctamente la novedad.");
+                }
+            }else{
+                $newNovelty = new Novelty();
+                $newNovelty->setNoveltyTypeNoveltyType($newNoveltyForm->get("noveltyType")->getData());
+                $newNovelty->setName($newNoveltyForm->get("noveltyType")->getData()->getName());
+                $newNovelty->setUnits(intval($newNoveltyForm->get("units")->getData()));
+                $newNovelty->setSqlValue(floatval($newNoveltyForm->get("value")->getData()));
+                $newNovelty->setSqlPayrollPayroll($payroll);
+                $payroll->addSqlNovelty($newNovelty);
+                $em->persist($newNovelty);
+                $em->flush();
+                $this->addFlash('success',"Se creo correctamente la novedad.");
+            }
+            return $this->redirectToRoute("modify_payroll",array('idPayroll'=>$payroll->getIdPayroll(),'noveltiesHadChanged'=>true,'executed'=>true),302);
         }
         if($noveltiesHadChanged){
-            $value = 0;
-            /** @var Novelty $novelty */
-            foreach ($payroll->getSqlNovelties() as $novelty) {
-                if($novelty->getNoveltyTypeNoveltyType()->getNaturaleza() == 'DEV'){
-                    $value += $novelty->getSqlValue();
+            $error = false;
+            if($payroll->getPaid()==0 and !$executed){
+                /** @var User $backUser */
+                $backUser = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('emailCanonical'=>'backofficesymplifica@gmail.com'));
+                $request  = new Request();
+                $request->setMethod("PUT");
+                $request->request->add(array(
+                    "month" => $payroll->getMonth(),
+                    "year"=>$payroll->getYear(),
+                    "period" => $payroll->getPeriod(),
+                    "day"=> ($payroll->getPeriod()==2)?16:26,
+                    "token"=>$backUser->getSalt(),
+                    "idpayroll" => $payroll->getIdPayroll()
+                ));
+                $response = $this->forward("RocketSellerTwoPickBundle:PayrollMethodRest:putAutoLiquidatePayroll",array("request"=>$request),array('_format'=>'json'));
+                if($response->getStatusCode()!=200){
+                    $this->addFlash('fail',"Error Congelando la nómina.");
+                    $error = true;
                 }else{
-                    $value -= $novelty->getSqlValue();
+                    $this->addFlash('success',"Se congeló correctamente la nómina.");
+                    return $this->redirectToRoute("modify_payroll",array('idPayroll'=>$payroll->getIdPayroll(),'noveltiesHadChanged'=>true,'executed'=>true),302);
                 }
             }
-            /** @var PurchaseOrdersDescription $pod */
-            $pod = $payroll->getPurchaseOrdersDescription()->first();
-            $log = new Log($this->getUser(),'PurchaseOrdersDescription','value',$pod->getIdPurchaseOrdersDescription(),$pod->getValue(),$value,"Se modificó el valor del purchaseOrderDescription de la nomina con payroll ".$payroll->getIdPayroll().".");
-            $pod->setValue($value);
-            $em->persist($pod);
-            $em->persist($log);
-            $em->flush();
+            if(!$error){
+                $value = 0;
+                /** @var Novelty $novelty */
+                foreach ($payroll->getSqlNovelties() as $novelty) {
+                    if($novelty->getNoveltyTypeNoveltyType()->getNaturaleza() == 'DEV'){
+                        $value += $novelty->getSqlValue();
+                    }else{
+                        $value -= $novelty->getSqlValue();
+                    }
+                }
+                /** @var PurchaseOrdersDescription $pod */
+                $pod = $payroll->getPurchaseOrdersDescription()->first();
+                if($pod!=null){
+                    $log = new Log($this->getUser(),'PurchaseOrdersDescription','value',$pod->getIdPurchaseOrdersDescription(),$pod->getValue(),$value,"Se modificó el valor del purchaseOrderDescription de la nomina con payroll ".$payroll->getIdPayroll().".");
+                    $pod->setValue($value);
+                    $em->persist($pod);
+                    $em->persist($log);
+                    $em->flush();
+                }
+            }
         }
 
         return $this->render('RocketSellerTwoPickBundle:BackOffice:modifyPayrollView.html.twig',array(
