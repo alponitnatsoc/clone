@@ -526,24 +526,32 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                 $template = $this->parameters['template']['sendBackLandingInfo'];
                 return $this->sendMessage($template, $context, $contactPublicFromEmail, $registrationStuck);
                 break;
-		        case "promoReferred5days":
-				        /** $context must have:
-				         * string toEmail
-				         * string referredCode
-				         */
-				        $template = $this->parameters['template']['promoReferred5days'];
-			          //TODO (a-santamaria cambiar el form a $mercadeoFromEmail)
-				        return $this->sendMessage($template, $context, $contactPublicFromEmail, $context["toEmail"]);
-				        break;
-		        case "promoReferred15days":
-				        /** $context must have:
-				         * string toEmail
-				         * string referredCode
-				         */
-				        $template = $this->parameters['template']['promoReferred15days'];
-								//TODO (a-santamaria cambiar el form a $mercadeoFromEmail)
-				        return $this->sendMessage($template, $context, $contactPublicFromEmail, $context["toEmail"]);
-				        break;
+            case "promoReferred5days":
+                    /** $context must have:
+                     * string toEmail
+                     * string referredCode
+                     */
+                    $template = $this->parameters['template']['promoReferred5days'];
+                  //TODO (a-santamaria cambiar el form a $mercadeoFromEmail)
+                    return $this->sendMessage($template, $context, $contactPublicFromEmail, $context["toEmail"]);
+                    break;
+            case "promoReferred15days":
+                    /** $context must have:
+                     * string toEmail
+                     * string referredCode
+                     */
+                    $template = $this->parameters['template']['promoReferred15days'];
+                            //TODO (a-santamaria cambiar el form a $mercadeoFromEmail)
+                    return $this->sendMessage($template, $context, $contactPublicFromEmail, $context["toEmail"]);
+                    break;
+            case "severancesAdvice":
+                /** $context must have:
+                 * string toEmail
+                 * string redirectUrl
+                 */
+                $template = $this->parameters['template']['severancesAdvice'];
+                return $this->sendMessage($template, $context, $teamFromEmail, $context["toEmail"]);
+                break;
 
         }
     }
