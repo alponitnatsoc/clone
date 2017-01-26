@@ -69,6 +69,7 @@ function startEmployee() {
                     "register_employee[employeeHasEmployers][employeeType]": "required",
                     "register_employee[employeeHasEmployers][contractType]": "required",
                     "register_employee[employeeHasEmployers][timeCommitment]": "required",
+                    "register_employee[employeeHasEmployers][worksSaturday]": "required",
                     //"register_employee[employeeHasEmployers][sisben]": "required",
                     "register_employee[employeeHasEmployers][position]": "required",
                     "register_employee[employeeHasEmployers][workplaces]": "required",
@@ -114,6 +115,7 @@ function startEmployee() {
                     "register_employee[employeeHasEmployers][employeeType]": "Por favor selecciona una opción",
                     "register_employee[employeeHasEmployers][contractType]": "Por favor selecciona una opción",
                     "register_employee[employeeHasEmployers][timeCommitment]": "Por favor selecciona una opción",
+                    "register_employee[employeeHasEmployers][worksSaturday]": "Por favor selecciona una opción",
                     //"register_employee[employeeHasEmployers][sisben]": "Por favor selecciona una opción",
                     "register_employee[employeeHasEmployers][position]": "Por favor selecciona una opción",
                     "register_employee[employeeHasEmployers][workplaces]": "Por favor selecciona una opción",
@@ -259,6 +261,9 @@ function startEmployee() {
         if (!validator.element($("[name='register_employee[employeeHasEmployers][timeCommitment]']"))) {
             valid = false;
         }
+        if (!validator.element($("[name='register_employee[employeeHasEmployers][worksSaturday]']"))) {
+            valid = false;
+        }
 
         /*if($("#register_employee_employeeHasEmployers_timeCommitment_2").prop("checked") == true){
          if (!validator.element($("[name='register_employee[employeeHasEmployers][sisben]']"))) {
@@ -285,6 +290,7 @@ function startEmployee() {
         $(this).hide();
     });
     $("#existentDataToShow").hide();
+
     var timeCommitment = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']");
     if($("#register_employee_employeeHasEmployers_timeCommitment_2").is("[checked]")){
         $('#radio_diario').prop('checked', true);
@@ -382,6 +388,7 @@ function startEmployee() {
             $(this).show();
         });
     }
+
     $("#register_employee_person_documentType").change(function () {
         var selectedVal = $(this).find("option:selected").text();
         if (selectedVal == "Tarjeta de identidad") {
@@ -926,6 +933,7 @@ function startEmployee() {
         //var employeeType = $(form).find("select[name='register_employee[employeeHasEmployers][employeeType]']");
         var contractType = $(form).find("select[name='register_employee[employeeHasEmployers][contractType]']");
         var timeCommitment = $(form).find("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked");
+        var worksSat = $(form).find("input[name='register_employee[employeeHasEmployers][worksSaturday]']:checked");
         var position = $(form).find("select[name='register_employee[employeeHasEmployers][position]']");
         var idWorkplace = $(form).find("select[name='register_employee[employeeHasEmployers][workplaces]']");
         if (!form.valid()) {
@@ -1028,6 +1036,7 @@ function startEmployee() {
                 //employeeType: employeeType.val(),
                 contractType: contractType.val(),
                 timeCommitment: timeCommitment.val(),
+                worksSat: worksSat.val(),
                 position: position.val(),
                 salary: accounting.unformat(salary.val()),
                 salaryD: accounting.unformat($("#totalExpensesValD").val()),

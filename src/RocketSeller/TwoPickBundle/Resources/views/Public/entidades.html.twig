@@ -35,46 +35,62 @@
                     <p>Aquí encontrarás la información de contacto de las diferentes entidades, EPS, ARL,
     Cajas de compensación, entidades gestoras de cesantías y pensiones en Colombia.</p>
                     <h3>Encuentra la tuya:</h3>
-                    <select>
-                        <option value="volvo">Selecciona una entidad</option>
-                        <option value="saab">EPS</option>
-                    </select>
-                    <select>
-                        <option value="volvo">Selecciona una lugar</option>
-                        <option value="saab">Bogotá</option>
-                    </select>
-                    <button>Filtrar</button>
-                </div>
-                <div class="light entidadesBack">
-                    <div class="entidades">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Nombre entidad</th>
-                                    <th>Tipo</th>
-                                    <th>Ciudad</th>
-                                    <th>Teléfono</th>
-                                    <th>Dirección</th>
-                                    <th>Horario atención</th>
-                                    <th>Página web</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Sanitas</td>
-                                    <td>EPS</td>
-                                    <td>Bogotá</td>
-                                    <td>2345678</td>
-                                    <td>cl 12 # 34 - 45</td>
-                                    <td>L -V 7AM - 5PM<br>
-                                        L -V 7AM - 5PM
-                                    </td>
-                                    <td>www.algo.com</td>
-                                </tr>
-                            </tbody>
-                        </table>
+
+                    {{ form_start(form) }}
+                    {#<select>#}
+                        {#<option value="volvo">Selecciona una entidad</option>#}
+                        {#<option value="saab">EPS</option>#}
+                    {#</select>#}
+                    {#<select>#}
+                        {#<option value="volvo">Selecciona una lugar</option>#}
+                        {#<option value="saab">Bogotá</option>#}
+                    {#</select>#}
+                    {#<button>Filtrar</button>#}
+
+                    <div  style="display: inline-flex;margin: 2px">
+                        {{ form_row(form.entityType) }}
                     </div>
+                    <div  style="display: inline-flex;margin: 2px">
+                        {{ form_row(form.department) }}
+                    </div>
+                    <div style="display: inline-flex;clear: both; position: inherit">
+                        {{ form_widget(form.search,{'attr':{'class':'btn-back'}}) }}
+                    </div>
+                    {{ form_end(form) }}
                 </div>
+                {% if entities is defined and entities |length > 0 %}
+                    <div class="light entidadesBack">
+                        <div class="entidades">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Nombre entidad</th>
+                                        <th>Tipo</th>
+                                        <th>Departamento</th>
+                                        <th>Teléfono</th>
+                                        <th>Dirección</th>
+                                        <th>Horario atención</th>
+                                        <th>Página web</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for entity in entities %}
+                                        <tr>
+                                            <td>{{ entity.name }}</td>
+                                            <td>{{ entityDisplayName[entity.entityTypeEntityType.name] }}</td>
+                                            <td>Bogotá</td>
+                                            <td>{{ entity.phone }}</td>
+                                            <td>{{ entity.address }}</td>
+                                            <td>{{ entity.attentionHours }}</td>
+                                            <td>{{ entity.webpage }}</td>
+                                        </tr>
+                                    {%  endfor %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                {% endif %}
             </section>
         </main>
          <script>

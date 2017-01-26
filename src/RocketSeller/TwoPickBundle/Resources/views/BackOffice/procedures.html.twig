@@ -121,6 +121,7 @@
                 <tbody>
                 {% set count = 1 %}
                 {% for procedure in procedures %}
+                    {% if procedure.procedureTypeProcedureType.code != 'VAC' %}
                     {% if count%2 == 0 %}
                         {% set statusCode =  procedure.procedureStatus.code %}
                         {% if statusCode == 'DIS' %}
@@ -213,6 +214,7 @@
 
                     </tr>
                     {% set count = count + 1 %}
+                    {% endif %}
                 {% endfor %}
 
                 </tbody>

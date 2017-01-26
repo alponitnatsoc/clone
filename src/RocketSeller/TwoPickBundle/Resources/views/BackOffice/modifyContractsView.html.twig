@@ -1,0 +1,1203 @@
+{% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
+
+{% block title %}Modificar Información{% endblock %}
+
+{% block fos_user_content %}
+    <style>
+        .table{
+            border: 1px solid black;
+        }
+        .table>tbody+tbody{
+            border: 1px solid black;
+        }
+        .table>thead+thead{
+            border: 1px solid black;
+        }
+        .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+            padding: 1px 5px;
+            border: 1px solid black;
+            font-size: 11px;
+        }
+        th{
+            background-color: lightgrey;
+            color: black;
+        }
+        .noPadding{
+            margin: 0!important;
+            padding: 0!important;
+        }
+        .form-tittle{
+            background-color: lightgrey;
+            color: black;
+            margin: 0px 0px 0px 0px;
+            padding:1px 5px;
+            border: 1px solid black;
+        }
+        .form-content{
+            margin: 0px 0px 0px 0px;
+            padding: 1px 5px;
+            border: 1px solid black;
+        }
+        select[name*='[expeditionDate]']{
+            height: 15px;
+            font-size: 10px;
+            border: none;
+            margin: 0px;
+            padding: 1px 2px;
+        }
+        select[name*='[birthDate]']{
+            height: 15px;
+            font-size: 10px;
+            border: none;
+            margin: 0px;
+            padding: 1px 2px;
+        }
+        select[name*='[documentsDate]']{
+            height: 15px;
+            font-size: 10px;
+            border: none;
+            margin: 0px;
+            padding: 1px 2px;
+        }
+    </style>
+    <div id="main">
+        <div class="back-panel-title col-sm-12 col-xs-12">
+            Modificar Información de Contratos y Usuarios
+        </div>
+
+        <div class="back-panel">
+            <div class="backoffice-headding">
+                <h4>Busqueda</h4>
+            </div>
+            <div class="col-md-12" style="padding: 10px;border: 1px solid #0c383f;border-radius: 0px 0px 5px 5px;margin-bottom: 15px">
+                {{ form_start(form) }}
+                <div style="width: 100px;display: inline-flex;margin: 2px">
+                    {{ form_row(form.contract,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:auto;padding:1px 5px'},'label_attr':{'style':'min-height:30px;margin: 0px 0px -10px 0px;'}}) }}
+                </div>
+                <div  style="width: 120px;display: inline-flex;margin: 2px">
+                    {{ form_row(form.documentType,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:21px'},'label_attr':{'style':'min-height:30px;margin:  0px 0px -10px 0px;'}}) }}
+                </div>
+                <div style="width: 120px;display: inline-flex;margin: 2px">
+                    {{ form_row(form.document,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:auto;padding:1px 5px'},'label_attr':{'style':'min-height:30px;margin:  0px 0px -10px 0px;'}}) }}
+                </div>
+                <div style="width: 230px;display: inline-flex;margin: 2px">
+                    {{ form_row(form.email,{'attr':{'style':'margin: 0px 0px;font-size: 12px;height:auto;padding:1px 5px;width:230px'},'label_attr':{'style':'min-height:30px;margin:  0px 0px -10px 0px;'}}) }}
+                </div>
+                <div style="display: inline-flex;clear: both; position: absolute">
+                    <div class="form-group" style="margin: 10px 20px">
+                        {{ form_widget(form.search,{'attr':{'class':'btn-back','style':'margin:0px'}}) }}
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+        {% for type, messages in app.session.flashbag.all() %}
+            {% for message in messages %}
+                {% if type == "success_changed" %}
+                    <div style="clear: both;background-color: rgba(7, 130, 29, 0.37);color: darkgreen;font-weight: 600;padding: 15px;border: 1px solid darkgreen;border-radius: 15px;">
+                        {{ message }}
+                    </div>
+                {% elseif type == "success" %}
+                    <div style="clear: both;background-color: rgba(7, 130, 29, 0.37);color: darkgreen;font-weight: 600;padding: 15px;border: 1px solid darkgreen;border-radius: 15px;">
+                        {{ message }}
+                    </div>
+                {% else %}
+                    <div style="clear: both;background-color: rgba(130, 7, 7, 0.37);color: darkred;font-weight: 600;padding: 15px;border: 1px solid darkred;border-radius: 15px;">
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+        {% if index is defined %}
+            {% if index == 1 %}
+                {% set count = 1 %}
+            {% else %}
+                {% set count = (( index - 1 ) * 3 ) + 1 %}
+            {% endif %}
+        {% endif %}
+        {% set count2 = 1 %}
+        {% if users|length > 0 %}
+            <input id="users_length" value="{{ users|length }}" style="display: none;">
+        <div class="col-md-12" style="overflow: scroll;padding: 0px;">
+            <div class="back-panel" style="padding:0px;min-width: 1000px">
+            <div class="backoffice-headding">
+                <h4>Información de usuarios</h4>
+            </div>
+            {% for user in users %}
+                <table class="table" id="table_users" style=" margin: 0px">
+                    <input id="id_user_{{ count2 }}" style="display: none;" value="{{ user.id }}">
+                    {% set editForm =  editFormViews[user.id]['userForm'] %}
+                    {% set empPerson = user.personPerson %}
+                    <thead>
+                        <th style="width: 5%;font-weight: 600;font-size: 16px;background-color:rgb(72, 72, 72);color: white">
+                            {{ count }}
+                        </th>
+                        <th style="background-color: #797979;color: #ffffff;font-weight: 600;font-size: 16px">
+                            {{ empPerson.fullName }}
+                        </th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="2" style="padding: 5px;background-color: white">
+                                {{ form_start(editForm) }}
+                                <div class="backoffice-headding" style="border-radius: 0px; background-color: rgb(41, 41, 41);margin: -1px 0px -1px 0px;">
+                                    Información del Usuario
+                                </div>
+                                <table class="table" style="margin-bottom: -1px;">
+                                    <thead>
+                                    <th style="width: 70px">Id Usuario</th>
+                                    <th style="width: 70px">Id Persona</th>
+                                    <th style="width: 200px">Email<i id="edit_email_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-pencil" aria-hidden="true" style="margin-left: 148px"></i><i id="cancel_edit_email_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-times" aria-hidden="true" style="margin-left: 148px;display: none"></i>
+                                    </th>
+                                    <th style="width: 93px">Confirmado<i id="edit_enabled_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-pencil" aria-hidden="true" style="margin-left: 7px"></i><i id="cancel_edit_enabled_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-times" aria-hidden="true" style="margin-left: 7px;display: none"></i></th>
+                                    <th style="width: 50px">Estado</th>
+                                    <th style="width: 60px">Sms-cod</th>
+                                    <th style="width: 120px">Codigo<i id="edit_code_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-pencil" aria-hidden="true" style="margin-left: 61px"></i><i id="cancel_edit_code_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-times" aria-hidden="true" style="margin-left: 61px;display: none"></i></th>
+                                    <th style="width: 98px">Data Credito<i id="edit_dataCredit_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-pencil" aria-hidden="true" style="margin-left: 5px"></i><i id="cancel_edit_dataCredit_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-times" aria-hidden="true" style="margin-left: 5px;display: none"></i></th>
+                                    <th style="width: 59px">Gratis<i id="edit_isFree_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-pencil" aria-hidden="true" style="margin-left: 5px"></i><i id="cancel_edit_isFree_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-times" aria-hidden="true" style="margin-left: 5px;display: none"></i></th>
+                                    <th style="width: 80px">Legal Flag<i id="edit_legalFlag_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-pencil" aria-hidden="true" style="margin-left: 5px"></i><i id="cancel_edit_legalFlag_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-times" aria-hidden="true" style="margin-left: 5px;display: none"></i></th>
+                                    <th>Estado Pago<i id="edit_pay_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-pencil" aria-hidden="true" style="margin-left: 5px"></i><i id="cancel_edit_pay_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-times" aria-hidden="true" style="margin-left: 5px;display: none"></i></th>
+                                    </thead>
+                                    <tbody>
+                                        <td>{{ user.id }}</td>
+                                        <td>{{ empPerson.idPerson }}</td>
+                                        <td>
+                                            <div content="{{ user.id }}" id="actual_email_{{ user.id }}" style="display: block">{{ user.email }}</div>
+                                            <div id="edit_email_{{ user.id }}" style="display: none;">{{ form_widget(editForm.email,{'attr':{'style':'height:15px;font-size:11px;padding:0px;margin:0px;border:none'}}) }}</div>
+                                        </td>
+                                        <td>
+                                            <div content="{{ user.id }}" id="actual_enabled_{{ user.id }}" style="display: block">{% if user.enabled == 1 %}Si{% else %}No{% endif %}</div>
+                                            <div id="edit_enabled_{{ user.id }}" style="display: none;">{{ form_widget(editForm.enabled,{'attr':{'style':'height:15px;font-size:11px;padding:0px;margin:-1px;border:none'}}) }}</div>
+                                        </td>
+                                        <td>{{ user.status }}</td>
+                                        <td>{{ user.smsCode }}</td>
+                                        <td>
+                                            <div content="{{ user.id }}" id="actual_code_{{ user.id }}" style="display: block">{% if user.code is defined %}{{ user.code }}{% endif %}</div>
+                                            <div id="edit_code_{{ user.id }}" style="display: none;">{{ form_widget(editForm.code,{'attr':{'style':'height:15px;font-size:11px;padding:0px;margin:0px;border:none'}}) }}</div>
+                                        </td>
+                                        <td>
+                                            <div content="{{ user.id }}" id="actual_dataCredit_{{ user.id }}" style="display: block">{% if user.dataCreditStatus is defined %}{{ user.dataCreditStatus }}{% endif %}</div>
+                                            <div id="edit_dataCredit_{{ user.id }}" style="display: none;">{{ form_widget(editForm.dataCredit,{'attr':{'style':'height:15px;font-size:11px;padding:0px;margin:0px;border:none'}}) }}</div>
+                                        </td>
+                                        <td>
+                                            <div content="{{ user.id }}" id="actual_isFree_{{ user.id }}" style="display: block">{% if user.isFree is defined %}{{ user.isFree }}{% endif %}</div>
+                                            <div id="edit_isFree_{{ user.id }}" style="display: none;">{{ form_widget(editForm.isFree,{'attr':{'style':'height:15px;font-size:11px;padding:0px;margin:0px;border:none'}}) }}</div>
+                                        </td>
+                                        <td>
+                                            <div content="{{ user.id }}" id="actual_legalFlag_{{ user.id }}" style="display: block">{% if user.legalFlag is defined %}{{ user.legalFlag }}{% endif %}</div>
+                                            <div id="edit_legalFlag_{{ user.id }}" style="display: none;">{{ form_widget(editForm.legalFlag,{'attr':{'style':'height:15px;font-size:11px;padding:0px;margin:0px;border:none'}}) }}</div>
+                                        </td>
+                                        <td>
+                                            <div content="{{ user.id }}" id="actual_pay_{{ user.id }}" style="display: block">{% if user.paymentState is defined %}{{ user.paymentState }}{% endif %}</div>
+                                            <div id="edit_pay_{{ user.id }}" style="display: none;">{{ form_widget(editForm.pay,{'attr':{'style':'height:15px;font-size:11px;padding:0px;margin:0px;border:none'}}) }}</div>
+                                        </td>
+                                    </tbody>
+                                </table>
+                                <table class="table" style="margin-bottom: -1px;">
+                                    <thead>
+                                        <th style="width: 84px">Id Empleador</th>
+                                        <th style="width: 125px">Nombres<i id="edit_names_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-pencil" aria-hidden="true" style="margin-left: 54px"></i><i id="cancel_edit_names_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-times" aria-hidden="true" style="margin-left: 54px;display: none"></i></th>
+                                        <th style="width: 80px">Apellido 1<i id="edit_lastName1_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-pencil" aria-hidden="true" style="margin-left: 5px"></i><i id="cancel_edit_lastName1_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-times" aria-hidden="true" style="margin-left: 5px;display: none"></i></th>
+                                        <th style="width: 80px">apellido 2<i id="edit_lastName2_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-pencil" aria-hidden="true" style="margin-left: 5px"></i><i id="cancel_edit_lastName2_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-times" aria-hidden="true" style="margin-left: 5px;display: none"></i></th>
+                                        <th style="width: 71px">Tipo Doc<i id="edit_documentType_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-pencil" aria-hidden="true" style="margin-left: 3px"></i><i id="cancel_edit_documentType_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-times" aria-hidden="true" style="margin-left: 3px;display: none"></i></th>
+                                        <th style="width: 71px">Nº Doc<i id="edit_document_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-pencil" aria-hidden="true" style="margin-left: 13px"></i><i id="cancel_edit_document_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-times" aria-hidden="true" style="margin-left: 13px;display: none"></i></th>
+                                        <th style="width: 129px">Fecha Expedición<i id="edit_expeditionDate_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-pencil" aria-hidden="true" style="margin-left: 14px"></i><i id="cancel_edit_expeditionDate_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-times" aria-hidden="true" style="margin-left: 14px;display: none"></i></th>
+                                        <th style="width: 121px">Lugar Expedición<i id="edit_expeditionPlace_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-pencil" aria-hidden="true" style="margin-left: 4px"></i><i id="cancel_edit_expeditionPlace_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-times" aria-hidden="true" style="margin-left: 4px;display: none"></i></th>
+                                        <th style="width: 129px">Fecha Nacimiento<i id="edit_birthDate_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-pencil" aria-hidden="true" style="margin-left: 9px"></i><i id="cancel_edit_birthDate_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-times" aria-hidden="true" style="margin-left: 9px;display: none"></i></th>
+                                        <th >Genero<i id="edit_gender_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-pencil" aria-hidden="true" style="margin-left: 45px"></i><i id="cancel_edit_gender_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-times" aria-hidden="true" style="margin-left: 45px;display: none"></i></th>
+                                    </thead>
+                                    <tbody>
+                                        <td>
+                                            {% if user.personPerson.employer.idEmployer is defined %}
+                                                {{ user.personPerson.employer.idEmployer }}
+                                                {% set employer = empPerson.employer %}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div content="{{ user.id }}" id="actual_names_{{ user.id }}" style="display: block">{{ empPerson.names }}</div>
+                                            <div id="edit_names_{{ user.id }}" style="display: none;">{{ form_widget(editForm.names,{'attr':{'style':'height:15px;font-size:11px;padding:0px;margin:0px;border:none'}}) }}</div>
+                                        </td>
+                                        <td>
+                                            <div content="{{ user.id }}" id="actual_lastName1_{{ user.id }}" style="display: block">{{ empPerson.lastName1 }}</div>
+                                            <div id="edit_lastName1_{{ user.id }}" style="display: none;">{{ form_widget(editForm.lastName1,{'attr':{'style':'height:15px;font-size:11px;padding:0px;margin:0px;border:none'}}) }}</div>
+                                        </td>
+                                        <td>
+                                            <div content="{{ user.id }}" id="actual_lastName2_{{ user.id }}" style="display: block">{{ empPerson.lastName2 }}</div>
+                                            <div id="edit_lastName2_{{ user.id }}" style="display: none;">{{ form_widget(editForm.lastName2,{'attr':{'style':'height:15px;font-size:11px;padding:0px;margin:0px;border:none'}}) }}</div>
+                                        </td>
+                                        <td>
+                                            <div content="{{ user.id }}" id="actual_documentType_{{ user.id }}" style="display: block">{{ empPerson.documentType }}</div>
+                                            <div id="edit_documentType_{{ user.id }}" style="display: none;">{{ form_widget(editForm.documentType,{'attr':{'style':'height:15px;font-size:11px;padding:0px;margin:-1px;border:none'}}) }}</div>
+                                        </td>
+                                        <td>
+                                            <div content="{{ user.id }}" id="actual_document_{{ user.id }}" style="display: block">{{ empPerson.document }}</div>
+                                            <div id="edit_document_{{ user.id }}" style="display: none;">{{ form_widget(editForm.document,{'attr':{'style':'height:15px;font-size:11px;padding:0px;margin:0px;border:none;width:63px'}}) }}</div>
+                                        </td>
+                                        <td>
+                                            <div content="{{ user.id }}" id="actual_expeditionDate_{{ user.id }}" style="display: block">{{ empPerson.documentExpeditionDate.format("d-m-Y") }}</div>
+                                            <div id="edit_expeditionDate_{{ user.id }}" style="display: none;margin: -2px -5px">{{ form_widget(editForm.expeditionDate) }}</div>
+                                        </td>
+                                        <td>
+                                            <div content="{{ user.id }}" id="actual_expeditionPlace_{{ user.id }}" style="display: block">{{ empPerson.documentExpeditionPlace }}</div>
+                                            <div id="edit_expeditionPlace_{{ user.id }}" style="display: none;">{{ form_widget(editForm.expeditionPlace,{'attr':{'style':'height:15px;font-size:11px;padding:0px;margin:0px;border:none'}}) }}</div>
+                                        </td>
+                                        <td>
+                                            <div content="{{ user.id }}" id="actual_birthDate_{{ user.id }}" style="display: block">{{ empPerson.birthDate.format("d-m-Y") }}</div>
+                                            <div id="edit_birthDate_{{ user.id }}" style="display: none;margin: -2px -5px">{{ form_widget(editForm.birthDate) }}</div>
+                                        </td>
+                                        <td>
+                                            <div content="{{ user.id }}" id="actual_gender_{{ user.id }}" style="display: block">{{ empPerson.gender }}</div>
+                                            <div id="edit_gender_{{ user.id }}" style="display: none;">{{ form_widget(editForm.gender,{'attr':{'style':'height:15px;font-size:11px;padding:0px;margin:-1px;border:none'}}) }}</div>
+                                        </td>
+                                    </tbody>
+                                </table>
+                                <table class="table" style="margin-bottom: -1px;">
+                                    <thead>
+                                        <th style="width: 100px">Departamento</th>
+                                        <th style="width: 80px">Ciudad</th>
+                                        <th style="width: 340px">Dirección Empleador<i id="edit_mainAddress_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-pencil" aria-hidden="true" style="margin-left: 205px"></i><i id="cancel_edit_mainAddress_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-times" aria-hidden="true" style="margin-left: 205px;display: none"></i></th>
+                                        <th style="width: 74px">Teléfono<i id="edit_phone_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-pencil" aria-hidden="true" style="margin-left: 5px"></i><i id="cancel_edit_phone_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-times" aria-hidden="true" style="margin-left: 5px;display: none"></i></th>
+                                        <th style="width: 46px">Id SQL</th>
+                                        <th style="width: 76px">Id HighTech</th>
+                                        <th style="width: 57px">Tipo</th>
+                                        <th style="width: 70px">Registro<i id="edit_registerState_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-pencil" aria-hidden="true" style="margin-left: 4px"></i><i id="cancel_edit_registerState_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-times" aria-hidden="true" style="margin-left: 4px;display: none"></i></th>
+                                        <th style="width: 47px">ID Doc</th>
+                                        <th style="width: 48px">ID RUT</th>
+                                        <th>ID MAND</th>
+                                    </thead>
+                                    <tbody>
+                                        <td>
+                                            {% if empPerson.department.name is defined %}
+                                                {{ empPerson.department.name }}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if empPerson.city.name is defined %}
+                                                {{ empPerson.city.name }}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div content="{{ user.id }}" id="actual_mainAddress_{{ user.id }}" style="display: block">{{ empPerson.mainAddress }}</div>
+                                            <div id="edit_mainAddress_{{ user.id }}" style="display: none;">{{ form_widget(editForm.mainAddress,{'attr':{'style':'height:15px;font-size:11px;padding:0px;margin:0px;border:none'}}) }}</div>
+                                        </td>
+                                        <td>
+                                            <div content="{{ user.id }}" id="actual_phone_{{ user.id }}" style="display: block">{{ empPerson.phones.first.phoneNumber }}</div>
+                                            <div id="edit_phone_{{ user.id }}" style="display: none;">{{ form_widget(editForm.phone,{'attr':{'style':'height:15px;font-size:11px;padding:0px;margin:0px;border:none'}}) }}</div>
+                                        </td>
+                                        <td>
+                                            {% if employer is defined and empPerson.employer.idSqlSociety is defined %}
+                                                {{ empPerson.employer.idSqlSociety }}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if employer is defined and empPerson.employer.idHighTech is defined %}
+                                                {{ empPerson.employer.idHighTech }}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if employer is defined and employer.employerType is defined %}
+                                                {{ employer.employerType }}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div content="{{ user.id }}" id="actual_registerState_{{ user.id }}" style="display: block">{% if employer is defined %}{{ employer.registerState }}{% endif %}</div>
+                                            <div id="edit_registerState_{{ user.id }}" style="display: none;">{{ form_widget(editForm.registerState,{'attr':{'style':'height:15px;font-size:11px;padding:0px;margin:0px;border:none'}}) }}</div>
+                                        </td>
+
+                                        {% if employer is defined and empPerson.documentDocument is not null and empPerson.documentDocument.mediaMedia is not null %}
+                                            <td>{{ empPerson.documentDocument.idDocument }}</td>
+                                        {% else %}
+                                            <td style="background-color: rgba(219,131,136,0.68); color: darkred">
+                                                Error
+                                            </td>
+                                        {% endif %}
+                                        {% if employer is defined and empPerson.rutDocument is not null and empPerson.rutDocument.mediaMedia is not null %}
+                                            <td>{{ empPerson.rutDocument.idDocument }}</td>
+                                        {% else %}
+                                            <td style="background-color: rgba(219,131,136,0.68); color: darkred">
+                                                Error
+                                            </td>
+                                        {% endif %}
+                                        {% if employer is defined and employer.mandatoryDocument is not null and employer.mandatoryDocument.mediaMedia is not null %}
+                                            <td>{{ employer.mandatoryDocument.idDocument }}</td>
+                                        {% else %}
+                                            <td style="background-color: rgba(219,131,136,0.68); color: darkred">
+                                                Error
+                                            </td>
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                                <table class="table" style="margin-bottom: -1px;">
+                                    <thead>
+                                        <th style="width: 140px">Estado Documentos<i id="edit_documentStatus_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-pencil" aria-hidden="true" style="margin-left: 10px"></i><i id="cancel_edit_documentStatus_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-times" aria-hidden="true" style="margin-left: 10px;display: none"></i></th>
+                                        <th style="width: 110px">Fecha Documento</th>
+                                        <th style="width: 70px">Fecha RUT</th>
+                                        <th style="width: 96px">Fecha Mandato</th>
+                                        <th style="width: 130px">Fecha Documentos<i id="edit_documentsDate_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-pencil" aria-hidden="true" style="margin-left: 5px"></i><i id="cancel_edit_documentsDate_ico_{{ user.id }}" content="{{ user.id }}" class="fa fa-times" aria-hidden="true" style="margin-left: 5px;display: none"></i></th>
+                                        <th>Token Confirmación</th>
+                                    </thead>
+                                    <tbody>
+                                        {% if employer is defined and employer.documentStatus is not null %}
+                                            <td>
+                                                <div content="{{ user.id }}" id="actual_documentStatus_{{ user.id }}" style="display: block">{{ employer.documentStatus.name }}</div>
+                                                <div id="edit_documentStatus_{{ user.id }}" style="display: none;">{{ form_widget(editForm.documentStatus,{'attr':{'style':'height:15px;font-size:11px;padding:0px;margin:0px;border:none'}}) }}</div>
+                                            </td>
+                                        {% else %}
+                                            <td style="background-color: rgba(219,131,136,0.68); color: darkred">
+                                                <div content="{{ user.id }}" id="actual_documentStatus_{{ user.id }}" style="display: block">-</div>
+                                                <div id="edit_documentStatus_{{ user.id }}" style="display: none;">{{ form_widget(editForm.documentStatus,{'attr':{'style':'height:15px;font-size:11px;padding:0px;margin:0px;border:none'}}) }}</div>
+                                            </td>
+                                        {% endif %}
+                                        {% if empPerson.documentDocument is not null and empPerson.documentDocument.mediaMedia is not null %}
+                                            <td>
+                                               {{ empPerson.documentDocument.mediaMedia.updatedAt.format("d-m-Y") }}
+                                            </td>
+                                        {% else %}
+                                            <td style="background-color: rgba(219,131,136,0.68); color: darkred">
+                                                Error
+                                            </td>
+                                        {% endif %}
+                                        {% if empPerson.rutDocument is not null and empPerson.rutDocument.mediaMedia is not null %}
+                                            <td>
+                                                {{ empPerson.rutDocument.mediaMedia.updatedAt.format("d-m-Y") }}
+                                            </td>
+                                        {% else %}
+                                            <td style="background-color: rgba(219,131,136,0.68); color: darkred">
+                                                Error
+                                            </td>
+                                        {% endif %}
+                                        {% if employer.mandatoryDocument is not null and employer.mandatoryDocument.mediaMedia is not null %}
+                                            <td>
+                                                {{ employer.mandatoryDocument.mediaMedia.updatedAt.format("d-m-Y") }}
+                                            </td>
+                                        {% else %}
+                                            <td style="background-color: rgba(219,131,136,0.68); color: darkred">
+                                                Error
+                                            </td>
+                                        {% endif %}
+                                        {% if employer.allDocsReadyAt is defined and employer.allDocsReadyAt is not null %}
+                                            <td>
+                                                <div content="{{ user.id }}" id="actual_documentsDate_{{ user.id }}" style="display: block">{{ employer.allDocsReadyAt.format("d-m-Y") }}</div>
+                                                <div id="edit_documentsDate_{{ user.id }}" style="display: none;margin: -2px -5px">{{ form_widget(editForm.documentsDate) }}</div>
+                                            </td>
+                                        {% else %}
+                                            <td style="background-color: rgba(219,131,136,0.68); color: darkred">
+                                                <div content="{{ user.id }}" id="actual_documentsDate_{{ user.id }}" style="display: block">-</div>
+                                                <div id="edit_documentsDate_{{ user.id }}" style="display: none;margin: -2px -5px">{{ form_widget(editForm.documentsDate) }}</div>
+                                            </td>
+                                        {% endif %}
+                                        <td>
+                                            {% if user.confirmationToken is defined %}
+                                                {{ user.confirmationToken }}
+                                            {% endif %}
+                                        </td>
+                                    </tbody>
+                                </table>
+                                <div id="form_submit_{{ user.id }}" style="padding: 2px;text-align: center;border: 1px solid black; background-color: lightgrey;display: none">
+                                    {{ form_widget(editForm.save,{'attr':{'style':'font-size:15px;padding:1px 5px'}}) }}
+                                </div>
+                                {{ form_end(editForm) }}
+                            {#</td>#}
+                        {#</tr>#}
+                        {#<tr>#}
+                            {#<td colspan="2" style="padding: 5px;background-color: white">#}
+                                <div class="backoffice-headding" style="border-radius: 0px; background-color: rgb(41, 41, 41);margin: -1px 0px -1px 0px;">
+                                    Información de empleados
+                                </div>
+                                {% for ehe in user.personPerson.employer.employerHasEmployees %}
+                                    <table class="table" style="padding: 0px; margin: -1px 0px -1px 0px">
+                                        <thead>
+                                            <th style="width: 110px;font-size: 14px;background-color: #464646;color: white">Id empleado </th>
+                                            <th style="font-size: 14px;background-color: #797979;color: white">{{ ehe.idEmployerHasEmployee }}</th>
+                                        </thead>
+                                    </table>
+                                    <table class="table" style="padding: 0px; margin: -1px 0px -1px 0px">
+                                        <thead>
+                                        <th style="width: 84px">Id empleado</th>
+                                        </thead>
+                                    </table>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                {% set count = count + 1 %}
+                {% set count2 = count2 + 1 %}
+            {% endfor %}
+        </div>
+        </div>
+        {% endif %}
+        {% if contract is not defined or contract == '' %}
+            {% set contract = '#' %}
+        {% endif %}
+        {% if document is not defined or document == '' %}
+            {% set document = '#' %}
+        {% endif %}
+        {% if documentType is not defined or documentType == '' %}
+            {% set documentType = '#' %}
+        {% endif %}
+        {% if email is not defined or email == '' %}
+            {% set email = '#' %}
+        {% endif %}
+        {% if maxIndex > 1 %}
+            {% set nextIndex = index + 1 %}
+            {% set prevIndex = 0 %}
+            {% if index > 1 and index <= maxIndex %}
+                {% set prevIndex = index - 1 %}
+            {% endif %}
+            {% if app.request.request.get('formFilter') is not null %}
+                {% if app.request.request.get('formFilter')['contract'] is defined and app.request.request.get('formFilter')['contract']!='' %}
+                    {% set contract = app.request.request.get('formFilter')['contract'] %}
+                {% endif %}
+                {% if app.request.request.get('formFilter')['document'] is defined and app.request.request.get('formFilter')['document']!='' %}
+                    {% set document = app.request.request.get('formFilter')['document'] %}
+                {% endif %}
+                {% if app.request.request.get('formFilter')['documentType'] is defined and app.request.request.get('formFilter')['documentType']!='' %}
+                    {% set documentType = app.request.request.get('formFilter')['documentType'] %}
+                {% endif %}
+                {% if app.request.request.get('formFilter')['email'] is defined and app.request.request.get('formFilter')['email']!='' %}
+                    {% set email = app.request.request.get('formFilter')['email'] %}
+                {% endif %}
+            {% endif %}
+            <div class="text-center col-md-12" style="display: inline-flex">
+                {% if index > 1 and index <= maxIndex %}
+                    {% if index == maxIndex %}
+                        <a class="btn btn-back notAjax" style="margin: 10px auto 0px auto" href="{{ path("change_contracts",{
+                            'contract':contract,
+                            'documentType':documentType,
+                            'document':document,
+                            'email':email,
+                            'index':prevIndex}) }}">&#10094;</a>
+                    {% else %}
+                        <a class="btn btn-back notAjax" style="margin: 10px 1px 0px auto" href="{{ path("change_contracts",{
+                            'contract':contract,
+                            'documentType':documentType,
+                            'document':document,
+                            'email':email,
+                            'index':prevIndex}) }}">&#10094;</a>
+                    {% endif %}
+
+                {% endif %}
+                {% if index > 0 and index < maxIndex %}
+                    {% if index == 1 %}
+                        <a class="btn btn-back notAjax" style="margin: 10px auto 0px auto" href="{{ path("change_contracts",{
+                            'contract':contract,
+                            'documentType':documentType,
+                            'document':document,
+                            'email':email,
+                            'index':nextIndex}) }}">&#10095;</a>
+                    {% else %}
+                        <a class="btn btn-back notAjax" style="margin: 10px auto 0px 1px" href="{{ path("change_contracts",{
+                            'contract':contract,
+                            'documentType':documentType,
+                            'document':document,
+                            'email':email,
+                            'index':nextIndex}) }}">&#10095;</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        {% endif %}
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        jQuery(document).ready(function () {
+            $.getScript("{{ asset("public/js/editUser.js") }}").done(function () {
+                editUsers();
+                userLength = $("#users_length").val();
+                change=[];
+                $('i[id^=edit_email_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_email_ico_"+$userId).hide();
+                    $("#cancel_edit_email_ico_"+$userId).show();
+                    $("#actual_email_"+$userId).hide();
+                    $("#edit_email_"+$userId).show();
+                });
+                $('div[id^=actual_email_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_email_ico_"+$userId).hide();
+                    $("#cancel_edit_email_ico_"+$userId).show();
+                    $("#actual_email_"+$userId).hide();
+                    $("#edit_email_"+$userId).show();
+                });
+                $('i[id^=cancel_edit_email_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    change[$userId]-=1;
+                    $("#edit_email_ico_"+$userId).show();
+                    $("#cancel_edit_email_ico_"+$userId).hide();
+                    $("#actual_email_"+$userId).show();
+                    $("#edit_email_"+$userId).hide();
+                    $("#formEditUser"+$userId+"_email").val($("#actual_email_"+$userId).html());
+                });
+                $('i[id^=edit_enabled_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_enabled_ico_"+$userId).hide();
+                    $("#cancel_edit_enabled_ico_"+$userId).show();
+                    $("#actual_enabled_"+$userId).hide();
+                    $("#edit_enabled_"+$userId).show();
+                });
+                $('div[id^=actual_enabled_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_enabled_ico_"+$userId).hide();
+                    $("#cancel_edit_enabled_ico_"+$userId).show();
+                    $("#actual_enabled_"+$userId).hide();
+                    $("#edit_enabled_"+$userId).show();
+                });
+                $('i[id^=cancel_edit_enabled_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    change[$userId]-=1;
+                    $("#edit_enabled_ico_"+$userId).show();
+                    $("#cancel_edit_enabled_ico_"+$userId).hide();
+                    $("#actual_enabled_"+$userId).show();
+                    $("#edit_enabled_"+$userId).hide();
+                    if($("#actual_enabled_"+$userId).html()=='Si'){
+                        $("#formEditUser"+$userId+"_enabled").val(1);
+                    }else{
+                        $("#formEditUser"+$userId+"_enabled").val(0);
+                    }
+                });
+                $('i[id^=edit_code_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_code_ico_"+$userId).hide();
+                    $("#cancel_edit_code_ico_"+$userId).show();
+                    $("#actual_code_"+$userId).hide();
+                    $("#edit_code_"+$userId).show();
+                });
+                $('div[id^=actual_code_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_code_ico_"+$userId).hide();
+                    $("#cancel_edit_code_ico_"+$userId).show();
+                    $("#actual_code_"+$userId).hide();
+                    $("#edit_code_"+$userId).show();
+                });
+                $('i[id^=cancel_edit_code_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    change[$userId]-=1;
+                    $("#edit_code_ico_"+$userId).show();
+                    $("#cancel_edit_code_ico_"+$userId).hide();
+                    $("#actual_code_"+$userId).show();
+                    $("#edit_code_"+$userId).hide();
+                    $("#formEditUser"+$userId+"_code").val($("#actual_code_"+$userId).html());
+                });
+                $('i[id^=edit_names_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_names_ico_"+$userId).hide();
+                    $("#cancel_edit_names_ico_"+$userId).show();
+                    $("#actual_names_"+$userId).hide();
+                    $("#edit_names_"+$userId).show();
+                });
+                $('div[id^=actual_names_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_names_ico_"+$userId).hide();
+                    $("#cancel_edit_names_ico_"+$userId).show();
+                    $("#actual_names_"+$userId).hide();
+                    $("#edit_names_"+$userId).show();
+                });
+                $('i[id^=cancel_edit_names_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    change[$userId]-=1;
+                    $("#edit_names_ico_"+$userId).show();
+                    $("#cancel_edit_names_ico_"+$userId).hide();
+                    $("#actual_names_"+$userId).show();
+                    $("#edit_names_"+$userId).hide();
+                    $("#formEditUser"+$userId+"_names").val($("#actual_names_"+$userId).html());
+                });
+                $('i[id^=edit_lastName1_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_lastName1_ico_"+$userId).hide();
+                    $("#cancel_edit_lastName1_ico_"+$userId).show();
+                    $("#actual_lastName1_"+$userId).hide();
+                    $("#edit_lastName1_"+$userId).show();
+                });
+                $('div[id^=actual_lastName1_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_lastName1_ico_"+$userId).hide();
+                    $("#cancel_edit_lastName1_ico_"+$userId).show();
+                    $("#actual_lastName1_"+$userId).hide();
+                    $("#edit_lastName1_"+$userId).show();
+                });
+                $('i[id^=cancel_edit_lastName1_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    change[$userId]-=1;
+                    $("#edit_lastName1_ico_"+$userId).show();
+                    $("#cancel_edit_lastName1_ico_"+$userId).hide();
+                    $("#actual_lastName1_"+$userId).show();
+                    $("#edit_lastName1_"+$userId).hide();
+                    $("#formEditUser"+$userId+"_lastName1").val($("#actual_lastName1_"+$userId).html());
+                });
+                $('i[id^=edit_lastName2_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_lastName2_ico_"+$userId).hide();
+                    $("#cancel_edit_lastName2_ico_"+$userId).show();
+                    $("#actual_lastName2_"+$userId).hide();
+                    $("#edit_lastName2_"+$userId).show();
+                });
+                $('div[id^=actual_lastName2_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_lastName2_ico_"+$userId).hide();
+                    $("#cancel_edit_lastName2_ico_"+$userId).show();
+                    $("#actual_lastName2_"+$userId).hide();
+                    $("#edit_lastName2_"+$userId).show();
+                });
+                $('i[id^=cancel_edit_lastName2_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    change[$userId]-=1;
+                    $("#edit_lastName2_ico_"+$userId).show();
+                    $("#cancel_edit_lastName2_ico_"+$userId).hide();
+                    $("#actual_lastName2_"+$userId).show();
+                    $("#edit_lastName2_"+$userId).hide();
+                    $("#formEditUser"+$userId+"_lastName2").val($("#actual_lastName2_"+$userId).html());
+                });
+                $('i[id^=edit_documentType_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_documentType_ico_"+$userId).hide();
+                    $("#cancel_edit_documentType_ico_"+$userId).show();
+                    $("#actual_documentType_"+$userId).hide();
+                    $("#edit_documentType_"+$userId).show();
+                });
+                $('div[id^=actual_documentType_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_documentType_ico_"+$userId).hide();
+                    $("#cancel_edit_documentType_ico_"+$userId).show();
+                    $("#actual_documentType_"+$userId).hide();
+                    $("#edit_documentType_"+$userId).show();
+                });
+                $('i[id^=cancel_edit_documentType_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    change[$userId]-=1;
+                    $("#edit_documentType_ico_"+$userId).show();
+                    $("#cancel_edit_documentType_ico_"+$userId).hide();
+                    $("#actual_documentType_"+$userId).show();
+                    $("#edit_documentType_"+$userId).hide();
+                    $("#formEditUser"+$userId+"_documentType").val($("#actual_documentType_"+$userId).html());
+                });
+                $('i[id^=edit_document_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_document_ico_"+$userId).hide();
+                    $("#cancel_edit_document_ico_"+$userId).show();
+                    $("#actual_document_"+$userId).hide();
+                    $("#edit_document_"+$userId).show();
+                });
+                $('div[id^=actual_document_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_document_ico_"+$userId).hide();
+                    $("#cancel_edit_document_ico_"+$userId).show();
+                    $("#actual_document_"+$userId).hide();
+                    $("#edit_document_"+$userId).show();
+                });
+                $('i[id^=cancel_edit_document_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    change[$userId]-=1;
+                    $("#edit_document_ico_"+$userId).show();
+                    $("#cancel_edit_document_ico_"+$userId).hide();
+                    $("#actual_document_"+$userId).show();
+                    $("#edit_document_"+$userId).hide();
+                    $("#formEditUser"+$userId+"_document").val($("#actual_document_"+$userId).html());
+                });
+                $('i[id^=edit_expeditionDate_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_expeditionDate_ico_"+$userId).hide();
+                    $("#cancel_edit_expeditionDate_ico_"+$userId).show();
+                    $("#actual_expeditionDate_"+$userId).hide();
+                    $("#edit_expeditionDate_"+$userId).show();
+                });
+                $('div[id^=actual_expeditionDate_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_expeditionDate_ico_"+$userId).hide();
+                    $("#cancel_edit_expeditionDate_ico_"+$userId).show();
+                    $("#actual_expeditionDate_"+$userId).hide();
+                    $("#edit_expeditionDate_"+$userId).show();
+                });
+                $('i[id^=cancel_edit_expeditionDate_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    change[$userId]-=1;
+                    $("#edit_expeditionDate_ico_"+$userId).show();
+                    $("#cancel_edit_expeditionDate_ico_"+$userId).hide();
+                    $("#actual_expeditionDate_"+$userId).show();
+                    $("#edit_expeditionDate_"+$userId).hide();
+                    var str = $("#actual_expeditionDate_"+$userId).html().split("-");
+                    $("#formEditUser"+$userId+"_expeditionDate_day").val(parseInt(str[0]));
+                    $("#formEditUser"+$userId+"_expeditionDate_month").val(parseInt(str[1]));
+                    $("#formEditUser"+$userId+"_expeditionDate_year").val(parseInt(str[2]));
+                });
+                $('i[id^=edit_birthDate_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_birthDate_ico_"+$userId).hide();
+                    $("#cancel_edit_birthDate_ico_"+$userId).show();
+                    $("#actual_birthDate_"+$userId).hide();
+                    $("#edit_birthDate_"+$userId).show();
+                });
+                $('div[id^=actual_birthDate_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_birthDate_ico_"+$userId).hide();
+                    $("#cancel_edit_birthDate_ico_"+$userId).show();
+                    $("#actual_birthDate_"+$userId).hide();
+                    $("#edit_birthDate_"+$userId).show();
+                });
+                $('i[id^=cancel_edit_birthDate_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    change[$userId]-=1;
+                    $("#edit_birthDate_ico_"+$userId).show();
+                    $("#cancel_edit_birthDate_ico_"+$userId).hide();
+                    $("#actual_birthDate_"+$userId).show();
+                    $("#edit_birthDate_"+$userId).hide();
+                    var str = $("#actual_birthDate_"+$userId).html().split("-");
+                    $("#formEditUser"+$userId+"_birthDate_day").val(parseInt(str[0]));
+                    $("#formEditUser"+$userId+"_birthDate_month").val(parseInt(str[1]));
+                    $("#formEditUser"+$userId+"_birthDate_year").val(parseInt(str[2]));
+                });
+                $('i[id^=edit_gender_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_gender_ico_"+$userId).hide();
+                    $("#cancel_edit_gender_ico_"+$userId).show();
+                    $("#actual_gender_"+$userId).hide();
+                    $("#edit_gender_"+$userId).show();
+                });
+                $('div[id^=actual_gender_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_gender_ico_"+$userId).hide();
+                    $("#cancel_edit_gender_ico_"+$userId).show();
+                    $("#actual_gender_"+$userId).hide();
+                    $("#edit_gender_"+$userId).show();
+                });
+                $('i[id^=cancel_edit_gender_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    change[$userId]-=1;
+                    $("#edit_gender_ico_"+$userId).show();
+                    $("#cancel_edit_gender_ico_"+$userId).hide();
+                    $("#actual_gender_"+$userId).show();
+                    $("#edit_gender_"+$userId).hide();
+                    $("#formEditUser"+$userId+"_gender").val($("#actual_gender_"+$userId).html());
+                });
+                $('i[id^=edit_expeditionPlace_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_expeditionPlace_ico_"+$userId).hide();
+                    $("#cancel_edit_expeditionPlace_ico_"+$userId).show();
+                    $("#actual_expeditionPlace_"+$userId).hide();
+                    $("#edit_expeditionPlace_"+$userId).show();
+                });
+                $('div[id^=actual_expeditionPlace_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_expeditionPlace_ico_"+$userId).hide();
+                    $("#cancel_edit_expeditionPlace_ico_"+$userId).show();
+                    $("#actual_expeditionPlace_"+$userId).hide();
+                    $("#edit_expeditionPlace_"+$userId).show();
+                });
+                $('i[id^=cancel_edit_expeditionPlace_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    change[$userId]-=1;
+                    $("#edit_expeditionPlace_ico_"+$userId).show();
+                    $("#cancel_edit_expeditionPlace_ico_"+$userId).hide();
+                    $("#actual_expeditionPlace_"+$userId).show();
+                    $("#edit_expeditionPlace_"+$userId).hide();
+                    $("#formEditUser"+$userId+"_expeditionPlace").val($("#actual_expeditionPlace_"+$userId).html());
+                });
+                $('i[id^=edit_mainAddress_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_mainAddress_ico_"+$userId).hide();
+                    $("#cancel_edit_mainAddress_ico_"+$userId).show();
+                    $("#actual_mainAddress_"+$userId).hide();
+                    $("#edit_mainAddress_"+$userId).show();
+                });
+                $('div[id^=actual_mainAddress_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_mainAddress_ico_"+$userId).hide();
+                    $("#cancel_edit_mainAddress_ico_"+$userId).show();
+                    $("#actual_mainAddress_"+$userId).hide();
+                    $("#edit_mainAddress_"+$userId).show();
+                });
+                $('i[id^=cancel_edit_mainAddress_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    change[$userId]-=1;
+                    $("#edit_mainAddress_ico_"+$userId).show();
+                    $("#cancel_edit_mainAddress_ico_"+$userId).hide();
+                    $("#actual_mainAddress_"+$userId).show();
+                    $("#edit_mainAddress_"+$userId).hide();
+                    $("#formEditUser"+$userId+"_mainAddress").val($("#actual_mainAddress_"+$userId).html());
+                });
+                $('i[id^=edit_phone_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_phone_ico_"+$userId).hide();
+                    $("#cancel_edit_phone_ico_"+$userId).show();
+                    $("#actual_phone_"+$userId).hide();
+                    $("#edit_phone_"+$userId).show();
+                });
+                $('div[id^=actual_phone_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_phone_ico_"+$userId).hide();
+                    $("#cancel_edit_phone_ico_"+$userId).show();
+                    $("#actual_phone_"+$userId).hide();
+                    $("#edit_phone_"+$userId).show();
+                });
+                $('i[id^=cancel_edit_phone_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    change[$userId]-=1;
+                    $("#edit_phone_ico_"+$userId).show();
+                    $("#cancel_edit_phone_ico_"+$userId).hide();
+                    $("#actual_phone_"+$userId).show();
+                    $("#edit_phone_"+$userId).hide();
+                    $("#formEditUser"+$userId+"_phone").val($("#actual_phone_"+$userId).html());
+                });
+                $('i[id^=edit_registerState_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_registerState_ico_"+$userId).hide();
+                    $("#cancel_edit_registerState_ico_"+$userId).show();
+                    $("#actual_registerState_"+$userId).hide();
+                    $("#edit_registerState_"+$userId).show();
+                });
+                $('div[id^=actual_registerState_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_registerState_ico_"+$userId).hide();
+                    $("#cancel_edit_registerState_ico_"+$userId).show();
+                    $("#actual_registerState_"+$userId).hide();
+                    $("#edit_registerState_"+$userId).show();
+                });
+                $('i[id^=cancel_edit_registerState_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    change[$userId]-=1;
+                    $("#edit_registerState_ico_"+$userId).show();
+                    $("#cancel_edit_registerState_ico_"+$userId).hide();
+                    $("#actual_registerState_"+$userId).show();
+                    $("#edit_registerState_"+$userId).hide();
+                    $("#formEditUser"+$userId+"_registerState").val($("#actual_registerState_"+$userId).html());
+                });
+                $('i[id^=edit_documentStatus_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_documentStatus_ico_"+$userId).hide();
+                    $("#cancel_edit_documentStatus_ico_"+$userId).show();
+                    $("#actual_documentStatus_"+$userId).hide();
+                    $("#edit_documentStatus_"+$userId).show();
+                });
+                $('div[id^=actual_documentStatus_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_documentStatus_ico_"+$userId).hide();
+                    $("#cancel_edit_documentStatus_ico_"+$userId).show();
+                    $("#actual_documentStatus_"+$userId).hide();
+                    $("#edit_documentStatus_"+$userId).show();
+                });
+                $('i[id^=cancel_edit_documentStatus_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    change[$userId]-=1;
+                    $("#edit_documentStatus_ico_"+$userId).show();
+                    $("#cancel_edit_documentStatus_ico_"+$userId).hide();
+                    $("#actual_documentStatus_"+$userId).show();
+                    $("#edit_documentStatus_"+$userId).hide();
+                    $("#formEditUser"+$userId+"_documentStatus").val($("#actual_documentStatus_"+$userId).html());
+                });
+                $('i[id^=edit_documentsDate_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_documentsDate_ico_"+$userId).hide();
+                    $("#cancel_edit_documentsDate_ico_"+$userId).show();
+                    $("#actual_documentsDate_"+$userId).hide();
+                    $("#edit_documentsDate_"+$userId).show();
+                });
+                $('div[id^=actual_documentsDate_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_documentsDate_ico_"+$userId).hide();
+                    $("#cancel_edit_documentsDate_ico_"+$userId).show();
+                    $("#actual_documentsDate_"+$userId).hide();
+                    $("#edit_documentsDate_"+$userId).show();
+                });
+                $('i[id^=cancel_edit_documentsDate_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    change[$userId]-=1;
+                    $("#edit_documentsDate_ico_"+$userId).show();
+                    $("#cancel_edit_documentsDate_ico_"+$userId).hide();
+                    $("#actual_documentsDate_"+$userId).show();
+                    $("#edit_documentsDate_"+$userId).hide();
+                    var str = $("#actual_documentsDate_"+$userId).html().split("-");
+                    $("#formEditUser"+$userId+"_documentsDate_day").val(parseInt(str[0]));
+                    $("#formEditUser"+$userId+"_documentsDate_month").val(parseInt(str[1]));
+                    $("#formEditUser"+$userId+"_documentsDate_year").val(parseInt(str[2]));
+                });
+                $('i[id^=edit_dataCredit_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_dataCredit_ico_"+$userId).hide();
+                    $("#cancel_edit_dataCredit_ico_"+$userId).show();
+                    $("#actual_dataCredit_"+$userId).hide();
+                    $("#edit_dataCredit_"+$userId).show();
+                });
+                $('div[id^=actual_dataCredit_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_dataCredit_ico_"+$userId).hide();
+                    $("#cancel_edit_dataCredit_ico_"+$userId).show();
+                    $("#actual_dataCredit_"+$userId).hide();
+                    $("#edit_dataCredit_"+$userId).show();
+                });
+                $('i[id^=cancel_edit_dataCredit_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    change[$userId]-=1;
+                    $("#edit_dataCredit_ico_"+$userId).show();
+                    $("#cancel_edit_dataCredit_ico_"+$userId).hide();
+                    $("#actual_dataCredit_"+$userId).show();
+                    $("#edit_dataCredit_"+$userId).hide();
+                    $("#formEditUser"+$userId+"_dataCredit").val($("#actual_dataCredit_"+$userId).html());
+                });
+                $('i[id^=edit_isFree_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_isFree_ico_"+$userId).hide();
+                    $("#cancel_edit_isFree_ico_"+$userId).show();
+                    $("#actual_isFree_"+$userId).hide();
+                    $("#edit_isFree_"+$userId).show();
+                });
+                $('div[id^=actual_isFree_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_isFree_ico_"+$userId).hide();
+                    $("#cancel_edit_isFree_ico_"+$userId).show();
+                    $("#actual_isFree_"+$userId).hide();
+                    $("#edit_isFree_"+$userId).show();
+                });
+                $('i[id^=cancel_edit_isFree_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    change[$userId]-=1;
+                    $("#edit_isFree_ico_"+$userId).show();
+                    $("#cancel_edit_isFree_ico_"+$userId).hide();
+                    $("#actual_isFree_"+$userId).show();
+                    $("#edit_isFree_"+$userId).hide();
+                    $("#formEditUser"+$userId+"_isFree").val($("#actual_isFree_"+$userId).html());
+                });
+                $('i[id^=edit_legalFlag_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_legalFlag_ico_"+$userId).hide();
+                    $("#cancel_edit_legalFlag_ico_"+$userId).show();
+                    $("#actual_legalFlag_"+$userId).hide();
+                    $("#edit_legalFlag_"+$userId).show();
+                });
+                $('div[id^=actual_legalFlag_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_legalFlag_ico_"+$userId).hide();
+                    $("#cancel_edit_legalFlag_ico_"+$userId).show();
+                    $("#actual_legalFlag_"+$userId).hide();
+                    $("#edit_legalFlag_"+$userId).show();
+                });
+                $('i[id^=cancel_edit_legalFlag_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    change[$userId]-=1;
+                    $("#edit_legalFlag_ico_"+$userId).show();
+                    $("#cancel_edit_legalFlag_ico_"+$userId).hide();
+                    $("#actual_legalFlag_"+$userId).show();
+                    $("#edit_legalFlag_"+$userId).hide();
+                    $("#formEditUser"+$userId+"_legalFlag").val($("#actual_legalFlag_"+$userId).html());
+                });
+                $('i[id^=edit_pay_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_pay_ico_"+$userId).hide();
+                    $("#cancel_edit_pay_ico_"+$userId).show();
+                    $("#actual_pay_"+$userId).hide();
+                    $("#edit_pay_"+$userId).show();
+                });
+                $('div[id^=actual_pay_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    if(change[$userId]==null)change[$userId]=0;
+                    change[$userId]+=1;
+                    $("#edit_pay_ico_"+$userId).hide();
+                    $("#cancel_edit_pay_ico_"+$userId).show();
+                    $("#actual_pay_"+$userId).hide();
+                    $("#edit_pay_"+$userId).show();
+                });
+                $('i[id^=cancel_edit_pay_ico_]').on("click",function () {
+                    $userId = $(this).attr('content');
+                    change[$userId]-=1;
+                    $("#edit_pay_ico_"+$userId).show();
+                    $("#cancel_edit_pay_ico_"+$userId).hide();
+                    $("#actual_pay_"+$userId).show();
+                    $("#edit_pay_"+$userId).hide();
+                    $("#formEditUser"+$userId+"_pay").val($("#actual_pay_"+$userId).html());
+                });
+//                $('i[id^=edit__ico_]').on("click",function () {
+//                    $userId = $(this).attr('content');
+//                    if(change[$userId]==null)change[$userId]=0;
+//                    change[$userId]+=1;
+//                    $("#edit__ico_"+$userId).hide();
+//                    $("#cancel_edit__ico_"+$userId).show();
+//                    $("#actual__"+$userId).hide();
+//                    $("#edit__"+$userId).show();
+//                });
+//                $('div[id^=actual__]').on("click",function () {
+//                    $userId = $(this).attr('content');
+//                    if(change[$userId]==null)change[$userId]=0;
+//                    change[$userId]+=1;
+//                    $("#edit__ico_"+$userId).hide();
+//                    $("#cancel_edit__ico_"+$userId).show();
+//                    $("#actual__"+$userId).hide();
+//                    $("#edit__"+$userId).show();
+//                });
+//                $('i[id^=cancel_edit__ico_]').on("click",function () {
+//                    $userId = $(this).attr('content');
+//                    change[$userId]-=1;
+//                    $("#edit__ico_"+$userId).show();
+//                    $("#cancel_edit__ico_"+$userId).hide();
+//                    $("#actual__"+$userId).show();
+//                    $("#edit__"+$userId).hide();
+//                    $("#formEditUser"+$userId+"_").val($("#actual__"+$userId).html());
+//                });
+                $('i[id^=edit_]').on("click change",function () {
+                    change.forEach(function (value,index) {
+                        if (value>0){
+                            $("#form_submit_"+index).show();
+                        }else{
+                            $("#form_submit_"+index).hide();
+                        }
+                    })
+                });
+                $('div[id^=actual_]').on("click change",function () {
+                    change.forEach(function (value,index) {
+                        if (value>0){
+                            $("#form_submit_"+index).show();
+                        }else{
+                            $("#form_submit_"+index).hide();
+                        }
+                    })
+                });
+                $('i[id^=cancel_edit_]').on("click change",function () {
+                    change.forEach(function (value,index) {
+                        if (value>0){
+                            $("#form_submit_"+index).show();
+                        }else{
+                            $("#form_submit_"+index).hide();
+                        }
+                    })
+                });
+
+            });
+//            $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
+//                $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js").done(function () {
+//                    var validator;
+//                    jQuery.validator.setDefaults({
+//                        errorPlacement: function (error, element) {
+//                            if(element.attr("name")=='add_document_form[document]'){
+//                                error.appendTo('#errorEmailInfo');
+//                            }
+//
+//                        }
+//                    });
+//                    validator = $("form[name='add_document_form']").validate({
+//                        rules: {
+//                            "add_document_form[document]": {
+//                                required: true,
+//                                accept:
+//                                'application/vnd.ms-excel,' +
+//                                'application/msexcel,' +
+//                                'application/x-msexcel,' +
+//                                'application/x-ms-excel,' +
+//                                'application/x-excel,' +
+//                                'application/x-dos_ms_excel,' +
+//                                'application/xls,' +
+//                                'application/x-xls,' +
+//                                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+//                            }
+//                        },
+//                        messages: {
+//                            "add_document_form[document]": {
+//                                required: "Por favor seleccione un archivo",
+//                                accept: 'No es un tipo de archivo valido'
+//                            }
+//                        }
+//                    });
+//                });
+//            });
+//
+//
+//            $("#import-teacher-info").on('click',function () {
+//                $("#add_document_document").click();
+//            });
+//
+//            $("form[name='add_document']").on('submit',function (e) {
+//                var form = $("form[name='add_document']");
+//                if (!form.valid()) {
+//                    e.preventDefault()
+//                    return false;
+//                }else{
+//                    return true;
+//                }
+//            });
+        });
+    </script>
+
+{% endblock %}

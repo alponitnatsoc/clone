@@ -17,6 +17,116 @@ class UtilsController extends ContainerAware
         if($container)
             $this->setContainer($container);
     }
+    public function getAllStrings($str){
+        $strs = array();
+        $strs[]=$str;
+        if(count(explode('a',$str))>1){
+            if(count(explode('a',$str))>2){
+                $count = count(explode('a',$str));
+                $sbstr = explode('a',$str);
+                $fstr2 = $sbstr[0];
+                for($i = 1; $i<$count;$i++){
+                    for($j = 1; $j<$count;$j++){
+                        if($j==$i){
+                            $fstr2.='á'.$sbstr[$j];
+                        }else{
+                            $fstr2.='a'.$sbstr[$j];
+                        }
+                    }
+                    $strs[]=$fstr2;
+                    $fstr2 = $sbstr[0];
+                }
+            }else{
+                $sbstr = explode('a',$str);
+                $strs[]=$sbstr[0].'á'.$sbstr[1];
+            }
+        }
+        if(count(explode('e',$str))>1){
+            if(count(explode('e',$str))>2){
+                $count = count(explode('e',$str));
+                $sbstr = explode('e',$str);
+                $fstr2 = $sbstr[0];
+                for($i = 1; $i<$count;$i++){
+                    for($j = 1; $j<$count;$j++){
+                        if($j==$i){
+                            $fstr2.='é'.$sbstr[$j];
+                        }else{
+                            $fstr2.='e'.$sbstr[$j];
+                        }
+                    }
+                    $strs[]=$fstr2;
+                    $fstr2 = $sbstr[0];
+                }
+            }else{
+                $sbstr = explode('e',$str);
+                $strs[]=$sbstr[0].'é'.$sbstr[1];
+            }
+        }
+        if(count(explode('i',$str))>1){
+            if(count(explode('i',$str))>2){
+                $count = count(explode('i',$str));
+                $sbstr = explode('i',$str);
+                $fstr2 = $sbstr[0];
+                for($i = 1; $i<$count;$i++){
+                    for($j = 1; $j<$count;$j++){
+                        if($j==$i){
+                            $fstr2.='í'.$sbstr[$j];
+                        }else{
+                            $fstr2.='i'.$sbstr[$j];
+                        }
+                    }
+                    $strs[]=$fstr2;
+                    $fstr2 = $sbstr[0];
+                }
+            }else{
+                $sbstr = explode('i',$str);
+                $strs[]=$sbstr[0].'í'.$sbstr[1];
+            }
+        }
+        if(count(explode('o',$str))>1){
+            if(count(explode('o',$str))>2){
+                $count = count(explode('o',$str));
+                $sbstr = explode('o',$str);
+                $fstr2 = $sbstr[0];
+                for($i = 1; $i<$count;$i++){
+                    for($j = 1; $j<$count;$j++){
+                        if($j==$i){
+                            $fstr2.='ó'.$sbstr[$j];
+                        }else{
+                            $fstr2.='o'.$sbstr[$j];
+                        }
+                    }
+                    $strs[]=$fstr2;
+                    $fstr2 = $sbstr[0];
+                }
+            }else{
+                $sbstr = explode('o',$str);
+                $strs[]=$sbstr[0].'ó'.$sbstr[1];
+            }
+        }
+        if(count(explode('u',$str))>1){
+            if(count(explode('u',$str))>2){
+                $count = count(explode('u',$str));
+                $sbstr = explode('u',$str);
+                $fstr2 = $sbstr[0];
+                for($i = 1; $i<$count;$i++){
+                    for($j = 1; $j<$count;$j++){
+                        if($j==$i){
+                            $fstr2.='ú'.$sbstr[$j];
+                        }else{
+                            $fstr2.='u'.$sbstr[$j];
+                        }
+                    }
+                    $strs[]=$fstr2;
+                    $fstr2 = $sbstr[0];
+                }
+            }else{
+                $sbstr = explode('u',$str);
+                $strs[]=$sbstr[0].'ú'.$sbstr[1];
+            }
+        }
+        return $strs;
+    }
     public function generateRandomString($STRL = 20) {
         $CHR = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         for ($STR = ''; strlen($STR) < $STRL;)

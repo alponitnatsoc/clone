@@ -386,7 +386,7 @@ class PayrollRestController extends FOSRestController
         $mandatory['society_id'] = true;
         $regex['society_name'] = '(.)*';
         $mandatory['society_name'] = false;
-        $regex['society_nit'] = '([0-9])+(-[0-9]+)?';
+        $regex['society_nit'] = '(.)*';
         $mandatory['society_nit'] = false;
         $regex['society_start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
         $mandatory['society_start_date'] = false;
@@ -492,6 +492,7 @@ class PayrollRestController extends FOSRestController
      *   (name="transport_aux", nullable=false, requirements="(S|N)", strict=true, description="Weather or not it needs transportation help. Its just a flag SQL looks for it legaly.")
      *   (name="society", nullable=false, requirements="(.)*", strict=true, description="Id of the society(id of the employeer).")
      *   (name="payroll_type", nullable=false, requirements="4|6|1", strict=true, description="Payroll type, 4 for full time 6 part time 1 regular payroll.")
+     *   (name="cal_type", nullable=true, requirements="3|2|1", strict=true, description="1 from Monday to Friday, 2 from Monday to Saturday, 3 all the days")
      *
      * @return View
      */
@@ -537,6 +538,8 @@ class PayrollRestController extends FOSRestController
         $mandatory['society'] = true;
         $regex['payroll_type'] = '4|6|1|7';
         $mandatory['payroll_type'] = true;
+        $regex['cal_type'] = '3|2|1|';
+        $mandatory['cal_type'] = false;
 	     // $regex['worked_days_week'] = '([0-9])+';
 	      //$mandatory['worked_days_week'] = false;
 
@@ -569,11 +572,11 @@ class PayrollRestController extends FOSRestController
 	    
 	      /*if( $parameters['payroll_type'] == 6 ){
 	      	$unico['DIAS_LABOR_SEM'] = $parameters['worked_days_week'];
-	      }
+	      }*/
 	
-		    if( $parameters['payroll_type'] == 4 ){
-			    $unico['EMP_TIP_CAL'] = 1;
-		    }*/
+        if( $parameters['payroll_type'] == 4 ){
+            $unico['EMP_TIP_CAL'] = $parameters['cal_type'];
+        }
 
         $content[] = $unico;
         $parameters = array();
@@ -619,10 +622,11 @@ class PayrollRestController extends FOSRestController
      *   (name="worked_hours_days", nullable=true, requirements="([0-9])+", description="Number of hours worked on a day.")
      *   (name="payment_method", nullable=true, requirements="(CHE|CON|EFE)", strict=false, description="Code of payment method(CHE, CON, EFE). This code can be obtained using the table pay_type, field payroll_code.")
      *   (name="liquidation_type", nullable=true, requirements="(J|M|Q)", strict=false, description="Liquidation type, (J daily, M monthly, Q every two weeks). This code can obtained using the table frequency field payroll_code.")
-     *   (name="contract_type", nullable=true, requirements="([0-9])", strict=false, description="Contract type of the employee, this can be found in the table contract_type, field payroll_code.")
+     *   (name="contract_type", nullable=true, requirements="([0-9])", strict=false, description="1 Termino indefinido 2 termino fijo.")
      *   (name="transport_aux", nullable=true, requirements="(S|N)", strict=false, description="Weather or not it needs transportation help, if empty it uses the law.")
      *   (name="society", nullable=true, requirements="(.)*", strict=true, description="Id of the society(id of the employeer).")
      *   (name="payroll_type", nullable=true, requirements="4|6|1", strict=true, description="Payroll type, 4 for full time 6 part time 1 regular payroll.")
+     *   (name="cal_type", nullable=true, requirements="3|2|1", strict=true, description="1 from Monday to Friday, 2 from Monday to Saturday, 3 all the days")
      *
      * @return View
      */
@@ -670,6 +674,8 @@ class PayrollRestController extends FOSRestController
         $mandatory['society'] = false;
         $regex['payroll_type'] = '4|6|1';
         $mandatory['payroll_type'] = false;
+        $regex['cal_type'] = '3|2|1|';
+        $mandatory['cal_type'] = false;
 
         $this->validateParamters($parameters, $regex, $mandatory);
 
@@ -678,7 +684,7 @@ class PayrollRestController extends FOSRestController
         $info = $this->getEmployeeAction($parameters['employee_id'])->getData();
 	
 	      if(!isset($info['RECIBE_AUX_TRA'])) $info['RECIBE_AUX_TRA'] = 'N';
-	      
+
         $unico['TIPOCON'] = 1;
         $unico['EMP_CODIGO'] = $parameters['employee_id'];
         $unico['EMP_APELLIDO1'] = isset($parameters['last_name']) ? $parameters['last_name'] : $info['EMP_APELLIDO1'];
@@ -687,22 +693,26 @@ class PayrollRestController extends FOSRestController
         $unico['EMP_CEDULA'] = isset($parameters['document']) ? $parameters['document'] : $info['EMP_CEDULA'];
         $unico['EMP_SEXO'] = isset($parameters['gender']) ? $parameters['gender'] : $info['EMP_SEXO'];
         $unico['EMP_FECHA_NACI'] = isset($parameters['birth_date']) ? $parameters['birth_date'] : $info['EMP_FECHA_NACI'];
+        //TODO(andres_ramirez) preguntar si este se manda
+//        $unico['EMP_SOCIEDAD'] = isset($parameters['society']) ? $parameters['society'] : $info['EMP_SOCIEDAD'];
         $unico['EMP_FECHA_INGRESO'] = isset($parameters['start_date']) ? $parameters['start_date'] : $info['EMP_FECHA_INGRESO'];
         $unico['EMP_FECHA_INI_CONTRATO'] = isset($parameters['start_date']) ? $parameters['start_date'] : $info['EMP_FECHA_INGRESO'];
-        $unico['EMP_NRO_CONTRATO'] = isset($parameters['contract_number']) ? $parameters['contract_number'] : $info['EMP_NRO_CONTRATO'];
         $unico['EMP_FECHA_FIN_CONTRATO'] = isset($parameters['last_contract_end_date']) ? $parameters['last_contract_end_date'] : $info['EMP_FECHA_FIN_CONTRATO'];
+        $unico['EMP_NRO_CONTRATO'] = isset($parameters['contract_number']) ? $parameters['contract_number'] : $info['EMP_NRO_CONTRATO'];
+        $unico['EMP_JORNADA'] = 1; //Is a must
         $unico['EMP_HORAS_TRAB'] = isset($parameters['worked_hours_days']) ? $parameters['worked_hours_days'] : $info['EMP_HORAS_TRAB'];
         $unico['EMP_FORMA_PAGO'] = isset($parameters['payment_method']) ? $parameters['payment_method'] : $info['EMP_FORMA_PAGO'];
         $unico['EMP_TIPOLIQ'] = isset($parameters['liquidation_type']) ? $parameters['liquidation_type'] : $info['EMP_TIPOLIQ'];
         $unico['EMP_TIPO_SALARIO'] = isset($parameters['salary_type']) ? $parameters['salary_type'] : $info['EMP_TIPO_SALARIO'];
         $unico['RECIBE_AUX_TRA'] = isset($parameters['transport_aux']) ? $parameters['transport_aux'] : $info['RECIBE_AUX_TRA'];
-	      //TODO(andres_ramirez) preguntar si este se manda
-//        $unico['EMP_SOCIEDAD'] = isset($parameters['society']) ? $parameters['society'] : $info['EMP_SOCIEDAD'];
         $unico['EMP_TIPO_NOMINA'] = isset($parameters['payroll_type']) ? $parameters['payroll_type'] : $info['EMP_TIPO_NOMINA'];
-	      $unico['EMP_JORNADA'] = 1; //Is a must
-
         if (isset($info['EMP_TIPO_CONTRATO']))
             $unico['EMP_TIPO_CONTRATO'] = isset($parameters['contract_type']) ? $parameters['contract_type'] : $info['EMP_TIPO_CONTRATO'];
+        if( $unico['EMP_TIPO_NOMINA'] == 4 ){
+            $unico['EMP_TIP_CAL'] = isset($parameters['cal_type']) ? $parameters['cal_type'] : $info['EMP_TIP_CAL'];
+        }else{
+            $unico['EMP_TIP_CAL'] = 1;
+        }
         $content[] = $unico;
         $parameters = array();
         $parameters['inInexCod'] = '601';
@@ -746,7 +756,6 @@ class PayrollRestController extends FOSRestController
 
         /** @var View $res */
         $responseView = $this->callApi($parameters);
-
         return $responseView;
     }
 
@@ -1097,6 +1106,7 @@ class PayrollRestController extends FOSRestController
      */
     public function getEmployeeEntityAction($employeeId)
     {
+        $employeeId = intval($employeeId);
         $content = array();
         $unico = array();
 
@@ -2287,7 +2297,84 @@ class PayrollRestController extends FOSRestController
 
         return $responseView;
     }
-
+	
+		/**
+		 * Modify final liquidation parameters.<br/>
+		 *
+		 * @ApiDoc(
+		 *   resource = true,
+		 *   description = "Modify final liquidation parameters.",
+		 *   statusCodes = {
+		 *     200 = "OK",
+		 *     400 = "Bad Request",
+		 *     401 = "Unauthorized",
+		 *     404 = "Not Found"
+		 *   }
+		 * )
+		 *
+		 * @param Request $request.
+		 * Rest Parameters:
+		 *
+		 *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+		 *    (name="year", nullable=true, requirements="([0-9])+", strict=true, description="Year of the process execution(format: DD-MM-YYYY)")
+		 *    (name="month", nullable=true, requirements="([0-9])+", strict=true, description="Month of the process execution(format: DD-MM-YYYY)")
+		 *    (name="period", nullable=true, requirements="([0-9])+", strict=true, description="Period of the process execution(format: DD-MM-YYYY)")
+		 *    (name="cutDate", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Date of the cut for the process execution(format: DD-MM-YYYY).")
+		 *    (name="processDate", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Date of the of the process execution(format: DD-MM-YYYY)")
+		 *    (name="retirementCause", nullable=true, requirements="([0-9])+", strict=true, description="ID of the retirement cause.")
+		 *
+		 * @return View
+		 */
+		public function postUnprocessFinalLiquidationParametersAction(Request $request)
+		{
+			$parameters = $request->request->all();
+			$regex = array();
+			$mandatory = array();
+			// Set all the parameters info.
+			$regex['employee_id'] = '([0-9])+';
+			$mandatory['employee_id'] = true;
+			$regex['year'] = '([0-9])+';
+			$mandatory['year'] = false;
+			$regex['month'] = '([0-9])+';
+			$mandatory['month'] = false;
+			$regex['period'] = '([0-9])+';
+			$mandatory['period'] = false;
+			$regex['cutDate'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
+			$mandatory['cutDate'] = false;
+			$regex['processDate'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
+			$mandatory['processDate'] = false;
+			$regex['retirementCause'] = '([0-9])+';
+			$mandatory['retirementCause'] = false;
+			
+			$this->validateParamters($parameters, $regex, $mandatory);
+			
+			$content = array();
+			$unico = array();
+			
+			$info = $this->getFinalLiquidationParametersAction($parameters['employee_id'])->getData();
+			
+			$unico['TIPOCON'] = 2;
+			$unico['USERNAME'] = 'SRHADMIN';
+			$unico['EMP_CODIGO'] =  $parameters['employee_id'];
+			$unico['PDEF_ANO'] = isset($parameters['year']) ? $parameters['year'] : $info['PDEF_ANO'];
+			$unico['PDEF_MES'] = isset($parameters['month']) ? $parameters['month'] : $info['PDEF_MES'];
+			$unico['PDEF_PERIODO'] = isset($parameters['period']) ? $parameters['period'] : $info['PDEF_PERIODO'];
+			$unico['PDEF_FECORTE'] = isset($parameters['cutDate']) ? $parameters['cutDate'] : $info['PDEF_FECORTE'];
+			$unico['PDEF_FEPAGO'] = isset($parameters['processDate']) ? $parameters['processDate'] : $info['PDEF_FEPAGO'];
+			$unico['CAUSA_RETIRO'] = isset($parameters['retirementCause']) ? $parameters['retirementCause'] : $info['CAUSA_RETIRO'];
+			
+			
+			$content[] = $unico;
+			$parameters = array();
+			$parameters['inInexCod'] = '620';
+			$parameters['clXMLSolic'] = $this->createXml($content, 620);
+			
+			/** @var View $res */
+			$responseView = $this->callApi($parameters);
+			
+			return $responseView;
+		}
+	
     /**
      * Gets the final liquidation parameteres.<br/>
      *
@@ -3324,7 +3411,7 @@ class PayrollRestController extends FOSRestController
 	 * @param Request $request.
 	 * Rest Parameters:
 	 *
-	 *    (name="cod_process", nullable=false, requirements="(P|D|C)", strict=true, description="code of the process to execute")
+	 *    (name="cod_process", nullable=false, requirements="([0-9])+", strict=true, description="code of the process to execute")
 	 *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
 	 *    (name="execution_type", nullable=false, requirements="(P|D|C)", strict=true, description="P for process, D for unprocess and C for close")
 	 *

@@ -541,106 +541,105 @@ class ContractRestSecuredController extends FOSRestController
         $em->persist($contract);
         $em->remove($contractRecord);
         $em->flush();
-        dump($contract->getIdContract());die;
         return true;
     }
 
-//    /**
-//     * Update minimum salary
-//     *
-//     * @ApiDoc(
-//     *   resource = true,
-//     *   description = "Update minimum salary",
-//     *   statusCodes = {
-//     *     200 = "ALL OK",
-//     *     400 = "Bad Request",
-//     *   }
-//     * )
-//     *
-//     * @param paramFetcher $paramFetcher ParamFetcher
-//     *
-//     * @RequestParam(name="year", nullable=false, requirements="[0-9]{4}", description="Year for new minimum salary")
-//     * @RequestParam(name="start_index", nullable=false, requirements="([0-9])+", description="index to start loop")
-//     * @RequestParam(name="end_index", nullable=false, requirements="([0-9])+", description="index to end loop")
-//     * @RequestParam(name="minimum_salary", nullable=true, requirements="([0-9])+(.[0-9]+)?", strict=true, description="new minimum salary")
-//     * @return View
-//     */
-//    public function postUpdateMinimumSalaryAction(ParamFetcher $paramFetcher)
-//    {
-//
-//        $em = $this->getDoctrine()->getManager();
-//        if($paramFetcher->get("minimum_salary")){
-//            $newMinimumSalary = $paramFetcher->get("minimum_salary");
-//            /** @var CalculatorConstraints $calcConstr */
-//            $calcConstr = $em->getRepository("RocketSellerTwoPickBundle:CalculatorConstraints")->findOneBy(array("name"=>"smmlv"));
-//            if($newMinimumSalary>$calcConstr->getValue()){
-//                $calcConstr->setValue($newMinimumSalary);
-//                $em->persist($calcConstr);
-//                $em->flush();
-//            }
-//        }else{
-//            $newMinimumSalary = $em->getRepository("RocketSellerTwoPickBundle:CalculatorConstraints")->findOneBy(array("name"=>"smmlv"))->getValue();
-//        }
-//        $minimumSalaryPerDay = $newMinimumSalary/30;
-//        $contracts = $em->getRepository("RocketSellerTwoPickBundle:Contract")->findAll();
-//        $today = new DateTime();
-//        /** @var Contract $contract */
-//        foreach ($contracts as $contract){
-//            $ehe = $contract->getEmployerHasEmployeeEmployerHasEmployee();
-//            $employer = $ehe->getEmployerEmployer();
-//            if(!($ehe->getExistentSQL() == 1 and $ehe->getState() >= 4 and $employer->getIdSqlSociety()!=null))
-//                continue;
-//            /** @var TimeCommitment $timeCommitment */
-//            $timeCommitment = $contract->getTimeCommitmentTimeCommitment();
-//            if($timeCommitment->getCode() == "XD"){
-//                $actualContractPerDaySalary = $contract->getSalary()/$contract->getWorkableDaysMonth();
-//                if($actualContractPerDaySalary<=$minimumSalaryPerDay){
-//                    $request = $this->container->get('request');
-//                    $request->setMethod("PUT");
-//                    $request->request->add(array(
-//                        'date_to_execute'=>$today->format("d-m-Y"),
-//                        'contract_id'=>$contract->getIdContract(),
-//                        'salary'=>$minimumSalaryPerDay
-//                    ));
-//                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:ContractRestSecured:putCreateContractRecord',
-//                        array('request' => $request ), array('_format' => 'json'));
-//                    if ($insertionAnswer->getStatusCode() != 200) {
-//                        $response["contracts"][$contract->getIdContract()]="fail";
-//                    }else{
-//                        $response["contracts"][$contract->getIdContract()]="yay";
-//                    }
-//                }else{
-//                    $response["contracts"][$contract->getIdContract()]="no entro";
-//                }
-//            }else{
-//                $actualContractSalary = $contract->getSalary();
-//                if($actualContractSalary<=$minimumSalary){
-//                    $request = $this->container->get('request');
-//                    $request->setMethod("PUT");
-//                    $request->request->add(array(
-//                        'date_to_execute'=>"01-01-2017",
-//                        'contract_id'=>$contract->getIdContract(),
-//                        'salary'=>$minimumSalary
-//                    ));
-//                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:ContractRestSecured:putCreateContractRecord',
-//                        array('request' => $request ), array('_format' => 'json'));
-//                    if ($insertionAnswer->getStatusCode() != 200) {
-//                        $response["contracts"][$contract->getIdContract()]="fail";
-//                    }else{
-//                        $response["contracts"][$contract->getIdContract()]="yay";
-//                    }
-//                }else{
-//                    $response["contracts"][$contract->getIdContract()]="no entro";
-//                }
-//
-//            }
-//        }
-//        $response['done']=true;
-//        $view = View::create();
-//        $view->setStatusCode(200);
-//        $view->setData($response);
-//        return $view;
-//    }
+    /**
+     * Update minimum salary
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Update minimum salary",
+     *   statusCodes = {
+     *     200 = "ALL OK",
+     *     400 = "Bad Request",
+     *   }
+     * )
+     *
+     * @param paramFetcher $paramFetcher ParamFetcher
+     *
+     * @RequestParam(name="year", nullable=false, requirements="[0-9]{4}", description="Year for new minimum salary")
+     * @RequestParam(name="start_index", nullable=false, requirements="([0-9])+", description="index to start loop")
+     * @RequestParam(name="end_index", nullable=false, requirements="([0-9])+", description="index to end loop")
+     * @RequestParam(name="minimum_salary", nullable=true, requirements="([0-9])+(.[0-9]+)?", strict=true, description="new minimum salary")
+     * @return View
+     */
+    public function postUpdateMinimumSalaryAction(ParamFetcher $paramFetcher)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        if($paramFetcher->get("minimum_salary")){
+            $newMinimumSalary = $paramFetcher->get("minimum_salary");
+            /** @var CalculatorConstraints $calcConstr */
+            $calcConstr = $em->getRepository("RocketSellerTwoPickBundle:CalculatorConstraints")->findOneBy(array("name"=>"smmlv"));
+            if($newMinimumSalary>$calcConstr->getValue()){
+                $calcConstr->setValue($newMinimumSalary);
+                $em->persist($calcConstr);
+                $em->flush();
+            }
+        }else{
+            $newMinimumSalary = $em->getRepository("RocketSellerTwoPickBundle:CalculatorConstraints")->findOneBy(array("name"=>"smmlv"))->getValue();
+        }
+        $minimumSalaryPerDay = $newMinimumSalary/30;
+        $contracts = $em->getRepository("RocketSellerTwoPickBundle:Contract")->findAll();
+        $today = new DateTime();
+        /** @var Contract $contract */
+        foreach ($contracts as $contract){
+            $ehe = $contract->getEmployerHasEmployeeEmployerHasEmployee();
+            $employer = $ehe->getEmployerEmployer();
+            if(!($ehe->getExistentSQL() == 1 and $ehe->getState() >= 4 and $employer->getIdSqlSociety()!=null))
+                continue;
+            /** @var TimeCommitment $timeCommitment */
+            $timeCommitment = $contract->getTimeCommitmentTimeCommitment();
+            if($timeCommitment->getCode() == "XD"){
+                $actualContractPerDaySalary = $contract->getSalary()/$contract->getWorkableDaysMonth();
+                if($actualContractPerDaySalary<=$minimumSalaryPerDay){
+                    $request = $this->container->get('request');
+                    $request->setMethod("PUT");
+                    $request->request->add(array(
+                        'date_to_execute'=>$today->format("d-m-Y"),
+                        'contract_id'=>$contract->getIdContract(),
+                        'salary'=>$minimumSalaryPerDay
+                    ));
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:ContractRestSecured:putCreateContractRecord',
+                        array('request' => $request ), array('_format' => 'json'));
+                    if ($insertionAnswer->getStatusCode() != 200) {
+                        $response["contracts"][$contract->getIdContract()]="fail";
+                    }else{
+                        $response["contracts"][$contract->getIdContract()]="yay";
+                    }
+                }else{
+                    $response["contracts"][$contract->getIdContract()]="no entro";
+                }
+            }else{
+                $actualContractSalary = $contract->getSalary();
+                if($actualContractSalary<=$newMinimumSalary){
+                    $request = $this->container->get('request');
+                    $request->setMethod("PUT");
+                    $request->request->add(array(
+                        'date_to_execute'=>"01-01-2017",
+                        'contract_id'=>$contract->getIdContract(),
+                        'salary'=>$newMinimumSalary
+                    ));
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:ContractRestSecured:putCreateContractRecord',
+                        array('request' => $request ), array('_format' => 'json'));
+                    if ($insertionAnswer->getStatusCode() != 200) {
+                        $response["contracts"][$contract->getIdContract()]="fail";
+                    }else{
+                        $response["contracts"][$contract->getIdContract()]="yay";
+                    }
+                }else{
+                    $response["contracts"][$contract->getIdContract()]="no entro";
+                }
+
+            }
+        }
+        $response['done']=true;
+        $view = View::create();
+        $view->setStatusCode(200);
+        $view->setData($response);
+        return $view;
+    }
 
 //    public function postExecuteContractRecordsAction(ParamFetcher $paramFetcher)
 //    {
@@ -720,4 +719,6 @@ class ContractRestSecuredController extends FOSRestController
         return $view;
 
     }
+
+
 }

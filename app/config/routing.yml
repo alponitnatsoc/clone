@@ -563,6 +563,10 @@ producto:
     path:     /producto
     defaults: { _controller: RocketSellerTwoPickBundle:Public:producto }
 
+entidades:
+    path:     /entidades
+    defaults: { _controller: RocketSellerTwoPickBundle:Entity:entitySearch }
+
 categories:
     path:     /categories/{redirectedBy}
     defaults: { _controller: RocketSellerTwoPickBundle:Public:categories }

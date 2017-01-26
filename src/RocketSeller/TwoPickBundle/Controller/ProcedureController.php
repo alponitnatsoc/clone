@@ -675,7 +675,7 @@ class ProcedureController extends Controller
                     'choices' => array(
                         'CC' => 'Cédula de ciudadania',
                         'CE' => 'Cédula de Extranjería',
-                        'PAS' => 'Pasaporte'
+                        'PASAPORTE' => 'Pasaporte'
                     )))
                 ->add('name','text',array('label'=>'Nombre Completo:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
                 ->add('lastName1','text',array('label'=>'Primer Apellido:','required'=>true,'disabled'=>true,'attr'=>array('class'=>'value-content'),'label_attr'=>array('class'=>'value-title')))
@@ -1203,7 +1203,7 @@ class ProcedureController extends Controller
                         'placeholder' => array(
                             'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
                         ),
-                        'years' => range(intval($today->format("Y"))+1,intval($ehe->getActiveContract()->getStartDate()->format("Y")))
+                        'years' => range(intval($today->format("Y"))+2,intval($ehe->getActiveContract()->getStartDate()->format("Y")-2))
                     ))
                     ->add('edit', 'submit', array('label' => 'Guardar','attr'=>array('class'=>'form-button')))
                     ->getForm();

@@ -552,6 +552,14 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                 $template = $this->parameters['template']['severancesAdvice'];
                 return $this->sendMessage($template, $context, $teamFromEmail, $context["toEmail"]);
                 break;
+            case "errorInBanckAccountRegistration":
+                /** $context must have:
+                 * string toEmail
+                 * string referredCode
+                 */
+                $template = $this->parameters['template']['errorInBanckAccountRegistration'];
+                return $this->sendMessage($template, $context, $contactPublicFromEmail, $contactPrivate);
+                break;
 
         }
     }

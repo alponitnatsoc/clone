@@ -119,6 +119,7 @@ services:
                     noRegisterFacebook: 'FOSUserBundle:EmailTemplates:noRegisterFacebook.txt.twig'
                     noRegisterLanding: 'FOSUserBundle:EmailTemplates:noRegisterLanding.txt.twig'
                     testAnalytics: 'FOSUserBundle:EmailTemplates:testAnalytics.txt.twig'
+                    errorInBanckAccountRegistration: 'FOSUserBundle:EmailTemplates:errorInBanckAccountRegistration.txt.twig'
                     severancesAdvice: 'FOSUserBundle:EmailTemplates:avisoPagoCesantias.txt.twig'
                 from_email:
                   confirmation: '%fos_user.registration.confirmation.from_email%'

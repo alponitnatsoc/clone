@@ -1014,7 +1014,7 @@ class Payments2RestController extends FOSRestController
         $mandatory['documentTypeEmployee'] = true;
         $regex['documentEmployee'] = '([0-9|-]| )+';
         $mandatory['documentEmployee'] = true;
-        $regex['bankCode'] = '(([0-9|-]| )+|(GS|PL))';
+        $regex['bankCode'] = '(([0-9|-]| )+|(GS|PL|PC))';
         $mandatory['bankCode'] = true;
         $regex['accountType'] = '(AH|CC|EN|DP)';
         $mandatory['accountType'] = true;
