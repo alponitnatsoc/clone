@@ -76,6 +76,57 @@ class BackOfficeController extends Controller
 
         return $this->render('RocketSellerTwoPickBundle:BackOffice:index.html.twig');
     }
+    public function testSeverancesEmailAction()
+    {
+        if(!$this->isGranted('ROLE_BACK_OFFICE')){
+            $this->createAccessDeniedException();
+        }
+        /** @var User $user */
+        $user=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->find(4);//gabriel user
+        $em=$this->getDoctrine()->getManager();
+
+        $shash = md5($user->getEmailCanonical());
+        $user->setSHash($shash);
+        $em->persist($user);
+        $em->flush();
+        $url =  $user->getSHash();
+        $this->get("symplifica.mailer.twig_swift")->sendEmailByTypeMessage(array("emailType"=>"severancesAdvice","toEmail"=>$user->getEmail(),"redirectUrl"=>$url));
+
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:index.html.twig');
+    }
+    public function emailSeverancesAction()
+    {
+        if(!$this->isGranted('ROLE_BACK_OFFICE')){
+            $this->createAccessDeniedException();
+        }
+        $em = $this->getDoctrine()->getManager();
+        /** @var QueryBuilder $qb */
+        $qb = $em->createQueryBuilder();
+        $qb->select('c')
+            ->from('RocketSellerTwoPickBundle:Contract', 'c')
+            ->where('c.startDate < ?1 and c.state = 1 ')->setParameter(1,"2017-01-01");
+        $result = $qb->getQuery()->getResult();
+        $array= array();
+        $userRepo= $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+        /** @var Contract $contract */
+        foreach ($result as $contract) {
+            if($contract->getEmployerHasEmployeeEmployerHasEmployee()->getState()>=4){
+                /** @var User $tUser */
+                $tUser = $userRepo->findOneBy(array('personPerson'=>$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson()));
+                $array[$tUser->getId()]=$tUser;
+            }
+        }
+        /** @var User $value */
+        foreach ($array as $key => $value) {
+            $shash = md5($value->getEmailCanonical());
+            $value->setSHash($shash);
+            $em->persist($value);
+            $em->flush();
+            $url =  $value->getSHash();
+            $this->get("symplifica.mailer.twig_swift")->sendEmailByTypeMessage(array("emailType"=>"severancesAdvice","toEmail"=>$value->getEmail(),"redirectUrl"=>$url));
+        }
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:index.html.twig');
+    }
     public function addPrimaAction(Request $request)
     {
 

@@ -571,6 +571,10 @@ categories:
     path:     /categories/{redirectedBy}
     defaults: { _controller: RocketSellerTwoPickBundle:Public:categories }
 
+authorize_hash:
+    path:     /authorize/{hash}
+    defaults: { _controller: RocketSellerTwoPickBundle:Public:authorizeAutomatedPayment }
+
 politicas_privacidad:
     path:     /politicas-de-privacidad
     defaults: { _controller: RocketSellerTwoPickBundle:CorporatePages:politicaPrivacidad}

@@ -68,6 +68,12 @@ sells_dashboard:
 back_office:
     path:     /backoffice
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:index}
+back_test_severances:
+    path:     /test/severances/email
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:testSeverancesEmail}
+severances_auth_email:
+    path:     /backoffice/severances/email
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:emailSeverances}
 back_office_prima:
     path:     /backoffice/add/prima
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:addPrima}

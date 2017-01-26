@@ -3,6 +3,8 @@
 namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Exclude;
 
 /**
  * Country
@@ -37,13 +39,19 @@ class Configuration
      */
     private $descripcion;
 
+    /**
+     * @ORM\OneToMany(targetEntity="UserHasConfig", mappedBy="configurationConfiguration", cascade={"persist"})
+     * @Exclude
+     */
+    private $configHasUsers;
+
 
     /**
      * Set idConfigurations
      *
-     * @param integer $idConfigurations
+     * @param integer $idConfiguration
      *
-     * @return Configurations
+     * @return Configuration
      */
     public function setIdConfiguration($idConfiguration)
     {
@@ -133,5 +141,46 @@ class Configuration
     public function getDescripcion()
     {
         return $this->descripcion;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->configHasUsers = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add configHasUser
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\UserHasConfig $configHasUser
+     *
+     * @return Configuration
+     */
+    public function addConfigHasUser(\RocketSeller\TwoPickBundle\Entity\UserHasConfig $configHasUser)
+    {
+        $this->configHasUsers[] = $configHasUser;
+
+        return $this;
+    }
+
+    /**
+     * Remove configHasUser
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\UserHasConfig $configHasUser
+     */
+    public function removeConfigHasUser(\RocketSeller\TwoPickBundle\Entity\UserHasConfig $configHasUser)
+    {
+        $this->configHasUsers->removeElement($configHasUser);
+    }
+
+    /**
+     * Get configHasUsers
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getConfigHasUsers()
+    {
+        return $this->configHasUsers;
     }
 }

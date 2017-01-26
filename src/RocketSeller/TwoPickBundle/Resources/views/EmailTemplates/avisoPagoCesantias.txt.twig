@@ -1,0 +1,94 @@
+{% trans_default_domain 'FOSUserBundle' %}
+{% block subject %}{% autoescape false %}Importante: Pago de cesantías{% endautoescape %}{% endblock %}
+{% block body_html %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600,600italic,700" rel="stylesheet" type="text/css">
+    <title>Responsive email</title>
+
+  <style type="text/css">
+        body{
+            margin:10px 0;
+            padding:0 10px;
+            background:#F9F2E7;
+            font-size:13px;
+        }
+        table{
+            border-collapse:collapse;
+        }
+        td{
+            font-family:arial, sans-serif;
+            color:#333333;
+        }
+    @media only screen and (max-width: 580px){
+        body,table,td,p,a,li,blockquote{
+            -webkit-text-size-adjust:none !important;
+        }
+}   @media only screen and (max-width: 580px){
+        table{
+            width:100% !important;
+        }
+}   @media only screen and (max-width: 580px){
+        .responsive-image img{
+            height:auto !important;
+            max-width:50% !important;
+            width:50% !important;
+        }
+}</style></head>
+<body>
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+        <td>
+        <table border="0" cellpadding="0" cellspacing="0" align="center" width="640" bgcolor="#FFFFFF">
+            <tr>{% include "RocketSellerTwoPickBundle:EmailTemplates:header.txt.twig" %}</tr>
+            <tr>
+                <td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px 10px 5px 10px;">
+                    <div style="text-align: left;width:80%;margin:0 auto;color:#75BEC1;font-size: 22px; font-family: 'Open Sans', sans-serif; font-weight: 700;">¡Hola!
+                    </div>
+                    <br>
+                    <div style="font-size: 15px; font-style: normal; font-family: 'Open Sans', sans-serif; font-weight: 100; color: #858688;width:80%;margin:0 auto;text-align:left">
+                        El pago de las cesantías de tu empleado estará habilitado el próximo 6 de febrero.<br><br>
+                        <div style="font-family: 'Open Sans', sans-serif; font-weight: 300; color:#858789; font-size: 15px;width:90%;margin:0 auto;text-align:justify">
+                            <strong>Ten en cuenta estas recomendaciones:</strong>
+                            <br><br>
+                            &#8226; No olvides <strong>tener recursos en tu cuenta</strong> para evitar inconveniente con las transacciones.
+                            <br><br>
+                            &#8226; <strong>Realizar el pago a tiempo</strong> ya que por cada día de mora deberás pagar un día de sueldo adicional.
+                            <br><br>
+                            &#8226; No pagar esta prestación podría traerte <strong>inconvenientes legales</strong> y económicos por tratarse de una prestación social a cargo del empleador.
+                            <br><br>
+                            &#8226; Recuerda que el aporte debe hacerse a un fondo de cesantías elegido por el trabajador y <strong>en ningún momento se debe dar en efectivo</strong>, según lo establece la ley.
+                            <br><br>
+                        </div>
+                        <span style="color:#13878e;font-weight:600">Si prefieres estar seguro de que tu pago se debitará en las fechas correctas, simplemente da clic en el siguiente botón y debitaremos automáticamente el pago.</span>
+                        <br>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:center; padding: 15px 5px 20px 5px;">
+                    <a href="{{ url('authorize_hash',{'hash':redirectUrl}) }}" style="text-decoration:none;width: 90%;display:block;margin: 0 auto;" target="_blank;">
+                    <div style="background:#13878e;border-radius:25px; height: 25px; font-size:14px; width: 170px; color:#FFFFFF;font-family: 'Open Sans', sans-serif; font-weight: 600; padding: 5px 0 0 0; text-align:center;margin:0px auto">
+                        Ir a Symplifica
+                    </div>
+                </a>
+                <br/>
+                <br/>
+                </td>
+            </tr>
+            <tr>
+              {% include "RocketSellerTwoPickBundle:EmailTemplates:footer.txt.twig" %}
+            </tr>
+        </table>
+        </td>
+    </tr>
+    </table>
+</body>
+</html>
+{% endblock %}
