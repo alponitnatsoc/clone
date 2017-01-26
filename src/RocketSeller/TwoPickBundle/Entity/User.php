@@ -282,9 +282,21 @@ class User extends BaseUser
     private $money = 0;
 
     /**
+     * @var string
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private $sHash;
+
+    /**
      * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\Log", mappedBy="userUser",cascade={"persist"})
      */
     private $logs;
+
+    /**
+     * @var UserHasConfig $userHasConfig
+     * @ORM\OneToMany(targetEntity="UserHasConfig", mappedBy="userUser", cascade={"persist"})
+     */
+    private $UserHasConfigs;
 
     /**
      * Set personPerson
@@ -1245,5 +1257,63 @@ class User extends BaseUser
     public function getMoney()
     {
         return $this->money;
+    }
+
+    /**
+     * Set sHash
+     *
+     * @param string $sHash
+     *
+     * @return User
+     */
+    public function setSHash($sHash)
+    {
+        $this->sHash = $sHash;
+
+        return $this;
+    }
+
+    /**
+     * Get sHash
+     *
+     * @return string
+     */
+    public function getSHash()
+    {
+        return $this->sHash;
+    }
+
+    /**
+     * Add userHasConfig
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\UserHasConfig $userHasConfig
+     *
+     * @return User
+     */
+    public function addUserHasConfig(\RocketSeller\TwoPickBundle\Entity\UserHasConfig $userHasConfig)
+    {
+        $this->UserHasConfigs[] = $userHasConfig;
+
+        return $this;
+    }
+
+    /**
+     * Remove userHasConfig
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\UserHasConfig $userHasConfig
+     */
+    public function removeUserHasConfig(\RocketSeller\TwoPickBundle\Entity\UserHasConfig $userHasConfig)
+    {
+        $this->UserHasConfigs->removeElement($userHasConfig);
+    }
+
+    /**
+     * Get userHasConfigs
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUserHasConfigs()
+    {
+        return $this->UserHasConfigs;
     }
 }
