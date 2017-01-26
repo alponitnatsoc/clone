@@ -116,6 +116,8 @@ class BackOfficeController extends Controller
                 $array[$tUser->getId()]=$tUser;
             }
         }
+        dump($array);
+        die();
         /** @var User $value */
         foreach ($array as $key => $value) {
             $shash = md5($value->getEmailCanonical());
