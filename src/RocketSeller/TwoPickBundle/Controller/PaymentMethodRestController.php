@@ -294,7 +294,7 @@ class PaymentMethodRestController extends FOSRestController
 		      $realPayMethods=[];
 		      if (isset($responsePaymentsMethodsCC["payment-methods"])) {
 			      foreach ($responsePaymentsMethodsCC["payment-methods"] as $key=>$value ) {
-				      $realPayMethods[]=array(
+				      $realPayMethods['0-'.$value["method-id"]]=array(
 					      'payment-type'=>$value["payment-type"]==3?"VISA":"MasterC",
 					      'account'=>$value["account"],
 					      'method-id'=>'0-'.$value["method-id"],
@@ -308,7 +308,7 @@ class PaymentMethodRestController extends FOSRestController
 				      if($value["estado"]=="DISPONIBLE"){
 					      /** @var Bank $bank */
 					      $bank=$bankRepo->findOneBy(array('hightechCode'=>$value["codBanco"]));
-					      $realPayMethods[]=array(
+					      $realPayMethods['1-'.$value["idCuenta"]]=array(
 						      'payment-type'=>$value["tipoCuenta"]=="AH"?"Ahorros":"Corriente",
 						      'account'=>$value["numeroCuenta"],
 						      'method-id'=>'1-'.$value["idCuenta"],
@@ -318,8 +318,12 @@ class PaymentMethodRestController extends FOSRestController
 				      }
 			      }
 		      }
+		      $rPM=array();
+              foreach ($realPayMethods as $key => $realPayMethod) {
+                  $rPM[]=$realPayMethod;
+		      }
 		
-		      return $view->setStatusCode(200)->setData(array("payment-methods"=>$realPayMethods));
+		      return $view->setStatusCode(200)->setData(array("payment-methods"=>$rPM));
 	      }
 	
 	      return $view->setStatusCode(404);
