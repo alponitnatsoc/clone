@@ -52,7 +52,7 @@
     </style>
     <div id="main">
         <div class="back-panel-title col-sm-12 col-xs-12">
-            Información de Nómina
+            Información de Nómina y pila
         </div>
 
         <div class="back-panel">
@@ -170,7 +170,8 @@
                                                 <td>{% if payroll.period == 4 %}Fin de Mes{% else %}Primera Quincena{% endif %}</td>
                                                 <td>{{ payroll.month }}</td>
                                                 <td>{{ payroll.year }}</td>
-                                                <td>{% if payroll.pila is defined and payroll.pila is not null %}{{ payroll.pila.idPurchaseOrdersDescription }}{% else %}-{% endif %}</td>
+                                                <td>{% if payroll.pila is defined and payroll.pila is not null %}
+                                                        <a class="notAjax" href="{{ path("modify_pila",{'idPila':payroll.pila.idPurchaseOrdersDescription}) }}">{{ payroll.pila.idPurchaseOrdersDescription }}</a>{% else %}-{% endif %}</td>
                                                 <td>{% if payroll.paid == 0 %}Por pagar{% else %}En orden de compra{% endif %}</td>
                                                 <td><a class="a-payroll notAjax" href="{{ path("modify_payroll",{'idPayroll':payroll.idPayroll}) }}">detalles</a></td>
                                             </tr>
