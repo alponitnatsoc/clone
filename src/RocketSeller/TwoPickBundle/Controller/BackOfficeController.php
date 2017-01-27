@@ -35,6 +35,7 @@ use RocketSeller\TwoPickBundle\Entity\PromotionCode;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\RealProcedure;
+use RocketSeller\TwoPickBundle\Entity\Severances;
 use RocketSeller\TwoPickBundle\Entity\Supply;
 use RocketSeller\TwoPickBundle\Entity\Transaction;
 use RocketSeller\TwoPickBundle\Entity\User;
@@ -93,6 +94,114 @@ class BackOfficeController extends Controller
         $this->get("symplifica.mailer.twig_swift")->sendEmailByTypeMessage(array("emailType"=>"severancesAdvice","toEmail"=>$user->getEmail(),"redirectUrl"=>$url));
 
         return $this->render('RocketSellerTwoPickBundle:BackOffice:index.html.twig');
+    }
+    public function addPODSeverancesAction(Request $request)
+    {
+        if(!$this->isGranted('ROLE_BACK_OFFICE')){
+            $this->createAccessDeniedException();
+        }
+        $didSomething=false;
+        if(count($request->request->all())>0){
+            $em=$this->getDoctrine()->getManager();
+            $requ = $request->request->all();
+            $filename = $requ["filename"];
+            unset($requ["filename"]);
+            foreach ($requ as $key=> $value) {
+
+                /** @var EmployerHasEmployee $realEhe */
+                $realEhe = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")->find($key);
+                if($realEhe==null)
+                    continue;
+                $contracts = $realEhe->getContracts();
+                $realContract=null;
+                /** @var Contract $contract */
+                foreach ($contracts as $contract) {
+                    if($contract->getState()==1){
+                        $realContract=$contract;
+                    }
+                }
+                if($realContract==null){
+                    continue;
+                }
+                /** @var User $realUser */
+                $realUser = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('personPerson'=>$realEhe->getEmployerEmployer()->getPersonPerson()->getIdPerson()));
+                $aSever=false;
+                $Severs = $realContract->getSeverances();
+                /** @var Severances  $pr */
+                foreach ($Severs as $pr) {
+                    if($pr->getYear()=="2017")
+                        $aSever=true;
+                }
+                if($aSever==true)
+                    break;
+                $didSomething=true;
+                //create the po and pod with the Sever
+                $newPo = new PurchaseOrders();
+                $newPOD = new PurchaseOrdersDescription();
+                $SeverProduct = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product")->findOneBy(array('simpleName'=>'SVR'));
+                $pendingStatus = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'P1'));
+                $newPOD->setProductProduct($SeverProduct);
+                $newPOD->setValue($value);
+                $newPOD->setDescription("Cesantías 2017");
+                $newPOD->setPurchaseOrdersStatus($pendingStatus);
+                $newPOD->setEnlaceOperativoFileName($filename);
+                $newPOD->setUploadedFile(-1);
+                $newPo->setPurchaseOrdersStatus($pendingStatus);
+                $newPo->addPurchaseOrderDescription($newPOD);
+                $realUser->addPurchaseOrder($newPo);
+                //finally we add the Sever to the contract
+                $Sever= new Severances();
+                $Sever->setMonth("02");
+                $Sever->setYear("2017");
+                $Sever->setValue($value);
+                $ehes = $realEhe->getEmployerEmployer()->getEmployerHasEmployees();
+                /** @var EmployerHasEmployee $ehe */
+                foreach ($ehes as $ehe) {
+                    if($ehe->getState()>=4){
+                        $actCont = $ehe->getActiveContract();
+                        if($actCont)
+                            $Sever->addContract($actCont);
+                    }
+                }
+
+
+                $em->persist($realUser);
+                $em->flush();
+                $Sever->setPurchaseOrdersDescriptionPurchaseOrdersDescription($newPOD);
+                $em->persist($Sever);
+                $em->flush();
+
+            }
+        }
+        $em = $this->getDoctrine()->getManager();
+        /** @var QueryBuilder $qb */
+        $qb = $em->createQueryBuilder();
+        $qb->select('c')
+            ->from('RocketSellerTwoPickBundle:Contract', 'c')
+            ->where('c.startDate < ?1 and c.state = 1 ')->setParameter(1,"2017-01-01");
+        $result = $qb->getQuery()->getResult();
+        $pendingSeverances = array();
+        /** @var Contract $contract */
+        foreach ($result as $contract) {
+            $skip=false;
+            $severances = $contract->getSeverances();
+
+            /** @var Severances $severance */
+            foreach ($severances as $severance) {
+                if($severance->getYear()==2017){
+                    $skip=true;
+                }
+            }
+            if(!$skip&&$contract->getEmployerHasEmployeeEmployerHasEmployee()->getState()>=4){
+                $idEmployer=$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getIdEmployer();
+                if(!isset($pendingSeverances[$idEmployer]))
+                    $pendingSeverances[$idEmployer]= array();
+                $pendingSeverances[$idEmployer][]=$contract->getEmployerHasEmployeeEmployerHasEmployee();
+            }
+        }
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:addSeverances.html.twig', array('employers'=>$pendingSeverances));
+
+
     }
     public function emailSeverancesAction()
     {
@@ -3917,6 +4026,128 @@ class BackOfficeController extends Controller
             'newNoveltyForm'=>$newNoveltyForm->createView(),
             'pods'=>$payroll->getPurchaseOrdersDescription(),
         ));
+    }
+
+    public function modifyPilaDetailsAction($idPila,Request $request){
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        $em = $this->getDoctrine()->getManager();
+        $podPila = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription")->find($idPila);
+        if($podPila == null){
+            $this->createNotFoundException();
+        }
+        $payrolls = $podPila->getPayrollsPila();
+        $pilasForms = array();
+        /** @var Payroll $payroll */
+        foreach ($payrolls as $payroll) {
+            $pilas = $payroll->getPilaDetails();
+            /** @var PilaDetail $pila */
+            foreach ($pilas as $pila) {
+                $pilaForm = $this->get("form.factory")->createNamedBuilder("form_edit_pila_".$pila->getIdPilaDetail())
+                    ->add('empValue','number',array(
+                        'label'=>false,
+                        'required'=>true,
+                    ))
+                    ->add('ciaValue','number',array(
+                        'label'=>false,
+                        'required'=>true,
+                    ))
+                    ->add('submit','submit',array(
+                        'label'=>'Guardar'
+                    ))
+                    ->getForm();
+                $pilaForm->get("empValue")->setData($pila->getSqlValueEmp());
+                $pilaForm->get("ciaValue")->setData($pila->getSqlValueCia());
+                $pilaForm->handleRequest($request);
+                $pilasForms[$pila->getIdPilaDetail()]=$pilaForm->createView();
+                if($pilaForm->isValid() and $pilaForm->isSubmitted()){
+                    $error = false;
+                    if($pila->getPayrollPayroll()->getPaid()==0){
+                        /** @var User $backUser */
+                        $backUser = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('emailCanonical'=>'backofficesymplifica@gmail.com'));
+                        $request  = new Request();
+                        $request->setMethod("PUT");
+                        $request->request->add(array(
+                            "month" => $payroll->getMonth(),
+                            "year"=>$payroll->getYear(),
+                            "period" => $payroll->getPeriod(),
+                            "day"=> ($payroll->getPeriod()==2)?16:26,
+                            "token"=>$backUser->getSalt(),
+                            "idpayroll" => $payroll->getIdPayroll()
+                        ));
+                        $response = $this->forward("RocketSellerTwoPickBundle:PayrollMethodRest:putAutoLiquidatePayroll",array("request"=>$request),array('_format'=>'json'));
+                        if($response->getStatusCode()!=200){
+                            $this->addFlash('fail',"Error Congelando la nómina.");
+                            $error = true;
+                        }else{
+                            $this->addFlash('success',"Se congeló correctamente la nómina.");
+                        }
+                    }
+                    if(!$error){
+                        $change = false;
+                        $empVal = intval($pilaForm->get("empValue")->getData());
+                        $ciaVal = intval($pilaForm->get("ciaValue")->getData());
+                        if($empVal<0 or $ciaVal <0){
+                            $this->addFlash('fail',"Los valores no pueden ser negativos.");
+                        }else{
+                            if($pila->getSqlValueEmp()!=$empVal){
+                                $log = new Log($this->getUser(),'PilaDetail','SqlValueEmp',$pila->getIdPilaDetail(),$pila->getSqlValueEmp(),$empVal,"Se modificó el valor del empleado de la pila con id: ".$pila->getIdPilaDetail().".");
+                                $pila->setSqlValueEmp($empVal);
+                                $em->persist($pila);
+                                $em->persist($log);
+                                $em->flush();
+                                $change =true;
+                            }
+                            if($pila->getSqlValueCia()!=$ciaVal){
+                                $log = new Log($this->getUser(),'PilaDetail','SqlValueCia',$pila->getIdPilaDetail(),$pila->getSqlValueCia(),$ciaVal,"Se modificó el valor del empleador de la pila con id: ".$pila->getIdPilaDetail().".");
+                                $pila->setSqlValueCia($ciaVal);
+                                $em->persist($pila);
+                                $em->persist($log);
+                                $em->flush();
+                                $change =true;
+                            }
+                        }
+                        if($change){
+                            if($this->updatePilaPurchaseOrderValue($podPila)){
+                                $this->addFlash('success',"Se modificó correctamente la pila");
+                            }else{
+                                $this->addFlash('fail',"Sucedió un error actualizando el valor de la pila");
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:modifyPilaView.html.twig',array(
+            'podPila'=>$podPila,
+            'payrolls'=>$payrolls,
+            'pilasForms'=>$pilasForms,
+        ));
+    }
+
+    public function updatePilaPurchaseOrderValue(PurchaseOrdersDescription $podPila){
+        try{
+            $em = $this->getDoctrine()->getManager();
+            $payrolls = $podPila->getPayrollsPila();
+            $value = 0;
+            /** @var Payroll $payroll */
+            foreach ($payrolls as $payroll){
+                $pilaDetails = $payroll->getPilaDetails();
+                /** @var PilaDetail $pilaDetail */
+                foreach ($pilaDetails as $pilaDetail) {
+                    $value+= $pilaDetail->getSqlValueCia();
+                    $value+= $pilaDetail->getSqlValueEmp();
+                }
+            }
+            $log = new Log($this->getUser(),'PurchaseOrderDescription','Value',$podPila->getIdPurchaseOrdersDescription(),$podPila->getValue(),$value,"Se modificó el valor de la purchase order description".$podPila->getIdPurchaseOrdersDescription().".");
+            $podPila->setValue($value);
+            $em->persist($log);
+            $em->persist($podPila);
+            $em->flush();
+            return true;
+        }catch(\Exception $e){
+            return false;
+        }
     }
 
     public function deleteNoveltyAction($idPayroll, $idNovelty){

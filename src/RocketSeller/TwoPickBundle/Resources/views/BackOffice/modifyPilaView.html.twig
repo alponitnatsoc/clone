@@ -1,0 +1,223 @@
+{% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
+
+{% block title %}Modificar Payroll{% endblock %}
+
+{% block fos_user_content %}
+    <style>
+        .table{
+            border: 1px solid black;
+        }
+        .table>tbody+tbody{
+            border: 1px solid black;
+        }
+        .table>thead+thead{
+            border: 1px solid black;
+        }
+        .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+            padding: 1px 5px;
+            border: 1px solid black;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        th{
+            background-color: lightgrey;
+            color: black;
+        }
+        .noPadding{
+            margin: 0!important;
+            padding: 0!important;
+        }
+        .form-tittle{
+            background-color: lightgrey;
+            color: black;
+            margin: 0px 0px 0px 0px;
+            padding:1px 5px;
+            border: 1px solid black;
+        }
+        .form-content{
+            margin: 0px 0px 0px 0px;
+            padding: 1px 5px;
+            border: 1px solid black;
+        }
+        .a-payroll{
+            color: #0a6267;
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .a-payroll:focus, .a-payroll:hover{
+            color: #00cdcc;
+            cursor: pointer;
+            font-weight: 700;
+            text-decoration: none;
+        }
+        input[id^='form_edit_pila_']{
+            height: 20px;
+            font-size: 12px;
+            margin: 1px;
+            padding: 0px;
+            border: none;
+        }
+        button[id^='form_edit_pila_']{
+            font-size: 11px;
+            margin: 0px;
+            padding: 2px 3px;
+            font-weight: 700;
+        }
+        select[id^='form_edit_pila_']{
+            height: 22px;
+            font-weight: 700;
+            font-size: 13px;
+            margin: 0px;
+            padding: 0px 3px;
+            border: none;
+        }
+    </style>
+    <div id="main">
+        <div class="back-panel-title col-sm-12 col-xs-12">
+            Modificar Pila
+        </div>
+
+        {% for type, messages in app.session.flashbag.all() %}
+            {% for message in messages %}
+                {% if type == "success_changed" %}
+                    <div style="clear: both;background-color: rgba(7, 130, 29, 0.37);color: darkgreen;font-weight: 600;padding: 15px;border: 1px solid darkgreen;border-radius: 15px;">
+                        {{ message }}
+                    </div>
+                {% elseif type == "success" %}
+                    <div style="clear: both;background-color: rgba(7, 130, 29, 0.37);color: darkgreen;font-weight: 600;padding: 15px;border: 1px solid darkgreen;border-radius: 15px;">
+                        {{ message }}
+                    </div>
+                {% else %}
+                    <div style="clear: both;background-color: rgba(130, 7, 7, 0.37);color: darkred;font-weight: 600;padding: 15px;border: 1px solid darkred;border-radius: 15px;">
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+        <div class="col-md-12" style="overflow: scroll;padding: 0px 30px;">
+            <div class="back-panel" style="padding:0px;min-width: 900px">
+                <div class="backoffice-headding">
+                    <h4>Detalle de la pila {{ podPila.idPurchaseOrdersDescription }}</h4>
+                </div>
+                {% for payroll in payrolls %}
+                    {% if payroll.contractContract.employerHasEmployeeEmployerHasEmployee.state < 4 %}
+                        <div>
+                            <h4>No se puede editar esta Pila</h4>
+                        </div>
+                    {% else %}
+                    <table class="table" id="table_users" style=" margin: -1px 0px">
+                        <thead>
+                            <th style="background-color: #2f2b2b; color: white; font-size: 18px; width: 110px; padding: 0px 10px">Empleado</th>
+                            <th style="background-color: #4c4c4c;color: white; font-size: 16px;padding: 1px 10px">{{ payroll.contractContract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson.fullName }}</th>
+                            <th style="background-color: #2f2b2b; color: white; font-size: 16px; width: 125px; padding: 1px 10px">{{ payroll.contractContract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson.documentType }}</th>
+                            <th style="background-color: #4c4c4c;color: white; font-size: 16px;width: 130px;padding: 1px 10px">{{ payroll.contractContract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson.document }}</th>
+                            <th style="background-color: #2f2b2b; color: white; font-size: 16px; width: 75px; padding: 1px 10px">Payroll</th>
+                            <th style="background-color: #4c4c4c;color: white; font-size: 16px; width: 60px; padding: 1px 10px">{{ payroll.idPayroll }}</th>
+                        </thead>
+                    </table>
+                    <table class="table" id="table_users" style=" margin: -1px 0px">
+                        <thead>
+                            <th style="width: 110px">Id Pila Detail</th>
+                            <th style="width: 100px">Tipo Entidad</th>
+                            <th>Nombre Entidad</th>
+                            <th style="width: 110px">Codigo Entidad</th>
+                            <th style="width: 125px">Valor Empleador</th>
+                            <th style="width: 130px">Valor Empleado</th>
+                            <th style="width: 135px">Acciones</th>
+                        </thead>
+                        <tbody>
+                            {% set empValue = 0 %}
+                            {% set eeValue = 0 %}
+                            {% set value = 0 %}
+                            {% for pila in payroll.pilaDetails %}
+                                <tr id="pila_detail_info_{{ pila.idPilaDetail }}">
+                                    <td>{{ pila.idPilaDetail }}</td>
+                                    <td>{{ pila.entityEntity.entityTypeEntityType.payrollCode }}</td>
+                                    <td>{{ pila.entityEntity.name }}</td>
+                                    <td>{{ pila.entityEntity.payrollCode }}</td>
+                                    <td>${{ pila.sqlValueCia|number_format(0, '.', ',') }}{% set empValue = empValue + pila.sqlValueCia %}</td>
+                                    <td>${{ pila.sqlValueEmp|number_format(0, '.', ',') }}{% set eeValue = eeValue + pila.sqlValueEmp %}</td>
+                                    <td style="text-align: center">
+                                        <div style="display: inline-flex">
+                                            <a content="{{ pila.idPilaDetail }}" class="btn btn-back notAjax" id="edit_pila_detail_{{ pila.idPilaDetail }}" style="font-weight: 700;font-size:12px;padding: 1px 20px;margin: 0px 2px;border-color: #c0c0c0;background-color: #c0c0c0;color: black">Editar</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr id="pila_detail_edit_{{ pila.idPilaDetail }}" style="display: none">
+                                    {% set editPilaForm = pilasForms[pila.idPilaDetail] %}
+                                    {{ form_start(editPilaForm) }}
+                                    <td>{{ pila.idPilaDetail }}</td>
+                                    <td>{{ pila.entityEntity.entityTypeEntityType.payrollCode }}</td>
+                                    <td>{{ pila.entityEntity.name }}</td>
+                                    <td>{{ pila.entityEntity.payrollCode }}</td>
+                                    <td>{{ form_widget(editPilaForm.ciaValue) }}</td>
+                                    <td>{{ form_widget(editPilaForm.empValue) }}</td>
+                                    <td colspan="2" style="text-align: center">{{ form_widget(editPilaForm.submit,{'attr':{'class':'notAjax'}}) }}<a id="cancel_edit_pila_{{ pila.idPilaDetail }}" content="{{ pila.idPilaDetail }}" class="btn btn-back notAjax" style="font-weight: 500;font-size:12px;padding: 2px 3px;margin: 0px 1px;border-color: black;background-color: black;color: white">Cancelar</a></td>
+                                    {{ form_end(editPilaForm) }}
+                                </tr>
+                            {% endfor %}
+                            {% set value = value + empValue + eeValue %}
+                        </tbody>
+                    </table>
+                    <table class="table" id="table_users" style=" margin: -1px 0px">
+                        <thead>
+                        <th style="background-color: rgb(183, 183, 183); color: black; font-size: 16px; padding: 0px 10px">Totales</th>
+                        <th style="background-color: rgb(183, 183, 183);color: black; font-size: 16px;width: 125px;padding: 0px 10px">
+                            ${{ empValue|number_format(0, '.', ',') }}</th>
+                        <th style="background-color: rgb(183, 183, 183);color: black; font-size: 16px;width: 130px;padding: 0px 10px">
+                            ${{ eeValue|number_format(0, '.', ',') }}</th>
+                        <th style="background-color: rgb(183, 183, 183);color: black; font-size: 16px;width: 135px;padding: 0px 10px">
+                            ${{ value|number_format(0, '.', ',') }}</th>
+                        </thead>
+                    </table>
+                    {% endif %}
+                {% endfor %}
+                <div class="backoffice-headding">
+                    <h4>Descripción de la orden de Compra</h4>
+                </div>
+                <table class="table" id="table_users" style=" margin: -1px 0px">
+                    <thead>
+                    <th style="width: 80px">Id pod</th>
+                    <th style="width: 80px">Id Payroll</th>
+                    <th style="width: 150px">Estado</th>
+                    <th style="width: 200px">Producto</th>
+                    <th>Descripción</th>
+                    <th style="width: 90px">valor</th>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{{ podPila.idPurchaseOrdersDescription }}</td>
+                        <td>{% for payroll in payrolls %}{{ payroll.idPayroll }} {% endfor %}</td>
+                        <td>{% if podPila.purchaseOrdersStatus is not null %}{{ podPila.purchaseOrdersStatus.description }}{% else %}-{% endif %}</td>
+                        <td>{{ podPila.productProduct.name }}</td>
+                        <td>{{ podPila.description }}</td>
+                        <td>${{ podPila.value|number_format(0, '.', ',') }}</td>
+                    </tr>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        jQuery(document).ready(function () {
+            $("a[id^='edit_pila_detail_']").on('click',function () {
+                var pila = $(this).attr("content");
+                $("#pila_detail_info_"+pila).hide();
+                $("#pila_detail_edit_"+pila).show();
+            });
+            $("a[id^='cancel_edit_pila_']").on('click',function () {
+                var pila = $(this).attr("content");
+                $("#pila_detail_info_"+pila).show();
+                $("#pila_detail_edit_"+pila).hide();
+            });
+        });
+    </script>
+
+{% endblock %}
