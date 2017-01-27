@@ -3975,8 +3975,8 @@ class BackOfficeController extends Controller
                     }
                     if(!$error){
                         $change = false;
-                        $empVal = floatval($pilaForm->get("empValue")->getData());
-                        $ciaVal = floatval($pilaForm->get("ciaValue")->getData());
+                        $empVal = intval($pilaForm->get("empValue")->getData());
+                        $ciaVal = intval($pilaForm->get("ciaValue")->getData());
                         if($empVal<0 or $ciaVal <0){
                             $this->addFlash('fail',"Los valores no pueden ser negativos.");
                         }else{
