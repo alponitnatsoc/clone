@@ -96,7 +96,7 @@ body {
             </tr>
             <tr height="25px">
                 <td>Salario diario:</td>
-                <td>{{ data.contract.salary/data.contract.nWorkDays }}</td>
+                <td>{{ (data.contract.salary/data.contract.nWorkDays)|number_format(0, '.', ',') }}</td>
             </tr>
             <tr height="25px">
                 <td>Cargo a desempeñar:</td>
@@ -250,7 +250,7 @@ EMPLEADOR.</p>
         de cada semana.</p>
 
     <p style="text-align: justify;"><strong>DECIMA PRIMERA: </strong>SALARIO: EL EMPLEADOR pagará al TRABAJADOR como remuneración por los servicios prestados, el salario
-        diario de {{ data.contract.salary/data.contract.nWorkDays }} por cada día laborado; pagaderos de manera {{ data.contract.frequency }}.</p>
+        diario de {{ (data.contract.salary/data.contract.nWorkDays)|number_format(0, '.', ',') }} por cada día laborado; pagaderos de manera {{ data.contract.frequency }}.</p>
 
     <p style="text-align: justify;"><strong>PARÁGRAFO 1: </strong>Dentro de este pago se encuentra incluida la remuneración de los descansos dominicales y festivos
         de que tratan los capítulos I y II del título VII del Código Sustantivo del Trabajo.</p>
@@ -307,7 +307,7 @@ EMPLEADOR.</p>
         de cada semana.</p>
 
     <p style="text-align: justify;"><strong>DECIMA: </strong>SALARIO: EL EMPLEADOR pagará al TRABAJADOR como remuneración por los servicios prestados, el salario
-        diario de {{ data.contract.salary/data.contract.nWorkDays }} por cada día laborado; pagaderos de manera {{ data.contract.frequency }}.</p>
+        diario de {{ (data.contract.salary/data.contract.nWorkDays)|number_format(0, '.', ',') }} por cada día laborado; pagaderos de manera {{ data.contract.frequency }}.</p>
 
     <p style="text-align: justify;"><strong>PARÁGRAFO 1: </strong>Dentro de este pago se encuentra incluida la remuneración de los descansos dominicales y festivos
         de que tratan los capítulos I y II del título VII del Código Sustantivo del Trabajo.</p>
