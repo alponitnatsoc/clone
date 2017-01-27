@@ -4,6 +4,7 @@ namespace RocketSeller\TwoPickBundle\Controller;
 
 use RocketSeller\TwoPickBundle\Entity\LandingRegistration;
 use RocketSeller\TwoPickBundle\Entity\User;
+use RocketSeller\TwoPickBundle\Entity\UserHasConfig;
 use RocketSeller\TwoPickBundle\Form\PublicCalculator;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -217,5 +218,24 @@ class PublicController extends Controller
 
         return $this->render('RocketSellerTwoPickBundle:Public:categories.html.twig', array(
             "called_from" => $redirectedBy));
+    }
+
+    public function authorizeAutomatedPaymentAction($hash) {
+        $uRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+        /** @var User $user */
+        $user = $uRepo->findOneBy(array('sHash'=>$hash));
+        if($user != null){
+            $user->setSHash(null);
+            $uhc = new UserHasConfig();
+            $configSev = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Configuration")->findOneBy(array('value'=>'Auth-SeverancesPayment'));
+            $uhc->setAcceptedAt(new \DateTime());
+            $uhc->setUserUser($user);
+            $uhc->setConfigurationConfiguration($configSev);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($uhc);
+            $em->persist($user);
+            $em->flush();
+        }
+        return $this->render('RocketSellerTwoPickBundle:Public:thankYou.html.twig', array());
     }
 }
