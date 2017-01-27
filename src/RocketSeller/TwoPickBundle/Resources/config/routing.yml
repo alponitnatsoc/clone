@@ -77,6 +77,9 @@ severances_auth_email:
 back_office_prima:
     path:     /backoffice/add/prima
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:addPrima}
+back_office_severances:
+    path:     /backoffice/add/severances
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:addPODSeverances}
 show_procedures:
     path:     /backoffice/procedures/{orderType}/{order}/{state}/{document}/{names}/{prior}
     defaults: { _controller: RocketSellerTwoPickBundle:Procedure:index,orderType: 'none',order: 'ASC',state: 'none',document: 'none',names: 'none',prior: 'none'}

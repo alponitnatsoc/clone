@@ -464,6 +464,38 @@
                                             </div>
                                         </div>
                                     </div>
+                                {% elseif data.product_product.simple_name == "SVR"  %}
+                                    <div class="deuda light grisclarofont">
+                                        <div align="center" colspan="4">Cesantías Pendientes por Pagar</div>
+                                    </div>
+                                    <div class="borderclass">
+                                        <div class="tittle-pay moraNomina">
+                                            <div class="pagoforma">
+                                                <label style="font-weight:100"><input type="radio" class="toPayArray"
+                                                                                      name="{{ data.id_purchase_orders_description }}"
+                                                                                      value="p-{{ data.id_purchase_orders_description }}">
+                                                    Pagar </label>
+                                            </div>
+                                        </div>
+                                        <div class="aportesFecha light">
+                                            Cesantías a pagar en el año {{ data.severance.year }}:
+                                            {% set contracts = data.severance.contracts %}
+                                        </div>
+                                        <div class="datadesc moraNominaBorder col-sm-12">
+                                            <div class="col-sm-10 title-span pila-empl azulmediofont bold">
+                                                <ul>
+                                                    {% for contract in contracts %}
+                                                        {% set employeePP = contract.employer_has_employee_employer_has_employee.employee_employee.person_person %}
+                                                        <li>{{ employeePP.names ~' '~ employeePP.last_name1 }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <p>Total</p>
+                                                <h2 class="h2">${{ data.value|number_format(0, '.', ',') }}</h2>
+                                            </div>
+                                        </div>
+                                    </div>
                                 {% else %}
                                     {% if data.product_product.simple_name == "PP" %}
                                         {% set pilaData = data %}
