@@ -34,7 +34,9 @@ modify_payroll:
 delete_novelty:
     path:     /backoffice/delete/novelty/{idPayroll}/{idNovelty}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:deleteNovelty,idPairoll: 0,idNovelty: 0 }
-
+modify_pila:
+    path:     /backoffice/modify/pila/{idPila}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:modifyPilaDetails,idPila: 0 }
 #Payments
 show_payments:
     path: /show/payments/{id}

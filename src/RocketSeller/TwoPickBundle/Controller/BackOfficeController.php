@@ -4028,6 +4028,128 @@ class BackOfficeController extends Controller
         ));
     }
 
+    public function modifyPilaDetailsAction($idPila,Request $request){
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        $em = $this->getDoctrine()->getManager();
+        $podPila = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription")->find($idPila);
+        if($podPila == null){
+            $this->createNotFoundException();
+        }
+        $payrolls = $podPila->getPayrollsPila();
+        $pilasForms = array();
+        /** @var Payroll $payroll */
+        foreach ($payrolls as $payroll) {
+            $pilas = $payroll->getPilaDetails();
+            /** @var PilaDetail $pila */
+            foreach ($pilas as $pila) {
+                $pilaForm = $this->get("form.factory")->createNamedBuilder("form_edit_pila_".$pila->getIdPilaDetail())
+                    ->add('empValue','number',array(
+                        'label'=>false,
+                        'required'=>true,
+                    ))
+                    ->add('ciaValue','number',array(
+                        'label'=>false,
+                        'required'=>true,
+                    ))
+                    ->add('submit','submit',array(
+                        'label'=>'Guardar'
+                    ))
+                    ->getForm();
+                $pilaForm->get("empValue")->setData($pila->getSqlValueEmp());
+                $pilaForm->get("ciaValue")->setData($pila->getSqlValueCia());
+                $pilaForm->handleRequest($request);
+                $pilasForms[$pila->getIdPilaDetail()]=$pilaForm->createView();
+                if($pilaForm->isValid() and $pilaForm->isSubmitted()){
+                    $error = false;
+                    if($pila->getPayrollPayroll()->getPaid()==0){
+                        /** @var User $backUser */
+                        $backUser = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('emailCanonical'=>'backofficesymplifica@gmail.com'));
+                        $request  = new Request();
+                        $request->setMethod("PUT");
+                        $request->request->add(array(
+                            "month" => $payroll->getMonth(),
+                            "year"=>$payroll->getYear(),
+                            "period" => $payroll->getPeriod(),
+                            "day"=> ($payroll->getPeriod()==2)?16:26,
+                            "token"=>$backUser->getSalt(),
+                            "idpayroll" => $payroll->getIdPayroll()
+                        ));
+                        $response = $this->forward("RocketSellerTwoPickBundle:PayrollMethodRest:putAutoLiquidatePayroll",array("request"=>$request),array('_format'=>'json'));
+                        if($response->getStatusCode()!=200){
+                            $this->addFlash('fail',"Error Congelando la nómina.");
+                            $error = true;
+                        }else{
+                            $this->addFlash('success',"Se congeló correctamente la nómina.");
+                        }
+                    }
+                    if(!$error){
+                        $change = false;
+                        $empVal = intval($pilaForm->get("empValue")->getData());
+                        $ciaVal = intval($pilaForm->get("ciaValue")->getData());
+                        if($empVal<0 or $ciaVal <0){
+                            $this->addFlash('fail',"Los valores no pueden ser negativos.");
+                        }else{
+                            if($pila->getSqlValueEmp()!=$empVal){
+                                $log = new Log($this->getUser(),'PilaDetail','SqlValueEmp',$pila->getIdPilaDetail(),$pila->getSqlValueEmp(),$empVal,"Se modificó el valor del empleado de la pila con id: ".$pila->getIdPilaDetail().".");
+                                $pila->setSqlValueEmp($empVal);
+                                $em->persist($pila);
+                                $em->persist($log);
+                                $em->flush();
+                                $change =true;
+                            }
+                            if($pila->getSqlValueCia()!=$ciaVal){
+                                $log = new Log($this->getUser(),'PilaDetail','SqlValueCia',$pila->getIdPilaDetail(),$pila->getSqlValueCia(),$ciaVal,"Se modificó el valor del empleador de la pila con id: ".$pila->getIdPilaDetail().".");
+                                $pila->setSqlValueCia($ciaVal);
+                                $em->persist($pila);
+                                $em->persist($log);
+                                $em->flush();
+                                $change =true;
+                            }
+                        }
+                        if($change){
+                            if($this->updatePilaPurchaseOrderValue($podPila)){
+                                $this->addFlash('success',"Se modificó correctamente la pila");
+                            }else{
+                                $this->addFlash('fail',"Sucedió un error actualizando el valor de la pila");
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:modifyPilaView.html.twig',array(
+            'podPila'=>$podPila,
+            'payrolls'=>$payrolls,
+            'pilasForms'=>$pilasForms,
+        ));
+    }
+
+    public function updatePilaPurchaseOrderValue(PurchaseOrdersDescription $podPila){
+        try{
+            $em = $this->getDoctrine()->getManager();
+            $payrolls = $podPila->getPayrollsPila();
+            $value = 0;
+            /** @var Payroll $payroll */
+            foreach ($payrolls as $payroll){
+                $pilaDetails = $payroll->getPilaDetails();
+                /** @var PilaDetail $pilaDetail */
+                foreach ($pilaDetails as $pilaDetail) {
+                    $value+= $pilaDetail->getSqlValueCia();
+                    $value+= $pilaDetail->getSqlValueEmp();
+                }
+            }
+            $log = new Log($this->getUser(),'PurchaseOrderDescription','Value',$podPila->getIdPurchaseOrdersDescription(),$podPila->getValue(),$value,"Se modificó el valor de la purchase order description".$podPila->getIdPurchaseOrdersDescription().".");
+            $podPila->setValue($value);
+            $em->persist($log);
+            $em->persist($podPila);
+            $em->flush();
+            return true;
+        }catch(\Exception $e){
+            return false;
+        }
+    }
+
     public function deleteNoveltyAction($idPayroll, $idNovelty){
         $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
         $em = $this->getDoctrine()->getManager();
