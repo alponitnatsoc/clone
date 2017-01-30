@@ -556,7 +556,7 @@ class PayrollRestSecuredController extends FOSRestController
         $realCampaing = null;
         /** @var UserHasCampaign $uHC */
         foreach ($uHCs as $uHC) {
-            if($uHC->getCampaignCampaign()->getDescription()=="150k") {
+            if($uHC->getCampaignCampaign()->getDescription()=="150k"&& $uHC->getState()==1) {
                 $uHC->setUses($uHC->getUses() + 1);
                 $uHC->setLastUsed(new DateTime());
                 if($uHC->getUses()>=2){
@@ -918,7 +918,8 @@ class PayrollRestSecuredController extends FOSRestController
         $response = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getPayPurchaseOrder', array(
             "idPurchaseOrder" => $realtoPay->getIdPurchaseOrders()), array('_format' => 'json'));
         if ($response->getStatusCode() == 200) {
-            $this->useDiscounts($user);
+            if($paysPila>0)
+                $this->useDiscounts($user);
             $money = $user->getMoney();
             if($money >0){
                 if($total< $money){
