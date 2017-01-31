@@ -76,6 +76,11 @@ class Contract
      * @Exclude
      */
     private $primas;
+    /**
+     * @ORM\ManyToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\Severances", mappedBy="contracts", cascade={"persist"})
+     * @Exclude
+     */
+    private $severances;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Payroll
@@ -971,18 +976,6 @@ class Contract
     {
         return $this->holidayDebt;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->payrolls = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->benefits = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->weekWorkableDays = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->liquidations = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->primas = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->supplies = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
 
     /**
@@ -1283,5 +1276,53 @@ class Contract
     public function getWorksSaturday()
     {
         return $this->worksSaturday;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->payrolls = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->primas = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->severances = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->benefits = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->weekWorkableDays = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->liquidations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->supplies = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contractRecords = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add severance
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Severances $severance
+     *
+     * @return Contract
+     */
+    public function addSeverance(\RocketSeller\TwoPickBundle\Entity\Severances $severance)
+    {
+        $this->severances[] = $severance;
+
+        return $this;
+    }
+
+    /**
+     * Remove severance
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Severances $severance
+     */
+    public function removeSeverance(\RocketSeller\TwoPickBundle\Entity\Severances $severance)
+    {
+        $this->severances->removeElement($severance);
+    }
+
+    /**
+     * Get severances
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSeverances()
+    {
+        return $this->severances;
     }
 }

@@ -1,0 +1,19 @@
+{% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
+
+{% block fos_user_content %}
+    <div id="main">
+        {% for emp in employers %}
+            {% set idehe = -1 %}
+
+            {% for ehe in emp %}
+                {% set idehe = ehe.idEmployerHasEmployee  %}
+                empleador: {{ ehe.employerEmployer.personPerson.fullName }}, empleado:{{ ehe.employeeEmployee.personPerson.fullName }}<br>
+            {% endfor %}
+            <form method="post">
+                <input id="{{ idehe }}" name="{{ idehe }}" required="required" type="text" placeholder="ValorCesatias">
+                <input id="{{ idehe }}filename" name="filename" required="required" type="text" placeholder="numeroPlanilla">
+                <input id="{{ idehe }}submit" type="submit">
+            </form>
+        {% endfor %}
+    </div>
+{% endblock %}

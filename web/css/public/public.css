@@ -30,3 +30,20 @@
 @media only screen and (max-width: 800px) {
   body {cursor: pointer}
 }
+@media only screen and (max-width: 500px) {
+  /*hide tel numbers*/
+  .tel1 {
+    display: none;
+  }
+  /*end hide tel*/
+}
+@media only screen and (max-width: 360px) {
+  /*hide tel numbers*/
+  .tel1 {
+    display: inline-block;
+  }
+  .tel2 {
+    display: none;
+  }
+  /*end hide tel*/
+}

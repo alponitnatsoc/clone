@@ -35,6 +35,7 @@ use RocketSeller\TwoPickBundle\Entity\PromotionCode;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\RealProcedure;
+use RocketSeller\TwoPickBundle\Entity\Severances;
 use RocketSeller\TwoPickBundle\Entity\Supply;
 use RocketSeller\TwoPickBundle\Entity\Transaction;
 use RocketSeller\TwoPickBundle\Entity\User;
@@ -93,6 +94,114 @@ class BackOfficeController extends Controller
         $this->get("symplifica.mailer.twig_swift")->sendEmailByTypeMessage(array("emailType"=>"severancesAdvice","toEmail"=>$user->getEmail(),"redirectUrl"=>$url));
 
         return $this->render('RocketSellerTwoPickBundle:BackOffice:index.html.twig');
+    }
+    public function addPODSeverancesAction(Request $request)
+    {
+        if(!$this->isGranted('ROLE_BACK_OFFICE')){
+            $this->createAccessDeniedException();
+        }
+        $didSomething=false;
+        if(count($request->request->all())>0){
+            $em=$this->getDoctrine()->getManager();
+            $requ = $request->request->all();
+            $filename = $requ["filename"];
+            unset($requ["filename"]);
+            foreach ($requ as $key=> $value) {
+
+                /** @var EmployerHasEmployee $realEhe */
+                $realEhe = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")->find($key);
+                if($realEhe==null)
+                    continue;
+                $contracts = $realEhe->getContracts();
+                $realContract=null;
+                /** @var Contract $contract */
+                foreach ($contracts as $contract) {
+                    if($contract->getState()==1){
+                        $realContract=$contract;
+                    }
+                }
+                if($realContract==null){
+                    continue;
+                }
+                /** @var User $realUser */
+                $realUser = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('personPerson'=>$realEhe->getEmployerEmployer()->getPersonPerson()->getIdPerson()));
+                $aSever=false;
+                $Severs = $realContract->getSeverances();
+                /** @var Severances  $pr */
+                foreach ($Severs as $pr) {
+                    if($pr->getYear()=="2017")
+                        $aSever=true;
+                }
+                if($aSever==true)
+                    break;
+                $didSomething=true;
+                //create the po and pod with the Sever
+                $newPo = new PurchaseOrders();
+                $newPOD = new PurchaseOrdersDescription();
+                $SeverProduct = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product")->findOneBy(array('simpleName'=>'SVR'));
+                $pendingStatus = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'P1'));
+                $newPOD->setProductProduct($SeverProduct);
+                $newPOD->setValue($value);
+                $newPOD->setDescription("Cesantías 2017");
+                $newPOD->setPurchaseOrdersStatus($pendingStatus);
+                $newPOD->setEnlaceOperativoFileName($filename);
+                $newPOD->setUploadedFile(-1);
+                $newPo->setPurchaseOrdersStatus($pendingStatus);
+                $newPo->addPurchaseOrderDescription($newPOD);
+                $realUser->addPurchaseOrder($newPo);
+                //finally we add the Sever to the contract
+                $Sever= new Severances();
+                $Sever->setMonth("02");
+                $Sever->setYear("2017");
+                $Sever->setValue($value);
+                $ehes = $realEhe->getEmployerEmployer()->getEmployerHasEmployees();
+                /** @var EmployerHasEmployee $ehe */
+                foreach ($ehes as $ehe) {
+                    if($ehe->getState()>=4){
+                        $actCont = $ehe->getActiveContract();
+                        if($actCont)
+                            $Sever->addContract($actCont);
+                    }
+                }
+
+
+                $em->persist($realUser);
+                $em->flush();
+                $Sever->setPurchaseOrdersDescriptionPurchaseOrdersDescription($newPOD);
+                $em->persist($Sever);
+                $em->flush();
+
+            }
+        }
+        $em = $this->getDoctrine()->getManager();
+        /** @var QueryBuilder $qb */
+        $qb = $em->createQueryBuilder();
+        $qb->select('c')
+            ->from('RocketSellerTwoPickBundle:Contract', 'c')
+            ->where('c.startDate < ?1 and c.state = 1 ')->setParameter(1,"2017-01-01");
+        $result = $qb->getQuery()->getResult();
+        $pendingSeverances = array();
+        /** @var Contract $contract */
+        foreach ($result as $contract) {
+            $skip=false;
+            $severances = $contract->getSeverances();
+
+            /** @var Severances $severance */
+            foreach ($severances as $severance) {
+                if($severance->getYear()==2017){
+                    $skip=true;
+                }
+            }
+            if(!$skip&&$contract->getEmployerHasEmployeeEmployerHasEmployee()->getState()>=4){
+                $idEmployer=$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getIdEmployer();
+                if(!isset($pendingSeverances[$idEmployer]))
+                    $pendingSeverances[$idEmployer]= array();
+                $pendingSeverances[$idEmployer][]=$contract->getEmployerHasEmployeeEmployerHasEmployee();
+            }
+        }
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:addSeverances.html.twig', array('employers'=>$pendingSeverances));
+
+
     }
     public function emailSeverancesAction()
     {

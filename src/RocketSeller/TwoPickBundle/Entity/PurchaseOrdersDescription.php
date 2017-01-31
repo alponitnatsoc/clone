@@ -126,6 +126,12 @@ class PurchaseOrdersDescription
     private $prima;
 
     /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Severances
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Severances", mappedBy="purchaseOrdersDescriptionPurchaseOrdersDescription", cascade={"persist"})
+     */
+    private $severance;
+
+    /**
      * Get idPurchaseOrdersDescription
      *
      * @return integer
@@ -535,5 +541,29 @@ class PurchaseOrdersDescription
     public function getPrima()
     {
         return $this->prima;
+    }
+
+    /**
+     * Set severance
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Severances $severance
+     *
+     * @return PurchaseOrdersDescription
+     */
+    public function setSeverance(\RocketSeller\TwoPickBundle\Entity\Severances $severance = null)
+    {
+        $this->severance = $severance;
+
+        return $this;
+    }
+
+    /**
+     * Get severance
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Severances
+     */
+    public function getSeverance()
+    {
+        return $this->severance;
     }
 }

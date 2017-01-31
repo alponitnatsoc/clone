@@ -251,7 +251,7 @@
                     <div class="col-sm-12">
                             {% if employerHasEmployee.state > 3 %}
                             <div class="col-sm-12 center">
-                                <a id="terminar_contrato_button" class="btn btn-sm btn-top-red btn-primary  notAjax" href="{{ path('final_liquidation', { 'id': employerHasEmployee.idEmployerHasEmployee }) }}" >Terminar contrato</a>
+                                <a id="terminar_contrato_button" class="btn btn-sm btn-top-red btn-primary  notAjax" {# href="{{ path('final_liquidation', { 'id': employerHasEmployee.idEmployerHasEmployee }) }} #}" >Terminar contrato</a>
                                 <input type="hidden" id="ehe-id" name="ehe-id" value="{{ employerHasEmployee.idEmployerHasEmployee }}"/>
                             </div>
                             {% endif %}
@@ -412,7 +412,7 @@
 
                         </div>
                     </div>
-                        {% if contractEmployee %}
+                        {% if contractEmployee and contractEmployee.mediaMedia != null %}
                           <div class="col-sm-12 file-download-contract downcopy" >
                               <div class="col-sm-1 icon-pdf">
                                   <i class="fa fa-file-pdf-o fa-2x"></i>

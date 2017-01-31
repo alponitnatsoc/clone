@@ -792,7 +792,7 @@ class PaymentMethodRestController extends FOSRestController
                 //this goes with pilla so we continue
                 return array('code'=>200);
             }
-            if ($purchaseOrderDescription->getProductProduct()->getSimpleName() == "PP"||$purchaseOrderDescription->getProductProduct()->getSimpleName() == "PC") {
+            if ($purchaseOrderDescription->getProductProduct()->getSimpleName() == "PP"||$purchaseOrderDescription->getProductProduct()->getSimpleName() == "SVR") {
                 $accountType = "CC";
                 if ($purchaseOrderDescription->getProductProduct()->getSimpleName() == "PP")
                     $bankCode="PL";

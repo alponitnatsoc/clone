@@ -270,45 +270,53 @@ class PayrollRestSecuredController extends FOSRestController
                 //por seguridad en caso de que no exista el POD
                 return $view->setStatusCode(403)->setData(array('error' => 'no exite pod'));
             }
-            if ($tempPOD->getPayrollPayroll() == null && $tempPOD->getProductProduct()->getSimpleName()=="PP") {
-                //paying Pila so we calculate the mora if applies
-                //seeking for the wished date
-                $todayPlus = new DateTime();
-                $todayPlus->modify('+1 day');
-                $request = $this->container->get('request');
-                $request->setMethod("GET");
-                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysToDate',array('dateStart'=>$todayPlus->format("Y-m-d"),'days'=>3), array('_format' => 'json'));
-                if ($insertionAnswer->getStatusCode() != 200) {
-                    return $insertionAnswer;
-                }
-                $permittedDate=new DateTime(json_decode($insertionAnswer->getContent(),true)['date']);
-                $tempPOD->setDateToPay($permittedDate);
-                //$em->persist($tempPOD);
-                //$em->flush();
-	            
-                //here starts the mora
-                //TODO leer el comentario de abajo
-                // esta mora se calcula por entidad por empleado, idealmente se debería calcular por planilla, lo que
-                // significa que si el empleador tiene 2 empleados que pertenecen a la misma entidad esos aportes se
-                // suman y a esos se les calcula la mora
-                $resultMora = $this->calculateMora($tempPOD,$userPerson);
-                if($resultMora!=0){
-                    $productMora = $productRepo->findOneBy(array('simpleName'=>'CM'));
-                    $pendingStatus = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => 'P1'));
-                    $moraPod = new PurchaseOrdersDescription();
-                    $moraPod->setValue($resultMora);
-                    $moraPod->setProductProduct($productMora);
-                    $moraPod->setDescription("Mora Pila");
-                    $moraPod->setPurchaseOrdersStatus($pendingStatus);
-                    //adding item to pay but not persisting it yet
-                    $realtoPay->addPurchaseOrderDescription($moraPod);
-                    $total += $moraPod->getValue();
+            if ($tempPOD->getPayrollPayroll() == null && ($tempPOD->getProductProduct()->getSimpleName()=="PP"||$tempPOD->getProductProduct()->getSimpleName()=="SVR")) {
+                //TODO es importante que en un futuro el usuario puede que page en una fecha incorrecta, y aplique una mora
+                if($tempPOD->getProductProduct()->getSimpleName()=="SVR"){
+                    $paysPila++;
+                    $person=$tempPOD->getSeverance()->getContracts()->get(0)->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
+                    $flagFrequency = false;
+                    $flagNomi=false;
+                }else{
+                    //paying Pila so we calculate the mora if applies
+                    //seeking for the wished date
+                    $todayPlus = new DateTime();
+                    $todayPlus->modify('+1 day');
+                    $request = $this->container->get('request');
+                    $request->setMethod("GET");
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysToDate',array('dateStart'=>$todayPlus->format("Y-m-d"),'days'=>3), array('_format' => 'json'));
+                    if ($insertionAnswer->getStatusCode() != 200) {
+                        return $insertionAnswer;
+                    }
+                    $permittedDate=new DateTime(json_decode($insertionAnswer->getContent(),true)['date']);
+                    $tempPOD->setDateToPay($permittedDate);
+                    //$em->persist($tempPOD);
+                    //$em->flush();
 
+                    //here starts the mora
+                    //TODO leer el comentario de abajo
+                    // esta mora se calcula por entidad por empleado, idealmente se debería calcular por planilla, lo que
+                    // significa que si el empleador tiene 2 empleados que pertenecen a la misma entidad esos aportes se
+                    // suman y a esos se les calcula la mora
+                    $resultMora = $this->calculateMora($tempPOD,$userPerson);
+                    if($resultMora!=0){
+                        $productMora = $productRepo->findOneBy(array('simpleName'=>'CM'));
+                        $pendingStatus = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => 'P1'));
+                        $moraPod = new PurchaseOrdersDescription();
+                        $moraPod->setValue($resultMora);
+                        $moraPod->setProductProduct($productMora);
+                        $moraPod->setDescription("Mora Pila");
+                        $moraPod->setPurchaseOrdersStatus($pendingStatus);
+                        //adding item to pay but not persisting it yet
+                        $realtoPay->addPurchaseOrderDescription($moraPod);
+                        $total += $moraPod->getValue();
+
+                    }
+                    $paysPila++;
+                    $person = $tempPOD->getPayrollsPila()->get(0)->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
+                    $flagFrequency = false;
+                    $flagNomi=false;
                 }
-                $paysPila++;
-                $person = $tempPOD->getPayrollsPila()->get(0)->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
-                $flagFrequency = false;
-                $flagNomi=false;
             } else {
                 if($tempPOD->getProductProduct()->getSimpleName()=="PRM"){
                     $contract = $tempPOD->getPrima()->getContractContract();
@@ -548,7 +556,7 @@ class PayrollRestSecuredController extends FOSRestController
         $realCampaing = null;
         /** @var UserHasCampaign $uHC */
         foreach ($uHCs as $uHC) {
-            if($uHC->getCampaignCampaign()->getDescription()=="150k") {
+            if($uHC->getCampaignCampaign()->getDescription()=="150k"&& $uHC->getState()==1) {
                 $uHC->setUses($uHC->getUses() + 1);
                 $uHC->setLastUsed(new DateTime());
                 if($uHC->getUses()>=2){
@@ -620,107 +628,119 @@ class PayrollRestSecuredController extends FOSRestController
                 //por seguridad en caso de que no exista el POD
                 return $view->setStatusCode(403)->setData(array('error' => 'no exite pod'));
             }
-            if ($tempPOD->getPayrollPayroll() == null  && $tempPOD->getProductProduct()->getSimpleName()=="PP") {
-                //paying Pila so we calculate the mora if applies
-                //seeking for the wished date
-                $todayPlus = new DateTime();
-                $todayPlus->modify('+1 day');
-                $request = $this->container->get('request');
-                $request->setMethod("GET");
-                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysToDate',array('dateStart'=>$todayPlus->format("Y-m-d"),'days'=>3), array('_format' => 'json'));
-                if ($insertionAnswer->getStatusCode() != 200) {
-                    return $insertionAnswer;
-                }
-                $permittedDate=new DateTime(json_decode($insertionAnswer->getContent(),true)['date']);
-                $tempPOD->setDateToPay($permittedDate);
-                //here starts the mora
-                $resultMora = $this->calculateMora($tempPOD,$userPerson);
-                if($resultMora!=0){
-                    $productMora = $productRepo->findOneBy(array('simpleName'=>'CM'));
-                    $pendingStatus = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => 'P1'));
-                    $moraPod = new PurchaseOrdersDescription();
-                    $moraPod->setValue($resultMora);
-                    $moraPod->setProductProduct($productMora);
-                    $moraPod->setDescription("Mora Pila");
-                    $moraPod->setPurchaseOrdersStatus($pendingStatus);
-                    //adding item to pay will be persisted later
-                    $realtoPay->addPurchaseOrderDescription($moraPod);
-                    $total += $moraPod->getValue();
+            if ($tempPOD->getPayrollPayroll() == null && ($tempPOD->getProductProduct()->getSimpleName()=="PP"||$tempPOD->getProductProduct()->getSimpleName()=="SVR")) {
+                //TODO es importante que en un futuro el usuario puede que page en una fecha incorrecta, y aplique una mora
+                if($tempPOD->getProductProduct()->getSimpleName()=="SVR"){
+                    $paysPila++;
+                    $person=$tempPOD->getSeverance()->getContracts()->get(0)->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
+                    $flagFrequency = false;
+                    $flagNomi=false;
+                }else{
+                    //paying Pila so we calculate the mora if applies
+                    //seeking for the wished date
+                    $todayPlus = new DateTime();
+                    $todayPlus->modify('+1 day');
+                    $request = $this->container->get('request');
+                    $request->setMethod("GET");
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysToDate',array('dateStart'=>$todayPlus->format("Y-m-d"),'days'=>3), array('_format' => 'json'));
+                    if ($insertionAnswer->getStatusCode() != 200) {
+                        return $insertionAnswer;
+                    }
+                    $permittedDate=new DateTime(json_decode($insertionAnswer->getContent(),true)['date']);
+                    $tempPOD->setDateToPay($permittedDate);
+                    //$em->persist($tempPOD);
+                    //$em->flush();
 
-                }
+                    //here starts the mora
+                    //TODO leer el comentario de abajo
+                    // esta mora se calcula por entidad por empleado, idealmente se debería calcular por planilla, lo que
+                    // significa que si el empleador tiene 2 empleados que pertenecen a la misma entidad esos aportes se
+                    // suman y a esos se les calcula la mora
+                    $resultMora = $this->calculateMora($tempPOD,$userPerson);
+                    if($resultMora!=0){
+                        $productMora = $productRepo->findOneBy(array('simpleName'=>'CM'));
+                        $pendingStatus = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => 'P1'));
+                        $moraPod = new PurchaseOrdersDescription();
+                        $moraPod->setValue($resultMora);
+                        $moraPod->setProductProduct($productMora);
+                        $moraPod->setDescription("Mora Pila");
+                        $moraPod->setPurchaseOrdersStatus($pendingStatus);
+                        //adding item to pay but not persisting it yet
+                        $realtoPay->addPurchaseOrderDescription($moraPod);
+                        $total += $moraPod->getValue();
 
-                /** @var Person $person */
-                $person = $tempPOD->getPayrollsPila()->get(0)->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
-                $flagFrequency = false;
-                $flagNomi=false;
-                $paysPila++;
-	            
-	              if($tempPOD->getEnlaceOperativoFileName() == NULL && $tempPOD->getUploadedFile() == NULL){
-		              //Here we get the file of the pila and we send it to HighTech
-		
-		              //TODO DanielRico Remove this as soon the final liquidation works and the novelty support is complete
-		              $payrollsPila = $tempPOD->getPayrollsPila();
-		              $haveNovelties = false;
-		
-		              $payrollRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
-		
-		              /** @var Payroll $payrollPila */
-		              foreach ( $payrollsPila as $payrollPila ){
-			              if( count($payrollPila->getNovelties()) > 0){
-				              $haveNovelties = true;
-				              break;
-			              }
-			              //If is Quincenal we need to check the first payroll of the month to see If we have novelties
-			              if($payrollPila->getContractContract()->getFrequencyFrequency()->getPayrollCode() == "Q"){
-				              $singlePayroll = $payrollRepo->findOneBy(array('contractContract' => $payrollPila->getContractContract() , 'period' => 2 , 'year' => $payrollPila->getYear() , 'month' => $payrollPila->getMonth()) );
-				              if($singlePayroll != NULL){
-					              if( count($singlePayroll->getNovelties()) > 0){
-						              $haveNovelties = true;
-						              break;
-					              }
-				              }
-			              }
-		              }
-		              //End of segment
-		
-		              $transactionType = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:TransactionType')->findOneBy(array('code' => 'CPla'));
-		
-		              $transaction = new Transaction();
-		              $transaction->setTransactionType($transactionType);
-		
-		              if($haveNovelties == false) {
-			              $request->setMethod("GET");
-			              $insertionAnswerTextFile = $this->forward('RocketSellerTwoPickBundle:PilaPlainTextRest:getMonthlyPlainText', array('podId' => $tempPOD->getIdPurchaseOrdersDescription(), 'download' => 'generate'), array('_format' => 'json'));
-			
-			              $request->setMethod("POST");
-			              $request->request->add(array(
-				              "GSCAccount" => $person->getEmployer()->getIdHighTech(),
-				              "FileToUpload" => json_decode($insertionAnswerTextFile->getContent(), true)['fileToSend']
-			              ));
-			              $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postUploadFileToPilaOperator', array('request' => $request) , array('_format' => 'json'));
-			              if ($insertionAnswer->getStatusCode() == 200) {
-				              //Received succesfully
-				              $radicatedNumber = json_decode($insertionAnswer->getContent(), true)["numeroRadicado"];
-				              $transaction->setRadicatedNumber($radicatedNumber);
-				              $purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-PlaEnv'));
-			              } else {
-				              //If some kind of error
-				              $purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-ErrSer'));
-			              }
-		              }
-		              else {
-			              $purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-ErrNov'));
-		              }
-		
-		              $em = $this->getDoctrine()->getManager();
-		              $transaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
-		              $em->persist($transaction);
-		              $em->flush();
-		              $tempPOD->setUploadedFile($transaction->getIdTransaction());
-		              $tempPOD->addTransaction($transaction);
-		              $em->persist($tempPOD);
-		              $em->flush();
-	              }
+                    }
+                    $paysPila++;
+                    $person = $tempPOD->getPayrollsPila()->get(0)->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
+                    $flagFrequency = false;
+                    $flagNomi=false;
+                    if($tempPOD->getEnlaceOperativoFileName() == NULL && $tempPOD->getUploadedFile() == NULL){
+                        //Here we get the file of the pila and we send it to HighTech
+
+                        //TODO DanielRico Remove this as soon the final liquidation works and the novelty support is complete
+                        $payrollsPila = $tempPOD->getPayrollsPila();
+                        $haveNovelties = false;
+
+                        $payrollRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
+
+                        /** @var Payroll $payrollPila */
+                        foreach ( $payrollsPila as $payrollPila ){
+                            if( count($payrollPila->getNovelties()) > 0){
+                                $haveNovelties = true;
+                                break;
+                            }
+                            //If is Quincenal we need to check the first payroll of the month to see If we have novelties
+                            if($payrollPila->getContractContract()->getFrequencyFrequency()->getPayrollCode() == "Q"){
+                                $singlePayroll = $payrollRepo->findOneBy(array('contractContract' => $payrollPila->getContractContract() , 'period' => 2 , 'year' => $payrollPila->getYear() , 'month' => $payrollPila->getMonth()) );
+                                if($singlePayroll != NULL){
+                                    if( count($singlePayroll->getNovelties()) > 0){
+                                        $haveNovelties = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        //End of segment
+
+                        $transactionType = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:TransactionType')->findOneBy(array('code' => 'CPla'));
+
+                        $transaction = new Transaction();
+                        $transaction->setTransactionType($transactionType);
+
+                        if($haveNovelties == false) {
+                            $request->setMethod("GET");
+                            $insertionAnswerTextFile = $this->forward('RocketSellerTwoPickBundle:PilaPlainTextRest:getMonthlyPlainText', array('podId' => $tempPOD->getIdPurchaseOrdersDescription(), 'download' => 'generate'), array('_format' => 'json'));
+
+                            $request->setMethod("POST");
+                            $request->request->add(array(
+                                "GSCAccount" => $person->getEmployer()->getIdHighTech(),
+                                "FileToUpload" => json_decode($insertionAnswerTextFile->getContent(), true)['fileToSend']
+                            ));
+                            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postUploadFileToPilaOperator', array('request' => $request) , array('_format' => 'json'));
+                            if ($insertionAnswer->getStatusCode() == 200) {
+                                //Received succesfully
+                                $radicatedNumber = json_decode($insertionAnswer->getContent(), true)["numeroRadicado"];
+                                $transaction->setRadicatedNumber($radicatedNumber);
+                                $purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-PlaEnv'));
+                            } else {
+                                //If some kind of error
+                                $purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-ErrSer'));
+                            }
+                        }
+                        else {
+                            $purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-ErrNov'));
+                        }
+
+                        $em = $this->getDoctrine()->getManager();
+                        $transaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
+                        $em->persist($transaction);
+                        $em->flush();
+                        $tempPOD->setUploadedFile($transaction->getIdTransaction());
+                        $tempPOD->addTransaction($transaction);
+                        $em->persist($tempPOD);
+                        $em->flush();
+                    }
+                }
             } elseif( $tempPOD->getProductProduct()->getSimpleName() == "PN" || $tempPOD->getProductProduct()->getSimpleName() == "PRM") {
                 if($tempPOD->getProductProduct()->getSimpleName() == "PRM"){
                     $contract = $tempPOD->getPrima()->getContractContract();
@@ -898,7 +918,8 @@ class PayrollRestSecuredController extends FOSRestController
         $response = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getPayPurchaseOrder', array(
             "idPurchaseOrder" => $realtoPay->getIdPurchaseOrders()), array('_format' => 'json'));
         if ($response->getStatusCode() == 200) {
-            $this->useDiscounts($user);
+            if($paysPila>0)
+                $this->useDiscounts($user);
             $money = $user->getMoney();
             if($money >0){
                 if($total< $money){
