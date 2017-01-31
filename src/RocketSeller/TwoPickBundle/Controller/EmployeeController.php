@@ -636,11 +636,14 @@ class EmployeeController extends Controller
             if (!in_array($employeeHasBeneficiary->getBeneficiaryBeneficiary(),$nonRepeatedBenef)) {
                 array_push($nonRepeatedBenef, $employeeHasBeneficiary->getBeneficiaryBeneficiary());
             }
+        };
+        if($activeContract == null) {
+        	$this->createNotFoundException("Active contract not found");
         }
         /** @var Document $contractEmployee */
         $contractEmployee = $activeContract->getDocumentDocument();
         $contractDate = "";
-        if($contractEmployee){
+        if($contractEmployee && $contractEmployee->getMediaMedia() != null){
             $contractDate = $contractEmployee->getMediaMedia()->getUpdatedAt();
         }
         $entidades = array();

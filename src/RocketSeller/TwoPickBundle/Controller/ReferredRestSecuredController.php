@@ -53,4 +53,39 @@ class ReferredRestSecuredController extends FOSRestController
 		return $view;
 	}
 	
+	/**
+	 * send sms to inform referred that we will contact him/her<br/>
+	 *
+	 * @ApiDoc(
+	 *   resource = true,
+	 *   description = "send sms to inform referred that we will contact him/her",
+	 *   statusCodes = {
+	 *     200 = "OK",
+	 *     401 = "Unauthorized",
+	 *   }
+	 * )
+	 *
+	 * @param ParamFetcher $paramFetcher
+	 * @RequestParam(name="phoneNumber", nullable=false, strict=true, description="referred number")
+	 * @return View
+	 */
+	public function postSendSmsToReferredAction(ParamFetcher $paramFetcher)
+	{
+		$phone = $paramFetcher->get("phoneNumber");
+		if(strrpos($phone, "+57") === false) {
+			$phone = "+57" . $phone;
+		}
+		/** @var User $user */
+		$user = $this->getUser();
+		
+		$message = $user->getPersonPerson()->getFullName() .
+		            " te ha invitado a usar Symplifica para que formalices la relación laboral con tu empleada. Te contactaremos pronto. Recibirás 2 meses GRATIS";
+		
+		$twilio = $this->get('twilio.api');
+		$twilio->account->messages->sendMessage("+19562671001", $phone, $message);
+		
+		$view = View::create();
+		$view->setStatusCode(200);
+		return $view->setData(array());
+	}
 }

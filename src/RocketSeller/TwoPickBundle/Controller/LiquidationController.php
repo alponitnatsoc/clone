@@ -739,12 +739,12 @@ class LiquidationController extends Controller
 
         $context=array(
             'emailType'=>'liquidation',
-            'toEmail'=>'backofficesymplifica@gmail.com',
+            'toEmail'=>'servicioalcliente@symplifica.com',
             'userName'=>$employer->getPersonPerson()->getFullName(),
             'employerSociety'=> $employer->getIdSqlSociety(),
             'documentNumber'=>$employer->getPersonPerson()->getDocument(),
             'userEmail'=>$employer->getPersonPerson()->getEmail(),
-            'phone'=>$employer->getPersonPerson()->getPhones()->first(),
+            'phone'=>$employer->getPersonPerson()->getPhones()->first()->getPhoneNumber(),
             'employeeName'=>$employee->getPersonPerson()->getFullName(),
             'sqlNumber'=>$ehe->getIdEmployerHasEmployee()
         );
