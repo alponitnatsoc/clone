@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use DateTime;
+use Doctrine\Common\Collections\Criteria;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -19,6 +20,8 @@ use RocketSeller\TwoPickBundle\Entity\WeekWorkableDaysRecord;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ContractRestSecuredController extends FOSRestController
 {
@@ -279,30 +282,34 @@ class ContractRestSecuredController extends FOSRestController
         $actualContractSalary = $actualContract->getSalary();
         $newWorkableDaysMonth = intval($paramFetcher->get("workable_days_month"));
         $actualContractWorkableDaysOfMonth = $actualContract->getWorkableDaysMonth();
-
-        if(!$newSalary)
-            $newSalary = $actualContractSalary;
-        if(!$newWorkableDaysMonth)
-            $newWorkableDaysMonth = $actualContractWorkableDaysOfMonth;
         /** @var TimeCommitment $timeCommitment */
         $timeCommitment = $contractRecord->getTimeCommitmentTimeCommitment();
+        if(!$newWorkableDaysMonth)
+            $newWorkableDaysMonth = $actualContractWorkableDaysOfMonth;
+        if(!$newSalary){
+            if($timeCommitment->getCode() == "XD"){
+                $newSalary = ($actualContractSalary/$actualContractWorkableDaysOfMonth)*$newWorkableDaysMonth;
+            }else{
+                $newSalary = $actualContractSalary;
+            }
+        }
+
         if($timeCommitment->getCode() == "XD"){
             $minimumSalaryPerDay = $minimumSalary/30;
             $actualContractPerDaySalary = $actualContractSalary/$actualContractWorkableDaysOfMonth;
             $newSalaryPerDay = $newSalary/$newWorkableDaysMonth;
-            $contractRecord->setWorkableDaysMonth($newWorkableDaysMonth);
-            if($newSalaryPerDay < $actualContractPerDaySalary)
-                $newSalaryPerDay = $actualContractPerDaySalary;
             if($newSalaryPerDay < $minimumSalaryPerDay)
                 $newSalaryPerDay = $minimumSalaryPerDay;
+            if($newSalaryPerDay < $actualContractPerDaySalary)
+                $newSalaryPerDay = $actualContractPerDaySalary;
             $newSalary = $newSalaryPerDay*$newWorkableDaysMonth;
         }else{
             if($newSalary < $actualContractSalary)
                 $newSalary = $actualContractSalary;
             if($newSalary < $minimumSalary)
                 $newSalary = $minimumSalary;
-            $contractRecord->setWorkableDaysMonth($newWorkableDaysMonth);
         }
+        $contractRecord->setWorkableDaysMonth($newWorkableDaysMonth);
         $contractRecord->setSalary($newSalary);
         $ContractHasChanged=true;
         $contractRecord->setEmployerHasEmployeeEmployeeHasEmployee($actualContract->getEmployerHasEmployeeEmployerHasEmployee());
@@ -344,6 +351,94 @@ class ContractRestSecuredController extends FOSRestController
         $view->setData($response);
         return $view;
     }
+
+    /**
+     * executes the contract record if the date to be executed is lower or equal to de actual date
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "executes the contract record if the date to be executed is lower or equal to de actual date",
+     *   statusCodes = {
+     *     200 = "Created successfully",
+     *     400 = "Bad Request",
+     *   }
+     * )
+     *
+     * @param paramFetcher $paramFetcher ParamFetcher
+     * @RequestParam(name="contract_record_id", nullable=false, requirements="([0-9])+", description="Contract Record to be executed")
+     *
+     * @return View
+     */
+    public function postExecuteContractRecordAction(ParamFetcher $paramFetcher){
+        $em = $this->getDoctrine()->getManager();
+        if(!$paramFetcher->get('contract_record_id')){
+            $view = View::create();
+            $view->setStatusCode(400);
+            return $view;
+        }
+        /** @var ContractRecord $contractRecord */
+        $contractRecord = $em->getRepository("RocketSellerTwoPickBundle:ContractRecord")->find($paramFetcher->get('contract_record_id'));
+        $today = new DateTime();
+        if ($contractRecord->getDateToBeAplied()->format("d-m-Y")==$today->format("d-m-Y") or $contractRecord->getDateToBeAplied()<$today){
+            $resp = $this->executeContractRecord($contractRecord);
+            if($resp){
+                $view = View::create();
+                $view->setStatusCode(200);
+                $view->setData(array("executed"=>true));
+                return $view;
+            }else{
+                $view = View::create();
+                $view->setStatusCode(400);
+                $view->setData(array("executed"=>false,'error'=>"something go wrong executing the contract record with id: ".$paramFetcher->get('contract_record_id')));
+                return $view;
+            }
+        }else{
+            $view = View::create();
+            $view->setStatusCode(400);
+            $view->setData(array("executed"=>false,'error'=>'Date to be executed is greater than actual date'));
+            return $view;
+        }
+    }
+
+    /**
+     * Executes all contract records pending for the actual date
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Executes all contract records pending for the actual date",
+     *   statusCodes = {
+     *     200 = "Created successfully",
+     *     400 = "Bad Request",
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function putExecuteAllPendingContractRecordsAction(){
+        $em = $this->getDoctrine()->getManager();
+        $date = new DateTime();
+        $criteria = Criteria::create()->where(Criteria::expr()->lte('dateToBeAplied',$date))->andWhere(Criteria::expr()->eq('toBeExecuted',1));
+        $contractRecords = $em->getRepository("RocketSellerTwoPickBundle:ContractRecord")->matching($criteria);
+        $response = array();
+        $response["contractRecords"] = array();
+        /** @var ContractRecord $contractRecord */
+        foreach ($contractRecords as $contractRecord) {
+            $res =  $this->executeContractRecord($contractRecord);
+            if($res){
+                $response["contractRecords"][$contractRecord->getIdContractRecord()]["executed"]=true;
+            }else{
+                $response["contractRecords"][$contractRecord->getIdContractRecord()]["executed"]=false;
+                $response["contractRecords"][$contractRecord->getIdContractRecord()]["error"]="Something went wrong executing this contract record please try it manually";
+            }
+        }
+        $response["cronExecutedAt"] = $date;
+        $view = View::create();
+        $view->setStatusCode(200);
+        $view->setData($response);
+        return $view;
+    }
+
+
 
     private function executeContractRecord(ContractRecord $contractRecord){
 
@@ -719,6 +814,5 @@ class ContractRestSecuredController extends FOSRestController
         return $view;
 
     }
-
 
 }
