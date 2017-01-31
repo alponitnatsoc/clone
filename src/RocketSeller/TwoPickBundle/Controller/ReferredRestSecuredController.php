@@ -78,8 +78,10 @@ class ReferredRestSecuredController extends FOSRestController
 		/** @var User $user */
 		$user = $this->getUser();
 		
-		$message = $user->getPersonPerson()->getFullName() .
-		            " te ha invitado a usar Symplifica para que formalices la relación laboral con tu empleada. Te contactaremos pronto. Recibirás 2 meses GRATIS";
+		$utils = $this->get('app.symplifica_utils');
+		
+		$message = $utils->normalizeAccentedChars($user->getPersonPerson()->getFullName()) .
+		            " te ha invitado a usar Symplifica para que formalices la relacion laboral con tu empleada. Te contactaremos pronto. Recibiras 2 meses GRATIS";
 		
 		$twilio = $this->get('twilio.api');
 		$twilio->account->messages->sendMessage("+19562671001", $phone, $message);
