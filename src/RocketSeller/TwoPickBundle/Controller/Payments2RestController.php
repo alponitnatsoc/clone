@@ -1512,6 +1512,45 @@ class Payments2RestController extends FOSRestController
     $view->setData($data);
     return $view;
   }
+
+    /**
+     * Gets the proof of the severances payment<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Gets the proof of the severances payment",
+     *   statusCodes = {
+     *     200 = "Created",
+     *     400 = "Bad Request",
+     *     404 = "Not found",
+     *     422 = "Bad parameters"
+     *   }
+     * )
+     *
+     * @param Int $GSCAccount Global account number of the employeer.
+     * @param String $filename name of the severances document payment to be obtained
+     *
+     * @return View
+     */
+    public function getSeverancesPaymentAction($GSCAccount, $filename){
+        $path = "DescargarComprobantePagoCesantias";
+
+        $parameters_fixed = array();
+        $parameters_fixed['cuentaGSC'] = $GSCAccount;
+        $parameters_fixed['numeroPlanilla'] = $filename;
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters_fixed, $path, "DescargarComprobantePagoCesantias");
+
+        $temp = $this->handleView($responseView);
+        $data = json_decode($temp->getContent(), true);
+        $code = json_decode($temp->getStatusCode(), true);
+
+        $view = View::create();
+        $view->setStatusCode($code);
+        $view->setData($data);
+        return $view;
+    }
   
 }
 
