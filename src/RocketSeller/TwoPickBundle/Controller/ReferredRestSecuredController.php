@@ -46,7 +46,7 @@ class ReferredRestSecuredController extends FOSRestController
 			'campaignStock' => $campaignRef->getStock(),
 			'money' => $user->getMoney(),
 			'code' => $user->getCode(),
-			'textCampaign' => 'En Enero gana $' . number_format($campaignRef->getStock()) . ' por cada referido que complete su registro',
+			'textCampaign' => 'En Febrero gana $' . number_format($campaignRef->getStock()) . ' por cada referido que complete su registro',
 			'numberMonths' => '2'
 		));
 		
