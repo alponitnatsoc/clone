@@ -15,6 +15,7 @@ use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Prima;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
+use RocketSeller\TwoPickBundle\Entity\TaxValueHistorical;
 use RocketSeller\TwoPickBundle\Entity\TempFile;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Form\DocumentRegistration;
@@ -1607,11 +1608,27 @@ use EmployerMethodsTrait;
                 $productsPrice = 0;
                 /** @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $desc */
                 foreach ($descriptions as $desc) {
+					
+                	/** @var DateTime $date */
+                	$dateCreated = $desc->getPurchaseOrders()->getDateCreated();
+	                $monthCreated = $dateCreated->format('m');
+	                $yearCreated = $dateCreated->format('Y');
+	                
+                    if($desc->getProductProduct()->getTaxTax()!=null) {
+	                    $taxValueRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:TaxValueHistorical');
+	                    /** @var TaxValueHistorical $taxValueHistorical */
+	                    $taxValueHistorical = $taxValueRepo->findOneBy(array(
+	                      'taxTax' => $desc->getProductProduct()->getTaxTax(),
+	                      'month' => $monthCreated,
+	                      'year' => $yearCreated));
 
-                    if($desc->getProductProduct()->getTaxTax()!=null)
-                        $taxValue = ($desc->getProductProduct()->getTaxTax()->getValue()+1);
-                    else
-                        $taxValue = 1;
+	                    if(!$taxValueHistorical)
+	                        $taxValue = ($desc->getProductProduct()->getTaxTax()->getValue() + 1);
+	                    else
+	                    	$taxValue = $taxValueHistorical->getValue() + 1;
+                    } else {
+	                    $taxValue = 1;
+                    }
                     $ivaTotal+= round($desc->getValue()-($desc->getValue() /$taxValue ),0);
                     $unitValue = round(($desc->getValue() / $taxValue),0);
                     $productsPrice += round(($desc->getValue() / $taxValue));

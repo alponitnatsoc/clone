@@ -36,7 +36,12 @@ class Tax
      * @ORM\Column(type="text", nullable=TRUE)
      */
     private $description;
-
+	
+	/**
+	 * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\TaxValueHistorical", mappedBy="taxTax")
+	 */
+	private $taxValueHistoricals;
+	
     /**
      * Get idTax
      *
@@ -119,4 +124,45 @@ class Tax
         return $this->description;
     }
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->taxValueHistoricals = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add taxValueHistorical
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\TaxValueHistorical $taxValueHistorical
+     *
+     * @return Tax
+     */
+    public function addTaxValueHistorical(\RocketSeller\TwoPickBundle\Entity\TaxValueHistorical $taxValueHistorical)
+    {
+        $this->taxValueHistoricals[] = $taxValueHistorical;
+
+        return $this;
+    }
+
+    /**
+     * Remove taxValueHistorical
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\TaxValueHistorical $taxValueHistorical
+     */
+    public function removeTaxValueHistorical(\RocketSeller\TwoPickBundle\Entity\TaxValueHistorical $taxValueHistorical)
+    {
+        $this->taxValueHistoricals->removeElement($taxValueHistorical);
+    }
+
+    /**
+     * Get taxValueHistoricals
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTaxValueHistoricals()
+    {
+        return $this->taxValueHistoricals;
+    }
 }
