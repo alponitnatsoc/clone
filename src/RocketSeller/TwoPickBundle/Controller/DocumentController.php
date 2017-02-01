@@ -1658,7 +1658,8 @@ use EmployerMethodsTrait;
                     'invoiceNumber' => $purchaseOrders->getInvoiceNumber(),
                     'client' => $clientInfo,
                     'purchaseOrder' => $purchaseInfo,
-                    'items' => $items
+                    'items' => $items,
+                    'dateCreated' => $dateCreated
                 );
                 break;
             case "comprobante":

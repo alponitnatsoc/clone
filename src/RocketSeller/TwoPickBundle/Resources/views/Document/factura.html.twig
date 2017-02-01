@@ -102,7 +102,7 @@ body {
             <p><strong>Dirección: </strong>{{ data.client.address|capitalize }}</p>
         </div>
         <div class="cols" style="text-align:right">
-            <p><strong>Fecha: </strong>{{ "now"|date('d-m-y') }}</p>
+            <p><strong>Fecha: </strong>{{ data.dateCreated | date('d-m-y') }}</p>
             <p><strong>Teléfono: </strong>{{ data.client.phone[0].phoneNumber }}</p>
             <p><strong>Ciudad: </strong>{{ data.client.city }}</p>
         </div>
@@ -112,18 +112,18 @@ body {
 <div class="level table" style="border-bottom: 1px solid;">
     <div class="columns">
         <div class="row" style="border-bottom: 1px solid;font-size: 13px;font-family: 'Open Sans', sans-serif;font-weight:700">
+            <div class="title" style="width: 102px; float: left;"><strong>ÍTEM</strong></div>
             <div class="title" style="width: 265px; float: left;"><strong>DESCRIPCION</strong></div>
-            <div class="title" style="width: 102px; float: left;"><strong>CANTIDAD</strong></div>
             <div class="title" style="width: 102px; float: left;"><strong>Sin IVA</strong></div>
             <div class="title" style="width: 102px; float: left;"><strong>Con IVA</strong></div>
         </div>
         {% for key, item in data.items %}
             <div class="row" style="width:100%">
-                <div class="cols" style="width:265px;">
-                    <p>{{ item.desc }}</p>
+                <div class="cols" style="width:102px;text-align:center;padding: 0;box-sizing: border-box;">
+                    <p>{{ loop.index }}</p>
                 </div>
-                <div class="cols" style="width:102px;text-align:right;padding: 0 15px 0 0;box-sizing: border-box;">
-                    <p></p>
+                <div class="cols" style="width:265px;text-align: center">
+                    <p>{{ item.desc }}</p>
                 </div>
                 <div class="cols" style="width:102px;text-align:right;padding: 0 15px 0 0;box-sizing: border-box;">
                     <p>${{ item.unitValue|number_format(0, '.', ',') }}</p>
