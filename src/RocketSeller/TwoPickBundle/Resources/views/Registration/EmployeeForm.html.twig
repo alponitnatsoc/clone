@@ -560,7 +560,6 @@
 
                                     <div class="col-sm-12 col-xs-12">
                                         <div class="col-sm-5 col-md-6 label-group">
-
                                             {{ form_label(form.employeeHasEmployers.timeCommitment) }}
                                         </div>
                                         <div class="col-sm-7 col-md-6 form-group">
@@ -581,9 +580,8 @@
                                             {% for key, item in form.employeeHasEmployers.worksSaturday.children %}
                                                 {{ form_widget(item, { 'attr': {'data-error': '#error_works_sat'} }) }}
                                             {% endfor %}
+                                            <div id="error_works_sat"></div>
                                         </div>
-                                        <div id="error_works_sat"></div>
-
                                     </div>
 
                                     {#
