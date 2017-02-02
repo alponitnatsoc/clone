@@ -205,6 +205,11 @@ class LoadDocumentTypeData extends AbstractFixture implements OrderedFixtureInte
         $documentCartaTerminacionContrato->setName('Carta de Terminación de Contrato');
         $documentCartaTerminacionContrato->setDocCode('CTC');
         $manager->persist($documentCartaTerminacionContrato);
+
+        $documentComprobanteCesantias = new DocumentType();
+        $documentComprobanteCesantias->setName('Comprobante Pago Cesantías');
+        $documentComprobanteCesantias->setDocCode('CPRCES');
+        $manager->persist($documentComprobanteCesantias);
 	    
         $manager->flush();
 
