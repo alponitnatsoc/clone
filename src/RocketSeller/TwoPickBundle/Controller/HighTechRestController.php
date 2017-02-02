@@ -606,7 +606,8 @@ class HighTechRestController extends FOSRestController
 
         $data = json_decode($response->getContent(), true);
 
-        //for local test
+//        for local test
+
 //        if(true){
 //            $data =array();
 //            $data["codigoRespuesta"] = "OK";
@@ -664,16 +665,15 @@ class HighTechRestController extends FOSRestController
             $em->persist($severance);
             $em->flush();
             unlink($file);
-
-            $file = $this->get("app.symplifica_utils")->getDocumentPath($document);
+            $file = $this->get("app.symplifica_utils")->getLocalDocumentPath($document);
             $context=array(
-                'emailType'=>'SuccessSeverancesPayment',
+                'emailType'=>'successSeverancesPayment',
                 'userEmail'=>$pod->getPurchaseOrders()->getIdUser()->getEmail(),
                 'toEmail'=>$pod->getPurchaseOrders()->getIdUser()->getEmail(),
-                'userName'=>$pod->getPurchaseOrders()->getIdUser()->getPersonPerson()->getFullName(),
+                'userName'=>$pod->getPurchaseOrders()->getIdUser()->getPersonPerson()->getNames(),
                 'path'=>$file,
                 'comprobante'=>true,
-                'documentName'=> 'Comprobante Pago Cesantias'.$pod->getIdPurchaseOrdersDescription().'_'.date_format(new DateTime(),'d-m-y H:i:s').'.pdf'
+                'documentName'=> 'Comprobante Pago Cesantias_'.$pod->getIdPurchaseOrdersDescription().'_'.date_format(new DateTime(),'d-m-y H:i:s').'.pdf'
             );
             $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
             $view = View::create()->setStatusCode(200)->setData("Ceverances payment document atached correctly");
