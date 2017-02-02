@@ -251,6 +251,22 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                 }
                 break;
             /** tested OK */
+            //$context['emailType']=='successSeverancesPayment'
+            case 'successSeverancesPayment':
+                /** $context must have:
+                 * string toEmail
+                 * string userName
+                 * if comprobante
+                 * string path
+                 * string documentName
+                 */
+                $template = $this->parameters['template']['successSeverancesPayment'];
+                if($context['comprobante']){
+                    return $this->sendMessage($template,$context,$teamFromEmail, $context['toEmail'],$context['path']);
+                }else{
+                    return $this->sendMessage($template,$context,$teamFromEmail, $context['toEmail']);
+                }
+                break;
             //$context['emailType']=='failDispersion'
             case 'failDispersion':
                 /** $context must have:

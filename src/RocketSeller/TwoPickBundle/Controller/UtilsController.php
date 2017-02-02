@@ -161,6 +161,17 @@ class UtilsController extends ContainerAware
 
         return $response;
     }
+    public function getLocalDocumentPath(Document $document)
+    {
+        $service = $this->container->get('sonata.media.twig.extension');
+        $response = '';
+        if($document->getMediaMedia()){
+            $response.= $service->path($document->getMediaMedia(), 'reference');
+        }
+
+        return $response;
+    }
+
     public function mb_capitalize($stringToCapitalize)
     {
         mb_internal_encoding('UTF-8');

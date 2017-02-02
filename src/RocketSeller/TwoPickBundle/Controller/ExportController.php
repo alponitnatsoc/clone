@@ -15,6 +15,7 @@ use PHPExcel_Style_Font;
 use PHPExcel_Writer_Excel2007;
 use RocketSeller\TwoPickBundle\Entity\EmailInfo;
 use RocketSeller\TwoPickBundle\Entity\Employee;
+use RocketSeller\TwoPickBundle\Entity\LandingRegistration;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use RocketSeller\TwoPickBundle\Entity\Action;
 use RocketSeller\TwoPickBundle\Entity\Contract;
@@ -2095,9 +2096,10 @@ class ExportController extends Controller
         fputs($handle, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
 
         fputcsv($handle, array('INFORMACIÓN DEL LANDING SYMPLIFICA'),';');
-        fputcsv($handle, array('TIPO DE INSCRIPCIÓN', 'NOMBRE','APELLIDO','E-MAIL','TELEFONO','FECHA DE INSCRIPCIÓN'),';');
+        fputcsv($handle, array('TIPO DE INSCRIPCIÓN', 'NOMBRE','E-MAIL','TELEFONO','FECHA DE INSCRIPCIÓN','TIPO'),';');
+        /** @var LandingRegistration $landing */
         foreach ($landings as $landing){
-            fputcsv($handle, array($landing->getEntityType(), $landing->getName(),$landing->getLastName(),$landing->getEmail(),$landing->getPhone(),$landing->getCreatedAt()->format('d/m/y')),';');
+            fputcsv($handle, array($landing->getEntityType(), $landing->getName()." ".$landing->getLastName(),$landing->getEmail(),$landing->getPhone(),$landing->getCreatedAt()->format('d/m/y'),$landing->getType()),';');
         }
 
         fclose($handle);

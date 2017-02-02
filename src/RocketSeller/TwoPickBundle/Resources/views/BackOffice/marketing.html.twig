@@ -3,36 +3,54 @@
 {% block title %}Marketing{% endblock %}
 
 {% block fos_user_content %}
-    <div id="main" class="col-sm-15">
-        <div class="col-md-11">
-            <div class="panel panel-title">
-                Marketing
-            </div>
+    <style>
+        .table{
+            border: 1px solid black;
+        }
+        .table>tbody+tbody{
+            border: 1px solid black;
+        }
+        .table>thead+thead{
+            border: 1px solid black;
+        }.table>thead>tr>th{
+             border: 1px solid black;
+         }
+        th{
+            background-color: lightgrey;
+            color: black;
+        }
+    </style>
+    <div id="main">
+        <div class="back-panel-title col-sm-12 col-xs-12">
+            Marketing
+        </div>
+        <div class="back-panel">
+            <a class="btn btn-bitbucket notAjax" href="{{path('export_landing')}}">Generar CSV</a>
             {% if express is not defined %}
                 <a href="{{ path('express_back') }}" class="btn btn-warning notAjax">Filtrar 0 esfuerzo</a>
             {% else %}
                 <a href="{{ path('marketing') }}" class="btn btn-warning notAjax">Remover filtro</a>
                 Las contraseñas de los usuarios creados es el telefono que aparece en cada registro
             {% endif %}
-            <br>
-            <div class="panel panel-default">
-                <div class="panel-heading">
+
+        </div>
+
+        <div class="col-md-12" style="overflow: scroll;padding: 0px;">
+            <div class="back-panel" style="padding:0px;min-width: 1000px">
+                <div class="backoffice-headding">
                     <h4>Landing Symplifica</h4>
                 </div>
-
-                <table class="table">
+                <table id="table_landing" class="table">
                     <thead>
-                    <tr>
-                        <td class="tbHeader">Tipo de Inscripción</td>
-                        <td class="tbHeader">Nombre</td>
-                        <td class="tbHeader">E-Mail</td>
-                        <td class="tbHeader">Teléfono</td>
-                        <td class="tbHeader">Fecha Inscripción</td>
-                        <td class="tbHeader">Tipo</td>
+                        <th style="width: 70px">Tipo de Inscripción</th>
+                        <th style="width: 200px">Nombre</th>
+                        <th style="width: 300px">E-Mail</th>
+                        <th style="width: 100px">Teléfono</th>
+                        <th style="width: 200px">Fecha Inscripción</th>
+                        <th >Tipo</th>
                         {% if express is defined %}
-                            <td class="tbHeader">Crear Usuario y enviar Email</td>
+                        <th>Crear Usuario y enviar Email</th>
                         {% endif %}
-                    </tr>
                     </thead>
                     <tbody>
                     {% for landing in landings %}
@@ -45,17 +63,34 @@
                                 <td>{{ landing.createdAt|date('y-m-d h:i:s a') }}</td>
                                 <td>{{ landing.type}}</td>
                                 {% if express is defined %}
-                                    <td class="tbHeader"><a href="{{ path('express_back',{id : landing.id}) }}" class="btn btn-warning notAjax">Crear y enviar</a>{% if landing.state == 1 %} Ya se envió correo{% endif %}</td>
+                                    <td class="tbHeader"><a href="{{ path('express_back',{id : landing.id}) }}" style="padding: 1px 15px;margin: 0px; font-size: 12px; border: 1px solid black;background-color: #0e4144;color: white;border-radius: 4px" class="btn notAjax">Crear y enviar</a>{% if landing.state == 1 %} Ya se envió correo{% endif %}</td>
                                 {% endif %}
                             </tr>
                         {% endif %}
                     {% endfor %}
                     </tbody>
                 </table>
-                <div class="col-md-12" style="margin-top: 50px;margin-bottom: 50px;text-align: center">
-                    <a class="btn btn-bitbucket notAjax" href="{{path('export_landing')}}">Generar CSV</a>
-                </div>
+
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            // DataTable
+            var table = $('#table_landing').DataTable({
+                "lengthMenu":[[25,50,100,-1],[25,50,100,"Todos"]],
+                "language":{
+                    "url":"//cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"
+                }
+            });
+
+        });
+    </script>
+
 {% endblock %}
