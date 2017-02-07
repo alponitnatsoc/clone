@@ -1524,6 +1524,12 @@ use EmployerMethodsTrait;
                 );
                 break;
             case "mandato":
+	            $isMobile = false;
+	            if(strpos($id, ",")) {
+		            $arr = explode(',', $id);
+		            $id = $arr[0];
+		            $isMobile = true;
+	            }
                 //$id del empleador
                 $repository = $this->getDoctrine()->getManager()->getRepository('RocketSellerTwoPickBundle:Person');
                 $repositoryE = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
@@ -1552,7 +1558,8 @@ use EmployerMethodsTrait;
                 $data = array(
                     'employer' => $employerInfo,
                     'accountInfo' => $responsePaymentsMethods,
-                    'rootDir' => $this->get('kernel')->getRootDir().'/..'
+                    'rootDir' => $this->get('kernel')->getRootDir().'/..',
+                    'isMobile' => $isMobile
                 );
                 break;
             case "carta-terminacion-contrato":

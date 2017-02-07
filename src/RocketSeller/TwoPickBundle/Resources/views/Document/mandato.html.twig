@@ -1,22 +1,27 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<title>Carta de Autorizaci&oacuten a Symplifica SAS</title>
-<meta charset="utf-8" />
-<style>
-body {
-    height: 792px;
-    width: 612px;
-    /* to centre page on screen*/
-    margin-left: auto;
-    margin-right: auto;
-}
+  <title>Carta de Autorizaci&oacuten a Symplifica SAS</title>
+  <meta charset="utf-8" />
+  <style>
+  body {
+      height: 792px;
+      {% if  data.isMobile %}
+        width: 312px;
+      {% else %}
+        width: 612px;
+      {% endif %}
+      /* to centre page on screen*/
+      margin-left: auto;
+      margin-right: auto;
+  }
 
-.payMethods {
-    text-align: center;
-}
-</style>
-<head>
+  .payMethods {
+      text-align: center;
+  }
+  </style>
+</head>
+
 <body>
 <hr />
 <p>&nbsp;</p>
