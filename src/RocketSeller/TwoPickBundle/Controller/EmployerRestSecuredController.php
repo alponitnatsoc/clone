@@ -9,6 +9,7 @@ use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\Notification;
+use RocketSeller\TwoPickBundle\Entity\SellLog;
 use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -73,10 +74,26 @@ class EmployerRestSecuredController extends FOSRestController
         }
         $notifications=$user->getPersonPerson()->getNotifications();
         $activeNotifications = new ArrayCollection();
-        /** @var Notification $notif */
-        foreach ( $notifications as $notif ) {
-            if( $notif->getStatus() == 1 )
-                $activeNotifications->add($notif);
+        /** @var Notification $notification */
+        foreach ( $notifications as $notification ) {
+            if( $notification->getStatus() == 1 ) {
+            	if($notification->getDocumentTypeDocumentType()->getDocCode() == 'MAND') {
+		            $sellLogRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:SellLog");
+		            
+		            $sellLogs = $sellLogRepo->findBy(array("targetUser" => $user));
+		            $loPasaronDataCredito = false;
+		            /** @var SellLog $sellLog */
+		            foreach($sellLogs as $sellLog) {
+		            	if($sellLog->getActionType() == 'DC') {
+				            $loPasaronDataCredito = true;
+			            }
+		            }
+		            $activeNotifications->add(array('notification' => $notification,
+		                                            'loPasaronDataCredito' => $loPasaronDataCredito));
+	            } else {
+		            $activeNotifications->add(array("notification" => $notification));
+	            }
+            }
         }
         return $view->setData(array('notifications'=>$activeNotifications))->setStatusCode(200);
 
