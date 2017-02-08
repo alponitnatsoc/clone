@@ -110,6 +110,14 @@ class Employer
      * )
      */
     private $mandatoryDocument;
+	
+	/** @var Document
+	 * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Document")
+	 * @ORM\JoinColumns(
+	 *     @ORM\JoinColumn(name="signature_id",referencedColumnName="id_document")
+	 * )
+	 */
+	private $signature;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -882,5 +890,29 @@ class Employer
     public function getDashboardMessage()
     {
         return $this->dashboardMessage;
+    }
+
+    /**
+     * Set signature
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Document $signature
+     *
+     * @return Employer
+     */
+    public function setSignature(\RocketSeller\TwoPickBundle\Entity\Document $signature = null)
+    {
+        $this->signature = $signature;
+
+        return $this;
+    }
+
+    /**
+     * Get signature
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Document
+     */
+    public function getSignature()
+    {
+        return $this->signature;
     }
 }

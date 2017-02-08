@@ -27,7 +27,7 @@ class DocumentRestController extends FOSRestController
 {
 
     /**
-     * upload signature to a specific payroll
+     * upload signature to a specific entity
      *
      * @ApiDoc(
      *   resource = true,
@@ -104,6 +104,24 @@ class DocumentRestController extends FOSRestController
                 $prima->setSignature($document);
                 $em->persist($prima);
                 break;
+	        case 'Employer':
+		        /** @var Employer $employer */
+		        $employer = $this->getDoctrine()
+		          ->getRepository('RocketSellerTwoPickBundle:Employer')
+		          ->find($idEntity);
+		        $personEmployee = $employer->getPersonPerson();
+		
+		        $document = new Document();
+		        $document->setPersonPerson($personEmployee);
+		        $document->setEmployerEmployer($employer);
+		        $document->setName('Firma');
+		        $document->setStatus(1);
+		        $document->setDocumentTypeDocumentType($documentType);
+		        $em->persist($document);
+		
+		        $employer->setSignature($document);
+		        $em->persist($employer);
+		        break;
         }
         $mediaManager = $this->container->get('sonata.media.manager.media');
         $media = $mediaManager->create();

@@ -1539,7 +1539,18 @@ use EmployerMethodsTrait;
                 $employer = $repositoryE->findByPersonPerson($employerPerson);
                 $user = $repositoryU->findByPersonPerson($employerPerson);
                 $user = $user[0]->getId();
+	
+	            $signatureUrl = null;
+	
+	            $document = $employer[0]->getSignature();
+	            // signatre is already stored in db
+	            if($document != null) {
 
+		            $fileUrl = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
+		            $data = file_get_contents($fileUrl);
+		            $signatureUrl = 'data:image/png;base64,' . base64_encode($data);
+	            }
+	            
                 $employerInfo = array(
                     'name' => $this->fullName($employerPerson->getIdPerson()),
                     'docType' => $employerPerson->getDocumentType(),
@@ -1559,7 +1570,8 @@ use EmployerMethodsTrait;
                     'employer' => $employerInfo,
                     'accountInfo' => $responsePaymentsMethods,
                     'rootDir' => $this->get('kernel')->getRootDir().'/..',
-                    'isMobile' => $isMobile
+                    'isMobile' => $isMobile,
+                    'signatureUrl' => $signatureUrl
                 );
                 break;
             case "carta-terminacion-contrato":

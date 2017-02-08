@@ -19,6 +19,12 @@
   .payMethods {
       text-align: center;
   }
+
+  .firmaImg {
+    width: 100%;
+    height: auto;
+    margin: 15px 0 0 0
+  }
   </style>
 </head>
 
@@ -163,13 +169,18 @@
 
 <p style="text-align: justify;">En constancia de lo anterior se firma y env&iacute;a a SYMPLIFICA SAS el {{ "now"|localizeddate('long', 'none', 'es-CO') }} </p>
 
+{% if  not data.isMobile %}
 <table>
   <tr>
     <td width="50%">EL MANDANTE,</td>
     <td width="50%">ACEPTO,</td>
   </tr>
   <tr>
-    <td>Firma: _______________________</td>
+    <td>Firma:
+        <div>
+          _______________________
+        </div>
+    </td>
     <td>Firma representante legal SYMPLIFICA: <img src="{{url('home_landing')}}{{asset('public/img/rep_legal_firma.jpeg')}}" height="40" width="200"></td>
   </tr>
   <tr>
@@ -190,6 +201,55 @@
     <td>C.C 79787598</td>
   </tr>
 </table>
+{% else %}
+  <table>
+    <tr>
+      <td width="50%">EL MANDANTE,</td>
+    </tr>
+    <tr>
+      <td>Firma:
+        {% if  data.signatureUrl != null %}
+          <div class="firmaImg">
+            <img src="{{ data.signatureUrl }}" height="60" width="250"/>
+          </div>
+        {% else %}
+          _______________________
+        {% endif %}
+      </td>
+    </tr>
+    <tr>
+      <td>Nombre: {{ data.employer.name }} </td>
+    </tr>
+    <tr>
+      <td>
+        {% if data.employer.docType == "CC" %}
+          C.C.
+        {% elseif data.employer.docType == "CE" %}
+          C.E.
+        {% elseif data.employer.docType == "TI" %}
+          T.I.
+        {% endif %}
+        {{ data.employer.docNumber }}
+      </td>
+    </tr>
+
+    <tr style="height: 32px;"></tr>
+
+    <tr>
+      <td width="50%">ACEPTO,</td>
+    </tr>
+    <tr>
+      <td>Firma representante legal SYMPLIFICA: <img src="{{url('home_landing')}}{{asset('public/img/rep_legal_firma.jpeg')}}" height="60" width="250"></td>
+    </tr>
+    <tr>
+      <td>Nombre: Camilo Andr&eacutes M&eacutendez Ram&iacuterez </td>
+    </tr>
+    <tr>
+      <td>C.C 79787598</td>
+    </tr>
+  </table>
+{% endif %}
+
 
 <p>&nbsp;</p>
 <p style="text-align: justify;">Direcci&oacuten: {{data.employer.address}}</p>
