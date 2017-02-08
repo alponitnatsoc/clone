@@ -1,21 +1,61 @@
 {% extends '@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig' %}
 
 {% block fos_user_content %}
-    <div id="main" class="col-sm-10">
-        <div class="col-md-12">
-            <h3>Los usarios listados a continuación no han terminado el paso 3 de 3</h3>
-            <br>
-            <table class="table">
-                <tr>
-                    <th>Usuario</th>
-                    <th>Cédula</th>
-                    <th>Email</th>
-                    <th>Paso actual</th>
-                    <th>Fecha Registro</th>
-                    <th>Fecha Cliente</th>
-                </tr>
+    {% if index is defined %}
+        {% if index == 1 %}
+            {% set count = 1 %}
+        {% else %}
+            {% set count = (( index - 1 ) * 50 ) + 1 %}
+        {% endif %}
+    {% endif %}
+    <style>
+        .table{
+            border: 1px solid #0d3031;
+        }
+        .table>tbody+tbody{
+            border: 1px solid #0d3031;
+        }
+        .table>thead+thead{
+            border: 1px solid #0d3031;
+        }
+        .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+            padding: 1px 5px;
+            border: 1px solid #0d3031;
+            font-size: 11px;
+        }
+        th{
+            background-color: lightgrey;
+            color: black;
+        }
+    </style>
+    <div id="main">
+        <div class="back-panel-title">
+            Usuarios sin pasar 3 de 3
+        </div>
+        {% if users|length > 0 %}
+        <div class="back-panel">
+            <div class="back-panel" style="text-align: center">
+                <a class="btn btn-bitbucket notAjax" href="{{path('export_base_user')}}">Generar CSV</a>
+            </div>
+            <div class="backoffice-headding">
+                <h4>Información de los usuarios que no han terminado registro</h4>
+            </div>
+            <table class="table" style="padding: 0px; margin: 0px">
+                <thead>
+                <th>Nº</th>
+                <th>Usuario</th>
+                <th>Cédula</th>
+                <th>Email</th>
+                <th>Paso actual</th>
+                <th>Fecha Registro</th>
+                <th>Fecha Cliente</th>
+                </thead>
+                <tbody>
                 {% for user in users %}
                     <tr>
+                        <td>
+                            {{ count }}
+                        </td>
                         <td>
                             {{ user.personPerson.fullName }}
                         </td>
@@ -25,7 +65,6 @@
                         <td>
                             {{ user.email }}
                         </td>
-
                         <td>
                             {% if user.personPerson.employer == NULL %}
                                 No ha empezado el paso 1
@@ -37,22 +76,76 @@
                                 Completado
                             {% endif %}
                         </td>
-
                         <td>
                             {{ user.dateCreated|date("d-m-Y H:i") }}
                         </td>
-
                         <td>
                             {% if user.realProcedure.count >0 %}
                                 {{ user.realProcedure.get(0).createdAt|date("d-m-Y H:i") }}
                             {% endif %}
                         </td>
-
                     </tr>
+                    {% set count = count + 1 %}
                 {% endfor %}
-
+                </tbody>
             </table>
+            {% if maxIndex > 1 %}
+                {% set nextIndex = index + 1 %}
+                {% set prevIndex = 0 %}
+                {% if index > 1 and index <= maxIndex %}
+                    {% set prevIndex = index - 1 %}
+                {% endif %}
+                <div class="text-center col-md-12" style="display: inline-flex">
+                    <a class="btn btn-back notAjax" style="margin: 10px 1px 0px auto;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("show_base_users_register",{
+                        'index':1}) }}">&#10094;&#10094;</a>
+                    {% if index > 1 and index <= maxIndex %}
+                        {% if index == maxIndex %}
+                            <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("show_base_users_register",{
+                                'index':prevIndex}) }}">&#10094;</a>
+                        {% else %}
+                            <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("show_base_users_register",{
+                                'index':prevIndex}) }}">&#10094;</a>
+                        {% endif %}
+                    {% endif %}
+                    {% if index-3 > 0 %}
+                        {% for actual in (index-3)..(index-1) %}
+                            <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("show_base_users_register",{
+                                'index':actual}) }}">{{ actual }}</a>
+                        {% endfor %}
+                    {% elseif index > 1 %}
+                        {% for actual in 1 .. (index-1) %}
+                            <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("show_base_users_register",{
+                                'index':actual}) }}">{{ actual }}</a>
+                        {% endfor %}
+                    {% endif %}
+                    <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #33d7d6;;border-bottom: 0px solid #33d7d6;" href="{{ path("show_base_users_register",{
+                        'index':index}) }}">{{ index }}</a>
+                    {% if index+3 <= maxIndex %}
+                        {% for actual in (index+1)..(index+3) %}
+                            <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("show_base_users_register",{
+                                'index':actual}) }}">{{ actual }}</a>
+                        {% endfor %}
+                    {% elseif index < maxIndex %}
+                        {% for actual in (index+1)..maxIndex %}
+                            <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("show_base_users_register",{
+                                'index':actual}) }}">{{ actual }}</a>
+                        {% endfor %}
+                    {% endif %}
+                    {% if index > 0 and index < maxIndex %}
+                        {% if index == 1 %}
+                            <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("show_base_users_register",{
+                                'index':nextIndex}) }}">&#10095;</a>
+                        {% else %}
+                            <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("show_base_users_register",{
+                                'index':nextIndex}) }}">&#10095;</a>
+                        {% endif %}
+                    {% endif %}
+                    <a class="btn btn-back notAjax" style="margin: 10px auto 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("show_base_users_register",{
+                        'index':maxIndex}) }}">&#10095;&#10095;</a>
+                </div>
+            {% endif %}
         </div>
+        {% endif %}
     </div>
 {% endblock %}
 
