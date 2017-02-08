@@ -2135,7 +2135,7 @@ class ExportController extends Controller
         /** @var User $landing */
         foreach ($users as $user){
             $state ='';
-            if($user->getPersonPerson()->getEmployer()==null){$state=='No ha empezado el paso 1';}
+            if($user->getPersonPerson()->getEmployer()==null){$state='No ha empezado el paso 1';}
             elseif(count($user->getPersonPerson()->getEmployer()->getEmployerHasEmployees()) == 0){$state = 'No ha empezado el paso 2';}
             elseif($user->getStatus()!=2){$state='No ha empezado el paso 3';}
             else{$state='Completado';}
