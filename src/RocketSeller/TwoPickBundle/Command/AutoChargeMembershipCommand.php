@@ -37,6 +37,7 @@ class AutoChargeMembershipCommand extends ContainerAwareCommand
             $output->writeln("Respuesta:\n" . implode("\n", $response->getData()['response']));
         }
         $output->writeln('<comment>Done!</comment>');
+	    
     }
     
     
