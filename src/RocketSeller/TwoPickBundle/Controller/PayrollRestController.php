@@ -214,7 +214,7 @@ class PayrollRestController extends FOSRestController
 //        dump ($url_request . '?' . str_replace( "%20", "",urldecode($test)));
 //        die();
 
-        $response = $client->request('GET', $url_request . '?' . str_replace("%20", "", urldecode($test))); //, ['query' => urldecode($test)]);
+        $response = $client->request('GET', $url_request . '?' . str_replace("%20", "", urldecode($test)), ['timeout' => 20]); //, ['query' => urldecode($test)]);
         // die ($url_request . '?' . str_replace( "%20", "",urldecode($test)));
         // We parse the xml recieved into an xml object, that we will transform.
         $plain_text = (String) $response->getBody();
