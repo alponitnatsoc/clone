@@ -197,7 +197,7 @@ class PayrollRestController extends FOSRestController
         if($ambiente == 'desarrollo')
           $ip_environment = '52.202.135.221'; // Query7Oracle-DEV.
         else
-          $ip_environment = '54.227.200.91'; // Query7Oracle.
+          $ip_environment = '10.0.0.91'; // Query7Oracle.
          $url_request = "http://SRHADMIN:SRHADMIN@";
          $url_request .= $ip_environment;
          $url_request .= ":9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
