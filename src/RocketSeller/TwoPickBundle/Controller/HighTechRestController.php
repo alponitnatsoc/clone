@@ -551,6 +551,96 @@ class HighTechRestController extends FOSRestController
     }
 
     /**
+     * Correct severances document<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "get all the pods and correct the payslip from each severance",
+     *   statusCodes = {
+     *     200 = "Ok",
+     *     400 = "Bad Request",
+     *     404 = "Not found",
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function postCorrectSeverancesDocumentAction(){
+        $em = $this->getDoctrine()->getManager();
+        $pods = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription")->findBy(array(
+            'productProduct'=>$em->getRepository("RocketSellerTwoPickBundle:Product")->findBy(array("simpleName"=>'SVR')),
+            'purchaseOrdersStatus'=>$em->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findBy(array('idNovoPay'=>'-1'))
+        ));
+        $result = array();
+        /** @var PurchaseOrdersDescription $pod */
+        foreach ($pods as $pod) {
+            $cgsAccount = $pod->getPurchaseOrders()->getIdUser()->getPersonPerson()->getEmployer()->getIdHighTech();
+            $podId = $pod->getIdPurchaseOrdersDescription();
+            $fileName = $pod->getEnlaceOperativoFileName();
+            $request  = $this->container->get("request");
+            $request->setMethod("GET");
+            $response = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:getSeverancesPayment', array(
+                "GSCAccount" => $cgsAccount,
+                "filename" => $fileName
+            ), array('_format' => 'json'));
+            $data = json_decode($response->getContent(), true);
+            if($data['codigoRespuesta'] == "OK" and $data['descripcionRespuesta']=="Archivo Generado"){
+                $em = $this->getDoctrine()->getManager();
+                /** @var PurchaseOrdersDescription $pod */
+                $pod = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription")->find($podId);
+                if($pod==null){
+                    $result[$podId]="error";
+                    continue;
+                }
+                if($pod->getSeverance()==null){
+                    $result[$podId]="error";
+                    continue;
+                }
+                /** @var Severances $severance */
+                $severance = $pod->getSeverance();
+                /** @var DocumentType $docType */
+                $docType = $em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array('docCode'=>'CPRCES'));
+
+                $document = new Document();
+                $document->setName("Comprobante pago cesantías ".$pod->getIdPurchaseOrdersDescription());
+                $document->setStatus(1);
+                $document->setDocumentTypeDocumentType($docType);
+
+                if (!file_exists('uploads/temp/comprobantes')) {
+                    mkdir('uploads/temp/comprobantes', 0777, true);
+                }
+                $filename = "tempComprobanteCesantias".$pod->getIdPurchaseOrdersDescription().".pdf";
+                $file = "uploads/temp/comprobantes/$filename";
+                file_put_contents($file, base64_decode($data['comprobanteBase64']));
+
+                $mediaManager = $this->container->get('sonata.media.manager.media');
+                $media = $mediaManager->create();
+                $media->setBinaryContent($file);
+                $media->setProviderName('sonata.media.provider.file');
+                $media->setName($document->getName());
+                $media->setProviderStatus(Media::STATUS_OK);
+                $media->setContext('person');
+                $media->setDocumentDocument($document);
+                $document->setMediaMedia($media);
+                $em->persist($document);
+                $em->flush();
+                $severance->setPayslip($document);
+                $em->persist($severance);
+                $em->flush();
+                unlink($file);
+                $result[$podId]='Se corrigio el pod '.$podId." con severance ".$severance->getIdSeverances();
+            }else{
+                $result[$podId]="error";
+            }
+        }
+        $view = View::create();
+        $view->setStatusCode(200);
+        $view->setData($result);
+        return $view;
+    }
+
+
+    /**
      * Check with hightech if severances were paid <br/>
      *
      * @ApiDoc(
@@ -657,11 +747,10 @@ class HighTechRestController extends FOSRestController
             $media->setProviderStatus(Media::STATUS_OK);
             $media->setContext('person');
             $media->setDocumentDocument($document);
-
             $document->setMediaMedia($media);
-            $severance->setPayslip($document);
-
             $em->persist($document);
+            $em->flush();
+            $severance->setPayslip($document);
             $em->persist($severance);
             $em->flush();
             unlink($file);
