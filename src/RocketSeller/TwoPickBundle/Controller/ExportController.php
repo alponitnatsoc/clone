@@ -2101,7 +2101,6 @@ class ExportController extends Controller
         foreach ($landings as $landing){
             fputcsv($handle, array($landing->getEntityType(), $landing->getName()." ".$landing->getLastName(),$landing->getEmail(),$landing->getPhone(),$landing->getCreatedAt()->format('d/m/y'),$landing->getType()),';');
         }
-
         fclose($handle);
         header("Content-Disposition: attachment; filename=$tmp_file");
         header("Content-type: application/vnd.ms-excel; charset=utf-8");
@@ -2111,6 +2110,48 @@ class ExportController extends Controller
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
         header('Pragma: public');
 
+        ob_clean();
+        ob_end_flush();
+        flush();
+        readfile($tmp_file);
+        ignore_user_abort(true);
+        unlink($tmp_file);
+    }
+
+    public function exportBaseUserRegisterAction(){
+
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+
+        $users = $this->getdoctrine()
+            ->getRepository('RocketSellerTwoPickBundle:User')
+            ->findAll();
+        $tmp_file="baseUser.csv";
+        $handle = fopen($tmp_file, 'w+');
+        fputs($handle, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
+
+        fputcsv($handle, array('INFORMACIÓN DE USUARIOS QUE NO HAN TERMINADO REGISTRO'),';');
+        fputcsv($handle, array('Nº', 'NOMBRE','DOCUMENTO','EMAIL','PASO ACTUAL','FECHA REGISTRO','FECHA CLIENTE'),';');
+        $count = 1;
+        /** @var User $landing */
+        foreach ($users as $user){
+            $state ='';
+            if($user->getPersonPerson()->getEmployer()==null){$state='No ha empezado el paso 1';}
+            elseif(count($user->getPersonPerson()->getEmployer()->getEmployerHasEmployees()) == 0){$state = 'No ha empezado el paso 2';}
+            elseif($user->getStatus()!=2){$state='No ha empezado el paso 3';}
+            else{$state='Completado';}
+            $date = '';
+            if(count($user->getRealProcedure())>0)$date = $user->getRealProcedure()->first()->getCreatedAt()->format("d-m-Y");
+            fputcsv($handle, array($count, $user->getPersonPerson()->getFullName(),$user->getPersonPerson()->getDocumentType().' '.$user->getPersonPerson()->getDocument(),$user->getEmail(),$state,$user->getDateCreated()->format("d-m-Y"),$date),';');
+            $count++;
+        }
+        fclose($handle);
+        header("Content-Disposition: attachment; filename=$tmp_file");
+        header("Content-type: application/vnd.ms-excel; charset=utf-8");
+        header('Content-Transfer-Encoding: binary');
+        header('Content-Description: File Transfer');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Pragma: public');
         ob_clean();
         ob_end_flush();
         flush();
