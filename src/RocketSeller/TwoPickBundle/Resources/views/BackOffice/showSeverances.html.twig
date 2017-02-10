@@ -1,0 +1,35 @@
+{% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
+
+{% block fos_user_content %}
+    <div id="main">
+        <table>
+            <tr>
+                <th>Item</th>
+                <th>Empleador</th>
+                <th>Fecha Recaudo</th>
+                <th>Enlace Operativo</th>
+                <th>Estado</th>
+            </tr>
+        {% for severance in severances %}
+            <tr>
+                <td>
+                    {{ severance.purchaseOrdersDescriptionPurchaseOrdersDescription.idPurchaseOrdersDescription }}
+                </td>
+                <td>
+                    {{ severance.purchaseOrdersDescriptionPurchaseOrdersDescription.purchaseOrders.idUser.personPerson.FullName }}
+                </td>
+                <td>
+                    {{ severance.purchaseOrdersDescriptionPurchaseOrdersDescription.purchaseOrders.dateCreated|date("d-m-y") }}
+                </td>
+                <td>
+                    {{ severance.purchaseOrdersDescriptionPurchaseOrdersDescription.enlaceOperativoFileName }}
+                </td>
+                <td>
+                    {{ severance.purchaseOrdersDescriptionPurchaseOrdersDescription.purchaseOrdersStatus.description }}
+                </td>
+            </tr>
+        {% endfor %}
+
+        </table>
+    </div>
+{% endblock %}
