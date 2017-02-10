@@ -577,6 +577,23 @@ class HighTechRestController extends FOSRestController
             $cgsAccount = $pod->getPurchaseOrders()->getIdUser()->getPersonPerson()->getEmployer()->getIdHighTech();
             $podId = $pod->getIdPurchaseOrdersDescription();
             $fileName = $pod->getEnlaceOperativoFileName();
+            $em = $this->getDoctrine()->getManager();
+            /** @var PurchaseOrdersDescription $pod */
+            $pod = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription")->find($podId);
+            if($pod==null){
+                $result[$podId]="error";
+                continue;
+            }
+            if($pod->getSeverance()==null){
+                $result[$podId]="error";
+                continue;
+            }
+            /** @var Severances $severance */
+            $severance = $pod->getSeverance();
+            if($severance->getPayslip() != null){
+                $result[$podId]="ya estaba corregida";
+                continue;
+            }
             $request  = $this->container->get("request");
             $request->setMethod("GET");
             $response = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:getSeverancesPayment', array(
@@ -585,26 +602,9 @@ class HighTechRestController extends FOSRestController
             ), array('_format' => 'json'));
             $data = json_decode($response->getContent(), true);
             if($data['codigoRespuesta'] == "OK" and $data['descripcionRespuesta']=="Archivo Generado"){
-                $em = $this->getDoctrine()->getManager();
-                /** @var PurchaseOrdersDescription $pod */
-                $pod = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription")->find($podId);
-                if($pod==null){
-                    $result[$podId]="error";
-                    continue;
-                }
-                if($pod->getSeverance()==null){
-                    $result[$podId]="error";
-                    continue;
-                }
-                /** @var Severances $severance */
-                $severance = $pod->getSeverance();
-                if($severance->getPayslip() != null){
-                    $result[$podId]="ya estaba corregida";
-                    continue;
-                }
+
                 /** @var DocumentType $docType */
                 $docType = $em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array('docCode'=>'CPRCES'));
-
                 $document = new Document();
                 $document->setName("Comprobante pago cesantías ".$pod->getIdPurchaseOrdersDescription());
                 $document->setStatus(1);
