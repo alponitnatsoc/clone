@@ -1,0 +1,37 @@
+{% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
+
+{% block fos_user_content %}
+    <div id="main" class="col-sm-10">
+        <div class="col-md-12">
+            <div class="panel panel-title">
+                Peticiones realizadas
+            </div>
+            <table>
+                <tr>
+                    <th>Item</th>
+                    <th>Tipo</th>
+                    <th>Persona</th>
+                    <th>Valor</th>
+                    <th>Razón</th>
+                    <th>Estado</th>
+                </tr>
+                {% for key, pending in toApprove %}
+                    <tr>
+                        <td>{{ pending.item.idToCall }}</td>
+                    {% if pending.type == "PB" %}
+                        <td>Autorizar Pago</td>
+
+                    {% elseif pending.type == "RM" %}
+                        <td>Autorizar Devolución</td>
+                    {% endif %}
+                        <td>{{ pending.person.fullName }}</td>
+                        <td>{{ pending.value }}</td>
+                        <td>{{ pending.item.reasonToAuthorize }}</td>
+                        <td>{% if pending.item.status == 0 %}Sin Respuesta{% elseif pending.item.status == 1  %}Aprovado{% elseif pending.item.status == 2  %}Rechazado{% elseif pending.item.status == 3  %}Falló{% endif %}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
+
+{% block fos_user_content %}
+    <div id="main">
+        <form method="post">
+            {% if ans is defined %}
+                <table>
+                    <tr>
+                        <th>Item</th>
+                        <th>Producto</th>
+                        <th>Descripción</th>
+                        <th>Valor</th>
+                    </tr>
+                    {% set datas = ans.dataNomina %}
+                    {% set debts = ans.debt %}
+                    {% for data in datas %}
+                        <tr>
+                            <td>
+                                <label style="font-weight: 100;"><input type="radio" class="toPayArray"
+                                                                        name="{{ data.id_purchase_orders_description }}"
+                                                                        value="p-{{ data.id_purchase_orders_description }}">
+                                    Pagar </label>
+                            </td>
+                            <td>
+                                {{ data.product_product.name }}
+                            </td>
+                            <td>
+                                {{ data.description }}
+                            </td>
+                            <td>
+                                {{ data.value }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    {% for po in debts %}
+                        {% set pods = po.purchase_order_descriptions %}
+                        {% for data in pods %}
+                            <tr>
+                                <td>
+                                    <label style="font-weight: 100;"><input type="radio" class="toPayArray"
+                                                                            name="{{ data.id_purchase_orders_description }}"
+                                                                            value="p-{{ data.id_purchase_orders_description }}">
+                                        Pagar </label>
+                                </td>
+                                <td>
+                                    {{ data.product_product.name }}
+                                </td>
+                                <td>
+                                    {{ data.description }}
+                                </td>
+                                <td>
+                                    {{ data.value }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </table>
+            {% elseif paym is defined  %}
+                <h4>Método de pago</h4>
+                <select name="paymentMethod" required="required">
+                    {% for paymentMethod in paym %}
+                        <option value="{{ paymentMethod['method-id'] }}">{{ paymentMethod['account'] }}</option>
+                    {% endfor  %}
+                </select>
+                <input type="number" name="devolutionValue" required placeholder="valor">
+            {% endif %}
+            <br>
+            <textarea name="reason" rows="4" cols="50">razón a autorizar</textarea>
+            <br>
+            <input type="submit" value="Enviar">
+        </form>
+
+
+    </div>
+{% endblock %}

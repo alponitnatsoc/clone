@@ -1,0 +1,55 @@
+{% extends "RocketSellerTwoPickBundle:Administrative:sellsBackOfficeBase.html.twig" %}
+
+{% block fos_user_content %}
+    <div id="main" class="col-sm-10">
+        <div class="col-md-12">
+            <div class="panel panel-title">
+                Herramientas Administrativas
+            </div>
+            <table>
+                <tr>
+                    <th>Item</th>
+                    <th>Tipo</th>
+                    <th>Persona</th>
+                    <th>Valor</th>
+                    <th>Razón</th>
+                    <th>Ación</th>
+                </tr>
+                {% for key, pending in toApprove %}
+                    <tr>
+                        <td>{{ pending.item.idToCall }}</td>
+                    {% if pending.type == "PB" %}
+                        <td>Autorizar Pago</td>
+
+                    {% elseif pending.type == "RM" %}
+                        <td>Autorizar Devolución</td>
+                    {% endif %}
+                        <td>{{ pending.person.fullName }}</td>
+                        <td>{{ pending.value }}</td>
+                        <td>{{ pending.item.reasonToAuthorize }}</td>
+                        <td><a class="notAjax" href="{{ path('money_admin_act',{'id':key,'action':1} ) }}">Autorizar</a> o <a class="notAjax" href="{{ path('money_admin_act',{'id':key,'action':2} ) }}">Rechazar</a></td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td align="center" colspan="6">Fallidos</td>
+                </tr>
+                {% for key, pending in failed %}
+                    <tr>
+                        <td>{{ pending.item.idToCall }}</td>
+                    {% if pending.type == "PB" %}
+                        <td>Autorizar Pago</td>
+
+                    {% elseif pending.type == "RM" %}
+                        <td>Autorizar Devolución</td>
+                    {% endif %}
+                        <td>{{ pending.person.fullName }}</td>
+                        <td>{{ pending.value }}</td>
+                        <td>{{ pending.item.reasonToAuthorize }}</td>
+                        <td></td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+        </div>
+    </div>
+{% endblock %}

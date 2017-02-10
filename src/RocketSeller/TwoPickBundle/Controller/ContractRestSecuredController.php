@@ -48,11 +48,11 @@ class ContractRestSecuredController extends FOSRestController
      * @RequestParam(name="birth_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Employee birth day on the format DD-MM-YYYY.")
      * @RequestParam(name="start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Day the employee started working on the comopany(format: DD-MM-YYYY).")
      * @RequestParam(name="end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Last work contract termination day(format: DD-MM-YYYY).")
-     * @RequestParam(name="liquidation_type", nullable=true, requirements="(J|M|Q)", strict=false, description="Liquidation type, (J daily, M monthly, Q every two weeks). This code can obtained using the table frequency field payroll_code.")
-     * @RequestParam(name="contract_type", nullable=true, requirements="([0-9])", strict=false, description="Contract type of the employee, this can be found in the table contract_type, field payroll_code.")
+     * @RequestParam(name="frequency", nullable=true, requirements="(J|M|Q)", strict=false, description="Liquidation type, (J daily, M monthly, Q every two weeks). This code can obtained using the table frequency field payroll_code.")
+     * @RequestParam(name="contract_type", nullable=true, requirements="(TF|TI)", strict=false, description="Contract type of the employee, TF termino fijo TI for termino indefinido")
      * @RequestParam(name="its_internal", nullable=true, requirements="(Y|N)", strict=false, description="Employee lives in the house or not")
-     * @RequestParam(name="sisben", nullable=true, requirements="([0-9])", strict=false, description="Employee has sisben")
-     * @RequestParam(name="payroll_type", nullable=true, requirements="4|6|1", strict=true, description="Payroll type, 4 for full time 6 part time 1 regular payroll.")
+     * @RequestParam(name="sisben", nullable=true, requirements="(Y|N)", strict=false, description="Employee has sisben")
+     * @RequestParam(name="time_commitment", nullable=true, requirements="TC|XD", strict=true, description="TC tiempo completo, XD por dias.")
      * @RequestParam(name="salary", nullable=true, requirements="([0-9])+(.[0-9]+)?", strict=true, description="salary, must be greater than the minimum salary")
      * @RequestParam(name="date_to_execute", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Date where changes must be executed in contract(format: DD-MM-YYYY).")
      * @RequestParam(name="workable_days_month", nullable=true, requirements="([0-9])+", description="workable days of the month count")
@@ -204,9 +204,9 @@ class ContractRestSecuredController extends FOSRestController
             if($actualContract->getEndDate()) $contractRecord->setEndDate($actualContract->getEndDate());
         }
 
-        if($paramFetcher->get("liquidation_type")){//if liquidationType in paramfetcher
+        if($paramFetcher->get("frequency")){//if frecuency in paramfetcher
             /** @var Frequency $frequency */
-            $frequency = $em->getRepository("RocketSellerTwoPickBundle:Frequency")->findOneBy(array('payroll_code'=>$paramFetcher->get("liquidation_type")));
+            $frequency = $em->getRepository("RocketSellerTwoPickBundle:Frequency")->findOneBy(array('payroll_code'=>$paramFetcher->get("frequency")));
             $contractRecord->setFrequencyFrequency($frequency);
             if($actualContract->getFrequencyFrequency() != $frequency)
                 $ContractHasChanged = true;
@@ -215,8 +215,13 @@ class ContractRestSecuredController extends FOSRestController
         }
 
         if($paramFetcher->get("contract_type")){//if contractType in paramfetcher
+            if($paramFetcher->get("contract_type")=='TF'){
+                $contract_type_payroll_code = 2;
+            }else{
+                $contract_type_payroll_code = 1;
+            }
             /** @var ContractType $contractType */
-            $contractType = $em->getRepository("RocketSellerTwoPickBundle:ContractType")->findOneBy(array("payroll_code"=>$paramFetcher->get("contract_type")));
+            $contractType = $em->getRepository("RocketSellerTwoPickBundle:ContractType")->findOneBy(array("payroll_code"=>$contract_type_payroll_code));
             $contractRecord->setContractTypeContractType($contractType);
             if($actualContract->getContractTypeContractType() != $contractType)
                 $ContractHasChanged = true;
@@ -243,12 +248,12 @@ class ContractRestSecuredController extends FOSRestController
             }
         }
 
-        if($paramFetcher->get("payroll_type")){//if payroll_type in paramfetcher
+        if($paramFetcher->get("time_commitment")){//if payroll_type in paramfetcher
             $timeCommitment = null;
-            if($paramFetcher->get("payroll_type") == 4){
+            if($paramFetcher->get("time_commitment") == 'TC'){
                 /** @var TimeCommitment $timeCommitment */
                 $timeCommitment = $em->getRepository("RocketSellerTwoPickBundle:TimeCommitment")->findOneBy(array("code"=>'TC'));
-            }elseif($paramFetcher->get("payroll_type") == 6){
+            }elseif($paramFetcher->get("payroll_type") == 'XD'){
                 /** @var TimeCommitment $timeCommitment */
                 $timeCommitment = $em->getRepository("RocketSellerTwoPickBundle:TimeCommitment")->findOneBy(array("code"=>'XD'));
             }
@@ -270,8 +275,13 @@ class ContractRestSecuredController extends FOSRestController
         }
 
         if($paramFetcher->get("sisben")){//if sisben in paramfetcher
-            $contractRecord->setSisben($paramFetcher->get("sisben"));
-            if($actualContract->getSisben()!= $paramFetcher->get("sisben"))
+            if($paramFetcher->get("sisben")=='Y'){
+                $sisben = 1;
+            }else{
+                $sisben = 0;
+            }
+            $contractRecord->setSisben($sisben);
+            if($actualContract->getSisben()!= $sisben)
                 $ContractHasChanged = true;
         }else{
             if($actualContract->getSisben()) $contractRecord->setSisben($actualContract->getSisben());

@@ -151,17 +151,27 @@ class UtilsRestController extends FOSRestController
             $token = $requ['token'];
             $user = $requ['user'];
             /** @var User $backUser */
-            $backUser = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('emailCanonical'=>"backofficesymplifica@gmail.com"));
-            if($backUser!=null && $backUser->getSalt() == $token){
+            $backUser = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('salt'=>$token));
+            $auth=false;
+            if($backUser!=null ){
+                $roles = $backUser->getRoles();
+                $auth=false;
+                foreach ($roles as $key => $role) {
+                    if($role=="ROLE_MONEY_ADMIN")
+                        $auth=true;
+                }
+            }
+            if(!$auth){
+                $view = View::create();
+                $view->setStatusCode(403);
+                return $view;
+            }else{
                 $request->request->add(array('podsToPay'=>$topay,'idUser'=>$user,'paymentMethod'=>"1-none"));
                 $answer = $this->forward("RocketSellerTwoPickBundle:PayrollRestSecured:postConfirm", array('request',$request), array('_format' => 'json'));
                 $view->setData($answer->getContent())->setStatusCode($answer->getStatusCode());
                 return $view;
 
             }
-            $view->setData(array())->setStatusCode(404);
-
-            return $view;
         }
 
         $view->setData(array())->setStatusCode(400);
@@ -188,33 +198,47 @@ class UtilsRestController extends FOSRestController
      * (name="account_number", nullable=false, requirements="[0-9]+",description="employer hightech id")
      * (name="account_id", nullable=false, requirements="[0-9]+", description="id from the account when asking hightech")
      * (name="value", nullable=false, requirements="[0-9]+(\.[0-9]+)?",description="Value for the purchase order")
+     * (name="token", nullable=false, requirements="[0-9]+(\.[0-9]+)?",description="the security token")
      * @return View
      */
 
     public function putCreateRefundPurchaseOrderAction(Request $request){
 
         $parameters = $request->request->all();
+        $token = $parameters['token'];
+        /** @var User $backUser */
+        $backUser = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('salt'=>$token));
+        $auth=false;
+        $view = View::create();
+        if($backUser!=null ){
+            $roles = $backUser->getRoles();
+            $auth=false;
+            foreach ($roles as $key => $role) {
+                if($role=="ROLE_MONEY_ADMIN")
+                    $auth=true;
+            }
+        }
+        if(!$auth){
+            $view->setStatusCode(403);
+            return $view;
+        }
         $em = $this->getDoctrine()->getManager();
         if(!$parameters["account_number"]){
-            $view = View::create();
             $view->setStatusCode(400);
             return $view;
         }
         $accountNumber = $parameters["account_number"];
         if(!$parameters["account_id"]){
-            $view = View::create();
             $view->setStatusCode(400);
             return $view;
         }
         $accountId = $parameters["account_id"];
         if(!$parameters["source"]){
-            $view = View::create();
             $view->setStatusCode(400);
             return $view;
         }
         $source = intval($parameters["source"]);
         if(!$parameters["value"]){
-            $view = View::create();
             $view->setStatusCode(400);
             return $view;
         }
@@ -222,7 +246,6 @@ class UtilsRestController extends FOSRestController
         /** @var Employer $employer */
         $employer = $em->getRepository("RocketSellerTwoPickBundle:Employer")->findOneBy(array('idHighTech'=>$parameters["account_number"]));
         if(!$employer){
-            $view = View::create();
             $view->setStatusCode(404);
             return $view;
         }
