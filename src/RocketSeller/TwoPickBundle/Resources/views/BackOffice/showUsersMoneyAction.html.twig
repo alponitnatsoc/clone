@@ -1,0 +1,27 @@
+{% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
+
+{% block fos_user_content %}
+    <div id="main">
+        <table>
+            <tr>
+                <th>Empleador</th>
+                <th>Acción1</th>
+                <th>Acción2</th>
+            </tr>
+        {% for user in users %}
+            <tr>
+                <td>
+                    {{ user.personPerson.fullName }}
+                </td>
+                <td>
+                    <a class="notAjax" href="{{ path('create_users_money', {'idUser':user.id,'intend':'p'}) }}">Pagar Algo</a>
+                </td>
+                <td>
+                    <a class="notAjax" href="{{ path('create_users_money', {'idUser':user.id,'intend':'r'}) }}">Retornar Dinero</a><br>
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+
+    </div>
+{% endblock %}
