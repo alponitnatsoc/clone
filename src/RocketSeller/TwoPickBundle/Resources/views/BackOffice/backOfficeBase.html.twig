@@ -88,6 +88,12 @@
         <div class="{% if app.request.get('_route') == 'show_base_users_register' %}activeMenu{% endif %} well sidebar-back">
             <a class="notAjax" href="{{ path('show_base_users_register') }}" >Base Usuarios Registros </a>
         </div>
+        <div class="{% if app.request.get('_route') == 'show_users_money' %}activeMenu{% endif %} well sidebar-back">
+            <a class="notAjax" href="{{ path('show_users_money') }}" >Peticiones Dinero</a>
+        </div>
+        <div class="{% if app.request.get('_route') == 'back_office_show_severances' %}activeMenu{% endif %} well sidebar-back">
+            <a class="notAjax" href="{{ path('back_office_show_severances') }}" >Cesantias</a>
+        </div>
 
     {% endblock %}
     {% block content_style %} style="width: 98%"{% endblock %}

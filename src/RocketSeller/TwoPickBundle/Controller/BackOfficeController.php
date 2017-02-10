@@ -37,6 +37,7 @@ use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\RealProcedure;
 use RocketSeller\TwoPickBundle\Entity\Severances;
 use RocketSeller\TwoPickBundle\Entity\Supply;
+use RocketSeller\TwoPickBundle\Entity\ToCall;
 use RocketSeller\TwoPickBundle\Entity\Transaction;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Form\addDocument;
@@ -80,7 +81,7 @@ class BackOfficeController extends Controller
     public function testSeverancesEmailAction()
     {
         if(!$this->isGranted('ROLE_BACK_OFFICE')){
-            $this->createAccessDeniedException();
+            throw $this->createAccessDeniedException();
         }
         /** @var User $user */
         $user=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->find(4);//gabriel user
@@ -95,10 +96,18 @@ class BackOfficeController extends Controller
 
         return $this->render('RocketSellerTwoPickBundle:BackOffice:index.html.twig');
     }
+    public function showPODSeverancesAction(Request $request)
+    {
+        if(!$this->isGranted('ROLE_BACK_OFFICE')){
+            throw $this->createAccessDeniedException();
+        }
+        $sever = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Severances")->findAll();
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:showSeverances.html.twig',array('severances'=>$sever));
+    }
     public function addPODSeverancesAction(Request $request)
     {
         if(!$this->isGranted('ROLE_BACK_OFFICE')){
-            $this->createAccessDeniedException();
+            throw $this->createAccessDeniedException();
         }
         $didSomething=false;
         if(count($request->request->all())>0){
@@ -206,7 +215,7 @@ class BackOfficeController extends Controller
     public function emailSeverancesAction()
     {
         if(!$this->isGranted('ROLE_BACK_OFFICE')){
-            $this->createAccessDeniedException();
+            throw $this->createAccessDeniedException();
         }
         $em = $this->getDoctrine()->getManager();
         /** @var QueryBuilder $qb */
@@ -460,6 +469,114 @@ class BackOfficeController extends Controller
       } else { // role = ROLE_BACK_OFFICE
         return $this->redirectToRoute("show_rejected_pods");
       }
+    }
+    public function showMoneyRequestsAction(Request $request)
+    {
+        $pending = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:ToCall")->findAll();
+        $uRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+        $eRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Employer");
+        $podRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription");
+        $fixedPending = array();
+        /** @var ToCall $item */
+        foreach ($pending as $item) {
+            if($item->getService()=="RocketSellerTwoPickBundle:UtilsRest:putUserPayBack"){
+                $params = $item->getParameters();
+                /** @var User $tUser */
+                $tUser = $uRepo->find($params['user']);
+                $fixedPending[$item->getIdToCall()]=array();
+                $fixedPending[$item->getIdToCall()]['type']="PB";
+                $fixedPending[$item->getIdToCall()]['person']=$tUser->getPersonPerson();
+                $fixedPending[$item->getIdToCall()]['item']=$item;
+                $topays = $params['toPay'];
+                $value = 0;
+                foreach ( $topays as $key => $topay) {
+                    /** @var PurchaseOrdersDescription $tPod */
+                    $tPod = $podRepo->find($topay);
+                    $value+=$tPod->getValue();
+                }
+                $fixedPending[$item->getIdToCall()]['value']=$value;
+
+
+            }elseif ($item->getService()=="RocketSellerTwoPickBundle:UtilsRest:putCreateRefundPurchaseOrder"){
+                $params = $item->getParameters();
+                /** @var Employer $tEmployer */
+                $tEmployer = $eRepo->findOneBy(array('idHighTech'=>$params['account_number']));
+                $fixedPending[$item->getIdToCall()]=array();
+                $fixedPending[$item->getIdToCall()]['type']="RM";
+                $fixedPending[$item->getIdToCall()]['person']= $tEmployer->getPersonPerson();
+                $fixedPending[$item->getIdToCall()]['value']=$params['value'];
+                $fixedPending[$item->getIdToCall()]['item']=$item;
+            }
+        }
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:showRequestMoney.html.twig', array('toApprove'=>$fixedPending));
+    }
+    public function showUsersToCreateMoneyRequestsAction(Request $request)
+    {
+        $users = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->findBy(array('status'=>2));
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:showUsersMoneyAction.html.twig', array(
+            'users' => $users,
+        ) );
+    }
+    public function createMoneyRequestsAction(Request $request, $idUser, $intend)
+    {
+        $requ = $request->request->all();
+
+        /** @var User $rUser */
+        $rUser = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->find($idUser);
+        if(count($requ)>1){
+            if($intend=="p"){//Pagar
+                $item= new ToCall();
+                $item->setReasonToAuthorize($requ['reason']);
+                $item->setService("RocketSellerTwoPickBundle:UtilsRest:putUserPayBack");
+                $params= array();
+                $params['user']=$rUser->getId();
+                $params['methodTy']='PUT';
+                unset($requ['reason']);
+                $topay = array();
+                foreach ($requ as $key => $value) {
+                    $topay[]=$key;
+                }
+                $params['toPay']=$topay;
+                $item->setParameters($params);
+            }elseif ($intend=="r") {//Retornar Dinero
+                $item= new ToCall();
+                $item->setReasonToAuthorize($requ['reason']);
+                $item->setService("RocketSellerTwoPickBundle:UtilsRest:putCreateRefundPurchaseOrder");
+                $params= array();
+                $params['source']='100';
+                $params['account_number']=$rUser->getPersonPerson()->getEmployer()->getIdHighTech();
+                $params['account_id']=explode("-",$requ['paymentMethod'])[1];
+                $params['value']=$requ['devolutionValue'];
+                $params['methodTy']='PUT';
+                $item->setParameters($params);
+            }
+            $em=$this->getDoctrine()->getManager();
+            $em->persist($item);
+            $em->flush();
+
+            return $this->redirectToRoute("show_requests_money");
+        }
+        if($intend=="p"){//Pagar
+            $request->setMethod("GET");
+            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRestSecured:getPay', array("idUser" => $rUser->getId()), array('_format' => 'json'));
+            if ($insertionAnswer->getStatusCode() != 200) {
+                return $this->redirectToRoute("show_users_money");
+            }
+            $ANS=json_decode($insertionAnswer->getContent(), true);
+            $ANS=json_decode($ANS, true);
+            return $this->render('RocketSellerTwoPickBundle:BackOffice:requestActionMoney.html.twig', array(
+                'ans' => $ANS,
+            ) );
+
+        }elseif ($intend=="r"){//Retornar Dinero
+            $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getClientListPaymentMethods', array('idUser' => $rUser->getId()), array('_format' => 'json'));
+            $responsePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true)["payment-methods"];
+            return $this->render('RocketSellerTwoPickBundle:BackOffice:requestActionMoney.html.twig', array(
+                'paym' => $responsePaymentsMethods,
+            ) );
+        }
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:requestActionMoney.html.twig', array());
+
     }
 
     public function returnMoneyPayAction($idPOD)
