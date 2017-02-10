@@ -166,12 +166,13 @@ class UtilsRestController extends FOSRestController
                 $view->setStatusCode(403);
                 return $view;
             }else{
+                $request = $this->container->get('request');
                 $request->setMethod('POST');
                 foreach ( $topay as $key => $item) {
                     $topay[$key]="".$item;
                 }
                 $request->request->add(array('podsToPay'=>$topay,'idUser'=>"".$user,'paymentMethod'=>"1-none"));
-                $answer = $this->forward("RocketSellerTwoPickBundle:PayrollRestSecured:postConfirm", array('request',$request), array('_format' => 'json'));
+                $answer = $this->forward("RocketSellerTwoPickBundle:PayrollRestSecured:postConfirm", array('request'=>$request), array('_format' => 'json'));
                 $view->setData($answer->getContent())->setStatusCode($answer->getStatusCode());
                 return $view;
 
@@ -261,6 +262,7 @@ class UtilsRestController extends FOSRestController
             $view->setStatusCode(404);
             return $view;
         }
+        $request = $this->container->get('request');
         $request->setMethod("POST");
         $request->request->add(array(
             'source'=>$source,
