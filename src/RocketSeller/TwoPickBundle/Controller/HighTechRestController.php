@@ -683,7 +683,7 @@ class HighTechRestController extends FOSRestController
             return $view;
         }
         if($paramFetcher->get("filename")){
-            $filename = $paramFetcher->get("filename");
+            $filename = trim($paramFetcher->get("filename"));
         }else{
             $view = View::create();
             $view->setStatusCode(400);
