@@ -568,7 +568,7 @@ class HighTechRestController extends FOSRestController
      * @RequestParam(name="pod_id", nullable=true, requirements="([0-9])+", description="Pod id to correct")
      * @return View
      */
-    public function postCorrectSeverancesDocumentAction($paramFetcher){
+    public function postCorrectSeverancesDocumentAction(ParamFetcher $paramFetcher){
         $em = $this->getDoctrine()->getManager();
             $pods=array();
         if($paramFetcher->get("pod_id")!=null){
