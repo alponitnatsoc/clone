@@ -146,8 +146,8 @@ show_unfinished_users:
     path:     /backoffice/show/unfinished/users
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showUnfinishedUsers}
 show_base_users_register:
-    path:     /backoffice/show/base/users/register
-    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showBaseRegisterUsers}
+    path:     /backoffice/show/base/users/register/{index}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showBaseRegisterUsers, index: 1}
 show_successful_invoices:
     path:     /backoffice/show/successful/invoices/{year}/{month}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showSuccessfulInvoices}
@@ -237,6 +237,9 @@ export_all_documents:
 export_landing:
     path:         /backoffice/export/landing
     defaults:     { _controller: RocketSellerTwoPickBundle:Export:exportLanding }
+export_base_user:
+    path:         /backoffice/export/base/user/register
+    defaults:     { _controller: RocketSellerTwoPickBundle:Export:exportBaseUserRegister }
 back_person_cvs_export:
     path:         /backoffice/export/excel/{idAction}
     defaults:     { _controller: RocketSellerTwoPickBundle:Export:generateCsvByAction }

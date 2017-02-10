@@ -4,6 +4,7 @@ namespace RocketSeller\TwoPickBundle\Controller;
 
 use Application\Sonata\MediaBundle\Entity\Media;
 use RocketSeller\TwoPickBundle\Entity\Document;
+use RocketSeller\TwoPickBundle\Entity\DocumentType;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use FOS\RestBundle\Controller\FOSRestController;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,6 +17,7 @@ use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
+use RocketSeller\TwoPickBundle\Entity\Severances;
 use RocketSeller\TwoPickBundle\Entity\Transaction;
 use RocketSeller\TwoPickBundle\Entity\TransactionState;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
@@ -379,7 +381,28 @@ class HighTechRestController extends FOSRestController
                 //$em->persist($notification);*/
 
             }
+            if($pay->getPurchaseOrdersDescription()->getProductProduct()->getSimpleName()=="SVR") {
+                $request->setMethod("GET");
+                $response = $this->forward('RocketSellerTwoPickBundle:HighTechRest:postCheckSeverancesPayment',array(
+                    "GSCAccount" => $pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser()->getPersonPerson()->getEmployer()->getIdHighTech(),
+                    "payslipNumber" => $pay->getPurchaseOrdersDescription()->getEnlaceOperativoFileName(),
+                    "podId"=>$pay->getPurchaseOrdersDescription()->getIdPurchaseOrdersDescription(),
+                ), array('_format' => 'json'));
+                $message = "¡Hemos realizado el pago de cesantías con éxito!";
+                $title = "Symplifica";
+                $longMessage = "¡Hemos realizado El pago de las cesantías con éxito!";
 
+                $request = new Request();
+                $request->setMethod("POST");
+                $request->request->add(array(
+                    "idUser" => $pay->getPurchaseOrdersDescription()->getPurchaseOrders()->getIdUser(),
+                    "title" => $title,
+                    "message" => $message,
+                    "longMessage" => $longMessage
+                ));
+                $pushNotificationService = $this->get('app.symplifica_push_notification');
+                $result = $pushNotificationService->postPushNotificationAction($request);
+            }
 		        if($pay->getPurchaseOrdersDescription()->getProductProduct()->getSimpleName()=="PP"){
 
 			        $request->setMethod("GET");
@@ -524,6 +547,244 @@ class HighTechRestController extends FOSRestController
         $view->setStatusCode(200);
         $view->setData([]);
         return $view;
+
+    }
+
+    /**
+     * Correct severances document<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "get all the pods and correct the payslip from each severance",
+     *   statusCodes = {
+     *     200 = "Ok",
+     *     400 = "Bad Request",
+     *     404 = "Not found",
+     *   }
+     * )
+     *
+     * @param paramFetcher $paramFetcher ParamFetcher
+     *
+     * @RequestParam(name="pod_id", nullable=true, requirements="([0-9])+", description="Pod id to correct")
+     * @return View
+     */
+    public function postCorrectSeverancesDocumentAction(ParamFetcher $paramFetcher){
+        $em = $this->getDoctrine()->getManager();
+            $pods=array();
+        if($paramFetcher->get("pod_id")!=null){
+            $pods[]=$em->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription")->find($paramFetcher->get("pod_id"));
+        }else{
+            $pods = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription")->findBy(array(
+                'productProduct'=>$em->getRepository("RocketSellerTwoPickBundle:Product")->findBy(array("simpleName"=>'SVR')),
+                'purchaseOrdersStatus'=>$em->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findBy(array('idNovoPay'=>'-1'))
+            ));
+        }
+
+        $result = array();
+        /** @var PurchaseOrdersDescription $pod */
+        foreach ($pods as $pod) {
+            $cgsAccount = $pod->getPurchaseOrders()->getIdUser()->getPersonPerson()->getEmployer()->getIdHighTech();
+            $podId = $pod->getIdPurchaseOrdersDescription();
+            $enlaceOperativofileName = $pod->getEnlaceOperativoFileName();
+            $em = $this->getDoctrine()->getManager();
+            if($pod==null){
+                $result[$podId]="error pod";
+                continue;
+            }
+            if($pod->getSeverance()==null){
+                $result[$podId]="error severance";
+                continue;
+            }
+            /** @var Severances $severance */
+            $severance = $pod->getSeverance();
+            if($severance->getPayslip() != null){
+                $result[$podId]="ya estaba corregida";
+                continue;
+            }
+            $request  = new Request();
+            $request->setMethod("GET");
+            $response = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:getSeverancesPayment', array(
+                "GSCAccount" => $cgsAccount,
+                "filename" => $enlaceOperativofileName
+            ), array('_format' => 'json'));
+            $data = json_decode($response->getContent(), true);
+            if($data['codigoRespuesta'] == "OK" and $data['descripcionRespuesta']=="Archivo Generado"){
+                /** @var DocumentType $docType */
+                $docType = $em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array('docCode'=>'CPRCES'));
+                $document = new Document();
+                $document->setName("Comprobante pago cesantías ".$pod->getIdPurchaseOrdersDescription());
+                $document->setStatus(1);
+                $document->setDocumentTypeDocumentType($docType);
+
+                if (!file_exists('uploads/temp/comprobantes')) {
+                    mkdir('uploads/temp/comprobantes', 0777, true);
+                }
+                $filename = "tempComprobanteCesantias".$pod->getIdPurchaseOrdersDescription().".pdf";
+                $file = "uploads/temp/comprobantes/$filename";
+                file_put_contents($file, base64_decode($data['comprobanteBase64']));
+
+                $mediaManager = $this->container->get('sonata.media.manager.media');
+                $media = $mediaManager->create();
+                $media->setBinaryContent($file);
+                $media->setProviderName('sonata.media.provider.file');
+                $media->setName($document->getName());
+                $media->setProviderStatus(Media::STATUS_OK);
+                $media->setContext('person');
+                $media->setDocumentDocument($document);
+                $document->setMediaMedia($media);
+                $em->persist($document);
+                $em->flush();
+                $severance->setPayslip($document);
+                $em->persist($severance);
+                $em->flush();
+                unlink($file);
+                $result[$podId]='Se corrigio el pod '.$podId." con severance ".$severance->getIdSeverances();
+            }else{
+                $result[$podId]="error servicio, GSCAccount: ".$cgsAccount." fileName: ".$enlaceOperativofileName;
+                $result["additional_info"]="codigoRespuesta => ".$data["codigoRespuesta"]." descripcionRespuesta => ".$data["descripcionRespuesta"];
+            }
+        }
+        $view = View::create();
+        $view->setStatusCode(200);
+        $view->setData($result);
+        return $view;
+    }
+
+
+    /**
+     * Check with hightech if severances were paid <br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Check with hightech if severances were pai",
+     *   statusCodes = {
+     *     200 = "Ok",
+     *     400 = "Bad Request",
+     *     404 = "Not found",
+     *   }
+     * )
+     *
+     * @param paramFetcher $paramFetcher ParamFetcher
+     *
+     * @RequestParam(name="GSCAccount", nullable=false, requirements="([0-9])+", description="HighTech employer Id.")
+     * @RequestParam(name="filename", nullable=true, requirements="([a-z|A-Z|0-9 ])+", description="POD hightech filenem to download the proof of severances payment")
+     * @RequestParam(name="podId", nullable=false, requirements="([0-9])+", description="PurchaseOrderDescription Id.")
+     *
+     * @return View
+     */
+    public function postCheckSeverancesPaymentAction(ParamFetcher $paramFetcher){
+
+        if($paramFetcher->get("GSCAccount")){
+             $GSCAccount = $paramFetcher->get("GSCAccount");
+        }else{
+            $view = View::create();
+            $view->setStatusCode(400);
+            $view->setData("Error: GSCAccount not fount in request parameters.");
+            return $view;
+        }
+        if($paramFetcher->get("filename")){
+            $filename = trim($paramFetcher->get("filename"));
+        }else{
+            $view = View::create();
+            $view->setStatusCode(400);
+            $view->setData("Error: HighTech filename not fount in request parameters.");
+            return $view;
+        }
+        if($paramFetcher->get("podId")){
+            $podId = $paramFetcher->get("podId");
+        }else{
+            $view = View::create();
+            $view->setStatusCode(400);
+            $view->setData("Error: Purchase Order Description Id not fount in request parameters.");
+            return $view;
+        }
+        $request  = $this->container->get("request");
+        $request->setMethod("GET");
+        $response = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:getSeverancesPayment', array(
+            "GSCAccount" => $GSCAccount,
+            "filename" => $filename
+        ), array('_format' => 'json'));
+
+        $data = json_decode($response->getContent(), true);
+
+//        for local test
+
+//        if(true){
+//            $data =array();
+//            $data["codigoRespuesta"] = "OK";
+//            $data["descripcionRespuesta"] = "Archivo Generado";
+//            $data["comprobanteBase64"] = "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c2VGb250L0hlbHZldGljYS9UeXBlL0ZvbnQvRW5jb2RpbmcvV2luQW5zaUVuY29kaW5nL1N1YnR5cGUvVHlwZTE+PgplbmRvYmoKMyAwIG9iajw8L0Jhc2VGb250L0hlbHZldGljYS1Cb2xkL1R5cGUvRm9udC9FbmNvZGluZy9XaW5BbnNpRW5jb2RpbmcvU3VidHlwZS9UeXBlMT4+CmVuZG9iago2IDAgb2JqPDwvVHlwZS9QYWdlcy9Db3VudCAxL0tpZHNbMSAwIFJdPj4KZW5kb2JqCjggMCBvYmo8PC9OYW1lc1soSlJfUEFHRV9BTkNIT1JfMF8xKSA3IDAgUl0+PgplbmRvYmoKOSAwIG9iajw8L0Rlc3RzIDggMCBSPj4KZW5kb2JqCjEwIDAgb2JqPDwvTmFtZXMgOSAwIFIvVHlwZS9DYXRhbG9nL1ZpZXdlclByZWZlcmVuY2VzPDwvUHJpbnRTY2FsaW5nL0FwcERlZmF1bHQ+Pi9QYWdlcyA2IDAgUj4+CmVuZG9iagoxMSAwIG9iajw8L0NyZWF0b3IoSmFzcGVyUmVwb3J0cyBcKFByb3B1ZXN0YV9JbmZvcm1lQ29tcGxldG9cKSkvUHJvZHVjZXIoaVRleHQgMi4xLjAgXChieSBsb3dhZ2llLmNvbVwpKS9Nb2REYXRlKEQ6MjAxNzAxMzAxMDAyMDAtMDUnMDAnKS9DcmVhdGlvbkRhdGUoRDoyMDE3MDEzMDEwMDIwMC0wNScwMCcpPj4KZW5kb2JqCnhyZWYKMCAxMgowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDc3ODkgMDAwMDAgbiAKMDAwMDAwODA4OCAwMDAwMCBuIAowMDAwMDA4MTc1IDAwMDAwIG4gCjAwMDAwMDAwMTUgMDAwMDAgbiAKMDAwMDAwNDg2NSAwMDAwMCBuIAowMDAwMDA4MjY3IDAwMDAwIG4gCjAwMDAwMDgwNTQgMDAwMDAgbiAKMDAwMDAwODMxNyAwMDAwMCBuIAowMDAwMDA4MzcwIDAwMDAwIG4gCjAwMDAwMDg0MDEgMDAwMDAgbiAKMDAwMDAwODUwNCAwMDAwMCBuIAp0cmFpbGVyCjw8L1Jvb3QgMTAgMCBSL0lEIFs8YmNhZjRmMjczNmJhYjVkOWJiYmRmMzA0YmM4OWRmMjE+PDllMDdlZmFlNGFiMjFhMTUwN2E1ZjdmZDI5NzJkOTg4Pl0vSW5mbyAxMSAwIFIvU2l6ZSAxMj4+CnN0YXJ0eHJlZgo4Njg5CiUlRU9GCg==";
+//        }
+
+
+        if($data['codigoRespuesta'] == "OK" and $data['descripcionRespuesta']=="Archivo Generado"){
+            $em = $this->getDoctrine()->getManager();
+            /** @var PurchaseOrdersDescription $pod */
+            $pod = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription")->find($podId);
+            if($pod==null){
+                $view = View::create();
+                $view->setStatusCode(404);
+                $view->setData("Error: Purchase Order Description with Id ".$podId." not found.");
+                return $view;
+            }
+            if($pod->getSeverance()==null){
+                $view = View::create();
+                $view->setStatusCode(404);
+                $view->setData("Error: Severances not found.");
+                return $view;
+            }
+            /** @var Severances $severance */
+            $severance = $pod->getSeverance();
+            /** @var DocumentType $docType */
+            $docType = $em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array('docCode'=>'CPRCES'));
+
+            $document = new Document();
+            $document->setName("Comprobante pago cesantías ".$pod->getIdPurchaseOrdersDescription());
+            $document->setStatus(1);
+            $document->setDocumentTypeDocumentType($docType);
+
+            if (!file_exists('uploads/temp/comprobantes')) {
+                mkdir('uploads/temp/comprobantes', 0777, true);
+            }
+            $filename = "tempComprobanteCesantias".$pod->getIdPurchaseOrdersDescription().".pdf";
+            $file = "uploads/temp/comprobantes/$filename";
+            file_put_contents($file, base64_decode($data['comprobanteBase64']));
+
+            $mediaManager = $this->container->get('sonata.media.manager.media');
+            $media = $mediaManager->create();
+            $media->setBinaryContent($file);
+            $media->setProviderName('sonata.media.provider.file');
+            $media->setName($document->getName());
+            $media->setProviderStatus(Media::STATUS_OK);
+            $media->setContext('person');
+            $media->setDocumentDocument($document);
+            $document->setMediaMedia($media);
+            $em->persist($document);
+            $em->flush();
+            $severance->setPayslip($document);
+            $em->persist($severance);
+            $em->flush();
+            unlink($file);
+            $file = $this->get("app.symplifica_utils")->getLocalDocumentPath($document);
+            $context=array(
+                'emailType'=>'successSeverancesPayment',
+                'userEmail'=>$pod->getPurchaseOrders()->getIdUser()->getEmail(),
+                'toEmail'=>$pod->getPurchaseOrders()->getIdUser()->getEmail(),
+                'userName'=>$pod->getPurchaseOrders()->getIdUser()->getPersonPerson()->getNames(),
+                'path'=>$file,
+                'comprobante'=>true,
+                'documentName'=> 'Comprobante Pago Cesantias_'.$pod->getIdPurchaseOrdersDescription().'_'.date_format(new DateTime(),'d-m-y H:i:s').'.pdf'
+            );
+            $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+            $view = View::create()->setStatusCode(200)->setData("Ceverances payment document atached correctly");
+            return $view;
+
+        }else{
+            $view = View::create();
+            $view->setStatusCode(400);
+            $view->setData($data);
+            return $view;
+        }
 
     }
 

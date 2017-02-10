@@ -59,7 +59,35 @@
           <div class="container">
             <div id="navbar" class="text-right">
               <!--<span class="bold">¿Necesitas ayuda?</span> <span class="light">llámanos</span> · <span class="bold">Bogotá 350 833 0000</span>-->
-              <span class="bold" style="border-right: 1px solid #CCC; padding-right: 20px;">Llámanos: Ventas: 350 833 0000<span class="noPhone"> – Servicio al cliente: 350 461 2013</span></span>
+              <span class="tel1"><i class="fa fa-phone" aria-hidden="true"></i><span class="bold" style="color:#5D5D5D"> Llámanos </span><span class="light" style="border-right: 1px solid #CCC; padding-right: 20px;"> 350 4493426 - 350 423 2841 - 350 833 0000</span></span>
+              <div id="botonTelefonos" class="tel2" data-toggle="modal" data-target="#myModal">
+                  <span><i class="fa fa-phone" aria-hidden="true"></i> | Llámanos</span>
+              </div>
+              <!-- Modal llamadas-->
+                <div class="modal fade" id="myModal" role="dialog">
+                  <div class="modal-dialog modal-sm">
+
+                    <!-- Modal content-->
+                    <div class="modal-content light" style="text-align:center;font-size:20px">
+                      <div class="modal-header azulmedio">
+                        <button style="text-align:right" type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title bold" style="color: #FFF">Llámanos</h4>
+                      </div>
+                      <div class="modal-body">
+                            <a href="tel:350 449 3426">&#10095; 350 449 3426</a><br />
+                            <hr />
+                            <a href="tel:350 423 2841">&#10095; 350 423 2841</a><br />
+                            <hr />
+                            <a href="tel:350 833 0000">&#10095; 350 833 0000</a>
+                      </div>
+                      <div class="modal-footer" style="text-align:center">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Modal llamadas-->
+
               <div id="btnLogin" style="width: auto;float: right;">
                 <a href="#" class="boton-ingresar">
                   <span class="fa-stack fa">
@@ -100,7 +128,7 @@
                                   <a href="/contactenos"><li class="grisclarofont light">Contáctanos</li></a>
                                  	<a href="/nosotros"><li class="grisclarofont light">Nosotros</li></a>
                                   <a href="{{ path('fos_user_registration_register') }}"><li style="color:#FFFFFF" class="bold naranja">Prueba un mes gratis</li></a>
-                                  <span class="contactPhone grisclarofont bold">Llámanos: Ventas: 350 833 0000 – Servicio al cliente: 350 461 2013</span>
+                                  <span class="contactPhone grisclarofont bold"><i class="fa fa-phone" aria-hidden="true"></i> Llámanos 350 423 2841 - 350 833 0000 - 350 4493426</span>
                              </ul>
                           </div>
           <!--fin menu de prueba-->

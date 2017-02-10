@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use DateTime;
+use Doctrine\Common\Collections\Criteria;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -19,6 +20,8 @@ use RocketSeller\TwoPickBundle\Entity\WeekWorkableDaysRecord;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ContractRestSecuredController extends FOSRestController
 {
@@ -45,11 +48,11 @@ class ContractRestSecuredController extends FOSRestController
      * @RequestParam(name="birth_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Employee birth day on the format DD-MM-YYYY.")
      * @RequestParam(name="start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Day the employee started working on the comopany(format: DD-MM-YYYY).")
      * @RequestParam(name="end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Last work contract termination day(format: DD-MM-YYYY).")
-     * @RequestParam(name="liquidation_type", nullable=true, requirements="(J|M|Q)", strict=false, description="Liquidation type, (J daily, M monthly, Q every two weeks). This code can obtained using the table frequency field payroll_code.")
-     * @RequestParam(name="contract_type", nullable=true, requirements="([0-9])", strict=false, description="Contract type of the employee, this can be found in the table contract_type, field payroll_code.")
+     * @RequestParam(name="frequency", nullable=true, requirements="(J|M|Q)", strict=false, description="Liquidation type, (J daily, M monthly, Q every two weeks). This code can obtained using the table frequency field payroll_code.")
+     * @RequestParam(name="contract_type", nullable=true, requirements="(TF|TI)", strict=false, description="Contract type of the employee, TF termino fijo TI for termino indefinido")
      * @RequestParam(name="its_internal", nullable=true, requirements="(Y|N)", strict=false, description="Employee lives in the house or not")
-     * @RequestParam(name="sisben", nullable=true, requirements="([0-9])", strict=false, description="Employee has sisben")
-     * @RequestParam(name="payroll_type", nullable=true, requirements="4|6|1", strict=true, description="Payroll type, 4 for full time 6 part time 1 regular payroll.")
+     * @RequestParam(name="sisben", nullable=true, requirements="(Y|N)", strict=false, description="Employee has sisben")
+     * @RequestParam(name="time_commitment", nullable=true, requirements="TC|XD", strict=true, description="TC tiempo completo, XD por dias.")
      * @RequestParam(name="salary", nullable=true, requirements="([0-9])+(.[0-9]+)?", strict=true, description="salary, must be greater than the minimum salary")
      * @RequestParam(name="date_to_execute", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Date where changes must be executed in contract(format: DD-MM-YYYY).")
      * @RequestParam(name="workable_days_month", nullable=true, requirements="([0-9])+", description="workable days of the month count")
@@ -201,9 +204,9 @@ class ContractRestSecuredController extends FOSRestController
             if($actualContract->getEndDate()) $contractRecord->setEndDate($actualContract->getEndDate());
         }
 
-        if($paramFetcher->get("liquidation_type")){//if liquidationType in paramfetcher
+        if($paramFetcher->get("frequency")){//if frecuency in paramfetcher
             /** @var Frequency $frequency */
-            $frequency = $em->getRepository("RocketSellerTwoPickBundle:Frequency")->findOneBy(array('payroll_code'=>$paramFetcher->get("liquidation_type")));
+            $frequency = $em->getRepository("RocketSellerTwoPickBundle:Frequency")->findOneBy(array('payroll_code'=>$paramFetcher->get("frequency")));
             $contractRecord->setFrequencyFrequency($frequency);
             if($actualContract->getFrequencyFrequency() != $frequency)
                 $ContractHasChanged = true;
@@ -212,8 +215,13 @@ class ContractRestSecuredController extends FOSRestController
         }
 
         if($paramFetcher->get("contract_type")){//if contractType in paramfetcher
+            if($paramFetcher->get("contract_type")=='TF'){
+                $contract_type_payroll_code = 2;
+            }else{
+                $contract_type_payroll_code = 1;
+            }
             /** @var ContractType $contractType */
-            $contractType = $em->getRepository("RocketSellerTwoPickBundle:ContractType")->findOneBy(array("payroll_code"=>$paramFetcher->get("contract_type")));
+            $contractType = $em->getRepository("RocketSellerTwoPickBundle:ContractType")->findOneBy(array("payroll_code"=>$contract_type_payroll_code));
             $contractRecord->setContractTypeContractType($contractType);
             if($actualContract->getContractTypeContractType() != $contractType)
                 $ContractHasChanged = true;
@@ -240,12 +248,12 @@ class ContractRestSecuredController extends FOSRestController
             }
         }
 
-        if($paramFetcher->get("payroll_type")){//if payroll_type in paramfetcher
+        if($paramFetcher->get("time_commitment")){//if payroll_type in paramfetcher
             $timeCommitment = null;
-            if($paramFetcher->get("payroll_type") == 4){
+            if($paramFetcher->get("time_commitment") == 'TC'){
                 /** @var TimeCommitment $timeCommitment */
                 $timeCommitment = $em->getRepository("RocketSellerTwoPickBundle:TimeCommitment")->findOneBy(array("code"=>'TC'));
-            }elseif($paramFetcher->get("payroll_type") == 6){
+            }elseif($paramFetcher->get("payroll_type") == 'XD'){
                 /** @var TimeCommitment $timeCommitment */
                 $timeCommitment = $em->getRepository("RocketSellerTwoPickBundle:TimeCommitment")->findOneBy(array("code"=>'XD'));
             }
@@ -267,8 +275,13 @@ class ContractRestSecuredController extends FOSRestController
         }
 
         if($paramFetcher->get("sisben")){//if sisben in paramfetcher
-            $contractRecord->setSisben($paramFetcher->get("sisben"));
-            if($actualContract->getSisben()!= $paramFetcher->get("sisben"))
+            if($paramFetcher->get("sisben")=='Y'){
+                $sisben = 1;
+            }else{
+                $sisben = 0;
+            }
+            $contractRecord->setSisben($sisben);
+            if($actualContract->getSisben()!= $sisben)
                 $ContractHasChanged = true;
         }else{
             if($actualContract->getSisben()) $contractRecord->setSisben($actualContract->getSisben());
@@ -279,30 +292,34 @@ class ContractRestSecuredController extends FOSRestController
         $actualContractSalary = $actualContract->getSalary();
         $newWorkableDaysMonth = intval($paramFetcher->get("workable_days_month"));
         $actualContractWorkableDaysOfMonth = $actualContract->getWorkableDaysMonth();
-
-        if(!$newSalary)
-            $newSalary = $actualContractSalary;
-        if(!$newWorkableDaysMonth)
-            $newWorkableDaysMonth = $actualContractWorkableDaysOfMonth;
         /** @var TimeCommitment $timeCommitment */
         $timeCommitment = $contractRecord->getTimeCommitmentTimeCommitment();
+        if(!$newWorkableDaysMonth)
+            $newWorkableDaysMonth = $actualContractWorkableDaysOfMonth;
+        if(!$newSalary){
+            if($timeCommitment->getCode() == "XD"){
+                $newSalary = ($actualContractSalary/$actualContractWorkableDaysOfMonth)*$newWorkableDaysMonth;
+            }else{
+                $newSalary = $actualContractSalary;
+            }
+        }
+
         if($timeCommitment->getCode() == "XD"){
             $minimumSalaryPerDay = $minimumSalary/30;
             $actualContractPerDaySalary = $actualContractSalary/$actualContractWorkableDaysOfMonth;
             $newSalaryPerDay = $newSalary/$newWorkableDaysMonth;
-            $contractRecord->setWorkableDaysMonth($newWorkableDaysMonth);
-            if($newSalaryPerDay < $actualContractPerDaySalary)
-                $newSalaryPerDay = $actualContractPerDaySalary;
             if($newSalaryPerDay < $minimumSalaryPerDay)
                 $newSalaryPerDay = $minimumSalaryPerDay;
+            if($newSalaryPerDay < $actualContractPerDaySalary)
+                $newSalaryPerDay = $actualContractPerDaySalary;
             $newSalary = $newSalaryPerDay*$newWorkableDaysMonth;
         }else{
             if($newSalary < $actualContractSalary)
                 $newSalary = $actualContractSalary;
             if($newSalary < $minimumSalary)
                 $newSalary = $minimumSalary;
-            $contractRecord->setWorkableDaysMonth($newWorkableDaysMonth);
         }
+        $contractRecord->setWorkableDaysMonth($newWorkableDaysMonth);
         $contractRecord->setSalary($newSalary);
         $ContractHasChanged=true;
         $contractRecord->setEmployerHasEmployeeEmployeeHasEmployee($actualContract->getEmployerHasEmployeeEmployerHasEmployee());
@@ -344,6 +361,94 @@ class ContractRestSecuredController extends FOSRestController
         $view->setData($response);
         return $view;
     }
+
+    /**
+     * executes the contract record if the date to be executed is lower or equal to de actual date
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "executes the contract record if the date to be executed is lower or equal to de actual date",
+     *   statusCodes = {
+     *     200 = "Created successfully",
+     *     400 = "Bad Request",
+     *   }
+     * )
+     *
+     * @param paramFetcher $paramFetcher ParamFetcher
+     * @RequestParam(name="contract_record_id", nullable=false, requirements="([0-9])+", description="Contract Record to be executed")
+     *
+     * @return View
+     */
+    public function postExecuteContractRecordAction(ParamFetcher $paramFetcher){
+        $em = $this->getDoctrine()->getManager();
+        if(!$paramFetcher->get('contract_record_id')){
+            $view = View::create();
+            $view->setStatusCode(400);
+            return $view;
+        }
+        /** @var ContractRecord $contractRecord */
+        $contractRecord = $em->getRepository("RocketSellerTwoPickBundle:ContractRecord")->find($paramFetcher->get('contract_record_id'));
+        $today = new DateTime();
+        if ($contractRecord->getDateToBeAplied()->format("d-m-Y")==$today->format("d-m-Y") or $contractRecord->getDateToBeAplied()<$today){
+            $resp = $this->executeContractRecord($contractRecord);
+            if($resp){
+                $view = View::create();
+                $view->setStatusCode(200);
+                $view->setData(array("executed"=>true));
+                return $view;
+            }else{
+                $view = View::create();
+                $view->setStatusCode(400);
+                $view->setData(array("executed"=>false,'error'=>"something go wrong executing the contract record with id: ".$paramFetcher->get('contract_record_id')));
+                return $view;
+            }
+        }else{
+            $view = View::create();
+            $view->setStatusCode(400);
+            $view->setData(array("executed"=>false,'error'=>'Date to be executed is greater than actual date'));
+            return $view;
+        }
+    }
+
+    /**
+     * Executes all contract records pending for the actual date
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Executes all contract records pending for the actual date",
+     *   statusCodes = {
+     *     200 = "Created successfully",
+     *     400 = "Bad Request",
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function putExecuteAllPendingContractRecordsAction(){
+        $em = $this->getDoctrine()->getManager();
+        $date = new DateTime();
+        $criteria = Criteria::create()->where(Criteria::expr()->lte('dateToBeAplied',$date))->andWhere(Criteria::expr()->eq('toBeExecuted',1));
+        $contractRecords = $em->getRepository("RocketSellerTwoPickBundle:ContractRecord")->matching($criteria);
+        $response = array();
+        $response["contractRecords"] = array();
+        /** @var ContractRecord $contractRecord */
+        foreach ($contractRecords as $contractRecord) {
+            $res =  $this->executeContractRecord($contractRecord);
+            if($res){
+                $response["contractRecords"][$contractRecord->getIdContractRecord()]["executed"]=true;
+            }else{
+                $response["contractRecords"][$contractRecord->getIdContractRecord()]["executed"]=false;
+                $response["contractRecords"][$contractRecord->getIdContractRecord()]["error"]="Something went wrong executing this contract record please try it manually";
+            }
+        }
+        $response["cronExecutedAt"] = $date;
+        $view = View::create();
+        $view->setStatusCode(200);
+        $view->setData($response);
+        return $view;
+    }
+
+
 
     private function executeContractRecord(ContractRecord $contractRecord){
 
@@ -719,6 +824,5 @@ class ContractRestSecuredController extends FOSRestController
         return $view;
 
     }
-
 
 }

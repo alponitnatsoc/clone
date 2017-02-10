@@ -197,7 +197,7 @@ class PayrollRestController extends FOSRestController
         if($ambiente == 'desarrollo')
           $ip_environment = '52.202.135.221'; // Query7Oracle-DEV.
         else
-          $ip_environment = '54.227.200.91'; // Query7Oracle.
+          $ip_environment = '10.0.0.91'; // Query7Oracle.
          $url_request = "http://SRHADMIN:SRHADMIN@";
          $url_request .= $ip_environment;
          $url_request .= ":9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
@@ -214,7 +214,7 @@ class PayrollRestController extends FOSRestController
 //        dump ($url_request . '?' . str_replace( "%20", "",urldecode($test)));
 //        die();
 
-        $response = $client->request('GET', $url_request . '?' . str_replace("%20", "", urldecode($test))); //, ['query' => urldecode($test)]);
+        $response = $client->request('GET', $url_request . '?' . str_replace("%20", "", urldecode($test)), ['timeout' => 20]); //, ['query' => urldecode($test)]);
         // die ($url_request . '?' . str_replace( "%20", "",urldecode($test)));
         // We parse the xml recieved into an xml object, that we will transform.
         $plain_text = (String) $response->getBody();
