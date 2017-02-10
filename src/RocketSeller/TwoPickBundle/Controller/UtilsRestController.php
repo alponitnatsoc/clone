@@ -167,7 +167,10 @@ class UtilsRestController extends FOSRestController
                 return $view;
             }else{
                 $request->setMethod('POST');
-                $request->request->add(array('podsToPay'=>$topay,'idUser'=>$user,'paymentMethod'=>"1-none"));
+                foreach ( $topay as $key => $item) {
+                    $topay[$key]="".$item;
+                }
+                $request->request->add(array('podsToPay'=>$topay,'idUser'=>"".$user,'paymentMethod'=>"1-none"));
                 $answer = $this->forward("RocketSellerTwoPickBundle:PayrollRestSecured:postConfirm", array('request',$request), array('_format' => 'json'));
                 $view->setData($answer->getContent())->setStatusCode($answer->getStatusCode());
                 return $view;
