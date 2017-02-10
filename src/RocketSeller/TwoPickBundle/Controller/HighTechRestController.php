@@ -598,6 +598,10 @@ class HighTechRestController extends FOSRestController
                 }
                 /** @var Severances $severance */
                 $severance = $pod->getSeverance();
+                if($severance->getPayslip() != null){
+                    $result[$podId]="ya estaba corregida";
+                    continue;
+                }
                 /** @var DocumentType $docType */
                 $docType = $em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array('docCode'=>'CPRCES'));
 
