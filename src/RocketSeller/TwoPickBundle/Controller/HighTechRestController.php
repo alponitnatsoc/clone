@@ -585,10 +585,8 @@ class HighTechRestController extends FOSRestController
         foreach ($pods as $pod) {
             $cgsAccount = $pod->getPurchaseOrders()->getIdUser()->getPersonPerson()->getEmployer()->getIdHighTech();
             $podId = $pod->getIdPurchaseOrdersDescription();
-            $fileName = $pod->getEnlaceOperativoFileName();
+            $enlaceOperativofileName = $pod->getEnlaceOperativoFileName();
             $em = $this->getDoctrine()->getManager();
-            /** @var PurchaseOrdersDescription $pod */
-            $pod = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription")->find($podId);
             if($pod==null){
                 $result[$podId]="error pod";
                 continue;
@@ -603,15 +601,14 @@ class HighTechRestController extends FOSRestController
                 $result[$podId]="ya estaba corregida";
                 continue;
             }
-            $request  = $this->container->get("request");
+            $request  = new Request();
             $request->setMethod("GET");
             $response = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:getSeverancesPayment', array(
                 "GSCAccount" => $cgsAccount,
-                "filename" => $fileName
+                "filename" => $enlaceOperativofileName
             ), array('_format' => 'json'));
             $data = json_decode($response->getContent(), true);
             if($data['codigoRespuesta'] == "OK" and $data['descripcionRespuesta']=="Archivo Generado"){
-
                 /** @var DocumentType $docType */
                 $docType = $em->getRepository("RocketSellerTwoPickBundle:DocumentType")->findOneBy(array('docCode'=>'CPRCES'));
                 $document = new Document();
@@ -643,7 +640,8 @@ class HighTechRestController extends FOSRestController
                 unlink($file);
                 $result[$podId]='Se corrigio el pod '.$podId." con severance ".$severance->getIdSeverances();
             }else{
-                $result[$podId]="error servicio";
+                $result[$podId]="error servicio, GSCAccount: ".$cgsAccount." fileName: ".$enlaceOperativofileName;
+                $result["additional_info"]="codigoRespuesta => ".$data["codigoRespuesta"]." descripcionRespuesta => ".$data["descripcionRespuesta"];
             }
         }
         $view = View::create();
