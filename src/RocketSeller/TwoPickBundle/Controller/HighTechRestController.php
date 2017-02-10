@@ -563,14 +563,23 @@ class HighTechRestController extends FOSRestController
      *   }
      * )
      *
+     * @param paramFetcher $paramFetcher ParamFetcher
+     *
+     * @RequestParam(name="pod_id", nullable=true, requirements="([0-9])+", description="Pod id to correct")
      * @return View
      */
-    public function postCorrectSeverancesDocumentAction(){
+    public function postCorrectSeverancesDocumentAction($paramFetcher){
         $em = $this->getDoctrine()->getManager();
-        $pods = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription")->findBy(array(
-            'productProduct'=>$em->getRepository("RocketSellerTwoPickBundle:Product")->findBy(array("simpleName"=>'SVR')),
-            'purchaseOrdersStatus'=>$em->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findBy(array('idNovoPay'=>'-1'))
-        ));
+            $pods=array();
+        if($paramFetcher->get("pod_id")!=null){
+            $pods[]=$em->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription")->find($paramFetcher->get("pod_id"));
+        }else{
+            $pods = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription")->findBy(array(
+                'productProduct'=>$em->getRepository("RocketSellerTwoPickBundle:Product")->findBy(array("simpleName"=>'SVR')),
+                'purchaseOrdersStatus'=>$em->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findBy(array('idNovoPay'=>'-1'))
+            ));
+        }
+
         $result = array();
         /** @var PurchaseOrdersDescription $pod */
         foreach ($pods as $pod) {
@@ -581,11 +590,11 @@ class HighTechRestController extends FOSRestController
             /** @var PurchaseOrdersDescription $pod */
             $pod = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription")->find($podId);
             if($pod==null){
-                $result[$podId]="error";
+                $result[$podId]="error pod";
                 continue;
             }
             if($pod->getSeverance()==null){
-                $result[$podId]="error";
+                $result[$podId]="error severance";
                 continue;
             }
             /** @var Severances $severance */
@@ -634,7 +643,7 @@ class HighTechRestController extends FOSRestController
                 unlink($file);
                 $result[$podId]='Se corrigio el pod '.$podId." con severance ".$severance->getIdSeverances();
             }else{
-                $result[$podId]="error";
+                $result[$podId]="error servicio";
             }
         }
         $view = View::create();
