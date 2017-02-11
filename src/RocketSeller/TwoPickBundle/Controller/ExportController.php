@@ -575,6 +575,20 @@ class ExportController extends Controller
         }
         return $this->redirectToRoute('ajax', array(), 301);
     }
+    function is_url_exist($url){
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_NOBODY, true);
+        curl_exec($ch);
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        if($code == 200){
+            $status = true;
+        }else{
+            $status = false;
+        }
+        curl_close($ch);
+        return $status;
+    }
 
 
     /**
@@ -605,12 +619,18 @@ class ExportController extends Controller
                     /** @var Media $media */
                     //getting the document media
                     $media = $cedula->getMediaMedia();
+                    $tFile=false;
                     //if the reference to the media exist in the DataBase we assign the document path to the array $docUrl
-                    if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference'))){
-                        $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
+                    if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+                        $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference');
+                    }elseif($this->is_url_exist($this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+                        $docUrl[] = file_get_contents($this->container->get('sonata.media.twig.extension')->path($media, 'reference'));
+                        $tFile=true;
+
                     }
+                    $file[]=$tFile;
                     //after the path has been set we asign the name of the document in the array docName that will be use later to asign names to files in the zip archive
-                    $docName[] = $count.'. '.$cedula->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
+                    $docName[] = $count.'. '.$media->getDocumentDocument()->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
                     $count++;
                 }
                 /** @var Document $cedula */
@@ -619,12 +639,18 @@ class ExportController extends Controller
                     /** @var Media $media */
                     //getting the document media
                     $media = $rut->getMediaMedia();
+                    $tFile=false;
                     //if the reference to the media exist in the DataBase we assign the document path to the array $docUrl
-                    if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference'))){
-                        $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
+                    if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+                        $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference');
+                    }elseif($this->is_url_exist($this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+                        $docUrl[] = file_get_contents($this->container->get('sonata.media.twig.extension')->path($media, 'reference'));
+                        $tFile=true;
+
                     }
+                    $file[]=$tFile;
                     //after the path has been set we asign the name of the document in the array docName that will be use later to asign names to files in the zip archive
-                    $docName[] = $count.'. '.$rut->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
+                    $docName[] = $count.'. '.$media->getDocumentDocument()->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
                     $count++;
                 }
                 /** @var Document $cedula */
@@ -633,12 +659,18 @@ class ExportController extends Controller
                     /** @var Media $media */
                     //getting the document media
                     $media = $registro->getMediaMedia();
+                    $tFile=false;
                     //if the reference to the media exist in the DataBase we assign the document path to the array $docUrl
-                    if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($registro->getMediaMedia(), 'reference'))){
-                        $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($registro->getMediaMedia(), 'reference');
+                    if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+                        $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference');
+                    }elseif($this->is_url_exist($this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+                        $docUrl[] = file_get_contents($this->container->get('sonata.media.twig.extension')->path($media, 'reference'));
+                        $tFile=true;
+
                     }
+                    $file[]=$tFile;
                     //after the path has been set we asign the name of the document in the array docName that will be use later to asign names to files in the zip archive
-                    $docName[] = $count.'. '.$registro->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
+                    $docName[] = $count.'. '.$media->getDocumentDocument()->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
                     $count++;
                 }
                 /** @var Employer $employer */
@@ -651,12 +683,18 @@ class ExportController extends Controller
                     /** @var Media $media */
                     //getting the document media
                     $media = $mandatory->getMediaMedia();
+                    $tFile=false;
                     //if the reference to the media exist in the DataBase we assign the document path to the array $docUrl
-                    if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($mandatory->getMediaMedia(), 'reference'))){
-                        $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($mandatory->getMediaMedia(), 'reference');
+                    if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+                        $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference');
+                    }elseif($this->is_url_exist($this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+                        $docUrl[] = file_get_contents($this->container->get('sonata.media.twig.extension')->path($media, 'reference'));
+                        $tFile=true;
+
                     }
+                    $file[]=$tFile;
                     //after the path has been set we asign the name of the document in the array docName that will be use later to asign names to files in the zip archive
-                    $docName[] = $count.'. '.$mandatory->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
+                    $docName[] = $count.'. '.$media->getDocumentDocument()->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
                     $count++;
                 }
             //else person is the employee
@@ -667,12 +705,18 @@ class ExportController extends Controller
                     /** @var Media $media */
                     //getting the document media
                     $media = $cedula->getMediaMedia();
+                    $tFile=false;
                     //if the reference to the media exist in the DataBase we assign the document path to the array $docUrl
-                    if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference'))){
-                        $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
+                    if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+                        $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference');
+                    }elseif($this->is_url_exist($this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+                        $docUrl[] = file_get_contents($this->container->get('sonata.media.twig.extension')->path($media, 'reference'));
+                        $tFile=true;
+
                     }
+                    $file[]=$tFile;
                     //after the path has been set we asign the name of the document in the array docName that will be use later to asign names to files in the zip archive
-                    $docName[] = $count.'. '.$cedula->getDocumentTypeDocumentType()->getName().' '.$user->getPersonPerson()->getFullName().'.'.$media->getExtension();
+                    $docName[] = $count.'. '.$media->getDocumentDocument()->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
                     $count++;
                 }
                 /** @var Document $cedula */
@@ -681,12 +725,18 @@ class ExportController extends Controller
                     /** @var Media $media */
                     //getting the document media
                     $media = $rut->getMediaMedia();
+                    $tFile=false;
                     //if the reference to the media exist in the DataBase we assign the document path to the array $docUrl
-                    if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference'))){
-                        $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
+                    if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+                        $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference');
+                    }elseif($this->is_url_exist($this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+                        $docUrl[] = file_get_contents($this->container->get('sonata.media.twig.extension')->path($media, 'reference'));
+                        $tFile=true;
+
                     }
+                    $file[]=$tFile;
                     //after the path has been set we asign the name of the document in the array docName that will be use later to asign names to files in the zip archive
-                    $docName[] = $count.'. '.$rut->getDocumentTypeDocumentType()->getName().' '.$user->getPersonPerson()->getFullName().'.'.$media->getExtension();
+                    $docName[] = $count.'. '.$media->getDocumentDocument()->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
                     $count++;
                 }
                 /** @var Document $cedula */
@@ -695,12 +745,18 @@ class ExportController extends Controller
                     /** @var Media $media */
                     //getting the document media
                     $media = $registro->getMediaMedia();
+                    $tFile=false;
                     //if the reference to the media exist in the DataBase we assign the document path to the array $docUrl
-                    if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($registro->getMediaMedia(), 'reference'))){
-                        $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($registro->getMediaMedia(), 'reference');
+                    if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+                        $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference');
+                    }elseif($this->is_url_exist($this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+                        $docUrl[] = file_get_contents($this->container->get('sonata.media.twig.extension')->path($media, 'reference'));
+                        $tFile=true;
+
                     }
+                    $file[]=$tFile;
                     //after the path has been set we asign the name of the document in the array docName that will be use later to asign names to files in the zip archive
-                    $docName[] = $count.'. '.$registro->getDocumentTypeDocumentType()->getName().' '.$user->getPersonPerson()->getFullName().'.'.$media->getExtension();
+                    $docName[] = $count.'. '.$media->getDocumentDocument()->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
                     $count++;
                 }
                 /** @var Employer $employer */
@@ -713,12 +769,18 @@ class ExportController extends Controller
                     /** @var Media $media */
                     //getting the document media
                     $media = $mandatory->getMediaMedia();
+                    $tFile=false;
                     //if the reference to the media exist in the DataBase we assign the document path to the array $docUrl
-                    if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($mandatory->getMediaMedia(), 'reference'))){
-                        $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($mandatory->getMediaMedia(), 'reference');
+                    if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+                        $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference');
+                    }elseif($this->is_url_exist($this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+                        $docUrl[] = file_get_contents($this->container->get('sonata.media.twig.extension')->path($media, 'reference'));
+                        $tFile=true;
+
                     }
+                    $file[]=$tFile;
                     //after the path has been set we asign the name of the document in the array docName that will be use later to asign names to files in the zip archive
-                    $docName[] = $count.'. '.$mandatory->getDocumentTypeDocumentType()->getName().' '.$user->getPersonPerson()->getFullName().'.'.$media->getExtension();
+                    $docName[] = $count.'. '.$media->getDocumentDocument()->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
                     $count++;
                 }
                 /** @var Document $cedula */
@@ -727,12 +789,18 @@ class ExportController extends Controller
                     /** @var Media $media */
                     //getting the document media
                     $media = $eCedula->getMediaMedia();
+                    $tFile=false;
                     //if the reference to the media exist in the DataBase we assign the document path to the array $docUrl
-                    if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($eCedula->getMediaMedia(), 'reference'))){
-                        $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($eCedula->getMediaMedia(), 'reference');
+                    if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+                        $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference');
+                    }elseif($this->is_url_exist($this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+                        $docUrl[] = file_get_contents($this->container->get('sonata.media.twig.extension')->path($media, 'reference'));
+                        $tFile=true;
+
                     }
+                    $file[]=$tFile;
                     //after the path has been set we asign the name of the document in the array docName that will be use later to asign names to files in the zip archive
-                    $docName[] = $count.'. '.$eCedula->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
+                    $docName[] = $count.'. '.$media->getDocumentDocument()->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
                     $count++;
                 }
                 /** @var Document $cedula */
@@ -741,12 +809,18 @@ class ExportController extends Controller
                     /** @var Media $media */
                     //getting the document media
                     $media = $eRut->getMediaMedia();
+                    $tFile=false;
                     //if the reference to the media exist in the DataBase we assign the document path to the array $docUrl
-                    if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($eRut->getMediaMedia(), 'reference'))){
-                        $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($eRut->getMediaMedia(), 'reference');
+                    if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+                        $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference');
+                    }elseif($this->is_url_exist($this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+                        $docUrl[] = file_get_contents($this->container->get('sonata.media.twig.extension')->path($media, 'reference'));
+                        $tFile=true;
+
                     }
+                    $file[]=$tFile;
                     //after the path has been set we asign the name of the document in the array docName that will be use later to asign names to files in the zip archive
-                    $docName[] = $count.'. '.$eRut->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
+                    $docName[] = $count.'. '.$media->getDocumentDocument()->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
                     $count++;
                 }
                 /** @var Document $cedula */
@@ -755,12 +829,18 @@ class ExportController extends Controller
                     /** @var Media $media */
                     //getting the document media
                     $media = $eRegistro->getMediaMedia();
+                    $tFile=false;
                     //if the reference to the media exist in the DataBase we assign the document path to the array $docUrl
-                    if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($eRegistro->getMediaMedia(), 'reference'))){
-                        $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($eRegistro->getMediaMedia(), 'reference');
+                    if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+                        $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference');
+                    }elseif($this->is_url_exist($this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+                        $docUrl[] = file_get_contents($this->container->get('sonata.media.twig.extension')->path($media, 'reference'));
+                        $tFile=true;
+
                     }
+                    $file[]=$tFile;
                     //after the path has been set we asign the name of the document in the array docName that will be use later to asign names to files in the zip archive
-                    $docName[] = $count.'. '.$eRegistro->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
+                    $docName[] = $count.'. '.$media->getDocumentDocument()->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
                     $count++;
                 }
                 /** @var Employee $employee */
@@ -777,12 +857,18 @@ class ExportController extends Controller
                             /** @var Media $media */
                             //getting the document media
                             $media = $cas->getMediaMedia();
+                            $tFile=false;
                             //if the reference to the media exist in the DataBase we assign the document path to the array $docUrl
-                            if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($cas->getMediaMedia(), 'reference'))){
-                                $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($cas->getMediaMedia(), 'reference');
+                            if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+                                $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference');
+                            }elseif($this->is_url_exist($this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+                                $docUrl[] = file_get_contents($this->container->get('sonata.media.twig.extension')->path($media, 'reference'));
+                                $tFile=true;
+
                             }
+                            $file[]=$tFile;
                             //after the path has been set we asign the name of the document in the array docName that will be use later to asign names to files in the zip archive
-                            $docName[] = $count.'. '.$cas->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
+                            $docName[] = $count.'. '.$media->getDocumentDocument()->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
                             $count++;
                         }
                         /** @var Contract $contract */
@@ -795,12 +881,18 @@ class ExportController extends Controller
                                     /** @var Media $media */
                                     //getting the document media
                                     $media = $activeContract->getMediaMedia();
+                                    $tFile=false;
                                     //if the reference to the media exist in the DataBase we assign the document path to the array $docUrl
-                                    if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($activeContract->getMediaMedia(), 'reference'))){
-                                        $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($activeContract->getMediaMedia(), 'reference');
+                                    if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+                                        $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference');
+                                    }elseif($this->is_url_exist($this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+                                        $docUrl[] = file_get_contents($this->container->get('sonata.media.twig.extension')->path($media, 'reference'));
+                                        $tFile=true;
+
                                     }
+                                    $file[]=$tFile;
                                     //after the path has been set we asign the name of the document in the array docName that will be use later to asign names to files in the zip archive
-                                    $docName[] = $count.'. '.$activeContract->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
+                                    $docName[] = $count.'. '.$media->getDocumentDocument()->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
                                     $count++;
                                 }
                                 break;
@@ -1384,8 +1476,14 @@ class ExportController extends Controller
             if ($zip->open($tmp_file,ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE )=== TRUE) {
                 # loop through each file
                 for($i=0;$i<$count;$i++){
-                    $zip->addFile($docUrl[$i],$docName[$i]);
+                    dump($file[$i]);
+                    dump($docName[$i]);
+//                    if($file[$i])
+//                        $zip->addFromString($docName[$i], $docUrl[$i]);
+//                    else
+//                        $zip->addFile($docUrl[$i],$docName[$i]);
                 }
+                die();
                 $zip->addFile('excel_file.xlsx','Info_'.$employee->getFullName().'_'.date('d-m-y').'.xlsx');
                 if($zip->close()!==TRUE)
                     echo "no permisos";
