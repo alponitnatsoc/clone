@@ -108,8 +108,6 @@ class Contract
     private $sisben;
 
     /**
-     * 1 = yes
-     * 0 = No
      * @ORM\Column(type="smallint", nullable=TRUE)
      * 0 no definido
      * 1 si trabaja los sabados
