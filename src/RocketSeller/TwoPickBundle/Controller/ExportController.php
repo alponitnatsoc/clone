@@ -1476,12 +1476,10 @@ class ExportController extends Controller
             if ($zip->open($tmp_file,ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE )=== TRUE) {
                 # loop through each file
                 for($i=0;$i<$count;$i++){
-                    dump($file[$i]);
-                    dump($docName[$i]);
-//                    if($file[$i])
-//                        $zip->addFromString($docName[$i], $docUrl[$i]);
-//                    else
-//                        $zip->addFile($docUrl[$i],$docName[$i]);
+                    if($file[$i])
+                        $zip->addFromString($docName[$i], $docUrl[$i]);
+                    else
+                        $zip->addFile($docUrl[$i],$docName[$i]);
                 }
                 die();
                 $zip->addFile('excel_file.xlsx','Info_'.$employee->getFullName().'_'.date('d-m-y').'.xlsx');
