@@ -50,3 +50,10 @@ parameters:
 
     twilio_id: 'AC1cbb80c722300b240bce151c107f927a'
     twilio_token: '8dbaa85d6dd9f840f2a25b23418d78b2'
+
+    s3_access_key: notrealkey
+    s3_bucket_name: testsymfonybucket
+    s3_secret_key: thisisnotrealsecrettsoforgetit
+    s3_version: "2006-03-01"
+    s3_region: "us-east-1"
+    s3_sdk_version: 2

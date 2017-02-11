@@ -48,7 +48,8 @@
         "royopa/fpdf-symfony2": "^1.0",
         "vresh/twilio-bundle": "dev-master",
         "knplabs/knp-snappy-bundle": "dev-master",
-        "liuggio/excelbundle": "^2.1"
+        "liuggio/excelbundle": "^2.1",
+        "aws/aws-sdk-php": "2.8.22"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
