@@ -70,7 +70,7 @@ sonata_media:
                 mode: http
     cdn:
         server:
-            path: https://s3.amazonaws.com/mediasymplifica/media
+            path: https://s3.amazonaws.com/mediasymplifica
     providers:
         image:
             filesystem: sonata.media.filesystem.s3
