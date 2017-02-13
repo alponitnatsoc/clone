@@ -1680,12 +1680,13 @@ use EmployerMethodsTrait;
                     return $this->redirectToRoute("show_dashboard");
                 }
                 $signatureUrl = null;
-
+				/** @var UtilsController $utils */
+				$utils = $this->get('app.symplifica_utils');
                 $document = $payroll->getSignature();
                 // signatre is already stored in db
                 if($document != null) {
 
-                    $fileUrl = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
+                    $fileUrl = $utils->getDocumentPath($document);
                     $data = file_get_contents($fileUrl);
                     $signatureUrl = 'data:image/png;base64,' . base64_encode($data);
                 }
