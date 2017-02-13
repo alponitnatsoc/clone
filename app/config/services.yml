@@ -74,6 +74,7 @@ services:
                     oneday: 'FOSUserBundle:EmailTemplates:diahabil.txt.twig'
                     diashabiles: 'FOSUserBundle:EmailTemplates:3diashabiles.txt.twig'
                     backoffice_warning: 'FOSUserBundle:EmailTemplates:backofficeWarning.txt.twig'
+                    backMoneyRequ: 'FOSUserBundle:EmailTemplates:backMoneyRequ.txt.twig'
                     backval: 'FOSUserBundle:EmailTemplates:validation-user.txt.twig'
                     remindNovelty: 'FOSUserBundle:EmailTemplates:payRecorder.txt.twig'
                     lastRemindNovelty: 'FOSUserBundle:EmailTemplates:lastPayRecorder.txt.twig'
