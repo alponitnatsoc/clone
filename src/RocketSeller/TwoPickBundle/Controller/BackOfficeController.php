@@ -4085,7 +4085,7 @@ class BackOfficeController extends Controller
                     "month" => $payroll->getMonth(),
                     "year"=>$payroll->getYear(),
                     "period" => $payroll->getPeriod(),
-                    "day"=> ($payroll->getPeriod()==2)?16:26,
+                    "day"=> ($payroll->getPeriod()==2)?13:26,
                     "token"=>$backUser->getSalt(),
                     "idpayroll" => $payroll->getIdPayroll()
                 ));
@@ -4216,7 +4216,7 @@ class BackOfficeController extends Controller
                             "month" => $payroll->getMonth(),
                             "year"=>$payroll->getYear(),
                             "period" => $payroll->getPeriod(),
-                            "day"=> ($payroll->getPeriod()==2)?16:26,
+                            "day"=> ($payroll->getPeriod()==2)?13:26,
                             "token"=>$backUser->getSalt(),
                             "idpayroll" => $payroll->getIdPayroll()
                         ));
