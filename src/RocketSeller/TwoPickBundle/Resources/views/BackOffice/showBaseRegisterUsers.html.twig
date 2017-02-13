@@ -99,13 +99,8 @@
                     <a class="btn btn-back notAjax" style="margin: 10px 1px 0px auto;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("show_base_users_register",{
                         'index':1}) }}">&#10094;&#10094;</a>
                     {% if index > 1 and index <= maxIndex %}
-                        {% if index == maxIndex %}
                             <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("show_base_users_register",{
                                 'index':prevIndex}) }}">&#10094;</a>
-                        {% else %}
-                            <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("show_base_users_register",{
-                                'index':prevIndex}) }}">&#10094;</a>
-                        {% endif %}
                     {% endif %}
                     {% if index-3 > 0 %}
                         {% for actual in (index-3)..(index-1) %}
@@ -132,13 +127,8 @@
                         {% endfor %}
                     {% endif %}
                     {% if index > 0 and index < maxIndex %}
-                        {% if index == 1 %}
                             <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("show_base_users_register",{
                                 'index':nextIndex}) }}">&#10095;</a>
-                        {% else %}
-                            <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("show_base_users_register",{
-                                'index':nextIndex}) }}">&#10095;</a>
-                        {% endif %}
                     {% endif %}
                     <a class="btn btn-back notAjax" style="margin: 10px auto 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("show_base_users_register",{
                         'index':maxIndex}) }}">&#10095;&#10095;</a>

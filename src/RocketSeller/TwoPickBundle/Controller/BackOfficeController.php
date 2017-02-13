@@ -78,6 +78,7 @@ class BackOfficeController extends Controller
 
         return $this->render('RocketSellerTwoPickBundle:BackOffice:index.html.twig');
     }
+
     public function testSeverancesEmailAction()
     {
         if(!$this->isGranted('ROLE_BACK_OFFICE')){
@@ -96,6 +97,7 @@ class BackOfficeController extends Controller
 
         return $this->render('RocketSellerTwoPickBundle:BackOffice:index.html.twig');
     }
+
     public function showPODSeverancesAction(Request $request)
     {
         if(!$this->isGranted('ROLE_BACK_OFFICE')){
@@ -104,6 +106,7 @@ class BackOfficeController extends Controller
         $sever = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Severances")->findAll();
         return $this->render('RocketSellerTwoPickBundle:BackOffice:showSeverances.html.twig',array('severances'=>$sever));
     }
+
     public function addPODSeverancesAction(Request $request)
     {
         if(!$this->isGranted('ROLE_BACK_OFFICE')){
