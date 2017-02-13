@@ -221,6 +221,15 @@ class ContractRecord
 	 */
 	private $autoRenewalEndDate;
 
+    /**
+     * 0 no definido
+     * 1 si trabaja los sabados
+     * -1 no trabaja los sabados
+     * aplica solo para tiempo completo
+     * @ORM\Column(type="smallint", nullable=TRUE)
+     */
+    private $worksSaturday = 0;
+
 
     /**
      * Constructor
@@ -944,5 +953,29 @@ class ContractRecord
     public function getDateToBeAplied()
     {
         return $this->dateToBeAplied;
+    }
+
+    /**
+     * Set worksSaturday
+     *
+     * @param integer $worksSaturday
+     *
+     * @return ContractRecord
+     */
+    public function setWorksSaturday($worksSaturday)
+    {
+        $this->worksSaturday = $worksSaturday;
+
+        return $this;
+    }
+
+    /**
+     * Get worksSaturday
+     *
+     * @return integer
+     */
+    public function getWorksSaturday()
+    {
+        return $this->worksSaturday;
     }
 }

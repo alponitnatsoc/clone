@@ -197,7 +197,7 @@ class PayrollRestController extends FOSRestController
         if($ambiente == 'desarrollo')
           $ip_environment = '52.202.135.221'; // Query7Oracle-DEV.
         else
-          $ip_environment = '54.227.200.91'; // Query7Oracle.
+          $ip_environment = '10.0.0.91'; // Query7Oracle.
          $url_request = "http://SRHADMIN:SRHADMIN@";
          $url_request .= $ip_environment;
          $url_request .= ":9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
@@ -214,7 +214,7 @@ class PayrollRestController extends FOSRestController
 //        dump ($url_request . '?' . str_replace( "%20", "",urldecode($test)));
 //        die();
 
-        $response = $client->request('GET', $url_request . '?' . str_replace("%20", "", urldecode($test))); //, ['query' => urldecode($test)]);
+        $response = $client->request('GET', $url_request . '?' . str_replace("%20", "", urldecode($test)), ['timeout' => 20]); //, ['query' => urldecode($test)]);
         // die ($url_request . '?' . str_replace( "%20", "",urldecode($test)));
         // We parse the xml recieved into an xml object, that we will transform.
         $plain_text = (String) $response->getBody();
@@ -678,13 +678,20 @@ class PayrollRestController extends FOSRestController
         $mandatory['cal_type'] = false;
 
         $this->validateParamters($parameters, $regex, $mandatory);
-
+        if(isset($parameters["last_contract_end_date"]) and $parameters["last_contract_end_date"]=='00-00-0000')
+            $parameters["last_contract_end_date"]='';
         $content = array();
         $unico = array();
         $info = $this->getEmployeeAction($parameters['employee_id'])->getData();
-	
-	      if(!isset($info['RECIBE_AUX_TRA'])) $info['RECIBE_AUX_TRA'] = 'N';
-
+        /** @var EmployerHasEmployee $ehe */
+        $ehe = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")->find($parameters['employee_id']);
+        $info['EMP_SOCIEDAD'] = ''.$ehe->getEmployerEmployer()->getIdSqlSociety();
+        if($ehe->getActiveContract()!= false){
+            /** @var Contract $aContract */
+            $aContract = $ehe->getActiveContract();
+            $info['EMP_TIPO_CONTRATO']=$aContract->getContractTypeContractType()->getPayrollCode();
+        }
+        if(!isset($info['RECIBE_AUX_TRA'])) $info['RECIBE_AUX_TRA'] = 'N';
         $unico['TIPOCON'] = 1;
         $unico['EMP_CODIGO'] = $parameters['employee_id'];
         $unico['EMP_APELLIDO1'] = isset($parameters['last_name']) ? $parameters['last_name'] : $info['EMP_APELLIDO1'];
@@ -693,8 +700,7 @@ class PayrollRestController extends FOSRestController
         $unico['EMP_CEDULA'] = isset($parameters['document']) ? $parameters['document'] : $info['EMP_CEDULA'];
         $unico['EMP_SEXO'] = isset($parameters['gender']) ? $parameters['gender'] : $info['EMP_SEXO'];
         $unico['EMP_FECHA_NACI'] = isset($parameters['birth_date']) ? $parameters['birth_date'] : $info['EMP_FECHA_NACI'];
-        //TODO(andres_ramirez) preguntar si este se manda
-//        $unico['EMP_SOCIEDAD'] = isset($parameters['society']) ? $parameters['society'] : $info['EMP_SOCIEDAD'];
+        $unico['EMP_SOCIEDAD'] = isset($parameters['society']) ? $parameters['society'] : $info['EMP_SOCIEDAD'];
         $unico['EMP_FECHA_INGRESO'] = isset($parameters['start_date']) ? $parameters['start_date'] : $info['EMP_FECHA_INGRESO'];
         $unico['EMP_FECHA_INI_CONTRATO'] = isset($parameters['start_date']) ? $parameters['start_date'] : $info['EMP_FECHA_INGRESO'];
         $unico['EMP_FECHA_FIN_CONTRATO'] = isset($parameters['last_contract_end_date']) ? $parameters['last_contract_end_date'] : $info['EMP_FECHA_FIN_CONTRATO'];
@@ -706,8 +712,7 @@ class PayrollRestController extends FOSRestController
         $unico['EMP_TIPO_SALARIO'] = isset($parameters['salary_type']) ? $parameters['salary_type'] : $info['EMP_TIPO_SALARIO'];
         $unico['RECIBE_AUX_TRA'] = isset($parameters['transport_aux']) ? $parameters['transport_aux'] : $info['RECIBE_AUX_TRA'];
         $unico['EMP_TIPO_NOMINA'] = isset($parameters['payroll_type']) ? $parameters['payroll_type'] : $info['EMP_TIPO_NOMINA'];
-        if (isset($info['EMP_TIPO_CONTRATO']))
-            $unico['EMP_TIPO_CONTRATO'] = isset($parameters['contract_type']) ? $parameters['contract_type'] : $info['EMP_TIPO_CONTRATO'];
+        $unico['EMP_TIPO_CONTRATO'] = isset($parameters['contract_type']) ? $parameters['contract_type'] :$info['EMP_TIPO_CONTRATO'];
         if( $unico['EMP_TIPO_NOMINA'] == 4 ){
             $unico['EMP_TIP_CAL'] = isset($parameters['cal_type']) ? $parameters['cal_type'] : $info['EMP_TIP_CAL'];
         }else{
