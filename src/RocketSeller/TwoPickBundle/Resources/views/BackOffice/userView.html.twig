@@ -526,7 +526,7 @@
                                                     <th>Fecha de Inicio de contrato</th>
                                                     <th>Fecha de Finalización de contrato</th>
                                                     <th>Días laborales al mes</th>
-                                                    {% if ehe.activeContract.timeCommitmentTimeCommitment.code == 'XD' %}
+                                                    {% if ehe.activeContract != false and ehe.activeContract.timeCommitmentTimeCommitment.code == 'XD' %}
                                                         <th>Lu</th>
                                                         <th>Ma</th>
                                                         <th>Mi</th>
@@ -707,9 +707,43 @@
                         {% endif %}
                     {% endif %}
                     <div class="text-center col-md-12" style="display: inline-flex">
+                        <a class="btn btn-back notAjax" style="margin: 10px 1px 0px auto;background-color: #0a0908;border-bottom: 0px solid #000000;" href="href="{{ path("user_view",{
+                            'name':name,
+                            'lastName':lastName,
+                            'documentType':documentType,
+                            'document':document,
+                            'email':email,
+                            'highTech':highTech,
+                            'sql':sql,
+                            'ehe':ehe,
+                            'pay':pay,
+                            'phone':phone,
+                            'contract':contract,
+                            'period':period,
+                            'paid':paid,
+                            'join':join,
+                            'index':1}) }}">&#10094;&#10094;</a>
                         {% if index > 1 and index <= maxIndex %}
-                            {% if index == maxIndex %}
-                                <a class="btn btn-back notAjax" style="margin: 10px auto 0px auto" href="{{ path("user_view",{
+                                <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="href="{{ path("user_view",{
+                                'name':name,
+                                'lastName':lastName,
+                                'documentType':documentType,
+                                'document':document,
+                                'email':email,
+                                'highTech':highTech,
+                                'sql':sql,
+                                'ehe':ehe,
+                                'pay':pay,
+                                'phone':phone,
+                                'contract':contract,
+                                'period':period,
+                                'paid':paid,
+                                'join':join,
+                                'index':prevIndex}) }}">&#10094;</a>
+                        {% endif %}
+                        {% if index-3 > 0 %}
+                            {% for actual in (index-3)..(index-1) %}
+                                <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("user_view",{
                                     'name':name,
                                     'lastName':lastName,
                                     'documentType':documentType,
@@ -724,9 +758,11 @@
                                     'period':period,
                                     'paid':paid,
                                     'join':join,
-                                    'index':prevIndex}) }}">&#10094;</a>
-                            {% else %}
-                                <a class="btn btn-back notAjax" style="margin: 10px 1px 0px auto" href="{{ path("user_view",{
+                                    'index':actual}) }}">{{ actual }}</a>
+                            {% endfor %}
+                        {% elseif index > 1 %}
+                            {% for actual in 1 .. (index-1) %}
+                                <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("user_view",{
                                     'name':name,
                                     'lastName':lastName,
                                     'documentType':documentType,
@@ -741,47 +777,98 @@
                                     'period':period,
                                     'paid':paid,
                                     'join':join,
-                                    'index':prevIndex}) }}">&#10094;</a>
-                            {% endif %}
-
+                                    'index':actual}) }}">{{ actual }}</a>
+                            {% endfor %}
+                        {% endif %}
+                        <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #33d7d6;;border-bottom: 0px solid #33d7d6;" href="{{ path("user_view",{
+                            'name':name,
+                            'lastName':lastName,
+                            'documentType':documentType,
+                            'document':document,
+                            'email':email,
+                            'highTech':highTech,
+                            'sql':sql,
+                            'ehe':ehe,
+                            'pay':pay,
+                            'phone':phone,
+                            'contract':contract,
+                            'period':period,
+                            'paid':paid,
+                            'join':join,
+                            'index':index}) }}">{{ index }}</a>
+                        {% if index+3 <= maxIndex %}
+                            {% for actual in (index+1)..(index+3) %}
+                                <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("user_view",{
+                                'name':name,
+                                'lastName':lastName,
+                                'documentType':documentType,
+                                'document':document,
+                                'email':email,
+                                'highTech':highTech,
+                                'sql':sql,
+                                'ehe':ehe,
+                                'pay':pay,
+                                'phone':phone,
+                                'contract':contract,
+                                'period':period,
+                                'paid':paid,
+                                'join':join,
+                                'index':actual}) }}">{{ actual }}</a>
+                            {% endfor %}
+                        {% elseif index < maxIndex %}
+                            {% for actual in (index+1)..maxIndex %}
+                                <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("user_view",{
+                                'name':name,
+                                'lastName':lastName,
+                                'documentType':documentType,
+                                'document':document,
+                                'email':email,
+                                'highTech':highTech,
+                                'sql':sql,
+                                'ehe':ehe,
+                                'pay':pay,
+                                'phone':phone,
+                                'contract':contract,
+                                'period':period,
+                                'paid':paid,
+                                'join':join,
+                                'index':actual}) }}">{{ actual }}</a>
+                            {% endfor %}
                         {% endif %}
                         {% if index > 0 and index < maxIndex %}
-                            {% if index == 1 %}
-                                <a class="btn btn-back notAjax" style="margin: 10px auto 0px auto" href="{{ path("user_view",{
-                                    'name':name,
-                                    'lastName':lastName,
-                                    'documentType':documentType,
-                                    'document':document,
-                                    'email':email,
-                                    'highTech':highTech,
-                                    'sql':sql,
-                                    'ehe':ehe,
-                                    'pay':pay,
-                                    'phone':phone,
-                                    'contract':contract,
-                                    'period':period,
-                                    'paid':paid,
-                                    'join':join,
-                                    'index':nextIndex}) }}">&#10095;</a>
-                            {% else %}
-                                <a class="btn btn-back notAjax" style="margin: 10px auto 0px 1px" href="{{ path("user_view",{
-                                    'name':name,
-                                    'lastName':lastName,
-                                    'documentType':documentType,
-                                    'document':document,
-                                    'email':email,
-                                    'highTech':highTech,
-                                    'sql':sql,
-                                    'ehe':ehe,
-                                    'pay':pay,
-                                    'phone':phone,
-                                    'contract':contract,
-                                    'period':period,
-                                    'paid':paid,
-                                    'join':join,
-                                    'index':nextIndex}) }}">&#10095;</a>
-                            {% endif %}
+                                <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("user_view",{
+                                'name':name,
+                                'lastName':lastName,
+                                'documentType':documentType,
+                                'document':document,
+                                'email':email,
+                                'highTech':highTech,
+                                'sql':sql,
+                                'ehe':ehe,
+                                'pay':pay,
+                                'phone':phone,
+                                'contract':contract,
+                                'period':period,
+                                'paid':paid,
+                                'join':join,
+                                'index':nextIndex}) }}">&#10095;</a>
                         {% endif %}
+                        <a class="btn btn-back notAjax" style="margin: 10px auto 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("user_view",{
+                            'name':name,
+                            'lastName':lastName,
+                            'documentType':documentType,
+                            'document':document,
+                            'email':email,
+                            'highTech':highTech,
+                            'sql':sql,
+                            'ehe':ehe,
+                            'pay':pay,
+                            'phone':phone,
+                            'contract':contract,
+                            'period':period,
+                            'paid':paid,
+                            'join':join,
+                            'index':maxIndex}) }}">&#10095;&#10095;</a>
                     </div>
                 {% endif %}
             </div>
