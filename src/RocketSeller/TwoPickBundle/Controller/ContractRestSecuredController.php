@@ -266,7 +266,7 @@ class ContractRestSecuredController extends FOSRestController
             $contractType = $em->getRepository("RocketSellerTwoPickBundle:ContractType")->findOneBy(array("payroll_code"=>$contract_type_payroll_code));
             $contractRecord->setContractTypeContractType($contractType);
             if($actualContract->getContractTypeContractType() != $contractType){
-                if($contractType->getPayrollCode()=='2' and $paramFetcher->get("end_date")!=null){
+                if($contractType->getPayrollCode()=='2' and $paramFetcher->get("end_date")==null){
                     $view =  View::create();
                     $view->setStatusCode(400);
                     $view->setData(array('Error'=>"El parametro end_date es obligatorio si el tipo de contrato es termino fijo"));
