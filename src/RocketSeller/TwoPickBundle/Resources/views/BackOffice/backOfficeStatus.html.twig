@@ -3,46 +3,75 @@
 {% block title %}Vista Usuarios{% endblock %}
 
 {% block fos_user_content %}
-    <div id="main" class="col-sm-15">
-        <div class="col-md-12">
-            <div class="back-panel-title">
-                BackOffice Estado Validación
-            </div>
-            <br>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4>Información de los clientes</h4>
-                </div>
-                <div>
-                    <table class="table">
-                        <tr>
-                            <th>Email</th>
-                            <th>Cédula</th>
-                            <th>Fecha ingreso a Back Office</th>
-                            <th>¿Faltan acciones en Back Office?</th>
-                        </tr>
-                        {% for procedure in procedures %}
-                        <tr>
-                            <td>{{ procedure.userUser.email }}</td>
-                            <td>{{ procedure.userUser.personPerson.documentType }}: {{ procedure.userUser.personPerson.document }}</td>
-                            <td>{{ procedure.createdAt|date('Y-m-d') }}</td>
-                            <td>{% set notDone = false %}
-                                {% for ehe in procedure.userUser.personPerson.employer.employerHasEmployees %}
-                                    {% if ehe.state > 0 and ehe.state < 4 %}
-                                        {% set notDone = true %}
-                                    {% endif %}
-                                {% endfor %}
-                                {% if notDone == false %}
-                                    Todo al día
-                                {% else %}
-                                    Faltan tramites
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </table>
-                </div>
-            </div>
-        </div>
+<div id="main">
+    <div class="back-panel-title">
+        BackOffice Estado Validación
     </div>
+    <div class="back-panel">
+        <div class="backoffice-headding">
+            <h4>Información de los clientes</h4>
+        </div>
+
+        <table class="table" id="backoffice_states">
+            <thead>
+                <th>Email</th>
+                <th>Cédula</th>
+                <th>Fecha ingreso a Back Office</th>
+                <th>¿Faltan acciones en Back Office?</th>
+            </thead>
+            <tbody>
+            {% for procedure in procedures %}
+                <tr>
+                    <td>{{ procedure.userUser.email }}</td>
+                    <td>{{ procedure.userUser.personPerson.documentType }}: {{ procedure.userUser.personPerson.document }}</td>
+                    <td>{{ procedure.createdAt|date('Y-m-d') }}</td>
+                    <td>{% set notDone = false %}
+                        {% for ehe in procedure.userUser.personPerson.employer.employerHasEmployees %}
+                            {% if ehe.state > 0 and ehe.state < 4 %}
+                                {% set notDone = true %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if notDone == false %}
+                            Todo al día
+                        {% else %}
+                            Faltan tramites
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            // DataTable
+            var table = $('#backoffice_states').DataTable({
+                "lengthMenu":[[10,25,50,100,-1],[10,25,50,100,"Todos"]],
+                "language":{
+                    "url":"//cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"
+                }
+            });
+
+
+            // Apply the search
+            table.columns().every( function () {
+                var that = this;
+                $( 'input', this.header() ).on( 'keyup change', function () {
+                    if (that.search() !== this.value ) {
+                        that
+                            .search( this.value )
+                            .draw();
+                    }
+                } );
+            } );
+        });
+    </script>
+
 {% endblock %}

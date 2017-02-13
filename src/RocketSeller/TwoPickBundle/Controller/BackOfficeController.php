@@ -1610,10 +1610,6 @@ class BackOfficeController extends Controller
         return $this->render('RocketSellerTwoPickBundle:BackOffice:marketing.html.twig', array('landings'=>array_reverse($landings)));
     }
 
-    /**
-     * Funcion que muestra la tabla de registrados en el landing
-     * @return Response /backoffice/marketing
-     */
     public function showExpressAction($id)
     {
         $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
@@ -1664,15 +1660,6 @@ class BackOfficeController extends Controller
             return $this->redirectToRoute("express_back",array('id'=>-1),301);
         }
 
-    }
-
-    /**
-     * Funcion para hacer las consultas
-     * @return Response /backoffice/request
-     */
-    public function showRequestAction(){
-        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
-        return $this->render('@RocketSellerTwoPick/BackOffice/request.html.twig');
     }
 
     public function addPlanillaTypeToContractsBackAction($autentication)

@@ -58,9 +58,6 @@
         <div class="{% if app.request.get('_route') == 'show_pilas' %}activeMenu{% endif %} well sidebar-back">
             <a class="notAjax" href="{{ path('show_pilas') }}" >Pila</a>
         </div>
-        <div class="{% if app.request.get('_route') == 'back_entities_view' %}activeMenu{% endif %} well sidebar-back">
-            <a class="notAjax" href="{{ path('back_entities_view') }}" >Entidades Empleados Activos</a>
-        </div>
         <div class="{% if app.request.get('_route') == 'back_pay_state_view' %}activeMenu{% endif %} well sidebar-back">
             <a class="notAjax" href="{{ path('back_pay_state_view') }}" >Estado pagos</a>
         </div>
@@ -81,9 +78,6 @@
         </div>
         <div class="{% if app.request.get('_route') == 'show_unfinished_users' %}activeMenu{% endif %} well sidebar-back">
             <a class="notAjax" href="{{ path('show_unfinished_users') }}" >Estado del registro</a>
-        </div>
-        <div class="{% if app.request.get('_route') == 'employer_state' %}activeMenu{% endif %} well sidebar-back">
-            <a class="notAjax" href="{{ path('employer_state') }}" >Estado altas BackOffice</a>
         </div>
         <div class="{% if app.request.get('_route') == 'show_base_users_register' %}activeMenu{% endif %} well sidebar-back">
             <a class="notAjax" href="{{ path('show_base_users_register') }}" >Base Usuarios Registros </a>
