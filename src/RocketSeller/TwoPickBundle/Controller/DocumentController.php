@@ -1124,6 +1124,20 @@ use EmployerMethodsTrait;
                         'RocketSellerTwoPickBundle:Document:addDocumentForm.html.twig', array('form' => $form->createView()));
         return $this->render('RocketSellerTwoPickBundle:Default:index.html.twig');
     }
+    function is_url_exist($url){
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_NOBODY, true);
+        curl_exec($ch);
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        if($code == 200){
+            $status = true;
+        }else{
+            $status = false;
+        }
+        curl_close($ch);
+        return $status;
+    }
 
     public function downloadDocAction($id,$idDocument)
     {
@@ -1234,8 +1248,14 @@ use EmployerMethodsTrait;
                 throw $this->createNotFoundException();
         }
         $media = $document->getMediaMedia();
+        $file=false;
+
         if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference'))){
             $docUrl = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
+        }elseif($this->is_url_exist($this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference'))){
+            $docUrl = file_get_contents($this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference'));
+            $file=true;
+
         }
         $docName = $document->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
         # create new zip opbject
@@ -1244,7 +1264,10 @@ use EmployerMethodsTrait;
         $tmp_file =$person->getNames()."_".$document->getDocumentTypeDocumentType()->getName().".zip";
         if ($zip->open($tmp_file,ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE )=== TRUE) {
             # loop through each file
-            $zip->addFile($docUrl,$docName);
+            if($file)
+                $zip->addFromString($docName, $docUrl);
+            else
+                $zip->addFile($docUrl,$docName);
             # close zip
             if($zip->close()!==TRUE)
                 echo "no permisos";
