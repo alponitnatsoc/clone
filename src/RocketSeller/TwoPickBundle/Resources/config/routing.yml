@@ -66,13 +66,30 @@ routes:
 sells_dashboard:
     path:     /ventas
     defaults: { _controller: RocketSellerTwoPickBundle:SellsBackOffice:index}
+#Back Office MONEY_ADMIN
+money_admin_dashboard:
+    path:     /administrador
+    defaults: { _controller: RocketSellerTwoPickBundle:AdministrativeBackOffice:index}
+money_admin_act:
+    path:     /administrador/act/{id}/{action}
+    defaults: { _controller: RocketSellerTwoPickBundle:AdministrativeBackOffice:doAct}
+#Back Office Test
+#back_test_anything:
+#    path:     /test/anything/url
+#    defaults: { _controller: RocketSellerTwoPickBundle:AdministrativeBackOffice:createTests}
 #Back Office
 back_office:
     path:     /backoffice
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:index}
-back_test_severances:
-    path:     /test/severances/email
-    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:testSeverancesEmail}
+create_users_money:
+    path:     /backoffice/create/users/money/{idUser}/{intend}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:createMoneyRequests}
+show_users_money:
+    path:     /backoffice/show/users/money
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showUsersToCreateMoneyRequests}
+show_requests_money:
+    path:     /backoffice/show/request/money
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showMoneyRequests}
 severances_auth_email:
     path:     /backoffice/severances/email
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:emailSeverances}
@@ -82,6 +99,9 @@ back_office_prima:
 back_office_severances:
     path:     /backoffice/add/severances
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:addPODSeverances}
+back_office_show_severances:
+    path:     /backoffice/show/severances
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showPODSeverances}
 show_procedures:
     path:     /backoffice/procedures/{orderType}/{order}/{state}/{document}/{names}/{prior}
     defaults: { _controller: RocketSellerTwoPickBundle:Procedure:index,orderType: 'none',order: 'ASC',state: 'none',document: 'none',names: 'none',prior: 'none'}
