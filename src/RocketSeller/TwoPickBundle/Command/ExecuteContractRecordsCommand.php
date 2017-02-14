@@ -27,16 +27,22 @@ class ExecuteContractRecordsCommand extends ContainerAwareCommand
     {
         $output->writeln('<comment>Running Cron Task executeContractRecords ' . date("Y/m/d h:i") . ' time_zone: ' . date_default_timezone_get() . '</comment>');
         $this->output = $output;
-
         $controller = new ContractRestSecuredController();
         $controller->setContainer($this->getContainer());
-        $response = $controller->putExecuteAllPendingContractRecordsAction();
-
-        if ($response->getStatusCode() != 200) {
+        $port = "8000";
+        if($this->getContainer()->getParameter('ambiente') == "produccion") {
+            $port = "80";
+        }
+        $ch = curl_init("127.0.0.1:$port/api/public/v1/execute/all/pending/contract/records");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+        $response = curl_exec($ch);
+        if (curl_getinfo($ch,CURLINFO_HTTP_CODE) != 200) {
             $output->writeln('<error>Error calling service</error>');
         }else{
-            if(key_exists("contractRecords",$response->getData())){
-                $contractResponse = $response->getData()["contractRecords"];
+            $response = json_decode($response,true);
+            if(key_exists("contractRecords",$response)){
+                $contractResponse = $response["contractRecords"];
             }
             foreach ($contractResponse as $key => $result) {
                 if(key_exists("executed",$result))

@@ -747,9 +747,10 @@ class ContractRestSecuredController extends FOSRestController
         $response["contractRecords"] = array();
         /** @var ContractRecord $contractRecord */
         foreach ($contractRecords as $contractRecord) {
+            $id = $contractRecord->getIdContractRecord();
             $res =  $this->executeContractRecord($contractRecord);
             if($res){
-                $response["contractRecords"][$contractRecord->getIdContractRecord()]["executed"]=true;
+                $response["contractRecords"][$id]["executed"]=true;
             }else{
                 $response["contractRecords"][$contractRecord->getIdContractRecord()]["executed"]=false;
                 $response["contractRecords"][$contractRecord->getIdContractRecord()]["error"]="Something went wrong executing this contract record please try it manually";
@@ -779,15 +780,16 @@ class ContractRestSecuredController extends FOSRestController
     public function putExecuteAllPendingEntityRecordsAction(){
         $em = $this->getDoctrine()->getManager();
         $date = new DateTime();
-        $criteria = Criteria::create()->where(Criteria::expr()->lte('dateToBeAplied',$date))->andWhere(Criteria::expr()->eq('toBeExecuted',1));
+        $criteria = Criteria::create()->where(Criteria::expr()->lte('dateToBeApplied',$date))->andWhere(Criteria::expr()->eq('toBeExecuted',1));
         $entityRecords = $em->getRepository("RocketSellerTwoPickBundle:EntityRecord")->matching($criteria);
         $response = array();
         $response["entityRecords"] = array();
         /** @var EntityRecord $entityRecord */
         foreach ($entityRecords as $entityRecord) {
-            $res =  $this->executeContractRecord($entityRecord);
+            $id = $entityRecord->getIdEntityRecord();
+            $res =  $this->executeEntityRecord($entityRecord);
             if($res){
-                $response["entityRecords"][$entityRecord->getIdEntityRecord()]["executed"]=true;
+                $response["entityRecords"][$id]["executed"]=true;
             }else{
                 $response["entityRecords"][$entityRecord->getIdEntityRecord()]["executed"]=false;
                 $response["entityRecords"][$entityRecord->getIdEntityRecord()]["error"]="Something went wrong executing this entity record please try it manually";
@@ -954,6 +956,7 @@ class ContractRestSecuredController extends FOSRestController
         } else {
             $saturday = 1;
         }
+        $request = new Request();
         $request->request->add(array(
             "employee_id" => $contractRecord->getEmployerHasEmployeeEmployeeHasEmployee()->getIdEmployerHasEmployee(),
             "last_name" => $employeePerson->getLastName1(),
@@ -984,7 +987,8 @@ class ContractRestSecuredController extends FOSRestController
                 "last_contract_start_date" => $newRecord->getStartDate()->format("d-m-Y")
             ));
         }
-        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postModifyEmployee', array('_format' => 'json'));
+        $request->setMethod("POST");
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postModifyEmployee',  array('request'=>$request),array('_format' => 'json'));
         if ($insertionAnswer->getStatusCode() != 200) {
             return false;
         }
@@ -998,6 +1002,7 @@ class ContractRestSecuredController extends FOSRestController
             " ","Se modificó el contrato al ejecutar un contract record");
         $em->persist($log);
         $em->flush();
+        $request = new Request();
         $request->setMethod("POST");
         $date = $contractRecord->getDateToBeAplied();
         $request->request->add(array(

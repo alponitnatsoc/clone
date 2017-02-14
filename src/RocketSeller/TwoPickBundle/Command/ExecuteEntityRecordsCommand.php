@@ -30,13 +30,20 @@ class ExecuteEntityRecordsCommand extends ContainerAwareCommand
 
         $controller = new ContractRestSecuredController();
         $controller->setContainer($this->getContainer());
-        $response = $controller->putExecuteAllPendingEntityRecordsAction();
-
-        if ($response->getStatusCode() != 200) {
+        $port = "8000";
+        if($this->getContainer()->getParameter('ambiente') == "produccion") {
+            $port = "80";
+        }
+        $ch = curl_init("127.0.0.1:$port/api/public/v1/execute/all/pending/entity/records");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+        $response = curl_exec($ch);
+        if (curl_getinfo($ch,CURLINFO_HTTP_CODE) != 200) {
             $output->writeln('<error>Error calling service</error>');
         }else{
-            if(key_exists("entityRecords",$response->getData())){
-                $entityResponse = $response->getData()["entityRecords"];
+            $response = json_decode($response,true);
+            if(key_exists("entityRecords",$response)){
+                $entityResponse = $response["entityRecords"];
             }
             foreach ($entityResponse as $key => $result) {
                 if(key_exists("executed",$result))
