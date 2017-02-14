@@ -11,6 +11,12 @@ use RocketSeller\TwoPickBundle\Entity\CalculatorConstraints;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\ContractRecord;
 use RocketSeller\TwoPickBundle\Entity\ContractType;
+use RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity;
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
+use RocketSeller\TwoPickBundle\Entity\Entity;
+use RocketSeller\TwoPickBundle\Entity\EntityRecord;
+use RocketSeller\TwoPickBundle\Entity\EntityType;
 use RocketSeller\TwoPickBundle\Entity\Frequency;
 use RocketSeller\TwoPickBundle\Entity\Log;
 use RocketSeller\TwoPickBundle\Entity\Person;
@@ -22,6 +28,8 @@ use FOS\RestBundle\Request\ParamFetcher;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Http\Authentication\DefaultAuthenticationFailureHandler;
+use Symfony\Component\Validator\Constraints\Date;
 
 class ContractRestSecuredController extends FOSRestController
 {
@@ -669,6 +677,54 @@ class ContractRestSecuredController extends FOSRestController
     }
 
     /**
+     * executes the entity record if the date to be executed is lower or equal to de actual date
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "executes the entity record if the date to be executed is lower or equal to de actual date",
+     *   statusCodes = {
+     *     200 = "Created successfully",
+     *     400 = "Bad Request",
+     *   }
+     * )
+     *
+     * @param paramFetcher $paramFetcher ParamFetcher
+     * @RequestParam(name="entity_record_id", nullable=false, requirements="([0-9])+", description="Entity Record to be executed")
+     *
+     * @return View
+     */
+    public function postExecuteEntityRecordAction(ParamFetcher $paramFetcher){
+        $em = $this->getDoctrine()->getManager();
+        if(!$paramFetcher->get('entity_record_id')){
+            $view = View::create();
+            $view->setStatusCode(400);
+            return $view;
+        }
+        /** @var EntityRecord $entityRecord */
+        $entityRecord = $em->getRepository("RocketSellerTwoPickBundle:EntityRecord")->find($paramFetcher->get('entity_record_id'));
+        $today = new DateTime();
+        if ($entityRecord->getDateToBeAplied()->format("d-m-Y")==$today->format("d-m-Y") or $entityRecord->getDateToBeAplied()<$today){
+            $resp = $this->executeEntityRecord($entityRecord);
+            if($resp){
+                $view = View::create();
+                $view->setStatusCode(200);
+                $view->setData(array("executed"=>true));
+                return $view;
+            }else{
+                $view = View::create();
+                $view->setStatusCode(400);
+                $view->setData(array("executed"=>false,'error'=>"something go wrong executing the entity record with id: ".$paramFetcher->get('entity_record_id')));
+                return $view;
+            }
+        }else{
+            $view = View::create();
+            $view->setStatusCode(400);
+            $view->setData(array("executed"=>false,'error'=>'Date to be executed is greater than actual date'));
+            return $view;
+        }
+    }
+
+    /**
      * Executes all contract records pending for the actual date
      *
      * @ApiDoc(
@@ -697,6 +753,44 @@ class ContractRestSecuredController extends FOSRestController
             }else{
                 $response["contractRecords"][$contractRecord->getIdContractRecord()]["executed"]=false;
                 $response["contractRecords"][$contractRecord->getIdContractRecord()]["error"]="Something went wrong executing this contract record please try it manually";
+            }
+        }
+        $response["cronExecutedAt"] = $date;
+        $view = View::create();
+        $view->setStatusCode(200);
+        $view->setData($response);
+        return $view;
+    }
+
+    /**
+     * Executes all entities records pending for the actual date
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Executes all entities records pending for the actual date",
+     *   statusCodes = {
+     *     200 = "Created successfully",
+     *     400 = "Bad Request",
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function putExecuteAllPendingEntityRecordsAction(){
+        $em = $this->getDoctrine()->getManager();
+        $date = new DateTime();
+        $criteria = Criteria::create()->where(Criteria::expr()->lte('dateToBeAplied',$date))->andWhere(Criteria::expr()->eq('toBeExecuted',1));
+        $entityRecords = $em->getRepository("RocketSellerTwoPickBundle:EntityRecord")->matching($criteria);
+        $response = array();
+        $response["entityRecords"] = array();
+        /** @var EntityRecord $entityRecord */
+        foreach ($entityRecords as $entityRecord) {
+            $res =  $this->executeContractRecord($entityRecord);
+            if($res){
+                $response["entityRecords"][$entityRecord->getIdEntityRecord()]["executed"]=true;
+            }else{
+                $response["entityRecords"][$entityRecord->getIdEntityRecord()]["executed"]=false;
+                $response["entityRecords"][$entityRecord->getIdEntityRecord()]["error"]="Something went wrong executing this entity record please try it manually";
             }
         }
         $response["cronExecutedAt"] = $date;
@@ -1098,7 +1192,453 @@ class ContractRestSecuredController extends FOSRestController
         $view->setStatusCode(200);
         $view->setData($response);
         return $view;
+    }
 
+    /**
+     * create entity record for the employee and employer entities, can be executed in demand or in a future date
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "create entity record for the employee and employer entities, can be executed in demand or in a future date",
+     *   statusCodes = {
+     *     200 = "Created successfully",
+     *     400 = "Bad Request",
+     *   }
+     * )
+     *
+     * @param paramFetcher $paramFetcher ParamFetcher
+     *
+     * @RequestParam(name="ehe_id", nullable=false, requirements="([0-9])+", description="employerHasEmployee Id to search in queryX")
+     * @RequestParam(name="entity_type", nullable=false, requirements="(EPS|ARP|AFP|PARAFISCAL|ARS|FCES)", description="entity type payroll code to modify")
+     * @RequestParam(name="entity_payroll_code", nullable=true, requirements="([0-9])+", description="payroll code of the new target entity")
+     * @RequestParam(name="date_to_execute", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Date where changes must be executed (format: DD-MM-YYYY).")
+     * @return View
+     */
+    public function postCreateEntityRecordAction(ParamFetcher $paramFetcher){
+        $dateToExecute = ($paramFetcher->get("date_to_execute")==null)? new DateTime() : new DateTime($paramFetcher->get("date_to_execute"));
+        if($paramFetcher->get("entity_type")==null){
+            $view = View::create();
+            $view->setStatusCode(400);
+            $view->setData(array(
+                'Error'=>'entity_type parameter needed'
+            ));
+            return $view;
+        }
+        $entityType = $paramFetcher->get("entity_type");
+        $entityPayrollCode = $paramFetcher->get("entity_payroll_code");
+        if($entityPayrollCode==null){
+            $view = View::create();
+            $view->setStatusCode(400);
+            $view->setData(array(
+                'Error'=>'entity_payroll_code parameter needed'
+            ));
+            return $view;
+        }
+        $em = $this->getDoctrine()->getManager();
+        /** @var EntityType $eType */
+        $eType = $em->getRepository("RocketSellerTwoPickBundle:EntityType")->findOneBy(array('payroll_code'=>$entityType));
+        if($eType == null){
+            $view = View::create();
+            $view->setStatusCode(400);
+            $view->setData(array(
+                'Error'=>'EntityType with payrollCode '.$entityType.' not found',
+            ));
+            return $view;
+        }
+        /** @var Entity $entity */
+        $entity = $em->getRepository("RocketSellerTwoPickBundle:Entity")->findOneBy(array(
+            'entityTypeEntityType'=>$eType,
+            'payroll_code'=>$entityPayrollCode,
+        ));
+        if($entity==null){
+            $view = View::create();
+            $view->setStatusCode(400);
+            $view->setData(array(
+                'Error'=>'Entity with payrollCode '.$entityPayrollCode.' and entityType '.$entityType.' not found',
+            ));
+            return $view;
+        }
+        $actualEntities = array();
+        $actualSQLEntities = array();
+        $eheId = $paramFetcher->get("ehe_id");
+        $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:getEmployeeEntity",array('employeeId'=>$eheId),array('_format'=>'json'));
+        if ($response->getStatusCode() != 200) {
+            $view = View::create();
+            $view->setStatusCode(404);
+            $view->setData(array(
+                'Error'=>'EmployerHasEmployee with id '.$eheId.' not found in queryX',
+            ));
+            return $view;
+        } else {
+            $data = json_decode($response->getContent(), true);
+            foreach ($data as $arrayEnt) {
+                if(key_exists($arrayEnt['TENT_CODIGO'],$actualSQLEntities)){
+                    $view = View::create();
+                    $view->setStatusCode(400);
+                    $view->setData(array(
+                        'Error'=>'More than one entity for the type '.$arrayEnt['TENT_CODIGO'].' in queryX, this needs to be solved manually',
+                    ));
+                    return $view;
+                }else{
+                    $actualSQLEntities[$arrayEnt['TENT_CODIGO']]=$arrayEnt['ENT_CODIGO'];
+                }
+
+            }
+        }
+        /** @var EmployerHasEmployee $ehe */
+        $ehe = $em->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee")->find($eheId);
+
+        $employeeEntities = $ehe->getEmployeeEmployee()->getEntities();
+        /** @var EmployeeHasEntity $employeeEntity */
+        foreach ($employeeEntities as $employeeEntity) {
+            if(key_exists($employeeEntity->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode(),$actualEntities)){
+                $view = View::create();
+                $view->setStatusCode(400);
+                $view->setData(array(
+                    'Error'=>'More than one entity for the type '.$employeeEntity->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode().' in DB, this needs to be solved manually',
+                ));
+                return $view;
+            }else{
+                $actualEntities[$employeeEntity->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode()]=$employeeEntity->getEntityEntity()->getPayrollCode();
+            }
+        }
+        $employerEntities = $ehe->getEmployerEmployer()->getEntities();
+        /** @var EmployerHasEntity $employerEntity */
+        foreach ($employerEntities as $employerEntity) {
+            if(key_exists($employerEntity->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode(),$actualEntities)){
+                $view = View::create();
+                $view->setStatusCode(400);
+                $view->setData(array(
+                    'Error'=>'More than one entity for the type '.$employerEntity->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode().' in DB, this needs to be solved manually',
+                ));
+                return $view;
+            }else{
+                $actualEntities[$employerEntity->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode()]=$employerEntity->getEntityEntity()->getPayrollCode();
+            }
+        }
+        $response = array();
+        $response['ehe_id']=$eheId;
+        $response['entity_type']=$entityType;
+        $entityRecord = new EntityRecord();
+        $entityRecord->setEmployerHasEmployeeId($ehe);
+        $entityRecord->setPayrollCode($entityPayrollCode);
+        $entityRecord->setEntityTypeEntityType($eType);
+        $entityRecord->setDateToBeApplied($dateToExecute);
+        $entityRecord->setToBeExecuted(1);
+        switch ($entityType){
+            case 'EPS':
+                if(key_exists('EPS',$actualEntities)){
+                    if($actualEntities['EPS'] != $actualSQLEntities['EPS'] or $actualEntities['EPS']!=$entityPayrollCode ){
+                        $entityRecord->setCoverageCode(2);
+                        $response['message']="changed from ".$actualEntities['EPS']." to ".$entityPayrollCode;
+                    }else{
+                        $view = View::create();
+                        $view->setStatusCode(200);
+                        $view->setData(array(
+                            'ehe_id'=>$eheId,
+                            'entity_type'=>$entityType,
+                            'message'=>'nothing to change, entity in queryX was the same.',
+                            'done'=>true,
+                        ));
+                        return $view;
+                    }
+                }elseif(key_exists('ARS',$actualEntities)){
+                    $entityRecord->setCoverageCode(1);
+                    $response['message']="changed from ".$actualEntities['ARS']." to ".$entityPayrollCode;
+                }
+                break;
+            case 'ARP':
+                $coverageCode = 1;
+                if(key_exists('ARP',$actualEntities)){
+                    if($actualEntities['ARP'] != $actualSQLEntities['ARP'] or $actualEntities['ARP']!=$entityPayrollCode ){
+                        $entityRecord->setCoverageCode($coverageCode);
+                        $response['message']="changed from ".$actualEntities['ARP']." to ".$entityPayrollCode;
+                    }else{
+                        $view = View::create();
+                        $view->setStatusCode(200);
+                        $view->setData(array(
+                            'ehe_id'=>$eheId,
+                            'entity_type'=>$entityType,
+                            'message'=>'nothing to change, entity in queryX was the same.',
+                            'done'=>true,
+                        ));
+                        return $view;
+                    }
+                }
+                break;
+            case 'AFP':
+                $coverageCode = ($entityPayrollCode == 0)? 2 : 1;
+                if(key_exists('AFP',$actualEntities)){
+                    if($actualEntities['AFP'] != $actualSQLEntities['AFP'] or $actualEntities['AFP']!=$entityPayrollCode ){
+                        $entityRecord->setCoverageCode($coverageCode);
+                        $response['message']="changed from ".$actualEntities['AFP']." to ".$entityPayrollCode;
+                    }else{
+                        $view = View::create();
+                        $view->setStatusCode(200);
+                        $view->setData(array(
+                            'ehe_id'=>$eheId,
+                            'entity_type'=>$entityType,
+                            'message'=>'nothing to change, entity in queryX was the same.',
+                            'done'=>true,
+                        ));
+                        return $view;
+                    }
+                }
+                break;
+            case 'PARAFISCAL':
+                $coverageCode = 1;
+                if(key_exists('PARAFISCAL',$actualEntities)){
+                    if($actualEntities['PARAFISCAL'] != $actualSQLEntities['PARAFISCAL'] or $actualEntities['PARAFISCAL']!=$entityPayrollCode ){
+                        $entityRecord->setCoverageCode($coverageCode);
+                        $response['message']="changed from ".$actualEntities['PARAFISCAL']." to ".$entityPayrollCode;
+                    }else{
+                        $view = View::create();
+                        $view->setStatusCode(200);
+                        $view->setData(array(
+                            'ehe_id'=>$eheId,
+                            'entity_type'=>$entityType,
+                            'message'=>'nothing to change, entity in queryX was the same.',
+                            'done'=>true,
+                        ));
+                        return $view;
+                    }
+                }
+                break;
+            case 'ARS':
+                if(key_exists('ARS',$actualEntities)){
+                    if($actualEntities['ARS'] != $actualSQLEntities['ARS'] or $actualEntities['ARS']!=$entityPayrollCode ){
+                        $entityRecord->setCoverageCode(1);
+                        $response['message']="changed from ".$actualEntities['ARS']." to ".$entityPayrollCode;
+                    }else{
+                        $view = View::create();
+                        $view->setStatusCode(200);
+                        $view->setData(array(
+                            'ehe_id'=>$eheId,
+                            'entity_type'=>$entityType,
+                            'message'=>'nothing to change, entity in queryX was the same.',
+                            'done'=>true,
+                        ));
+                        return $view;
+                    }
+                }elseif(key_exists('EPS',$actualEntities)){
+                    $entityRecord->setCoverageCode(2);
+                    $response['message']="changed from ".$actualEntities['EPS']." to ".$entityPayrollCode;
+                }
+                break;
+            case 'FCES':
+                $coverageCode = 1;
+                if(key_exists('FCES',$actualEntities)){
+                    if($actualEntities['FCES'] != $actualSQLEntities['FCES'] or $actualEntities['FCES']!=$entityPayrollCode ){
+                        $entityRecord->setCoverageCode($coverageCode);
+                        $response['message']="changed from ".$actualEntities['FCES']." to ".$entityPayrollCode;
+                    }else{
+                        $view = View::create();
+                        $view->setStatusCode(200);
+                        $view->setData(array(
+                            'ehe_id'=>$eheId,
+                            'entity_type'=>$entityType,
+                            'message'=>'nothing to change, entity in queryX was the same.',
+                            'done'=>true,
+                        ));
+                        return $view;
+                    }
+                }
+                break;
+            default:
+                $view = View::create();
+                $view->setStatusCode(400);
+                $view->setData(array(
+                   'Error'=>'enity_type parameter not match any payroll_code for the entityTypes'
+                ));
+                break;
+        }
+        $em->persist($entityRecord);
+        $em->flush();
+        $today= new DateTime();
+        if($today->format("d-m-Y") == $dateToExecute->format("d-m-Y") or $today>=$dateToExecute) {
+            if($this->executeEntityRecord($entityRecord)){
+                $response["done"]=true;
+            }else{
+                $response["done"]=false;
+            }
+        }else{
+            $response["to_do"]=true;
+        }
+        $view = View::create();
+        $view->setStatusCode(200);
+        $view->setData($response);
+        return $view;
+    }
+
+    private function executeEntityRecord(EntityRecord $entityRecord){
+        $em = $this->getDoctrine()->getManager();
+        /** @var EmployerHasEmployee $ehe */
+        $ehe = $entityRecord->getEmployerHasEmployeeId();
+        $entityType = $entityRecord->getEntityTypeEntityType()->getPayrollCode();
+        $actualEntities = array();
+        /** @var EmployeeHasEntity $employeeHasEntity */
+        foreach ($ehe->getEmployeeEmployee()->getEntities() as $employeeHasEntity) {
+            $actualEntities[$employeeHasEntity->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode()] = $employeeHasEntity->getIdEmployeeHasEntity();
+        }
+        /** @var EmployerHasEntity $employerHasEntity */
+        foreach ($ehe->getEmployerEmployer()->getEntities() as $employerHasEntity) {
+            $actualEntities[$employerHasEntity->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode()]= $employerHasEntity->getIdEmployerHasEntity();
+        }
+        $newEntityRecord = new EntityRecord();
+        $newEntityRecord->setEmployerHasEmployeeId($ehe);
+        $newEntityRecord->setDateToBeApplied($entityRecord->getDateToBeApplied());
+        $newEntityRecord->setToBeExecuted(0);
+        $newEntityRecord->setDateChangesApplied(new DateTime());
+        $data = array(
+            'employee_id' => $ehe->getIdEmployerHasEmployee(),
+            'entity_type_code' => $entityType,
+            'coverage_code' => $entityRecord->getCoverageCode(),
+            'entity_code' => $entityRecord->getPayrollCode(),
+            'start_date' => $entityRecord->getDateToBeApplied()->format("d-m-Y"),
+        );
+        switch ($entityType){
+            case 'EPS':
+                if(key_exists('EPS',$actualEntities)){
+                    /** @var EmployeeHasEntity $employeeHasEntity */
+                    $employeeHasEntity = $em->getRepository("RocketSellerTwoPickBundle:EmployeeHasEntity")->find($actualEntities['EPS']);
+                    $newEntityRecord->setEntityTypeEntityType($employeeHasEntity->getEntityEntity()->getEntityTypeEntityType());
+                    $newEntityRecord->setPayrollCode($employeeHasEntity->getEntityEntity()->getPayrollCode());
+                    $newEntityRecord->setCoverageCode(2);
+                    $employeeHasEntity->setEntityEntity($em->getRepository("RocketSellerTwoPickBundle:Entity")->findOneBy(array(
+                        'entityTypeEntityType'=>$entityRecord->getEntityTypeEntityType(),
+                        'payroll_code'=>$entityRecord->getPayrollCode(),
+                        ))
+                    );
+                    $em->persist($employeeHasEntity);
+
+                }elseif(key_exists('ARS',$actualEntities)){
+                    /** @var EmployeeHasEntity $employeeHasEntity */
+                    $employeeHasEntity = $em->getRepository("RocketSellerTwoPickBundle:EmployeeHasEntity")->find($actualEntities['ARS']);
+                    $newEntityRecord->setEntityTypeEntityType($employeeHasEntity->getEntityEntity()->getEntityTypeEntityType());
+                    $newEntityRecord->setPayrollCode($employeeHasEntity->getEntityEntity()->getPayrollCode());
+                    $newEntityRecord->setCoverageCode(1);
+                    $employeeHasEntity->setEntityEntity($em->getRepository("RocketSellerTwoPickBundle:Entity")->findOneBy(array(
+                        'entityTypeEntityType'=>$entityRecord->getEntityTypeEntityType(),
+                        'payroll_code'=>$entityRecord->getPayrollCode(),
+                    ))
+                    );
+                    $em->persist($employeeHasEntity);
+                }else{
+                    return false;
+                }
+                break;
+            case 'ARP':
+                if(key_exists('ARP',$actualEntities)){
+                    /** @var EmployerHasEntity $employerHasEntity */
+                    $employerHasEntity = $em->getRepository("RocketSellerTwoPickBundle:EmployerHasEntity")->find($actualEntities['ARP']);
+                    $newEntityRecord->setEntityTypeEntityType($employerHasEntity->getEntityEntity()->getEntityTypeEntityType());
+                    $newEntityRecord->setPayrollCode($employerHasEntity->getEntityEntity()->getPayrollCode());
+                    $newEntityRecord->setCoverageCode(1);
+                    $employerHasEntity->setEntityEntity($em->getRepository("RocketSellerTwoPickBundle:Entity")->findOneBy(array(
+                        'entityTypeEntityType'=>$entityRecord->getEntityTypeEntityType(),
+                        'payroll_code'=>$entityRecord->getPayrollCode(),
+                    ))
+                    );
+                    $em->persist($employerHasEntity);
+
+                }else{
+                    return false;
+                }
+                break;
+            case 'AFP':
+                if(key_exists('AFP',$actualEntities)){
+                    /** @var EmployeeHasEntity $employeeHasEntity */
+                    $employeeHasEntity = $em->getRepository("RocketSellerTwoPickBundle:EmployeeHasEntity")->find($actualEntities['AFP']);
+                    $newEntityRecord->setEntityTypeEntityType($employeeHasEntity->getEntityEntity()->getEntityTypeEntityType());
+                    $newEntityRecord->setPayrollCode($employeeHasEntity->getEntityEntity()->getPayrollCode());
+                    $newEntityRecord->setCoverageCode(($employeeHasEntity->getEntityEntity()->getPayrollCode() == 0)? 2 : 1);
+                    $employeeHasEntity->setEntityEntity($em->getRepository("RocketSellerTwoPickBundle:Entity")->findOneBy(array(
+                        'entityTypeEntityType'=>$entityRecord->getEntityTypeEntityType(),
+                        'payroll_code'=>$entityRecord->getPayrollCode(),
+                    ))
+                    );
+                    $em->persist($employeeHasEntity);
+                }else{
+                    return false;
+                }
+                break;
+            case 'PARAFISCAL':
+                if(key_exists('PARAFISCAL',$actualEntities)){
+                    /** @var EmployerHasEntity $employerHasEntity */
+                    $employerHasEntity = $em->getRepository("RocketSellerTwoPickBundle:EmployerHasEntity")->find($actualEntities['PARAFISCAL']);
+                    $newEntityRecord->setEntityTypeEntityType($employerHasEntity->getEntityEntity()->getEntityTypeEntityType());
+                    $newEntityRecord->setPayrollCode($employerHasEntity->getEntityEntity()->getPayrollCode());
+                    $newEntityRecord->setCoverageCode(1);
+                    $employerHasEntity->setEntityEntity($em->getRepository("RocketSellerTwoPickBundle:Entity")->findOneBy(array(
+                        'entityTypeEntityType'=>$entityRecord->getEntityTypeEntityType(),
+                        'payroll_code'=>$entityRecord->getPayrollCode(),
+                    ))
+                    );
+                    $em->persist($employerHasEntity);
+                }else{
+                    return false;
+                }
+                break;
+            case 'ARS':
+                if(key_exists('ARS',$actualEntities)){
+                    /** @var EmployeeHasEntity $employeeHasEntity */
+                    $employeeHasEntity = $em->getRepository("RocketSellerTwoPickBundle:EmployeeHasEntity")->find($actualEntities['ARS']);
+                    $newEntityRecord->setEntityTypeEntityType($employeeHasEntity->getEntityEntity()->getEntityTypeEntityType());
+                    $newEntityRecord->setPayrollCode($employeeHasEntity->getEntityEntity()->getPayrollCode());
+                    $newEntityRecord->setCoverageCode(1);
+                    $employeeHasEntity->setEntityEntity($em->getRepository("RocketSellerTwoPickBundle:Entity")->findOneBy(array(
+                        'entityTypeEntityType'=>$entityRecord->getEntityTypeEntityType(),
+                        'payroll_code'=>$entityRecord->getPayrollCode(),
+                    ))
+                    );
+                    $em->persist($employeeHasEntity);
+                }elseif(key_exists('EPS',$actualEntities)){
+                    /** @var EmployeeHasEntity $employeeHasEntity */
+                    $employeeHasEntity = $em->getRepository("RocketSellerTwoPickBundle:EmployeeHasEntity")->find($actualEntities['EPS']);
+                    $newEntityRecord->setEntityTypeEntityType($employeeHasEntity->getEntityEntity()->getEntityTypeEntityType());
+                    $newEntityRecord->setPayrollCode($employeeHasEntity->getEntityEntity()->getPayrollCode());
+                    $newEntityRecord->setCoverageCode(2);
+                    $employeeHasEntity->setEntityEntity($em->getRepository("RocketSellerTwoPickBundle:Entity")->findOneBy(array(
+                        'entityTypeEntityType'=>$entityRecord->getEntityTypeEntityType(),
+                        'payroll_code'=>$entityRecord->getPayrollCode(),
+                    ))
+                    );
+                    $em->persist($employeeHasEntity);
+                }else{
+                    return false;
+                }
+                break;
+            case 'FCES':
+                if(key_exists('FCES',$actualEntities)){
+                    /** @var EmployeeHasEntity $employeeHasEntity */
+                    $employeeHasEntity = $em->getRepository("RocketSellerTwoPickBundle:EmployeeHasEntity")->find($actualEntities['FCES']);
+                    $newEntityRecord->setEntityTypeEntityType($employeeHasEntity->getEntityEntity()->getEntityTypeEntityType());
+                    $newEntityRecord->setPayrollCode($employeeHasEntity->getEntityEntity()->getPayrollCode());
+                    $newEntityRecord->setCoverageCode(1);
+                    $employeeHasEntity->setEntityEntity($em->getRepository("RocketSellerTwoPickBundle:Entity")->findOneBy(array(
+                        'entityTypeEntityType'=>$entityRecord->getEntityTypeEntityType(),
+                        'payroll_code'=>$entityRecord->getPayrollCode(),
+                    ))
+                    );
+                    $em->persist($employeeHasEntity);
+                }else{
+                    return false;
+                }
+                break;
+        }
+
+        $request = new Request();
+        $request->setMethod("POST");
+        $request->request->add($data);
+        $response = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postModifyEmployeeEntity', array('request' => $request ), array('_format' => 'json'));
+        if ($response->getStatusCode() != 200) {
+            return false;
+        }else{
+            $em->remove($entityRecord);
+            $em->persist($newEntityRecord);
+            $em->flush();
+            return true;
+        }
     }
 
 }
