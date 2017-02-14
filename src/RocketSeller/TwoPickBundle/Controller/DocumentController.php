@@ -1566,10 +1566,10 @@ use EmployerMethodsTrait;
 	            /** @var UtilsController $utils */
 	            $utils = $this->get('app.symplifica_utils');
 	            $signatureUrl = null;
+				/** @var Document $document */
 	            $document = $employer[0]->getSignature();
 	            // signatre is already stored in db
 	            if($document != null) {
-		
 		            $fileUrl = $utils->getDocumentPath($document);
 		            $data = file_get_contents($fileUrl);
 		            $signatureUrl = 'data:image/png;base64,' . base64_encode($data);

@@ -156,10 +156,10 @@ class UtilsController extends ContainerAware
         $service = $this->container->get('sonata.media.twig.extension');
         $response = '';
         if($document->getMediaMedia()){//
-            if($this->container->hasParameter('ambiente')=="produccion")
+            if($this->container->getParameter('ambiente')=="produccion")
                 $response.=   $service->path($document->getMediaMedia(), 'reference');
             else
-                $response.= '//' . $_SERVER['HTTP_HOST'] . $service->path($document->getMediaMedia(), 'reference');
+                $response.= '//' .getcwd(). $service->path($document->getMediaMedia(), 'reference');
 
         }
 

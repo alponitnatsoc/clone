@@ -14,6 +14,7 @@ use RocketSeller\TwoPickBundle\Entity\NoveltyTypeHasDocumentType;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Prima;
+use RocketSeller\TwoPickBundle\Entity\UserHasConfig;
 use Symfony\Component\HttpFoundation\Request;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
@@ -405,6 +406,62 @@ class DocumentRestSecuredController extends FOSRestController
         $view->setStatusCode(200);
 
         return $view->setData(array("data" => $data));
-     }
+    }
+	
+	/**
+	 * accept mandato <br/>
+	 *
+	 * @ApiDoc(
+	 *   resource = true,
+	 *   description = "upload document",
+	 *   statusCodes = {
+	 *     200 = "OK",
+	 *     400 = "Bad Request",
+	 *     401 = "Unauthorized",
+	 *     404 = "Not Found"
+	 *   }
+	 * )
+	 *
+	 *
+	 * @RequestParam(name="notificationId", nullable=false, strict=true, description="notification id")
+	 *
+	 * @return View
+	 */
+	public function postAcceptMandatoAction(ParamFetcher $paramFetcher)
+	{
+		$notificationId = $paramFetcher->get('notificationId');
+		
+		/** @var User $user */
+		$user = $this->getUser();
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		$configuration = $this->getDoctrine()
+		  ->getRepository('RocketSellerTwoPickBundle:Configuration')
+		  ->findOneBy(array('value' => 'Acepto-Mandato'));
+		
+		$userHasConfig = new UserHasConfig();
+		$userHasConfig->setUserUser($user);
+		$userHasConfig->setConfigurationConfiguration($configuration);
+		$userHasConfig->setAcceptedAt(new \DateTime());
+		$user->addUserHasConfig($userHasConfig);
+		$em->persist($user);
+		
+		$notification = $this->getDoctrine()
+		  ->getRepository('RocketSellerTwoPickBundle:Notification')
+		  ->find($notificationId);
+		
+		$notification->disable();
+		
+		$em->persist($notification);
+		
+		$em->flush();
+		
+		$view = View::create();
+		$view->setStatusCode(200);
+		
+		return $view->setData(array());
+		
+	}
 
  }
