@@ -2,11 +2,13 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
+use JMS\Serializer\SerializationContext;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity;
@@ -14,7 +16,10 @@ use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\LandingRegistration;
 use RocketSeller\TwoPickBundle\Entity\Pay;
+use RocketSeller\TwoPickBundle\Entity\Product;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus;
+use RocketSeller\TwoPickBundle\RocketSellerTwoPickBundle;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolation;
@@ -326,4 +331,217 @@ class UtilsRestController extends FOSRestController
 
     }
 
+    /**
+     * Return the overall user list.
+     *
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Return the overall User List",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     404 = "Returned when the user is not found"
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function getGeneratePodMembershipUsersAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $view = View::create();
+
+        /** @var Product $PS1 */
+        $PS1 = $em->getRepository('RocketSellerTwoPickBundle:Product')->findOneBy(array("simpleName" => "PS1"));
+        /** @var Product $PS2 */
+        $PS2 = $em->getRepository('RocketSellerTwoPickBundle:Product')->findOneBy(array("simpleName" => "PS2"));
+        /** @var Product $PS3 */
+        $PS3 = $em->getRepository('RocketSellerTwoPickBundle:Product')->findOneBy(array("simpleName" => "PS3"));
+        /** @var PurchaseOrdersStatus $PS3 */
+        $status_peding = $em->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'P1') );
+        $data = array();
+
+        $dateToday = new \DateTime();
+
+
+        $users = $em->getRepository("RocketSellerTwoPickBundle:User")->findBy(array('status' => '2'));
+
+        /** @var User $user */
+        foreach ($users as $user){
+            if($user->getLastPayDate() == null || $user->getLastPayDate() == '')
+            {
+                continue;
+            }
+            $total = 0;
+            $effectiveDate = $user->getLastPayDate();
+            $isFreeMonths = $user->getIsFree();
+            if ($isFreeMonths == 0) {
+                $isFreeMonths += 1;
+            }
+
+            $effectiveDate = new DateTime(date('Y-m-d', strtotime("+$isFreeMonths months", strtotime($effectiveDate->format("Y-m-") . "25"))));
+
+            if ($dateToday->format("d") >= 14 && ($dateToday->format("m") >= $effectiveDate->format("m") || $dateToday->format("Y") > $effectiveDate->format("Y")) && $dateToday->format("Y") >= $effectiveDate->format("Y")) {
+                //this means that the user has to pay the symplifica fee this month
+                $symplificaPO = new PurchaseOrders();
+                $symplificaPO->setIdUser($user);
+
+                $symplificaPO->setPurchaseOrdersStatus($status_peding);
+
+                $symplificaPOD = new PurchaseOrdersDescription();
+                $symplificaPOD->setDescription("Subscripción Symplifica");
+                $symplificaPOD->setPurchaseOrdersStatus($status_peding);
+
+                $ehes = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+
+                $ps1Count = 0;
+                $ps2Count = 0;
+                $ps3Count = 0;
+                /** @var EmployerHasEmployee $ehe */
+                foreach ($ehes as $ehe) {
+                    if ($ehe->getState() < 3) {
+                        continue;
+                    }
+                    $contracts = $ehe->getContracts();
+                    $actualContract = null;
+                    /** @var Contract $contract */
+                    foreach ($contracts as $contract) {
+                        if ($contract->getState() == 1) {
+                            $actualContract = $contract;
+                            break;
+                        }
+                    }
+                    if ($actualContract == null) {
+                        continue;
+                    }
+                    $actualDays = $actualContract->getWorkableDaysMonth();
+                    if ($actualDays < 10) {
+                        $ps1Count++;
+                    } elseif ($actualDays <= 19) {
+                        $ps2Count++;
+                    } else {
+                        $ps3Count++;
+                    }
+
+                }
+                $total = round(($PS1->getPrice() * (1 + $PS1->getTaxTax()->getValue()) * $ps1Count) +
+                    ($PS2->getPrice() * (1 + $PS2->getTaxTax()->getValue()) * $ps2Count) +
+                    ($PS3->getPrice() * (1 + $PS3->getTaxTax()->getValue()) * $ps3Count), 0);
+
+                $symplificaPOD->setValue($total);
+
+                $symplificaPOD->setProductProduct($PS3);
+                $symplificaPO->addPurchaseOrderDescription($symplificaPOD);
+                $symplificaPO->setValue($total);
+
+                $user->setLastPayDate(new DateTime($dateToday->format("Y-m-")."25"));
+
+                $user->setIsFree(0);
+
+                // Se consulta el PayMethod
+                $response = $this->forward('RocketSellerTwoPickBundle:UtilsRest:getPayMethodUser',array('idUser' => $user->getId()), array('format' => 'json'));
+                $method_id = json_decode($response->getContent(),true);
+
+                /** @var PurchaseOrders $po  */
+                $symplificaPO->setPayMethodId($method_id['method_id']);
+                $em->persist($user);
+                $em->persist($symplificaPO);
+                $em->persist($symplificaPOD);
+
+                $em->flush();
+
+                $response =  $this->sendPayToPodMembershipUsers($symplificaPO->getIdPurchaseOrders());
+                if($response->getStatusCode() != 200){
+                    array_push($data, array(
+                        'id_user' => $user->getId(),
+                        'Name_user' => $user->getId().' '.$user->getPersonPerson()->getFullName(),
+                        'id_PO' => $symplificaPO->getIdPurchaseOrders(),
+                        'id_POD' => $symplificaPOD->getIdPurchaseOrdersDescription(),
+                        'error' => $response->getContent(),
+                    ));
+                }else {
+                    array_push($data, array(
+                        'id_user' => $user->getId(),
+                        'Name_user' => $user->getId() . ' ' . $user->getPersonPerson()->getFullName(),
+                        'id_PO' => $symplificaPO->getIdPurchaseOrders(),
+                        'id_POD' => $symplificaPOD->getIdPurchaseOrdersDescription(),
+                        'error' => 'none'
+                    ));
+                }
+            }
+
+        }
+
+        $view->setStatusCode(200);
+        $view->setData($data);
+
+        return $view;
+    }
+
+    /** Envia la peticion de cobro de la suscripcion.
+     *
+     */
+    private function sendPayToPodMembershipUsers($po){
+
+        $response = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getPayPurchaseOrder', array('idPurchaseOrder' => $po), array( 'format' => 'json'));
+        return $response;
+
+    }
+
+    /**
+     * Consulta Paymenthod de un user
+     *
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Return the PayMethod User",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     404 = "Returned when the user is not found"
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function getPayMethodUserAction($idUser){
+
+        $view = View::create();
+        $em = $this->getDoctrine()->getManager();
+        $query = $em->createQueryBuilder();
+        $query->add('select', 'po');
+
+        $query->from("RocketSellerTwoPickBundle:PurchaseOrders",'po')
+            ->Join("po.purchaseOrdersStatus",'ps')
+            ->where("ps.idNovoPay = '00' and po.payMethodId != 'none' and po.idUser = ?1")
+            ->setMaxResults(1)
+            ->setParameter(1,$idUser);
+
+        /** @var PurchaseOrders $poUser */
+        $poUser = $query->getQuery()->getResult();
+
+        $paymenthod = 0;
+        if(count($poUser) > 0){
+            $paymenthod = $poUser[0]->getProviderId().'-'.$poUser[0]->getPayMethodId();
+            if($paymenthod != '' || $paymenthod != null){
+                return $view->setStatusCode(200)->setData(array('method_id' => $paymenthod));
+            }
+        }
+
+        $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getClientListPaymentMethods', array('idUser' => $idUser), array('_format' => 'json'));
+        $responsePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
+
+
+        if(!isset($responsePaymentsMethods['payment-methods'][0]['method-id'])){
+            $responsePaymentsMethods = array('payment-methods' => array(array(
+                    "payment-type" => "Ahorros",
+                    "account" => "*******0444",
+                    "method-id" => "1-00000000",
+                    "bank" => "BANCOLOMBIA S.A.",
+                    "id-provider" >= "1"
+                )));
+        }
+        $paymenthod = $responsePaymentsMethods['payment-methods'][0]['method-id'];
+
+        return $view->setStatusCode(200)->setData(array('method_id' => $paymenthod));
+    }
 }
