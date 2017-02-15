@@ -101,7 +101,10 @@
                                     <td> {{ usersEmail[locIndex] }} </td>
                                     <td> {{ ehe.employeeEmployee.personPerson.names }} {{ ehe.employeeEmployee.personPerson.lastName1 }}</td>
                                     <td> {{ ehe.employeeEmployee.personPerson.document }} </td>
-                                    <td> {{ contract.payMethodpayMethod.payTypePayType.simpleName }}</td>
+                                    <td>
+                                        {% if contract.payMethodPayMethod is not null and contract.payMethodPayMethod.payTypePayType is not null %}
+                                        {{ contract.payMethodPayMethod.payTypePayType.simpleName }}</td>
+                                        {% endif %}
                                     <td> {{ contract.timeCommitmentTimeCommitment.name }}</td>
                                     <td>
                                         {% if contract.workableDaysMonth != 30 %}

@@ -495,7 +495,8 @@ class BackOfficeController extends Controller
                 foreach ( $topays as $key => $topay) {
                     /** @var PurchaseOrdersDescription $tPod */
                     $tPod = $podRepo->find($topay);
-                    $value+=$tPod->getValue();
+                    if ($tPod != null)
+                        $value+=$tPod->getValue();
                 }
                 $fixedPending[$item->getIdToCall()]['value']=$value;
 
@@ -527,6 +528,7 @@ class BackOfficeController extends Controller
         /** @var User $rUser */
         $rUser = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->find($idUser);
         if(count($requ)>1){
+            $toEmail="camilo.mendez@symplifica.com";//This is the CEO
             if($intend=="p"){//Pagar
                 $item= new ToCall();
                 $item->setReasonToAuthorize($requ['reason']);
@@ -557,8 +559,17 @@ class BackOfficeController extends Controller
             $em->persist($item);
             $em->flush();
 
+            /** test cesantCharges Email */
+            $context=array(
+                'emailType'=>'backMoneyRequ',
+                'toEmail'=>$toEmail,
+            );
+            $this->get('symplifica.mailer.twig_swift')->sendEmailByTypeMessage($context);
+
             return $this->redirectToRoute("show_requests_money");
         }
+
+
         if($intend=="p"){//Pagar
             $request->setMethod("GET");
             $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRestSecured:getPay', array("idUser" => $rUser->getId()), array('_format' => 'json'));
@@ -567,6 +578,7 @@ class BackOfficeController extends Controller
             }
             $ANS=json_decode($insertionAnswer->getContent(), true);
             $ANS=json_decode($ANS, true);
+
             return $this->render('RocketSellerTwoPickBundle:BackOffice:requestActionMoney.html.twig', array(
                 'ans' => $ANS,
             ) );
@@ -574,10 +586,12 @@ class BackOfficeController extends Controller
         }elseif ($intend=="r"){//Retornar Dinero
             $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getClientListPaymentMethods', array('idUser' => $rUser->getId()), array('_format' => 'json'));
             $responsePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true)["payment-methods"];
+
             return $this->render('RocketSellerTwoPickBundle:BackOffice:requestActionMoney.html.twig', array(
                 'paym' => $responsePaymentsMethods,
             ) );
         }
+
         return $this->render('RocketSellerTwoPickBundle:BackOffice:requestActionMoney.html.twig', array());
 
     }
@@ -1596,10 +1610,6 @@ class BackOfficeController extends Controller
         return $this->render('RocketSellerTwoPickBundle:BackOffice:marketing.html.twig', array('landings'=>array_reverse($landings)));
     }
 
-    /**
-     * Funcion que muestra la tabla de registrados en el landing
-     * @return Response /backoffice/marketing
-     */
     public function showExpressAction($id)
     {
         $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
@@ -1650,15 +1660,6 @@ class BackOfficeController extends Controller
             return $this->redirectToRoute("express_back",array('id'=>-1),301);
         }
 
-    }
-
-    /**
-     * Funcion para hacer las consultas
-     * @return Response /backoffice/request
-     */
-    public function showRequestAction(){
-        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
-        return $this->render('@RocketSellerTwoPick/BackOffice/request.html.twig');
     }
 
     public function addPlanillaTypeToContractsBackAction($autentication)
@@ -4084,7 +4085,7 @@ class BackOfficeController extends Controller
                     "month" => $payroll->getMonth(),
                     "year"=>$payroll->getYear(),
                     "period" => $payroll->getPeriod(),
-                    "day"=> ($payroll->getPeriod()==2)?16:26,
+                    "day"=> ($payroll->getPeriod()==2)?13:26,
                     "token"=>$backUser->getSalt(),
                     "idpayroll" => $payroll->getIdPayroll()
                 ));
@@ -4215,7 +4216,7 @@ class BackOfficeController extends Controller
                             "month" => $payroll->getMonth(),
                             "year"=>$payroll->getYear(),
                             "period" => $payroll->getPeriod(),
-                            "day"=> ($payroll->getPeriod()==2)?16:26,
+                            "day"=> ($payroll->getPeriod()==2)?13:26,
                             "token"=>$backUser->getSalt(),
                             "idpayroll" => $payroll->getIdPayroll()
                         ));

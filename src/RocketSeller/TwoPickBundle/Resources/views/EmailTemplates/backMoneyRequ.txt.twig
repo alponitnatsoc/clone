@@ -1,0 +1,12 @@
+{% trans_default_domain 'FOSUserBundle' %}
+{% block subject %}{% autoescape false %}Revisar Backoffice de dinero{% endautoescape %}{% endblock %}
+{% block body_html %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<body>
+<h1>Se creo una nueva petición de dinero</h1><br>
+<h3>Entrar a <a href="{{  url('money_admin_dashboard') }}">aqui<a/></h3>
+</body>
+</html>
+{% endblock %}
