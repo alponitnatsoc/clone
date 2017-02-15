@@ -95,7 +95,7 @@ class PayrollMethodRestController extends FOSRestController
                "novelty_end_date"=> $dateEndPeriod->format("d-m-Y"),
                "novelty_base"=>$salaryD,
            ));
-           $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddNoveltyEmployee', array('_format' => 'json'));
+           $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddNoveltyEmployee',array('request'=>$request), array('_format' => 'json'));
            if($insertionAnswer->getStatusCode()!=200){
                return $insertionAnswer;
            }
@@ -136,9 +136,9 @@ class PayrollMethodRestController extends FOSRestController
      */
     public function putAutoLiquidatePayrollAction(Request $request)
     {
+	    $view = View::create();
         $em = $this->getDoctrine()->getManager();
-
-        $view = View::create();
+        
         $format = array('_format' => 'json');
         $idPayroll=-1;
         $requ = $request->request->all();
@@ -148,7 +148,7 @@ class PayrollMethodRestController extends FOSRestController
             $period=$requ['period'];
             $day =  $requ['day'] ;
             $tokenBack =  $requ['token'] ;
-            $idPayroll=isset($requ['idpayroll'])?$requ['idpayroll']:-1;
+            $idPayroll = isset($requ['idpayroll']) ? $requ['idpayroll'] : -1;
             /** @var User $backuser */
             $backuser = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->findOneBy(array('emailCanonical'=>'backofficesymplifica@gmail.com'));
 
@@ -164,8 +164,7 @@ class PayrollMethodRestController extends FOSRestController
         }
         $payrollEntity = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
         $period =  4 ;
-
-        //TODO tengo que buscar las que no están pagas
+	    
         if ($day == 26) {
             $params = array(
                 "month" => $month,
@@ -198,12 +197,15 @@ class PayrollMethodRestController extends FOSRestController
 	
 	      $podArray = array();
 	      $employerArray = array();
-
+	    $cont = 0;
         /** @var \RocketSeller\TwoPickBundle\Entity\Payroll $payroll */
-        foreach($payrolls as $payroll) {
-            if($payroll->getPaid()!=0||$payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getState()==-1){
-                continue;
-            }
+        foreach ($payrolls as $payroll) {
+	        if($payroll->getPaid() > 0 || $payroll->getContractContract() == null ||
+	           $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee() == null ||
+	           $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getState() == null ||
+	           $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getState() < 4) {
+	        	continue;
+	        }
             $employer=$payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer();
             $eHEs=$employer->getEmployerHasEmployees();
             //CREAR orden de compra
@@ -221,7 +223,8 @@ class PayrollMethodRestController extends FOSRestController
             $totalPilaToPay=0;
             //la descripcion para la pila
             $podPila = new PurchaseOrdersDescription();
-
+//
+	        $entre = false;
             /** @var EmployerHasEmployee $ehe */
             foreach ($eHEs as $ehe) {
                 if($ehe->getState()>3){
@@ -241,7 +244,12 @@ class PayrollMethodRestController extends FOSRestController
                             $payrollPods=$activePayrrol->getPurchaseOrdersDescription();
                             if($activePayrrol->getPaid()==0){
                                 $empHasEmp=$ehe;
+
                                 $dataNomina = $this->getInfoNominaSQL($ehe);
+	                            if($dataNomina == null) {
+	                            	continue;
+	                            }
+	                            $entre = true;
                                 $totalLiquidation = $this->totalLiquidation($dataNomina);
                                 $salary = $totalLiquidation['total'];
                                 $pila = $this->getTotalPILA($empHasEmp, $activePayrrol);
@@ -360,7 +368,7 @@ class PayrollMethodRestController extends FOSRestController
                 $podPila->setValue($totalPilaToPay);
                 $podPila->setPurchaseOrdersStatus($pos);
                 $purchaseOrder->addPurchaseOrderDescription($podPila);
-	
+
 		            if($podPila->getEnlaceOperativoFileName() == NULL && $podPila->getUploadedFile() == NULL){
 			            //this means the file has not be sent yet
 			            $podArray[] = $podPila->getIdPurchaseOrdersDescription();
@@ -387,36 +395,42 @@ class PayrollMethodRestController extends FOSRestController
             $not->setRelatedLink($this->generateUrl("payroll", array('idNotif'=>$not->getId())));
             $em->persist($not);
             $em->flush();
-
+			$em->clear();
 
 
             $total[] = array("Empleador " . $employer->getIdEmployer() => "proceso liquidado de nomina");
+	        if($entre) {
+		        $cont++;
+	        }
+	        if($cont == 5) {
+	        	break;
+	        }
 
         }
 
         if (!isset($total)) {
             $total = "no hay nominas pendientes por cerrar ";
         }
-        if($idPayroll!=-1){
-            $view->setStatusCode(200);
-
-            $view->setData($total);
-            return $view;
-        }
+	    if($idPayroll!=-1){
+		    $view->setStatusCode(200);
+		
+		    $view->setData($total);
+		    return $view;
+	    }
 
 //         $result .= count($pod);
 //         $total = $data;
-	    
-	      //From this point we send the pila files to hightech in order to be upload on Enlace Operativo
+//
+//	      //From this point we send the pila files to hightech in order to be upload on Enlace Operativo
 	      foreach ($podArray as $index => $singlePodId){
 		      //TODO DanielRico Remove this as soon the final liquidation works and the novelty support is complete
-		      
+
 		      $singlePod = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription")->find($singlePodId);
 		      $payrollsPila = $singlePod->getPayrollsPila();
 		      $haveNovelties = false;
-		
+
 		      $payrollRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
-		
+
 		      /** @var Payroll $payrollPila */
 		      foreach ( $payrollsPila as $payrollPila ){
 			      if( count($payrollPila->getNovelties()) > 0){
@@ -435,16 +449,16 @@ class PayrollMethodRestController extends FOSRestController
 			      }
 		      }
 		      //End of segment
-		
+
 		      $transactionType = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:TransactionType')->findOneBy(array('code' => 'CPla'));
-		
+
 		      $transaction = new Transaction();
 		      $transaction->setTransactionType($transactionType);
-		
+
 		      if($haveNovelties == false) {
 			      $request->setMethod("GET");
 			      $insertionAnswerTextFile = $this->forward('RocketSellerTwoPickBundle:PilaPlainTextRest:getMonthlyPlainText', array('podId' => $singlePod->getIdPurchaseOrdersDescription(), 'download' => 'generate'), array('_format' => 'json'));
-			
+
 			      $request->setMethod("POST");
 			      $request->request->add(array(
 				      "GSCAccount" => $employerArray[$index]->getIdHighTech(),
@@ -456,7 +470,7 @@ class PayrollMethodRestController extends FOSRestController
 				      $radicatedNumber = json_decode($insertionAnswer->getContent(), true)["numeroRadicado"];
 				      $transaction->setRadicatedNumber($radicatedNumber);
 				      $purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-PlaEnv'));
-				
+
 				      $total[] = array("Empleador " . $employerArray[$index]->getIdEmployer() => " archivo de pila cargado exitosamente");
 			      } else {
 				      //If some kind of error
@@ -468,7 +482,7 @@ class PayrollMethodRestController extends FOSRestController
 			      $purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-ErrNov'));
 			      $total[] = array("Empleador " . $employerArray[$index]->getIdEmployer() => " archivo de pila no fue cargado, tiene novedades");
 		      }
-		
+
 		      $em = $this->getDoctrine()->getManager();
 		      $transaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
 		      $em->persist($transaction);
@@ -478,10 +492,206 @@ class PayrollMethodRestController extends FOSRestController
 		      $em->persist($singlePod);
 		      $em->flush();
 	      }
-	    
-        $view->setStatusCode(200);
-
-        $view->setData($total);
-        return $view;
+//	    $view = View::create();
+//        $view->setStatusCode(200);
+//
+//        $view->setData(array("cont" => 0));
+//        return $view;
+	
+	    $view = View::create();
+	    $view->setStatusCode(200);
+	
+	    $view->setData(array("total" => $total,  "cont" => $cont));
+	    return $view;
     }
+	
+	/**
+	 *  Send Planilla File To Enlace Operativo the ones that weren't sent in AutoLiquidatePayroll<br/>
+	 *
+	 * @ApiDoc(
+	 *   resource = true,
+	 *   description = "Send Planilla File To Enlace Operativo",
+	 *   statusCodes = {
+	 *     200 = "OK"
+	 *   }
+	 * )
+	 *
+	 * @param Request $request
+	 * @return View
+	 */
+	public function putSendPlanillaFileToEnlaceOperativoBackAction(Request $request){
+		$params = $request->request->all();
+		$period = $params['period'];
+		$month = $params['month'];
+		$year = $params['year'];
+		
+		$conta = 0;
+		
+		$em=$this->getDoctrine()->getManager();
+		
+		$payrolls = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll")->findBy(array(
+		  "period" => $period,
+		  "month" => $month,
+		  "year" => $year,
+		  "paid" => 1));
+		
+		foreach($payrolls as $payroll){
+			$podPila = $payroll->getPila();
+			
+			if($podPila != NULL && $podPila->getUploadedFile() == NULL){
+				
+				$payrollsPila = $podPila->getPayrollsPila();
+				$haveNovelties = false;
+				
+				$payrollRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
+				
+				/** @var Payroll $payrollPila */
+				foreach ( $payrollsPila as $payrollPila ){
+					if( count($payrollPila->getNovelties()) > 0){
+						$haveNovelties = true;
+						break;
+					}
+					//If is Quincenal we need to check the first payroll of the month to see If we have novelties
+					if($payrollPila->getContractContract()->getFrequencyFrequency()->getPayrollCode() == "Q"){
+						$singlePayroll = $payrollRepo->findOneBy(array('contractContract' => $payrollPila->getContractContract() , 'period' => 2 , 'year' => $payrollPila->getYear() , 'month' => $payrollPila->getMonth()) );
+						if($singlePayroll != NULL){
+							if( count($singlePayroll->getNovelties()) > 0){
+								$haveNovelties = true;
+								break;
+							}
+						}
+					}
+				}
+				
+				$transactionType = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:TransactionType')->findOneBy(array('code' => 'CPla'));
+				
+				$transaction = new Transaction();
+				$transaction->setTransactionType($transactionType);
+				
+				if($haveNovelties == false) {
+					$request->setMethod("GET");
+					$insertionAnswerTextFile = $this->forward('RocketSellerTwoPickBundle:PilaPlainTextRest:getMonthlyPlainText', array('podId' => $podPila->getIdPurchaseOrdersDescription(), 'download' => 'generate'), array('_format' => 'json'));
+					
+					$request->setMethod("POST");
+					$request->request->add(array(
+					  "GSCAccount" => $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getIdHighTech(),
+					  "FileToUpload" => json_decode($insertionAnswerTextFile->getContent(), true)['fileToSend']
+					));
+					$insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postUploadFileToPilaOperator', array('request' => $request) ,  array('_format' => 'json'));
+					if ($insertionAnswer->getStatusCode() == 200) {
+						//Received succesfully
+						$radicatedNumber = json_decode($insertionAnswer->getContent(), true)["numeroRadicado"];
+						$transaction->setRadicatedNumber($radicatedNumber);
+						$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-PlaEnv'));
+					} else {
+						//If some kind of error
+						$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-ErrSer'));
+					}
+				}
+				else {
+					$purchaseOrdersStatus = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus')->findOneBy(array('idNovoPay' => 'CarPla-ErrNov'));
+				}
+				
+				$em = $this->getDoctrine()->getManager();
+				$transaction->setPurchaseOrdersStatus($purchaseOrdersStatus);
+				$em->persist($transaction);
+				$em->flush();
+				$podPila->setUploadedFile($transaction->getIdTransaction());
+				$podPila->addTransaction($transaction);
+				$em->persist($podPila);
+				$em->flush();
+				
+				$conta = $conta + 1;
+				
+			}
+			
+			if($conta == 10){
+				$view = new View();
+				$view->setStatusCode(200);
+				
+				$view->setData(array('conta' => $conta));
+				return $view;
+			}
+		}
+		
+		$view = new View();
+		$view->setStatusCode(200);
+		
+		$view->setData(array('conta' => $conta));
+		return $view;
+	}
+	
+	/**
+	 *  fix pod pila after AutoLiquidatePayroll<br/>
+	 *
+	 * @ApiDoc(
+	 *   resource = true,
+	 *   description = "Send Planilla File To Enlace Operativo",
+	 *   statusCodes = {
+	 *     200 = "OK"
+	 *   }
+	 * )
+	 *
+	 * @param Request $request
+	 * @return View
+	 */
+	public function putFixPODPilaAction(Request $request){
+		
+		$params = $request->request->all();
+		$period = $params['period'];
+		$month = $params['month'];
+		$year = $params['year'];
+		
+		$em=$this->getDoctrine()->getManager();
+		
+		$payrolls = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll")->findBy(
+		  array("period" => $period,
+		    "month" => $month,
+		    "year" => $year,
+		    "paid" => 1));
+		$pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array("idNovoPay" => "P1"));
+		$product = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product")->findOneBy(array("simpleName" => "PP"));
+		
+		foreach($payrolls as $payroll){
+			$pilaPOD = $payroll->getPila();
+			
+			if($pilaPOD!=null&&$pilaPOD->getProductProduct() == NULL){
+				
+				$pilaPOD->setPurchaseOrdersStatus($pos);
+				$pilaPOD->setProductProduct($product);
+				$pilaPOD->setDescription("Pago de Aportes a Seguridad Social mes Enero");
+				
+				$poList = $payroll->getPurchaseOrdersDescription();
+				
+				/** @var PurchaseOrdersDescription $singlePod */
+				foreach ($poList as $singlePod){
+					$pilaPOD->setPurchaseOrders($singlePod->getPurchaseOrders());
+					break;
+				}
+				
+				$totalValue = 0;
+				$payrollsPila = $pilaPOD->getPayrollsPila();
+				
+				/** @var Payroll $singlePayroll */
+				foreach ($payrollsPila as $singlePayroll){
+					$pilaDetails = $singlePayroll->getPilaDetails();
+					
+					/** @var PilaDetail $singleDetail */
+					foreach ($pilaDetails as $singleDetail){
+						$totalValue = $totalValue + $singleDetail->getSqlValueCia() + $singleDetail->getSqlValueEmp();
+					}
+				}
+				
+				$pilaPOD->setValue($totalValue);
+				$em->persist($pilaPOD);
+				$em->flush();
+			}
+		}
+		
+		$view = new View();
+		$view->setStatusCode(200);
+		
+		$view->setData(array());
+		return $view;
+	}
 }

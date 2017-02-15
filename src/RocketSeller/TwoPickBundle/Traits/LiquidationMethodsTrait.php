@@ -21,6 +21,9 @@ trait LiquidationMethodsTrait
         $total = $totalDed = $totalDev = 0;
         $novelties=new ArrayCollection();
         foreach ($data as $key => $info) {
+        	if(!is_array($info)){
+        		continue;
+	        }
             $payroll_code = isset($info["CON_CODIGO"]) ? $info["CON_CODIGO"] : false;
             /** @var \RocketSeller\TwoPickBundle\Entity\NoveltyType $noveltyType */
             $noveltyType = $this->noveltyTypeByPayrollCode($payroll_code);
