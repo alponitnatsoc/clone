@@ -5,6 +5,7 @@ namespace RocketSeller\TwoPickBundle\Controller;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
 use RocketSeller\TwoPickBundle\Entity\Device;
+use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
@@ -17,6 +18,7 @@ class PushNotificationRestController extends FOSRestController
         if($container)
             $this->setContainer($container);
     }
+    
     /**
      * send push notification to devices of a user
      *
@@ -165,4 +167,66 @@ class PushNotificationRestController extends FOSRestController
         $resultUsers[] = array('userId' => $idUser, 'result' => $collect);
         // echo $resultUsers;
     }
+	
+	/**
+	 * send generic push notification to all users with devices
+	 *
+	 * @ApiDoc(
+	 *   resource = true,
+	 *   description = "send generic push notification to all users with devices",
+	 *   statusCodes = {
+	 *     200 = "Notification sent successfully"
+	 *   }
+	 * )
+	 *
+	 * @param ParamFetcher $paramFetcher Paramfetcher
+	 *
+	 * @RequestParam(name="title", nullable=false, strict=true, description="title")
+	 * @RequestParam(name="message", nullable=false,  strict=true, description="title")
+	 * @RequestParam(name="longMessage", nullable=false,  strict=true, description="title")
+	 * @RequestParam(name="page", nullable=true,  strict=true, description="title")
+	 * @return View
+	 */
+	public function postSendGenericMessageToAllUsersWithDeviceAction(ParamFetcher $paramFetcher) {
+		
+		$title = $paramFetcher->get('title');
+		$message = $paramFetcher->get('message');
+		$longMessage = $paramFetcher->get('longMessage');
+		$page = $paramFetcher->get('page');
+		
+		$users = $this->getDoctrine()
+		  ->getRepository('RocketSellerTwoPickBundle:User')
+		  ->findAll();
+		$resultUsers = array();
+		
+		/** @var User $user */
+		foreach ($users as $user) {
+			$devices = $this->getDoctrine()
+			  ->getRepository('RocketSellerTwoPickBundle:Device')
+			  ->findBy(array("userUser" => $user));
+			
+			if(!$devices) {
+				continue;
+			}
+			
+			$request = new Request();
+			$request->setMethod("POST");
+			$request->request->add(array(
+			  "idUser" => $user->getId(),
+			  "title" => $title,
+			  "message" => $message,
+			  "longMessage" => $longMessage,
+			  "page" => $page
+			));
+			
+			$result = $this->postPushNotificationAction($request);
+			
+			$collect = $result->getData();
+			$resultUsers[] = array('userId' => $user->getId(), 'result' => $collect);
+			// echo $resultUsers;
+		}
+		$view = View::create();
+		$view->setStatusCode(200);
+		return $view->setData(array('$resultUsers' => $resultUsers));
+	}
 }
