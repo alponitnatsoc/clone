@@ -2657,20 +2657,119 @@ class BackOfficeController extends Controller
 
 	}
 
-	public function notPaidViewAction(){
-		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+	public function notPaidNominaViewAction($index){
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
 
-		$product = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:Product')->findOneBy(array("simpleName"=>"PN"));
-		$product2 = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:Product')->findOneBy(array("simpleName"=>"PP"));
-		$product3 = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:Product')->findOneBy(array("simpleName"=>"PRM"));
+        $product = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:Product')->findOneBy(array("simpleName"=>"PN"));
+        $pods;
+        $em = $this->getDoctrine()->getManager();
+        /** @var QueryBuilder $query */
+        $query = $em->createQueryBuilder();
+        $query->add('select', 'pod');
+        $query->from("RocketSellerTwoPickBundle:PurchaseOrdersDescription",'pod');
+        $query->where('pod.productProduct = ?1' );
+        $query->setParameter(1,$product->getIdProduct());
 
-		$podNomina = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')->findBy(array("productProduct"=>$product->getIdProduct()));
-		$podPila = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')->findBy(array("productProduct"=>$product2->getIdProduct()));
-		$podPrima = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersDescription')->findBy(array("productProduct"=>$product3->getIdProduct()));
+        $maxIndex = 1;
+        $results = count($query->getQuery()->getResult());
+        if($results%50!=0){
+            $maxIndex = intval($results/50)+1;
+        }else{
+            $maxIndex = intval($results/50);
+        }
+        if($index==1){
+            $query->setFirstResult(0);
+            $query->setMaxResults(50);
+            $paginator = new Paginator($query,$fetchJoinCollection = true);
+            $pods = $paginator->getIterator();
+        }else{
+            $query->setFirstResult(($index-1)*50);
+            $query->setMaxResults(50);
+            $paginator = new Paginator($query,$fetchJoinCollection = true);
+            $pods = $paginator->getIterator();
+        }
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:payStateNomina.html.twig',array(
+            'podsN'=>$pods,
+            'maxIndex'=>$maxIndex,
+            'index'=>$index,
+        ));
+    }
 
-		//Now Pod has all the products nomina on the database.
-		return $this->render('RocketSellerTwoPickBundle:BackOffice:payState.html.twig', array('podsN' => $podNomina, 'podsP' => $podPila, 'podsPr' => $podPrima));
-	}
+    public function notPaidPilaViewAction($index){
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+
+        $product = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:Product')->findOneBy(array("simpleName"=>"PP"));
+        $pods;
+        $em = $this->getDoctrine()->getManager();
+        /** @var QueryBuilder $query */
+        $query = $em->createQueryBuilder();
+        $query->add('select', 'pod');
+        $query->from("RocketSellerTwoPickBundle:PurchaseOrdersDescription",'pod');
+        $query->where('pod.productProduct = ?1' );
+        $query->setParameter(1,$product->getIdProduct());
+
+        $maxIndex = 1;
+        $results = count($query->getQuery()->getResult());
+        if($results%50!=0){
+            $maxIndex = intval($results/50)+1;
+        }else{
+            $maxIndex = intval($results/50);
+        }
+        if($index==1){
+            $query->setFirstResult(0);
+            $query->setMaxResults(50);
+            $paginator = new Paginator($query,$fetchJoinCollection = true);
+            $pods = $paginator->getIterator();
+        }else{
+            $query->setFirstResult(($index-1)*50);
+            $query->setMaxResults(50);
+            $paginator = new Paginator($query,$fetchJoinCollection = true);
+            $pods = $paginator->getIterator();
+        }
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:payStatePila.html.twig',array(
+            'podsP'=>$pods,
+            'maxIndex'=>$maxIndex,
+            'index'=>$index,
+        ));
+    }
+
+    public function notPaidPrimaViewAction($index){
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+
+        $product = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:Product')->findOneBy(array("simpleName"=>"PRM"));
+        $pods;
+        $em = $this->getDoctrine()->getManager();
+        /** @var QueryBuilder $query */
+        $query = $em->createQueryBuilder();
+        $query->add('select', 'pod');
+        $query->from("RocketSellerTwoPickBundle:PurchaseOrdersDescription",'pod');
+        $query->where('pod.productProduct = ?1' );
+        $query->setParameter(1,$product->getIdProduct());
+
+        $maxIndex = 1;
+        $results = count($query->getQuery()->getResult());
+        if($results%50!=0){
+            $maxIndex = intval($results/50)+1;
+        }else{
+            $maxIndex = intval($results/50);
+        }
+        if($index==1){
+            $query->setFirstResult(0);
+            $query->setMaxResults(50);
+            $paginator = new Paginator($query,$fetchJoinCollection = true);
+            $pods = $paginator->getIterator();
+        }else{
+            $query->setFirstResult(($index-1)*50);
+            $query->setMaxResults(50);
+            $paginator = new Paginator($query,$fetchJoinCollection = true);
+            $pods = $paginator->getIterator();
+        }
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:payStatePrima.html.twig',array(
+            'podsPr'=>$pods,
+            'maxIndex'=>$maxIndex,
+            'index'=>$index,
+        ));
+    }
 
 	public function payTypeInfoViewAction()
 	{
@@ -3072,6 +3171,11 @@ class BackOfficeController extends Controller
 
 			$criteria = new \Doctrine\Common\Collections\Criteria();
 			$criteria->where($criteria->expr()->gt('state', 2));
+
+            /** @var User $users */
+            $userRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User');
+            $users = $userRepo->findBy(array('state' => 2));
+            dump($users); die();
 
 			$em = $this->getDoctrine()->getManager();
 			$eheRepo = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');

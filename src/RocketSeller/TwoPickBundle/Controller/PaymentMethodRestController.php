@@ -262,7 +262,7 @@ class PaymentMethodRestController extends FOSRestController
     }
 
     /**
-     * Return the overall user list.
+     * Return the method Pay of user in array.
      *
      *
      * @ApiDoc(

@@ -289,9 +289,16 @@ back_pending_vacations:
 back_entities_view:
     path:         /backoffice/entidades
     defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:eheEntitiesView }
-back_pay_state_view:
-    path:         /backoffice/estado/pagos
-    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:notPaidView }
+back_pay_state_nomina_view:
+    path:         /backoffice/estado/pagos/nomina/{index}
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:notPaidNominaView }
+back_pay_state_pila_view:
+    path:         /backoffice/estado/pagos/pila/{index}
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:notPaidPilaView }
+back_pay_state_prima_view:
+    path:         /backoffice/estado/pagos/prima/{index}
+    defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:notPaidPrimaView }
+
 back_frequency_state_view:
     path:         /backoffice/frecuencia/pagos
     defaults:     { _controller: RocketSellerTwoPickBundle:BackOffice:payTypeInfoView }
