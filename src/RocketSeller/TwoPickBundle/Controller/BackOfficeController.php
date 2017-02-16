@@ -3172,11 +3172,6 @@ class BackOfficeController extends Controller
 			$criteria = new \Doctrine\Common\Collections\Criteria();
 			$criteria->where($criteria->expr()->gt('state', 2));
 
-            /** @var User $users */
-            $userRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User');
-            $users = $userRepo->findBy(array('state' => 2));
-            dump($users); die();
-
 			$em = $this->getDoctrine()->getManager();
 			$eheRepo = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
 			$filteredEheRepo = $eheRepo->matching($criteria);
