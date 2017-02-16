@@ -57,10 +57,9 @@ class PayrollCloseCommand extends ContainerAwareCommand
 			$period = 4;
 		}
 		
-		$host = "127.0.0.1";
-		$port = "8000";
+		$fullHost = "127.0.0.1:8000";
 		if($this->getContainer()->getParameter('ambiente') == "produccion") {
-			$port = "80";
+			$fullHost = "https://symplifica.com";
 		}
 		/** @var User $backUser */
 		$backUser = $this->getContainer()->get('doctrine')->getRepository("RocketSellerTwoPickBundle:User")
@@ -74,7 +73,7 @@ class PayrollCloseCommand extends ContainerAwareCommand
 		);
 		
 		$paramsJson = json_encode($parameters);
-		$chAutoLiquidate = curl_init("$host:$port/api/public/v1/auto/liquidate/payroll");
+		$chAutoLiquidate = curl_init("$fullHost/api/public/v1/auto/liquidate/payroll");
 		
 		curl_setopt($chAutoLiquidate, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($chAutoLiquidate, CURLOPT_HTTPHEADER, array('Content-type: application/json','Content-Length: ' . strlen($paramsJson)));
@@ -107,7 +106,7 @@ class PayrollCloseCommand extends ContainerAwareCommand
 
 		$paramsJson = json_encode($parameters2);
 
-		$chFixPodPila = curl_init("$host:$port/api/public/v1/fix/p/o/d/pila");
+		$chFixPodPila = curl_init("$fullHost/api/public/v1/fix/p/o/d/pila");
 
 		curl_setopt($chFixPodPila, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($chFixPodPila, CURLOPT_HTTPHEADER, array('Content-type: application/json','Content-Length: ' . strlen($paramsJson)));
@@ -123,7 +122,7 @@ class PayrollCloseCommand extends ContainerAwareCommand
 			$output->writeln($response);
 		}
 
-		$chSendPlanilla = curl_init("$host:$port/api/public/v1/send/planilla/file/to/enlace/operativo/back");
+		$chSendPlanilla = curl_init("$fullHost/api/public/v1/send/planilla/file/to/enlace/operativo/back");
 
 		curl_setopt($chSendPlanilla, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($chSendPlanilla, CURLOPT_HTTPHEADER, array('Content-type: application/json','Content-Length: ' . strlen($paramsJson)));
