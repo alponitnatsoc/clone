@@ -191,6 +191,11 @@ class EmployerHasEmployee
     private $ErrorEmailSentAt=null;
 
     /**
+     * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\EntityRecord", mappedBy="employerHasEmployeeId")
+     */
+    private $entitiesRecords;
+
+    /**
      * Set idEmployerHasEmployee
      *
      * @param integer $idEmployerHasEmployee
@@ -884,5 +889,39 @@ class EmployerHasEmployee
     public function getIsPostRegister()
     {
         return $this->isPostRegister;
+    }
+
+    /**
+     * Add entitiesRecord
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\EntityRecord $entitiesRecord
+     *
+     * @return EmployerHasEmployee
+     */
+    public function addEntitiesRecord(\RocketSeller\TwoPickBundle\Entity\EntityRecord $entitiesRecord)
+    {
+        $this->entitiesRecords[] = $entitiesRecord;
+
+        return $this;
+    }
+
+    /**
+     * Remove entitiesRecord
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\EntityRecord $entitiesRecord
+     */
+    public function removeEntitiesRecord(\RocketSeller\TwoPickBundle\Entity\EntityRecord $entitiesRecord)
+    {
+        $this->entitiesRecords->removeElement($entitiesRecord);
+    }
+
+    /**
+     * Get entitiesRecords
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEntitiesRecords()
+    {
+        return $this->entitiesRecords;
     }
 }

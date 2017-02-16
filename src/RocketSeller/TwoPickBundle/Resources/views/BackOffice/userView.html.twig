@@ -430,8 +430,10 @@
                                                         {{ ehe.existentSQL }}
                                                     {% endif %}
                                                 </td>
-                                                <td style="{{ styleEhe }}">{% if ehe.DateRegisterToSql is defined %}
+                                                <td style="{{ styleEhe }}">{% if ehe.DateRegisterToSql is defined and ehe.DateRegisterToSql!= null %}
                                                         {{ ehe.dateRegisterToSQL|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                                                    {% else %}
+                                                        -
                                                     {% endif %}
                                                 </td>
                                                 <td>{% if ehe.existentHightec is defined %}
@@ -556,9 +558,9 @@
                                                                     {% endif %}
                                                                 </td>
                                                                 <td> {{ aC.salary }} </td>
-                                                                <td> {{ aC.startDate|date("y-m-d") }}</td>
+                                                                <td> {{ aC.startDate|date("Y-m-d") }}</td>
                                                                 <td>{% if aC.endDate != NULL %}
-                                                                        {{ aC.endDate|date("y-m-d") }}
+                                                                        {{ aC.endDate|date("Y-m-d") }}
                                                                     {% endif %}
                                                                 </td>
                                                                 <td> {{ aC.workableDaysMonth }} </td>

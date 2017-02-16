@@ -3,63 +3,62 @@
 {% block title %}Vista Entidades{% endblock %}
 
 {% block fos_user_content %}
-    <div id="main" class="col-sm-15">
-        <div class="col-md-12">
-            <div class="panel panel-title">
-                BackOffice Entidades
-            </div>
-            <br>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4>Información de las entidades por empleado</h4>
-                </div>
-
-                <table class="table">
-                    <tr>
-                        <th>Empleador</th>
-                        <th>Cédula</th>
-                        <th>Empleado</th>
-                        <th>Cédula</th>
-                        <th>Fecha inicio contrato</th>
-                        <th>Entidades</th>
-                    </tr>
-                    {% for ehe in ehes %}
-                        <tr>
-                            <td> {{ ehe.employerEmployer.personPerson.names }} {{ ehe.employerEmployer.personPerson.lastName1 }}</td>
-                            <td> {{ ehe.employerEmployer.personPerson.document }} </td>
-                            <td> {{ ehe.employeeEmployee.personPerson.names }} {{ ehe.employeeEmployee.personPerson.lastName1 }}</td>
-                            <td> {{ ehe.employeeEmployee.personPerson.document }} </td>
-                            <td>
-                                {% for contract in ehe.contracts %}
-                                    {% if contract.state == 1 %}
-                                        {{ contract.startDate|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                            {% for se in ehe.employerEmployer.entities %}
-                                <td>
-                                    {{ se.entityEntity.name }} -
-                                    {% if se.state == 0 %}
-                                        Inscrito
-                                    {% elseif se.state == 1 %}
-                                        Inscribir
-                                    {% endif %}
-                                </td>
-                            {% endfor %}
-                            {% for se in ehe.employeeEmployee.entities %}
-                                <td>
-                                    {{ se.entityEntity.name }} -
-                                    {% if se.state == 0 %}
-                                        Inscrito
-                                    {% elseif se.state == 1 %}
-                                        Inscribir
-                                    {% endif %}
-                                </td>
-                            {% endfor %}
-                        </tr>
-                    {% endfor %}
-                </table>
-            </div>
-        </div>
+<div id="main">
+    <div class="back-panel-title">
+        BackOffice Entidades
     </div>
+    <div class="back-panel">
+        <div class="backoffice-headding">
+            <h4>Información de las entidades por empleado</h4>
+        </div>
+
+        <table class="table">
+            <thead>
+                <th>Empleador</th>
+                <th>Cédula</th>
+                <th>Empleado</th>
+                <th>Cédula</th>
+                <th>Fecha inicio contrato</th>
+                <th colspan="5">Entidades</th>
+            </thead>
+            <tbody>
+            {% for ehe in ehes %}
+                <tr>
+                    <td> {{ ehe.employerEmployer.personPerson.names }} {{ ehe.employerEmployer.personPerson.lastName1 }}</td>
+                    <td> {{ ehe.employerEmployer.personPerson.document }} </td>
+                    <td> {{ ehe.employeeEmployee.personPerson.names }} {{ ehe.employeeEmployee.personPerson.lastName1 }}</td>
+                    <td> {{ ehe.employeeEmployee.personPerson.document }} </td>
+                    <td>
+                        {% for contract in ehe.contracts %}
+                            {% if contract.state == 1 %}
+                                {{ contract.startDate|date("Y-M-d")|localizeddate('long', 'none', 'es-CO') }}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    {% for se in ehe.employerEmployer.entities %}
+                        <td>
+                            {{ se.entityEntity.name }} -
+                            {% if se.state == 0 %}
+                                Inscrito
+                            {% elseif se.state == 1 %}
+                                Inscribir
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                    {% for se in ehe.employeeEmployee.entities %}
+                        <td>
+                            {{ se.entityEntity.name }} -
+                            {% if se.state == 0 %}
+                                Inscrito
+                            {% elseif se.state == 1 %}
+                                Inscribir
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

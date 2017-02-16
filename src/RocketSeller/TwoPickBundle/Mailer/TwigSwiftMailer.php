@@ -298,6 +298,14 @@ class TwigSwiftMailer extends Controller implements MailerInterface
                 $template = $this->parameters['template']['backoffice_warning'];
                 return $this->sendMessage($template,$context,$teamFromEmail, $context['toEmail']);
                 break;
+            case 'backMoneyRequ':
+                /** $context must have:
+                 * string toEmail
+                 * int idPod
+                 */
+                $template = $this->parameters['template']['backMoneyRequ'];
+                return $this->sendMessage($template,$context,$teamFromEmail, $context['toEmail']);
+                break;
             /** tested OK */
             //$context['emailType']=='liquidation'
             case 'liquidation':
