@@ -98,6 +98,11 @@ class PayrollCloseCommand extends ContainerAwareCommand
 			
 		} while($cont != 0);
 		
+		if($period == 2) {
+			$output->writeln('<comment>Done!</comment>');
+			return;
+		}
+		
 		$parameters2 = array(
 		  "period" => $period,
 		  "month" => $month,
