@@ -1017,6 +1017,13 @@ class ContractRestSecuredController extends FOSRestController
         $log = new Log($user,"Contract","Salary",$contract->getIdContract(),$newRecord->getSalary(),$contract->getSalary()
             ,"Se modificó el salario desde execute contract record");
         $em->persist($log);
+        $today = new DateTime();
+        if($contract->getFrequencyFrequency()->getPayrollCode()=='M' and $contract->getActivePayroll()->getPeriod()==2){
+            $contract->getActivePayroll()->setPeriod(4);
+        }elseif($contract->getFrequencyFrequency()->getPayrollCode()=='Q' and $contract->getActivePayroll()->getPeriod()==4 and intval($today->format("d"))<15 ){
+            $contract->getActivePayroll()->setPeriod(2);
+        }
+        $em->persist($contract->getActivePayroll());
         $em->persist($newRecord);
         $em->persist($contract);
         $em->remove($contractRecord);

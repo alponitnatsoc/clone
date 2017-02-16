@@ -475,7 +475,6 @@ trait PayrollMethodsTrait
     private function getInfoNominaSQL(EmployerHasEmployee $employerHasEmployee)
     {
         $employeeId = $employerHasEmployee->getIdEmployerHasEmployee();
-
         $generalPayroll = $this->forward('RocketSellerTwoPickBundle:PayrollMethodRest:getGeneralPayrolls', array(
             'employeeId' => $employeeId,
             'period' => null,
@@ -483,7 +482,9 @@ trait PayrollMethodsTrait
             'year' => null
         ), array('_format' => 'json')
         );
-
+	    if($generalPayroll->getStatusCode() != 200) {
+	    	return null;
+	    }
         return json_decode($generalPayroll->getContent(), true);
     }
 
