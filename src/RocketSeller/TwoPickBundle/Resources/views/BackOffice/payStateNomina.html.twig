@@ -1,0 +1,141 @@
+{% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
+
+{% block title %}Vista Usuarios{% endblock %}
+
+{% block fos_user_content %}
+
+
+<div id="main">
+    <div class="back-panel-title">
+        BackOffice Estado Pagos
+    </div>
+    <div class="back-panel">
+        <div class="backoffice-headding">
+            <h4>Información de los pagos de nómina - Los colores por días son basados en días calendario</h4>
+        </div>
+
+        <table class="table" style="padding: 0px; margin: 0px">
+            <thead>
+                <th>ID</th>
+                <th>Cédula Empleador</th>
+                <th>Nombre Empleador</th>
+                <th>Cédula Empleado</th>
+                <th>Nombre Empleado</th>
+                <th>Periodo al que corresponde el pago</th>
+                <th>Metodo de pago</th>
+                <th>Valor</th>
+                <th>Estado</th>
+                <th>Fecha en que solicitó el recaudo</th>
+            </thead>
+            <tbody>
+            {% for pod in podsN %}
+                {% if pod.purchaseOrders != NULL and (pod.purchaseOrdersStatus.idNovoPay == "S2" or pod.purchaseOrdersStatus.idNovoPay == "00") %}
+                    {% if "now"|date('Y-m-d') == pod.purchaseOrders.dateCreated|date_modify("+3 days")|date('Y-m-d')  %}
+                        <tr bgcolor="#FFFF00">
+                    {% elseif "now"|date('Y-m-d') > pod.purchaseOrders.dateCreated|date_modify("+3 days")|date('Y-m-d') %}
+                        <tr bgcolor="#FF0000">
+                    {% endif %}
+                {% else %}
+                    <tr>
+                {% endif %}
+                {% if pod.payrollPayroll.contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.document != NULL %}
+                    <td>{{ pod.idPurchaseOrdersDescription }}</td>
+                    <td>{{ pod.payrollPayroll.contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.document }}</td>
+                    <td>{{ pod.payrollPayroll.contractContract.employerHasEmployeeEmployerHasEmployee.employerEmployer.personPerson.fullName }}</td>
+                    <td>{{ pod.payrollPayroll.contractContract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson.document }}</td>
+                    <td>{{ pod.payrollPayroll.contractContract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson.fullName }}</td>
+                    <td>
+                        {{ utils.month_number_to_name(pod.payrollPayroll.month) }} - {{ pod.payrollPayroll.year }} -
+                        {% if pod.payrollPayroll.period == 2 %}
+                            1ra Quincena
+                        {% elseif pod.payrollPayroll.period == 4 %}
+                            {% if pod.payrollPayroll.contractContract.frequencyFrequency.payrollCode == "Q" %}
+                                2da Quincena
+                            {% else %}
+                                Mensual
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                    <td>{{ pod.payrollPayroll.contractContract.payMethodPayMethod.payTypePayType.simpleName }}</td>
+                    <td>$ {{ pod.value|number_format(0, '.', ',') }}</td>
+                    <td>
+                        {% if pod.purchaseOrdersStatus != NULL %}
+                            {% if pod.purchaseOrdersStatus.idNovoPay == "S2" %}
+                                El recaudo del dinero está en proceso
+                            {% elseif pod.purchaseOrdersStatus.idNovoPay == "P1" %}
+                                El usuario no ha autorizado el pago
+                            {% elseif pod.purchaseOrdersStatus.idNovoPay == "00" %}
+                                El recaudo se aprobó y el pago de nómina está en proceso
+                            {% elseif pod.purchaseOrdersStatus.idNovoPay == "-1" %}
+                                Dispersión aprobada, el empleado ya recibió el dinero
+                            {% elseif pod.purchaseOrdersStatus.idNovoPay == "-2" %}
+                                Dispersión rechazada, el dinero está en la cuenta de Symplifica
+                            {% elseif pod.purchaseOrdersStatus.idNovoPay == "-3" %}
+                                Se devolvió el dinero a la cuenta del empleador
+                            {% else %}
+                                {{ pod.purchaseOrdersStatus.description }}
+                            {% endif %}
+                        {% else %}
+                            El usuario no ha autorizado el pago
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if pod.purchaseOrders != NULL and pod.purchaseOrdersStatus.idNovoPay != "P1" %}
+                            {{ pod.purchaseOrders.dateCreated|localizeddate('long', 'none', 'es-CO') }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% if maxIndex > 1 %}
+            {% set nextIndex = index + 1 %}
+            {% set prevIndex = 0 %}
+            {% if index > 1 and index <= maxIndex %}
+                {% set prevIndex = index - 1 %}
+            {% endif %}
+            <div class="text-center col-md-12" style="display: inline-flex">
+                <a class="btn btn-back notAjax" style="margin: 10px 1px 0px auto;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("back_pay_state_nomina_view",{
+                    'index':1}) }}">&#10094;&#10094;</a>
+                {% if index > 1 and index <= maxIndex %}
+                    <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("back_pay_state_nomina_view",{
+                        'index':prevIndex}) }}">&#10094;</a>
+                {% endif %}
+                {% if index-3 > 0 %}
+                    {% for actual in (index-3)..(index-1) %}
+                        <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("back_pay_state_nomina_view",{
+                            'index':actual}) }}">{{ actual }}</a>
+                    {% endfor %}
+                {% elseif index > 1 %}
+                    {% for actual in 1 .. (index-1) %}
+                        <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("back_pay_state_nomina_view",{
+                            'index':actual}) }}">{{ actual }}</a>
+                    {% endfor %}
+                {% endif %}
+                <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #33d7d6;;border-bottom: 0px solid #33d7d6;" href="{{ path("back_pay_state_nomina_view",{
+                    'index':index}) }}">{{ index }}</a>
+                {% if index+3 <= maxIndex %}
+                    {% for actual in (index+1)..(index+3) %}
+                        <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("back_pay_state_nomina_view",{
+                            'index':actual}) }}">{{ actual }}</a>
+                    {% endfor %}
+                {% elseif index < maxIndex %}
+                    {% for actual in (index+1)..maxIndex %}
+                        <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("back_pay_state_nomina_view",{
+                            'index':actual}) }}">{{ actual }}</a>
+                    {% endfor %}
+                {% endif %}
+                {% if index > 0 and index < maxIndex %}
+                    <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("back_pay_state_nomina_view",{
+                        'index':nextIndex}) }}">&#10095;</a>
+                {% endif %}
+                <a class="btn btn-back notAjax" style="margin: 10px auto 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("back_pay_state_nomina_view",{
+                    'index':maxIndex}) }}">&#10095;&#10095;</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

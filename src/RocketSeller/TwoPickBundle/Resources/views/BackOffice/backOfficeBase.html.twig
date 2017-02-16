@@ -58,10 +58,7 @@
         <div class="{% if app.request.get('_route') == 'show_pilas' %}activeMenu{% endif %} well sidebar-back">
             <a class="notAjax" href="{{ path('show_pilas') }}" >Pila</a>
         </div>
-        <div class="{% if app.request.get('_route') == 'back_pay_state_view' %}activeMenu{% endif %} well sidebar-back">
-            <a class="notAjax" href="{{ path('back_pay_state_view') }}" >Estado pagos</a>
-        </div>
-        <div class="{% if app.request.get('_route') == 'back_pay_state_view' %}activeMenu{% endif %} well sidebar-back">
+        <div class="{% if app.request.get('_route') == 'back_frequency_state_view' %}activeMenu{% endif %} well sidebar-back">
             <a class="notAjax" href="{{ path('back_frequency_state_view') }}" >Frecuencia pagos</a>
         </div>
         {#<div class="{% if app.request.get('_route') == 'back_pila_operator_state_view' %}activeMenu{% endif %} well well-lg separador">
