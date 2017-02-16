@@ -74,7 +74,7 @@
             <a class="notAjax" href="{{ path('back_personal_info_view') }}" >Info Personal Despues Paso 3</a>
         </div>
         <div class="{% if app.request.get('_route') == 'show_unfinished_users' %}activeMenu{% endif %} well sidebar-back">
-            <a class="notAjax" href="{{ path('show_unfinished_users') }}" >Estado del registro</a>
+            <a class="notAjax" href="{{ path('show_unfinished_users',{'index':1}) }}" >Estado del registro</a>
         </div>
         <div class="{% if app.request.get('_route') == 'show_base_users_register' %}activeMenu{% endif %} well sidebar-back">
             <a class="notAjax" href="{{ path('show_base_users_register') }}" >Base Usuarios Registros </a>

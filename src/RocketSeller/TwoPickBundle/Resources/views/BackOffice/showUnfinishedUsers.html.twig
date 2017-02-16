@@ -1,12 +1,19 @@
 {% extends '@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig' %}
 
 {% block fos_user_content %}
-    <div id="main" class="col-sm-10">
-        <div class="col-md-12">
-            <h3>Los usarios listados a continuación no han terminado el paso 3 de 3</h3>
-            <br>
+<div id="main">
+    <div class="back-panel-title">
+        Usuarios sin pasar 3 de 3
+    </div>
+    <div class="back-panel">
+        <div class="back-panel" style="text-align: center">
+            <a class="btn btn-bitbucket notAjax" href="{{path('export_base_user')}}">Generar CSV</a>
+        </div>
+        <div class="backoffice-headding">
+            <h4>Los usarios listados a continuación no han terminado el paso 3 de 3</h4>
+        </div>
             <table class="table">
-                <tr>
+                <thead>
                     <th>Usuario</th>
                     <th>Cédula</th>
                     <th>Celular</th>
@@ -14,58 +21,105 @@
                     <th>Último login</th>
                     <th>Dirección correo</th>
                     <th>Confirmar Correo</th>
-                </tr>
-                {% for user in users %}
-                    <tr>
-                        <td>
-                            {{ user.personPerson.fullName }}
-                        </td>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>
+                                {{ user.personPerson.fullName }}
+                            </td>
 
-                        <td>
-                            {{ user.personPerson.document }}
-                        </td>
+                            <td>
+                                {{ user.personPerson.document }}
+                            </td>
 
-                        <td>
-                            {% if user.personPerson.phones.count !=0 %}
-                                {{ user.personPerson.phones.get(0).phoneNumber }}
-                            {% endif %}
-                        </td>
+                            <td>
+                                {% if user.personPerson.phones.count !=0 %}
+                                    {{ user.personPerson.phones.get(0).phoneNumber }}
+                                {% endif %}
+                            </td>
 
-                        <td>
-                            {% if user.personPerson.employer == NULL %}
-                                No ha empezado el paso 1
-                            {% elseif user.personPerson.employer.employerHasEmployees.count == 0%}
-                                No ha empezado el paso 2
-                            {% else %}
-                                No ha empezado el paso 3
-                            {% endif %}
-                        </td>
+                            <td>
+                                {% if user.personPerson.employer == NULL %}
+                                    No ha empezado el paso 1
+                                {% elseif user.personPerson.employer.employerHasEmployees.count == 0%}
+                                    No ha empezado el paso 2
+                                {% else %}
+                                    No ha empezado el paso 3
+                                {% endif %}
+                            </td>
 
-                        <td>
-                            {% if user.lastLogin is defined %}
-                                {{ user.lastLogin|date("d-m-Y H:i") }}
-                            {% else %}
-                                No hay registro
-                            {% endif %}
-                        </td>
+                            <td>
+                                {% if user.lastLogin is defined %}
+                                    {{ user.lastLogin|date("d-m-Y H:i") }}
+                                {% else %}
+                                    No hay registro
+                                {% endif %}
+                            </td>
 
-                        <td>
-                            {{ user.email }}
-                        </td>
+                            <td>
+                                {{ user.email }}
+                            </td>
 
-                        <td>
-                            {% if user.confirmationToken != null %}
-                                <a class="notAjax" href="{{ path('fos_user_registration_confirm', {'token':user.confirmationToken}) }}"> Confirmar</a>
+                            <td>
+                                {% if user.confirmationToken != null %}
+                                    <a class="notAjax" href="{{ path('fos_user_registration_confirm', {'token':user.confirmationToken}) }}"> Confirmar</a>
 
-                            {% else %}
-                                --
-                            {% endif %}
-                        </td>
+                                {% else %}
+                                    --
+                                {% endif %}
+                            </td>
 
-                    </tr>
-                {% endfor %}
-
+                        </tr>
+                    {% endfor %}
+                </tbody>
             </table>
+
+        {% if maxIndex > 1 %}
+            {% set nextIndex = index + 1 %}
+            {% set prevIndex = 0 %}
+            {% if index > 1 and index <= maxIndex %}
+                {% set prevIndex = index - 1 %}
+            {% endif %}
+            <div class="text-center col-md-12" style="display: inline-flex">
+                <a class="btn btn-back notAjax" style="margin: 10px 1px 0px auto;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("show_unfinished_users",{
+                    'index':1}) }}">&#10094;&#10094;</a>
+                {% if index > 1 and index <= maxIndex %}
+                    <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("show_unfinished_users",{
+                        'index':prevIndex}) }}">&#10094;</a>
+                {% endif %}
+                {% if index-3 > 0 %}
+                    {% for actual in (index-3)..(index-1) %}
+                        <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("show_unfinished_users",{
+                            'index':actual}) }}">{{ actual }}</a>
+                    {% endfor %}
+                {% elseif index > 1 %}
+                    {% for actual in 1 .. (index-1) %}
+                        <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("show_unfinished_users",{
+                            'index':actual}) }}">{{ actual }}</a>
+                    {% endfor %}
+                {% endif %}
+                <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #33d7d6;;border-bottom: 0px solid #33d7d6;" href="{{ path("show_unfinished_users",{
+                    'index':index}) }}">{{ index }}</a>
+                {% if index+3 <= maxIndex %}
+                    {% for actual in (index+1)..(index+3) %}
+                        <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("show_unfinished_users",{
+                            'index':actual}) }}">{{ actual }}</a>
+                    {% endfor %}
+                {% elseif index < maxIndex %}
+                    {% for actual in (index+1)..maxIndex %}
+                        <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("show_unfinished_users",{
+                            'index':actual}) }}">{{ actual }}</a>
+                    {% endfor %}
+                {% endif %}
+                {% if index > 0 and index < maxIndex %}
+                    <a class="btn btn-back notAjax" style="margin: 10px 1px 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("show_unfinished_users",{
+                        'index':nextIndex}) }}">&#10095;</a>
+                {% endif %}
+                <a class="btn btn-back notAjax" style="margin: 10px auto 0px 1px;background-color: #0a0908;border-bottom: 0px solid #000000;" href="{{ path("show_unfinished_users",{
+                    'index':maxIndex}) }}">&#10095;&#10095;</a>
+            </div>
+        {% endif %}
         </div>
     </div>
 {% endblock %}

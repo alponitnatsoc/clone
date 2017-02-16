@@ -634,13 +634,40 @@ class BackOfficeController extends Controller
 
     }
 
-    public function showUnfinishedUsersAction()
+    public function showUnfinishedUsersAction($index)
     {
-        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
-        $usersRepo= $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
-        $users= $usersRepo->findBy(array("status"=>1));
-        return $this->render('RocketSellerTwoPickBundle:BackOffice:showUnfinishedUsers.html.twig',array('users'=>$users));
 
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+
+        $em = $this->getDoctrine()->getManager();
+        $users = null;
+        $query = $em->createQueryBuilder();
+        $query->add('select', 'u');
+        $query->from("RocketSellerTwoPickBundle:User",'u');
+        $query->where('u.status = 1');
+        $maxIndex = 1;
+        $results = count($query->getQuery()->getResult());
+        if($results%20!=0){
+            $maxIndex = intval($results/20)+1;
+        }else{
+            $maxIndex = intval($results/20);
+        }
+        if($index==1){
+            $query->setFirstResult(0);
+            $query->setMaxResults(20);
+            $paginator = new Paginator($query,$fetchJoinCollection = true);
+            $users = $paginator->getIterator();
+        }else{
+            $query->setFirstResult(($index-1)*20);
+            $query->setMaxResults(20);
+            $paginator = new Paginator($query,$fetchJoinCollection = true);
+            $users = $paginator->getIterator();
+        }
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:showUnfinishedUsers.html.twig',array(
+            'users'=>$users,
+            'maxIndex'=>$maxIndex,
+            'index'=>$index,
+        ));
     }
 
     public function showBaseRegisterUsersAction($index)

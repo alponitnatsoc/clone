@@ -143,7 +143,7 @@ back_return_pay_pod:
     path:     /backoffice/back/return/pay/{idPOD}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:returnMoneyPay}
 show_unfinished_users:
-    path:     /backoffice/show/unfinished/users
+    path:     /backoffice/show/unfinished/users/{index}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showUnfinishedUsers}
 show_base_users_register:
     path:     /backoffice/show/base/users/register/{index}
