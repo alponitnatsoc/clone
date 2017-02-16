@@ -547,8 +547,12 @@ class ExportController extends Controller
         if(!$backOffice and !$auth)
             throw $this->createAccessDeniedException();
         $media = $document->getMediaMedia();
-        if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference'))){
-            $docUrl = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
+        $tFile=false;
+        if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+            $docUrl = getcwd().$this->container->get('sonata.media.twig.extension')->path($media, 'reference');
+        }elseif($this->is_url_exist($this->container->get('sonata.media.twig.extension')->path($media, 'reference'))){
+            $docUrl = file_get_contents($this->container->get('sonata.media.twig.extension')->path($media, 'reference'));
+            $tFile=true;
         }
         $docName = $document->getDocumentTypeDocumentType()->getName().' '.$name.'.'.$media->getExtension();
         # create new zip opbject
@@ -557,7 +561,11 @@ class ExportController extends Controller
         $tmp_file ="Download_".$document->getDocumentTypeDocumentType()->getName().".zip";
         if ($zip->open($tmp_file,ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE )=== TRUE) {
             # loop through each file
-            $zip->addFile($docUrl,$docName);
+            if(!$tFile){
+                $zip->addFile($docUrl,$docName);
+            }else{
+                $zip->addFromString($docName, $docUrl);
+            }
             # close zip
             if($zip->close()!==TRUE)
                 echo "no permisos";
