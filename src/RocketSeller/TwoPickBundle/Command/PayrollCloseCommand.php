@@ -35,7 +35,6 @@ class PayrollCloseCommand extends ContainerAwareCommand
 		$day = $today->format('d');
 		$month = $today->format('m');
 		$year = $today->format('Y');
-		
 		if($day == 16) {
 			$day = 13;
 		}
@@ -46,29 +45,35 @@ class PayrollCloseCommand extends ContainerAwareCommand
 			$year = $oneMonthLess->format('Y');
 		}
 		
-		if($day != 13 || $day != 26) {
+		if($day != 13 && $day != 26) {
 			$output->writeln('<comment>Done today is not the day!</comment>');
 			return;
 		}
 		
-		$host = "127.0.0.1";
-		$port = "8000";
+		if($day == 13){
+			$period = 2;
+		}
+		if($day == 26) {
+			$period = 4;
+		}
+		
+		$fullHost = "127.0.0.1:8000";
 		if($this->getContainer()->getParameter('ambiente') == "produccion") {
-			$port = "80";
+			$fullHost = "https://symplifica.com";
 		}
 		/** @var User $backUser */
-		$backUser = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")
-		    ->findOneBy(array('email_cannonical' => 'backofficesymplifica@gmail.com'));
+		$backUser = $this->getContainer()->get('doctrine')->getRepository("RocketSellerTwoPickBundle:User")
+		    ->findOneBy(array('emailCanonical' => 'backofficesymplifica@gmail.com'));
 		$parameters = array(
 		  "token" => $backUser->getSalt(),
-		  "month" => "01",
-		  "year" => date("Y"),
-		  "day" => "26",
-		  "period" => 4
+		  "month" => $month,
+		  "year" => $year,
+		  "day" => $day,
+		  "period" => $period
 		);
 		
 		$paramsJson = json_encode($parameters);
-		$chAutoLiquidate = curl_init("//$host:$port/api/public/v1/auto/liquidate/payroll");
+		$chAutoLiquidate = curl_init("$fullHost/api/public/v1/auto/liquidate/payroll");
 		
 		curl_setopt($chAutoLiquidate, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($chAutoLiquidate, CURLOPT_HTTPHEADER, array('Content-type: application/json','Content-Length: ' . strlen($paramsJson)));
@@ -78,30 +83,35 @@ class PayrollCloseCommand extends ContainerAwareCommand
 		
 		do {
 			$response = curl_exec($chAutoLiquidate);
-			var_dump($response);
-			if ($response == null || curl_getinfo($chAutoLiquidate, CURLINFO_HTTP_CODE != 200)) {
-				$output->writeln('Fallo llamando auto liquidate');
+			if ($response == null || curl_getinfo($chAutoLiquidate, CURLINFO_HTTP_CODE) != 200) {
+				$output->writeln('Fallo llamando auto liquidate status: ' . curl_getinfo($chAutoLiquidate, CURLINFO_HTTP_CODE));
+				$output->writeln($response);
 				$cont = 0;
 			} else {
-				$output->writeln("Respuesta auto liquidate todbien: ");
-				
-//				$output->writeln(json_decode($response, true));
+				$output->writeln("Respuesta auto liquidate: ");
 				$jsonR = json_decode($response, true);
+				
 				$cont = $jsonR['cont'];
+				$output->writeln($response);
 				$output->writeln('cont: ' . $cont);
 			}
 			
 		} while($cont != 0);
 		
+		if($period == 2) {
+			$output->writeln('<comment>Done!</comment>');
+			return;
+		}
+		
 		$parameters2 = array(
-		  "period" => 4,
-		  "month" => "01",
-		  "year" => date("Y")
+		  "period" => $period,
+		  "month" => $month,
+		  "year" => $year
 		);
 
 		$paramsJson = json_encode($parameters2);
 
-		$chFixPodPila = curl_init("//$host:$port/api/public/v1/fix/p/o/d/pila");
+		$chFixPodPila = curl_init("$fullHost/api/public/v1/fix/p/o/d/pila");
 
 		curl_setopt($chFixPodPila, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($chFixPodPila, CURLOPT_HTTPHEADER, array('Content-type: application/json','Content-Length: ' . strlen($paramsJson)));
@@ -109,14 +119,15 @@ class PayrollCloseCommand extends ContainerAwareCommand
 		curl_setopt($chFixPodPila, CURLOPT_POSTFIELDS, $paramsJson);
 
 		$response = curl_exec($chFixPodPila);
-		if (!$response || curl_getinfo($chAutoLiquidate, CURLINFO_HTTP_CODE != 200)) {
-			$output->writeln('Fallo llamando fix pod pila');
+		if (curl_getinfo($chAutoLiquidate, CURLINFO_HTTP_CODE) != 200) {
+			$output->writeln('Fallo llamando fix pod pila status: ' . curl_getinfo($chAutoLiquidate, CURLINFO_HTTP_CODE));
 			$output->writeln($response);
 		} else {
-			$output->writeln("Respuesta fix pod pila: " . PHP_EOL . $response);
+			$output->writeln("Respuesta fix pod pila: ");
+			$output->writeln($response);
 		}
 
-		$chSendPlanilla = curl_init("//$host:$port/api/public/v1/send/planilla/file/to/enlace/operativo/back");
+		$chSendPlanilla = curl_init("$fullHost/api/public/v1/send/planilla/file/to/enlace/operativo/back");
 
 		curl_setopt($chSendPlanilla, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($chSendPlanilla, CURLOPT_HTTPHEADER, array('Content-type: application/json','Content-Length: ' . strlen($paramsJson)));
@@ -125,17 +136,15 @@ class PayrollCloseCommand extends ContainerAwareCommand
 		
 		do {
 			$response = curl_exec($chSendPlanilla);
-			if (!$response || curl_getinfo($chAutoLiquidate, CURLINFO_HTTP_CODE != 200)) {
-				$output->writeln('Fallo llamando send planilla to enlace operativo');
+			if (!$response || curl_getinfo($chAutoLiquidate, CURLINFO_HTTP_CODE) != 200) {
+				$output->writeln('Fallo llamando send planilla to enlace operativo status: ' . curl_getinfo($chAutoLiquidate, CURLINFO_HTTP_CODE));
 				$output->writeln($response);
 				$cont = 0;
 			} else {
 				$output->writeln("Respuesta send planilla to enlace operativo:");
-				$output->writeln($response);
 				$jsonR = json_decode($response, true);
 				$cont = $jsonR['conta'];
 				$output->writeln('cont: ' . $cont);
-	//			$output->writeln("Respuesta send planilla to enlace operativo: " . $response);
 			}
 		} while($cont != 0);
 

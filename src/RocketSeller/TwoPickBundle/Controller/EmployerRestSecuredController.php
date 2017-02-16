@@ -74,6 +74,7 @@ class EmployerRestSecuredController extends FOSRestController
         }
         $notifications=$user->getPersonPerson()->getNotifications();
         $activeNotifications = new ArrayCollection();
+	    $loPasaronDataCreditoArray = new ArrayCollection();
         /** @var Notification $notification */
         foreach ( $notifications as $notification ) {
             if( $notification->getStatus() == 1 ) {
@@ -88,14 +89,17 @@ class EmployerRestSecuredController extends FOSRestController
 				            $loPasaronDataCredito = true;
 			            }
 		            }
-		            $activeNotifications->add(array('notification' => $notification,
-		                                            'loPasaronDataCredito' => $loPasaronDataCredito));
+		            $activeNotifications->add($notification);
+		            $loPasaronDataCreditoArray->add($loPasaronDataCredito);
 	            } else {
-		            $activeNotifications->add(array("notification" => $notification));
+		            $activeNotifications->add($notification);
+		            $loPasaronDataCreditoArray->add(false);
 	            }
             }
         }
-        return $view->setData(array('notifications'=>$activeNotifications))->setStatusCode(200);
+        return $view->setData(array('notifications'=>$activeNotifications,
+                                    'loPasaronDataCreditoArr' => $loPasaronDataCreditoArray))
+                    ->setStatusCode(200);
 
     }
 
